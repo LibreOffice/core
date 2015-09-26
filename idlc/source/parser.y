@@ -2719,7 +2719,7 @@ enumerator :
 
         if ( $3 && pScope && pScope->getScopeNodeType() == NT_enum)
         {
-            $3->evaluate(EK_const);
+            $3->evaluate();
             if ( $3->coerce(ET_long) )
             {
                 pEnum = static_cast<AstEnum*>(pScope);

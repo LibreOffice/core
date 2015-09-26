@@ -41,13 +41,6 @@ enum ExprComb
     EC_symbol   // a symbol (function or constant name)
 };
 
-// Enum to define the different kinds of evaluation possible
-enum EvalKind
-{
-    EK_const,           // Must evaluate to constant
-    EK_positive_int     // Must evaluate to positive integer
-};
-
 // Enum to define expression type
 enum ExprType
 {
@@ -118,7 +111,7 @@ public:
     AstExprValue* coerce(ExprType type, bool bAssign=true);
 
     // Evaluate then store value inside this AstExpression
-    void evaluate(EvalKind ek);
+    void evaluate();
 
     // Compare to AstExpressions
     bool operator==(AstExpression *pExpr);
@@ -129,12 +122,12 @@ private:
     // Fill out the lineno, filename and definition scope details
     void    fillDefinitionDetails();
     // Internal evaluation
-    AstExprValue* eval_internal(EvalKind ek);
+    AstExprValue* eval_internal();
     // Evaluate different sets of operators
-    AstExprValue* eval_bin_op(EvalKind ek);
-    AstExprValue* eval_bit_op(EvalKind ek);
-    AstExprValue* eval_un_op(EvalKind ek);
-    AstExprValue* eval_symbol(EvalKind ek);
+    AstExprValue* eval_bin_op();
+    AstExprValue* eval_bit_op();
+    AstExprValue* eval_un_op();
+    AstExprValue* eval_symbol();
 
     AstScope*       m_pScope;       // scope defined in
     sal_Int32       m_lineNo;       // line number defined in
