@@ -22,114 +22,96 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <boost/optional.hpp>
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/repetition.hpp>
-#include <boost/preprocessor/arithmetic/add.hpp>
 #include <cppu/unotype.hxx>
+#include <boost/optional.hpp>
 
 namespace comphelper {
 
-
-// generating helper functions to unwrap the service's argument sequence:
-
-
 /// @internal
 namespace detail {
-
-template <typename T>
-inline void extract(
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> const& seq,
-    sal_Int32 nArg, T & v,
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
-    const& xErrorContext )
-{
-    if (nArg >= seq.getLength()) {
+    inline void unwrapArgsError(
+        const OUString& str, sal_Int32 nArg,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xErrorContext =
+       ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() )
+    {
         throw ::com::sun::star::lang::IllegalArgumentException(
-            OUString( "No such argument available!"),
-            xErrorContext, static_cast<sal_Int16>(nArg) );
+            str, xErrorContext, static_cast< sal_Int16 >( nArg ) );
     }
-    if (! (seq[nArg] >>= v)) {
-        OUStringBuffer buf;
-        buf.append( "Cannot extract ANY { " );
-        buf.append( seq[nArg].getValueType().getTypeName() );
-        buf.append( " } to " );
-        buf.append( ::cppu::UnoType<T>::get().getTypeName() );
-        buf.append( static_cast<sal_Unicode>('!') );
-        throw ::com::sun::star::lang::IllegalArgumentException(
-            buf.makeStringAndClear(), xErrorContext,
-            static_cast<sal_Int16>(nArg) );
+
+    template< typename T, typename... Args >
+    inline void unwrapArgsError( const OUString& str, sal_Int32 nArg, T&, Args&... args )
+    {
+        return unwrapArgsError( str, nArg, args... );
+    }
+
+    inline void unwrapArgs(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&,
+        sal_Int32,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& )
+    {
+        return;
+    }
+
+    inline void unwrapArgs(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&,
+        sal_Int32 )
+    {
+        return;
+    }
+
+    template< typename T, typename... Args >
+    inline void unwrapArgs(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& seq,
+        sal_Int32 nArg, ::boost::optional< T >& v, Args&... args );
+
+    template< typename T, typename... Args >
+    inline void unwrapArgs(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& seq,
+        sal_Int32 nArg, T& v, Args&... args )
+    {
+        if( seq.getLength() <= nArg )
+        {
+            return unwrapArgsError( OUString( "No such argument available!"),
+                                     nArg, args... );
+        }
+        if( ! ( seq[nArg] >>= v ) )
+        {
+            OUStringBuffer buf;
+            buf.append( "Cannot extract ANY { " );
+            buf.append( seq[nArg].getValueType().getTypeName() );
+            buf.append( " } to " );
+            buf.append( ::cppu::UnoType<T>::get().getTypeName() );
+            buf.append( static_cast<sal_Unicode>('!') );
+            return unwrapArgsError( buf.makeStringAndClear(), nArg, args... );
+        }
+        return unwrapArgs( seq, ++nArg, args... );
+    }
+
+    template< typename T, typename... Args >
+    inline void unwrapArgs(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& seq,
+        sal_Int32 nArg, ::boost::optional< T >& v, Args&... args )
+    {
+        if( nArg < seq.getLength() )
+        {
+            T t;
+            unwrapArgs( seq, nArg, t, args... );
+            v = t;
+        } else {
+            unwrapArgs( seq, ++nArg, args... );
+        }
     }
 }
 
-template <typename T>
-inline void extract(
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> const& seq,
-    sal_Int32 nArg, ::boost::optional<T> & v,
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
-    const& xErrorContext )
+template< typename... Args >
+inline void unwrapArgs(
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& seq,
+    Args&... args )
 {
-    if (nArg < seq.getLength()) {
-        T t;
-        extract( seq, nArg, t, xErrorContext );
-        v.reset( t );
-    }
+    return detail::unwrapArgs( seq, 0, args... );
 }
-
-} // namespace detail
-
-#define COMPHELPER_UNWRAPARGS_extract(z_, n_, unused_) \
-    detail::extract( seq, n_, BOOST_PP_CAT(v, n_), xErrorContext );
-#define COMPHELPER_UNWRAPARGS_args(z_, n_, unused_) \
-    BOOST_PP_CAT(T, n_) & BOOST_PP_CAT(v, n_)
-
-/** The following preprocessor repetitions generate functions like
-
-    <pre>
-        template <typename T0, typename T1, ...>
-        inline void unwrapArgs(
-            uno::Sequence<uno::Any> const& seq,
-            T0 & v0, T1 & v1, ...,
-            css::uno::Reference<css::uno::XInterface> const& xErrorContext =
-            css::uno::Reference<css::uno::XInterface>() );
-    </pre>
-    (full namespace qualification ::com::sun::star has been omitted
-    for brevity)
-
-    which unwraps the passed sequence's elements, assigning them to the
-    referenced values.  Specify optional arguments as boost::optional<T>.
-    If the length of the sequence is greater than the count of arguments,
-    then the latter sequence elements are ignored.
-    If too few arguments are given in the sequence and a missing argument is
-    no boost::optional<T>, then an lang::IllegalArgumentException is thrown
-    with the specified xErrorContext (defaults to null-ref).
-
-    The maximum number of service declarations can be set by defining
-    COMPHELPER_UNWRAPARGS_MAX_ARGS; its default is 12.
-*/
-#define COMPHELPER_UNWRAPARGS_make(z_, n_, unused_) \
-template < BOOST_PP_ENUM_PARAMS( BOOST_PP_ADD(n_, 1), typename T) > \
-inline void unwrapArgs( \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const& seq, \
-    BOOST_PP_ENUM(BOOST_PP_ADD(n_, 1), COMPHELPER_UNWRAPARGS_args, ~), \
-    ::com::sun::star::uno::Reference< \
-    ::com::sun::star::uno::XInterface> const& xErrorContext = \
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>() ) \
-{ \
-    BOOST_PP_REPEAT(BOOST_PP_ADD(n_, 1), COMPHELPER_UNWRAPARGS_extract, ~) \
-}
-
-#ifndef COMPHELPER_UNWRAPARGS_MAX_ARGS
-#define COMPHELPER_UNWRAPARGS_MAX_ARGS 12
-#endif
-
-BOOST_PP_REPEAT(COMPHELPER_UNWRAPARGS_MAX_ARGS, COMPHELPER_UNWRAPARGS_make, ~)
-
-#undef COMPHELPER_UNWRAPARGS_MAX_ARGS
-#undef COMPHELPER_UNWRAPARGS_make
-#undef COMPHELPER_UNWRAPARGS_args
-#undef COMPHELPER_UNWRAPARGS_extract
 
 } // namespace comphelper
 
