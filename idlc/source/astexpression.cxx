@@ -685,7 +685,7 @@ coerce_value(AstExprValue *ev, ExprType t)
     }
 }
 
-AstExprValue* AstExpression::coerce(ExprType t, bool bAssign)
+AstExprValue* AstExpression::coerce(ExprType t)
 {
     AstExprValue *copy;
 
@@ -753,8 +753,7 @@ AstExprValue* AstExpression::coerce(ExprType t, bool bAssign)
         copy = nullptr;
     }
 
-    if (bAssign)
-        m_exprValue = copy;
+    m_exprValue = copy;
 
     return copy;
 }

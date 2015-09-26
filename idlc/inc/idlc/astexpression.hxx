@@ -108,7 +108,7 @@ public:
         { m_exprValue = pEv; }
 
     // Evaluation and value coercion
-    AstExprValue* coerce(ExprType type, bool bAssign=true);
+    AstExprValue* coerce(ExprType type);
 
     // Evaluate then store value inside this AstExpression
     void evaluate();
