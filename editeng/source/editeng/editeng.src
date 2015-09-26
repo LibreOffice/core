@@ -71,9 +71,9 @@ Menu RID_MENU_SPELL
     {
         MenuItem
         {
-            Identifier = MN_SPELLING ;
-            HelpId = HID_EDITENG_SPELLER_START;
-            Text [ en-US ] = "~Spellcheck..." ;
+            Identifier = MN_IGNORE ;
+            HelpId = HID_EDITENG_SPELLER_IGNORE;
+            Text [ en-US ] = "I~gnore All" ;
         };
         MenuItem
         {
@@ -92,10 +92,11 @@ Menu RID_MENU_SPELL
         };
         MenuItem
         {
-            Identifier = MN_IGNORE ;
-            HelpId = HID_EDITENG_SPELLER_IGNORE;
-            Text [ en-US ] = "Ignore All" ;
+            Identifier = MN_SPELLING ;
+            HelpId = HID_EDITENG_SPELLER_START;
+            Text [ en-US ] = "~Spellcheck..." ;
         };
+        MenuItem { Separator = TRUE ; };
         MenuItem
         {
             Identifier = MN_AUTOCORR ;
@@ -103,7 +104,12 @@ Menu RID_MENU_SPELL
             SubMenu = Menu
             {
             };
-            Text [ en-US ] = "AutoCorrect" ;
+            Text [ en-US ] = "AutoCorrect ~to" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_AUTO_CORRECT_DLG ;
+            Text [ en-US ] = "Auto~Correct Options..." ;
         };
     };
 };

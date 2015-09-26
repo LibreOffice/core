@@ -21,13 +21,14 @@
 
 #include <editeng/editrids.hrc>
 
-#define MN_SPELLING         1
-#define MN_INSERT           2
-#define MN_IGNORE           3
-#define MN_AUTOCORR         4
-#define MN_WORDLANGUAGE     5
-#define MN_PARALANGUAGE     6
-#define MN_INSERT_SINGLE    7
+#define MN_SPELLING           1
+#define MN_INSERT             2
+#define MN_IGNORE             3
+#define MN_AUTOCORR           4
+#define MN_WORDLANGUAGE       5
+#define MN_PARALANGUAGE       6
+#define MN_INSERT_SINGLE      7
+#define MN_AUTO_CORRECT_DLG   8
 
 #define MN_ALTSTART     1000
 #define MN_AUTOSTART    2000
