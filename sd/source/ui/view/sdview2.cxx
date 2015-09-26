@@ -66,7 +66,6 @@
 
 #include "slideshow.hxx"
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -889,7 +888,7 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
                 OUString aDesc(SD_RESSTR(STR_DESC_NAMEGROUP));
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                boost::scoped_ptr<AbstractSvxNameDialog> pDlg;
+                std::unique_ptr<AbstractSvxNameDialog> pDlg;
 
                 if (pFact)
                     pDlg.reset(pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), aNewName, aDesc ));
