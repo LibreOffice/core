@@ -28,7 +28,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 class SdDrawDocument;
 class SfxRequest;
@@ -234,7 +233,7 @@ protected:
 
 private:
     class Implementation;
-    ::boost::scoped_ptr<Implementation> mpImpl;
+    std::unique_ptr<Implementation> mpImpl;
     DrawDocShell* mpDocShell;
     SdDrawDocument* mpDocument;
 
