@@ -84,6 +84,7 @@
 #include <istyleaccess.hxx>
 #include <swstylemanager.hxx>
 #include <IGrammarContact.hxx>
+#include <tblafmt.hxx>
 #include <tblsel.hxx>
 #include <MarkManager.hxx>
 #include <UndoManager.hxx>
@@ -255,6 +256,7 @@ SwDoc::SwDoc()
     mpStyleAccess( 0 ),
     mpLayoutCache( 0 ),
     mpGrammarContact(createGrammarContact()),
+    mpTableStyles(new SwTableAutoFormatTable),
     m_pXmlIdRegistry(),
     mReferenceCount(0),
     mbGlossDoc(false),

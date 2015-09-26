@@ -49,6 +49,7 @@
 #include <ndtxt.hxx>
 #include <calc.hxx>
 #include <tabcol.hxx>
+#include <tblafmt.hxx>
 #include <cellatr.hxx>
 #include <pam.hxx>
 #include <pamtyp.hxx>
@@ -1175,10 +1176,29 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
 }
 
     // AutoFormat for the table/table selection
-bool SwFEShell::SetTableAutoFormat( const SwTableAutoFormat& rNew )
+bool SwFEShell::SetTableStyle(const SwTableAutoFormat& rStyle)
+{
+    // make sure SwDoc has the style
+    GetDoc()->GetTableStyles().AddAutoFormat(rStyle);
+
+    SwTableNode *pTableNd = const_cast<SwTableNode*>(IsCrsrInTable());
+    if (!pTableNd)
+        return false;
+
+    // set the name & update
+    pTableNd->GetTable().SetTableStyleName(rStyle.GetName());
+    return UpdateTableStyleFormatting();
+}
+
+bool SwFEShell::UpdateTableStyleFormatting()
 {
     SwTableNode *pTableNd = const_cast<SwTableNode*>(IsCrsrInTable());
     if( !pTableNd || pTableNd->GetTable().IsTableComplex() )
+        return false;
+
+    OUString aTableStyleName(pTableNd->GetTable().GetTableStyleName());
+    SwTableAutoFormat* pTableStyle = GetDoc()->GetTableStyles().FindAutoFormat(aTableStyleName);
+    if (!pTableStyle)
         return false;
 
     SwSelBoxes aBoxes;
@@ -1204,7 +1224,7 @@ bool SwFEShell::SetTableAutoFormat( const SwTableAutoFormat& rNew )
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        bRet = GetDoc()->SetTableAutoFormat( aBoxes, rNew );
+        bRet = GetDoc()->SetTableAutoFormat(aBoxes, *pTableStyle);
         DELETEZ( pLastCols );
         DELETEZ( pLastRows );
         EndAllActionAndCall();

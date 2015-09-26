@@ -720,8 +720,11 @@ public:
     /// Not allowed if only empty cells are selected.
     bool IsAdjustCellWidthAllowed( bool bBalance = false ) const;
 
-    /// AutoFormat for table/ table selection.
-    bool SetTableAutoFormat( const SwTableAutoFormat& rNew );
+    /// Set table style of the current table.
+    bool SetTableStyle(const SwTableAutoFormat& rNew);
+
+    /// Update the direct formatting according to the current table style.
+    bool UpdateTableStyleFormatting();
 
     bool GetTableAutoFormat( SwTableAutoFormat& rGet );
 

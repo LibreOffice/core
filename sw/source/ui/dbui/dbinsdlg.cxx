@@ -1179,7 +1179,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 SetTabSet();
 
             if( pTAutoFormat )
-                rSh.SetTableAutoFormat( *pTAutoFormat );
+                rSh.SetTableStyle(*pTAutoFormat);
         }
         rSh.SetAutoUpdateCells( bIsAutoUpdateCells );
     }

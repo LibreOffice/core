@@ -498,7 +498,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl)
 IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, OkHdl, Button*, void)
 {
     if( bSetAutoFormat )
-        pShell->SetTableAutoFormat( (*pTableTable)[ nIndex ] );
+        pShell->SetTableStyle((*pTableTable)[nIndex]);
     EndDialog( RET_OK );
 }
 

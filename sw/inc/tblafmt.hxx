@@ -310,9 +310,16 @@ public:
     size_t size() const;
     SwTableAutoFormat const& operator[](size_t i) const;
     SwTableAutoFormat      & operator[](size_t i);
+
+    /// Append table style to the existing styles.
+    void AddAutoFormat(const SwTableAutoFormat& rFormat);
+
     void InsertAutoFormat(size_t i, std::unique_ptr<SwTableAutoFormat> pFormat);
     void EraseAutoFormat(size_t i);
     std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(size_t i);
+
+    /// Find table style with the provided name, return nullptr when not found.
+    SwTableAutoFormat* FindAutoFormat(const OUString& rName) const;
 
     bool Load();
     bool Save() const;

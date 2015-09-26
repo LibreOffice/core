@@ -1025,8 +1025,16 @@ SwTableAutoFormat      & SwTableAutoFormatTable::operator[](size_t const i)
     return *m_pImpl->m_AutoFormats[i];
 }
 
-void
-SwTableAutoFormatTable::InsertAutoFormat(size_t const i, std::unique_ptr<SwTableAutoFormat> pFormat)
+void SwTableAutoFormatTable::AddAutoFormat(const SwTableAutoFormat& rTableStyle)
+{
+    // don't insert when we already have style of this name
+    if (FindAutoFormat(rTableStyle.GetName()))
+        return;
+
+    InsertAutoFormat(size(), std::unique_ptr<SwTableAutoFormat>(new SwTableAutoFormat(rTableStyle)));
+}
+
+void SwTableAutoFormatTable::InsertAutoFormat(size_t const i, std::unique_ptr<SwTableAutoFormat> pFormat)
 {
     m_pImpl->m_AutoFormats.insert(m_pImpl->m_AutoFormats.begin() + i, std::move(pFormat));
 }
@@ -1042,6 +1050,17 @@ std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(siz
     std::unique_ptr<SwTableAutoFormat> pRet(std::move(*iter));
     m_pImpl->m_AutoFormats.erase(iter);
     return pRet;
+}
+
+SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormat(const OUString& rName) const
+{
+    for (auto &rFormat : m_pImpl->m_AutoFormats)
+    {
+        if (rFormat->GetName() == rName)
+            return rFormat.get();
+    }
+
+    return nullptr;
 }
 
 SwTableAutoFormatTable::~SwTableAutoFormatTable()

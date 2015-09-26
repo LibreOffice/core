@@ -127,6 +127,7 @@ class SwSectionFormat;
 class SwSectionFormats;
 class SwSectionData;
 class SwSelBoxes;
+class SwTableAutoFormatTable;
 class SwTOXBaseSection;
 class SwTOXTypes;
 class SwTabCols;
@@ -342,6 +343,9 @@ class SW_DLLPUBLIC SwDoc :
     rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenCharsTable;
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > mxVbaEvents;
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> m_xTemplateToProjectCache;
+
+    /// Table styles (autoformats that are applied with table changes).
+    std::unique_ptr<SwTableAutoFormatTable> mpTableStyles;
 
 private:
     ::std::unique_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
@@ -1256,6 +1260,9 @@ public:
 
     // Query attributes.
     bool GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet );
+
+    /// Return the available table styles.
+    SwTableAutoFormatTable& GetTableStyles() { return *mpTableStyles.get(); }
 
     void AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable );
 

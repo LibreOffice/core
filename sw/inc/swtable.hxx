@@ -114,6 +114,9 @@ protected:
                                         // at HTML-import.
     sal_uInt16      nRowsToRepeat;      // Number of rows to repeat on every page.
 
+    /// Name of the table style to be applied on this table.
+    OUString maTableStyleName;
+
     bool        bModifyLocked   :1;
     bool        bNewModel       :1; // false: old SubTableModel; true: new RowSpanModel
 #ifdef DBG_UTIL
@@ -174,6 +177,12 @@ public:
 
     void SetTableModel( bool bNew ){ bNewModel = bNew; }
     bool IsNewModel() const { return bNewModel; }
+
+    /// Return the table style name of this table.
+    OUString GetTableStyleName() const { return maTableStyleName; }
+
+    /// Set the new table style name for this table.
+    void SetTableStyleName(const OUString& rName) { maTableStyleName = rName; }
 
     sal_uInt16 GetRowsToRepeat() const { return std::min( (sal_uInt16)GetTabLines().size(), nRowsToRepeat ); }
     sal_uInt16 _GetRowsToRepeat() const { return nRowsToRepeat; }

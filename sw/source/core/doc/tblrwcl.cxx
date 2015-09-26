@@ -36,11 +36,14 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <cntfrm.hxx>
+#include <docsh.hxx>
+#include <fesh.hxx>
 #include <tabfrm.hxx>
 #include <frmtool.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
+#include <tblafmt.hxx>
 #include <tblsel.hxx>
 #include <fldbas.hxx>
 #include <swundo.hxx>
@@ -646,6 +649,8 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     if (pPCD && nCnt)
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     pDoc->UpdateCharts( GetFrameFormat()->GetName() );
+
+    pDoc->GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
 
     return true;
 }
