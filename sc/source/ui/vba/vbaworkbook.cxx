@@ -19,6 +19,7 @@
 
 #include <vbahelper/helperdecl.hxx>
 #include <tools/urlobj.hxx>
+#include <boost/optional.hpp>
 #include <comphelper/unwrapargs.hxx>
 #include <comphelper/servicehelper.hxx>
 
