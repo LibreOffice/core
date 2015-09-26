@@ -401,7 +401,12 @@ void ChartElementsPanel::updateData()
     mpCB2ndXAxis->Check(isAxisVisible(mxModel, AxisType::X_SECOND));
     mpCB2ndYAxis->Check(isAxisVisible(mxModel, AxisType::Y_SECOND));
 
-    if (nDimension != 3)
+    if (nDimension == 3)
+    {
+        mpCBZAxis->Enable();
+        mpCBZAxisTitle->Enable();
+    }
+    else
     {
         mpCBZAxis->Disable();
         mpCBZAxisTitle->Disable();
