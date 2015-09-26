@@ -550,6 +550,8 @@ bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     pDoc->UpdateCharts( GetFrameFormat()->GetName() );
 
+    pDoc->GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+
     return bRes;
 }
 
@@ -2094,6 +2096,8 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     OSL_ENSURE( pTableNd, "Where is the TableNode now?" );
 
     pTableNd->GetTable().SetRowsToRepeat( GetRowsToRepeat() );
+
+    pNewTable->SetTableStyleName(pTableNd->GetTable().GetTableStyleName());
 
     if( IS_TYPE( SwDDETable, this ))
     {

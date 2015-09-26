@@ -1181,22 +1181,25 @@ bool SwFEShell::SetTableStyle(const SwTableAutoFormat& rStyle)
     // make sure SwDoc has the style
     GetDoc()->GetTableStyles().AddAutoFormat(rStyle);
 
-    SwTableNode *pTableNd = const_cast<SwTableNode*>(IsCrsrInTable());
-    if (!pTableNd)
+    SwTableNode *pTableNode = const_cast<SwTableNode*>(IsCrsrInTable());
+    if (!pTableNode)
         return false;
 
     // set the name & update
-    pTableNd->GetTable().SetTableStyleName(rStyle.GetName());
-    return UpdateTableStyleFormatting();
+    pTableNode->GetTable().SetTableStyleName(rStyle.GetName());
+    return UpdateTableStyleFormatting(pTableNode);
 }
 
-bool SwFEShell::UpdateTableStyleFormatting()
+bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode)
 {
-    SwTableNode *pTableNd = const_cast<SwTableNode*>(IsCrsrInTable());
-    if( !pTableNd || pTableNd->GetTable().IsTableComplex() )
-        return false;
+    if (!pTableNode)
+    {
+        pTableNode = const_cast<SwTableNode*>(IsCrsrInTable());
+        if (!pTableNode || pTableNode->GetTable().IsTableComplex())
+            return false;
+    }
 
-    OUString aTableStyleName(pTableNd->GetTable().GetTableStyleName());
+    OUString aTableStyleName(pTableNode->GetTable().GetTableStyleName());
     SwTableAutoFormat* pTableStyle = GetDoc()->GetTableStyles().FindAutoFormat(aTableStyleName);
     if (!pTableStyle)
         return false;
@@ -1211,7 +1214,7 @@ bool SwFEShell::UpdateTableStyleFormatting()
         ::GetTableSelCrs( *this, aBoxes );
     else
     {
-        const SwTableSortBoxes& rTBoxes = pTableNd->GetTable().GetTabSortBoxes();
+        const SwTableSortBoxes& rTBoxes = pTableNode->GetTable().GetTabSortBoxes();
         for (size_t n = 0; n < rTBoxes.size(); ++n)
         {
             SwTableBox* pBox = rTBoxes[ n ];

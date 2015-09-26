@@ -2104,8 +2104,12 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             pTableNd->DelFrms();
             getIDocumentContentOperations().DeleteSection( pTableNd );
         }
+
+        GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+
         getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
+
         return true;
     }
 
@@ -2135,6 +2139,8 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         bRet = rTable.DeleteSel( this, aSelBoxes, 0, pUndo, true, true );
         if (bRet)
         {
+            GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+
             getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
         }
@@ -2203,6 +2209,8 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
 
         if (bRet)
         {
+            GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+
             getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
         }
@@ -2310,6 +2318,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
         if( pTableNd->GetTable().Merge( this, aBoxes, aMerged, pMergeBox, pUndo ))
         {
             nRet = TBLMERGE_OK;
+
             getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
             if( pUndo )
@@ -3257,6 +3266,10 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
     // TL_CHART2: need to inform chart of probably changed cell names
     UpdateCharts( rTable.GetFrameFormat()->GetName() );
 
+    // update table style formatting of both the tables
+    GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTNd);
+    GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pNew);
+
     getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
 
     return 0 != pNew;
@@ -3457,6 +3470,8 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
         *pNewTableFormat = *pOldTableFormat;
         pNewTableNd->GetTable().RegisterToFormat( *pNewTableFormat );
 
+        pNewTableNd->GetTable().SetTableStyleName(rTable.GetTableStyleName());
+
         // Calculate a new Size?
         // lcl_ChgTableSize: Only execute the second call if the first call was
         // successful, thus has an absolute Size
@@ -3527,6 +3542,8 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     }
     if( bRet )
     {
+        GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+
         getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
     }

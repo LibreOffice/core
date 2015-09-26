@@ -264,6 +264,7 @@ SwTable::SwTable( const SwTable& rTable )
     eTableChgMode( rTable.eTableChgMode ),
     nGrfsThatResize( 0 ),
     nRowsToRepeat( rTable.GetRowsToRepeat() ),
+    maTableStyleName(rTable.maTableStyleName),
     bModifyLocked( false ),
     bNewModel( rTable.bNewModel )
 {

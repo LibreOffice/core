@@ -724,7 +724,8 @@ public:
     bool SetTableStyle(const SwTableAutoFormat& rNew);
 
     /// Update the direct formatting according to the current table style.
-    bool UpdateTableStyleFormatting();
+    /// @param pTableNode Table node to update.  When nullptr, current cursor position is used.
+    bool UpdateTableStyleFormatting(SwTableNode *pTableNode = nullptr);
 
     bool GetTableAutoFormat( SwTableAutoFormat& rGet );
 
