@@ -150,32 +150,30 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
 }
 
 // part of the runtime-library?
-SbiSymDef* SbiParser::CheckRTLForSym( const OUString& rSym, SbxDataType eType )
+SbiSymDef* SbiParser::CheckRTLForSym(const OUString& rSym, SbxDataType eType)
 {
-    SbxVariable* pVar = GetBasic()->GetRtl()->Find( rSym, SbxCLASS_DONTCARE );
-    SbiSymDef* pDef = NULL;
-    if( pVar )
+    SbxVariable* pVar = GetBasic()->GetRtl()->Find(rSym, SbxCLASS_DONTCARE);
+    if (!pVar)
+        return nullptr;
+
+    if (pVar->IsA(TYPE(SbxMethod)))
     {
-        if( pVar->IsA( TYPE(SbxMethod) ) )
+        SbiProcDef* pProc_ = aRtlSyms.AddProc( rSym );
+        SbxMethod* pMethod = static_cast<SbxMethod*>(pVar);
+        if (pMethod->IsRuntimeFunction())
         {
-            SbiProcDef* pProc_ = aRtlSyms.AddProc( rSym );
-            SbxMethod* pMethod = static_cast<SbxMethod*>(pVar);
-            if ( pMethod && pMethod->IsRuntimeFunction() )
-            {
-                pProc_->SetType( pMethod->GetRuntimeFunctionReturnType() );
-            }
-            else
-            {
-                pProc_->SetType( pVar->GetType() );
-            }
-            pDef = pProc_;
+            pProc_->SetType( pMethod->GetRuntimeFunctionReturnType() );
         }
         else
         {
-            pDef = aRtlSyms.AddSym( rSym );
-            pDef->SetType( eType );
+            pProc_->SetType( pVar->GetType() );
         }
+        return pProc_;
     }
+
+
+    SbiSymDef* pDef = aRtlSyms.AddSym(rSym);
+    pDef->SetType(eType);
     return pDef;
 }
 
