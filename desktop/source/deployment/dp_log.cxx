@@ -25,6 +25,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/servicedecl.hxx>
+#include <boost/optional.hpp>
 #include <comphelper/unwrapargs.hxx>
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>

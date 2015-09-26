@@ -21,6 +21,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <unotools/configmgr.hxx>
+#include <boost/optional.hpp>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <i18nlangtag/mslangid.hxx>
