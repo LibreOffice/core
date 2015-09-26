@@ -476,7 +476,7 @@ Menu RID_POPUP_CHART
         {
             Identifier = SID_EXPORT_AS_GRAPHIC ;
             Command = ".uno:ExportAsGraphic" ;
-            Text [ en-US ] = "Export as Image.." ;
+            Text [ en-US ] = "Export as Image..." ;
         };
     };
 };
