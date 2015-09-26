@@ -122,7 +122,7 @@ private:
     // Fill out the lineno, filename and definition scope details
     void    fillDefinitionDetails();
     // Internal evaluation
-    AstExprValue* eval_internal();
+    void eval_internal();
     // Evaluate different sets of operators
     AstExprValue* eval_bin_op();
     AstExprValue* eval_bit_op();
