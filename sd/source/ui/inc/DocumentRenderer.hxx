@@ -63,7 +63,7 @@ public:
 
 private:
     class Implementation;
-    std::unique_ptr<Implementation> mpImpl;
+    ::boost::scoped_ptr<Implementation> mpImpl;
 };
 
 } // end of namespace sd
