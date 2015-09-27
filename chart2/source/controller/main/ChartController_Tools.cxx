@@ -217,8 +217,25 @@ void ChartController::executeDispatch_NewArrangement()
             // regression curve equations
             ::std::vector< Reference< chart2::XRegressionCurve > > aRegressionCurves(
                 RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine( xDiagram ));
-            ::std::for_each( aRegressionCurves.begin(), aRegressionCurves.end(),
-                      RegressionCurveHelper::resetEquationPosition );
+
+            // reset equation position
+            for( const auto& xCurve : aRegressionCurves )
+            {
+                if( xCurve.is() )
+                {
+                    try
+                    {
+                        const OUString aPosPropertyName( "RelativePosition" );
+                        Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties() ); // since m233: , uno::UNO_SET_THROW );
+                        if( xEqProp->getPropertyValue( aPosPropertyName ).hasValue())
+                            xEqProp->setPropertyValue( aPosPropertyName, uno::Any());
+                    }
+                    catch( const uno::Exception & ex )
+                    {
+                        ASSERT_EXCEPTION( ex );
+                    }
+                }
+            }
 
             aUndoGuard.commit();
         }

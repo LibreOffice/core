@@ -392,7 +392,9 @@ InternalDataProvider::InternalDataProvider(
 
             // data series
             ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartDoc ));
-            ::std::for_each( aSeriesVector.begin(), aSeriesVector.end(), lcl_internalizeSeries( m_aInternalData, *this, bConnectToModel, m_bDataInColumns ) );
+            lcl_internalizeSeries ftor( m_aInternalData, *this, bConnectToModel, m_bDataInColumns );
+            for( const auto& rxScreen : aSeriesVector )
+                ftor( rxScreen );
         }
     }
     catch( const uno::Exception & ex )
