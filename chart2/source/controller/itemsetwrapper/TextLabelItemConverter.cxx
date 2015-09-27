@@ -34,10 +34,10 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svx/tabline.hxx>
-#include <boost/checked_delete.hpp>
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace com::sun::star::chart2;
@@ -212,13 +212,13 @@ TextLabelItemConverter::TextLabelItemConverter(
 
 TextLabelItemConverter::~TextLabelItemConverter()
 {
-    std::for_each(maConverters.begin(), maConverters.end(), boost::checked_deleter<ItemConverter>());
+    std::for_each(maConverters.begin(), maConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void TextLabelItemConverter::FillItemSet( SfxItemSet& rOutItemSet ) const
 {
-    std::for_each(maConverters.begin(), maConverters.end(),
-        FillItemSetFunc(rOutItemSet));
+    for( const auto& pConv : maConverters )
+        pConv->FillItemSet( rOutItemSet );
 
     // own items
     ItemConverter::FillItemSet(rOutItemSet);
@@ -228,8 +228,8 @@ bool TextLabelItemConverter::ApplyItemSet( const SfxItemSet& rItemSet )
 {
     bool bResult = false;
 
-    std::for_each(maConverters.begin(), maConverters.end(),
-        ApplyItemSetFunc(rItemSet, bResult));
+    for( const auto& pConv: maConverters )
+        bResult = pConv->ApplyItemSet( rItemSet ) || bResult;
 
     // own items
     return ItemConverter::ApplyItemSet(rItemSet) || bResult;

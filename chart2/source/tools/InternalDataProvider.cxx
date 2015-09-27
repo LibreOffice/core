@@ -105,85 +105,6 @@ struct lcl_setModified : public ::std::unary_function< lcl_tSequenceMap, void >
     }
 };
 
-struct lcl_internalizeSeries : public ::std::unary_function< Reference< chart2::XDataSeries >, void >
-{
-    lcl_internalizeSeries( InternalData & rInternalData,
-                           InternalDataProvider & rProvider,
-                           bool bConnectToModel, bool bDataInColumns ) :
-            m_rInternalData( rInternalData ),
-            m_rProvider( rProvider ),
-            m_bConnectToModel( bConnectToModel ),
-            m_bDataInColumns( bDataInColumns )
-    {}
-    void operator() ( const Reference< chart2::XDataSeries > & xSeries )
-    {
-        Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-        Reference< chart2::data::XDataSink >   xSink(   xSeries, uno::UNO_QUERY );
-        if( xSource.is() && xSink.is() )
-        {
-            Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeriesData = xSource->getDataSequences();
-            Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeriesData( aOldSeriesData.getLength() );
-            for( sal_Int32 i=0; i<aOldSeriesData.getLength(); ++i )
-            {
-                sal_Int32 nNewIndex( m_bDataInColumns ? m_rInternalData.appendColumn() : m_rInternalData.appendRow() );
-                OUString aIdentifier( OUString::number( nNewIndex ));
-                //@todo: deal also with genericXDataSequence
-                Reference< chart2::data::XNumericalDataSequence > xValues( aOldSeriesData[i]->getValues(), uno::UNO_QUERY );
-                Reference< chart2::data::XTextualDataSequence > xLabel( aOldSeriesData[i]->getLabel(), uno::UNO_QUERY );
-                Reference< chart2::data::XDataSequence > xNewValues;
-
-                if( xValues.is() )
-                {
-                    ::std::vector< double > aValues( ContainerHelper::SequenceToVector( xValues->getNumericalData()));
-                    if( m_bDataInColumns )
-                        m_rInternalData.setColumnValues( nNewIndex, aValues );
-                    else
-                        m_rInternalData.setRowValues( nNewIndex, aValues );
-                    if( m_bConnectToModel )
-                    {
-                        xNewValues.set( m_rProvider.createDataSequenceByRangeRepresentation( aIdentifier ));
-                        comphelper::copyProperties(
-                            Reference< beans::XPropertySet >( xValues, uno::UNO_QUERY ),
-                            Reference< beans::XPropertySet >( xNewValues, uno::UNO_QUERY ));
-                    }
-                }
-
-                if( xLabel.is() )
-                {
-                    if( m_bDataInColumns )
-                        m_rInternalData.setComplexColumnLabel( nNewIndex, ContainerHelper::SequenceToVector( lcl_StringToAnySequence( xLabel->getTextualData() ) ) );
-                    else
-                        m_rInternalData.setComplexRowLabel( nNewIndex, ContainerHelper::SequenceToVector( lcl_StringToAnySequence( xLabel->getTextualData() ) ) );
-                    if( m_bConnectToModel )
-                    {
-                        Reference< chart2::data::XDataSequence > xNewLabel(
-                            m_rProvider.createDataSequenceByRangeRepresentation( lcl_aLabelRangePrefix + aIdentifier ));
-                        comphelper::copyProperties(
-                            Reference< beans::XPropertySet >( xLabel, uno::UNO_QUERY ),
-                            Reference< beans::XPropertySet >( xNewLabel, uno::UNO_QUERY ));
-                        aNewSeriesData[i] = Reference< chart2::data::XLabeledDataSequence >(
-                                new LabeledDataSequence( xNewValues, xNewLabel ));
-                    }
-                }
-                else
-                {
-                    if( m_bConnectToModel )
-                        aNewSeriesData[i] = Reference< chart2::data::XLabeledDataSequence >(
-                            new LabeledDataSequence( xNewValues ));
-                }
-            }
-            if( m_bConnectToModel )
-                xSink->setData( aNewSeriesData );
-        }
-     }
-
-private:
-    InternalData &          m_rInternalData;
-    InternalDataProvider &  m_rProvider;
-    bool                    m_bConnectToModel;
-    bool                    m_bDataInColumns;
-};
-
 struct lcl_copyFromLevel : public ::std::unary_function< vector< uno::Any >, uno::Any >
 {
 public:
@@ -392,7 +313,49 @@ InternalDataProvider::InternalDataProvider(
 
             // data series
             ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartDoc ));
-            ::std::for_each( aSeriesVector.begin(), aSeriesVector.end(), lcl_internalizeSeries( m_aInternalData, *this, bConnectToModel, m_bDataInColumns ) );
+            for( const auto& rxSeries : aSeriesVector )
+            {
+                Reference< chart2::data::XDataSource > xSource( rxSeries, ::uno::UNO_QUERY );
+                Reference< chart2::data::XDataSink >   xSink( rxSeries, ::uno::UNO_QUERY );
+                if( xSource.is() && xSink.is() )
+                {
+                    Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeriesData = xSource->getDataSequences();
+                    Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeriesData( aOldSeriesData.getLength() );
+                    for( sal_Int32 i=0; i<aOldSeriesData.getLength(); ++i )
+                    {
+                        sal_Int32 nNewIndex( m_bDataInColumns ? m_aInternalData.appendColumn() : m_aInternalData.appendRow() );
+                        OUString aIdentifier( OUString::number( nNewIndex ));
+                        //@todo: deal also with genericXDataSequence
+                        Reference< chart2::data::XNumericalDataSequence > xValues( aOldSeriesData[i]->getValues(), uno::UNO_QUERY );
+                        Reference< chart2::data::XTextualDataSequence > xLabel( aOldSeriesData[i]->getLabel(), uno::UNO_QUERY );
+                        Reference< chart2::data::XDataSequence > xNewValues;
+
+                        if( xValues.is() )
+                        {
+                            ::std::vector< double > aValues( ContainerHelper::SequenceToVector( xValues->getNumericalData()));
+                            if( m_bDataInColumns )
+                                m_aInternalData.setColumnValues( nNewIndex, aValues );
+                            else
+                                m_aInternalData.setRowValues( nNewIndex, aValues );
+                            if( bConnectToModel )
+                            {
+                                xNewValues.set( this->createDataSequenceByRangeRepresentation( aIdentifier ));
+                                comphelper::copyProperties(
+                                    Reference< beans::XPropertySet >( xValues, uno::UNO_QUERY ),
+                                    Reference< beans::XPropertySet >( xNewValues, uno::UNO_QUERY ));
+                            }
+                        }
+                        else
+                        {
+                            if( bConnectToModel )
+                                aNewSeriesData[i] = Reference< chart2::data::XLabeledDataSequence >(
+                                    new LabeledDataSequence( xNewValues ) );
+                        }
+                    }
+                    if( bConnectToModel )
+                        xSink->setData( aNewSeriesData );
+                }
+            }
         }
     }
     catch( const uno::Exception & ex )

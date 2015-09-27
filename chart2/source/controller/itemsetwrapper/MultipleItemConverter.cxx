@@ -21,7 +21,7 @@
 #include "ItemPropertyMap.hxx"
 
 #include <algorithm>
-#include <boost/checked_delete.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -33,7 +33,7 @@ MultipleItemConverter::MultipleItemConverter( SfxItemPool& rItemPool )
 }
 MultipleItemConverter::~MultipleItemConverter()
 {
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), boost::checked_deleter<ItemConverter>());
+    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void MultipleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
@@ -58,8 +58,8 @@ bool MultipleItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 {
     bool bResult = false;
 
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ApplyItemSetFunc( rItemSet, bResult ));
+    for( const auto& pConv : m_aConverters )
+        bResult = pConv->ApplyItemSet( rItemSet ) || bResult;
 
     // no own items
     return bResult;

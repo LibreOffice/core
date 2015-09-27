@@ -46,10 +46,10 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <svx/tabline.hxx>
-#include <boost/checked_delete.hpp>
 
 #include <functional>
 #include <algorithm>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -240,13 +240,13 @@ DataPointItemConverter::DataPointItemConverter(
 
 DataPointItemConverter::~DataPointItemConverter()
 {
-    ::std::for_each(m_aConverters.begin(), m_aConverters.end(), boost::checked_deleter<ItemConverter>());
+    ::std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void DataPointItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     FillItemSetFunc( rOutItemSet ));
+    for( const auto& pConv : m_aConverters )
+        pConv->FillItemSet( rOutItemSet );
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -262,8 +262,8 @@ bool DataPointItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 {
     bool bResult = false;
 
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ApplyItemSetFunc( rItemSet, bResult ));
+    for( const auto& pConv : m_aConverters )
+        bResult = pConv->ApplyItemSet( rItemSet ) || bResult;
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;

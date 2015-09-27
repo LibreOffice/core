@@ -171,9 +171,6 @@ namespace RegressionCurveHelper
         getAllRegressionCurvesNotMeanValueLine(
                 const css::uno::Reference<css::chart2::XDiagram>& xDiagram );
 
-    OOO_DLLPUBLIC_CHARTTOOLS void resetEquationPosition(
-        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
-
     /// @return the index of the given curve in the given container. -1 if not contained
     OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getRegressionCurveIndex(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xContainer,

@@ -30,6 +30,7 @@
 #include "CommonConverters.hxx"
 #include "ChartTypeHelper.hxx"
 #include <unonames.hxx>
+#include <memory>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
@@ -42,7 +43,6 @@
 #include <svx/chrtitem.hxx>
 #include <svl/intitem.hxx>
 #include <rtl/math.hxx>
-#include <boost/checked_delete.hpp>
 
 #include <algorithm>
 
@@ -110,12 +110,13 @@ AxisItemConverter::~AxisItemConverter()
     delete m_pExplicitScale;
     delete m_pExplicitIncrement;
 
-    ::std::for_each(m_aConverters.begin(), m_aConverters.end(), boost::checked_deleter<ItemConverter>());
+    ::std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void AxisItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), FillItemSetFunc( rOutItemSet ));
+    for( const auto& pConv : m_aConverters )
+        pConv->FillItemSet( rOutItemSet );
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -125,7 +126,8 @@ bool AxisItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 {
     bool bResult = false;
 
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), ApplyItemSetFunc( rItemSet, bResult ));
+    for( const auto& pConv : m_aConverters )
+        bResult = pConv->ApplyItemSet( rItemSet ) || bResult;
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;

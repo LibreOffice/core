@@ -713,25 +713,6 @@ std::vector< Reference< chart2::XRegressionCurve > >
     return aResult;
 }
 
-void RegressionCurveHelper::resetEquationPosition(
-    const Reference< chart2::XRegressionCurve > & xCurve )
-{
-    if( xCurve.is())
-    {
-        try
-        {
-            const OUString aPosPropertyName( "RelativePosition" );
-            Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties()); // since m233: , uno::UNO_SET_THROW );
-            if( xEqProp->getPropertyValue( aPosPropertyName ).hasValue())
-                xEqProp->setPropertyValue( aPosPropertyName, uno::Any());
-        }
-        catch( const uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-}
-
 sal_Int32 RegressionCurveHelper::getRegressionCurveIndex(
     const Reference< chart2::XRegressionCurveContainer >& xContainer,
     const Reference< chart2::XRegressionCurve >& xCurve )

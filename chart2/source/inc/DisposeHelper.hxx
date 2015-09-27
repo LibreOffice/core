@@ -22,10 +22,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <functional>
-#include <algorithm>
-#include <utility>
-
 namespace chart
 {
 namespace DisposeHelper
@@ -47,37 +43,11 @@ template< class Intf >
     rIntf.set( 0 );
 }
 
-template< class T >
-    struct DisposeFunctor : public ::std::unary_function< T, void >
-{
-    void operator() ( const T & xIntf )
-    {
-        Dispose< T >( xIntf );
-    }
-};
-
-template< typename T >
-    struct DisposeFirstOfPairFunctor : public ::std::unary_function< T, void >
-{
-    void operator() ( const T & rElem )
-    {
-        Dispose< typename T::first_type >( rElem.first );
-    }
-};
-
-template< typename T >
-    struct DisposeSecondOfPairFunctor : public ::std::unary_function< T, void >
-{
-    void operator() ( const T & rElem )
-    {
-        Dispose< typename T::second_type >( rElem.second );
-    }
-};
-
 template< class Container >
     void DisposeAllElements( Container & rContainer )
 {
-    ::std::for_each( rContainer.begin(), rContainer.end(), DisposeFunctor< typename Container::value_type >());
+    for( const auto& rElem : rContainer )
+        Dispose< typename Container::value_type >( rElem );
 }
 
 } //  namespace DisposeHelper
