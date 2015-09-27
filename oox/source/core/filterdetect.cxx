@@ -178,9 +178,11 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
         rContentType == "application/vnd.ms-word.template.macroEnabledTemplate.main+xml" )
         return OUString( "writer_MS_Word_2007_Template" );
 
-    if( rContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" ||
-        rContentType == "application/vnd.ms-excel.sheet.macroEnabled.main+xml" )
+    if( rContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")
         return OUString( "MS Excel 2007 XML" );
+
+    if (rContentType == "application/vnd.ms-excel.sheet.macroEnabled.main+xml")
+        return OUString( "MS Excel 2007 VBA XML" );
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ||
         rContentType == "application/vnd.ms-excel.template.macroEnabled.main+xml" )

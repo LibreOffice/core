@@ -506,6 +506,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	calc8 \
 	calc8_template \
 	MS_Excel_2007_XML \
+	MS_Excel_2007_VBA_XML \
 	MS_Excel_2007_XML_Template \
 	MS_Excel_2007_Binary \
 	calc_OOXML \

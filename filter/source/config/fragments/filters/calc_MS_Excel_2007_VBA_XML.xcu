@@ -21,7 +21,7 @@
     <prop oor:name="FilterService"><value>com.sun.star.comp.oox.xls.ExcelFilter</value></prop>
     <prop oor:name="UserData"><value>macro-enabled</value></prop>
     <prop oor:name="FileFormatVersion"/>
-    <prop oor:name="Type"><value>MS Excel 2007 XML</value></prop>
+    <prop oor:name="Type"><value>MS Excel 2007 VBA XML</value></prop>
     <prop oor:name="TemplateName"/>
     <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
     <prop oor:name="UIName">
