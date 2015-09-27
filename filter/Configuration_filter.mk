@@ -486,6 +486,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	calc_HTML \
 	generic_HTML \
 	generic_Text \
+	calc_Gnumeric \
 	calc_Lotus \
 	calc_QPro \
 	calc_MS_Excel_40 \
@@ -545,6 +546,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	dBase \
 	calc8 \
 	calc8_template \
+	calc_Gnumeric \
 	calc_MS_Excel_2007_XML \
 	calc_MS_Excel_2007_VBA_XML \
 	calc_MS_Excel_2007_XML_Template \

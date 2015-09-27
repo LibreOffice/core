@@ -236,6 +236,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/orcus/interface \
 	sc/source/filter/orcus/orcusfiltersimpl \
 	sc/source/filter/orcus/xmlcontext \
+	sc/source/filter/orcus/filterdetect \
 ))
 
 endif

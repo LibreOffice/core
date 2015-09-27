@@ -685,13 +685,6 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
     // exists) in order to find a usable loader. Exploit it as a temporary
     // hack.
 
-    if (aURL.endsWith(".gnumeric"))
-    {
-        rType = "generic_Text";
-        rFilter = "gnumeric";
-        return true;
-    }
-
     // depending on the experimental mode
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))

@@ -1,0 +1,17 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+<node oor:name="Gnumeric XML" oor:op="replace" >
+    <prop oor:name="DetectService"><value>com.sun.star.comp.sc.OrcusFilterDetect</value></prop>
+    <prop oor:name="URLPattern"/>
+    <prop oor:name="Extensions"><value>gnumeric gnm</value></prop>
+    <prop oor:name="MediaType"><value>application/x-gnumeric</value></prop>
+    <prop oor:name="Preferred"><value>false</value></prop>
+    <prop oor:name="PreferredFilter"><value>Gnumeric Spreadsheet</value></prop>
+    <prop oor:name="UIName"><value xml:lang="en-US">Gnumeric Spreadsheet</value></prop>
+    <prop oor:name="ClipboardFormat"/>
+</node>
