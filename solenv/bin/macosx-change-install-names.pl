@@ -49,7 +49,7 @@ sub action($$$)
         ('app/UREBIN/URELIB' => '@executable_path/../Frameworks',
          'app/OOO/URELIB' => '@executable_path/../Frameworks',
          'app/OOO/OOO' => '@executable_path/../Frameworks',
-         'app/SDKBIN/URELIB' => '@executable_path/../Frameworks',
+         'app/SDKBIN/URELIB' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/NONE' => '@__VIA_LIBRARY_PATH__',
