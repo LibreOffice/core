@@ -233,6 +233,10 @@ private:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence > & xSequence );
 
+    template < sal_Int32 ( InternalData::* append )(),
+               void ( InternalData::* setValues )( sal_Int32, const ::std::vector< double >& ) >
+    struct internalizeSeriesHelper;
+
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence >
         createDataSequenceAndAddToMap( const OUString & rRangeRepresentation,
