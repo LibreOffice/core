@@ -29,6 +29,7 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -232,6 +233,12 @@ private:
         const OUString & rRangeRepresentation,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence > & xSequence );
+
+    template < sal_Int32 ( InternalData::* append )(),
+               void ( InternalData::* setValues )( sal_Int32, const ::std::vector< double >& ) >
+    void internalizeSeries(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >&,
+        bool );
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence >
