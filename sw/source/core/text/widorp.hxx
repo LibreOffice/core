@@ -71,7 +71,14 @@ public:
     // method <SwTextFrmBreak::IsBreakNow>, which isn't virtual.
     bool IsBreakNowWidAndOrp( SwTextMargin &rLine )
     {
-        return ( rLine.GetLineNr() > nOrphLines ) && IsBreakNow( rLine );
+        bool isOnFirstLine = (rLine.GetLineNr() == 1 && !rLine.GetPrev());
+        if ( isOnFirstLine && rLine.GetCurr()->IsDummy()) {
+            return IsBreakNow( rLine );
+        }
+        if ( rLine.GetLineNr() > nOrphLines ) {
+            return IsBreakNow( rLine );
+        }
+        return false;
     }
 };
 
