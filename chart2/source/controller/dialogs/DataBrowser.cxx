@@ -401,14 +401,6 @@ Image SeriesHeader::GetChartTypeImage(
     return aResult;
 }
 
-struct applyChangesFunctor : public ::std::unary_function< std::shared_ptr< SeriesHeader >, void >
-{
-    void operator() ( std::shared_ptr< SeriesHeader > spHeader )
-    {
-        spHeader->applyChanges();
-    }
-};
-
 } // namespace impl
 
 namespace
@@ -541,7 +533,8 @@ bool DataBrowser::MaySwapColumns() const
 
 void DataBrowser::clearHeaders()
 {
-    ::std::for_each( m_aSeriesHeaders.begin(), m_aSeriesHeaders.end(), impl::applyChangesFunctor());
+    for( const auto& spHeader : m_aSeriesHeaders )
+        spHeader->applyChanges();
     m_aSeriesHeaders.clear();
 }
 
@@ -1183,7 +1176,8 @@ bool DataBrowser::EndEditing()
     SaveModified();
 
     // apply changes made to series headers
-    ::std::for_each( m_aSeriesHeaders.begin(), m_aSeriesHeaders.end(), impl::applyChangesFunctor());
+    for( const auto& spHeader : m_aSeriesHeaders )
+        spHeader->applyChanges();
 
     if( m_bDataValid )
         return true;

@@ -217,8 +217,10 @@ void ChartController::executeDispatch_NewArrangement()
             // regression curve equations
             ::std::vector< Reference< chart2::XRegressionCurve > > aRegressionCurves(
                 RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine( xDiagram ));
-            ::std::for_each( aRegressionCurves.begin(), aRegressionCurves.end(),
-                      RegressionCurveHelper::resetEquationPosition );
+
+            // reset equation position
+            for( const auto& xCurve : aRegressionCurves )
+                RegressionCurveHelper::resetEquationPosition( xCurve );
 
             aUndoGuard.commit();
         }

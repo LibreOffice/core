@@ -67,27 +67,18 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-struct lcl_InsertMeanValueLine
+
+void lcl_InsertMeanValueLine( const uno::Reference< uno::XComponentContext > & xContext,
+                              const uno::Reference< chart2::XDataSeries > & xSeries )
 {
-public:
-    explicit lcl_InsertMeanValueLine( const uno::Reference< uno::XComponentContext > & xContext ) :
-            m_xContext( xContext )
-    {}
-
-    void operator()( const uno::Reference< chart2::XDataSeries > & xSeries )
+    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+        xSeries, uno::UNO_QUERY );
+    if( xRegCurveCnt.is())
     {
-        uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-            xSeries, uno::UNO_QUERY );
-        if( xRegCurveCnt.is())
-        {
-            ::chart::RegressionCurveHelper::addMeanValueLine(
-                xRegCurveCnt, m_xContext, uno::Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
-        }
+        ::chart::RegressionCurveHelper::addMeanValueLine(
+            xRegCurveCnt, xContext, uno::Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
     }
-
-private:
-    uno::Reference< uno::XComponentContext > m_xContext;
-};
+}
 
 } // anonymous namespace
 
@@ -317,8 +308,9 @@ void ChartController::executeDispatch_InsertMeanValue()
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::INSERT, SCH_RESSTR( STR_OBJECT_AVERAGE_LINE )),
         m_xUndoManager );
-    lcl_InsertMeanValueLine( m_xCC ).operator()(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ));
+    lcl_InsertMeanValueLine( m_xCC,
+                             ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(),
+                                                                    getModel() ) );
     aUndoGuard.commit();
 }
 
@@ -334,13 +326,15 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
     if( xSeries.is() )
     {
         //if a series is selected insert mean value only for that series:
-        lcl_InsertMeanValueLine( m_xCC ).operator()(xSeries);
+        lcl_InsertMeanValueLine( m_xCC, xSeries );
     }
     else
     {
         ::std::vector< uno::Reference< chart2::XDataSeries > > aSeries(
             DiagramHelper::getDataSeriesFromDiagram( ChartModelHelper::findDiagram( getModel() )));
-        ::std::for_each( aSeries.begin(), aSeries.end(), lcl_InsertMeanValueLine( m_xCC ));
+
+        for( const auto& xSrs : aSeries )
+            lcl_InsertMeanValueLine( m_xCC, xSrs );
     }
     aUndoGuard.commit();
 }
