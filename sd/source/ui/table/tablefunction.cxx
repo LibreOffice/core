@@ -128,7 +128,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         if( (nColumns == 0) || (nRows == 0) )
         {
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            std::unique_ptr<SvxAbstractNewTableDialog> pDlg( pFact ? pFact->CreateSvxNewTableDialog( NULL ) : 0);
+            boost::scoped_ptr<SvxAbstractNewTableDialog> pDlg( pFact ? pFact->CreateSvxNewTableDialog( NULL ) : 0);
 
             if( !pDlg.get() || (pDlg->Execute() != RET_OK) )
                 break;
@@ -222,23 +222,15 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
 
 void DrawViewShell::GetTableMenuState( SfxItemSet &rSet )
 {
-    bool bIsUIActive = GetDocSh()->IsUIActive();
-    if( bIsUIActive )
+    OUString aActiveLayer = mpDrawView->GetActiveLayer();
+    SdrPageView* pPV = mpDrawView->GetSdrPageView();
+
+    if(
+        ( !aActiveLayer.isEmpty() && pPV && ( pPV->IsLayerLocked(aActiveLayer) ||
+        !pPV->IsLayerVisible(aActiveLayer) ) ) ||
+        SD_MOD()->GetWaterCan() )
     {
         rSet.DisableItem( SID_INSERT_TABLE );
-    }
-    else
-    {
-        OUString aActiveLayer = mpDrawView->GetActiveLayer();
-        SdrPageView* pPV = mpDrawView->GetSdrPageView();
-
-        if( bIsUIActive ||
-            ( !aActiveLayer.isEmpty() && pPV && ( pPV->IsLayerLocked(aActiveLayer) ||
-            !pPV->IsLayerVisible(aActiveLayer) ) ) ||
-            SD_MOD()->GetWaterCan() )
-        {
-            rSet.DisableItem( SID_INSERT_TABLE );
-        }
     }
 }
 
