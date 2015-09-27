@@ -376,12 +376,12 @@ void writePROJECTCODEPAGE(SvStream& rStrm)
 }
 
 //section 2.3.4.2.1.5
-void writePROJECTNAME(SvStream& rStrm)
+void writePROJECTNAME(SvStream& rStrm, const OUString& name)
 {
     rStrm.WriteUInt16(0x0004); // id
-    sal_uInt32 sizeOfProjectName = 0x0000000a; // for project name "VBAProject"
+    sal_uInt32 sizeOfProjectName = name.getLength(); // for project name "VBAProject"
     rStrm.WriteUInt32(sizeOfProjectName); // sizeOfProjectName
-    exportString(rStrm, "VBAProject"); // ProjectName
+    exportString(rStrm, name); // ProjectName
 }
 
 //section 2.3.4.2.1.6
@@ -437,13 +437,13 @@ void writePROJECTCONSTANTS(SvStream& rStrm)
 }
 
 // section 2.3.4.2.1
-void writePROJECTINFORMATION(SvStream& rStrm)
+void writePROJECTINFORMATION(SvStream& rStrm, const OUString& projectName)
 {
     writePROJECTSYSKIND(rStrm);
     writePROJECTLCID(rStrm);
     writePROJECTLCIDINVOKE(rStrm);
     writePROJECTCODEPAGE(rStrm);
-    writePROJECTNAME(rStrm);
+    writePROJECTNAME(rStrm, projectName);
     writePROJECTDOCSTRING(rStrm);
     writePROJECTHELPFILEPATH(rStrm);
     writePROJECTHELPCONTEXT(rStrm);
@@ -613,11 +613,11 @@ void writePROJECTMODULES(SvStream& rStrm, css::uno::Reference<css::container::XN
 }
 
 // section 2.3.4.2
-void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, const std::vector<sal_Int32>& rLibraryMap)
+void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, const std::vector<sal_Int32>& rLibraryMap, const OUString& projectName)
 {
     SvMemoryStream aDirStream(4096, 4096);
 
-    writePROJECTINFORMATION(aDirStream);
+    writePROJECTINFORMATION(aDirStream, projectName);
     writePROJECTREFERENCES(aDirStream);
     writePROJECTMODULES(aDirStream, xNameContainer, rLibraryMap);
     aDirStream.WriteUInt16(0x0010); // terminator
@@ -912,7 +912,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     OUString aDirPath = "/home/moggi/Documents/testfiles/vba/VBA/dir";
     addFileStreamToSotStream(aDirPath, pDirStream);
 #else
-    exportDirStream(*pDirStream, xNameContainer, aLibraryMap);
+    exportDirStream(*pDirStream, xNameContainer, aLibraryMap, getProjectName());
 #endif
 
 #if VBA_USE_ORIGINAL_PROJECT_STREAM
