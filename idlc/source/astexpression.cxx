@@ -885,19 +885,19 @@ void AstExpression::evaluate()
         case EC_mul:
         case EC_div:
         case EC_mod:
-            m_exprValue = eval_bin_op();
+            m_exprValue = eval_bin_op().release();
             break;
         case EC_or:
         case EC_xor:
         case EC_and:
         case EC_left:
         case EC_right:
-            m_exprValue = eval_bit_op();
+            m_exprValue = eval_bit_op().release();
             break;
         case EC_u_plus:
         case EC_u_minus:
         case EC_bit_neg:
-            m_exprValue = eval_un_op();
+            m_exprValue = eval_un_op().release();
             break;
         case EC_symbol:
             m_exprValue = eval_symbol();
@@ -907,7 +907,7 @@ void AstExpression::evaluate()
     }
 }
 
-AstExprValue* AstExpression::eval_bin_op()
+std::unique_ptr<AstExprValue> AstExpression::eval_bin_op()
 {
     ExprType eType = ET_double;
 
@@ -955,10 +955,10 @@ AstExprValue* AstExpression::eval_bin_op()
             return NULL;
     }
 
-    return retval.release();
+    return retval;
 }
 
-AstExprValue* AstExpression::eval_bit_op()
+std::unique_ptr<AstExprValue> AstExpression::eval_bit_op()
 {
     if (m_subExpr1 == NULL || m_subExpr2 == NULL)
         return NULL;
@@ -997,10 +997,10 @@ AstExprValue* AstExpression::eval_bit_op()
             return NULL;
     }
 
-    return retval.release();
+    return retval;
 }
 
-AstExprValue* AstExpression::eval_un_op()
+std::unique_ptr<AstExprValue> AstExpression::eval_un_op()
 {
     if (m_subExpr1 == NULL)
         return NULL;
@@ -1030,7 +1030,7 @@ AstExprValue* AstExpression::eval_un_op()
             return NULL;
     }
 
-    return retval.release();
+    return retval;
 }
 
 AstExprValue* AstExpression::eval_symbol()

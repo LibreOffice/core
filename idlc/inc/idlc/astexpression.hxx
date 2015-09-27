@@ -19,6 +19,10 @@
 #ifndef INCLUDED_IDLC_INC_IDLC_ASTEXPRESSION_HXX
 #define INCLUDED_IDLC_INC_IDLC_ASTEXPRESSION_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <idlc/idlc.hxx>
 
 // Enum to define all the different operators to combine expressions
@@ -120,9 +124,9 @@ private:
     // Fill out the lineno, filename and definition scope details
     void    fillDefinitionDetails();
     // Evaluate different sets of operators
-    AstExprValue* eval_bin_op();
-    AstExprValue* eval_bit_op();
-    AstExprValue* eval_un_op();
+    std::unique_ptr<AstExprValue> eval_bin_op();
+    std::unique_ptr<AstExprValue> eval_bit_op();
+    std::unique_ptr<AstExprValue> eval_un_op();
     AstExprValue* eval_symbol();
 
     AstScope*       m_pScope;       // scope defined in
