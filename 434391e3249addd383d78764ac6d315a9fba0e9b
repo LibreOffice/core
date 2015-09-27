@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_0ea47455",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-27T20:07:00Z",
+      "side": 1,
+      "message": "Obviously this needs to happen before the checks if you can edit the cells.",
+      "revId": "434391e3249addd383d78764ac6d315a9fba0e9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
