@@ -895,31 +895,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             eTHA = SDRTEXTHORZADJUST_LEFT;
                         break;
                     }
-                    // if there is a 100% use of following attributes, the textbox can been aligned also in vertical direction
-                    switch ( eTextAnchor )
-                    {
-                        case mso_anchorTopCentered :
-                        case mso_anchorMiddleCentered :
-                        case mso_anchorBottomCentered :
-                        case mso_anchorTopCenteredBaseline:
-                        case mso_anchorBottomCenteredBaseline:
-                        {
-                            // check if it is sensible to use the centered alignment
-                            sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
-                            if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left and also right aligned pararagraphs
-                                eTVA = SDRTEXTVERTADJUST_CENTER;    // the text has to be displayed using the full width;
-                        }
-                        break;
-
-                        default :
-                        {
-                            if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT )
-                                eTVA = SDRTEXTVERTADJUST_TOP;
-                            else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
-                                eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                        }
-                        break;
-                    }
                     nMinFrameWidth = rTextRect.GetWidth() - ( nTextLeft + nTextRight );
                 }
                 else
@@ -949,31 +924,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         case mso_anchorBottomBaseline:
                         case mso_anchorBottomCenteredBaseline:
                             eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                        break;
-                    }
-                    // if there is a 100% usage of following attributes, the textbox can be aligned also in horizontal direction
-                    switch ( eTextAnchor )
-                    {
-                        case mso_anchorTopCentered :
-                        case mso_anchorMiddleCentered :
-                        case mso_anchorBottomCentered :
-                        case mso_anchorTopCenteredBaseline:
-                        case mso_anchorBottomCenteredBaseline:
-                        {
-                            // check if it is sensible to use the centered alignment
-                            sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
-                            if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left and also right aligned pararagraphs
-                                eTHA = SDRTEXTHORZADJUST_CENTER;    // the text has to be displayed using the full width;
-                        }
-                        break;
-
-                        default :
-                        {
-                            if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT )
-                                eTHA = SDRTEXTHORZADJUST_LEFT;
-                            else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
-                                eTHA = SDRTEXTHORZADJUST_RIGHT;
-                        }
                         break;
                     }
                     nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
@@ -1023,7 +973,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 aTextObj.SetDestinationInstance( (sal_uInt16)nDestinationInstance );
 
-                bool bAutoFit = false; // auto-scale text into shape box
                 switch ( aTextObj.GetInstance() )
                 {
                     case TSS_TYPE_PAGETITLE :
@@ -1031,7 +980,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     case TSS_TYPE_SUBTITLE : eTextKind = OBJ_TEXT; break;
                     case TSS_TYPE_BODY :
                     case TSS_TYPE_HALFBODY :
-                    case TSS_TYPE_QUARTERBODY : eTextKind = OBJ_OUTLINETEXT; bAutoFit = true; break;
+                    case TSS_TYPE_QUARTERBODY : eTextKind = OBJ_OUTLINETEXT; break;
                 }
                 if ( aTextObj.GetDestinationInstance() != TSS_TYPE_TEXT_IN_SHAPE )
                 {
@@ -1090,47 +1039,44 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
 
-                //Autofit text only if there is no auto grow height and width
-                //See fdo#41245
-                if (bAutoFit && !bAutoGrowHeight && !bAutoGrowWidth)
+                // SdStyleSheetPool::CreateLayoutStyleSheets in stlpool.cxx applies SDRTEXTFIT_AUTOFIT by default,
+                // so need to override here
+                pTObj->SetMergedItem(SdrTextFitToSizeTypeItem(SDRTEXTFIT_NONE));
+
+                if ( !pTObj->ISA( SdrObjCustomShape ) )
                 {
-                    pTObj->SetMergedItem( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
+                    pTObj->SetMergedItem( makeSdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
+                    pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
+                }
+                else
+                {
+                    pTObj->SetMergedItem( makeSdrTextWordWrapItem( bWordWrap ) );
+                    pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bFitShapeToText ) );
                 }
 
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
-            {
-                 pTObj->SetMergedItem( makeSdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
-                pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
-            }
-            else
-            {
-                pTObj->SetMergedItem( makeSdrTextWordWrapItem( bWordWrap ) );
-                pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bFitShapeToText ) );
-            }
+                pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
+                pTObj->SetMergedItem( SdrTextHorzAdjustItem( eTHA ) );
 
-            pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
-            pTObj->SetMergedItem( SdrTextHorzAdjustItem( eTHA ) );
+                if ( nMinFrameHeight < 0 )
+                    nMinFrameHeight = 0;
+                if ( !pTObj->ISA( SdrObjCustomShape ) )
+                    pTObj->SetMergedItem( makeSdrTextMinFrameHeightItem( nMinFrameHeight ) );
 
-            if ( nMinFrameHeight < 0 )
-                nMinFrameHeight = 0;
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
-                pTObj->SetMergedItem( makeSdrTextMinFrameHeightItem( nMinFrameHeight ) );
+                if ( nMinFrameWidth < 0 )
+                    nMinFrameWidth = 0;
+                if ( !pTObj->ISA( SdrObjCustomShape ) )
+                    pTObj->SetMergedItem( makeSdrTextMinFrameWidthItem( nMinFrameWidth ) );
 
-            if ( nMinFrameWidth < 0 )
-                nMinFrameWidth = 0;
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
-                pTObj->SetMergedItem( makeSdrTextMinFrameWidthItem( nMinFrameWidth ) );
+                // set margins at the borders of the textbox
+                pTObj->SetMergedItem( makeSdrTextLeftDistItem( nTextLeft ) );
+                pTObj->SetMergedItem( makeSdrTextRightDistItem( nTextRight ) );
+                pTObj->SetMergedItem( makeSdrTextUpperDistItem( nTextTop ) );
+                pTObj->SetMergedItem( makeSdrTextLowerDistItem( nTextBottom ) );
+                pTObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
 
-            // set margins at the borders of the textbox
-            pTObj->SetMergedItem( makeSdrTextLeftDistItem( nTextLeft ) );
-            pTObj->SetMergedItem( makeSdrTextRightDistItem( nTextRight ) );
-            pTObj->SetMergedItem( makeSdrTextUpperDistItem( nTextTop ) );
-            pTObj->SetMergedItem( makeSdrTextLowerDistItem( nTextBottom ) );
-            pTObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
-
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
-                pTObj->SetSnapRect( rTextRect );
-            pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
+                if ( !pTObj->ISA( SdrObjCustomShape ) )
+                    pTObj->SetSnapRect( rTextRect );
+                pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
 
                 if ( pTObj )
                 {
@@ -1395,7 +1341,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                                     if ( pPersistPtr[ nOfs ] > nStreamLen )
                                     {
                                         bOk = false;
-                                        OSL_FAIL("SdrPowerPointImport::Ctor(): Ungueltiger Eintrag im Persist-Directory!");
+                                        OSL_FAIL("SdrPowerPointImport::Ctor(): Invalid entry in Persist-Directory!");
                                     }
                                 }
                                 nAnz--;
@@ -1403,7 +1349,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                             }
                             if ( bOk && nAnz > 0 )
                             {
-                                OSL_FAIL("SdrPowerPointImport::Ctor(): Nicht alle Persist-Directory Entraege gelesen!");
+                                OSL_FAIL("SdrPowerPointImport::Ctor(): Not all Persist-Directory entries read!");
                                 bOk = false;
                             }
                         }
@@ -1425,7 +1371,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
         nDocStreamPos = aUserEditAtom.nDocumentRef;
         if ( nDocStreamPos > nPersistPtrAnz )
         {
-            OSL_FAIL("SdrPowerPointImport::Ctor(): aUserEditAtom.nDocumentRef ungueltig!");
+            OSL_FAIL("SdrPowerPointImport::Ctor(): aUserEditAtom.nDocumentRef is invalid!");
             bOk = false;
         }
     }
@@ -1619,7 +1565,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                         }
                         else
                         {
-                            OSL_FAIL("SdrPowerPointImport::Ctor(): Persist-Eintrag fehlerhaft! (SJ)");
+                            OSL_FAIL("SdrPowerPointImport::Ctor(): Persist-Entry is faulty! (SJ)");
                         }
                     }
                 }
