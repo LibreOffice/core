@@ -33,31 +33,18 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 template< class Map >
-    struct lcl_DisposeAndClearAndDeleteMapElement :
-        public ::std::unary_function< typename Map::value_type, void >
-    {
-        explicit lcl_DisposeAndClearAndDeleteMapElement( const Reference< uno::XInterface > & xEventSource ) :
-                m_aEvent( xEventSource )
-        {}
-        void operator() ( typename Map::value_type & rElement )
-        {
-            if( rElement.second )
-            {
-                rElement.second->disposeAndClear( m_aEvent );
-                delete rElement.second;
-            }
-        }
-    private:
-        lang::EventObject m_aEvent;
-    };
-
-template< class Map >
     void lcl_DisposeAndClearAndDeleteAllMapElements(
         Map & rMap,
         const Reference< uno::XInterface > & xEventSource )
 {
-    ::std::for_each( rMap.begin(), rMap.end(),
-                     lcl_DisposeAndClearAndDeleteMapElement< Map >( xEventSource ));
+    for( const auto& rElement : rMap )
+    {
+        if( rElement.second )
+        {
+            rElement.second->disposeAndClear( xEventSource );
+            delete rElement.second;
+        }
+    }
 }
 
 } // anonymous namespace

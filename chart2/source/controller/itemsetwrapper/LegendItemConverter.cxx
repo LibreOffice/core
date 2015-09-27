@@ -32,8 +32,7 @@
 
 #include <functional>
 #include <algorithm>
-
-#include <boost/checked_delete.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -61,13 +60,13 @@ LegendItemConverter::LegendItemConverter(
 
 LegendItemConverter::~LegendItemConverter()
 {
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), boost::checked_deleter<ItemConverter>());
+    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void LegendItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     FillItemSetFunc( rOutItemSet ));
+    for( const auto& pConv : m_aConverters )
+        pConv->FillItemSet( rOutItemSet );
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -77,8 +76,8 @@ bool LegendItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 {
     bool bResult = false;
 
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ApplyItemSetFunc( rItemSet, bResult ));
+    for( const auto& pConv : m_aConverters )
+        bResult = pConv->ApplyItemSet( rItemSet ) || bResult;
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
