@@ -246,10 +246,7 @@ void ScfPropertySet::SetAnyProperty( const OUString& rPropName, const Any& rValu
     }
     catch (const Exception&)
     {
-        OSL_FAIL(OStringBuffer("ScfPropertySet::SetAnyProperty - cannot set property \"")
-                .append(OUStringToOString(rPropName,
-                    RTL_TEXTENCODING_ASCII_US))
-                .append('"').getStr());
+        SAL_WARN("sc", "ScfPropertySet::SetAnyProperty - cannot set property \"" + rPropName + "\"");
     }
 }
 
