@@ -27,9 +27,9 @@
 #include "DAVProperties.hxx"
 
 #include "webdavresponseparser.hxx"
-#include <serf/serf.h>
+#include <serf.h>
 #include <rtl/ustrbuf.hxx>
-#include <apr/apr_strings.h>
+#include <apr_strings.h>
 
 namespace http_dav_ucp
 {
