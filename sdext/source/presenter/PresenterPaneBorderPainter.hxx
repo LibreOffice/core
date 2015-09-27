@@ -52,7 +52,7 @@ class PresenterPaneBorderPainter
       public PresenterPaneBorderPainterInterfaceBase
 {
 public:
-    PresenterPaneBorderPainter (
+    explicit PresenterPaneBorderPainter (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterPaneBorderPainter();
 

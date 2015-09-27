@@ -40,7 +40,7 @@ public:
     virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) = 0;
     virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) = 0;
 
-    EmitContext( const PDFContainer* pTop = NULL );
+    explicit EmitContext( const PDFContainer* pTop = NULL );
     virtual ~EmitContext();
 
     // set this to deflate contained streams
@@ -70,7 +70,7 @@ struct PDFComment : public PDFEntry
 {
     OString  m_aComment;
 
-    PDFComment( const OString& rComment )
+    explicit PDFComment( const OString& rComment )
     : PDFEntry(), m_aComment( rComment ) {}
     virtual ~PDFComment();
     virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
@@ -88,7 +88,7 @@ struct PDFName : public PDFValue
 {
     OString  m_aName;
 
-    PDFName( const OString& rName )
+    explicit PDFName( const OString& rName )
     : PDFValue(), m_aName( rName ) {}
     virtual ~PDFName();
     virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
@@ -101,7 +101,7 @@ struct PDFString : public PDFValue
 {
     OString  m_aString;
 
-    PDFString( const OString& rString )
+    explicit PDFString( const OString& rString )
     : PDFValue(), m_aString( rString ) {}
     virtual ~PDFString();
     virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
@@ -114,7 +114,7 @@ struct PDFNumber : public PDFValue
 {
     double m_fValue;
 
-    PDFNumber( double fVal )
+    explicit PDFNumber( double fVal )
     : PDFValue(), m_fValue( fVal ) {}
     virtual ~PDFNumber();
     virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;
@@ -125,7 +125,7 @@ struct PDFBool : public PDFValue
 {
     bool m_bValue;
 
-    PDFBool( bool bVal )
+    explicit PDFBool( bool bVal )
     : PDFValue(), m_bValue( bVal ) {}
     virtual ~PDFBool();
     virtual bool emit( EmitContext& rWriteContext ) const SAL_OVERRIDE;

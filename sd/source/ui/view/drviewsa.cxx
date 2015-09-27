@@ -89,7 +89,7 @@ private:
 
 public:
 
-                            ScannerEventListener( DrawViewShell* pParent ) : mpParent( pParent )  {};
+                            explicit ScannerEventListener( DrawViewShell* pParent ) : mpParent( pParent )  {}
                             virtual ~ScannerEventListener();
 
     // XEventListener

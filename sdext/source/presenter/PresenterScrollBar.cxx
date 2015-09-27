@@ -48,7 +48,7 @@ class PresenterScrollBar::MousePressRepeater
     : public std::enable_shared_from_this<MousePressRepeater>
 {
 public:
-    MousePressRepeater (const ::rtl::Reference<PresenterScrollBar>& rpScrollBar);
+    explicit MousePressRepeater (const ::rtl::Reference<PresenterScrollBar>& rpScrollBar);
     void Dispose();
     void Start (const PresenterScrollBar::Area& reArea);
     void Stop();

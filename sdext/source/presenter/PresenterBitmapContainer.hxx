@@ -50,7 +50,7 @@ public:
     {
     public:
         BitmapDescriptor();
-        BitmapDescriptor (const std::shared_ptr<BitmapDescriptor>& rpDefault);
+        explicit BitmapDescriptor (const std::shared_ptr<BitmapDescriptor>& rpDefault);
 
         enum Mode {Normal, MouseOver, ButtonDown, Disabled, Mask};
         css::uno::Reference<css::rendering::XBitmap> GetNormalBitmap() const;

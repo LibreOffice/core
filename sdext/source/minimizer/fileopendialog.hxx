@@ -47,7 +47,7 @@ class FileOpenDialog
     std::vector< FilterEntry > aFilterEntryList;
 
 public:
-        FileOpenDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        explicit FileOpenDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         ~FileOpenDialog();
 
         sal_Int16 execute();

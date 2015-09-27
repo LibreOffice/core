@@ -73,7 +73,7 @@ namespace pdfi
     struct Element
     {
     protected:
-        Element( Element* pParent )
+        explicit Element( Element* pParent )
             : x( 0 ), y( 0 ), w( 0 ), h( 0 ), StyleId( -1 ), Parent( pParent )
         {
             if( pParent )
@@ -187,7 +187,7 @@ namespace pdfi
     {
         friend class ElementFactory;
     protected:
-        ParagraphElement( Element* pParent ) : Element( pParent ), Type( Normal ), bRtl( false ) {}
+        explicit ParagraphElement( Element* pParent ) : Element( pParent ), Type( Normal ), bRtl( false ) {}
 
     public:
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) SAL_OVERRIDE;

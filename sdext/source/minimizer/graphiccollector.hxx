@@ -73,7 +73,7 @@ class GraphicCollector
         css::text::GraphicCrop                      maGraphicCropLogic;
         std::vector< GraphicUser >                      maUser;
 
-        GraphicEntity( const GraphicUser& rUser )
+        explicit GraphicEntity( const GraphicUser& rUser )
             : maLogicalSize( rUser.maLogicalSize ), mbRemoveCropArea( false ), maGraphicCropLogic( 0, 0, 0, 0 ) { maUser.push_back( rUser ); };
     };
 

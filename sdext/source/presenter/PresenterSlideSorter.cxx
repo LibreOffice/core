@@ -84,7 +84,7 @@ namespace {
 class PresenterSlideSorter::Layout
 {
 public:
-    Layout (const ::rtl::Reference<PresenterScrollBar>& rpVerticalScrollBar);
+    explicit Layout (const ::rtl::Reference<PresenterScrollBar>& rpVerticalScrollBar);
 
     void Update (const geometry::RealRectangle2D& rBoundingBox, const double nSlideAspectRatio);
     void SetupVisibleArea();

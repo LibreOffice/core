@@ -46,7 +46,7 @@ class PresenterProtocolHandler
       public PresenterProtocolHandlerInterfaceBase
 {
 public:
-    PresenterProtocolHandler (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    explicit PresenterProtocolHandler (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterProtocolHandler();
 
     void SAL_CALL disposing() SAL_OVERRIDE;

@@ -61,7 +61,7 @@ class PresenterPaneContainer
       public PresenterPaneContainerInterfaceBase
 {
 public:
-    PresenterPaneContainer (
+    explicit PresenterPaneContainer (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterPaneContainer();
 

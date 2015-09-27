@@ -236,7 +236,7 @@ class AccessibleStateSet
       public AccessibleStateSetInterfaceBase
 {
 public:
-    AccessibleStateSet (const sal_Int32 nStateSet);
+    explicit AccessibleStateSet (const sal_Int32 nStateSet);
     virtual ~AccessibleStateSet();
 
     static sal_uInt32 GetStateMask (const sal_Int16 nType);

@@ -68,7 +68,7 @@ struct EmitImplData
         return false;
     }
 
-    EmitImplData( const PDFContainer* pTopContainer ) :
+    explicit EmitImplData( const PDFContainer* pTopContainer ) :
         m_pObjectContainer( pTopContainer ),
         m_nDecryptObject( 0 ),
         m_nDecryptGeneration( 0 )

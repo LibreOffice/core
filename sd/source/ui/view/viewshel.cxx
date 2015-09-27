@@ -93,7 +93,7 @@ class ViewShellObjectBarFactory
     : public ::sd::ShellFactory<SfxShell>
 {
 public:
-    ViewShellObjectBarFactory (::sd::ViewShell& rViewShell);
+    explicit ViewShellObjectBarFactory (::sd::ViewShell& rViewShell);
     virtual ~ViewShellObjectBarFactory();
     virtual SfxShell* CreateShell (
         ::sd::ShellId nId,

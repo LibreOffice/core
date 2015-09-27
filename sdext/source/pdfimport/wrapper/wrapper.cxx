@@ -990,7 +990,7 @@ class Buffering
     sal_uInt64 left;
 
 public:
-    Buffering(oslFileHandle& out) : aBuffer(new char[SIZE]), pOut(out), pos(0), left(0) {}
+    explicit Buffering(oslFileHandle& out) : aBuffer(new char[SIZE]), pOut(out), pos(0), left(0) {}
 
     oslFileError read(char *pChar, short count, sal_uInt64* pBytesRead)
     {

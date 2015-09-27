@@ -125,7 +125,7 @@ namespace pdfi
         {
             const std::unordered_map< sal_Int32, HashedStyle >* m_pMap;
 
-            StyleIdNameSort( const std::unordered_map< sal_Int32, HashedStyle >* pMap ) :
+            explicit StyleIdNameSort( const std::unordered_map< sal_Int32, HashedStyle >* pMap ) :
                 m_pMap(pMap)
             {}
             bool operator()( sal_Int32 nLeft, sal_Int32 nRight )

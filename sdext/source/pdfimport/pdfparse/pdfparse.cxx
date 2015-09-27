@@ -77,7 +77,7 @@ class PDFGrammar :  public grammar< PDFGrammar<iteratorT> >
 {
 public:
 
-    PDFGrammar( const iteratorT& first )
+    explicit PDFGrammar( const iteratorT& first )
     : m_fDouble( 0.0 ), m_aGlobalBegin( first ) {}
     ~PDFGrammar()
     {
@@ -130,7 +130,7 @@ public:
     template< typename ScannerT >
     struct definition
     {
-        definition( const PDFGrammar<iteratorT>& rSelf )
+        explicit definition( const PDFGrammar<iteratorT>& rSelf )
         {
             PDFGrammar<iteratorT>* pSelf = const_cast< PDFGrammar<iteratorT>* >( &rSelf );
 

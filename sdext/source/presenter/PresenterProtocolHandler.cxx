@@ -58,7 +58,7 @@ namespace {
     class GotoPreviousSlideCommand : public Command
     {
     public:
-        GotoPreviousSlideCommand (
+        explicit GotoPreviousSlideCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~GotoPreviousSlideCommand() {}
         virtual void Execute() SAL_OVERRIDE;
@@ -70,7 +70,7 @@ namespace {
     class GotoNextSlideCommand : public Command
     {
     public:
-        GotoNextSlideCommand (
+        explicit GotoNextSlideCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~GotoNextSlideCommand() {}
         virtual void Execute() SAL_OVERRIDE;
@@ -85,7 +85,7 @@ namespace {
     class GotoNextEffectCommand : public Command
     {
     public:
-        GotoNextEffectCommand (
+        explicit GotoNextEffectCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~GotoNextEffectCommand() {}
         virtual void Execute() SAL_OVERRIDE;
@@ -96,7 +96,7 @@ namespace {
     class SwitchMonitorCommand : public Command
     {
     public:
-        SwitchMonitorCommand (
+        explicit SwitchMonitorCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~SwitchMonitorCommand() {}
         virtual void Execute() SAL_OVERRIDE;

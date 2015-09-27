@@ -132,7 +132,7 @@ namespace {
           public ElementInterfaceBase
     {
     public:
-        Element (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
+        explicit Element (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         virtual ~Element();
 
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -243,7 +243,7 @@ namespace {
     class Label : public Element
     {
     public:
-        Label (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
+        explicit Label (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
 
         void SetText (const OUString& rsText);
         virtual void Paint (
@@ -275,14 +275,14 @@ namespace {
         void ConnectToTimer();
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) = 0;
     protected:
-        TimeLabel(const ::rtl::Reference<PresenterToolBar>& rpToolBar);
+        explicit TimeLabel(const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         using Element::disposing;
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
     private:
         class Listener : public PresenterClockTimer::Listener
         {
         public:
-            Listener (const ::rtl::Reference<TimeLabel>& rxLabel)
+            explicit Listener (const ::rtl::Reference<TimeLabel>& rxLabel)
                 : mxLabel(rxLabel) {}
             virtual ~Listener() {}
             virtual void TimeHasChanged (const oslDateTime& rCurrentTime) SAL_OVERRIDE
