@@ -45,6 +45,7 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "detfunc.hxx"
+#include "editutil.hxx"
 
 #include <utility>
 
@@ -545,11 +546,14 @@ OUString ScPostIt::GetText() const
     if( const EditTextObject* pEditObj = GetEditTextObject() )
     {
         OUStringBuffer aBuffer;
-        for( sal_Int32 nPara = 0, nParaCount = pEditObj->GetParagraphCount(); nPara < nParaCount; ++nPara )
+        ScNoteEditEngine& rEngine = mrDoc.GetNoteEngine();
+        rEngine.SetText(*pEditObj);
+        sal_Int32 nParaCount = rEngine.GetParagraphCount();
+        for( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
         {
             if( nPara > 0 )
                 aBuffer.append( '\n' );
-            aBuffer.append( pEditObj->GetText( nPara ) );
+            aBuffer.append(rEngine.GetText(nPara));
         }
         return aBuffer.makeStringAndClear();
     }
