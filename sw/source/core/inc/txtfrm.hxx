@@ -60,8 +60,8 @@ class SwTextFrm: public SwContentFrm
     static long nMinPrtLine;    // This Line must not be underrun when printing
                                 // Hack for table cells stretching multiple pages
 
-    sal_uLong  nAllLines        :24; // Line count for the Paint (including nThisLines)
-    sal_uLong  nThisLines       :8; // Count of Lines of the Frame
+    sal_uLong  mnAllLines        :24; // Line count for the Paint (including nThisLines)
+    sal_uLong  mnThisLines       :8; // Count of Lines of the Frame
 
     // The x position for flys anchored at this paragraph.
     // These values are calculated in SwTextFrm::CalcBaseOfstForFly()
@@ -78,9 +78,9 @@ class SwTextFrm: public SwContentFrm
     // It is NOT used for the determination of printing area.
     SwTwips mnAdditionalFirstLineOffset;
 
-    sal_Int32 nOfst; // Is the offset in the Content (character count)
+    sal_Int32 mnOffset; // Is the offset in the Content (character count)
 
-    sal_uInt16 nCacheIdx; // Index into the cache, USHRT_MAX if there's definitely no fitting object in the cache
+    sal_uInt16 mnCacheIndex; // Index into the cache, USHRT_MAX if there's definitely no fitting object in the cache
 
     // Separates the Master and creates a Follow or adjusts the data in the Follow
     void _AdjustFollow( SwTextFormatter &rLine, const sal_Int32 nOffset,
@@ -102,17 +102,17 @@ class SwTextFrm: public SwContentFrm
     void FormatAdjust( SwTextFormatter &rLine, WidowsAndOrphans &rFrmBreak,
                        const sal_Int32 nStrLen, const bool bDummy );
 
-    bool bLocked        : 1;        // In the Format?
-    bool bWidow         : 1;        // Are we a Widow?
-    bool bJustWidow     : 1;        // Did we just request to be a Widow?
-    bool bEmpty         : 1;        // Are we an empty paragraph?
-    bool bInFootnoteConnect  : 1;        // Is in Connect at the moment
-    bool bFootnote           : 1;        // Has at least one footnote
-    bool bRepaint       : 1;        // TextFrm: Repaint is ready to be fetched
-    bool bBlinkPor      : 1;        // Contains Blink Portions
-    bool bFieldFollow   : 1;        // Start with Field rest of the Master
-    bool bHasAnimation  : 1;        // Contains animated SwGrfNumPortion
-    bool bIsSwapped     : 1;        // during text formatting we swap the
+    bool mbLocked        : 1;        // In the Format?
+    bool mbWidow         : 1;        // Are we a Widow?
+    bool mbJustWidow     : 1;        // Did we just request to be a Widow?
+    bool mbEmpty         : 1;        // Are we an empty paragraph?
+    bool mbInFootnoteConnect  : 1;        // Is in Connect at the moment
+    bool mbFootnote           : 1;        // Has at least one footnote
+    bool mbRepaint       : 1;        // TextFrm: Repaint is ready to be fetched
+    bool mbHasBlinkPortions      : 1;        // Contains Blink Portions
+    bool mbFieldFollow   : 1;        // Start with Field rest of the Master
+    bool mbHasAnimation  : 1;        // Contains animated SwGrfNumPortion
+    bool mbIsSwapped     : 1;        // during text formatting we swap the
                                     // width and height for vertical formatting
     // OD 14.03.2003 #i11760# - flag to control, if follow is formatted in
     // method <CalcFollow(..)>.
@@ -121,12 +121,12 @@ class SwTextFrm: public SwContentFrm
     bool mbFollowFormatAllowed : 1;
 
     void ResetPreps();
-    inline void Lock() { bLocked = true; }
-    inline void Unlock() { bLocked = false; }
-    inline void SetWidow( const bool bNew ) { bWidow = bNew; }
-    inline void SetJustWidow( const bool bNew ) { bJustWidow = bNew; }
-    inline void SetEmpty( const bool bNew ) { bEmpty = bNew; }
-    inline void SetFieldFollow( const bool bNew ) { bFieldFollow = bNew; }
+    inline void Lock() { mbLocked = true; }
+    inline void Unlock() { mbLocked = false; }
+    inline void SetWidow( const bool bNew ) { mbWidow = bNew; }
+    inline void SetJustWidow( const bool bNew ) { mbJustWidow = bNew; }
+    inline void SetEmpty( const bool bNew ) { mbEmpty = bNew; }
+    inline void SetFieldFollow( const bool bNew ) { mbFieldFollow = bNew; }
 
     bool IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const;
 
@@ -309,10 +309,10 @@ public:
     /// Methods to manage the FollowFrame
     SwContentFrm *SplitFrm( const sal_Int32 nTextPos );
     SwContentFrm *JoinFrm();
-    inline sal_Int32  GetOfst() const { return nOfst; }
+    inline sal_Int32  GetOfst() const { return mnOffset; }
            void        _SetOfst( const sal_Int32 nNewOfst );
     inline void        SetOfst ( const sal_Int32 nNewOfst );
-    inline void        ManipOfst ( const sal_Int32 nNewOfst ){ nOfst = nNewOfst; }
+    inline void        ManipOfst ( const sal_Int32 nNewOfst ){ mnOffset = nNewOfst; }
            SwTextFrm   *GetFrmAtPos ( const SwPosition &rPos);
     inline const SwTextFrm *GetFrmAtPos ( const SwPosition &rPos) const;
     SwTextFrm&   GetFrmAtOfst( const sal_Int32 nOfst );
@@ -378,26 +378,26 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextFrm)
 
     // Locking
-    inline bool IsLocked()      const { return bLocked;     }
+    inline bool IsLocked()      const { return mbLocked;     }
 
-    inline bool IsWidow()       const { return bWidow;      }
-    inline bool IsJustWidow()   const { return bJustWidow;  }
-    inline bool IsEmpty()       const { return bEmpty;      }
-    inline bool HasFootnote()        const { return bFootnote;        }
-    inline bool IsInFootnoteConnect()const { return bInFootnoteConnect;}
-    inline bool IsFieldFollow() const { return bFieldFollow;}
+    inline bool IsWidow()       const { return mbWidow;      }
+    inline bool IsJustWidow()   const { return mbJustWidow;  }
+    inline bool IsEmpty()       const { return mbEmpty;      }
+    inline bool HasFootnote()        const { return mbFootnote;        }
+    inline bool IsInFootnoteConnect()const { return mbInFootnoteConnect;}
+    inline bool IsFieldFollow() const { return mbFieldFollow;}
 
     inline void SetRepaint() const;
     inline void ResetRepaint() const;
-    inline bool HasRepaint() const { return bRepaint; }
+    inline bool HasRepaint() const { return mbRepaint; }
     inline void SetBlinkPor() const;
     inline void ResetBlinkPor() const;
-    inline bool HasBlinkPor() const { return bBlinkPor; }
+    inline bool HasBlinkPor() const { return mbHasBlinkPortions; }
     inline void SetAnimation() const
-        { const_cast<SwTextFrm*>(this)->bHasAnimation = true; }
-    inline bool HasAnimation() const { return bHasAnimation; }
+        { const_cast<SwTextFrm*>(this)->mbHasAnimation = true; }
+    inline bool HasAnimation() const { return mbHasAnimation; }
 
-    inline bool IsSwapped() const { return bIsSwapped; }
+    inline bool IsSwapped() const { return mbIsSwapped; }
 
     /// Does the Frm have a local footnote (in this Frm or Follow)?
 #ifdef DBG_UTIL
@@ -456,7 +456,7 @@ public:
     SwTextFrm* GetFormatted( bool bForceQuickFormat = false );
 
     /// Will be moved soon
-    inline void SetFootnote( const bool bNew ) { bFootnote = bNew; }
+    inline void SetFootnote( const bool bNew ) { mbFootnote = bNew; }
 
     /// Respect the Follows
     inline bool IsInside( const sal_Int32 nPos ) const;
@@ -472,8 +472,8 @@ public:
 
     static long GetMinPrtLine() { return nMinPrtLine; }
 
-    inline sal_uInt16 GetCacheIdx() const { return nCacheIdx; }
-    inline void   SetCacheIdx( const sal_uInt16 nNew ) { nCacheIdx = nNew; }
+    inline sal_uInt16 GetCacheIdx() const { return mnCacheIndex; }
+    inline void   SetCacheIdx( const sal_uInt16 nNew ) { mnCacheIndex = nNew; }
 
     /// Removes the Line information from the Cache
     void ClearPara();
@@ -524,8 +524,8 @@ public:
     sal_uInt16 GetLineCount( sal_Int32 nPos );
 
     /// For displaying the line numbers
-    sal_uLong GetAllLines()  const { return nAllLines; }
-    sal_uLong GetThisLines() const { return nThisLines;}
+    sal_uLong GetAllLines()  const { return mnAllLines; }
+    sal_uLong GetThisLines() const { return mnThisLines;}
     void RecalcAllLines();
 
     /// Stops the animations within numberings
@@ -670,7 +670,7 @@ inline const SwParaPortion *SwTextFrm::GetPara() const
 
 inline bool SwTextFrm::HasPara() const
 {
-    return nCacheIdx!=USHRT_MAX && _HasPara();
+    return mnCacheIndex!=USHRT_MAX && _HasPara();
 }
 
 inline SwTwips SwTextFrm::GrowTst( const SwTwips nGrow )
@@ -716,26 +716,26 @@ inline const SwTextFrm *SwTextFrm::GetFrmAtPos( const SwPosition &rPos) const
 
 inline void SwTextFrm::SetOfst( const sal_Int32 nNewOfst )
 {
-    if ( nOfst != nNewOfst )
+    if ( mnOffset != nNewOfst )
         _SetOfst( nNewOfst );
 }
 
 inline void SwTextFrm::SetRepaint() const
 {
-    const_cast<SwTextFrm*>(this)->bRepaint = true;
+    const_cast<SwTextFrm*>(this)->mbRepaint = true;
 }
 inline void SwTextFrm::ResetRepaint() const
 {
-    const_cast<SwTextFrm*>(this)->bRepaint = false;
+    const_cast<SwTextFrm*>(this)->mbRepaint = false;
 }
 
 inline void SwTextFrm::SetBlinkPor() const
 {
-    const_cast<SwTextFrm*>(this)->bBlinkPor = true;
+    const_cast<SwTextFrm*>(this)->mbHasBlinkPortions = true;
 }
 inline void SwTextFrm::ResetBlinkPor() const
 {
-    const_cast<SwTextFrm*>(this)->bBlinkPor = false;
+    const_cast<SwTextFrm*>(this)->mbHasBlinkPortions = false;
 }
 
 class TemporarySwap {

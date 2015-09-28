@@ -72,7 +72,7 @@ bool SwTextFrm::_HasPara() const
             return true;
     }
     else
-        const_cast<SwTextFrm*>(this)->nCacheIdx = USHRT_MAX;
+        const_cast<SwTextFrm*>(this)->mnCacheIndex = USHRT_MAX;
 
     return false;
 }
@@ -86,7 +86,7 @@ SwParaPortion *SwTextFrm::GetPara()
         if ( pLine )
             return pLine->GetPara();
         else
-            nCacheIdx = USHRT_MAX;
+            mnCacheIndex = USHRT_MAX;
     }
     return 0;
 }
@@ -104,7 +104,7 @@ void SwTextFrm::ClearPara()
             pTextLine->SetPara( 0 );
         }
         else
-            nCacheIdx = USHRT_MAX;
+            mnCacheIndex = USHRT_MAX;
     }
 }
 
@@ -124,14 +124,14 @@ void SwTextFrm::SetPara( SwParaPortion *pNew, bool bDelete )
         else
         {
             OSL_ENSURE( !pNew, "+SetPara: Losing SwParaPortion" );
-            nCacheIdx = USHRT_MAX;
+            mnCacheIndex = USHRT_MAX;
         }
     }
     else if ( pNew )
     {   // Insert a new one
         SwTextLine *pTextLine = new SwTextLine( this, pNew );
         if ( SwTextFrm::GetTextCache()->Insert( pTextLine ) )
-            nCacheIdx = pTextLine->GetCachePos();
+            mnCacheIndex = pTextLine->GetCachePos();
         else
         {
             OSL_FAIL( "+SetPara: InsertCache failed." );

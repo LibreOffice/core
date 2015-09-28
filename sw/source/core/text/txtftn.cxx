@@ -86,7 +86,7 @@ void SwTextFrm::CalcFootnoteFlag( sal_Int32 nStop )// For testing the SplitFrm
 void SwTextFrm::CalcFootnoteFlag()
 #endif
 {
-    bFootnote = false;
+    mbFootnote = false;
 
     const SwpHints *pHints = GetTextNode()->GetpSwpHints();
     if( !pHints )
@@ -111,7 +111,7 @@ void SwTextFrm::CalcFootnoteFlag()
                 break;
             if( GetOfst() <= nIdx )
             {
-                bFootnote = true;
+                mbFootnote = true;
                 break;
             }
         }
@@ -584,8 +584,8 @@ void SwTextFrm::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDeadL
     OSL_ENSURE( !IsVertical() || !IsSwapped(),
             "SwTextFrm::ConnectFootnote with swapped frame" );
 
-    bFootnote = true;
-    bInFootnoteConnect = true; // Just reset!
+    mbFootnote = true;
+    mbInFootnoteConnect = true; // Just reset!
     const bool bEnd = pFootnote->GetFootnote().IsEndNote();
 
     // We want to store this value, because it is needed as a fallback
@@ -647,7 +647,7 @@ void SwTextFrm::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDeadL
             }
             else if( pSrcFrm != this )
                 SwFootnoteBossFrm::ChangeFootnoteRef( pSrcFrm, pFootnote, this );
-            bInFootnoteConnect = false;
+            mbInFootnoteConnect = false;
             return;
         }
         else if( pSrcFrm )
@@ -668,7 +668,7 @@ void SwTextFrm::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDeadL
             pBoss->AppendFootnote( this, pFootnote );
         else if( pSrcFrm != this )
             SwFootnoteBossFrm::ChangeFootnoteRef( pSrcFrm, pFootnote, this );
-        bInFootnoteConnect = false;
+        mbInFootnoteConnect = false;
         return;
     }
 
@@ -710,7 +710,7 @@ void SwTextFrm::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDeadL
                         // So that we don't miss anything
                         pSh->InvalidateWindows( pCont->Frm() );
                 }
-                bInFootnoteConnect = false;
+                mbInFootnoteConnect = false;
                 return;
             }
             else
@@ -781,7 +781,7 @@ void SwTextFrm::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDeadL
     nRstHeight = GetRstHeight();
     (void)nRstHeight;
 #endif
-    bInFootnoteConnect = false;
+    mbInFootnoteConnect = false;
     return;
 }
 

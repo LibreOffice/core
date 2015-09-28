@@ -83,7 +83,7 @@ TYPEINIT1( SwTextFrm, SwContentFrm );
 /// Switches width and height of the text frame
 void SwTextFrm::SwapWidthAndHeight()
 {
-    if ( ! bIsSwapped )
+    if ( ! mbIsSwapped )
     {
         const long nPrtOfstX = Prt().Pos().X();
         Prt().Pos().X() = Prt().Pos().Y();
@@ -110,7 +110,7 @@ void SwTextFrm::SwapWidthAndHeight()
     Prt().Width( Prt().Height() );
     Prt().Height( nPrtWidth );
 
-    bIsSwapped = ! bIsSwapped;
+    mbIsSwapped = ! mbIsSwapped;
 }
 
 /**
@@ -139,7 +139,7 @@ void SwTextFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
         rRect.Left(Frm().Left() + nOfstY);
     else
     {
-        if ( bIsSwapped )
+        if ( mbIsSwapped )
             rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
         else
             // frame is rotated
@@ -164,7 +164,7 @@ void SwTextFrm::SwitchHorizontalToVertical( Point& rPoint ) const
         rPoint.X() = Frm().Left() + nOfstY;
     else
     {
-        if ( bIsSwapped )
+        if ( mbIsSwapped )
             rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
         else
             // calc rotated coords
@@ -198,7 +198,7 @@ void SwTextFrm::SwitchVerticalToHorizontal( SwRect& rRect ) const
         nOfstX = rRect.Left() - Frm().Left();
     else
     {
-        if ( bIsSwapped )
+        if ( mbIsSwapped )
             nOfstX = Frm().Left() + Frm().Height() - ( rRect.Left() + rRect.Width() );
         else
             nOfstX = Frm().Left() + Frm().Width() - ( rRect.Left() + rRect.Width() );
@@ -228,7 +228,7 @@ void SwTextFrm::SwitchVerticalToHorizontal( Point& rPoint ) const
         nOfstX = rPoint.X() - Frm().Left();
     else
     {
-        if ( bIsSwapped )
+        if ( mbIsSwapped )
             nOfstX = Frm().Left() + Frm().Height() - rPoint.X();
         else
             nOfstX = Frm().Left() + Frm().Width() - rPoint.X();
@@ -351,26 +351,26 @@ void SwTextFrm::Init()
 
 SwTextFrm::SwTextFrm(SwTextNode * const pNode, SwFrm* pSib )
     : SwContentFrm( pNode, pSib )
-    , nAllLines( 0 )
-    , nThisLines( 0 )
+    , mnAllLines( 0 )
+    , mnThisLines( 0 )
     , mnFlyAnchorOfst( 0 )
     , mnFlyAnchorOfstNoWrap( 0 )
     , mnFootnoteLine( 0 )
     , mnHeightOfLastLine( 0 ) // OD 2004-03-17 #i11860#
     , mnAdditionalFirstLineOffset( 0 )
-    , nOfst( 0 )
-    , nCacheIdx( USHRT_MAX )
-    , bLocked( false )
-    , bWidow( false )
-    , bJustWidow( false )
-    , bEmpty( false )
-    , bInFootnoteConnect( false )
-    , bFootnote( false )
-    , bRepaint( false )
-    , bBlinkPor( false )
-    , bFieldFollow( false )
-    , bHasAnimation( false )
-    , bIsSwapped( false )
+    , mnOffset( 0 )
+    , mnCacheIndex( USHRT_MAX )
+    , mbLocked( false )
+    , mbWidow( false )
+    , mbJustWidow( false )
+    , mbEmpty( false )
+    , mbInFootnoteConnect( false )
+    , mbFootnote( false )
+    , mbRepaint( false )
+    , mbHasBlinkPortions( false )
+    , mbFieldFollow( false )
+    , mbHasAnimation( false )
+    , mbIsSwapped( false )
     , mbFollowFormatAllowed( true ) // OD 14.03.2003 #i11760#
 {
     mnFrmType = FRM_TXT;
@@ -2468,13 +2468,13 @@ void SwTextFrm::ChgThisLines()
     else if ( rInf.IsCountBlankLines() )
         nNew = 1;
 
-    if ( nNew != nThisLines )
+    if ( nNew != mnThisLines )
     {
         if ( !IsInTab() && GetAttrSet()->GetLineNumber().IsCount() )
         {
-            nAllLines -= nThisLines;
-            nThisLines = nNew;
-            nAllLines  += nThisLines;
+            mnAllLines -= mnThisLines;
+            mnThisLines = nNew;
+            mnAllLines  += mnThisLines;
             SwFrm *pNxt = GetNextContentFrm();
             while( pNxt && pNxt->IsInTab() )
             {
@@ -2493,7 +2493,7 @@ void SwTextFrm::ChgThisLines()
             }
         }
         else // Paragraphs which are not counted should not manipulate the AllLines.
-            nThisLines = nNew;
+            mnThisLines = nNew;
     }
 }
 
@@ -2537,7 +2537,7 @@ void SwTextFrm::RecalcAllLines()
 
         if ( nOld != nNewNum )
         {
-            nAllLines = nNewNum;
+            mnAllLines = nNewNum;
             SwContentFrm *pNxt = GetNextContentFrm();
             while ( pNxt &&
                     (pNxt->IsInTab() || pNxt->IsInDocBody() != IsInDocBody()) )

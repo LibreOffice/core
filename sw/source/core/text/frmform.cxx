@@ -746,7 +746,7 @@ void SwTextFrm::_SetOfst( const sal_Int32 nNewOfst )
     // We do not need to invalidate out Follow.
     // We are a Follow, get formatted right away and call
     // SetOfst() from there
-    nOfst = nNewOfst;
+    mnOffset = nNewOfst;
     SwParaPortion *pPara = GetPara();
     if( pPara )
     {
