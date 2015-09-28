@@ -16,6 +16,24 @@
       "revId": "434391e3249addd383d78764ac6d315a9fba0e9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_ae810892",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2015-09-28T04:52:42Z",
+      "side": 1,
+      "message": "I\u0027m assuming that \"this\" refers to choosing the current cell if there is no markdata.\n\nI thought about that, but the current cell: \n(a) is covered by the protection measures mentioned previously that are implemented in EnterData(),\n(b) is only a single cell, so there will not be multiple error prompts, and\n(c) will provide more specific error messages, as the single cell error message is specific to that particular cell\u0027s protection problem.\n(d) Also, since MarkData is empty, the current cell is not selected, and so would not be caught by the IsSelectionEditable() anyway.\n\nSo there is no point in selecting the current cell, doing expensive checking routines, and then deselecting the cell again, especially since it would result in a loss of helpful debugging information.",
+      "parentUuid": "ba0121b8_0ea47455",
+      "revId": "434391e3249addd383d78764ac6d315a9fba0e9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
