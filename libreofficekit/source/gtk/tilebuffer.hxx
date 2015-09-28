@@ -235,6 +235,9 @@ struct LOEvent
         , m_nSetGraphicSelectionY(0)
     {
     }
+
+    /// Wrapper around delete to help GLib.
+    static void destroy(void* pMemory);
 };
 
 #endif // INCLUDED_TILEBUFFER_HXX

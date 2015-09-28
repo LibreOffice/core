@@ -67,7 +67,7 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
         pLOEvent->m_nPaintTileX = x;
         pLOEvent->m_nPaintTileY = y;
         pLOEvent->m_fPaintTileZoom = fZoom;
-        g_task_set_task_data(task, pLOEvent, g_free);
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
         g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
     }
 }
@@ -83,7 +83,7 @@ Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task,
         pLOEvent->m_nPaintTileX = x;
         pLOEvent->m_nPaintTileY = y;
         pLOEvent->m_fPaintTileZoom = fZoom;
-        g_task_set_task_data(task, pLOEvent, g_free);
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
         g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
         return m_mTiles[index];
     }
@@ -93,7 +93,7 @@ Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task,
         pLOEvent->m_nPaintTileX = x;
         pLOEvent->m_nPaintTileY = y;
         pLOEvent->m_fPaintTileZoom = fZoom;
-        g_task_set_task_data(task, pLOEvent, g_free);
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
         g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
         return m_DummyTile;
     }
@@ -101,5 +101,10 @@ Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task,
     return m_mTiles[index];
 }
 
+void LOEvent::destroy(void* pMemory)
+{
+    LOEvent* pLOEvent = static_cast<LOEvent*>(pMemory);
+    delete pLOEvent;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

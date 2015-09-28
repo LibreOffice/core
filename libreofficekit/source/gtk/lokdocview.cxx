@@ -314,7 +314,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
         pLOEvent->m_nKeyEvent = LOK_KEYEVENT_KEYUP;
         pLOEvent->m_nCharCode = nCharCode;
         pLOEvent->m_nKeyCode  = nKeyCode;
-        g_task_set_task_data(task, pLOEvent, g_free);
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
         g_object_unref(task);
     }
@@ -325,7 +325,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
         pLOEvent->m_nKeyEvent = LOK_KEYEVENT_KEYINPUT;
         pLOEvent->m_nCharCode = nCharCode;
         pLOEvent->m_nKeyCode  = nKeyCode;
-        g_task_set_task_data(task, pLOEvent, g_free);
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
         g_object_unref(task);
     }
@@ -951,7 +951,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
                 pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
                 pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
                 pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
-                g_task_set_task_data(task, pLOEvent, g_free);
+                g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
                 g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
                 g_object_unref(task);
@@ -970,7 +970,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
             pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
             pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
             pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
-            g_task_set_task_data(task, pLOEvent, g_free);
+            g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
             g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
             g_object_unref(task);
@@ -1019,7 +1019,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
                     pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_START;
                     pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(priv->m_aGraphicHandleRects[i].x + priv->m_aGraphicHandleRects[i].width / 2, priv->m_fZoom);
                     pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(priv->m_aGraphicHandleRects[i].y + priv->m_aGraphicHandleRects[i].height / 2, priv->m_fZoom);
-                    g_task_set_task_data(task, pLOEvent, g_free);
+                    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
                     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
                     g_object_unref(task);
@@ -1047,7 +1047,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventCount = nCount;
-        g_task_set_task_data(task, pLOEvent, g_free);
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
         g_object_unref(task);
@@ -1065,7 +1065,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventCount = nCount;
-        g_task_set_task_data(task, pLOEvent, g_free);
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
         g_object_unref(task);
@@ -1153,7 +1153,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
         pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_START;
         pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
-        g_task_set_task_data(task, pLOEvent, g_free);
+        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
         g_object_unref(task);
@@ -1169,7 +1169,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
     pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
     pLOEvent->m_nPostMouseEventCount = 1;
-    g_task_set_task_data(task, pLOEvent, g_free);
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
     g_object_unref(task);
@@ -1891,7 +1891,7 @@ lok_doc_view_open_document (LOKDocView* pDocView,
     pLOEvent->m_pPath = pPath;
 
     priv->m_aDocPath = pPath;
-    g_task_set_task_data(task, pLOEvent, g_free);
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
     g_object_unref(task);
@@ -1953,7 +1953,7 @@ lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PART);
 
     pLOEvent->m_nPart = nPart;
-    g_task_set_task_data(task, pLOEvent, g_free);
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
     g_object_unref(task);
@@ -1975,7 +1975,7 @@ lok_doc_view_set_partmode(LOKDocView* pDocView,
     GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PARTMODE);
     pLOEvent->m_nPartMode = nPartMode;
-    g_task_set_task_data(task, pLOEvent, g_free);
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
     g_object_unref(task);
@@ -1997,7 +1997,7 @@ lok_doc_view_set_edit(LOKDocView* pDocView,
     GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_EDIT);
     pLOEvent->m_bEdit = bEdit;
-    g_task_set_task_data(task, pLOEvent, g_free);
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
     g_object_unref(task);
@@ -2022,7 +2022,7 @@ lok_doc_view_post_command (LOKDocView* pDocView,
     pLOEvent->m_pCommand = pCommand;
     pLOEvent->m_pArguments  = g_strdup(pArguments);
 
-    g_task_set_task_data(task, pLOEvent, g_free);
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
     g_object_unref(task);
 }
