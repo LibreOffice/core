@@ -4,6 +4,6 @@ Provides algorithms and data types for bitmap graphics e.g. line and fill
 polygon scan conversion, bitmap format iterators, and a SalGraphics-compatible
 software renderer
 
-Used for example for wmf / svm files. E.g. used when you do -headless, and
+Used for example for wmf / svm files. E.g. used when you do --headless, and
 have no DISPLAY set - it's an all-software backend for the LibO graphic
 backend. also see [git:vcl/headless].
