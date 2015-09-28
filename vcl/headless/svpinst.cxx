@@ -150,8 +150,9 @@ void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
             std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
             do
             {
-                if( it->m_pFrame    == pFrame )
+                if (it->m_pFrame == pFrame)
                 {
+                    delete it->m_pData;
                     it = m_aUserEvents.erase( it );
                 }
                 else
