@@ -9152,14 +9152,12 @@ AC_MSG_CHECKING([whether to use X11])
 dnl ***************************************
 dnl testing for X libraries and includes...
 dnl ***************************************
-WANT_X11="no"
-if test $_os != Darwin -a $_os != WINNT -a $_os != Android -a $_os != iOS -a "$with_x" != "no"; then
-    WANT_X11="yes"
+if test $USING_X11 = TRUE; then
     AC_DEFINE(HAVE_FEATURE_X11)
 fi
-AC_MSG_RESULT([$WANT_X11])
+AC_MSG_RESULT([$USING_X11])
 
-if test "$WANT_X11" = "yes"; then
+if test "$USING_X11" = TRUE; then
     AC_PATH_X
     AC_PATH_XTRA
     CPPFLAGS="$CPPFLAGS $X_CFLAGS"
@@ -9178,7 +9176,7 @@ else
     x_libraries="no_x_libraries"
 fi
 
-if test "$WANT_X11" = "yes"; then
+if test "$USING_X11" = TRUE; then
     dnl ===================================================================
     dnl Check for Composite.h for Mozilla plugin
     dnl ===================================================================
@@ -9208,7 +9206,7 @@ dnl ===================================================================
 dnl Check for system Xrender
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use Xrender])
-if test "$WANT_X11" = "yes" -a  "$test_xrender" = "yes"; then
+if test "$USING_X11" = TRUE -a  "$test_xrender" = "yes"; then
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES(XRENDER, xrender)
     XRENDER_CFLAGS=$(printf '%s' "$XRENDER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
@@ -9226,7 +9224,7 @@ dnl ===================================================================
 dnl Check for XRandr
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable RandR support])
-if test "$WANT_X11" = "yes" -a "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" = "TRUE" \); then
+if test "$USING_X11" = "yes" -a "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" = "TRUE" \); then
     if test -z "$enable_randr_link" -o "$enable_randr_link" = "no"; then
         XRANDR_DLOPEN="TRUE"
         AC_MSG_RESULT([configured to dlopen libXrandr at runtime])
