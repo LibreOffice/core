@@ -894,14 +894,11 @@ public:
         int i;
         static const int nSequence = 4096;
         rtl::OUString *pStrs;
-        sal_uIntPtr   *pValues;
 
         pStrs = new rtl::OUString[nSequence];
-        pValues = new sal_uIntPtr[nSequence];
         for (i = 0; i < nSequence; i++)
         {
             pStrs[i] = rtl::OUString::number( sqrt( static_cast<double>(i) ) ).intern();
-            pValues[i] = reinterpret_cast<sal_uIntPtr>( pStrs[i].pData );
         }
         for (i = 0; i < nSequence; i++)
         {
@@ -909,27 +906,6 @@ public:
             CPPUNIT_ASSERT_MESSAGE("double intern failed",
                                    aNew.pData == pStrs[i].pData);
         }
-
-        // Free strings to check for leaks
-        for (i = 0; i < nSequence; i++)
-        {
-            // Overwrite - hopefully this re-uses the memory
-            pStrs[i] = rtl::OUString();
-            pStrs[i] = rtl::OUString::number( sqrt( static_cast<double>(i) ) );
-        }
-
-        for (i = 0; i < nSequence; i++)
-        {
-            rtl::OUString aIntern;
-            sal_uIntPtr nValue;
-            aIntern = rtl::OUString::number( sqrt( static_cast<double>(i) ) ).intern();
-
-            nValue = reinterpret_cast<sal_uIntPtr>( aIntern.pData );
-            // This may not be 100% reliable: memory may
-            // have been re-used, but it's worth checking.
-            CPPUNIT_ASSERT_MESSAGE("intern leaking", nValue != pValues[i]);
-        }
-        delete [] pValues;
         delete [] pStrs;
     }
 
