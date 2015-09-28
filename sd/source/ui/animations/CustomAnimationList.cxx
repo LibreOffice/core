@@ -46,6 +46,7 @@
 #include "glob.hrc"
 
 #include <algorithm>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
@@ -877,9 +878,10 @@ bool CustomAnimationList::DoubleClickHdl()
     return false;
 }
 
-PopupMenu* CustomAnimationList::CreateContextMenu()
+std::unique_ptr<PopupMenu> CustomAnimationList::CreateContextMenu()
 {
-    PopupMenu* pMenu = new PopupMenu(SdResId( RID_EFFECT_CONTEXTMENU ));
+    std::unique_ptr<PopupMenu> pMenu(
+        new PopupMenu(SdResId( RID_EFFECT_CONTEXTMENU )));
 
     sal_Int16 nNodeType = -1;
     sal_Int16 nEntries = 0;

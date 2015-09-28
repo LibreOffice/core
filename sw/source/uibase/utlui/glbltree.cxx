@@ -331,14 +331,14 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-PopupMenu* SwGlobalTree::CreateContextMenu()
+std::unique_ptr<PopupMenu> SwGlobalTree::CreateContextMenu()
 {
-    PopupMenu* pPop = 0;
+    std::unique_ptr<PopupMenu> pPop;
     if(pActiveShell &&
         !pActiveShell->GetView().GetDocShell()->IsReadOnly())
     {
         const sal_uInt16 nEnableFlags = GetEnableFlags();
-        pPop = new PopupMenu;
+        pPop.reset(new PopupMenu);
         PopupMenu* pSubPop1 = new PopupMenu;
         PopupMenu* pSubPop2 = new PopupMenu;
 

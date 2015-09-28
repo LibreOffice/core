@@ -27,6 +27,7 @@
 #include <svtools/treelistbox.hxx>
 #include <vcl/timer.hxx>
 
+#include <memory>
 #include <set>
 
 namespace dbaui
@@ -114,7 +115,7 @@ namespace dbaui
 
         virtual bool    DoubleClickHdl() SAL_OVERRIDE;
 
-        virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
+        virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
         virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
         void            SetEnterKeyHdl(const Link<DBTreeListBox*,void>& rNewHdl) {m_aEnterKeyHdl = rNewHdl;}

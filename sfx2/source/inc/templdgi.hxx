@@ -21,6 +21,10 @@
 
 class SfxTemplateControllerItem;
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <vcl/button.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/lstbox.hxx>
@@ -137,7 +141,7 @@ public:
     }
     void MakeExpanded_Impl(ExpandedEntries_t& rEntries) const;
 
-    virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
 };
 
 class SfxActionListBox : public DropListBox_Impl
@@ -146,7 +150,7 @@ protected:
 public:
     SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinBits );
 
-    virtual PopupMenu*  CreateContextMenu() SAL_OVERRIDE;
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
     void Recalc();
 };
 
@@ -332,7 +336,7 @@ public:
     }
 
     // normally for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
-    PopupMenu*  CreateContextMenu();
+    std::unique_ptr<PopupMenu> CreateContextMenu();
 };
 
 class DropToolBox_Impl : public ToolBox, public DropTargetHelper

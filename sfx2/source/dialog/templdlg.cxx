@@ -332,7 +332,7 @@ void SfxActionListBox::Recalc()
     }
 }
 
-PopupMenu* SfxActionListBox::CreateContextMenu()
+std::unique_ptr<PopupMenu> SfxActionListBox::CreateContextMenu()
 {
 
     if( !( GetSelectionCount() > 0 ) )
@@ -421,7 +421,7 @@ void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries_t& rEntries) const
     }
 }
 
-PopupMenu* StyleTreeListBox_Impl::CreateContextMenu()
+std::unique_ptr<PopupMenu> StyleTreeListBox_Impl::CreateContextMenu()
 {
     return pDialog->CreateContextMenu();
 }
@@ -2191,7 +2191,7 @@ void SfxCommonTemplateDialog_Impl::EnableExample_Impl(sal_uInt16 nId, bool bEnab
     EnableItem(nId, bEnable);
 }
 
-PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu()
+std::unique_ptr<PopupMenu> SfxCommonTemplateDialog_Impl::CreateContextMenu()
 {
     if ( bBindingUpdate )
     {
@@ -2199,7 +2199,7 @@ PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu()
         pBindings->Update( SID_STYLE_NEW );
         bBindingUpdate = false;
     }
-    PopupMenu* pMenu = new PopupMenu( SfxResId( MN_CONTEXT_TEMPLDLG ) );
+    std::unique_ptr<PopupMenu> pMenu(new PopupMenu( SfxResId( MN_CONTEXT_TEMPLDLG ) ));
     pMenu->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectHdl ) );
     pMenu->EnableItem( ID_EDIT, bCanEdit );
     pMenu->EnableItem( ID_DELETE, bCanDel );

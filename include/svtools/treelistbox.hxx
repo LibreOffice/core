@@ -23,6 +23,7 @@
 #include <svtools/svtdllapi.h>
 
 #include <deque>
+#include <memory>
 #include <vector>
 
 #include <vcl/ctrl.hxx>
@@ -794,7 +795,7 @@ public:
     void            ShowFocusRect( const SvTreeListEntry* pEntry );
     void            InitStartEntry();
 
-    virtual PopupMenu* CreateContextMenu();
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu();
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
     void            EnableContextMenuHandling();

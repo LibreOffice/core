@@ -561,12 +561,12 @@ namespace
     }
 }
 
-PopupMenu* DBTreeListBox::CreateContextMenu()
+std::unique_ptr<PopupMenu> DBTreeListBox::CreateContextMenu()
 {
     ::std::unique_ptr< PopupMenu > pContextMenu;
 
     if ( !m_pContextMenuProvider )
-        return pContextMenu.release();
+        return pContextMenu;
 
     // the basic context menu
     pContextMenu.reset( m_pContextMenuProvider->getContextMenu( *this ) );
@@ -577,7 +577,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu()
     // allow context menu interception
     ::cppu::OInterfaceContainerHelper* pInterceptors = m_pContextMenuProvider->getContextMenuInterceptors();
     if ( !pInterceptors || !pInterceptors->getLength() )
-        return pContextMenu.release();
+        return pContextMenu;
 
     ContextMenuExecuteEvent aEvent;
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
@@ -642,7 +642,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu()
         lcl_adjustMenuItemIDs( *pModifiedMenu, m_pContextMenuProvider->getCommandController() );
     }
 
-    return pContextMenu.release();
+    return pContextMenu;
 }
 
 void DBTreeListBox::ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )

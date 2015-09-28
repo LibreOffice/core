@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
 
 #include <sal/macros.h>
 #include "datanavi.hxx"
@@ -217,9 +220,10 @@ namespace svxform
         pTransferable->StartDrag( this, DND_ACTION_COPY );
     }
 
-    PopupMenu* DataTreeListBox::CreateContextMenu()
+    std::unique_ptr<PopupMenu> DataTreeListBox::CreateContextMenu()
     {
-        PopupMenu* pMenu = new PopupMenu( SVX_RES( RID_MENU_DATANAVIGATOR ) );
+        std::unique_ptr<PopupMenu> pMenu(
+            new PopupMenu( SVX_RES( RID_MENU_DATANAVIGATOR ) ));
         if ( DGTInstance == m_eGroup )
             pMenu->RemoveItem( pMenu->GetItemPos( m_nAddId ) );
         else
@@ -240,7 +244,7 @@ namespace svxform
                 pMenu->SetItemText( m_nRemoveId, SVX_RESSTR( RID_STR_DATANAV_REMOVE_BINDING ) );
             }
         }
-        m_pXFormsPage->EnableMenuItems( pMenu );
+        m_pXFormsPage->EnableMenuItems( pMenu.get() );
         return pMenu;
     }
 

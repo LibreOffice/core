@@ -52,6 +52,8 @@
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 
 #include "datalistener.hxx"
+
+#include <memory>
 #include <vector>
 
 class FmFormShell;
@@ -131,7 +133,7 @@ namespace svxform
         virtual ~DataTreeListBox();
         virtual void dispose() SAL_OVERRIDE;
 
-        virtual PopupMenu*      CreateContextMenu() SAL_OVERRIDE;
+        virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
         virtual void            ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry ) SAL_OVERRIDE;
         virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
         virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;

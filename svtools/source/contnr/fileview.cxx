@@ -225,7 +225,7 @@ public:
 
     DECL_LINK_TYPED(ResetQuickSearch_Impl, Timer *, void);
 
-    virtual PopupMenu*  CreateContextMenu() SAL_OVERRIDE;
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
     virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) SAL_OVERRIDE;
 };
 
@@ -656,7 +656,7 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 
 
 
-PopupMenu* ViewTabListBox_Impl::CreateContextMenu()
+std::unique_ptr<PopupMenu> ViewTabListBox_Impl::CreateContextMenu()
 {
     bool bEnableDelete = mbEnableDelete;
     bool bEnableRename = mbEnableRename;
@@ -733,8 +733,8 @@ PopupMenu* ViewTabListBox_Impl::CreateContextMenu()
 
     if ( bEnableDelete || bEnableRename )
     {
-        PopupMenu * pRet
-            = new PopupMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
+        std::unique_ptr<PopupMenu> pRet(
+            new PopupMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) ));
         pRet->EnableItem( MID_FILEVIEW_DELETE, bEnableDelete );
         pRet->EnableItem( MID_FILEVIEW_RENAME, bEnableRename );
         pRet->RemoveDisabledEntries( true, true );

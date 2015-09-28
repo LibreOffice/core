@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONLIST_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONLIST_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/drawing/XShape.hpp>
 #include <svtools/treelistbox.hxx>
 #include <CustomAnimationEffect.hxx>
@@ -72,7 +76,7 @@ public:
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
-    virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

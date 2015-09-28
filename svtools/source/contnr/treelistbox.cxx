@@ -3810,7 +3810,7 @@ void SvTreeListBox::InitStartEntry()
         pImp->pStartEntry = GetModel()->First();
 }
 
-PopupMenu* SvTreeListBox::CreateContextMenu()
+std::unique_ptr<PopupMenu> SvTreeListBox::CreateContextMenu()
 {
     return NULL;
 }

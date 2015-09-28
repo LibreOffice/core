@@ -23,6 +23,7 @@
 #include <vcl/settings.hxx>
 
 #include <cstdlib>
+#include <memory>
 #include <stack>
 
 #include <svtools/treelistbox.hxx>
@@ -3042,16 +3043,16 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
                 aPopupPos = Point( 0, 0 );
         }
 
-        PopupMenu*  pPopup = pView->CreateContextMenu();
-
-        if( pPopup )
         {
-            // do action for selected entry in popup menu
-            sal_uInt16 nMenuAction = pPopup->Execute( pView, aPopupPos );
-            if ( nMenuAction )
-                pView->ExcecuteContextMenuAction( nMenuAction );
-            lcl_DeleteSubPopups(pPopup);
-            delete pPopup;
+            std::unique_ptr<PopupMenu> pPopup = pView->CreateContextMenu();
+            if( pPopup.get() )
+            {
+                // do action for selected entry in popup menu
+                sal_uInt16 nMenuAction = pPopup->Execute( pView, aPopupPos );
+                if ( nMenuAction )
+                    pView->ExcecuteContextMenuAction( nMenuAction );
+                lcl_DeleteSubPopups(pPopup.get());
+            }
         }
 
         if( bClickedIsFreePlace )

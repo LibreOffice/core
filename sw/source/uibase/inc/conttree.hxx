@@ -25,6 +25,8 @@
 #include "swcont.hxx"
 
 #include <map>
+#include <memory>
+
 #include <o3tl/enumarray.hxx>
 
 class SwWrtShell;
@@ -142,7 +144,7 @@ protected:
     void            GotoContent(SwContent* pCnt);
     static void     SetInDrag(bool bSet) {bIsInDrag = bSet;}
 
-    virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
 public:
@@ -305,7 +307,7 @@ protected:
     static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
     DECL_STATIC_LINK_TYPED(SwGlobalTree, ShowFrameHdl, void*, void);
 
-    virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
+    virtual std::unique_ptr<PopupMenu> CreateContextMenu() SAL_OVERRIDE;
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
 public:
