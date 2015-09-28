@@ -228,15 +228,17 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
                 ColorMaskElement aRedMask(0x0000ff00);
                 ColorMaskElement aGreenMask(0x00ff0000);
                 ColorMaskElement aBlueMask(0xff000000);
+                sal_uInt32 nAlphaChannel(0x000000ff);
 #else
                 ColorMaskElement aRedMask(0x00ff0000);
                 ColorMaskElement aGreenMask(0x0000ff00);
                 ColorMaskElement aBlueMask(0x000000ff);
+                sal_uInt32 nAlphaChannel(0xff000000);
 #endif
                 aBlueMask.CalcMaskShift();
                 aRedMask.CalcMaskShift();
                 aGreenMask.CalcMaskShift();
-                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, 0xff000000);
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, nAlphaChannel);
                 break;
             }
             case Format::ThirtyTwoBitTcMaskARGB:
@@ -247,15 +249,17 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
                 ColorMaskElement aRedMask(0x00ff0000);
                 ColorMaskElement aGreenMask(0x0000ff00);
                 ColorMaskElement aBlueMask(0x000000ff);
+                sal_uInt32 nAlphaChannel(0xff000000);
 #else
                 ColorMaskElement aRedMask(0x0000ff00);
                 ColorMaskElement aGreenMask(0x00ff0000);
                 ColorMaskElement aBlueMask(0xff000000);
+                sal_uInt32 nAlphaChannel(0x000000ff);
 #endif
                 aBlueMask.CalcMaskShift();
                 aRedMask.CalcMaskShift();
                 aGreenMask.CalcMaskShift();
-                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, 0xff000000 );
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, nAlphaChannel);
                 break;
             }
             case Format::ThirtyTwoBitTcMaskABGR:
@@ -266,15 +270,17 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
                 ColorMaskElement aRedMask(0x000000ff);
                 ColorMaskElement aGreenMask(0x0000ff00);
                 ColorMaskElement aBlueMask(0x00ff0000);
+                sal_uInt32 nAlphaChannel(0xff000000);
 #else
                 ColorMaskElement aRedMask(0xff000000);
                 ColorMaskElement aGreenMask(0x00ff0000);
                 ColorMaskElement aBlueMask(0x0000ff00);
+                sal_uInt32 nAlphaChannel(0x000000ff);
 #endif
                 aBlueMask.CalcMaskShift();
                 aRedMask.CalcMaskShift();
                 aGreenMask.CalcMaskShift();
-                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, 0xff000000);
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, nAlphaChannel);
                 break;
             }
             case Format::ThirtyTwoBitTcMaskRGBA:
@@ -285,15 +291,17 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
                 ColorMaskElement aRedMask(0xff000000);
                 ColorMaskElement aGreenMask(0x00ff0000);
                 ColorMaskElement aBlueMask(0x0000ff00);
+                sal_uInt32 nAlphaChannel(0x000000ff);
 #else
                 ColorMaskElement aRedMask(0x000000ff);
                 ColorMaskElement aGreenMask(0x0000ff00);
                 ColorMaskElement aBlueMask(0x00ff0000);
+                sal_uInt32 nAlphaChannel(0xff000000);
 #endif
                 aBlueMask.CalcMaskShift();
                 aRedMask.CalcMaskShift();
                 aGreenMask.CalcMaskShift();
-                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, 0x000000ff);
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, nAlphaChannel);
                 break;
             }
             default:
