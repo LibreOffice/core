@@ -359,8 +359,7 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
 
-    const SfxUInt16Item* pUInt16Item =
-        PTR_CAST( SfxUInt16Item, GetOldItem( *rSet, SID_ATTR_YEAR2000 ) );
+    const SfxUInt16Item* pUInt16Item = dynamic_cast< const SfxUInt16Item* >( GetOldItem( *rSet, SID_ATTR_YEAR2000 ) );
     sal_uInt16 nNum = (sal_uInt16)m_pYearValueField->GetText().toInt32();
     if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
     {

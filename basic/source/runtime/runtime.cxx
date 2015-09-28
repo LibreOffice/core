@@ -528,7 +528,7 @@ StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic )
     if( pActiveModule )
     {
         SbxObject* pParent = pActiveModule->GetParent();
-        if( pParent && pParent->ISA(StarBASIC) )
+        if( pParent && 0 != dynamic_cast<const StarBASIC*>( pParent) )
         {
             pCurBasic = static_cast<StarBASIC*>(pParent);
         }
@@ -1169,7 +1169,7 @@ void SbiRuntime::PushForEach()
     BasicCollection* pCollection;
     SbxDimArray* pArray;
     SbUnoObject* pUnoObj;
-    if( (pArray = PTR_CAST(SbxDimArray,pObj)) != NULL )
+    if( (pArray = dynamic_cast<SbxDimArray*>( pObj)) != NULL  )
     {
         p->eForType = FOR_EACH_ARRAY;
         p->refEnd = reinterpret_cast<SbxVariable*>(pArray);
@@ -1186,13 +1186,13 @@ void SbiRuntime::PushForEach()
             p->pArrayUpperBounds[i] = uBound;
         }
     }
-    else if( (pCollection = PTR_CAST(BasicCollection,pObj)) != NULL )
+    else if( (pCollection = dynamic_cast<BasicCollection*>( pObj)) != NULL  )
     {
         p->eForType = FOR_EACH_COLLECTION;
         p->refEnd = pCollection;
         p->nCurCollectionIndex = 0;
     }
-    else if( (pUnoObj = PTR_CAST(SbUnoObject,pObj)) != NULL )
+    else if( (pUnoObj = dynamic_cast<SbUnoObject*>( pObj)) != NULL  )
     {
         // XEnumerationAccess?
         Any aAny = pUnoObj->getUnoAny();
@@ -1268,7 +1268,7 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
     {
         SbxVariable* pVar = p->refEnd.Is() ? p->refEnd.get() : NULL;
         if( p->eForType == FOR_EACH_COLLECTION && pVar != NULL &&
-            PTR_CAST(BasicCollection,pVar) == pCollection )
+            dynamic_cast<BasicCollection*>( pVar) == pCollection  )
         {
             return p;
         }
@@ -1640,15 +1640,15 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
             return false;
     }
     // #115826: Exclude ProcedureProperties to avoid call to Property Get procedure
-    else if( refVar->ISA(SbProcedureProperty) )
+    else if( 0 != dynamic_cast<const SbProcedureProperty*>( &refVar) )
         return false;
 
     SbxObjectRef xValObj = static_cast<SbxObject*>(refVal->GetObject());
-    if( !xValObj.Is() || xValObj->ISA(SbUnoAnyObject) )
+    if( !xValObj.Is() || 0 != dynamic_cast<const SbUnoAnyObject*>( &xValObj) )
         return false;
 
-    SbUnoObject* pUnoVal =  PTR_CAST(SbUnoObject,static_cast<SbxObject*>(xValObj));
-    SbUnoStructRefObject* pUnoStructVal = PTR_CAST(SbUnoStructRefObject,static_cast<SbxObject*>(xValObj));
+    SbUnoObject* pUnoVal =  dynamic_cast<SbUnoObject*>( static_cast<SbxObject*>(xValObj.get()) );
+    SbUnoStructRefObject* pUnoStructVal = dynamic_cast<SbUnoStructRefObject*>( static_cast<SbxObject*>(xValObj) );
     Any aAny;
     // make doubly sure value is either an Uno object or
     // an uno struct
@@ -1670,7 +1670,7 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
         else
             SbxBase::ResetError();
 
-        SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,static_cast<SbxObject*>(xVarObj));
+        SbUnoStructRefObject* pUnoStructObj = dynamic_cast<SbUnoStructRefObject*>( static_cast<SbxObject*>(xVarObj.get()) );
 
         OUString sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
         OUString sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();
@@ -1830,7 +1830,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         SbxBase* pObjVarObj = refVal->GetObject();
         if( pObjVarObj )
         {
-            SbxVariableRef refObjVal = PTR_CAST(SbxObject,pObjVarObj);
+            SbxVariableRef refObjVal = dynamic_cast<SbxObject*>( pObjVarObj );
 
             if( refObjVal )
             {
@@ -1860,7 +1860,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
             n = refVar->GetFlags();
             refVar->SetFlag( SbxFlagBits::Write );
         }
-        SbProcedureProperty* pProcProperty = PTR_CAST(SbProcedureProperty, refVar.get());
+        SbProcedureProperty* pProcProperty = dynamic_cast<SbProcedureProperty*>( refVar.get() );
         if( pProcProperty )
         {
             pProcProperty->setSet( true );
@@ -1896,14 +1896,14 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 SbxObject* pObj = NULL;
 
 
-                pObj = PTR_CAST(SbxObject,refVar.get());
+                pObj = dynamic_cast<SbxObject*>( refVar.get() );
 
                 // calling GetObject on a SbxEMPTY variable raises
                 // object not set errors, make sure its an Object
                 if ( !pObj && refVar->GetType() == SbxOBJECT )
                 {
                     SbxBase* pObjVarObj = refVar->GetObject();
-                    pObj = PTR_CAST(SbxObject,pObjVarObj);
+                    pObj = dynamic_cast<SbxObject*>( pObjVarObj );
                 }
                 SbxVariable* pDflt = NULL;
                 if ( pObj && !bObjAssign )
@@ -1932,7 +1932,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
             Reference< XInterface > xComListener;
 
             SbxBase* pObj = refVal->GetObject();
-            SbUnoObject* pUnoObj = (pObj != NULL) ? PTR_CAST(SbUnoObject,pObj) : NULL;
+            SbUnoObject* pUnoObj = (pObj != NULL) ? dynamic_cast<SbUnoObject*>( pObj ) : NULL;
             if( pUnoObj != NULL )
             {
                 Any aControlAny = pUnoObj->getUnoAny();
@@ -1959,7 +1959,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         }
         if ( bDimAsNew )
         {
-            if( !refVar->ISA(SbxObject) )
+            if( 0 == dynamic_cast<const SbxObject*>( &refVar) )
             {
                 SbxBase* pValObjBase = refVal->GetObject();
                 if( pValObjBase == NULL )
@@ -1996,12 +1996,12 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                     if( bFirstInit )
                     {
                         // Store information to instantiate object later
-                        SbxObject* pValObj = PTR_CAST(SbxObject,pValObjBase);
+                        SbxObject* pValObj = dynamic_cast<SbxObject*>( pValObjBase );
                         if( pValObj != NULL )
                         {
                             OUString aObjClass = pValObj->GetClassName();
 
-                            SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pValObjBase);
+                            SbClassModuleObject* pClassModuleObj = dynamic_cast<SbClassModuleObject*>( pValObjBase );
                             DimAsNewRecoverHash &rDimAsNewRecoverHash = GaDimAsNewRecoverHash::get();
                             if( pClassModuleObj != NULL )
                             {
@@ -2247,7 +2247,7 @@ void SbiRuntime::StepREDIMP()
     if( refRedimpArray.Is() )
     {
         SbxBase* pElemObj = refVar->GetObject();
-        SbxDimArray* pNewArray = PTR_CAST(SbxDimArray,pElemObj);
+        SbxDimArray* pNewArray = dynamic_cast<SbxDimArray*>( pElemObj );
         SbxDimArray* pOldArray = static_cast<SbxDimArray*>(static_cast<SbxArray*>(refRedimpArray));
         if( pNewArray )
         {
@@ -2304,7 +2304,7 @@ void SbiRuntime::StepREDIMP_ERASE()
     if( eType & SbxARRAY )
     {
         SbxBase* pElemObj = refVar->GetObject();
-        SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,pElemObj);
+        SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>( pElemObj );
         if( pDimArray )
         {
             refRedimpArray = pDimArray;
@@ -2338,7 +2338,7 @@ static void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
         if ( bVBAEnabled )
         {
             SbxBase* pElemObj = refVar->GetObject();
-            SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,pElemObj);
+            SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>( pElemObj );
             bool bClearValues = true;
             if( pDimArray )
             {
@@ -2355,7 +2355,7 @@ static void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
             }
             if ( bClearValues )
             {
-                SbxArray* pArray = PTR_CAST(SbxArray,pElemObj);
+                SbxArray* pArray = dynamic_cast<SbxArray*>( pElemObj );
                 if ( pArray )
                 {
                     pArray->Clear();
@@ -2444,7 +2444,9 @@ void SbiRuntime::StepARGV()
         SbxVariableRef pVal = PopVar();
 
         // Before fix of #94916:
-        if( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) || pVal->ISA(SbProcedureProperty) )
+        if( 0 != dynamic_cast<const SbxMethod*>( &pVal)
+            || 0 != dynamic_cast<const SbUnoProperty*>( &pVal)
+            || 0 != dynamic_cast<const SbProcedureProperty*>( &pVal) )
         {
             // evaluate methods and properties!
             SbxVariable* pRes = new SbxVariable( *pVal );
@@ -2851,7 +2853,7 @@ void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
     {
         OUString aAlias( pImg->GetString( static_cast<short>( nOp1 ) ) );
         SbxVariableRef pVal = PopVar();
-        if( bVBAEnabled && ( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) || pVal->ISA(SbProcedureProperty) ) )
+        if( bVBAEnabled && ( 0 != dynamic_cast<const SbxMethod*>( &pVal) || 0 != dynamic_cast<const SbUnoProperty*>( &pVal) || 0 != dynamic_cast<const SbProcedureProperty*>( &pVal) ) )
         {
             // named variables ( that are Any especially properties ) can be empty at this point and need a broadcast
             if ( pVal->GetType() == SbxEMPTY )
@@ -3230,7 +3232,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     SbxDataType t = refVal->GetType();
     SbxVariable* pVal = refVal.get();
     // we don't know the type of uno properties that are (maybevoid)
-    if ( t == SbxEMPTY && refVal->ISA(SbUnoProperty) )
+    if ( t == SbxEMPTY && 0 != dynamic_cast<const SbUnoProperty*>( &refVal) )
     {
         SbUnoProperty* pProp = static_cast<SbUnoProperty*>(pVal);
         t = pProp->getRealType();
@@ -3252,7 +3254,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
             {
                 if ( ( bVBAEnabled || CodeCompleteOptions::IsExtendedTypeDeclaration() ) && pObj->IsA( TYPE(SbUnoObject) ) )
                 {
-                    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
+                    SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( pObj );
                     bOk = checkUnoObjectType( pUnoObj, aClass );
                 }
                 else
@@ -3267,7 +3269,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
             {
                 bOk = true;
 
-                SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pObj);
+                SbClassModuleObject* pClassModuleObject = dynamic_cast<SbClassModuleObject*>( pObj );
                 if( pClassModuleObject != NULL )
                     pClassModuleObject->triggerInitializeEvent();
             }
@@ -3581,7 +3583,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
         // definitely we want this for VBA where properties are often
         // collections ( which need index access ), but lets only do
         // this if we actually have params following
-        else if( bVBAEnabled && pElem->ISA(SbUnoProperty) && pElem->GetParameters() )
+        else if( bVBAEnabled && 0 != dynamic_cast<const SbUnoProperty*>( pElem) && pElem->GetParameters() )
         {
             SbxVariableRef refTemp = pElem;
 
@@ -3686,11 +3688,11 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
             {
                 bool bError_ = true;
 
-                SbUnoMethod* pUnoMethod = PTR_CAST(SbUnoMethod,p);
-                SbUnoProperty* pUnoProperty = PTR_CAST(SbUnoProperty,p);
+                SbUnoMethod* pUnoMethod = dynamic_cast<SbUnoMethod*>( p );
+                SbUnoProperty* pUnoProperty = dynamic_cast<SbUnoProperty*>( p );
                 if( pUnoMethod || pUnoProperty )
                 {
-                    SbUnoObject* pParentUnoObj = PTR_CAST( SbUnoObject,p->GetParent() );
+                    SbUnoObject* pParentUnoObj = dynamic_cast<SbUnoObject*>( p->GetParent()  );
                     if( pParentUnoObj )
                     {
                         Any aUnoAny = pParentUnoObj->getUnoAny();
@@ -3718,11 +3720,11 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                         }
                     }
                 }
-                else if( bVBAEnabled && p->GetType() == SbxOBJECT && (!p->ISA(SbxMethod) || !p->IsBroadcaster()) )
+                else if( bVBAEnabled && p->GetType() == SbxOBJECT && (0 == dynamic_cast<const SbxMethod*>( p) || !p->IsBroadcaster()) )
                 {
                     // Check for default method with named parameters
                     SbxBaseRef pObj = p->GetObject();
-                    if( pObj && pObj->ISA(SbUnoObject) )
+                    if( pObj && 0 != dynamic_cast<const SbUnoObject*>( &pObj) )
                     {
                         SbUnoObject* pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj));
                         Any aAny = pUnoObj->getUnoAny();
@@ -3808,7 +3810,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
     if( ( pElem->GetType() & SbxARRAY ) && refRedim.get() != pElem )
     {
         SbxBase* pElemObj = pElem->GetObject();
-        SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,pElemObj);
+        SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>( pElemObj );
         pPar = pElem->GetParameters();
         if( pDimArray )
         {
@@ -3819,7 +3821,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
         }
         else
         {
-            SbxArray* pArray = PTR_CAST(SbxArray,pElemObj);
+            SbxArray* pArray = dynamic_cast<SbxArray*>( pElemObj );
             if( pArray )
             {
                 if( !pPar )
@@ -3841,7 +3843,9 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
         }
     }
     // consider index-access for UnoObjects
-    else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) && ( !bVBAEnabled || !pElem->ISA(SbxProperty) ) )
+    else if( pElem->GetType() == SbxOBJECT &&
+            0 == dynamic_cast<const SbxMethod*>( pElem) &&
+            ( !bVBAEnabled || 0 == dynamic_cast<const SbxProperty*>( pElem) ) )
     {
         pPar = pElem->GetParameters();
         if ( pPar )
@@ -3850,7 +3854,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             SbxBaseRef pObj = pElem->GetObject();
             if( pObj )
             {
-                if( pObj->ISA(SbUnoObject) )
+                if( 0 != dynamic_cast<const SbUnoObject*>( &pObj) )
                 {
                     SbUnoObject* pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj));
                     Any aAny = pUnoObj->getUnoAny();
@@ -3921,7 +3925,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                 SbxBaseRef pDfltObj = pDflt->GetObject();
                                 if( pDfltObj )
                                 {
-                                    if( pDfltObj->ISA(SbUnoObject) )
+                                    if( 0 != dynamic_cast<const SbUnoObject*>( &pDfltObj) )
                                     {
                                         pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pDfltObj));
                                         Any aUnoAny = pUnoObj->getUnoAny();
@@ -3961,7 +3965,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                     // #42940, set parameter 0 to NULL so that var doesn't contain itself
                     pPar->Put( NULL, 0 );
                 }
-                else if( pObj->ISA(BasicCollection) )
+                else if( 0 != dynamic_cast<const BasicCollection*>( &pObj) )
                 {
                     BasicCollection* pCol = static_cast<BasicCollection*>(static_cast<SbxBase*>(pObj));
                     pElem = new SbxVariable( SbxVARIANT );
@@ -4010,7 +4014,7 @@ void SbiRuntime::StepFIND( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 void SbiRuntime::StepFIND_CM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
 
-    SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pMod);
+    SbClassModuleObject* pClassModuleObject = dynamic_cast<SbClassModuleObject*>( pMod );
     if( pClassModuleObject )
     {
         pMod->SetFlag( SbxFlagBits::GlobalSearch );
@@ -4035,11 +4039,11 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     SbxVariableRef pObjVar = PopVar();
 
-    SbxObject* pObj = PTR_CAST(SbxObject, pObjVar.get());
+    SbxObject* pObj = dynamic_cast<SbxObject*>( pObjVar.get() );
     if( !pObj )
     {
         SbxBase* pObjVarObj = pObjVar->GetObject();
-        pObj = PTR_CAST(SbxObject,pObjVarObj);
+        pObj = dynamic_cast<SbxObject*>( pObjVarObj );
     }
 
     // #56368 save reference at StepElem, otherwise objects could
@@ -4380,7 +4384,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     }
 
     SbxDimArray* pArray = 0;
-    if( xObj->ISA(SbxDimArray) )
+    if( 0 != dynamic_cast<const SbxDimArray*>( &xObj) )
     {
         SbxBase* pObj = static_cast<SbxBase*>(xObj);
         pArray = static_cast<SbxDimArray*>(pObj);

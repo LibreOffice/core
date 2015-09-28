@@ -296,7 +296,7 @@ bool SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "SvxChartColorTableItem::operator== : types differ" );
 
-    const SvxChartColorTableItem * rCTItem( dynamic_cast< const SvxChartColorTableItem * >( & rAttr ));
+    const SvxChartColorTableItem * rCTItem( dynamic_cast<const SvxChartColorTableItem * >( & rAttr ));
     if( rCTItem )
     {
         return (this->m_aColorTable == rCTItem->GetColorList());

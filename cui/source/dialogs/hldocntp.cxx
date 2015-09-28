@@ -358,7 +358,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                                                                            &aFrame, &aReferer, 0L );
 
                     // save new doc
-                    const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );  // SJ: pReturn is NULL if the Hyperlink
+                    const SfxViewFrameItem *pItem = dynamic_cast<const SfxViewFrameItem*>( pReturn  );  // SJ: pReturn is NULL if the Hyperlink
                     if ( pItem )                                                            // creation is cancelled #106216#
                     {
                         pViewFrame = pItem->GetFrame();

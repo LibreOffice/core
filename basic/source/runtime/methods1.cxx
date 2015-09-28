@@ -124,11 +124,11 @@ RTLFUNC(CallByName)
     SbxBase* pObjVar = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     SbxObject* pObj = NULL;
     if( pObjVar )
-        pObj = PTR_CAST(SbxObject,pObjVar);
-    if( !pObj && pObjVar && pObjVar->ISA(SbxVariable) )
+        pObj = dynamic_cast<SbxObject*>( pObjVar );
+    if( !pObj && pObjVar && 0 != dynamic_cast<const SbxVariable*>( pObjVar) )
     {
         SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
-        pObj = PTR_CAST(SbxObject,pObjVarObj);
+        pObj = dynamic_cast<SbxObject*>( pObjVarObj );
     }
     if( !pObj )
     {
@@ -192,7 +192,7 @@ RTLFUNC(CallByName)
         break;
     case vbMethod:
         {
-            SbMethod* pMeth = PTR_CAST(SbMethod,pFindVar);
+            SbMethod* pMeth = dynamic_cast<SbMethod*>( pFindVar );
             if( pMeth == NULL )
             {
                 StarBASIC::Error( ERRCODE_BASIC_PROC_UNDEFINED );
@@ -934,7 +934,7 @@ RTLFUNC(FindObject)
     SbxObject* pFindObj = NULL;
     if( pFind )
     {
-        pFindObj = PTR_CAST(SbxObject,pFind);
+        pFindObj = dynamic_cast<SbxObject*>( pFind );
     }
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( pFindObj );
@@ -958,12 +958,12 @@ RTLFUNC(FindPropertyObject)
     SbxObject* pObj = NULL;
     if( pObjVar )
     {
-        pObj = PTR_CAST(SbxObject,pObjVar);
+        pObj = dynamic_cast<SbxObject*>( pObjVar );
     }
-    if( !pObj && pObjVar && pObjVar->ISA(SbxVariable) )
+    if( !pObj && pObjVar && 0 != dynamic_cast<const SbxVariable*>( pObjVar) )
     {
         SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
-        pObj = PTR_CAST(SbxObject,pObjVarObj);
+        pObj = dynamic_cast<SbxObject*>( pObjVarObj );
     }
 
     OUString aNameStr = rPar.Get(2)->GetOUString();
@@ -972,7 +972,7 @@ RTLFUNC(FindPropertyObject)
     if( pObj )
     {
         SbxVariable* pFindVar = pObj->Find( aNameStr, SbxCLASS_OBJECT );
-        pFindObj = PTR_CAST(SbxObject,pFindVar);
+        pFindObj = dynamic_cast<SbxObject*>( pFindVar );
     }
     else
     {
@@ -1274,7 +1274,7 @@ void PutGet( SbxArray& rPar, bool bPut )
     if( pVar->GetType() & SbxARRAY )
     {
         SbxBase* pParObj = pVar->GetObject();
-        pArr = PTR_CAST(SbxDimArray,pParObj);
+        pArr = dynamic_cast<SbxDimArray*>( pParObj );
     }
 
     bool bRet;
@@ -1713,7 +1713,7 @@ RTLFUNC(Join)
         return;
     }
     SbxBase* pParObj = rPar.Get(1)->GetObject();
-    SbxDimArray* pArr = PTR_CAST(SbxDimArray,pParObj);
+    SbxDimArray* pArr = dynamic_cast<SbxDimArray*>( pParObj );
     if( pArr )
     {
         if( pArr->GetDims() != 1 )
@@ -3288,11 +3288,11 @@ RTLFUNC(Me)
     (void)bWrite;
 
     SbModule* pActiveModule = GetSbData()->pInst->GetActiveModule();
-    SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pActiveModule);
+    SbClassModuleObject* pClassModuleObject = dynamic_cast<SbClassModuleObject*>( pActiveModule );
     SbxVariableRef refVar = rPar.Get(0);
     if( pClassModuleObject == NULL )
     {
-        SbObjModule* pMod = PTR_CAST(SbObjModule,pActiveModule);
+        SbObjModule* pMod = dynamic_cast<SbObjModule*>( pActiveModule );
         if ( pMod )
             refVar->PutObject( pMod );
         else

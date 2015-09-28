@@ -57,7 +57,7 @@ SbError returnInt64InOutArg(SbxArray *pArgs, SbxVariable &rRetVal,
     if (pOut->IsObject())
     {
         // FIXME: should we clone this and use pOut->PutObject ?
-        SbxObject* pObj = PTR_CAST(SbxObject,pOut->GetObject());
+        SbxObject* pObj = dynamic_cast<SbxObject*>( pOut->GetObject() );
         if (!pObj)
             return ERRCODE_BASIC_BAD_ARGUMENT;
 

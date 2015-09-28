@@ -1151,8 +1151,8 @@ OUString EditorWindow::GetActualSubName( sal_uLong nLine )
     SbxArrayRef pMethods = rModulWindow.GetSbModule()->GetMethods();
     for( sal_uInt16 i=0; i < pMethods->Count(); i++ )
     {
-        SbxVariable* p = PTR_CAST( SbMethod, pMethods->Get( i ) );
-        SbMethod* pMeth = PTR_CAST( SbMethod, p );
+        SbxVariable* p = dynamic_cast<SbMethod*>( pMethods->Get( i )  );
+        SbMethod* pMeth = dynamic_cast<SbMethod*>( p  );
         if( pMeth )
         {
             sal_uInt16 l1,l2;

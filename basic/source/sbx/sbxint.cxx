@@ -172,7 +172,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 nRes = pVal->GetInteger();
             else
@@ -269,7 +269,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 pVal->PutInteger( n );
             else
@@ -450,7 +450,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 nRes = pVal->GetInt64();
             else
@@ -550,7 +550,7 @@ start:
         }
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 pVal->PutInt64( n );
             else
@@ -727,7 +727,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 nRes = pVal->GetUInt64();
             else
@@ -828,7 +828,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 pVal->PutUInt64( n );
             else

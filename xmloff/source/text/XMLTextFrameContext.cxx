@@ -1362,7 +1362,7 @@ bool XMLTextFrameContext::CreateIfNotThere( ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet >& rPropSet )
 {
     SvXMLImportContext *pContext = &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl*>( pContext );
     if( pImpl )
     {
         if( pImpl->CreateIfNotThere() )
@@ -1442,7 +1442,7 @@ void XMLTextFrameContext::EndElement()
 
     SvXMLImportContext const*const pContext =
         (pMultiContext) ? &pMultiContext : &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = const_cast<XMLTextFrameContext_Impl*>(PTR_CAST( XMLTextFrameContext_Impl, pContext ));
+    XMLTextFrameContext_Impl *pImpl = const_cast<XMLTextFrameContext_Impl*>(dynamic_cast< const XMLTextFrameContext_Impl*>( pContext ));
     assert(!pMultiContext || pImpl);
     if( pImpl )
     {
@@ -1593,7 +1593,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             m_xReplImplContext = pContext;
         }
     }
-    else if( m_xImplContext->ISA( XMLTextFrameContext_Impl ) )
+    else if( 0 != dynamic_cast< const XMLTextFrameContext_Impl*>( m_xImplContext.get() ))
     {
         // the child is a writer frame
         if( XML_NAMESPACE_SVG == p_nPrefix )
@@ -1698,7 +1698,7 @@ void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
 TextContentAnchorType XMLTextFrameContext::GetAnchorType() const
 {
     SvXMLImportContext *pContext = &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl*>( pContext );
     if( pImpl )
         return pImpl->GetAnchorType();
     else
@@ -1709,7 +1709,7 @@ Reference < XTextContent > XMLTextFrameContext::GetTextContent() const
 {
     Reference < XTextContent > xTxtCntnt;
     SvXMLImportContext *pContext = &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl* >( pContext );
     if( pImpl )
         xTxtCntnt.set( pImpl->GetPropSet(), UNO_QUERY );
 
@@ -1720,7 +1720,7 @@ Reference < XShape > XMLTextFrameContext::GetShape() const
 {
     Reference < XShape > xShape;
     SvXMLImportContext* pContext = &m_xImplContext;
-    SvXMLShapeContext* pImpl = PTR_CAST( SvXMLShapeContext, pContext );
+    SvXMLShapeContext* pImpl = dynamic_cast<SvXMLShapeContext*>( pContext  );
     if ( pImpl )
     {
         xShape = pImpl->getShape();

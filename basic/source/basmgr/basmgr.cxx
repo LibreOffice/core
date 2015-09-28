@@ -1078,7 +1078,7 @@ bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
     bool bLoaded = false;
     if( xNew.Is() )
     {
-        if( xNew->IsA( TYPE(StarBASIC) ) )
+        if( 0 != dynamic_cast<const StarBASIC*>( &xNew ) )
         {
             StarBASIC* pNew = static_cast<StarBASIC*>(static_cast<SbxBase*>(xNew));
             // Use the Parent of the old BASICs
@@ -1983,7 +1983,7 @@ sal_Bool DialogContainer_Impl::hasElements()
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
-        if ( pVar->ISA( SbxObject ) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
+        if ( 0 != dynamic_cast<const SbxObject*>( pVar) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
         {
             bRet = true;
             break;
@@ -1997,7 +1997,7 @@ uno::Any DialogContainer_Impl::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
-    if( !( pVar && pVar->ISA( SbxObject ) &&
+    if( !( pVar && 0 != dynamic_cast<const SbxObject*>( pVar) &&
            ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) ) )
     {
         throw container::NoSuchElementException();
@@ -2023,7 +2023,7 @@ uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
-        if ( pVar->ISA( SbxObject ) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
+        if ( 0 != dynamic_cast<const SbxObject*>( pVar) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
         {
             pRetSeq[ nDialogCounter ] = OUString( pVar->GetName() );
             nDialogCounter++;
@@ -2038,7 +2038,7 @@ sal_Bool DialogContainer_Impl::hasByName( const OUString& aName )
 {
     bool bRet = false;
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
-    if( pVar && pVar->ISA( SbxObject ) &&
+    if( pVar && 0 != dynamic_cast<const SbxObject*>( pVar) &&
            ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
     {
         bRet = true;
@@ -2078,7 +2078,7 @@ void DialogContainer_Impl::removeByName( const OUString& Name )
 {
     (void)Name;
     SbxVariable* pVar = mpLib->GetObjects()->Find( Name, SbxCLASS_DONTCARE );
-    if( !( pVar && pVar->ISA( SbxObject ) &&
+    if( !( pVar && 0 != dynamic_cast<const SbxObject*>( pVar) &&
            ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) ) )
     {
         throw container::NoSuchElementException();

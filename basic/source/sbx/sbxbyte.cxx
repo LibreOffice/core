@@ -174,7 +174,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 nRes = pVal->GetByte();
             else
@@ -264,7 +264,7 @@ void ImpPutByte( SbxValues* p, sal_uInt8 n )
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 pVal->PutByte( n );
             else

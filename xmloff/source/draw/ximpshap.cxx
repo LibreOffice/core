@@ -630,9 +630,9 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             OUString aStyleName = maDrawStyleName;
             uno::Reference< style::XStyle > xStyle;
 
-            if( pStyle && pStyle->ISA(XMLShapeStyleContext) )
+            if( pStyle && dynamic_cast<const XMLShapeStyleContext*>( pStyle ) !=  nullptr)
             {
-                pDocStyle = const_cast<XMLShapeStyleContext*>(PTR_CAST( XMLShapeStyleContext, pStyle ));
+                pDocStyle = const_cast<XMLShapeStyleContext*>(dynamic_cast<const XMLShapeStyleContext*>( pStyle ) );
 
                 if( pDocStyle->GetStyle().is() )
                 {
@@ -733,7 +733,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 break;
 
             const SvXMLStyleContext* pTempStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_PARAGRAPH, maTextStyleName);
-            XMLPropStyleContext* pStyle = const_cast<XMLPropStyleContext*>(PTR_CAST( XMLPropStyleContext, pTempStyle )); // use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
+            XMLPropStyleContext* pStyle = const_cast<XMLPropStyleContext*>(dynamic_cast<const XMLPropStyleContext*>( pTempStyle ) ); // use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
             if( pStyle == NULL )
                 break;
 
@@ -3589,7 +3589,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
         // read replacement image
         SvXMLImportContext *pImplContext = &mxImplContext;
         SdXMLShapeContext *pSContext =
-            PTR_CAST( SdXMLShapeContext, pImplContext );
+            dynamic_cast<SdXMLShapeContext*>( pImplContext  );
         if( pSContext )
         {
             uno::Reference < beans::XPropertySet > xPropSet(
@@ -3610,7 +3610,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
                                                 IsXMLToken( rLocalName, XML_THUMBNAIL ) ) ) )
     {
         SvXMLImportContext *pImplContext = &mxImplContext;
-        pContext = PTR_CAST( SdXMLShapeContext, pImplContext )->CreateChildContext( nPrefix,
+        pContext = dynamic_cast<SdXMLShapeContext*>( pImplContext  )->CreateChildContext( nPrefix,
                                                                         rLocalName, xAttrList );
     }
     else if ( (XML_NAMESPACE_DRAW == nPrefix) && IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
