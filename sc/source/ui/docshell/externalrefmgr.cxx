@@ -1448,7 +1448,7 @@ inline void ColumnBatch<T>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
     xMat->PutDouble(&maStorage.front(), maStorage.size(), nCol, mnRowStart);
 }
 
-static ScTokenArray* convertToTokenArray(
+static std::unique_ptr<ScTokenArray> convertToTokenArray(
     ScDocument* pHostDoc, ScDocument* pSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
 {
     ScAddress& s = rRange.aStart;
@@ -1565,10 +1565,10 @@ static ScTokenArray* convertToTokenArray(
     e.SetCol(pUsedRange->aEnd.Col());
     e.SetRow(pUsedRange->aEnd.Row());
 
-    return pArray.release();
+    return pArray;
 }
 
-static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
+static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScRange& rRange)
 {
     SCSIZE nC = static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1);
     SCSIZE nR = static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1);
@@ -1577,7 +1577,7 @@ static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
     ScMatrixToken aToken(xMat);
     unique_ptr<ScTokenArray> pArray(new ScTokenArray);
     pArray->AddToken(aToken);
-    return pArray.release();
+    return pArray;
 }
 
 ScExternalRefManager::ScExternalRefManager(ScDocument* pDoc) :
@@ -1749,7 +1749,7 @@ void putRangeDataIntoCache(
     else
     {
         // Array is empty.  Fill it with an empty matrix of the required size.
-        pArray.reset(lcl_fillEmptyMatrix(rCacheRange));
+        pArray = lcl_fillEmptyMatrix(rCacheRange);
 
         // Make sure to set this range 'cached', to prevent unnecessarily
         // accessing the src document time and time again.
@@ -2190,7 +2190,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     aRange.aStart.SetTab(nTab1);
     aRange.aEnd.SetTab(nTab1 + nTabSpan);
 
-    pArray.reset(convertToTokenArray(mpDoc, pSrcDoc, aRange, aCacheData));
+    pArray = convertToTokenArray(mpDoc, pSrcDoc, aRange, aCacheData);
     rRange = aRange;
     rCacheData.swap(aCacheData);
     return pArray;
