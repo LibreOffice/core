@@ -140,7 +140,7 @@ void SvxLineEndDefTabPage::Construct()
     {
         bCreateArrowPossible = false;
     }
-    else if( !pPolyObj->ISA( SdrPathObj ) )
+    else if( 0 == dynamic_cast<const SdrPathObj*>( pPolyObj) )
     {
         SdrObjTransformInfoRec aInfoRec;
         pPolyObj->TakeObjInfo( aInfoRec );
@@ -148,7 +148,7 @@ void SvxLineEndDefTabPage::Construct()
         if( aInfoRec.bCanConvToPath )
             pNewObj = pPolyObj->ConvertToPolyObj( true, false );
 
-        bCreateArrowPossible = pNewObj && pNewObj->ISA( SdrPathObj );
+        bCreateArrowPossible = pNewObj && 0 != dynamic_cast<const SdrPathObj*>( pNewObj);
         SdrObject::Free( pNewObj );
     }
 
@@ -407,7 +407,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
         const SdrObject* pNewObj;
         SdrObject* pConvPolyObj = NULL;
 
-        if( pPolyObj->ISA( SdrPathObj ) )
+        if( 0 != dynamic_cast<const SdrPathObj*>( pPolyObj) )
         {
             pNewObj = pPolyObj;
         }
@@ -420,7 +420,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
             {
                 pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( true, false );
 
-                if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
+                if( !pNewObj || 0 == dynamic_cast<const SdrPathObj*>( pNewObj) )
                     return; // cancel, additional safety, which
                             // has no use for group objects though.
             }

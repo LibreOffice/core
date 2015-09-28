@@ -292,7 +292,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
 {
     SbxVariable* pMeth = FindQualified( rName, SbxCLASS_DONTCARE);
-    if( pMeth && pMeth->ISA(SbxMethod) )
+    if( pMeth && 0 != dynamic_cast<const SbxMethod*>( pMeth) )
     {
         // FindQualified() might have struck already!
         if( pParam )
@@ -385,7 +385,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
         return NULL;
     }
     // Collections may contain objects of the same name
-    if( !( ct == SbxCLASS_OBJECT && ISA(SbxCollection) ) )
+    if( !( ct == SbxCLASS_OBJECT && 0 != dynamic_cast<const SbxCollection*>( this ) ) )
     {
         SbxVariable* pRes = pArray->Find( rName, ct );
         if( pRes )
@@ -429,7 +429,7 @@ void SbxObject::Insert( SbxVariable* pVar )
         {
             // Then this element exists already
             // There are objects of the same name allowed at collections
-            if( pArray == pObjs && ISA(SbxCollection) )
+            if( pArray == pObjs && 0 != dynamic_cast<const SbxCollection*>( this ) )
             {
                 nIdx = pArray->Count();
             }
@@ -463,9 +463,9 @@ void SbxObject::Insert( SbxVariable* pVar )
         static const char* pCls[] =
             { "DontCare","Array","Value","Variable","Method","Property","Object" };
         OUString aVarName( pVar->GetName() );
-        if ( aVarName.isEmpty() && pVar->ISA(SbxObject) )
+        if ( aVarName.isEmpty() && 0 != dynamic_cast<const SbxObject*>( pVar) )
         {
-            aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
+            aVarName = dynamic_cast<SbxObject*>( pVar)->GetClassName( );
         }
         SAL_INFO(
             "basic.sbx",
@@ -507,9 +507,9 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         static const char* pCls[] =
             { "DontCare","Array","Value","Variable","Method","Property","Object" };
         OUString aVarName( pVar->GetName() );
-        if ( aVarName.isEmpty() && pVar->ISA(SbxObject) )
+        if ( aVarName.isEmpty() && 0 != dynamic_cast<const SbxObject*>( pVar) )
         {
-            aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
+            aVarName = dynamic_cast<SbxObject*>( pVar)->GetClassName( );
         }
         SAL_INFO(
             "basic.sbx",
@@ -535,9 +535,9 @@ void SbxObject::Remove( SbxVariable* pVar )
     {
 #ifdef DBG_UTIL
         OUString aVarName( pVar->GetName() );
-        if ( aVarName.isEmpty() && pVar->ISA(SbxObject) )
+        if ( aVarName.isEmpty() && 0 != dynamic_cast<const SbxObject*>( pVar) )
         {
-            aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
+            aVarName = dynamic_cast<SbxObject*>( pVar)->GetClassName( );
         }
         SAL_INFO(
             "basic.sbx",
@@ -855,11 +855,11 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
             if ( pVar )
             {
                 rStrm.WriteCharPtr( aIndentNameStr.getStr() ).WriteCharPtr( "  - Sub" );
-                if ( pVar->ISA(SbxObject) )
+                if ( 0 != dynamic_cast<const SbxObject*>( pVar) )
                 {
                     static_cast<SbxObject*>(pVar)->Dump( rStrm, bFill );
                 }
-                else if ( pVar->ISA(SbxVariable) )
+                else if ( 0 != dynamic_cast<const SbxVariable*>( pVar) )
                 {
                     static_cast<SbxVariable*>(pVar)->Dump( rStrm, bFill );
                 }

@@ -53,7 +53,7 @@ namespace offapp
 
     bool DriverPoolingSettingsItem::operator==( const SfxPoolItem& _rCompare ) const
     {
-        const DriverPoolingSettingsItem* pItem = PTR_CAST(DriverPoolingSettingsItem, &_rCompare);
+        const DriverPoolingSettingsItem* pItem = dynamic_cast<const DriverPoolingSettingsItem*>( &_rCompare );
         if (!pItem)
             return false;
 

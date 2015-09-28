@@ -172,7 +172,7 @@ void SbxCollection::CollAdd( SbxArray* pPar_ )
     else
     {
         SbxBase* pObj = pPar_->Get( 1 )->GetObject();
-        if( !pObj || !( pObj->ISA(SbxObject) ) )
+        if( !pObj || !( 0 != dynamic_cast<const SbxObject*>( pObj) ) )
         {
             SetError( ERRCODE_SBX_NOTIMP );
         }
@@ -273,7 +273,7 @@ SbxStdCollection::~SbxStdCollection()
 
 void SbxStdCollection::Insert( SbxVariable* p )
 {
-    SbxObject* pObj = PTR_CAST(SbxObject,p);
+    SbxObject* pObj = dynamic_cast<SbxObject*>( p );
     if( pObj && !pObj->IsClass( aElemClass ) )
         SetError( ERRCODE_SBX_BAD_ACTION );
     else

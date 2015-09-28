@@ -95,7 +95,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 nRes = pVal->GetBool() ? SbxTRUE : SbxFALSE;
             else
@@ -181,7 +181,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
 
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 pVal->PutBool( n != 0 );
             else

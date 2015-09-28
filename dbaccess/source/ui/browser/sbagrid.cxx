@@ -1395,7 +1395,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
             ActivateCell();
 
         CellControllerRef xCurrentController = Controller();
-        if (!xCurrentController.Is() || !xCurrentController->ISA(EditCellController))
+        if (!xCurrentController.Is() || 0 == dynamic_cast< const EditCellController* >(xCurrentController.get()))
             return DND_ACTION_NONE;
         Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
 
