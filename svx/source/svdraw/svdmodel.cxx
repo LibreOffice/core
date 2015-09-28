@@ -286,6 +286,7 @@ SdrModel::~SdrModel()
 
     // Delete DrawOutliner only after deleting ItemPool, because ItemPool
     // references Items of the DrawOutliner!
+    delete pChainingOutliner;
     delete pHitTestOutliner;
     delete pDrawOutliner;
 
