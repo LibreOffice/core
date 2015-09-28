@@ -26,7 +26,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/uuid.h>
 #include <rtl/ustring.h>
-#include <sal/alloca.h>
 
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -179,8 +178,8 @@ sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, ::com::sun::star::
     {
         vcl::Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
-        long* pDXA = static_cast<long*>(alloca(str.getLength() * sizeof(long)));
-        nRet = pOutDev->GetTextArray( str, pDXA );
+        std::unique_ptr<long []> pDXA(new long[str.getLength()]);
+        nRet = pOutDev->GetTextArray( str, pDXA.get() );
         rDXArray = ::com::sun::star::uno::Sequence<sal_Int32>( str.getLength() );
         for(int i = 0; i < str.getLength(); i++)
         {

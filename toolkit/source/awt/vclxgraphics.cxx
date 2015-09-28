@@ -26,7 +26,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/uuid.h>
-#include <sal/alloca.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -497,12 +496,12 @@ void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rTex
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS|InitOutDevFlags::FONT );
-        long* pDXA = static_cast<long*>(alloca(rText.getLength() * sizeof(long)));
+        std::unique_ptr<long []> pDXA(new long[rText.getLength()]);
         for(int i = 0; i < rText.getLength(); i++)
         {
             pDXA[i] = rLongs[i];
         }
-        mpOutputDevice->DrawTextArray( Point( x, y ), rText, pDXA );
+        mpOutputDevice->DrawTextArray( Point( x, y ), rText, pDXA.get() );
     }
 }
 
