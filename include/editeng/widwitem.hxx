@@ -33,7 +33,6 @@ class SvXMLUnitConverter;
 
 class EDITENG_DLLPUBLIC SvxWidowsItem: public SfxByteItem
 {
-    friend SvStream & WriteSvxWidowsItem( SvStream & aS, SvxWidowsItem & );
 public:
     TYPEINFO_OVERRIDE();
 

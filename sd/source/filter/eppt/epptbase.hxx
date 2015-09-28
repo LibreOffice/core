@@ -105,8 +105,6 @@ class PropValue
             : mXPropSet( rXPropSet )
         {}
 
-        ::com::sun::star::uno::Any GetAny() { return mAny; }
-
         static bool GetPropertyValue(
             ::com::sun::star::uno::Any& rAny,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,

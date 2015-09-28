@@ -39,7 +39,6 @@ public:
 
     // get & set config entries
     bool        GetIsForPagePreviews() const;
-    bool        GetIsHelpTipsDisappear() const;
     bool        GetIsAllowAnimatedGraphics() const;
     bool        GetIsAllowAnimatedText() const;
     bool        GetIsAutomaticFontColor() const;

@@ -435,11 +435,6 @@ bool FilterConfigCache::IsImportInternalFilter( sal_uInt16 nFormat )
     return (nFormat < aImport.size()) && aImport[ nFormat ].bIsInternalFilter;
 }
 
-bool FilterConfigCache::IsImportPixelFormat( sal_uInt16 nFormat )
-{
-    return (nFormat < aImport.size()) && aImport[ nFormat ].bIsPixelFormat;
-}
-
 OUString FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )

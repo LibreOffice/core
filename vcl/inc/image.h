@@ -108,8 +108,6 @@ struct ImplImageRefData
 
                     ImplImageRefData() {}    // Um Warning zu umgehen
                     ~ImplImageRefData();
-
-    bool            IsEqual( const ImplImageRefData& rData );
 };
 
 // - ImpImageData -

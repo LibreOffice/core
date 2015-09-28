@@ -90,27 +90,12 @@ public:
     void operator&=(const SetOfByte& r2ndSet);
     void operator|=(const SetOfByte& r2ndSet);
 
-    friend inline SvStream& WriteSetOfByte(SvStream& rOut, const SetOfByte& rSet);
-    friend inline SvStream& ReadSetOfByte(SvStream& rIn, SetOfByte& rSet);
-
     // initialize this set with a uno sequence of sal_Int8
     void PutValue(const com::sun::star::uno::Any & rAny);
 
     // returns a uno sequence of sal_Int8
     void QueryValue(com::sun::star::uno::Any & rAny) const;
 };
-
-inline SvStream& WriteSetOfByte(SvStream& rOut, const SetOfByte& rSet)
-{
-    rOut.Write(rSet.aData, 32);
-    return rOut;
-}
-
-inline SvStream& ReadSetOfByte(SvStream& rIn, SetOfByte& rSet)
-{
-    rIn.Read(rSet.aData, 32);
-    return rIn;
-}
 
 #endif // INCLUDED_SVX_SVDSOB_HXX
 

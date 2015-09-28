@@ -64,8 +64,6 @@ namespace dbaui
         */
         void    setToolBox(ToolBox* _pTB);
 
-        inline ToolBox* getToolBox() const  { return m_pToolBox; }
-
         /** checks if the toolbox needs a new imagelist.
         */
         void checkImageList();

@@ -51,10 +51,8 @@ namespace dbaui
         DbaIndexList(vcl::Window* _pParent, WinBits nWinBits);
 
         void SetSelectHdl(const Link<DbaIndexList&,void>& _rHdl) { m_aSelectHdl = _rHdl; }
-        Link<DbaIndexList&,void> GetSelectHdl() const { return m_aSelectHdl; }
 
         void SetEndEditHdl(const Link<SvTreeListEntry*,bool>& _rHdl) { m_aEndEditHdl = _rHdl; }
-        Link<SvTreeListEntry*,bool> GetEndEditHdl() const { return m_aEndEditHdl; }
 
         virtual bool Select(SvTreeListEntry* pEntry, bool bSelect) SAL_OVERRIDE;
 

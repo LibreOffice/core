@@ -46,7 +46,6 @@ class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
     bool    bLastCenter : 1;
     bool    bLastBlock : 1;
 
-    friend SvStream& WriteSvxAdjustItem( SvStream&, SvxAdjustItem& ); //$ ostream
 public:
     TYPEINFO_OVERRIDE();
 

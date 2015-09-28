@@ -66,13 +66,6 @@ bool VCL_DLLPUBLIC WriteDIBBitmapEx(
     const BitmapEx& rSource,
     SvStream& rOStm);
 
-bool VCL_DLLPUBLIC WriteDIBV5(
-    const Bitmap& rSource,
-    const Bitmap& rSourceAlpha,
-    SvStream& rOStm);
-
-
-
 #endif // INCLUDED_VCL_DIBTOOLS_HXX
 
 

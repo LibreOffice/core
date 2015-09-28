@@ -42,9 +42,6 @@ namespace dbaui
 
         virtual bool             operator==(const SfxPoolItem& _rItem) const SAL_OVERRIDE;
         virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const SAL_OVERRIDE;
-
-        css::uno::Reference< css::beans::XPropertySet >
-                getPropertySet() const { return m_xSet; }
     };
 
 }   // namespace dbaui

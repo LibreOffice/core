@@ -178,7 +178,6 @@ public:
 
     // Objects maintain their IDs while storing and loading to/from stream
     friend SvStream& operator >> ( SvStream &, SvPersistStream & );
-    friend SvStream& WriteSvPersistStream( SvStream &, SvPersistStream & );
 };
 
 #endif

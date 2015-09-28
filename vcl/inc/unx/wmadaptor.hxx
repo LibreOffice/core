@@ -284,11 +284,6 @@ public:
     bool supportsSplash() const { return m_aWMAtoms[ NET_WM_WINDOW_TYPE_SPLASH ] != 0; }
 
     /*
-     *  tells whteher there is WM support for NET_WM_WINDOW_TYPE_TOOLBAR
-     */
-    bool supportsToolbar() const { return m_aWMAtoms[ NET_WM_WINDOW_TYPE_TOOLBAR ] != 0; }
-
-    /*
      *  enables always on top or equivalent if possible
      */
     virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const;

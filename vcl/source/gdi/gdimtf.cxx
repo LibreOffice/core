@@ -2954,45 +2954,4 @@ void GDIMetaFile::UseCanvas( bool _bUseCanvas )
     bUseCanvas = _bUseCanvas;
 }
 
-MetaCommentAction* makePluggableRendererAction( const OUString& rRendererServiceName,
-                                                const OUString& rGraphicServiceName,
-                                                const void* _pData,
-                                                sal_uInt32 nDataSize )
-{
-    const sal_uInt8* pData=static_cast<sal_uInt8 const *>(_pData);
-
-    // FIXME: Data gets copied twice, unfortunately
-    OString aRendererServiceName(
-        rRendererServiceName.getStr(),
-        rRendererServiceName.getLength(),
-        RTL_TEXTENCODING_ASCII_US);
-    OString aGraphicServiceName(
-        rGraphicServiceName.getStr(),
-        rGraphicServiceName.getLength(),
-        RTL_TEXTENCODING_ASCII_US);
-
-    std::vector<sal_uInt8> aMem(
-        aRendererServiceName.getLength()+
-        aGraphicServiceName.getLength()+2+nDataSize);
-    sal_uInt8* pMem=&aMem[0];
-
-    std::copy(aRendererServiceName.getStr(),
-              aRendererServiceName.getStr()+aRendererServiceName.getLength()+1,
-              pMem);
-    pMem+=aRendererServiceName.getLength()+1;
-    std::copy(aGraphicServiceName.getStr(),
-              aGraphicServiceName.getStr()+aGraphicServiceName.getLength()+1,
-              pMem);
-    pMem+=aGraphicServiceName.getLength()+1;
-
-    std::copy(pData,pData+nDataSize,
-              pMem);
-
-    return new MetaCommentAction(
-        "DELEGATE_PLUGGABLE_RENDERER",
-        0,
-        &aMem[0],
-        aMem.size());
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

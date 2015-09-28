@@ -43,10 +43,6 @@ namespace dbaui
         */
         static void getSupportedIndirectSettings( const OUString& _sURLPrefix,const css::uno::Reference< css::uno::XComponentContext >& _xContext,::std::vector< sal_Int32>& _out_rDetailsIds );
 
-        /** Creates the detail page for Dbase
-        */
-        static  VclPtr<SfxTabPage> CreateDbase2( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );
-
         /** Creates the detail page for ado
         */
         static  VclPtr<SfxTabPage> CreateDbase( vcl::Window* _pParent, const SfxItemSet* _rAttrSet );

@@ -41,8 +41,6 @@ private:
     mutable sal_Unicode     m_cDecimal;
     sal_Unicode     cFill;
 
-    EDITENG_DLLPRIVATE friend SvStream& WriteSvxTabStop( SvStream&, SvxTabStop& );
-
     void fillDecimal() const;
 
 public:

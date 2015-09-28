@@ -192,9 +192,6 @@ public:
                         { return (aStart == r.aStart) && (aEnd == r.aEnd); }
     bool            operator!=( const ScBigRange& r ) const
                         { return !operator==( r ); }
-
-    friend inline SvStream& WriteScBigRange( SvStream& rStream, const ScBigRange& rRange );
-    friend inline SvStream& ReadScBigRange( SvStream& rStream, ScBigRange& rRange );
 };
 
 inline bool ScBigRange::In( const ScBigAddress& rAddr ) const
@@ -220,20 +217,6 @@ inline bool ScBigRange::Intersects( const ScBigRange& r ) const
      || std::min( aEnd.Row(), r.aEnd.Row() ) < std::max( aStart.Row(), r.aStart.Row() )
      || std::min( aEnd.Tab(), r.aEnd.Tab() ) < std::max( aStart.Tab(), r.aStart.Tab() )
         );
-}
-
-inline SvStream& WriteScBigRange ( SvStream& rStream, const ScBigRange& rRange )
-{
-    WriteScBigAddress( rStream, rRange.aStart );
-    WriteScBigAddress( rStream, rRange.aEnd );
-    return rStream;
-}
-
-inline SvStream& ReadScBigRange( SvStream& rStream, ScBigRange& rRange )
-{
-    ReadScBigAddress( rStream, rRange.aStart );
-    ReadScBigAddress( rStream, rRange.aEnd );
-    return rStream;
 }
 
 #endif

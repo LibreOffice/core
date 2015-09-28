@@ -1083,48 +1083,6 @@ IMPL_LINK_NOARG_TYPED(GraphicObject, ImplAutoSwapOutHdl, Timer *, void)
         mpSwapOutTimer->Start();
 }
 
-SvStream& ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj )
-{
-    VersionCompat   aCompat( rIStm, StreamMode::READ );
-    Graphic         aGraphic;
-    GraphicAttr     aAttr;
-    bool            bLink;
-
-    ReadGraphic( rIStm, aGraphic );
-    ReadGraphicAttr( rIStm, aAttr );
-    rIStm.ReadCharAsBool( bLink );
-
-    rGraphicObj.SetGraphic( aGraphic );
-    rGraphicObj.SetAttr( aAttr );
-
-    if( bLink )
-    {
-        OUString aLink = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_UTF8);
-        rGraphicObj.SetLink(aLink);
-    }
-    else
-        rGraphicObj.SetLink();
-
-    rGraphicObj.SetSwapStreamHdl();
-
-    return rIStm;
-}
-
-SvStream& WriteGraphicObject( SvStream& rOStm, const GraphicObject& rGraphicObj )
-{
-    VersionCompat   aCompat( rOStm, StreamMode::WRITE, 1 );
-    const bool      bLink =  rGraphicObj.HasLink();
-
-    WriteGraphic( rOStm, rGraphicObj.GetGraphic() );
-    WriteGraphicAttr( rOStm, rGraphicObj.GetAttr() );
-    rOStm.WriteBool( bLink );
-
-    if( bLink )
-        write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8);
-
-    return rOStm;
-}
-
 #define UNO_NAME_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
 GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )

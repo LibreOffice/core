@@ -70,9 +70,7 @@ namespace dbaui
 
         bool IsOptionDefData() const { return m_pRB_DefData->IsChecked(); }
         bool IsOptionDef() const { return m_pRB_Def->IsChecked(); }
-        bool IsOptionAppendData() const { return m_pRB_AppendData->IsChecked(); }
         bool IsOptionView() const { return m_pRB_View->IsChecked(); }
-        bool UseHeaderLine() const { return m_pCB_UseHeaderLine->IsChecked(); }
         OUString GetKeyName() const { return m_pEdKeyName->GetText(); }
 
         void setCreateStyleAction();

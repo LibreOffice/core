@@ -40,8 +40,6 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
     sal_uInt8 nMinTrail;
     sal_uInt8 nMaxHyphens;
 
-    friend SvStream & WriteSvxHyphenZoneItem( SvStream & aS, SvxHyphenZoneItem & );
-
 public:
     TYPEINFO_OVERRIDE();
 

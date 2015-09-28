@@ -572,32 +572,6 @@ SvPersistStream& operator >>
     return rStm.ReadPointer( rpObj );
 }
 
-SvStream& WriteSvPersistStream
-(
-    SvStream & rStm,
-    SvPersistStream & rThis
-)
-{
-    SvStream * pOldStm = rThis.GetStream();
-    rThis.SetStream( &rStm );
-
-    sal_uInt8 bTmp = 0;
-    rThis.WriteUChar( bTmp );    // Version
-    sal_uInt32 nCount = (sal_uInt32)rThis.aPUIdx.Count();
-    rThis.WriteUInt32( nCount );
-    sal_uIntPtr aIndex = rThis.aPUIdx.FirstIndex();
-    for( sal_uInt32 i = 0; i < nCount; i++ )
-    {
-        SvPersistBase * pEle = rThis.aPUIdx.Get(aIndex);
-        sal_uInt8 nP = P_OBJ | P_ID | P_STD;
-        WriteId( rThis, nP, aIndex, pEle->GetClassId() );
-        rThis.WriteObj( nP, pEle );
-        aIndex = rThis.aPUIdx.NextIndex( aIndex );
-    }
-    rThis.SetStream( pOldStm );
-    return rStm;
-}
-
 SvStream& operator >>
 (
     SvStream & rStm,

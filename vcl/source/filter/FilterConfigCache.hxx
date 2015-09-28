@@ -99,7 +99,6 @@ public:
     OUString    GetImportFilterTypeName( sal_uInt16 nFormat );
 
     bool    IsImportInternalFilter( sal_uInt16 nFormat );
-    bool    IsImportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16  GetExportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aExport.size()); };

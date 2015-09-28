@@ -84,7 +84,6 @@ namespace MenuBarMerger
                                                     const ::std::vector< OUString >& rReferencePath,
                                                     const OUString&                  rModuleIdentifier,
                                                     const AddonMenuContainer&               rAddonMenuItems );
-        bool       ProcessFallbackOperation();
         bool       MergeMenuItems( Menu*                     pMenu,
                                           sal_uInt16                nPos,
                                           sal_uInt16                nModIndex,

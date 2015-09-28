@@ -46,13 +46,6 @@ public:
     typedef typename container_type::size_type              size_type;
 
 public:
-    /** Returns true, if the object with the passed index exists. Returns
-        false, if the vector element exists but is an empty reference. */
-    bool                has( sal_Int32 nIndex ) const
-                        {
-                            const value_type* pxRef = getRef( nIndex );
-                            return pxRef && pxRef->get();
-                        }
 
     /** Returns a reference to the object with the passed index, or 0 on error. */
     value_type          get( sal_Int32 nIndex ) const

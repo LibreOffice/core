@@ -60,17 +60,6 @@ FileList& FileList::operator=( const FileList& rFileList )
 |*
 \******************************************************************************/
 
-/*
- * NOTE: to correctly handle this Protocol with Unicode, native Win32 must be called:
- * e.g. DropQueryFile
- */
-
-SvStream& WriteFileList( SvStream& rOStm, SAL_UNUSED_PARAMETER const FileList& )
-{
-    OSL_FAIL("TODO: Not implemented!");
-    return rOStm;
-}
-
 /* #i28176#
    The Windows clipboard bridge now provides a double '\0'
    terminated list of file names for format SotClipboardFormatId::FILE_LIST

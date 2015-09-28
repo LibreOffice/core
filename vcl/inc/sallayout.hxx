@@ -124,7 +124,6 @@ protected:
 std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs);
 
 // helper functions often used with ImplLayoutArgs
-bool IsDiacritic( sal_UCS4 );
 int GetVerticalFlags( sal_UCS4 );
 
 // all positions/widths are in font units

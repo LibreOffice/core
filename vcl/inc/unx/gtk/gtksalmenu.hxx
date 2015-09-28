@@ -75,7 +75,6 @@ public:
 
     void                        SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
     Menu*                       GetMenu() { return mpVCLMenu; }
-    GtkSalMenu*                 GetParentSalMenu() { return mpParentSalMenu; }
     void                        SetMenuModel( GMenuModel* pMenuModel ) { mpMenuModel = pMenuModel; }
     GMenuModel*                 GetMenuModel() { return mpMenuModel; }
     unsigned                    GetItemCount() { return maItems.size(); }

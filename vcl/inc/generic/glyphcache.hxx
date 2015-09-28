@@ -109,7 +109,6 @@ public:
                             GlyphMetric() : mnAdvanceWidth(0) {}
 
     Point                   GetOffset() const   { return maOffset; }
-    Point                   GetDelta() const    { return maDelta; }
     Size                    GetSize() const     { return maSize; }
     long                    GetCharWidth() const { return mnAdvanceWidth; }
 

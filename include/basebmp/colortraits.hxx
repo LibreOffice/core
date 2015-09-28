@@ -119,13 +119,6 @@ template< typename ColorType > struct ColorTraits
     /// Type of a color component (i.e. the type of an individual channel)
     typedef ColorType component_type;
 
-    /// Calculate normalized distance between color c1 and c2
-    static inline vigra::NormTraits<ColorType> distance( ColorType c1,
-                                                         ColorType c2 )
-    {
-        return vigra::norm(c1 - c2);
-    }
-
     static inline component_type toGreyscale( ColorType c )
     {
         return c;

@@ -387,36 +387,6 @@ bool QueueInfo::operator==( const QueueInfo& rInfo ) const
         mnJobs          == rInfo.mnJobs;
 }
 
-SvStream& WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo )
-{
-    VersionCompat aCompat( rOStream, StreamMode::WRITE, 1 );
-
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maPrinterName, RTL_TEXTENCODING_UTF8);
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maDriver, RTL_TEXTENCODING_UTF8);
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maLocation, RTL_TEXTENCODING_UTF8);
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maComment, RTL_TEXTENCODING_UTF8);
-    rOStream.WriteUInt32( static_cast<sal_uInt32>(rInfo.mnStatus) );
-    rOStream.WriteUInt32( rInfo.mnJobs );
-
-    return rOStream;
-}
-
-SvStream& ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo )
-{
-    VersionCompat aCompat( rIStream, StreamMode::READ );
-
-    rInfo.maPrinterName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
-    rInfo.maDriver = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
-    rInfo.maLocation = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
-    rInfo.maComment = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
-    sal_uInt32 nTmp;
-    rIStream.ReadUInt32( nTmp );
-    rInfo.mnStatus = static_cast<PrintQueueFlags>(nTmp);
-    rIStream.ReadUInt32( rInfo.mnJobs );
-
-    return rIStream;
-}
-
 SalPrinterQueueInfo::SalPrinterQueueInfo()
 {
     mnStatus    = PrintQueueFlags::NONE;

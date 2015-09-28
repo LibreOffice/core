@@ -340,7 +340,6 @@ public:
                     {aMiscConfig.bShowIndexPreview = bSet;
                     aMiscConfig.SetModified();}
 
-    bool    IsDefaultFontInCurrDocOnly() const { return aMiscConfig.bDefaultFontsInCurrDocOnly;}
     void        SetDefaultFontInCurrDocOnly(bool bSet)
                     {
                         aMiscConfig.bDefaultFontsInCurrDocOnly = bSet;

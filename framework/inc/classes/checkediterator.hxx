@@ -140,8 +140,6 @@ class CheckedIterator
                         If you step to next element again; we set it to E_AFTEREND.
                         So you have a chance to differ between "exact end" and "after end"!
 
-            @seealso    method isEnd()
-            @seealso    method isAfterEnd()
             @return     A reference to our changed object himself.
         *//*-*****************************************************************************************************/
 
@@ -168,50 +166,6 @@ class CheckedIterator
                                     break;
             }
             return *this;
-        }
-
-        /*-****************************************************************************************************
-            @short      return true if internal iterator was not initialized before
-            @descr      These will be true, if use start a new search by using these iterator mechanism!
-
-            @seealso    class FilterCache
-            @return     True if internalk state E_UNKNOWN - false otherwise.
-        *//*-*****************************************************************************************************/
-
-        inline bool isUninitialized()
-        {
-            return( m_eEndState == E_UNKNOWN );
-        }
-
-        /*-****************************************************************************************************
-            @short      return true if internal iterator reached end of container
-            @descr      These will be true if you step to the end of internal container.
-
-            @seealso    method isAfterEnd()
-            @return     True if end reached; false otherwise.
-        *//*-*****************************************************************************************************/
-
-        inline bool isEnd()
-        {
-            // Is true if one end state is set!
-            return  (
-                        ( m_eEndState == E_END      )   ||
-                        ( m_eEndState == E_AFTEREND )
-                    );
-        }
-
-        /*-****************************************************************************************************
-            @short      return true if you call operator++ again and end already reached
-            @descr      These indicate, that end already reached but you call operator++ again and again!
-
-            @seealso    method isEnd()
-            @return     True if end multiple reached; false otherwise.
-        *//*-*****************************************************************************************************/
-
-        inline bool isAfterEnd()
-        {
-            // Is true only, if special end state is set!
-            return( m_eEndState == E_AFTEREND );
         }
 
         /*-****************************************************************************************************

@@ -110,7 +110,6 @@ namespace drawinglayer
             SdrTextHorzAdjust getSdrTextHorzAdjust() const;
             SdrTextVertAdjust getSdrTextVertAdjust() const;
 
-            bool isToBeChained() const;
             bool isChainable() const;
 
 

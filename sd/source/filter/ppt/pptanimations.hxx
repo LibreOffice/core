@@ -213,7 +213,6 @@ public:
     }
 public:
 
-    friend SvStream& ReadAnimationNode(SvStream& rIn, AnimationNode& rAtom);
     friend SvStream& WriteAnimationNode(SvStream& rOut, AnimationNode& rAtom);
 };
 

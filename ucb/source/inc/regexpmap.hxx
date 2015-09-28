@@ -449,8 +449,6 @@ public:
 
     const_iterator end() const;
 
-    bool empty() const;
-
     size_type size() const;
 
     Val const * map(OUString const & rString,
@@ -601,15 +599,6 @@ typename RegexpMap< Val >::const_iterator RegexpMap< Val >::end() const
 {
     return RegexpMapConstIter< Val >(new RegexpMapIterImpl< Val >(m_pImpl,
                                                                   false));
-}
-
-template< typename Val >
-bool RegexpMap< Val >::empty() const
-{
-    return !m_pImpl->m_pDefault
-           && m_pImpl->m_aList[Regexp::KIND_PREFIX].empty()
-           && m_pImpl->m_aList[Regexp::KIND_AUTHORITY].empty()
-           && m_pImpl->m_aList[Regexp::KIND_DOMAIN].empty();
 }
 
 template< typename Val >

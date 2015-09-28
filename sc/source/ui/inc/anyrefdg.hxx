@@ -171,7 +171,6 @@ template<  class TWindow, bool bBindRef = true >
 class ScRefHdlrImplBase: public TWindow, public ScRefHandler
 {
 public:
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual void        StateChanged( StateChangedType nStateChange );
 
 private:
@@ -230,13 +229,6 @@ ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, 
 
 template<class TWindow, bool bBindRef >
 ScRefHdlrImplBase<TWindow,bBindRef>::~ScRefHdlrImplBase(){}
-
-template<class TWindow, bool bBindRef>
-bool ScRefHdlrImplBase<TWindow, bBindRef>::PreNotify( NotifyEvent& rNEvt )
-{
-    ScRefHandler::preNotify( rNEvt, bBindRef );
-    return TWindow::PreNotify( rNEvt );
-}
 
 template<class TWindow, bool bBindRef>
 void ScRefHdlrImplBase<TWindow, bBindRef>::StateChanged( StateChangedType nStateChange )

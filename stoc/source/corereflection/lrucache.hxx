@@ -77,12 +77,6 @@ public:
         @param rValue a value
     */
     inline void setValue( const t_Key & rKey, const t_Val & rValue );
-    /** Tests whether a value is cached for given key.
-        <br>
-        @param rKey a key
-        @return true, if value is cached
-    */
-    inline bool hasValue( const t_Key & rKey ) const;
     /** Clears the cache, thus releasing all cached elements and keys.
         <br>
     */
@@ -139,14 +133,6 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::toFront( CacheEntry * pEntry )
         pEntry->pSucc = _pHead;
         _pHead        = pEntry;
     }
-}
-
-template< class t_Key, class t_Val, class t_KeyHash >
-inline bool LRU_Cache< t_Key, t_Val, t_KeyHash >::hasValue( const t_Key & rKey ) const
-{
-    ::osl::MutexGuard aGuard( _aCacheMutex );
-    const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
-    return (iFind != _aKey2Element.end());
 }
 
 template< class t_Key, class t_Val, class t_KeyHash >

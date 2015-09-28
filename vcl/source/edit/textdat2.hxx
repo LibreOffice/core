@@ -72,7 +72,6 @@ public:
     sal_uInt8&      GetKind()                   { return nKind; }
     void            SetRightToLeft(bool b)      { bRightToLeft = b; }
     bool            IsRightToLeft() const       { return bRightToLeft; }
-    bool            HasValidSize() const        { return nWidth != (-1); }
 };
 
 class TETextPortionList : public std::vector<TETextPortion*>

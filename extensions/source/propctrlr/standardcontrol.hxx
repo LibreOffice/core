@@ -64,34 +64,7 @@ namespace pcr
         }
 
         void SetModifyHdl( const Link<>& _rLink ) { ListBoxType::SetSelectHdl( _rLink ); }
-
-    protected:
-        bool    PreNotify( NotifyEvent& _rNEvt );
     };
-
-
-    template< class LISTBOX_WINDOW >
-    bool ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::PreNotify( NotifyEvent& _rNEvt )
-    {
-        if ( _rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-        {
-            const ::KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
-            if  (   ( pKeyEvent->GetKeyCode().GetModifier() == 0 )
-                &&  (   ( pKeyEvent->GetKeyCode().GetCode() == KEY_PAGEUP )
-                    ||  ( pKeyEvent->GetKeyCode().GetCode() == KEY_PAGEDOWN )
-                    )
-                )
-            {
-                if ( !ListBoxType::IsInDropDown() )
-                {
-                    // don't give the base class a chance to consume the event, in the property browser, it is
-                    // intended to scroll the complete property page
-                    return ListBoxType::GetParent()->PreNotify( _rNEvt );
-                }
-            }
-        }
-        return ListBoxType::PreNotify( _rNEvt );
-    }
 
 
     //= OTimeControl

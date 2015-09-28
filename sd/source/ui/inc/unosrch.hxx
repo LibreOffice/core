@@ -92,9 +92,8 @@ public:
     SdUnoSearchReplaceDescriptor(bool bReplace) throw (css::uno::RuntimeException);
     virtual ~SdUnoSearchReplaceDescriptor() throw();
 
-    bool IsBackwards() const throw() { return mbBackwards; }
-    bool IsCaseSensitive() const throw() { return mbCaseSensitive; }
-    bool IsWords() const throw() { return mbWords; }
+    bool IsCaseSensitive() const { return mbCaseSensitive; }
+    bool IsWords() const { return mbWords; }
 
     UNO3_GETIMPLEMENTATION_DECL( SdUnoSearchReplaceDescriptor )
 

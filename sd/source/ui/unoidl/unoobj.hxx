@@ -63,7 +63,6 @@ private:
     bool IsMasterDepend() const throw();
     void SetMasterDepend( bool bDepend ) throw();
 
-    SdrObject* GetSdrObject() const throw();
     OUString GetPlaceholderText() const;
 
     com::sun::star::uno::Sequence< sal_Int8 >* mpImplementationId;

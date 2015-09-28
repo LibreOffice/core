@@ -213,11 +213,9 @@ bool UnusedMethods::VisitCXXConstructExpr(const CXXConstructExpr* expr)
 
 bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
 {
-    // I don't use the normal ignoreLocation() here, because I __want__ to include files that are
-    // compiled in the $WORKDIR since they may refer to normal code
-    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocStart() );
-    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
+    if (ignoreLocation(functionDecl)) {
         return true;
+    }
 
     functionDecl = functionDecl->getCanonicalDecl();
     const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(functionDecl);
@@ -228,7 +226,7 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     }
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              functionDecl->getNameInfo().getLoc()))) {
+                              functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
         return true;
     }
     if (methodDecl && isStandardStuff(methodDecl->getParent()->getQualifiedNameAsString())) {

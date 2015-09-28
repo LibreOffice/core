@@ -50,7 +50,5 @@ namespace extensions { namespace resource
     };
 }}
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> initResourceIndexAccess(::extensions::resource::ResourceIndexAccess*);
-
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

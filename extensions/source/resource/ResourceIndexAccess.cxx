@@ -87,17 +87,6 @@ ResourceIndexAccess::ResourceIndexAccess(Sequence<Any> const& rArgs, Reference<X
     : m_pResMgr(GetResMgr(rArgs))
 {};
 
-Reference<XInterface> initResourceIndexAccess(ResourceIndexAccess* pResourceIndexAccess)
-{
-    Reference<XInterface> xResult(static_cast<cppu::OWeakObject*>(pResourceIndexAccess));
-    if(!pResourceIndexAccess->hasElements())
-        // xResult does not help the client to analyse the problem
-        // and will crash on getByIndex calls, better just give back an empty Reference
-        // so that such ResourceStringIndexAccess instances are never release into the wild
-        throw RuntimeException("resource manager could not get initialized");
-    return xResult;
-}
-
 Any SAL_CALL ResourceIndexAccess::getByName(const OUString& aName)
     throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {

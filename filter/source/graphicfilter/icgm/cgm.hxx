@@ -144,8 +144,6 @@ class CGM
         bool                IsFinished() const { return mbIsFinished; };
         bool                Write( SvStream& rIStm );
 
-        friend SvStream& ReadCGM( SvStream& rOStm, CGM& rCGM );
-
 };
 #endif
 

@@ -57,14 +57,6 @@ static bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
     return false;
 }
 
-SvStream& WriteSvBOOL(SvStream & rStm, const SvBOOL & rb )
-{
-    sal_uInt8 n = int(rb.nVal);
-    if( rb.bSet )
-        n |= 0x02;
-    rStm.WriteUChar( n );
-    return rStm;
-}
 SvStream& operator >> (SvStream & rStm, SvBOOL & rb )
 {
     sal_uInt8 n;
@@ -75,27 +67,6 @@ SvStream& operator >> (SvStream & rStm, SvBOOL & rb )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
         OSL_FAIL( "format error" );
-    }
-    return rStm;
-}
-
-SvStream& WriteSvVersion(SvStream & rStm, const SvVersion & r )
-{
-    if( (r.GetMajorVersion() || r.GetMinorVersion())
-      && r.GetMajorVersion() <= 0x0F && r.GetMinorVersion() <= 0x0F )
-    { // compress version number in 1 byte
-        // format first 4 bit for major, then 4 bit for minor
-        // 0.0 gets not compressed
-
-        int n = r.GetMajorVersion() << 4;
-        n |= r.GetMinorVersion();
-        rStm.WriteUChar( n );
-    }
-    else
-    {
-        rStm.WriteUChar( 0 );
-        rStm.WriteUInt16( r.GetMajorVersion() );
-        rStm.WriteUInt16( r.GetMinorVersion() );
     }
     return rStm;
 }
@@ -250,12 +221,6 @@ bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
     }
     rInStm.Seek( nTokPos );
     return false;
-}
-
-SvStream& WriteSvString(SvStream & rStm, const SvString & r )
-{
-    write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, r.getString());
-    return rStm;
 }
 
 SvStream& operator >> (SvStream & rStm, SvString & r )

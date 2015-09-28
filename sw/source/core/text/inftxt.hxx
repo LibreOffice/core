@@ -112,8 +112,6 @@ public:
     {
         return nListTabStopPosition;
     }
-
-    friend SvStream & WriteSwLineInfo( SvStream &rOS, const SwLineInfo &rInf );
 };
 
 class SwTextInfo
@@ -136,8 +134,6 @@ public:
     SwParaPortion *GetParaPortion() { return m_pPara; }
     const SwParaPortion *GetParaPortion() const { return m_pPara; }
     sal_Int32 GetTextStart() const { return m_nTextStart; }
-
-    friend SvStream & WriteSwTextInfo( SvStream &rOS, const SwTextInfo &rInf );
 };
 
 class SwTextSizeInfo : public SwTextInfo
@@ -292,8 +288,6 @@ public:
     inline sal_Int32 GetLen() const { return m_nLen; }
     inline void SetLen( const sal_Int32 nNew ) { m_nLen = nNew; }
     inline void SetText( const OUString &rNew ){ m_pText = &rNew; }
-
-    friend SvStream & WriteSwTextSizeInfo( SvStream &rOS, const SwTextSizeInfo &rInf );
 
     // No Bullets for the symbol font!
     inline bool IsNoSymbol() const
@@ -464,8 +458,6 @@ public:
     inline void SetPos( const Point &rNew ) { aPos = rNew; }
 
     inline const SwRect &GetPaintRect() const { return aPaintRect; }
-
-    friend SvStream & WriteSwTextPaintInfo( SvStream &rOS, const SwTextPaintInfo &rInf );
 
     // STUFF FOR JUSTIFIED ALIGNMENT
 
@@ -689,8 +681,6 @@ public:
     // Looks for tabs, TabDec, TXTATR and BRK from nIdx until nEnd.
     // Return: Position; sets cHookChar if necessary
     sal_Int32 ScanPortionEnd( const sal_Int32 nStart, const sal_Int32 nEnd );
-
-    friend SvStream & WriteSwTextFormatInfo( SvStream &rOS, const SwTextFormatInfo &rInf );
 
     inline void SetTabOverflow( bool bOverflow ) { bTabOverflow = bOverflow; }
     inline bool IsTabOverflow() { return bTabOverflow; }

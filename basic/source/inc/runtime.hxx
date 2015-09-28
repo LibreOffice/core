@@ -202,9 +202,6 @@ public:
         LanguageType* peFormatterLangType=NULL, DateFormat* peFormatterDateFormat=NULL );
 };
 
-SbiIoSystem* SbGetIoSystem();
-
-
 // chainable items to keep references temporary
 struct RefSaveItem
 {

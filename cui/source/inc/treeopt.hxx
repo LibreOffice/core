@@ -26,11 +26,6 @@
 class SfxModule;
 class SfxShell;
 
-// static ----------------------------------------------------------------
-
-bool            EnableSSO();
-CreateTabPage   GetSSOCreator();
-
 // struct OrderedEntry ---------------------------------------------------
 
 struct OrderedEntry

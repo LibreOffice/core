@@ -45,8 +45,6 @@ namespace jvmaccess {
 
 namespace stoc_javavm {
 
-bool configureJava(const css::uno::Reference<
-                   css::uno::XComponentContext>& xContext);
 // The MS compiler needs a typedef here, so the JavaVirtualMachine ctor can call
 // its base class ctor:
 typedef

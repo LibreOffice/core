@@ -379,14 +379,6 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName);
 
 
-/** This function returns the access mode of the registry.
-
-    @param  hReg identifies a currently open registry.
-    @return TRUE if accessmode is read only else FALSE.
-*/
-REG_DLLPUBLIC bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hReg);
-
-
 /** This function opens a registry with the specified name.
 
     @param  registryName points to a null terminated string specifying the name of the registry.

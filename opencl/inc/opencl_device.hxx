@@ -15,8 +15,6 @@
 namespace opencl {
 
 ds_device getDeviceSelection(const char* pFileName, bool bForceSelection = false);
-bool selectedDeviceIsOpenCL(ds_device device);
-bool selectedDeviceIsNativeCPU(ds_device device);
 
 }
 

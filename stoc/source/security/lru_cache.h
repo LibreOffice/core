@@ -82,13 +82,6 @@ public:
     */
     inline void set( t_key const & key, t_val const & val );
 
-    /** Tests whether a value is cached for given key.
-
-        @param key a key
-        @return true, if value is cached
-    */
-    inline bool has( t_key const & key ) const;
-
     /** Clears the cache, releasing all cached elements and keys.
     */
     inline void clear();
@@ -168,14 +161,6 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::toFront(
         entry->m_succ = m_head;
         m_head = entry;
     }
-}
-
-template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
-inline bool lru_cache< t_key, t_val, t_hashKey, t_equalKey >::has(
-    t_key const & key ) const
-{
-    typename t_key2element::const_iterator const iFind( m_key2element.find( key ) );
-    return (iFind != m_key2element.end());
 }
 
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
