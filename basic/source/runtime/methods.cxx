@@ -2523,7 +2523,7 @@ RTLFUNC(IsObject)
 
         SbUnoClass* pUnoClass;
         bool bObject;
-        if( pObj &&  NULL != ( pUnoClass=PTR_CAST(SbUnoClass,pObj) ) )
+        if( pObj &&  NULL != ( pUnoClass=dynamic_cast<SbUnoClass*>( pObj) )  )
         {
             bObject = pUnoClass->getUnoClass().is();
         }
@@ -2612,12 +2612,12 @@ RTLFUNC(IsError)
     else
     {
         SbxVariable* pVar =rPar.Get( 1 );
-        SbUnoObject* pObj = PTR_CAST(SbUnoObject,pVar );
+        SbUnoObject* pObj = dynamic_cast<SbUnoObject*>( pVar  );
         if ( !pObj )
         {
             if ( SbxBase* pBaseObj = pVar->GetObject() )
             {
-                pObj = PTR_CAST(SbUnoObject, pBaseObj );
+                pObj = dynamic_cast<SbUnoObject*>( pBaseObj  );
             }
         }
         uno::Reference< script::XErrorQuery > xError;
@@ -3838,12 +3838,12 @@ OUString getObjectTypeName( SbxVariable* pVar )
         }
         else
         {
-            SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pVar );
+            SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( pVar  );
             if ( !pUnoObj )
             {
                 if ( SbxBase* pBaseObj = pVar->GetObject() )
                 {
-                    pUnoObj = PTR_CAST(SbUnoObject, pBaseObj );
+                    pUnoObj = dynamic_cast<SbUnoObject*>( pBaseObj  );
                 }
             }
             if ( pUnoObj )
@@ -4160,7 +4160,7 @@ RTLFUNC(LBound)
         return;
     }
     SbxBase* pParObj = rPar.Get(1)->GetObject();
-    SbxDimArray* pArr = PTR_CAST(SbxDimArray,pParObj);
+    SbxDimArray* pArr = dynamic_cast<SbxDimArray*>( pParObj );
     if( pArr )
     {
         sal_Int32 nLower, nUpper;
@@ -4187,7 +4187,7 @@ RTLFUNC(UBound)
     }
 
     SbxBase* pParObj = rPar.Get(1)->GetObject();
-    SbxDimArray* pArr = PTR_CAST(SbxDimArray,pParObj);
+    SbxDimArray* pArr = dynamic_cast<SbxDimArray*>( pParObj );
     if( pArr )
     {
         sal_Int32 nLower, nUpper;

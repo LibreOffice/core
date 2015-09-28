@@ -193,7 +193,7 @@ void OXMLTable::EndElement()
                     const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
                     if ( pAutoStyles )
                     {
-                        OTableStyleContext* pAutoStyle = const_cast<OTableStyleContext*>(PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_TABLE,m_sStyleName)));
+                        OTableStyleContext* pAutoStyle = const_cast<OTableStyleContext*>(dynamic_cast< const OTableStyleContext* >(pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_TABLE,m_sStyleName)));
                         if ( pAutoStyle )
                         {
                             pAutoStyle->FillPropertySet(m_xTable);

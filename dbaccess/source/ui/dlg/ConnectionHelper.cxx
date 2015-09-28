@@ -98,7 +98,7 @@ namespace dbaui
         get(m_pPB_CreateDB, "create");
 
         // extract the datasource type collection from the item set
-        const DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rCoreAttrs.GetItem(DSID_TYPECOLLECTION));
+        const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _rCoreAttrs.GetItem(DSID_TYPECOLLECTION) );
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
         m_pPB_Connection->SetClickHdl(LINK(this, OConnectionHelper, OnBrowseConnections));

@@ -205,10 +205,10 @@ public:
     {
         css::uno::Reference < css::text::XTextContent > xTxt;
         SvXMLImportContext *pContext = &xContext;
-        if( pContext->ISA( XMLTextFrameContext ) )
-            xTxt = PTR_CAST( XMLTextFrameContext, pContext )->GetTextContent();
-        else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
-            xTxt = PTR_CAST( XMLTextFrameHyperlinkContext, pContext )
+        if( 0 != dynamic_cast<const XMLTextFrameContext*>(pContext) )
+            xTxt = dynamic_cast< XMLTextFrameContext*>( pContext )->GetTextContent();
+        else if( 0 != dynamic_cast<const XMLTextFrameHyperlinkContext*>(pContext) )
+            xTxt = dynamic_cast< XMLTextFrameHyperlinkContext* >( pContext )
                         ->GetTextContent();
 
         return xTxt;
@@ -219,10 +219,10 @@ public:
     {
         css::uno::Reference < css::drawing::XShape > xShape;
         SvXMLImportContext *pContext = &xContext;
-        if( pContext->ISA( XMLTextFrameContext ) )
-            xShape = PTR_CAST( XMLTextFrameContext, pContext )->GetShape();
-        else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
-            xShape = PTR_CAST( XMLTextFrameHyperlinkContext, pContext )->GetShape();
+        if( 0 != dynamic_cast<const XMLTextFrameContext*>(pContext) )
+            xShape = dynamic_cast< XMLTextFrameContext*>( pContext )->GetShape();
+        else if( 0 != dynamic_cast<const XMLTextFrameHyperlinkContext*>(pContext) )
+            xShape = dynamic_cast<XMLTextFrameHyperlinkContext*>( pContext )->GetShape();
 
         return xShape;
     }
@@ -231,13 +231,13 @@ public:
     {
         bool bRet = false;
         SvXMLImportContext *pContext = &xContext;
-        if( pContext->ISA( XMLTextFrameContext ) )
+        if( 0 != dynamic_cast<const XMLTextFrameContext*>(pContext) )
             bRet = css::text::TextContentAnchorType_AT_CHARACTER ==
-                PTR_CAST( XMLTextFrameContext, pContext )
+                dynamic_cast<const XMLTextFrameContext*>( pContext )
                     ->GetAnchorType();
-        else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
+        else if( 0 != dynamic_cast<const XMLTextFrameHyperlinkContext*>( pContext) )
             bRet = css::text::TextContentAnchorType_AT_CHARACTER ==
-                PTR_CAST( XMLTextFrameHyperlinkContext, pContext )
+                dynamic_cast<const XMLTextFrameHyperlinkContext*>( pContext )
                     ->GetAnchorType();
         return bRet;
     }
