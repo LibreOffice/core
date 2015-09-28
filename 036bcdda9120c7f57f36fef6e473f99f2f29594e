@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_6941aa39",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-09-28T10:14:43Z",
+      "side": 1,
+      "message": "Just two minor nitpicks:\n\n* Best avoid introducing new uses of \"0\" or \"NULL\" instead of \"nullptr\".  There is compilerplugins/clang/store/nullptr.cxx waiting to rewrite all of them anyway.\n\n* Reading \"if (const \u003d var)\" instead of \"if (var \u003d const)\" always makes me shiver. ;)",
+      "revId": "036bcdda9120c7f57f36fef6e473f99f2f29594e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
