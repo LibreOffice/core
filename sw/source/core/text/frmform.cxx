@@ -1894,14 +1894,21 @@ bool SwTextFrm::FormatQuick( bool bForceQuickFormat )
     sal_Int32 nStart = GetOfst();
     const sal_Int32 nEnd = GetFollow()
                       ? GetFollow()->GetOfst() : aInf.GetText().getLength();
+
+    bool bPreviousLayoutWasZeroWidth = false;
     do
     {
-        sal_Int32 nShift = aLine.FormatLine(nStart) - nStart;
-        nStart += nShift;
-        if ((nShift != 0) // Check for special case: line is invisible,
-                          // like in too thin table cell: tdf#66141
+        sal_Int32 nNewStart = aLine.FormatLine(nStart);
+        // Check for special case: line is invisible,
+        // like in too thin table cell: tdf#66141
+        bool bThisLayoutIsZeroWidth = (nNewStart == nStart);
+        nStart = nNewStart;
+        bool bWillEndlessInsert = (bPreviousLayoutWasZeroWidth && bThisLayoutIsZeroWidth);
+        if ((!bWillEndlessInsert) // Check for special case: line is invisible,
+                                  // like in too thin table cell: tdf#66141
          && (aInf.IsNewLine() || (!aInf.IsStop() && nStart < nEnd)))
             aLine.Insert( new SwLineLayout() );
+        bPreviousLayoutWasZeroWidth = bThisLayoutIsZeroWidth;
     } while( aLine.Next() );
 
     // Last exit: the heights need to match
