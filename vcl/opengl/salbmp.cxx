@@ -62,7 +62,7 @@ OpenGLSalBitmap::OpenGLSalBitmap()
 OpenGLSalBitmap::~OpenGLSalBitmap()
 {
     Destroy();
-    SAL_INFO( "vcl.opengl", "~OpenGLSalBitmap" );
+    VCL_GL_INFO( "vcl.opengl", "~OpenGLSalBitmap" );
 }
 
 bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight )
@@ -71,7 +71,7 @@ bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long 
     OpenGLZone aZone;
 
     Destroy();
-    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from FBO: [" << nX << ", " << nY << "] " << nWidth << "x" << nHeight );
+    VCL_GL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from FBO: [" << nX << ", " << nY << "] " << nWidth << "x" << nHeight );
 
     mnWidth = nWidth;
     mnHeight = nHeight;
@@ -87,7 +87,7 @@ bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long 
     else
         maTexture = OpenGLTexture( nX, nY, nWidth, nHeight );
     mbDirtyTexture = false;
-    SAL_INFO( "vcl.opengl", "Created texture " << maTexture.Id() );
+    VCL_GL_INFO( "vcl.opengl", "Created texture " << maTexture.Id() );
 
     return true;
 }
@@ -97,7 +97,7 @@ bool OpenGLSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapP
     OpenGLZone aZone;
 
     Destroy();
-    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create with size: " << rSize );
+    VCL_GL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create with size: " << rSize );
 
     if( !isValidBitCount( nBits ) )
         return false;
@@ -127,7 +127,7 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
 
     const OpenGLSalBitmap& rSourceBitmap = static_cast<const OpenGLSalBitmap&>(rSalBmp);
 
-    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from BMP: " << rSourceBitmap.mnWidth << "x" << rSourceBitmap.mnHeight );
+    VCL_GL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from BMP: " << rSourceBitmap.mnWidth << "x" << rSourceBitmap.mnHeight );
 
     if( isValidBitCount( nNewBitCount ) )
     {
@@ -169,7 +169,7 @@ OpenGLTexture& OpenGLSalBitmap::GetTexture() const
         pThis->CreateTexture();
     else if( !maPendingOps.empty() )
         pThis->ExecuteOperations();
-    SAL_INFO( "vcl.opengl", "Got texture " << maTexture.Id() );
+    VCL_GL_INFO( "vcl.opengl", "Got texture " << maTexture.Id() );
     return pThis->maTexture;
 }
 
@@ -177,7 +177,7 @@ void OpenGLSalBitmap::Destroy()
 {
     OpenGLZone aZone;
 
-    SAL_INFO( "vcl.opengl", "Destroy OpenGLSalBitmap" );
+    VCL_GL_INFO( "vcl.opengl", "Destroy OpenGLSalBitmap" );
     maPendingOps.clear();
     maTexture = OpenGLTexture();
     maUserBuffer.reset();
@@ -185,7 +185,7 @@ void OpenGLSalBitmap::Destroy()
 
 bool OpenGLSalBitmap::AllocateUserData()
 {
-    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::AllocateUserData" );
+    VCL_GL_INFO( "vcl.opengl", "OpenGLSalBitmap::AllocateUserData" );
 
     if( mnWidth && mnHeight )
     {
@@ -384,7 +384,7 @@ void OpenGLSalBitmap::ExecuteOperations()
 
 GLuint OpenGLSalBitmap::CreateTexture()
 {
-    SAL_INFO( "vcl.opengl", "::CreateTexture" );
+    VCL_GL_INFO( "vcl.opengl", "::CreateTexture" );
     GLenum nFormat = GL_RGBA;
     GLenum nType = GL_UNSIGNED_BYTE;
     sal_uInt8* pData( NULL );
@@ -454,7 +454,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
 
     lclInstantiateTexture(maTexture, mnBufWidth, mnBufHeight, nFormat, nType, pData);
 
-    SAL_INFO( "vcl.opengl", "Created texture " << maTexture.Id() );
+    VCL_GL_INFO( "vcl.opengl", "Created texture " << maTexture.Id() );
 
     if( bAllocated )
         delete[] pData;
@@ -470,7 +470,7 @@ bool OpenGLSalBitmap::ReadTexture()
 {
     sal_uInt8* pData = maUserBuffer.get();
 
-    SAL_INFO( "vcl.opengl", "::ReadTexture " << mnWidth << "x" << mnHeight );
+    VCL_GL_INFO( "vcl.opengl", "::ReadTexture " << mnWidth << "x" << mnHeight );
 
     if( pData == NULL )
         return false;
@@ -686,7 +686,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 
         if( !maPendingOps.empty() )
         {
-            SAL_INFO( "vcl.opengl", "** Creating texture and reading it back immediately" );
+            VCL_GL_INFO( "vcl.opengl", "** Creating texture and reading it back immediately" );
             if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
                 return NULL;
         }
