@@ -2846,6 +2846,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf90153, "tdf90153.docx")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf93919, "tdf93919.docx")
+{
+    // This was 0, left margin was not inherited from the list style.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

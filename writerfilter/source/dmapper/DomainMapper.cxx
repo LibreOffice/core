@@ -480,6 +480,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 sal_Int32 nValue = ConversionHelper::convertTwipToMM100( nIntValue );
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_FIRST_LINE_INDENT, uno::makeAny( - nValue ));
+
+                // See above, need to inherit left margin from list style when first is set.
+                sal_Int32 nParaLeftMargin = m_pImpl->getCurrentNumberingProperty("IndentAt");
+                if (nParaLeftMargin != 0)
+                    m_pImpl->GetTopContext()->Insert(PROP_PARA_LEFT_MARGIN, uno::makeAny(nParaLeftMargin), /*bOverwrite=*/false);
             }
             break;
         case NS_ooxml::LN_CT_Ind_firstLine:
