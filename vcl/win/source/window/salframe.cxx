@@ -1059,7 +1059,7 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
     mbGraphics = FALSE;
 }
 
-bool WinSalFrame::PostEvent( void* pData )
+bool WinSalFrame::PostEvent(ImplSVEvent* pData)
 {
     return (bool)PostMessageW( mhWnd, SAL_MSG_USEREVENT, 0, (LPARAM)pData );
 }
