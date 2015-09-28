@@ -81,84 +81,50 @@ TYPEINIT1( SwTableLineFormat, SwFrameFormat );
 void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
                     bool bChgAlign, sal_uLong nNdPos );
 
-class SwTableBox_Impl
-{
-    Color *mpUserColor, *mpNumFormatColor;
-    long mnRowSpan;
-    bool mbDummyFlag;
-
-    static void SetNewCol( Color** ppCol, const Color* pNewCol );
-public:
-    SwTableBox_Impl() : mpUserColor(0), mpNumFormatColor(0), mnRowSpan(1),
-        mbDummyFlag( false ) {}
-    ~SwTableBox_Impl() { delete mpUserColor; delete mpNumFormatColor; }
-
-    const Color* GetSaveUserColor() const       { return mpUserColor; }
-    const Color* GetSaveNumFormatColor() const     { return mpNumFormatColor; }
-    void SetSaveUserColor(const Color* p )      { SetNewCol( &mpUserColor, p ); }
-    void SetSaveNumFormatColor( const Color* p )   { SetNewCol( &mpNumFormatColor, p ); }
-    long getRowSpan() const { return mnRowSpan; }
-    void setRowSpan( long nNewRowSpan ) { mnRowSpan = nNewRowSpan; }
-    bool getDummyFlag() const { return mbDummyFlag; }
-    void setDummyFlag( bool bDummy ) { mbDummyFlag = bDummy; }
-};
-
 inline const Color* SwTableBox::GetSaveUserColor() const
 {
-    return pImpl ? pImpl->GetSaveUserColor() : 0;
+    return mpUserColor.get();
 }
 
 inline const Color* SwTableBox::GetSaveNumFormatColor() const
 {
-    return pImpl ? pImpl->GetSaveNumFormatColor() : 0;
+    return mpNumFormatColor.get();
 }
 
 inline void SwTableBox::SetSaveUserColor(const Color* p )
 {
-    if( pImpl )
-        pImpl->SetSaveUserColor( p );
-    else if( p )
-        ( pImpl = new SwTableBox_Impl ) ->SetSaveUserColor( p );
+    if (p)
+        mpUserColor.reset(new Color(*p));
+    else
+        mpUserColor.reset(nullptr);
 }
 
 inline void SwTableBox::SetSaveNumFormatColor( const Color* p )
 {
-    if( pImpl )
-        pImpl->SetSaveNumFormatColor( p );
-    else if( p )
-        ( pImpl = new SwTableBox_Impl )->SetSaveNumFormatColor( p );
+    if (p)
+        mpNumFormatColor.reset(new Color(*p));
+    else
+        mpNumFormatColor.reset(nullptr);
 }
 
 long SwTableBox::getRowSpan() const
 {
-    return pImpl ? pImpl->getRowSpan() : 1;
+    return mnRowSpan;
 }
 
 void SwTableBox::setRowSpan( long nNewRowSpan )
 {
-    if( !pImpl )
-    {
-        if( nNewRowSpan == 1 )
-            return;
-        pImpl = new SwTableBox_Impl();
-    }
-    pImpl->setRowSpan( nNewRowSpan );
+    mnRowSpan = nNewRowSpan;
 }
 
 bool SwTableBox::getDummyFlag() const
 {
-    return pImpl && pImpl->getDummyFlag();
+    return mbDummyFlag;
 }
 
 void SwTableBox::setDummyFlag( bool bDummy )
 {
-    if( !pImpl )
-    {
-        if( !bDummy )
-            return;
-        pImpl = new SwTableBox_Impl();
-    }
-    pImpl->setDummyFlag( bDummy );
+    mbDummyFlag = bDummy;
 }
 
 //JP 15.09.98: Bug 55741 - Keep tabs (front and rear)
@@ -1645,13 +1611,23 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
     return nRet;
 }
 
+SwTableBox::SwTableBox()
+    : pSttNd(0)
+    , pUpper(0)
+    , mnRowSpan(1)
+    , mbDummyFlag(false)
+    , mbDirectFormatting(false)
+{
+}
+
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLine *pUp )
-    : SwClient( 0 ),
-    aLines(),
-    pSttNd( 0 ),
-    pUpper( pUp ),
-    pImpl( 0 ),
-    mbDirectFormatting(false)
+    : SwClient(0)
+    , aLines()
+    , pSttNd(0)
+    , pUpper(pUp)
+    , mnRowSpan(1)
+    , mbDummyFlag(false)
+    , mbDirectFormatting(false)
 {
     aLines.reserve( nLines );
     CheckBoxFormat( pFormat )->Add( this );
@@ -1659,11 +1635,12 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLin
 
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
                         SwTableLine *pUp )
-    : SwClient( 0 ),
-    aLines(),
-    pUpper( pUp ),
-    pImpl( 0 ),
-    mbDirectFormatting(false)
+    : SwClient(0)
+    , aLines()
+    , pUpper(pUp)
+    , mnRowSpan(1)
+    , mbDummyFlag(false)
+    , mbDirectFormatting(false)
 {
     CheckBoxFormat( pFormat )->Add( this );
 
@@ -1678,13 +1655,14 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
     rSrtArr.insert( p );        // insert
 }
 
-SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, SwTableLine *pUp ) :
-    SwClient( 0 ),
-    aLines(),
-    pSttNd( &rSttNd ),
-    pUpper( pUp ),
-    pImpl( 0 ),
-    mbDirectFormatting(false)
+SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, SwTableLine *pUp )
+    : SwClient(0)
+    , aLines()
+    , pSttNd(&rSttNd)
+    , pUpper(pUp)
+    , mnRowSpan(1)
+    , mbDummyFlag(false)
+    , mbDirectFormatting(false)
 {
     CheckBoxFormat( pFormat )->Add( this );
 
@@ -1724,8 +1702,6 @@ SwTableBox::~SwTableBox()
     pMod->Remove( this );               // remove,
     if( !pMod->HasWriterListeners() )
         delete pMod;    // and delete
-
-    delete pImpl;
 }
 
 SwTableBoxFormat* SwTableBox::CheckBoxFormat( SwTableBoxFormat* pFormat )
@@ -2590,18 +2566,6 @@ void SwTableBox::ActualiseValueBox()
             if( rText != sNewText )
                 ChgTextToNum( *this, sNewText, pCol, false ,nNdPos);
         }
-    }
-}
-
-void SwTableBox_Impl::SetNewCol( Color** ppCol, const Color* pNewCol )
-{
-    if( *ppCol != pNewCol )
-    {
-        delete *ppCol;
-        if( pNewCol )
-            *ppCol = new Color( *pNewCol );
-        else
-            *ppCol = 0;
     }
 }
 

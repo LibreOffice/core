@@ -54,7 +54,6 @@ class SfxPoolItem;
 class SwUndoTableMerge;
 class SwUndo;
 class SwPaM;
-class SwTableBox_Impl;
 class SwUndoTableCpyTable;
 class SwBoxSelection;
 struct SwSaveRowSpan;
@@ -395,7 +394,11 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
     SwTableLines aLines;
     const SwStartNode * pSttNd;
     SwTableLine *pUpper;
-    SwTableBox_Impl* pImpl;
+
+    std::unique_ptr<Color> mpUserColor;
+    std::unique_ptr<Color> mpNumFormatColor;
+    long mnRowSpan;
+    bool mbDummyFlag;
 
     /// Do we contain any direct formatting?
     bool mbDirectFormatting;
@@ -407,7 +410,7 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
 public:
     TYPEINFO_OVERRIDE();
 
-    SwTableBox() : pSttNd(0), pUpper(0), pImpl(0), mbDirectFormatting(false) {}
+    SwTableBox();
 
     SwTableBox( SwTableBoxFormat*, sal_uInt16 nLines, SwTableLine *pUp = 0 );
     SwTableBox( SwTableBoxFormat*, const SwStartNode&, SwTableLine *pUp = 0 );
