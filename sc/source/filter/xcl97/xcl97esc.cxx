@@ -109,7 +109,7 @@ XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr,
 
 XclEscherEx::~XclEscherEx()
 {
-    OSL_ENSURE( !aStack.empty(), "~XclEscherEx: stack not empty" );
+    OSL_ENSURE( aStack.empty(), "~XclEscherEx: stack not empty" );
     DeleteCurrAppData();
     delete pTheClientData;
 }
