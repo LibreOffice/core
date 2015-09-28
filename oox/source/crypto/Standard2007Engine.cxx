@@ -72,7 +72,6 @@ bool Standard2007Engine::generateVerifier()
     if (mKey.size() != 16)
         return false;
 
-    sal_uInt32 outputLength;
     vector<sal_uInt8> verifier(ENCRYPTED_VERIFIER_LENGTH);
     vector<sal_uInt8> encryptedVerifier(ENCRYPTED_VERIFIER_LENGTH);
 
@@ -80,8 +79,7 @@ bool Standard2007Engine::generateVerifier()
 
     vector<sal_uInt8> iv;
     Encrypt aEncryptorVerifier(mKey, iv, Crypto::AES_128_ECB);
-    outputLength = aEncryptorVerifier.update(encryptedVerifier, verifier);
-    if (outputLength != ENCRYPTED_VERIFIER_LENGTH)
+    if (aEncryptorVerifier.update(encryptedVerifier, verifier) != ENCRYPTED_VERIFIER_LENGTH)
         return false;
     std::copy(encryptedVerifier.begin(), encryptedVerifier.end(), mInfo.verifier.encryptedVerifier);
 
@@ -93,7 +91,7 @@ bool Standard2007Engine::generateVerifier()
     vector<sal_uInt8> encryptedHash(ENCRYPTED_VERIFIER_HASH_LENGTH, 0);
 
     Encrypt aEncryptorHash(mKey, iv, Crypto::AES_128_ECB);
-    outputLength = aEncryptorHash.update(encryptedHash, hash, hash.size());
+    aEncryptorHash.update(encryptedHash, hash, hash.size());
     std::copy(encryptedHash.begin(), encryptedHash.end(), mInfo.verifier.encryptedVerifierHash);
 
     return true;
