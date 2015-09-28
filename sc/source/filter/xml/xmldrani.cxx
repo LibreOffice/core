@@ -279,7 +279,7 @@ SvXMLImportContext *ScXMLDatabaseRangeContext::CreateChildContext( sal_uInt16 nP
     return pContext;
 }
 
-ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
+std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
 {
     if (!mbValidRange)
         return NULL;
@@ -414,7 +414,7 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         pData->SetRefreshControl(&pDoc->GetRefreshTimerControlAddress());
     }
 
-    return pData.release();
+    return pData;
 }
 
 namespace {

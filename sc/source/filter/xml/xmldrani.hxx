@@ -103,7 +103,7 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
     ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
-    ScDBData* ConvertToDBData(const OUString& rName);
+    std::unique_ptr<ScDBData> ConvertToDBData(const OUString& rName);
 
 public:
 
