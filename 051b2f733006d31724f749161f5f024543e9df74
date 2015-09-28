@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_69724a7e",
+        "filename": "sc/source/filter/html/htmlexp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-28T15:41:46Z",
+      "side": 1,
+      "message": "Can we please use the normal calc formatting?\n\nSo:\n\nif (...)\n{\n\n}\n\ninstead of the \n\nif () {\n\n}",
+      "revId": "051b2f733006d31724f749161f5f024543e9df74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_496f8692",
+        "filename": "sc/source/filter/html/htmlexp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-28T15:41:46Z",
+      "side": 1,
+      "message": "I don\u0027t think that using OUT_COMMENT here is correct. This means that they will be placed as html comment in the file and are therefore not visible to the user.",
+      "revId": "051b2f733006d31724f749161f5f024543e9df74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
