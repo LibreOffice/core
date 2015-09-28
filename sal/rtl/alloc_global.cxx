@@ -35,7 +35,11 @@ AllocMode alloc_mode = AMode_UNSET;
 static void determine_alloc_mode()
 {
     assert(alloc_mode == AMode_UNSET);
-    alloc_mode = (getenv("G_SLICE") == NULL ? AMode_CUSTOM : AMode_SYSTEM);
+    const char* alloc_string = getenv("G_SLICE");
+    if (!alloc_string)
+        alloc_mode = AMode_SYSTEM;
+    else
+        alloc_mode = strcmp(alloc_string, "always-malloc") == 0 ? AMode_SYSTEM : AMode_CUSTOM;
 }
 
 /* ================================================================= *
