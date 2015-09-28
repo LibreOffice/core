@@ -129,6 +129,8 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 {
     SAL_INFO( "vcl.virdev", "ImplInitVirDev(" << nDX << "," << nDY << "," << nBitCount << ")" );
 
+    bool bErase = nDX > 0 && nDY > 0;
+
     if ( nDX < 1 )
         nDX = 1;
 
@@ -191,7 +193,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     SetBackground( Wallpaper( Color( COL_WHITE ) ) );
 
     // #i59283# don't erase user-provided surface
-    if( !pData )
+    if( !pData && bErase)
         Erase();
 
     // register VirDev in the list
@@ -212,7 +214,7 @@ VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
                  "VirtualDevice::VirtualDevice(): Only 0, 1 or 8 allowed for BitCount, not " << nBitCount );
     SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
-    ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount );
+    ImplInitVirDev( Application::GetDefaultDevice(), 0, 0, nBitCount );
 }
 
 VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount )
@@ -223,7 +225,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
                  "VirtualDevice::VirtualDevice(): Only 0, 1 or 8 allowed for BitCount, not " << nBitCount );
     SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
-    ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
+    ImplInitVirDev( &rCompDev, 0, 0, nBitCount );
 }
 
 VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount, sal_uInt16 nAlphaBitCount )
@@ -235,7 +237,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     SAL_INFO( "vcl.gdi",
             "VirtualDevice::VirtualDevice( " << nBitCount << ", " << nAlphaBitCount << " )" );
 
-    ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
+    ImplInitVirDev( &rCompDev, 0, 0, nBitCount );
 
     // Enable alpha channel
     mnAlphaDepth = sal::static_int_cast<sal_Int8>(nAlphaBitCount);
