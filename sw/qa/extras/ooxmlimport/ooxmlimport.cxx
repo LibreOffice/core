@@ -2767,6 +2767,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf87924, "tdf87924.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aGeometry["TextPreRotateAngle"].get<sal_Int32>());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf93919, "tdf93919.docx")
+{
+    // This was 0, left margin was not inherited from the list style.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
