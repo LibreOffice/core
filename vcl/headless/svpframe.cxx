@@ -191,7 +191,7 @@ void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
     delete pSvpGraphics;
 }
 
-bool SvpSalFrame::PostEvent( void* pData )
+bool SvpSalFrame::PostEvent(ImplSVEvent* pData)
 {
     m_pInstance->PostEvent( this, pData, SALEVENT_USEREVENT );
     return true;

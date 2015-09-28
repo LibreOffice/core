@@ -115,7 +115,7 @@ SvpSalInstance::~SvpSalInstance()
     osl_destroyMutex( m_aEventGuard );
 }
 
-void SvpSalInstance::PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
+void SvpSalInstance::PostEvent(const SalFrame* pFrame, void* pData, sal_uInt16 nEvent)
 {
     if( osl_acquireMutex( m_aEventGuard ) )
     {

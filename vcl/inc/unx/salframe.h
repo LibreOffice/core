@@ -215,7 +215,7 @@ public:
     // call with false to setup graphics with window (GetWindow())
     virtual void                updateGraphics( bool bClear );
 
-    virtual bool                PostEvent( void* pData ) SAL_OVERRIDE;
+    virtual bool                PostEvent(ImplSVEvent* pData) SAL_OVERRIDE;
 
     virtual void                SetTitle( const OUString& rTitle ) SAL_OVERRIDE;
     virtual void                SetIcon( sal_uInt16 nIcon ) SAL_OVERRIDE;
