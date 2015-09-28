@@ -779,7 +779,7 @@ double VDataSeries::getYMeanValue() const
     return m_fYMeanValue;
 }
 
-Symbol* getSymbolPropertiesFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
+std::unique_ptr<Symbol> getSymbolPropertiesFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
     ::std::unique_ptr< Symbol > apSymbolProps( new Symbol() );
     try
@@ -798,7 +798,7 @@ Symbol* getSymbolPropertiesFromPropertySet( const uno::Reference< beans::XProper
     {
         ASSERT_EXCEPTION( e );
     }
-    return apSymbolProps.release();
+    return apSymbolProps;
 }
 
 Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
@@ -808,16 +808,16 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
     {
         adaptPointCache( index );
         if (!m_apSymbolProperties_AttributedPoint)
-            m_apSymbolProperties_AttributedPoint.reset(
-                getSymbolPropertiesFromPropertySet(this->getPropertiesOfPoint(index)));
+            m_apSymbolProperties_AttributedPoint
+                = getSymbolPropertiesFromPropertySet(this->getPropertiesOfPoint(index));
         pRet = m_apSymbolProperties_AttributedPoint.get();
         //if a single data point does not have symbols but the dataseries itself has symbols
         //we create an invisible symbol shape to enable selection of that point
         if( !pRet || pRet->Style == SymbolStyle_NONE )
         {
             if (!m_apSymbolProperties_Series)
-                m_apSymbolProperties_Series.reset(
-                    getSymbolPropertiesFromPropertySet(this->getPropertiesOfSeries()));
+                m_apSymbolProperties_Series
+                    = getSymbolPropertiesFromPropertySet(this->getPropertiesOfSeries());
             if( m_apSymbolProperties_Series.get() && m_apSymbolProperties_Series->Style != SymbolStyle_NONE )
             {
                 if (!m_apSymbolProperties_InvisibleSymbolForSelection)
@@ -836,8 +836,8 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
     else
     {
         if (!m_apSymbolProperties_Series)
-            m_apSymbolProperties_Series.reset(
-                getSymbolPropertiesFromPropertySet(this->getPropertiesOfSeries()));
+            m_apSymbolProperties_Series
+                = getSymbolPropertiesFromPropertySet(this->getPropertiesOfSeries());
         pRet = m_apSymbolProperties_Series.get();
     }
 
@@ -925,7 +925,7 @@ uno::Reference<beans::XPropertySet> VDataSeries::getPropertiesOfSeries() const
     return uno::Reference<css::beans::XPropertySet>(m_xDataSeries, css::uno::UNO_QUERY);
 }
 
-DataPointLabel* getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
+std::unique_ptr<DataPointLabel> getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
     ::std::unique_ptr< DataPointLabel > apLabel( new DataPointLabel() );
     try
@@ -937,7 +937,7 @@ DataPointLabel* getDataPointLabelFromPropertySet( const uno::Reference< beans::X
     {
         ASSERT_EXCEPTION( e );
     }
-    return apLabel.release();
+    return apLabel;
 }
 
 void VDataSeries::adaptPointCache( sal_Int32 nNewPointIndex ) const
@@ -959,15 +959,15 @@ DataPointLabel* VDataSeries::getDataPointLabel( sal_Int32 index ) const
     {
         adaptPointCache( index );
         if( !m_apLabel_AttributedPoint.get() )
-            m_apLabel_AttributedPoint.reset(
-                getDataPointLabelFromPropertySet(this->getPropertiesOfPoint(index)));
+            m_apLabel_AttributedPoint
+                = getDataPointLabelFromPropertySet(this->getPropertiesOfPoint(index));
         pRet = m_apLabel_AttributedPoint.get();
     }
     else
     {
         if (!m_apLabel_Series)
-            m_apLabel_Series.reset(
-                getDataPointLabelFromPropertySet(this->getPropertiesOfPoint(index)));
+            m_apLabel_Series
+                = getDataPointLabelFromPropertySet(this->getPropertiesOfPoint(index));
         pRet = m_apLabel_Series.get();
     }
     if( !m_bAllowPercentValueInDataLabel )
