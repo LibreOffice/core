@@ -2423,7 +2423,7 @@ X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
 
 // PostEvent
 
-bool X11SalFrame::PostEvent( void *pData )
+bool X11SalFrame::PostEvent(ImplSVEvent* pData)
 {
     GetDisplay()->SendInternalEvent( this, pData );
     return true;

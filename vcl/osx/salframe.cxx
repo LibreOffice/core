@@ -273,7 +273,7 @@ void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
     mbGraphics = FALSE;
 }
 
-bool AquaSalFrame::PostEvent( void *pData )
+bool AquaSalFrame::PostEvent(ImplSVEvent* pData)
 {
     GetSalData()->mpFirstInstance->PostUserEvent( this, SALEVENT_USEREVENT, pData );
     return TRUE;

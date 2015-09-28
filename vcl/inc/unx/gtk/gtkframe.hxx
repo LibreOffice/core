@@ -374,7 +374,7 @@ public:
 
     // Event must be destroyed, when Frame is destroyed
     // When Event is called, SalInstance::Yield() must be returned
-    virtual bool                PostEvent( void* pData ) SAL_OVERRIDE;
+    virtual bool                PostEvent(ImplSVEvent* pData) SAL_OVERRIDE;
 
     virtual void                SetTitle( const OUString& rTitle ) SAL_OVERRIDE;
     virtual void                SetIcon( sal_uInt16 nIcon ) SAL_OVERRIDE;

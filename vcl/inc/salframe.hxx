@@ -95,6 +95,7 @@ typedef sal_uInt64 SalExtStyle;
 #define SAL_FRAME_POSSIZE_HEIGHT            ((sal_uInt16)0x0008)
 
 struct SystemParentData;
+struct ImplSVEvent;
 
 /// A SalFrame is a system window (e.g. an X11 window).
 class VCL_PLUGIN_PUBLIC SalFrame
@@ -126,7 +127,7 @@ public:
 
     // Event must be destroyed, when Frame is destroyed
     // When Event is called, SalInstance::Yield() must be returned
-    virtual bool            PostEvent( void* pData ) = 0;
+    virtual bool            PostEvent(ImplSVEvent* pData) = 0;
 
     virtual void            SetTitle( const OUString& rTitle ) = 0;
     virtual void            SetIcon( sal_uInt16 nIcon ) = 0;
