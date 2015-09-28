@@ -25,7 +25,6 @@
 #include <cstdio>
 
 #include <math.h>
-#include <sal/alloca.h>
 
 #include <salgdi.hxx>
 #include <sallayout.hxx>
@@ -995,7 +994,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
 
     // determine cluster boundaries and x base offset
     const int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-    int* pLogCluster = static_cast<int*>(alloca( nCharCount * sizeof(int) ));
+    std::unique_ptr<int[]> const pLogCluster(new int[nCharCount]);
     size_t i;
     int n,p;
     long nBasePointX = -1;
@@ -1030,7 +1029,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     }
 
     // calculate adjusted cluster widths
-    long* pNewGlyphWidths = static_cast<long*>(alloca( m_GlyphItems.size() * sizeof(long) ));
+    std::unique_ptr<long[]> const pNewGlyphWidths(new long[m_GlyphItems.size()]);
     for( i = 0; i < m_GlyphItems.size(); ++i )
         pNewGlyphWidths[ i ] = 0;
 
@@ -1294,8 +1293,8 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) co
 sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor ) const
 {
     int nCharCapacity = mnEndCharPos - mnMinCharPos;
-    DeviceCoordinate* pCharWidths = static_cast<DeviceCoordinate*>(alloca( nCharCapacity * sizeof(DeviceCoordinate) ));
-    if( !GetCharWidths( pCharWidths ) )
+    std::unique_ptr<DeviceCoordinate[]> const pCharWidths(new DeviceCoordinate[nCharCapacity]);
+    if (!GetCharWidths(pCharWidths.get()))
         return -1;
 
     DeviceCoordinate nWidth = 0;
@@ -1929,13 +1928,13 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
         return mpLayouts[0]->GetTextBreak( nMaxWidth, nCharExtra, nFactor );
 
     int nCharCount = mnEndCharPos - mnMinCharPos;
-    DeviceCoordinate* pCharWidths = static_cast<DeviceCoordinate*>(alloca( 2*nCharCount * sizeof(DeviceCoordinate) ));
-    mpLayouts[0]->FillDXArray( pCharWidths );
+    std::unique_ptr<DeviceCoordinate[]> const pCharWidths(new DeviceCoordinate[2 * nCharCount]);
+    mpLayouts[0]->FillDXArray( pCharWidths.get() );
 
     for( int n = 1; n < mnLevel; ++n )
     {
         SalLayout& rLayout = *mpLayouts[ n ];
-        rLayout.FillDXArray( pCharWidths + nCharCount );
+        rLayout.FillDXArray( &pCharWidths[nCharCount] );
         double fUnitMul = mnUnitsPerPixel;
         fUnitMul /= rLayout.GetUnitsPerPixel();
         for( int i = 0; i < nCharCount; ++i )
@@ -1963,19 +1962,19 @@ DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) co
     DeviceCoordinate nMaxWidth = 0;
 
     // prepare merging of fallback levels
-    DeviceCoordinate* pTempWidths = NULL;
+    std::unique_ptr<DeviceCoordinate[]> pTempWidths;
     const int nCharCount = mnEndCharPos - mnMinCharPos;
     if( pCharWidths )
     {
         for( int i = 0; i < nCharCount; ++i )
             pCharWidths[i] = 0;
-        pTempWidths = static_cast<DeviceCoordinate*>(alloca( nCharCount * sizeof(DeviceCoordinate) ));
+        pTempWidths.reset(new DeviceCoordinate[nCharCount]);
     }
 
     for( int n = mnLevel; --n >= 0; )
     {
         // query every fallback level
-        DeviceCoordinate nTextWidth = mpLayouts[n]->FillDXArray( pTempWidths );
+        DeviceCoordinate nTextWidth = mpLayouts[n]->FillDXArray( pTempWidths.get() );
         if( !nTextWidth )
             continue;
         // merge results from current level
@@ -2011,10 +2010,10 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
 
     if( mnLevel > 1 )
     {
-        long* pTempPos = static_cast<long*>(alloca( nMaxIndex * sizeof(long) ));
+        std::unique_ptr<long[]> const pTempPos(new long[nMaxIndex]);
         for( int n = 1; n < mnLevel; ++n )
         {
-            mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos );
+            mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos.get() );
             double fUnitMul = mnUnitsPerPixel;
             fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
             for( int i = 0; i < nMaxIndex; ++i )
