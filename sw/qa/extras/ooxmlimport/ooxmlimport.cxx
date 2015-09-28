@@ -2840,6 +2840,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf92124, "tdf92124.docx")
     CPPUNIT_ASSERT(aSuffix.isEmpty());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf90153, "tdf90153.docx")
+{
+    // This was at-para, so the line-level VertOrientRelation was lost, resulting in an incorrect vertical position.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
