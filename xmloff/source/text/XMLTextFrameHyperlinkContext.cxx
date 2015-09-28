@@ -138,7 +138,7 @@ TextContentAnchorType XMLTextFrameHyperlinkContext::GetAnchorType() const
     if( xFrameContext.Is() )
     {
         SvXMLImportContext *pContext = &xFrameContext;
-        return PTR_CAST( XMLTextFrameContext, pContext ) ->GetAnchorType();
+        return dynamic_cast<XMLTextFrameContext*>( pContext ) ->GetAnchorType( );
     }
     else
         return eDefaultAnchorType;
@@ -151,7 +151,7 @@ Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
     if( xFrameContext.Is() )
     {
         SvXMLImportContext *pContext = &xFrameContext;
-        xTxt = PTR_CAST( XMLTextFrameContext, pContext )->GetTextContent();
+        xTxt = dynamic_cast<XMLTextFrameContext*>( pContext )->GetTextContent( );
     }
 
     return xTxt;
@@ -164,7 +164,7 @@ Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
     if( xFrameContext.Is() )
     {
         SvXMLImportContext *pContext = &xFrameContext;
-        xShape = PTR_CAST( XMLTextFrameContext, pContext )->GetShape();
+        xShape = dynamic_cast<XMLTextFrameContext*>( pContext )->GetShape( );
     }
 
     return xShape;

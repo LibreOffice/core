@@ -105,7 +105,7 @@ namespace dbaui
 
                 // check whether this must be a tristate check box
                 const SfxPoolItem& rItem = _rCoreAttrs.Get( nItemId );
-                if ( rItem.ISA( OptionalBoolItem ) )
+                if ( 0 != dynamic_cast< const OptionalBoolItem* >(&rItem) )
                     (*setting->ppControl)->EnableTriState();
             }
         }
@@ -253,11 +253,11 @@ namespace dbaui
             aValue.reset();
 
             SFX_ITEMSET_GET( _rSet, pItem, SfxPoolItem, setting->nItemId, true );
-            if (const SfxBoolItem *pBoolItem = PTR_CAST(SfxBoolItem, pItem))
+            if (const SfxBoolItem *pBoolItem = dynamic_cast<const SfxBoolItem*>( pItem) )
             {
                 aValue.reset( pBoolItem->GetValue() );
             }
-            else if (const OptionalBoolItem *pOptionalItem = PTR_CAST(OptionalBoolItem, pItem))
+            else if (const OptionalBoolItem *pOptionalItem = dynamic_cast<const OptionalBoolItem*>( pItem) )
             {
                 aValue = pOptionalItem->GetFullValue();
             }

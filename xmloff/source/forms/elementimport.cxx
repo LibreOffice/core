@@ -598,7 +598,7 @@ namespace xmloff
             const SvXMLStyleContext* pStyleContext = m_rContext.getStyleElement( _rValue );
             OSL_ENSURE( pStyleContext, "OElementImport::handleAttribute: do not know the style!" );
             // remember the element for later usage.
-            m_pStyleElement = PTR_CAST( XMLTextStyleContext, pStyleContext );
+            m_pStyleElement = dynamic_cast<const XMLTextStyleContext*>( pStyleContext  );
             return true;
         }
 

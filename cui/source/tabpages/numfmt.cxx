@@ -1717,7 +1717,7 @@ bool SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType()==MouseNotifyEvent::LOSEFOCUS)
     {
-        if ( rNEvt.GetWindow() == dynamic_cast< vcl::Window* >( m_pEdComment.get() ) && !m_pEdComment->IsVisible() )
+        if ( rNEvt.GetWindow() == dynamic_cast<const  vcl::Window* >( m_pEdComment.get() ) && !m_pEdComment->IsVisible() )
         {
             pLastActivWindow = NULL;
         }

@@ -1477,7 +1477,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_CUT:
             {
                 CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
-                if (xCurrentController.Is() && xCurrentController->ISA(EditCellController))
+                if (xCurrentController.Is() && 0 != dynamic_cast< const EditCellController* >(xCurrentController.get()))
                 {
                     Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
                     bool bHasLen = (rEdit.GetSelection().Len() != 0);

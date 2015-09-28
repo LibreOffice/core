@@ -143,7 +143,7 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
                 && (aData.eType == SbxSTRING) )
             {
                 SbxBase* pObj = r.GetObject();
-                SbxArray* pArr = PTR_CAST(SbxArray, pObj);
+                SbxArray* pArr = dynamic_cast<SbxArray*>( pObj );
                 if( pArr )
                 {
                     OUString aStr = ByteArrayToString( pArr );
@@ -193,7 +193,7 @@ void SbxValue::Clear()
                 if( aData.pObj != this )
                 {
                     SAL_INFO("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
-                    SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
+                    SbxVariable *pThisVar = dynamic_cast<SbxVariable*>( this );
                     bool bParentProp = pThisVar && 5345 ==
                         static_cast<sal_uInt16>(pThisVar->GetUserData());
                     if ( !bParentProp )
@@ -244,7 +244,7 @@ SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
         if( t == SbxOBJECT )
         {
             // The block contains an object or a variable
-            SbxObject* pObj = PTR_CAST(SbxObject,p->aData.pObj);
+            SbxObject* pObj = dynamic_cast<SbxObject*>( p->aData.pObj );
             if( pObj )
             {
                 // Has the object a default property?
@@ -276,18 +276,18 @@ SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
                 break;
             }
             // Did we have an array?
-            SbxArray* pArray = PTR_CAST(SbxArray,p->aData.pObj);
+            SbxArray* pArray = dynamic_cast<SbxArray*>( p->aData.pObj );
             if( pArray )
             {
                 // When indicated get the parameter
                 SbxArray* pPar = NULL;
-                SbxVariable* pVar = PTR_CAST(SbxVariable,p);
+                SbxVariable* pVar = dynamic_cast<SbxVariable*>( p );
                 if( pVar )
                     pPar = pVar->GetParameters();
                 if( pPar )
                 {
                     // Did we have a dimensioned array?
-                    SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,p->aData.pObj);
+                    SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>( p->aData.pObj );
                     if( pDimArray )
                         p = pDimArray->Get( pPar );
                     else
@@ -296,7 +296,7 @@ SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
                 }
             }
             // Otherwise guess a SbxValue
-            SbxValue* pVal = PTR_CAST(SbxValue,p->aData.pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->aData.pObj );
             if( pVal )
                 p = pVal;
             else
@@ -539,7 +539,7 @@ bool SbxValue::Put( const SbxValues& rVal )
                                 OSL_FAIL( "TheRealValue" );
                             }
                             SAL_INFO("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
-                            SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
+                            SbxVariable *pThisVar = dynamic_cast<SbxVariable*>( this );
                             bool bParentProp = pThisVar && 5345 ==
                                 static_cast<sal_uInt16>(pThisVar->GetUserData());
                             if ( !bParentProp )
@@ -733,7 +733,7 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
         return false;
     }
     // Test downcast!!!
-    if( this->ISA(SbxVariable) )
+    if( 0 != dynamic_cast<const SbxVariable*>( this) )
         const_cast<SbxVariable*>(static_cast<const SbxVariable*>(this))->Broadcast( SBX_HINT_DATAWANTED );
     SbxDataType t = GetType();
     if( t == SbxSTRING )
@@ -802,7 +802,7 @@ bool SbxValue::SetType( SbxDataType t )
                     if( aData.pObj && aData.pObj != this )
                     {
                         SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
-                        SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
+                        SbxVariable *pThisVar = dynamic_cast<SbxVariable*>( this );
                         sal_uInt16 nSlotId = pThisVar
                                     ? static_cast<sal_uInt16>(pThisVar->GetUserData())
                                     : 0;
@@ -1604,7 +1604,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             // to save itself as Objectptr does not work!
             if( aData.pObj )
             {
-                if( PTR_CAST(SbxValue,aData.pObj) != this )
+                if( dynamic_cast<SbxValue*>( aData.pObj) != this  )
                 {
                     r.WriteUChar( 1 );
                     return aData.pObj->Store( r );

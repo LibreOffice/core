@@ -148,7 +148,7 @@ double ImpGetDate( const SbxValues* p )
         }
         break;
     case SbxOBJECT:
-        pVal = PTR_CAST(SbxValue,p->pObj);
+        pVal = dynamic_cast<SbxValue*>( p->pObj );
         if( pVal )
         {
             nRes = pVal->GetDate();
@@ -316,7 +316,7 @@ start:
             break;
         }
     case SbxOBJECT:
-        pVal = PTR_CAST(SbxValue,p->pObj);
+        pVal = dynamic_cast<SbxValue*>( p->pObj );
         if( pVal )
         {
             pVal->PutDate( n );

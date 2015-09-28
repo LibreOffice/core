@@ -78,7 +78,7 @@ OUString ImpGetString( const SbxValues* p )
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
             {
                 aRes = pVal->GetOUString();
@@ -87,7 +87,7 @@ OUString ImpGetString( const SbxValues* p )
                     && (p->pObj->GetType() == (SbxARRAY | SbxBYTE )) )
             {
                 // convert byte array to string
-                SbxArray* pArr = PTR_CAST(SbxArray, p->pObj);
+                SbxArray* pArr = dynamic_cast<SbxArray*>( p->pObj );
                 if( pArr )
                 {
                     aRes = ByteArrayToString( pArr );
@@ -214,7 +214,7 @@ void ImpPutString( SbxValues* p, const OUString* n )
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast<SbxValue*>( p->pObj );
             if( pVal )
                 pVal->PutString( *n );
             else
