@@ -52,6 +52,7 @@
 #include <utlui.hrc>
 
 #include "access.hrc"
+#include "globals.hrc"
 
 #include <unomid.h>
 #include <memory>
@@ -707,10 +708,10 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
     for( sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); i++  )
     {
-        aContextArr[i] = SW_RESSTR(ST_HYPERLINK + i);
-        aStatusArr[i] = SW_RESSTR(ST_STATUS_FIRST + i);
+        aContextArr[i] = SW_RESSTR(STR_HYPERLINK + i);
+        aStatusArr[i] = SW_RESSTR(STR_STATUS_FIRST + i);
     }
-    aStatusArr[3] = SW_RESSTR(ST_ACTIVE_VIEW);
+    aStatusArr[3] = SW_RESSTR(STR_ACTIVE_VIEW);
     FreeResource();
 
     const Size& rOutSize =  GetOutputSizePixel();
@@ -1030,10 +1031,10 @@ void SwNavigationPI::UpdateListBox()
             if (pView == pActView)
             {
                 nAct = nCount;
-                sEntry += aStatusArr[ST_ACTIVE - ST_STATUS_FIRST];
+                sEntry += aStatusArr[STR_ACTIVE - STR_STATUS_FIRST];
             }
             else
-                sEntry += aStatusArr[ST_INACTIVE - ST_STATUS_FIRST];
+                sEntry += aStatusArr[STR_INACTIVE - STR_STATUS_FIRST];
             sEntry += ")";
             aDocListBox->InsertEntry(sEntry);
 
@@ -1052,7 +1053,7 @@ void SwNavigationPI::UpdateListBox()
         OUString sEntry = aContentTree->GetHiddenWrtShell()->GetView().
                                         GetDocShell()->GetTitle();
         sEntry += " (";
-        sEntry += aStatusArr[ST_HIDDEN - ST_STATUS_FIRST];
+        sEntry += aStatusArr[STR_HIDDEN - STR_STATUS_FIRST];
         sEntry += ")";
         aDocListBox->InsertEntry(sEntry);
         bDisable = false;

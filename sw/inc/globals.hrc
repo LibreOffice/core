@@ -88,6 +88,49 @@
 #define STR_ERROR_CLPBRD_READ       (RC_GLOBALS_BEGIN + 50)
 #define STR_ERROR_PASSWD            (RC_GLOBALS_BEGIN + 51)
 
+// Strings for the context menu of the content tree
+#define STR_CONTEXT_FIRST            (RC_GLOBALS_BEGIN + 52)
+#define STR_OUTLINE_LEVEL            (STR_CONTEXT_FIRST + 0)
+#define STR_DRAGMODE                 (STR_CONTEXT_FIRST + 1)
+#define STR_HYPERLINK                (STR_CONTEXT_FIRST + 2)
+#define STR_LINK_REGION              (STR_CONTEXT_FIRST + 3)
+#define STR_COPY_REGION              (STR_CONTEXT_FIRST + 4)
+#define STR_DISPLAY                  (STR_CONTEXT_FIRST + 5)
+#define STR_ACTIVE_VIEW              (STR_CONTEXT_FIRST + 6)
+#define STR_STATUS_FIRST             (RC_GLOBALS_BEGIN + 59)
+#define STR_HIDDEN                   (STR_STATUS_FIRST + 0)
+#define STR_ACTIVE                   (STR_STATUS_FIRST + 1)
+#define STR_INACTIVE                 (STR_STATUS_FIRST + 2)
+#define STR_MISC                     (RC_GLOBALS_BEGIN + 63)
+#define STR_EDIT_ENTRY               STR_MISC
+#define STR_DELETE_ENTRY             (STR_MISC + 1)
+
+#define STR_GLOBAL_CONTEXT_FIRST     (STR_DELETE_ENTRY + 1)
+#define STR_UPDATE                   (STR_GLOBAL_CONTEXT_FIRST    )
+#define STR_EDIT_CONTENT             (STR_GLOBAL_CONTEXT_FIRST + 1)
+#define STR_EDIT_INSERT              (STR_GLOBAL_CONTEXT_FIRST + 2)
+#define STR_INDEX                    (STR_GLOBAL_CONTEXT_FIRST + 3)
+#define STR_FILE                     (STR_GLOBAL_CONTEXT_FIRST + 4)
+#define STR_NEW_FILE                 (STR_GLOBAL_CONTEXT_FIRST + 5)
+#define STR_INSERT_TEXT              (STR_GLOBAL_CONTEXT_FIRST + 6)
+#define STR_DELETE                   (STR_GLOBAL_CONTEXT_FIRST + 7)
+#define STR_UPDATE_SEL               (STR_GLOBAL_CONTEXT_FIRST + 8)
+#define STR_UPDATE_INDEX             (STR_GLOBAL_CONTEXT_FIRST + 9)
+#define STR_UPDATE_LINK              (STR_GLOBAL_CONTEXT_FIRST +10)
+#define STR_UPDATE_ALL               (STR_GLOBAL_CONTEXT_FIRST +11)
+#define STR_BROKEN_LINK              (STR_GLOBAL_CONTEXT_FIRST +12)
+#define STR_EDIT_LINK                (STR_GLOBAL_CONTEXT_FIRST +13)
+
+#define STR_REMOVE_INDEX             (STR_GLOBAL_CONTEXT_FIRST +30)
+#define STR_REMOVE_TBL_PROTECTION    (STR_GLOBAL_CONTEXT_FIRST +31)
+#define STR_RENAME                   (STR_GLOBAL_CONTEXT_FIRST +32)
+#define STR_READONLY_IDX             (STR_GLOBAL_CONTEXT_FIRST +33)
+#define STR_INVISIBLE                (STR_GLOBAL_CONTEXT_FIRST +34)
+
+#define STR_POSTIT_SHOW              (STR_GLOBAL_CONTEXT_FIRST +35)
+#define STR_POSTIT_HIDE              (STR_GLOBAL_CONTEXT_FIRST +36)
+#define STR_POSTIT_DELETE            (STR_GLOBAL_CONTEXT_FIRST +37)
+
 // ACC ---------------------------------------------------------------
 
 #define FN_CHAR_LEFT_SEL            (RC_GLOBALS_BEGIN + 1)
@@ -132,6 +175,7 @@
 #define SID_FONTMODE_TYPE           (RC_GLOBALS_BEGIN +  115)
 #define SID_FAX_LIST                (RC_GLOBALS_BEGIN +  116)
 #define SID_WRT_SHELL               (RC_GLOBALS_BEGIN +  117)
+
 
 #endif // _GLOBALS_HRC
 

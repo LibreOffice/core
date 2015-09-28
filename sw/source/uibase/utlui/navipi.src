@@ -18,6 +18,7 @@
  */
 
 #include "cmdid.h"
+#include "globals.hrc"
 #include "utlui.hrc"
 #include "navipi.hrc"
 #include "helpid.h"
@@ -310,142 +311,6 @@ Window DLG_NAVIGATION_PI
         Last = 5 ;
         Value = 5 ;
     };
-    String ST_OUTLINE_LEVEL
-    {
-        Text [ en-US ] = "Outline Level" ;
-    };
-    String ST_DRAGMODE
-    {
-        Text [ en-US ] = "Drag Mode" ;
-    };
-    String ST_HYPERLINK
-    {
-        Text [ en-US ] = "Insert as Hyperlink" ;
-    };
-    String ST_LINK_REGION
-    {
-        Text [ en-US ] = "Insert as Link" ;
-    };
-    String ST_COPY_REGION
-    {
-        Text [ en-US ] = "Insert as Copy" ;
-    };
-    String ST_DISPLAY
-    {
-        Text [ en-US ] = "Display" ;
-    };
-    String ST_ACTIVE_VIEW
-    {
-        Text [ en-US ] = "Active Window" ;
-    };
-    String ST_HIDDEN
-    {
-        Text [ en-US ] = "hidden" ;
-    };
-    String ST_ACTIVE
-    {
-        Text [ en-US ] = "active" ;
-    };
-    String ST_INACTIVE
-    {
-        Text [ en-US ] = "inactive" ;
-    };
-    String ST_EDIT_ENTRY
-    {
-        Text [ en-US ] = "Edit..." ;
-    };
-    String ST_UPDATE
-    {
-        Text [ en-US ] = "~Update" ;
-    };
-    String ST_EDIT_CONTENT
-    {
-        Text [ en-US ] = "Edit" ;
-    };
-    String ST_EDIT_LINK
-    {
-        Text [ en-US ] = "Edit link";
-    };
-    String ST_INSERT
-    {
-        Text [ en-US ] = "Insert" ;
-    };
-    String ST_INDEX
-    {
-        Text [ en-US ] = "~Index";
-    };
-    String ST_FILE
-    {
-        Text [ en-US ] = "File" ;
-    };
-    String ST_NEW_FILE
-    {
-        Text [ en-US ] = "New Document" ;
-    };
-    String ST_TEXT
-    {
-        Text [ en-US ] = "Text" ;
-    };
-    String ST_DELETE
-    {
-        Text [ en-US ] = "Delete" ;
-    };
-    String ST_DELETE_ENTRY
-    {
-        Text [ en-US ] = "~Delete" ;
-    };
-    String ST_UPDATE_SEL
-    {
-        Text [ en-US ] = "Selection" ;
-    };
-    String ST_UPDATE_INDEX
-    {
-        Text [ en-US ] = "Indexes" ;
-    };
-    String ST_UPDATE_LINK
-    {
-        Text [ en-US ] = "Links" ;
-    };
-    String ST_UPDATE_ALL
-    {
-        Text [ en-US ] = "All" ;
-    };
-    String ST_REMOVE_INDEX
-    {
-        Text [ en-US ] = "~Remove Index" ;
-    };
-    String ST_REMOVE_TBL_PROTECTION
-    {
-        Text [ en-US ] = "~Unprotect" ;
-    };
-    String ST_INVISIBLE
-    {
-        Text [ en-US ] = "hidden";
-    };
-    String ST_BROKEN_LINK
-    {
-        Text [ en-US ] = "File not found: ";
-    };
-    String ST_RENAME
-    {
-        Text [ en-US ] = "~Rename";
-    };
-    String ST_READONLY_IDX
-    {
-        Text [ en-US ] = "Read-~only";
-    };
-    String ST_POSTIT_SHOW
-    {
-        Text [ en-US ] = "Show All";
-    };
-    String ST_POSTIT_HIDE
-    {
-        Text [ en-US ] = "Hide All";
-    };
-    String ST_POSTIT_DELETE
-    {
-        Text [ en-US ] = "Delete All";
-    };
 };
 #define NAVI_ENTRY_IDS \
     IdList =           \
@@ -479,6 +344,142 @@ String STR_ACCESS_TL_GLOBAL
 String STR_ACCESS_TL_CONTENT
 {
     Text [ en-US ] = "Content View";
+};
+String STR_OUTLINE_LEVEL
+{
+    Text [ en-US ] = "Outline Level" ;
+};
+String STR_DRAGMODE
+{
+    Text [ en-US ] = "Drag Mode" ;
+};
+String STR_HYPERLINK
+{
+    Text [ en-US ] = "Insert as Hyperlink" ;
+};
+String STR_LINK_REGION
+{
+    Text [ en-US ] = "Insert as Link" ;
+};
+String STR_COPY_REGION
+{
+    Text [ en-US ] = "Insert as Copy" ;
+};
+String STR_DISPLAY
+{
+    Text [ en-US ] = "Display" ;
+};
+String STR_ACTIVE_VIEW
+{
+    Text [ en-US ] = "Active Window" ;
+};
+String STR_HIDDEN
+{
+    Text [ en-US ] = "hidden" ;
+};
+String STR_ACTIVE
+{
+    Text [ en-US ] = "active" ;
+};
+String STR_INACTIVE
+{
+    Text [ en-US ] = "inactive" ;
+};
+String STR_EDIT_ENTRY
+{
+    Text [ en-US ] = "Edit..." ;
+};
+String STR_UPDATE
+{
+    Text [ en-US ] = "~Update" ;
+};
+String STR_EDIT_CONTENT
+{
+    Text [ en-US ] = "Edit" ;
+};
+String STR_EDIT_LINK
+{
+    Text [ en-US ] = "Edit link";
+};
+String STR_EDIT_INSERT
+{
+    Text [ en-US ] = "Insert" ;
+};
+String STR_INDEX
+{
+    Text [ en-US ] = "~Index";
+};
+String STR_FILE
+{
+    Text [ en-US ] = "File" ;
+};
+String STR_NEW_FILE
+{
+    Text [ en-US ] = "New Document" ;
+};
+String STR_INSERT_TEXT
+{
+    Text [ en-US ] = "Text" ;
+};
+String STR_DELETE
+{
+    Text [ en-US ] = "Delete" ;
+};
+String STR_DELETE_ENTRY
+{
+    Text [ en-US ] = "~Delete" ;
+};
+String STR_UPDATE_SEL
+{
+    Text [ en-US ] = "Selection" ;
+};
+String STR_UPDATE_INDEX
+{
+    Text [ en-US ] = "Indexes" ;
+};
+String STR_UPDATE_LINK
+{
+    Text [ en-US ] = "Links" ;
+};
+String STR_UPDATE_ALL
+{
+    Text [ en-US ] = "All" ;
+};
+String STR_REMOVE_INDEX
+{
+    Text [ en-US ] = "~Remove Index" ;
+};
+String STR_REMOVE_TBL_PROTECTION
+{
+    Text [ en-US ] = "~Unprotect" ;
+};
+String STR_INVISIBLE
+{
+    Text [ en-US ] = "hidden";
+};
+String STR_BROKEN_LINK
+{
+    Text [ en-US ] = "File not found: ";
+};
+String STR_RENAME
+{
+    Text [ en-US ] = "~Rename";
+};
+String STR_READONLY_IDX
+{
+    Text [ en-US ] = "Read-~only";
+};
+String STR_POSTIT_SHOW
+{
+    Text [ en-US ] = "Show All";
+};
+String STR_POSTIT_HIDE
+{
+    Text [ en-US ] = "Hide All";
+};
+String STR_POSTIT_DELETE
+{
+    Text [ en-US ] = "Delete All";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

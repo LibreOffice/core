@@ -24,47 +24,4 @@
 #define TL_GLOBAL           55
 #define TB_GLOBAL           56
 
-// Strings for the context menu of the content tree
-#define ST_CONTEXT_FIRST        60
-#define ST_OUTLINE_LEVEL        ST_CONTEXT_FIRST
-#define ST_DRAGMODE                     (ST_CONTEXT_FIRST + 1)
-#define ST_HYPERLINK                    (ST_CONTEXT_FIRST + 2)
-#define ST_LINK_REGION                  (ST_CONTEXT_FIRST + 3)
-#define ST_COPY_REGION                  (ST_CONTEXT_FIRST + 4)
-#define ST_DISPLAY                      (ST_CONTEXT_FIRST + 5)
-#define ST_ACTIVE_VIEW                  (ST_CONTEXT_FIRST + 6)
-#define ST_STATUS_FIRST         67
-#define ST_HIDDEN                       (ST_STATUS_FIRST    )
-#define ST_ACTIVE                       (ST_STATUS_FIRST + 1)
-#define ST_INACTIVE                     (ST_STATUS_FIRST + 2)
-#define ST_MISC                         70
-#define ST_EDIT_ENTRY                   ST_MISC
-#define ST_DELETE_ENTRY                 (ST_MISC + 1)
-
-#define ST_GLOBAL_CONTEXT_FIRST         (ST_DELETE_ENTRY + 1)
-#define ST_UPDATE                       (ST_GLOBAL_CONTEXT_FIRST    )
-#define ST_EDIT_CONTENT                 (ST_GLOBAL_CONTEXT_FIRST + 1)
-#define ST_INSERT                       (ST_GLOBAL_CONTEXT_FIRST + 2)
-#define ST_INDEX                        (ST_GLOBAL_CONTEXT_FIRST + 3)
-#define ST_FILE                         (ST_GLOBAL_CONTEXT_FIRST + 4)
-#define ST_NEW_FILE                     (ST_GLOBAL_CONTEXT_FIRST + 5)
-#define ST_TEXT                         (ST_GLOBAL_CONTEXT_FIRST + 6)
-#define ST_DELETE                       (ST_GLOBAL_CONTEXT_FIRST + 7)
-#define ST_UPDATE_SEL                   (ST_GLOBAL_CONTEXT_FIRST + 8)
-#define ST_UPDATE_INDEX                 (ST_GLOBAL_CONTEXT_FIRST + 9)
-#define ST_UPDATE_LINK                  (ST_GLOBAL_CONTEXT_FIRST +10)
-#define ST_UPDATE_ALL                   (ST_GLOBAL_CONTEXT_FIRST +11)
-#define ST_BROKEN_LINK                  (ST_GLOBAL_CONTEXT_FIRST +12)
-#define ST_EDIT_LINK                    (ST_GLOBAL_CONTEXT_FIRST +13)
-
-#define ST_REMOVE_INDEX                 (ST_GLOBAL_CONTEXT_FIRST +30)
-#define ST_REMOVE_TBL_PROTECTION        (ST_GLOBAL_CONTEXT_FIRST +31)
-#define ST_RENAME                       (ST_GLOBAL_CONTEXT_FIRST +32)
-#define ST_READONLY_IDX                 (ST_GLOBAL_CONTEXT_FIRST +33)
-#define ST_INVISIBLE                    (ST_GLOBAL_CONTEXT_FIRST +34)
-
-#define ST_POSTIT_SHOW              (ST_GLOBAL_CONTEXT_FIRST +35)
-#define ST_POSTIT_HIDE              (ST_GLOBAL_CONTEXT_FIRST +36)
-#define ST_POSTIT_DELETE            (ST_GLOBAL_CONTEXT_FIRST +37)
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
