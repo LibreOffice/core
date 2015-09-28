@@ -261,6 +261,7 @@ void SalDisplay::InitRandR( ::Window aRoot ) const
     if( m_bUseRandRWrapper )
         RandRWrapper::get( GetDisplay() ).XRRSelectInput( GetDisplay(), aRoot, RRScreenChangeNotifyMask );
     #else
+    (void)this;
     (void)aRoot;
     #endif
 }
@@ -273,6 +274,8 @@ void SalDisplay::DeInitRandR()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::DeInitRandR()\n" );
 #endif
+    #else
+    (void)this;
     #endif
 }
 
@@ -321,6 +324,7 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
         }
     }
     #else
+    (void)this;
     (void)pEvent;
     #endif
     return nRet;
