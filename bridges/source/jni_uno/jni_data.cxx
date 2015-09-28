@@ -31,14 +31,15 @@ namespace jni_uno
 {
 
 
-inline rtl_mem * seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
+inline std::unique_ptr<rtl_mem> seq_allocate(
+    sal_Int32 nElements, sal_Int32 nSize )
 {
     std::unique_ptr< rtl_mem > seq(
         rtl_mem::allocate( SAL_SEQUENCE_HEADER_SIZE + (nElements * nSize) ) );
     uno_Sequence * p = reinterpret_cast<uno_Sequence *>(seq.get());
     p->nRefCount = 1;
     p->nElements = nElements;
-    return seq.release();
+    return seq;
 }
 
 
@@ -972,21 +973,21 @@ void Bridge::map_to_uno(
         switch (element_type->eTypeClass)
         {
         case typelib_TypeClass_CHAR:
-            seq.reset( seq_allocate( nElements, sizeof (sal_Unicode) ) );
+            seq = seq_allocate( nElements, sizeof (sal_Unicode) );
             jni->GetCharArrayRegion(
                 static_cast<jcharArray>(java_data.l), 0, nElements,
                 reinterpret_cast<jchar *>(reinterpret_cast<uno_Sequence *>(seq.get())->elements) );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_BOOLEAN:
-            seq.reset( seq_allocate( nElements, sizeof (sal_Bool) ) );
+            seq = seq_allocate( nElements, sizeof (sal_Bool) );
             jni->GetBooleanArrayRegion(
                 static_cast<jbooleanArray>(java_data.l), 0, nElements,
                 reinterpret_cast<jboolean *>(reinterpret_cast<uno_Sequence *>(seq.get())->elements) );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_BYTE:
-            seq.reset( seq_allocate( nElements, sizeof (sal_Int8) ) );
+            seq = seq_allocate( nElements, sizeof (sal_Int8) );
             jni->GetByteArrayRegion(
                 static_cast<jbyteArray>(java_data.l), 0, nElements,
                 reinterpret_cast<jbyte *>(reinterpret_cast<uno_Sequence *>(seq.get())->elements) );
@@ -994,7 +995,7 @@ void Bridge::map_to_uno(
             break;
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
-            seq.reset( seq_allocate( nElements, sizeof (sal_Int16) ) );
+            seq = seq_allocate( nElements, sizeof (sal_Int16) );
             jni->GetShortArrayRegion(
                 static_cast<jshortArray>(java_data.l), 0, nElements,
                 reinterpret_cast<jshort *>(reinterpret_cast<uno_Sequence *>(seq.get())->elements) );
@@ -1002,7 +1003,7 @@ void Bridge::map_to_uno(
             break;
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
-            seq.reset( seq_allocate( nElements, sizeof (sal_Int32) ) );
+            seq = seq_allocate( nElements, sizeof (sal_Int32) );
             jni->GetIntArrayRegion(
                 static_cast<jintArray>(java_data.l), 0, nElements,
                 reinterpret_cast<jint *>(reinterpret_cast<uno_Sequence *>(seq.get())->elements) );
@@ -1010,21 +1011,21 @@ void Bridge::map_to_uno(
             break;
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
-            seq.reset( seq_allocate( nElements, sizeof (sal_Int64) ) );
+            seq = seq_allocate( nElements, sizeof (sal_Int64) );
             jni->GetLongArrayRegion(
                 static_cast<jlongArray>(java_data.l), 0, nElements,
                 reinterpret_cast<jlong *>(reinterpret_cast<uno_Sequence *>(seq.get())->elements) );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_FLOAT:
-            seq.reset( seq_allocate( nElements, sizeof (float) ) );
+            seq = seq_allocate( nElements, sizeof (float) );
             jni->GetFloatArrayRegion(
                 static_cast<jfloatArray>(java_data.l), 0, nElements,
                 reinterpret_cast<jfloat *>(reinterpret_cast<uno_Sequence *>(seq.get())->elements) );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_DOUBLE:
-            seq.reset( seq_allocate( nElements, sizeof (double) ) );
+            seq = seq_allocate( nElements, sizeof (double) );
             jni->GetDoubleArrayRegion(
                 static_cast<jdoubleArray>(java_data.l), 0, nElements,
                 reinterpret_cast<jdouble *>(reinterpret_cast<uno_Sequence *>(seq.get())->elements) );
@@ -1040,7 +1041,7 @@ void Bridge::map_to_uno(
         case typelib_TypeClass_INTERFACE:
         {
             TypeDescr element_td( element_type );
-            seq.reset( seq_allocate( nElements, element_td.get()->nSize ) );
+            seq = seq_allocate( nElements, element_td.get()->nSize );
 
             JNI_type_info const * element_info;
             if (typelib_TypeClass_STRUCT == element_type->eTypeClass ||
