@@ -449,7 +449,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 sal_Int32 nFirstLineIndent = m_pImpl->getCurrentNumberingProperty("FirstLineIndent");
 
                 if (nFirstLineIndent != 0)
-                    m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent));
+                    m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent), /*bOverwrite=*/false);
 
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_LEFT_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
@@ -465,9 +465,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 sal_Int32 nParaLeftMargin = m_pImpl->getCurrentNumberingProperty("IndentAt");
 
                 if (nFirstLineIndent != 0)
-                    m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent));
+                    m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent), /*bOverwrite=*/false);
                 if (nParaLeftMargin != 0)
-                    m_pImpl->GetTopContext()->Insert(PROP_PARA_LEFT_MARGIN, uno::makeAny(nParaLeftMargin));
+                    m_pImpl->GetTopContext()->Insert(PROP_PARA_LEFT_MARGIN, uno::makeAny(nParaLeftMargin), /*bOverwrite=*/false);
 
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_RIGHT_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));

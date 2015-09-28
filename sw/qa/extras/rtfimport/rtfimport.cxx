@@ -2345,6 +2345,16 @@ DECLARE_RTFIMPORT_TEST(testTdf92481, "tdf92481.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int8>(2), getProperty<sal_Int8>(getParagraph(1), "ParaWidows"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf94456, "tdf94456.rtf")
+{
+    // Paragraph left margin and first line indent wasn't imported correctly.
+
+    // This was 1270.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(762), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    // This was -635.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-762), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
