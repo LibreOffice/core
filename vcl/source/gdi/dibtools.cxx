@@ -267,7 +267,19 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         rHeader.nSizeImage = 0;
     }
 
-    return( ( rHeader.nPlanes == 1 ) && ( rIStm.GetError() == 0UL ) );
+
+    if (rHeader.nPlanes != 1)
+        return false;
+
+    if (rHeader.nBitCount != 0 && rHeader.nBitCount != 1 &&
+        rHeader.nBitCount != 4 && rHeader.nBitCount != 8 &&
+        rHeader.nBitCount != 16 && rHeader.nBitCount != 24 &&
+        rHeader.nBitCount != 32)
+    {
+        return false;
+    }
+
+    return rIStm.good();
 }
 
 bool ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, bool bQuad )
