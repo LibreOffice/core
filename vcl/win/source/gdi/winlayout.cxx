@@ -626,6 +626,7 @@ static bool bManualCellAlign = true;
 
 static void InitUSP()
 {
+#if _WIN32_WINNT < _WIN32_WINNT_VISTA
     // get the usp10.dll version info
     HMODULE usp10 = GetModuleHandle("usp10.dll");
     void *pScriptIsComplex = reinterpret_cast< void* >( GetProcAddress(usp10, "ScriptIsComplex"));
@@ -655,7 +656,10 @@ static void InitUSP()
 
     // #i77976# USP>=1.0600 changed the need to manually align glyphs in their cells
     if( nUspVersion >= 10600 )
+#endif
+    {
         bManualCellAlign = false;
+    }
 
     bUspInited = true;
 }
