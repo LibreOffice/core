@@ -18,7 +18,6 @@
  */
 #include <stdlib.h>
 #include <string.h>
-#include <sal/alloca.h>
 #include <cassert>
 #include <vector>
 
@@ -53,47 +52,8 @@ using namespace ::com::sun::star::io;
 
 namespace {
 
-// Useful macros for correct String conversion depending on the chosen expat-mode
-#ifdef XML_UNICODE
-OUString XmlNChar2OUString( const XML_Char *p , int nLen )
-{
-    if( p ) {
-        if( sizeof( sal_Unicode ) == sizeof( XML_Char ) )
-        {
-            return OUString( (sal_Unicode*)p,nLen);
-        }
-        else
-        {
-            sal_Unicode *pWchar = (sal_Unicode *)alloca( sizeof( sal_Unicode ) * nLen );
-            for( int n = 0 ; n < nLen ; n++ ) {
-                pWchar[n] = (sal_Unicode) p[n];
-            }
-            return OUString( pWchar , nLen );
-        }
-    }
-    else {
-        return OUString();
-    }
-}
-
-OUString XmlChar2OUString( const XML_Char *p )
-{
-    if( p ) {
-        int nLen;
-        for( nLen = 0 ; p[nLen] ; nLen ++ )
-            ;
-         return XmlNChar2OUString( p , nLen );
-     }
-     else return OUString();
-}
-
-
-#define XML_CHAR_TO_OUSTRING(x) XmlChar2OUString(x)
-#define XML_CHAR_N_TO_USTRING(x,n) XmlNChar2OUString(x,n)
-#else
 #define XML_CHAR_TO_OUSTRING(x) OUString(x , strlen( x ), RTL_TEXTENCODING_UTF8)
 #define XML_CHAR_N_TO_USTRING(x,n) OUString(x,n, RTL_TEXTENCODING_UTF8 )
-#endif
 
 
 /*
