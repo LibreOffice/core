@@ -132,26 +132,17 @@ static rtl_uString *getDomainName()
     /* Initialize and assume failure */
     rtl_uString *ustrDomainName = NULL;
 
-    char    *pBuffer;
-    int     result;
-    size_t  nBufSize = 0;
+    char    buffer[256]; // actually the man page says 65 bytes should be enough
 
-    do
-    {
-        nBufSize += 256; /* Increase buffer size by steps of 256 bytes */
-        pBuffer = static_cast<char *>(alloca( nBufSize ));
-        result = getdomainname( pBuffer, nBufSize );
-        /* If buffersize in not large enough -1 is returned and errno
-        is set to EINVAL. This only applies to libc. With glibc the name
-        is truncated. */
-    } while ( -1 == result && EINVAL == errno );
+    /* If buffersize is not large enough the name is truncated. */
+    int const result = getdomainname( &buffer[0], SAL_N_ELEMENTS(buffer) );
 
     if ( 0 == result )
     {
         rtl_string2UString(
             &ustrDomainName,
-            pBuffer,
-            strlen( pBuffer ),
+            &buffer[0],
+            strlen( &buffer[0] ),
             osl_getThreadTextEncoding(),
             OSTRING_TO_OUSTRING_CVTFLAGS );
     }
