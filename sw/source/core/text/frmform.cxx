@@ -1899,8 +1899,6 @@ bool SwTextFrm::FormatQuick( bool bForceQuickFormat )
     do
     {
         sal_Int32 nNewStart = aLine.FormatLine(nStart);
-        // Check for special case: line is invisible,
-        // like in too thin table cell: tdf#66141
         bool bThisLayoutIsZeroWidth = (nNewStart == nStart);
         nStart = nNewStart;
         bool bWillEndlessInsert = (bPreviousLayoutWasZeroWidth && bThisLayoutIsZeroWidth);
