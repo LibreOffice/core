@@ -25,17 +25,17 @@ public:
 
     static bool hasProtectedTab( const ScDocument& rDoc, const ScMarkData& rMark );
 
-    static ScDocument* createDeleteContentsUndoDoc(
+    static std::unique_ptr<ScDocument> createDeleteContentsUndoDoc(
         ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange,
         InsertDeleteFlags nFlags, bool bOnlyMarked );
 
     static void addDeleteContentsUndo(
         svl::IUndoManager* pUndoMgr, ScDocShell* pDocSh, const ScMarkData& rMark,
-        const ScRange& rRange, ScDocument* pUndoDoc, InsertDeleteFlags nFlags,
+        const ScRange& rRange, std::unique_ptr<ScDocument>&& pUndoDoc, InsertDeleteFlags nFlags,
         const std::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
         bool bMulti, bool bDrawUndo );
 
-    static ScSimpleUndo::DataSpansType* getNonEmptyCellSpans(
+    static std::unique_ptr<ScSimpleUndo::DataSpansType> getNonEmptyCellSpans(
         const ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange );
 };
 

@@ -255,7 +255,7 @@ public:
                     ScUndoDeleteContents( ScDocShell* pNewDocShell,
                                           const ScMarkData& rMark,
                                           const ScRange& rRange,
-                                          ScDocument* pNewUndoDoc, bool bNewMulti,
+                                          std::unique_ptr<ScDocument>&& pNewUndoDoc, bool bNewMulti,
                                           InsertDeleteFlags nNewFlags, bool bObjects );
     virtual         ~ScUndoDeleteContents();
 
@@ -273,7 +273,7 @@ private:
 
     ScRange         aRange;
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;       // Block mark and deleted data
+    std::unique_ptr<ScDocument> pUndoDoc; // Block mark and deleted data
     SdrUndoAction*  pDrawUndo;      // Deleted objects
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;

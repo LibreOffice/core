@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+#include <utility>
+
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -76,12 +81,12 @@ TYPEINIT1(ScUndoUpdateAreaLink,     SfxUndoAction);
 ScUndoDeleteContents::ScUndoDeleteContents(
                 ScDocShell* pNewDocShell,
                 const ScMarkData& rMark, const ScRange& rRange,
-                ScDocument* pNewUndoDoc, bool bNewMulti,
+                std::unique_ptr<ScDocument>&& pNewUndoDoc, bool bNewMulti,
                 InsertDeleteFlags nNewFlags, bool bObjects )
     :   ScSimpleUndo( pNewDocShell ),
         aRange      ( rRange ),
         aMarkData   ( rMark ),
-        pUndoDoc    ( pNewUndoDoc ),
+        pUndoDoc    ( std::move(pNewUndoDoc) ),
         pDrawUndo   ( NULL ),
         nFlags      ( nNewFlags ),
         bMulti      ( bNewMulti )   // unnecessary
@@ -97,7 +102,6 @@ ScUndoDeleteContents::ScUndoDeleteContents(
 
 ScUndoDeleteContents::~ScUndoDeleteContents()
 {
-    delete pUndoDoc;
     DeleteSdrUndoAction( pDrawUndo );
 }
 
@@ -115,7 +119,7 @@ void ScUndoDeleteContents::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack && (nFlags & IDF_CONTENTS) )
-        pChangeTrack->AppendContentRange( aRange, pUndoDoc,
+        pChangeTrack->AppendContentRange( aRange, pUndoDoc.get(),
             nStartChangeAction, nEndChangeAction );
     else
         nStartChangeAction = nEndChangeAction = 0;

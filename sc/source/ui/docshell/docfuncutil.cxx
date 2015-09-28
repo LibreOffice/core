@@ -25,6 +25,7 @@
 #include <undoblk.hxx>
 
 #include <memory>
+#include <utility>
 
 namespace sc {
 
@@ -39,7 +40,7 @@ bool DocFuncUtil::hasProtectedTab( const ScDocument& rDoc, const ScMarkData& rMa
     return false;
 }
 
-ScDocument* DocFuncUtil::createDeleteContentsUndoDoc(
+std::unique_ptr<ScDocument> DocFuncUtil::createDeleteContentsUndoDoc(
     ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange,
     InsertDeleteFlags nFlags, bool bOnlyMarked )
 {
@@ -68,24 +69,24 @@ ScDocument* DocFuncUtil::createDeleteContentsUndoDoc(
     nUndoDocFlags |= IDF_NOCAPTIONS;
     rDoc.CopyToDocument(aCopyRange, nUndoDocFlags, bOnlyMarked, pUndoDoc.get(), &rMark);
 
-    return pUndoDoc.release();
+    return pUndoDoc;
 }
 
 void DocFuncUtil::addDeleteContentsUndo(
     svl::IUndoManager* pUndoMgr, ScDocShell* pDocSh, const ScMarkData& rMark,
-    const ScRange& rRange, ScDocument* pUndoDoc, InsertDeleteFlags nFlags,
+    const ScRange& rRange, std::unique_ptr<ScDocument>&& pUndoDoc, InsertDeleteFlags nFlags,
     const std::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
     bool bMulti, bool bDrawUndo )
 {
     std::unique_ptr<ScUndoDeleteContents> pUndo(
         new ScUndoDeleteContents(
-            pDocSh, rMark, rRange, pUndoDoc, bMulti, nFlags, bDrawUndo));
+            pDocSh, rMark, rRange, std::move(pUndoDoc), bMulti, nFlags, bDrawUndo));
     pUndo->SetDataSpans(pSpans);
 
     pUndoMgr->AddUndoAction(pUndo.release());
 }
 
-ScSimpleUndo::DataSpansType* DocFuncUtil::getNonEmptyCellSpans(
+std::unique_ptr<ScSimpleUndo::DataSpansType> DocFuncUtil::getNonEmptyCellSpans(
     const ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange )
 {
     std::unique_ptr<ScSimpleUndo::DataSpansType> pDataSpans(new ScSimpleUndo::DataSpansType);
@@ -107,7 +108,7 @@ ScSimpleUndo::DataSpansType* DocFuncUtil::getNonEmptyCellSpans(
         }
     }
 
-    return pDataSpans.release();
+    return pDataSpans;
 }
 
 }

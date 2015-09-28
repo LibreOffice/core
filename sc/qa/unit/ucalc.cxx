@@ -87,7 +87,9 @@
 #include <sfx2/docfile.hxx>
 
 #include <iostream>
+#include <memory>
 #include <sstream>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -6212,10 +6214,10 @@ void Test::testDeleteContents()
     aMark.SelectOneTable(0);
     aMark.SetMarkArea(aRange);
 
-    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    std::unique_ptr<ScDocument> pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aRange, IDF_CONTENTS, false, pUndoDoc, &aMark);
-    ScUndoDeleteContents aUndo(&getDocShell(), aMark, aRange, pUndoDoc, false, IDF_CONTENTS, true);
+    m_pDoc->CopyToDocument(aRange, IDF_CONTENTS, false, pUndoDoc.get(), &aMark);
+    ScUndoDeleteContents aUndo(&getDocShell(), aMark, aRange, std::move(pUndoDoc), false, IDF_CONTENTS, true);
 
     clearRange(m_pDoc, aRange);
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3,15,0))); // formula

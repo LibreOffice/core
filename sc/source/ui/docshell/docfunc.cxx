@@ -582,7 +582,7 @@ bool ScDocFunc::DeleteContents(
     ScMarkData aMultiMark = rMark;
     aMultiMark.SetMarking(false);       // fuer MarkToMulti
 
-    ScDocument* pUndoDoc = NULL;
+    std::unique_ptr<ScDocument> pUndoDoc;
     bool bMulti = aMultiMark.IsMultiMarked();
     aMultiMark.MarkToMulti();
     aMultiMark.GetMultiMarkArea( aMarkRange );
@@ -623,7 +623,7 @@ bool ScDocFunc::DeleteContents(
     if ( bRecord )
     {
         pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, aMultiMark, aMarkRange, nFlags, bMulti);
-        pDataSpans.reset(sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, aMultiMark, aMarkRange));
+        pDataSpans = sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, aMultiMark, aMarkRange);
     }
 
     rDoc.DeleteSelection( nFlags, aMultiMark );
@@ -633,7 +633,7 @@ bool ScDocFunc::DeleteContents(
     {
         sc::DocFuncUtil::addDeleteContentsUndo(
             rDocShell.GetUndoManager(), &rDocShell, aMultiMark, aExtendedRange,
-            pUndoDoc, nFlags, pDataSpans, bMulti, bDrawUndo);
+            std::move(pUndoDoc), nFlags, pDataSpans, bMulti, bDrawUndo);
     }
 
     if (!AdjustRowHeight( aExtendedRange ))
@@ -688,11 +688,11 @@ bool ScDocFunc::DeleteCell(
     // To keep track of all non-empty cells within the deleted area.
     std::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
 
-    ScDocument* pUndoDoc = NULL;
+    std::unique_ptr<ScDocument> pUndoDoc;
     if (bRecord)
     {
         pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, rMark, rPos, nFlags, false);
-        pDataSpans.reset(sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, rMark, rPos));
+        pDataSpans = sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, rMark, rPos);
     }
 
     rDoc.DeleteArea(rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark, nFlags);
@@ -700,7 +700,7 @@ bool ScDocFunc::DeleteCell(
     if (bRecord)
     {
         sc::DocFuncUtil::addDeleteContentsUndo(
-            rDocShell.GetUndoManager(), &rDocShell, rMark, rPos, pUndoDoc,
+            rDocShell.GetUndoManager(), &rDocShell, rMark, rPos, std::move(pUndoDoc),
             nFlags, pDataSpans, false, bDrawUndo);
     }
 
