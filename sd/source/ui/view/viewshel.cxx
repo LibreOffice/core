@@ -506,7 +506,7 @@ void ViewShell::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
     Point aPoint = mpActiveWindow->GetPointerPosPixel();
     mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
 
-    MouseButtonDown(rMouseEvent, 0);
+    MouseButtonDown(rMouseEvent, mpActiveWindow);
 
     mpActiveWindow->SetPointerPosPixel(aPoint);
 }
@@ -519,7 +519,7 @@ void ViewShell::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     Point aPoint = mpActiveWindow->GetPointerPosPixel();
     mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
 
-    MouseButtonUp(rMouseEvent, 0);
+    MouseButtonUp(rMouseEvent, mpActiveWindow);
 
     mpActiveWindow->SetPointerPosPixel(aPoint);
 }
@@ -532,7 +532,7 @@ void ViewShell::LogicMouseMove(const MouseEvent& rMouseEvent)
     Point aPoint = mpActiveWindow->GetPointerPosPixel();
     mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
 
-    MouseMove(rMouseEvent, 0);
+    MouseMove(rMouseEvent, mpActiveWindow);
 
     mpActiveWindow->SetPointerPosPixel(aPoint);
 }
@@ -616,16 +616,16 @@ void ViewShell::SetGraphicMm100Position(bool bStart, const Point& rPosition)
     if (bStart)
     {
         MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
-        MouseButtonDown(aClickEvent, 0);
+        MouseButtonDown(aClickEvent, mpActiveWindow);
         MouseEvent aMoveEvent(Point(rPosition.getX(), rPosition.getY()), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
-        MouseMove(aMoveEvent, 0);
+        MouseMove(aMoveEvent, mpActiveWindow);
     }
     else
     {
         MouseEvent aMoveEvent(Point(rPosition.getX(), rPosition.getY()), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
-        MouseMove(aMoveEvent, 0);
+        MouseMove(aMoveEvent, mpActiveWindow);
         MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
-        MouseButtonUp(aClickEvent, 0);
+        MouseButtonUp(aClickEvent, mpActiveWindow);
     }
 }
 
