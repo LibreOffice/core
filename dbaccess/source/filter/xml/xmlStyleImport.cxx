@@ -83,13 +83,13 @@ void OTableStyleContext::FillPropertySet(
         {
             if ((m_nNumberFormat == -1) && !m_sDataStyleName.isEmpty())
             {
-                SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>(PTR_CAST(SvXMLNumFormatContext,pStyles->FindStyleChildContext(
+                SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>(dynamic_cast< const SvXMLNumFormatContext* >(pStyles->FindStyleChildContext(
                     XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true)));
                 if ( !pStyle )
                 {
-                    OTableStylesContext* pMyStyles = PTR_CAST(OTableStylesContext,GetOwnImport().GetAutoStyles());
+                    OTableStylesContext* pMyStyles = dynamic_cast<OTableStylesContext* >(GetOwnImport().GetAutoStyles());
                     if ( pMyStyles )
-                        pStyle = const_cast<SvXMLNumFormatContext*>(PTR_CAST(SvXMLNumFormatContext,pMyStyles->
+                        pStyle = const_cast<SvXMLNumFormatContext*>(dynamic_cast< const SvXMLNumFormatContext* >(pMyStyles->
                             FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true)));
                     else {
                         OSL_FAIL("not possible to get style");

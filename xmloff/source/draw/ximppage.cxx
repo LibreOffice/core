@@ -355,7 +355,7 @@ void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
         {
             const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
 
-            if( pContext && pContext->ISA( SvXMLStyleContext ) )
+            if( pContext && dynamic_cast<const SdXMLStylesContext *>( pContext) != nullptr)
             {
                 const SdXMLStylesContext* pStyles = static_cast<const SdXMLStylesContext*>(pContext);
                 if(pStyles)
@@ -363,7 +363,7 @@ void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
                     const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
                         XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, rStyleName);
 
-                    if(pStyle && pStyle->ISA(XMLPropStyleContext))
+                    if(pStyle && dynamic_cast<const XMLPropStyleContext*>(pStyle))
                     {
                         const XMLPropStyleContext* pPropStyle = static_cast<const XMLPropStyleContext*>(pStyle);
 
@@ -420,14 +420,14 @@ void SdXMLGenericPageContext::SetLayout()
 
         const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
 
-        if( pContext && pContext->ISA( SvXMLStyleContext ) )
+        if( pContext && dynamic_cast<const SdXMLStylesContext *>( pContext ) != nullptr)
         {
             const SdXMLStylesContext* pStyles = static_cast<const SdXMLStylesContext*>(pContext);
             if(pStyles)
             {
                 const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext( XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
 
-                if(pStyle && pStyle->ISA(SdXMLPresentationPageLayoutContext))
+                if(pStyle && dynamic_cast<const SdXMLPresentationPageLayoutContext*>( pStyle) != nullptr)
                 {
                     const SdXMLPresentationPageLayoutContext* pLayout = static_cast<const SdXMLPresentationPageLayoutContext*>(pStyle);
                     nType = pLayout->GetTypeId();
@@ -489,7 +489,7 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
 
         const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, rsPageMasterName) : NULL;
 
-        if(pStyle && pStyle->ISA(SdXMLPageMasterContext))
+        if(pStyle && dynamic_cast<const SdXMLPageMasterContext*>(pStyle) != nullptr)
         {
             const SdXMLPageMasterContext* pPageMaster = static_cast<const SdXMLPageMasterContext*>(pStyle);
             const SdXMLPageMasterStyleContext* pPageMasterContext = pPageMaster->GetPageMasterStyle();

@@ -702,7 +702,7 @@ SvXMLImportContext *XMLShapeImportHelper::CreateFrameChildContext(
 {
     SvXMLImportContext * pContext = NULL;
 
-    SdXMLFrameShapeContext *pFrameContext = PTR_CAST( SdXMLFrameShapeContext, pThisContext );
+    SdXMLFrameShapeContext *pFrameContext = dynamic_cast<SdXMLFrameShapeContext*>( pThisContext  );
     if( pFrameContext )
         pContext = pFrameContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
 

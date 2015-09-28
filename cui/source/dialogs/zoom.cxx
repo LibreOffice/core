@@ -203,7 +203,7 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
 
     const SfxPoolItem& rItem = mrSet.Get(mrSet.GetPool()->GetWhich(SID_ATTR_ZOOM));
 
-    if (rItem.ISA(SvxZoomItem))
+    if (0 != dynamic_cast<const SvxZoomItem*>( &rItem))
     {
         const SvxZoomItem& rZoomItem = static_cast<const SvxZoomItem&>(rItem);
         const sal_uInt16 nZoom = rZoomItem.GetValue();

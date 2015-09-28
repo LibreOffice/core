@@ -404,7 +404,7 @@ bool XMLFontStylesContext::FillProperties( const OUString& rName,
                          sal_Int32 nCharsetIdx ) const
 {
     const SvXMLStyleContext* pStyle = FindStyleChildContext( XML_STYLE_FAMILY_FONT, rName, true );
-    const XMLFontStyleContextFontFace *pFontStyle = PTR_CAST( XMLFontStyleContextFontFace,pStyle);// use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
+    const XMLFontStyleContextFontFace *pFontStyle = dynamic_cast<const XMLFontStyleContextFontFace*>(pStyle);// use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
     if( pFontStyle )
         pFontStyle->FillProperties( rProps, nFamilyNameIdx, nStyleNameIdx,
                                     nFamilyIdx, nPitchIdx, nCharsetIdx );

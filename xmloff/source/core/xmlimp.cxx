@@ -708,7 +708,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     {
         pContext = CreateContext( nPrefix, aLocalName, xAttrList );
         if( (nPrefix & XML_NAMESPACE_UNKNOWN_FLAG) != 0 &&
-            IS_TYPE( SvXMLImportContext, pContext ) )
+            dynamic_cast< const SvXMLImportContext*>(pContext ) !=  nullptr )
         {
             OUString aMsg( "Root element unknown" );
             Reference<xml::sax::XLocator> xDummyLocator;

@@ -839,11 +839,11 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
     // translate the SfxPoolItem
     Any aValue;
 
-    const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, _pItem );
-    const SfxBoolItem* pBoolItem = PTR_CAST( SfxBoolItem, _pItem );
-    const OptionalBoolItem* pOptBoolItem = PTR_CAST( OptionalBoolItem, _pItem );
-    const SfxInt32Item* pInt32Item = PTR_CAST( SfxInt32Item, _pItem );
-    const OStringListItem* pStringListItem = PTR_CAST( OStringListItem, _pItem );
+    const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>( _pItem  );
+    const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>( _pItem  );
+    const OptionalBoolItem* pOptBoolItem = dynamic_cast<const OptionalBoolItem*>( _pItem  );
+    const SfxInt32Item* pInt32Item = dynamic_cast< const SfxInt32Item* >( _pItem );
+    const OStringListItem* pStringListItem = dynamic_cast<const OStringListItem*>( _pItem  );
 
     if ( pStringItem )
     {
@@ -1113,7 +1113,7 @@ DbuTypeCollectionItem::DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSour
 
 bool DbuTypeCollectionItem::operator==(const SfxPoolItem& _rItem) const
 {
-    const DbuTypeCollectionItem* pCompare = PTR_CAST(DbuTypeCollectionItem, &_rItem);
+    const DbuTypeCollectionItem* pCompare = dynamic_cast<const DbuTypeCollectionItem*>( &_rItem );
     return pCompare && (pCompare->getCollection() == getCollection());
 }
 
