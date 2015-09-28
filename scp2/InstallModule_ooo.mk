@@ -53,7 +53,7 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	-DGUIBASE_UNX \
+	-DUSING_X11 \
 ))
 endif
 

@@ -74,7 +74,7 @@ File gid_File_Extra_Databasebiblio
     Name = "extras_databasebiblio.filelist";
 End
 
-#ifdef GUIBASE_UNX
+#ifdef USING_X11
 
 File gid_File_Extra_Fontunxppds
     Dir = FILELIST_DIR;
