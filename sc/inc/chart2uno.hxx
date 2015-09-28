@@ -246,7 +246,7 @@ class ScChart2DataSequence : public
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,
             const com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >& xDP,
-            ::std::vector<ScTokenRef>* pTokens, bool bIncludeHiddenCells );
+            ::std::vector<ScTokenRef>&& rTokens, bool bIncludeHiddenCells );
 
     virtual ~ScChart2DataSequence();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
@@ -452,13 +452,12 @@ private:
     bool                        m_bIncludeHiddenCells;
 
     // internals
-    typedef std::unique_ptr<std::vector<ScTokenRef> >  TokenListPtr;
     typedef std::unique_ptr<std::vector<sal_uInt32> >  RangeIndexMapPtr;
     typedef std::unique_ptr<ExternalRefListener>       ExtRefListenerPtr;
 
     sal_Int64                   m_nObjectId;
     ScDocument*                 m_pDocument;
-    TokenListPtr                m_pTokens;
+    std::vector<ScTokenRef>     m_aTokens;
     RangeIndexMapPtr            m_pRangeIndices;
     ExtRefListenerPtr           m_pExtRefListener;
     com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;

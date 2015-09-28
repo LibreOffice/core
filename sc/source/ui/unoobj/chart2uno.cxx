@@ -179,19 +179,19 @@ struct TokenTable : boost::noncopyable
         return nRet;
     }
 
-    vector<ScTokenRef>* getColRanges(SCCOL nCol) const;
-    vector<ScTokenRef>* getRowRanges(SCROW nRow) const;
-    vector<ScTokenRef>* getAllRanges() const;
+    vector<ScTokenRef> getColRanges(SCCOL nCol) const;
+    vector<ScTokenRef> getRowRanges(SCROW nRow) const;
+    vector<ScTokenRef> getAllRanges() const;
 };
 
-vector<ScTokenRef>* TokenTable::getColRanges(SCCOL nCol) const
+vector<ScTokenRef> TokenTable::getColRanges(SCCOL nCol) const
 {
     if (nCol >= mnColCount)
-        return nullptr;
+        return vector<ScTokenRef>();
     if( mnRowCount<=0 )
-        return nullptr;
+        return vector<ScTokenRef>();
 
-    unique_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
+    vector<ScTokenRef> aTokens;
     sal_uInt32 nLast = getIndex(nCol, mnRowCount-1);
     for (sal_uInt32 i = getIndex(nCol, 0); i <= nLast; ++i)
     {
@@ -200,19 +200,19 @@ vector<ScTokenRef>* TokenTable::getColRanges(SCCOL nCol) const
             continue;
 
         ScTokenRef pCopy(p->Clone());
-        ScRefTokenHelper::join(*pTokens, pCopy, ScAddress());
+        ScRefTokenHelper::join(aTokens, pCopy, ScAddress());
     }
-    return pTokens.release();
+    return aTokens;
 }
 
-vector<ScTokenRef>* TokenTable::getRowRanges(SCROW nRow) const
+vector<ScTokenRef> TokenTable::getRowRanges(SCROW nRow) const
 {
     if (nRow >= mnRowCount)
-        return nullptr;
+        return vector<ScTokenRef>();
     if( mnColCount<=0 )
-        return nullptr;
+        return vector<ScTokenRef>();
 
-    unique_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
+    vector<ScTokenRef> aTokens;
     sal_uInt32 nLast = getIndex(mnColCount-1, nRow);
     for (sal_uInt32 i = getIndex(0, nRow); i <= nLast; i += mnRowCount)
     {
@@ -221,14 +221,14 @@ vector<ScTokenRef>* TokenTable::getRowRanges(SCROW nRow) const
             continue;
 
         ScTokenRef p2(p->Clone());
-        ScRefTokenHelper::join(*pTokens, p2, ScAddress());
+        ScRefTokenHelper::join(aTokens, p2, ScAddress());
     }
-    return pTokens.release();
+    return aTokens;
 }
 
-vector<ScTokenRef>* TokenTable::getAllRanges() const
+vector<ScTokenRef> TokenTable::getAllRanges() const
 {
-    unique_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
+    vector<ScTokenRef> aTokens;
     sal_uInt32 nStop = mnColCount*mnRowCount;
     for (sal_uInt32 i = 0; i < nStop; i++)
     {
@@ -237,9 +237,9 @@ vector<ScTokenRef>* TokenTable::getAllRanges() const
             continue;
 
         ScTokenRef p2(p->Clone());
-        ScRefTokenHelper::join(*pTokens, p2, ScAddress());
+        ScRefTokenHelper::join(aTokens, p2, ScAddress());
     }
-    return pTokens.release();
+    return aTokens;
 }
 
 typedef std::map<sal_uInt32, FormulaToken*> FormulaTokenMap;
@@ -256,15 +256,15 @@ public:
     SCCOL getDataColCount() const { return mnDataColCount; }
     SCROW getDataRowCount() const { return mnDataRowCount; }
 
-    vector<ScTokenRef>* getLeftUpperCornerRanges() const;
-    vector<ScTokenRef>* getAllColHeaderRanges() const;
-    vector<ScTokenRef>* getAllRowHeaderRanges() const;
+    vector<ScTokenRef> getLeftUpperCornerRanges() const;
+    vector<ScTokenRef> getAllColHeaderRanges() const;
+    vector<ScTokenRef> getAllRowHeaderRanges() const;
 
-    vector<ScTokenRef>* getColHeaderRanges(SCCOL nChartCol) const;
-    vector<ScTokenRef>* getRowHeaderRanges(SCROW nChartRow) const;
+    vector<ScTokenRef> getColHeaderRanges(SCCOL nChartCol) const;
+    vector<ScTokenRef> getRowHeaderRanges(SCROW nChartRow) const;
 
-    vector<ScTokenRef>* getDataColRanges(SCCOL nCol) const;
-    vector<ScTokenRef>* getDataRowRanges(SCROW nRow) const;
+    vector<ScTokenRef> getDataColRanges(SCCOL nCol) const;
+    vector<ScTokenRef> getDataRowRanges(SCROW nRow) const;
 
 private:
     SCCOL mnDataColCount;
@@ -399,33 +399,33 @@ Chart2PositionMap::~Chart2PositionMap()
     maData.clear();
 }
 
-vector<ScTokenRef>* Chart2PositionMap::getLeftUpperCornerRanges() const
+vector<ScTokenRef> Chart2PositionMap::getLeftUpperCornerRanges() const
 {
     return maLeftUpperCorner.getAllRanges();
 }
-vector<ScTokenRef>* Chart2PositionMap::getAllColHeaderRanges() const
+vector<ScTokenRef> Chart2PositionMap::getAllColHeaderRanges() const
 {
     return maColHeaders.getAllRanges();
 }
-vector<ScTokenRef>* Chart2PositionMap::getAllRowHeaderRanges() const
+vector<ScTokenRef> Chart2PositionMap::getAllRowHeaderRanges() const
 {
     return maRowHeaders.getAllRanges();
 }
-vector<ScTokenRef>* Chart2PositionMap::getColHeaderRanges(SCCOL nCol) const
+vector<ScTokenRef> Chart2PositionMap::getColHeaderRanges(SCCOL nCol) const
 {
     return maColHeaders.getColRanges( nCol);
 }
-vector<ScTokenRef>* Chart2PositionMap::getRowHeaderRanges(SCROW nRow) const
+vector<ScTokenRef> Chart2PositionMap::getRowHeaderRanges(SCROW nRow) const
 {
     return maRowHeaders.getRowRanges( nRow);
 }
 
-vector<ScTokenRef>* Chart2PositionMap::getDataColRanges(SCCOL nCol) const
+vector<ScTokenRef> Chart2PositionMap::getDataColRanges(SCCOL nCol) const
 {
     return maData.getColRanges( nCol);
 }
 
-vector<ScTokenRef>* Chart2PositionMap::getDataRowRanges(SCROW nRow) const
+vector<ScTokenRef> Chart2PositionMap::getDataRowRanges(SCROW nRow) const
 {
     return maData.getRowRanges( nRow);
 }
@@ -1051,12 +1051,12 @@ namespace
 {
 
 Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFromTokens(
-    unique_ptr< vector< ScTokenRef > > && pValueTokens, unique_ptr< vector< ScTokenRef > > && pLabelTokens,
+    vector< ScTokenRef > && aValueTokens, vector< ScTokenRef > && aLabelTokens,
     ScDocument* pDoc, const Reference< chart2::data::XDataProvider >& xDP, bool bIncludeHiddenCells )
 {
     Reference< chart2::data::XLabeledDataSequence >  xResult;
-    bool bHasValues = pValueTokens.get() && !pValueTokens->empty();
-    bool bHasLabel = pLabelTokens.get() && !pLabelTokens->empty();
+    bool bHasValues = !aValueTokens.empty();
+    bool bHasLabel = !aLabelTokens.empty();
     if( bHasValues || bHasLabel )
     {
         try
@@ -1068,12 +1068,12 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
             }
             if ( bHasValues )
             {
-                Reference< chart2::data::XDataSequence > xSeq( new ScChart2DataSequence( pDoc, xDP, pValueTokens.release(), bIncludeHiddenCells ) );
+                Reference< chart2::data::XDataSequence > xSeq( new ScChart2DataSequence( pDoc, xDP, std::move(aValueTokens), bIncludeHiddenCells ) );
                 xResult->setValues( xSeq );
             }
             if ( bHasLabel )
             {
-                Reference< chart2::data::XDataSequence > xLabelSeq( new ScChart2DataSequence( pDoc, xDP, pLabelTokens.release(), bIncludeHiddenCells ) );
+                Reference< chart2::data::XDataSequence > xLabelSeq( new ScChart2DataSequence( pDoc, xDP, std::move(aLabelTokens), bIncludeHiddenCells ) );
                 xResult->setLabel( xLabelSeq );
             }
         }
@@ -1527,17 +1527,17 @@ ScChart2DataProvider::createDataSource(
     // Fill Categories
     if( bCategories )
     {
-        unique_ptr< vector<ScTokenRef> > pValueTokens;
+        vector<ScTokenRef> aValueTokens;
         if (bOrientCol)
-            pValueTokens.reset(pChartMap->getAllRowHeaderRanges());
+            aValueTokens = pChartMap->getAllRowHeaderRanges();
         else
-            pValueTokens.reset(pChartMap->getAllColHeaderRanges());
+            aValueTokens = pChartMap->getAllColHeaderRanges();
 
-        unique_ptr< vector<ScTokenRef> > pLabelTokens(
+        vector<ScTokenRef> aLabelTokens(
                 pChartMap->getLeftUpperCornerRanges());
 
         Reference< chart2::data::XLabeledDataSequence > xCategories = lcl_createLabeledDataSequenceFromTokens(
-            std::move(pValueTokens), std::move(pLabelTokens), m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
+            std::move(aValueTokens), std::move(aLabelTokens), m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
         if ( xCategories.is() )
         {
             aSeqs.push_back( xCategories );
@@ -1548,20 +1548,20 @@ ScChart2DataProvider::createDataSource(
     sal_Int32 nCount = bOrientCol ? pChartMap->getDataColCount() : pChartMap->getDataRowCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        unique_ptr< vector<ScTokenRef> > pValueTokens;
-        unique_ptr< vector<ScTokenRef> > pLabelTokens;
+        vector<ScTokenRef> aValueTokens;
+        vector<ScTokenRef> aLabelTokens;
         if (bOrientCol)
         {
-            pValueTokens.reset(pChartMap->getDataColRanges(static_cast<SCCOL>(i)));
-            pLabelTokens.reset(pChartMap->getColHeaderRanges(static_cast<SCCOL>(i)));
+            aValueTokens = pChartMap->getDataColRanges(static_cast<SCCOL>(i));
+            aLabelTokens = pChartMap->getColHeaderRanges(static_cast<SCCOL>(i));
         }
         else
         {
-            pValueTokens.reset(pChartMap->getDataRowRanges(static_cast<SCROW>(i)));
-            pLabelTokens.reset(pChartMap->getRowHeaderRanges(static_cast<SCROW>(i)));
+            aValueTokens = pChartMap->getDataRowRanges(static_cast<SCROW>(i));
+            aLabelTokens = pChartMap->getRowHeaderRanges(static_cast<SCROW>(i));
         }
         Reference< chart2::data::XLabeledDataSequence > xChartSeries = lcl_createLabeledDataSequenceFromTokens(
-            std::move(pValueTokens), std::move(pLabelTokens), m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
+            std::move(aValueTokens), std::move(aLabelTokens), m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
         if ( xChartSeries.is() && xChartSeries->getValues().is() && xChartSeries->getValues()->getData().getLength() )
         {
             aSeqs.push_back( xChartSeries );
@@ -2084,10 +2084,7 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
 
     shrinkToDataRange(m_pDocument, aRefTokens);
 
-    // ScChart2DataSequence manages the life cycle of pRefTokens.
-    vector<ScTokenRef>* pRefTokens = new vector<ScTokenRef>();
-    pRefTokens->swap(aRefTokens);
-    xResult.set(new ScChart2DataSequence(m_pDocument, this, pRefTokens, m_bIncludeHiddenCells));
+    xResult.set(new ScChart2DataSequence(m_pDocument, this, std::move(aRefTokens), m_bIncludeHiddenCells));
 
     return xResult;
 }
@@ -2234,10 +2231,7 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
 
     shrinkToDataRange(m_pDocument, aRefTokens);
 
-    // ScChart2DataSequence manages the life cycle of pRefTokens.
-    vector<ScTokenRef>* pRefTokens = new vector<ScTokenRef>();
-    pRefTokens->swap(aRefTokens);
-    xResult.set(new ScChart2DataSequence(m_pDocument, this, pRefTokens, m_bIncludeHiddenCells));
+    xResult.set(new ScChart2DataSequence(m_pDocument, this, std::move(aRefTokens), m_bIncludeHiddenCells));
     return xResult;
 }
 
@@ -2469,12 +2463,12 @@ void ScChart2DataSequence::HiddenRangeListener::notify()
 
 ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
         const uno::Reference < chart2::data::XDataProvider >& xDP,
-        vector<ScTokenRef>* pTokens,
+        vector<ScTokenRef>&& rTokens,
         bool bIncludeHiddenCells )
     : m_bIncludeHiddenCells( bIncludeHiddenCells)
     , m_nObjectId( 0 )
     , m_pDocument( pDoc)
-    , m_pTokens(pTokens)
+    , m_aTokens(std::move(rTokens))
     , m_pRangeIndices(nullptr)
     , m_pExtRefListener(nullptr)
     , m_xDataProvider( xDP)
@@ -2488,8 +2482,6 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
     , mnTimeBasedEnd(0)
     , mnCurrentTab(0)
 {
-    OSL_ENSURE(pTokens, "reference token list is null");
-
     if ( m_pDocument )
     {
         m_pDocument->AddUnoObject( *this);
@@ -2543,7 +2535,7 @@ void ScChart2DataSequence::RefChanged()
                     pCLC->EndListeningHiddenRange(m_pHiddenListener.get());
             }
 
-            vector<ScTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
+            vector<ScTokenRef>::const_iterator itr = m_aTokens.begin(), itrEnd = m_aTokens.end();
             for (; itr != itrEnd; ++itr)
             {
                 ScRange aRange;
@@ -2565,19 +2557,13 @@ void ScChart2DataSequence::BuildDataCache()
     if (!m_aDataArray.empty())
         return;
 
-    if (!m_pTokens.get())
-    {
-        OSL_FAIL("m_pTokens == nullptr!  Something is wrong.");
-        return;
-    }
-
     StopListeningToAllExternalRefs();
 
     ::std::list<sal_Int32> aHiddenValues;
     sal_Int32 nDataCount = 0;
     sal_Int32 nHiddenValueCount = 0;
 
-    for (vector<ScTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
+    for (vector<ScTokenRef>::const_iterator itr = m_aTokens.begin(), itrEnd = m_aTokens.end();
           itr != itrEnd; ++itr)
     {
         if (ScRefTokenHelper::isExternalRef(*itr))
@@ -2773,7 +2759,7 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
 
         ScRefTokenHelper::getTokenFromRange(pToken, *pRange);
         sal_uInt32 nOrigPos = (*m_pRangeIndices)[i];
-        (*m_pTokens)[nOrigPos] = pToken;
+        m_aTokens[nOrigPos] = pToken;
     }
 
     RefChanged();
@@ -2884,7 +2870,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
         ScRangeList aRanges;
         m_pRangeIndices.reset(new vector<sal_uInt32>());
-        vector<ScTokenRef>::const_iterator itrBeg = m_pTokens->begin(), itrEnd = m_pTokens->end();
+        vector<ScTokenRef>::const_iterator itrBeg = m_aTokens.begin(), itrEnd = m_aTokens.end();
         for (vector<ScTokenRef>::const_iterator itr = itrBeg ;itr != itrEnd; ++itr)
         {
             if (!ScRefTokenHelper::isExternalRef(*itr))
@@ -3088,12 +3074,12 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
             ++pArr;
         }
     }
-    else if ( m_pTokens.get() && m_pTokens->front() )
+    else if ( m_aTokens.front() )
     {
-        if( m_pTokens->front()->GetType() == svString )
+        if( m_aTokens.front()->GetType() == svString )
         {
             aSeq = uno::Sequence<OUString>(1);
-            aSeq[0] = m_pTokens->front()->GetString().getString();
+            aSeq[0] = m_aTokens.front()->GetString().getString();
         }
     }
 
@@ -3106,8 +3092,8 @@ OUString SAL_CALL ScChart2DataSequence::getSourceRangeRepresentation()
     SolarMutexGuard aGuard;
     OUString aStr;
     OSL_ENSURE( m_pDocument, "No Document -> no SourceRangeRepresentation" );
-    if (m_pDocument && m_pTokens.get())
-        lcl_convertTokensToString(aStr, *m_pTokens, m_pDocument);
+    if (m_pDocument)
+        lcl_convertTokensToString(aStr, m_aTokens, m_pDocument);
 
     return aStr;
 }
@@ -3222,12 +3208,9 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
     if ( !m_pDocument)
         throw uno::RuntimeException();
 
-    if (!m_pTokens.get())
-        return Sequence<OUString>();
-
     // Determine the total size of all ranges.
     AccumulateRangeSize func;
-    func = ::std::for_each(m_pTokens->begin(), m_pTokens->end(), func);
+    func = ::std::for_each(m_aTokens.begin(), m_aTokens.end(), func);
     SCCOL nCols = func.getCols();
     SCROW nRows = func.getRows();
 
@@ -3257,7 +3240,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
     // Generate label strings based on the info so far.
     sal_Int32 nCount = bColumn ? nCols : nRows;
     GenerateLabelStrings genLabels(nCount, eOrigin, bColumn);
-    genLabels = ::std::for_each(m_pTokens->begin(), m_pTokens->end(), genLabels);
+    genLabels = ::std::for_each(m_aTokens.begin(), m_aTokens.end(), genLabels);
     Sequence<OUString> aSeq = genLabels.getLabels();
 
     return aSeq;
@@ -3313,21 +3296,17 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
 {
     SolarMutexGuard aGuard;
 
-    unique_ptr< vector<ScTokenRef> > pTokensNew;
-    if (m_pTokens.get())
+    // Clone tokens.
+    vector<ScTokenRef> aTokensNew;
+    aTokensNew.reserve(m_aTokens.size());
+    vector<ScTokenRef>::const_iterator itr = m_aTokens.begin(), itrEnd = m_aTokens.end();
+    for (; itr != itrEnd; ++itr)
     {
-        // Clone tokens.
-        pTokensNew.reset(new vector<ScTokenRef>);
-        pTokensNew->reserve(m_pTokens->size());
-        vector<ScTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
-        for (; itr != itrEnd; ++itr)
-        {
-            ScTokenRef p((*itr)->Clone());
-            pTokensNew->push_back(p);
-        }
+        ScTokenRef p((*itr)->Clone());
+        aTokensNew.push_back(p);
     }
 
-    uno::Reference<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, m_xDataProvider, pTokensNew.release(), m_bIncludeHiddenCells));
+    uno::Reference<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, m_xDataProvider, std::move(aTokensNew), m_bIncludeHiddenCells));
     p->CopyData(*this);
     Reference< util::XCloneable > xClone(p);
 
@@ -3341,11 +3320,11 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
 {
     // like ScCellRangesBase::addModifyListener
     SolarMutexGuard aGuard;
-    if (!m_pTokens.get() || m_pTokens->empty())
+    if (m_aTokens.empty())
         return;
 
     ScRangeList aRanges;
-    ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens, ScAddress());
+    ScRefTokenHelper::getRangeListFromTokens(aRanges, m_aTokens, ScAddress());
     m_aValueListeners.push_back( uno::Reference<util::XModifyListener>( aListener ) );
 
     if ( m_aValueListeners.size() == 1 )
@@ -3359,7 +3338,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
         if( m_pDocument )
         {
             ScChartListenerCollection* pCLC = m_pDocument->GetChartListenerCollection();
-            vector<ScTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
+            vector<ScTokenRef>::const_iterator itr = m_aTokens.begin(), itrEnd = m_aTokens.end();
             for (; itr != itrEnd; ++itr)
             {
                 ScRange aRange;
@@ -3382,7 +3361,7 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
     // like ScCellRangesBase::removeModifyListener
 
     SolarMutexGuard aGuard;
-    if (!m_pTokens.get() || m_pTokens->empty())
+    if (m_aTokens.empty())
         return;
 
     acquire();      // in case the listeners have the last ref - released below
@@ -3486,9 +3465,9 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rProper
         // Read-only property.  It returns whether or not the label value is a
         // direct user input, rather than an indirect reference.
         bool bHasStringLabel = false;
-        if (m_pTokens->size() == 1)
+        if (m_aTokens.size() == 1)
         {
-            const formula::FormulaToken& rToken = *(*m_pTokens)[0];
+            const formula::FormulaToken& rToken = *m_aTokens[0];
             bHasStringLabel = rToken.GetType() == formula::svString;
         }
         aRet <<= bHasStringLabel;
@@ -3547,7 +3526,7 @@ void ScChart2DataSequence::setDataChangedHint(bool b)
 sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
     throw (uno::RuntimeException, std::exception)
 {
-    if(!m_pTokens || !mbTimeBased)
+    if(!mbTimeBased)
         return sal_True;
 
     if(mnCurrentTab >= mnTimeBasedEnd)
@@ -3557,8 +3536,8 @@ sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
         return false;
     }
 
-    for(vector<ScTokenRef>::iterator itr = m_pTokens->begin(),
-            itrEnd = m_pTokens->end(); itr != itrEnd; ++itr)
+    for(vector<ScTokenRef>::iterator itr = m_aTokens.begin(),
+            itrEnd = m_aTokens.end(); itr != itrEnd; ++itr)
     {
         if ((*itr)->GetType() != svDoubleRef)
             continue;
@@ -3589,15 +3568,12 @@ void ScChart2DataSequence::setRange(sal_Int32 nStart, sal_Int32 nEnd)
 sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
     throw (uno::RuntimeException, std::exception)
 {
-    if(!m_pTokens)
-        return sal_True;
-
     if(nPoint > mnTimeBasedEnd - mnTimeBasedStart)
         return false;
 
     SCTAB nTab = mnTimeBasedStart + nPoint;
-    for(vector<ScTokenRef>::iterator itr = m_pTokens->begin(),
-            itrEnd = m_pTokens->end(); itr != itrEnd; ++itr)
+    for(vector<ScTokenRef>::iterator itr = m_aTokens.begin(),
+            itrEnd = m_aTokens.end(); itr != itrEnd; ++itr)
     {
         if ((*itr)->GetType() != svDoubleRef)
             continue;
