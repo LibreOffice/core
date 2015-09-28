@@ -30,6 +30,7 @@
 #include <osl/diagnose.h>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 using ::std::unique_ptr;
@@ -355,7 +356,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     return bFound ? nField : -1;
 }
 
-ScDBQueryParamBase* ScDBInternalRange::createQueryParam(const ScDBRangeBase* pQueryRef) const
+std::unique_ptr<ScDBQueryParamBase> ScDBInternalRange::createQueryParam(const ScDBRangeBase* pQueryRef) const
 {
     unique_ptr<ScDBQueryParamInternal> pParam(new ScDBQueryParamInternal);
 
@@ -374,7 +375,7 @@ ScDBQueryParamBase* ScDBInternalRange::createQueryParam(const ScDBRangeBase* pQu
     if (!pQueryRef->fillQueryEntries(pParam.get(), this))
         return NULL;
 
-    return pParam.release();
+    return std::unique_ptr<ScDBQueryParamBase>(std::move(pParam));
 }
 
 bool ScDBInternalRange::isRangeEqual(const ScRange& rRange) const
@@ -450,7 +451,7 @@ SCCOL ScDBExternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     return -1;
 }
 
-ScDBQueryParamBase* ScDBExternalRange::createQueryParam(const ScDBRangeBase* pQueryRef) const
+std::unique_ptr<ScDBQueryParamBase> ScDBExternalRange::createQueryParam(const ScDBRangeBase* pQueryRef) const
 {
     unique_ptr<ScDBQueryParamMatrix> pParam(new ScDBQueryParamMatrix);
     pParam->mpMatrix = mpMatrix;
@@ -460,7 +461,7 @@ ScDBQueryParamBase* ScDBExternalRange::createQueryParam(const ScDBRangeBase* pQu
     if (!pQueryRef->fillQueryEntries(pParam.get(), this))
         return NULL;
 
-    return pParam.release();
+    return std::unique_ptr<ScDBQueryParamBase>(std::move(pParam));
 }
 
 bool ScDBExternalRange::isRangeEqual(const ScRange& /*rRange*/) const

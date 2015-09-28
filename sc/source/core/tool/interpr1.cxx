@@ -6683,7 +6683,7 @@ void ScInterpreter::ScAggregate()
     }
 }
 
-ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
+std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingField )
 {
     bool bAllowMissingField = false;
     if ( rMissingField )
@@ -6816,7 +6816,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
                 if (!bNumber && !pParam->bRegExp)
                     pParam->bRegExp = MayBeRegExp(aQueryStr, pDok);
             }
-            return pParam.release();
+            return pParam;
         }
     }
     return NULL;

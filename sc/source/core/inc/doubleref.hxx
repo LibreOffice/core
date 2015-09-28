@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_DOUBLEREF_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_DOUBLEREF_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "address.hxx"
 #include "types.hxx"
 
@@ -66,7 +70,7 @@ public:
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const = 0;
     virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = NULL) const = 0;
-    virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const = 0;
+    virtual std::unique_ptr<ScDBQueryParamBase> createQueryParam(const ScDBRangeBase* pQueryRef) const = 0;
     virtual bool isRangeEqual(const ScRange& rRange) const = 0;
 
 protected:
@@ -120,7 +124,7 @@ public:
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const SAL_OVERRIDE;
     virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = NULL) const SAL_OVERRIDE;
-    virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const SAL_OVERRIDE;
+    virtual std::unique_ptr<ScDBQueryParamBase> createQueryParam(const ScDBRangeBase* pQueryRef) const SAL_OVERRIDE;
     virtual bool isRangeEqual(const ScRange& rRange) const SAL_OVERRIDE;
 
 private:
@@ -160,7 +164,7 @@ public:
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const SAL_OVERRIDE;
     virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = NULL) const SAL_OVERRIDE;
-    virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const SAL_OVERRIDE;
+    virtual std::unique_ptr<ScDBQueryParamBase> createQueryParam(const ScDBRangeBase* pQueryRef) const SAL_OVERRIDE;
     virtual bool isRangeEqual(const ScRange& rRange) const SAL_OVERRIDE;
 
 private:

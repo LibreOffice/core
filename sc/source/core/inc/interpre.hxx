@@ -34,6 +34,7 @@
 #include "math.hxx"
 
 #include <map>
+#include <memory>
 #include <vector>
 
 class ScDocument;
@@ -534,7 +535,7 @@ void ScSubTotal();
 // compatibility). If this was the case then rMissingField is set to true upon
 // return. If rMissingField==false upon call all "missing cases" are considered
 // to be an error.
-ScDBQueryParamBase* GetDBParams( bool& rMissingField );
+std::unique_ptr<ScDBQueryParamBase> GetDBParams( bool& rMissingField );
 
 void DBIterator( ScIterFunc );
 void ScDBSum();
