@@ -123,8 +123,18 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
                 }
 
                 OUString aValStr;
-                Color* pDummy;
-                pFormatter->GetOutputString( nVal, nNumFmt, aValStr, &pDummy );
+                // Do not use the unlimited precision of the General format or
+                // the display string for 1E+222 would be '1' and 222 repeated
+                // '0' characters in the status bar ... Instead of setting
+                // standard precision back and forth simply use the input line
+                // string.
+                if ((nNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                    pFormatter->GetInputLineString( nVal, nNumFmt, aValStr);
+                else
+                {
+                    Color* pDummy;
+                    pFormatter->GetOutputString( nVal, nNumFmt, aValStr, &pDummy );
+                }
                 aStr += aValStr;
             }
         }
