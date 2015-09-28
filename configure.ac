@@ -9224,7 +9224,7 @@ dnl ===================================================================
 dnl Check for XRandr
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable RandR support])
-if test "$USING_X11" = "yes" -a "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" = "TRUE" \); then
+if test "$USING_X11" = TRUE -a "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" = "TRUE" \); then
     if test -z "$enable_randr_link" -o "$enable_randr_link" = "no"; then
         XRANDR_DLOPEN="TRUE"
         AC_MSG_RESULT([configured to dlopen libXrandr at runtime])
