@@ -43,7 +43,7 @@ namespace drawinglayer
 
             It does transform by embedding an existing geometry into a
             transformation as Child-content. This allows re-usage of the
-            refcounted Uno-Api primitives and their existung, buffered
+            refcounted Uno-Api primitives and their existing, buffered
             decompositions.
 
             It could e.g. be used to show a single object geometry in 1000

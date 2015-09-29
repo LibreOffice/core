@@ -68,7 +68,7 @@ public:
     /**
      * Get number of part that the document contains.
      *
-     * Part refers to either indivual sheets in a Calc, or slides in Impress,
+     * Part refers to either individual sheets in a Calc, or slides in Impress,
      * and has no relevance for Writer.
      */
     inline int getParts()
