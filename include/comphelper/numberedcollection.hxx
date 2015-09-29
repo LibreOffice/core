@@ -136,7 +136,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
 
         /** @short  trys to find an unique number not already used within this collection.
 
-            @descr  It reuses the smalles number which isn't used by any component
+            @descr  It reuses the smallest number which isn't used by any component
                     of this collection. (fragmentation!) If collection is full (means there
                     is no free number) the special value INVALID_NUMBER will be returned.
 

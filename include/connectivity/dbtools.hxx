@@ -314,7 +314,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> findDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent);
 
-    /** determines the value of a booolean data source setting, given by ASCII name
+    /** determines the value of a boolean data source setting, given by ASCII name
 
         @param _rxConnection
             the connection belonging to the data source whose setting is to be retrieved

@@ -157,7 +157,7 @@ namespace comphelper
         }
 
         /** retrieves a value with a given name, or defaults it to a given value, if its not present
-            in the colllection
+            in the collection
         */
         template < typename VALUE_TYPE >
         VALUE_TYPE  getOrDefault( const sal_Char* _pAsciiValueName, const VALUE_TYPE& _rDefault ) const
