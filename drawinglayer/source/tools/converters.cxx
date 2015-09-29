@@ -126,7 +126,7 @@ namespace drawinglayer
                     pContentProcessor->process(xSeq);
                     delete pContentProcessor;
 
-                    // get alpha cahannel from vdev
+                    // get alpha channel from vdev
                     maContent->EnableMapMode(false);
                     const Bitmap aAlpha(maContent->GetBitmap(aEmptyPoint, aSizePixel));
 #ifdef DBG_UTIL

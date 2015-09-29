@@ -59,7 +59,7 @@ namespace accessibility
 
     AccessibleParaManager::~AccessibleParaManager()
     {
-        // owner is responsible for possible child defuncs
+        // owner is responsible for possible child death
     }
 
     void AccessibleParaManager::SetAdditionalChildStates( const VectorOfStates& rChildStates )

@@ -211,7 +211,7 @@ namespace drawinglayer
     // static global VDev buffer for the VclProcessor2D's (VclMetafileProcessor2D and VclPixelProcessor2D)
     VDevBuffer& getVDevBuffer()
     {
-        // secure global instance with Vcl's safe desroyer of external (seen by
+        // secure global instance with Vcl's safe destroyer of external (seen by
         // library base) stuff, the remembered VDevs need to be deleted before
         // Vcl's deinit
         static vcl::DeleteOnDeinit< VDevBuffer > aVDevBuffer(new VDevBuffer());

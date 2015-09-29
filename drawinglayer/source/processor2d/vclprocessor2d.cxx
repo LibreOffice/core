@@ -448,7 +448,7 @@ namespace drawinglayer
             // renderer on pixel base to ensure tight fitting. Do not do this when
             // the fill is rotated or sheared.
 
-            // ovveride static bool (for debug) and tiling is active
+            // override static bool (for debug) and tiling is active
             if(bTryTilingDirect && rFillGraphicAttribute.getTiling())
             {
                 // content is bitmap(ex)

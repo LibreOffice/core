@@ -66,7 +66,7 @@ CWinClipboard::CWinClipboard( const Reference< XComponentContext >& rxContext, c
 // to avoid unnecessary traffic we check first if there is a clipboard
 // content which was set via setContent, in this case we don't need
 // to query the content from the clipboard, create a new wrapper object
-// and so on, we simply return the orignial XTransferable instead of our
+// and so on, we simply return the original XTransferable instead of our
 // DOTransferable
 
 Reference< XTransferable > SAL_CALL CWinClipboard::getContents( ) throw( RuntimeException )

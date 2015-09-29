@@ -78,7 +78,7 @@ CWinClipbImpl::~CWinClipbImpl( )
 
 Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( RuntimeException )
 {
-    // use the shotcut or create a transferable from
+    // use the shortcut or create a transferable from
     // system clipboard
     ClearableMutexGuard aGuard( m_ClipContentMutex );
 
@@ -156,7 +156,7 @@ void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
     // but it does not work since FlushClipboard does a callback and frees DataObject
     // which results in a deadlock in onReleaseDataObject.
     // FlushClipboard had to be synchron in order to prevent shutdown until all
-    // clipboard-formats are redered.
+    // clipboard-formats are rendered.
     // The request is needed to prevent flushing if we are not clipboard owner (it is
     // not known what happens if we flush but aren't clipoard owner).
     // It may be possible to move the request to the clipboard STA thread by saving the
