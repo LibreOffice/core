@@ -111,7 +111,7 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
 
 
 
-// CCRS_Cache methoeds.
+// CCRS_Cache methods
 
 
 

@@ -210,7 +210,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
         m_aDisabledCommands.AddCommand( sCmd );
     }
 
-    // dont forget to update all existing frames and her might cached dispatch objects!
+    // don't forget to update all existing frames and her might cached dispatch objects!
     // But look for already killed frames. We hold weak references instead of hard ones ...
     for (SvtFrameVector::const_iterator pIt  = m_lFrames.begin();
                                         pIt != m_lFrames.end();

@@ -193,8 +193,8 @@ struct FactoryInfo
         bool            isDefaultFilterReadonly() const { return bDefaultFilterReadonly; }
         sal_Int32           getIcon             () const { return nIcon;              };
 
-        // If you call set-methods - we check for changes of valkues and mark it.
-        // But if you wish to set it without that ... you must initialize it!
+        // If you call set-methods - we check for changes of values and mark it.
+        // But if you wish to set it without that... you must initialize it!
         void initInstalled        ( bool               bNewInstalled        ) { bInstalled        = bNewInstalled; }
         void initFactory          ( const OUString& sNewFactory          ) { sFactory          = sNewFactory; }
         void initShortName        ( const OUString& sNewShortName        ) { sShortName        = sNewShortName; }

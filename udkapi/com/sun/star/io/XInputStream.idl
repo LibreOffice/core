@@ -49,7 +49,7 @@ published interface XInputStream: com::sun::star::uno::XInterface
              of bytes (or less as a sign of EOF).
              <br>
              C++ only : Note that for unbridged (e.g., in-process)
-             calls, using the same sequence for repetive readBytes()-calls
+             calls, using the same sequence for repetitive readBytes()-calls
              can bear a performance advantage. The callee can put the data
              directly into the sequence so that no buffer reallocation is
              necessary.
