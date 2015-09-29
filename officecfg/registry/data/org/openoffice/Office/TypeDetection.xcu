@@ -19,7 +19,7 @@
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="TypeDetection" oor:package="org.openoffice.Office">
   <!--
-        Attention: Please dont merge any changes into this file! Its deprecated for further versions.
+        Attention: Please don't merge any changes into this file! Its deprecated for further versions.
                    Use the new configuration schema org.openoffice.TypeDetection/ and its related sub
                    structures. Contact as96863 to get further information about this fact.
   -->

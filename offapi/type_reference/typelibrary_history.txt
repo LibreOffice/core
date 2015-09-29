@@ -80,7 +80,7 @@
   directory. We need only one reference per source stand. I have also removed the
   types_doc.rdb because all type info is already in the normal types.rdb, even
   the service nad singleton type info.
-  In the same step i have updated the reference type library with the rdb of
+  In the same step I have updated the reference type library with the rdb of
   OOo2.0.1 and have patched the following singleton types to ensure that we need
   only one type library:
     - com.sun.star.script.browse.theBrowseNodeFactory

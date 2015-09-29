@@ -126,7 +126,7 @@ public class Test15 implements StorageTest {
                 return false;
 
             // open a new substream hierarchically, set "MediaType" and "Compressed" properties to it, write some bytes
-            // and dont commit
+            // and don't commit
             if ( !m_aTestHelper.WBToSubstrOfEncrH( xTempFileStorage, aSubStream4Path, "MediaType2", true, pBytes1, true, false ) )
                 return false;
 

@@ -626,7 +626,7 @@ struct UniqueSelector<T[N]>
  *
  *   UniquePtr<char> p;
  *   p = new char;           // ERROR
- *   p.reset(new char);      // works, but fugly
+ *   p.reset(new char);      // works, but ugly
  *   p = MakeUnique<char>(); // preferred
  *
  * (And third, although not relevant to Mozilla: MakeUnique is exception-safe.
