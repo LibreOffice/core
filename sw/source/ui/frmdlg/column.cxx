@@ -347,7 +347,7 @@ IMPL_LINK_NOARG_TYPED(SwColumnDlg, OkHdl, Button*, void)
 
     if(pPageSet && SfxItemState::SET == pPageSet->GetItemState(RES_COL) && bPageChanged)
     {
-        // deterine current PageDescriptor and fill the Set with it
+        // determine current PageDescriptor and fill the Set with it
         const size_t nCurIdx = rWrtShell.GetCurPageDesc();
         SwPageDesc aPageDesc(rWrtShell.GetPageDesc(nCurIdx));
         SwFrameFormat &rFormat = aPageDesc.GetMaster();
@@ -1074,7 +1074,7 @@ IMPL_LINK( SwColumnPage, EdModify, MetricField *, pMetricField )
 }
 
 // Handler behind the Checkbox for automatic width. When the box is checked
-// no expicit values for the column width can be entered.
+// no explicit values for the column width can be entered.
 IMPL_LINK_TYPED( SwColumnPage, AutoWidthHdl, Button*, pButton, void )
 {
     CheckBox* pBox = static_cast<CheckBox*>(pButton);

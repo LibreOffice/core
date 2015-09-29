@@ -323,7 +323,7 @@ namespace SwLangHelper
             EE_CHAR_LANGUAGE_CTL
         };
 
-        // Writewr IDs
+        // Writer IDs
         const sal_uInt16 aLangWhichId_Writer[3] =
         {
             RES_CHRATR_LANGUAGE,

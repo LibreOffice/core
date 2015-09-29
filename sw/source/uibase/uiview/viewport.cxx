@@ -106,7 +106,7 @@ static void lcl_GetPos(SwView* pView,
     if ( !bHori && nTmp > lSize )
         lDelta -= nTmp - lSize;
 
-    // use a reference to access/moodify the correct coordinate
+    // use a reference to access/modify the correct coordinate
     // returned by accessors to non-const object
     long & rCoord = bHori ? rPos.X() : rPos.Y();
     rCoord += lDelta;

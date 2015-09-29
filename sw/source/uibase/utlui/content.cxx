@@ -2427,7 +2427,7 @@ void    SwContentTree::ShowTree()
     SvTreeListBox::Show();
 }
 
-// folded together will not be geidled
+// folded together will not be glidled
 
 void    SwContentTree::HideTree()
 {

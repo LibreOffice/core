@@ -569,7 +569,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             aSection.SetProtectFlag( false );
 
             // the update of content from linked section at time delete
-            // the undostack. Then the change of the section dont create
+            // the undostack. Then the change of the section don't create
             // any undoobject. -  BUG 69145
             bool bDoesUndo = DoesUndo();
             SwUndoId nLastUndoId(UNDO_EMPTY);

@@ -175,7 +175,7 @@ public:
     bool    IsSttOfPara() const { return IsSttPara(); }
     bool    IsEndOfPara() const { return IsEndPara(); }
 
-    // select word / sentense
+    // select word / sentence
     bool    SelNearestWrd();
     bool    SelWrd      (const Point * = 0, bool bProp=false );
     // #i32329# Enhanced selection

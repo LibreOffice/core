@@ -878,7 +878,7 @@ int SwWrtShell::IntelligentCut(int nSelection, bool bCut)
     cNext = GetChar(true);
 
     int cWord = NO_WORD;
-        // is a word seleced?
+        // is a word selected?
     if(!cWord && cPrev && cNext &&
         CH_TXTATR_BREAKWORD != cPrev && CH_TXTATR_INWORD != cPrev &&
         CH_TXTATR_BREAKWORD != cNext && CH_TXTATR_INWORD != cNext &&
