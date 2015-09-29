@@ -438,7 +438,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         break;
     }
 
-    // boolean keyords
+    // boolean keywords
     InitSpecialKeyword( NF_KEY_TRUE );
     InitSpecialKeyword( NF_KEY_FALSE );
 

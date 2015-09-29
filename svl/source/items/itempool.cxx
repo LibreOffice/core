@@ -880,10 +880,10 @@ const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const
     {
         if ( pImp->mpSecondary )
             return pImp->mpSecondary->GetDefaultItem( nWhich );
-        assert(!"unknown which - dont ask me for defaults");
+        assert(!"unknown which - don't ask me for defaults");
     }
 
-    DBG_ASSERT( pImp->ppStaticDefaults, "no defaults known - dont ask me for defaults" );
+    DBG_ASSERT( pImp->ppStaticDefaults, "no defaults known - don't ask me for defaults" );
     sal_uInt16 nPos = GetIndex_Impl(nWhich);
     SfxPoolItem *pDefault = *(pImp->ppPoolDefaults + nPos);
     if ( pDefault )

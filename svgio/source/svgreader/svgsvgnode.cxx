@@ -322,7 +322,7 @@ namespace svgio
                     // bounding box width or height on a given object (refer to the section that describes object
                     // bounding box units)."
 
-                    // Comparisons with commom browsers show, that it's mostly interpreted relative to the viewport
+                    // Comparisons with common browsers show that it's mostly interpreted relative to the viewport
                     // of the parent, and so does the new implementation.
 
                     // Extract known viewport data

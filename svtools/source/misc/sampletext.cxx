@@ -1261,7 +1261,7 @@ namespace
                 eScript = USCRIPT_TRADITIONAL_HAN;
             else if (bHans && !bHant && !bKore && !bJpan)
                 eScript = USCRIPT_SIMPLIFIED_HAN;
-            //otherwise fall-through as USCRIPT_HAN and expect a combind Hant/Hans preview
+            //otherwise fall-through as USCRIPT_HAN and expect a combined Hant/Hans preview
         }
         return eScript;
     }

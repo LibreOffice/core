@@ -3123,7 +3123,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
                             (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
                             pImp->GetDontKnowNodeBmp().GetSizePixel().Width())
                         {
-                            aControlValue.setTristateVal( BUTTONVALUE_DONTKNOW ); //dont know
+                            aControlValue.setTristateVal( BUTTONVALUE_DONTKNOW ); //don't know
                         }
                         else
                         {

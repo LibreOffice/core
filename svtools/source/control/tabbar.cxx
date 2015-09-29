@@ -1755,7 +1755,7 @@ void TabBar::RemovePage(sal_uInt16 nPageId)
         if (mnCurPageId == nPageId)
             mnCurPageId = 0;
 
-        // check if first visibale page should be moved
+        // check if first visible page should be moved
         if (mnFirstPos > nPos)
             mnFirstPos--;
 
