@@ -172,7 +172,7 @@ static void aDspFunc(const OUString &rErr, const OUString &rAction)
 struct ErrorContextImpl
 {
     ErrorContext *pNext;
-    vcl::Window  *pWin; // should be VclPtr for strong lifecyle
+    vcl::Window  *pWin; // should be VclPtr for strong lifecycle
 };
 
 ErrorContext::ErrorContext(vcl::Window *pWinP)

@@ -676,7 +676,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
     if ( !rNoProxyList.isEmpty() )
     {
         // List of connection endpoints hostname[:port],
-        // separated by semicolon. Wilcards allowed.
+        // separated by semicolon. Wildcards allowed.
 
         sal_Int32 nPos = 0;
         sal_Int32 nEnd = rNoProxyList.indexOf( ';' );

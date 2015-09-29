@@ -464,7 +464,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
     Close();
     errno = 0;
     m_eStreamMode = nOpenMode;
-    m_eStreamMode &= ~StreamMode::TRUNC; // don't truncat on reopen
+    m_eStreamMode &= ~StreamMode::TRUNC; // don't truncate on reopen
 
     aFilename = rFilename;
 
