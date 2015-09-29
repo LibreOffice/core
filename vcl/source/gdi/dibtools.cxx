@@ -1537,7 +1537,7 @@ bool ImplWriteDIB(
 
         rOStm.SetEndian(SvStreamEndian::LITTLE);
 
-        if(pAcc)
+        if (pAcc)
         {
             if(bFileHeader)
             {
@@ -1552,11 +1552,11 @@ bool ImplWriteDIB(
             }
 
             Bitmap::ReleaseAccess(pAcc);
+        }
 
-            if(pAccAlpha)
-            {
-                Bitmap::ReleaseAccess(pAccAlpha);
-            }
+        if (pAccAlpha)
+        {
+            Bitmap::ReleaseAccess(pAccAlpha);
         }
 
         if(!bRet)
