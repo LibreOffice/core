@@ -41,7 +41,7 @@ service DataBar
     [property] sequence<XDataBarEntry> DataBarEntries;
 
     /**
-      * Mimimum databar length in percent of cell width.
+      * Minimum databar length in percent of cell width.
       *
       * Allowed values are [0, 100) but smaller than MaximumLength.
       */

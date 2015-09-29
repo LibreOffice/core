@@ -104,7 +104,7 @@ namespace oox { namespace ppt {
 
             do
             {
-                // copy the non matching inverval verbatim
+                // copy the non matching interval verbatim
                 if(nIndex > nLastIndex)
                 {
                     sRes.append(rString.getStr() + nLastIndex, (nIndex - nLastIndex));

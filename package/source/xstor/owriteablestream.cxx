@@ -1826,7 +1826,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
         m_pImpl->AddLog( rException.Message );
         m_pImpl->AddLog( "Quiet exception" );
 
-        // TODO: set the stoream in invalid state or dispose
+        // TODO: set the stream in invalid state or dispose
         SAL_WARN( "package.xstor", "The stream become invalid during copiing!" );
         throw uno::RuntimeException();
     }

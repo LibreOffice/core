@@ -752,7 +752,7 @@ void ChartExport::exportChartSpace( Reference< css::chart::XChartDocument > xCha
             FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
             FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
             FSEND );
-    // TODO: get the correct editing lanauge
+    // TODO: get the correct editing language
     pFS->singleElement( FSNS( XML_c, XML_lang ),
             XML_val, "en-US",
             FSEND );

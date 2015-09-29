@@ -356,7 +356,7 @@ DWORD
 LaunchServiceSoftwareUpdateCommand(int argc, LPCWSTR* argv)
 {
   // The service command is the same as the updater.exe command line except
-  // it has 2 extra args: 1) The Path to udpater.exe, and 2) the command
+  // it has 2 extra args: 1) The Path to updater.exe, and 2) the command
   // being executed which is "software-update"
   LPCWSTR *updaterServiceArgv = new LPCWSTR[argc + 2];
   updaterServiceArgv[0] = L"MozillaMaintenance";

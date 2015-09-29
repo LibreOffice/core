@@ -3039,7 +3039,7 @@ int NS_main(int argc, NS_tchar **argv)
       int retries = 1;
       DWORD lastWriteError = 0;
       do {
-        // By opening a file handle wihout FILE_SHARE_READ to the callback
+        // By opening a file handle without FILE_SHARE_READ to the callback
         // executable, the OS will prevent launching the process while it is
         // being updated.
         callbackFile = CreateFileW(targetPath,

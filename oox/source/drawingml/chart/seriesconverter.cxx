@@ -49,7 +49,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-/** nastied-up sgn function - employs some gratuity around 0 - values
+/** nested-up sgn function - employs some gratuity around 0 - values
    smaller than 0.33 are clamped to 0
  */
 int lclSgn( double nVal )

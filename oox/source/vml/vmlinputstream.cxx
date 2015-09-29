@@ -211,7 +211,7 @@ bool lclProcessCharacters( OStringBuffer& rBuffer, const OString& rChars )
         VML import filter implementation has to react on this case manually.
 
         A single space character following another character is stored
-        literally and must not be stipped away here. Example: The element
+        literally and must not be stripped away here. Example: The element
             <font>abc </font>
         contains the three letters a, b, and c, followed by a space character.
 

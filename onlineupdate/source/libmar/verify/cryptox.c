@@ -143,10 +143,10 @@ CyprtoAPI_VerifySignature(HCRYPTHASH *hash,
 /**
  * Obtains the public key for the passed in cert data
  *
- * @param provider       The cyrto provider
- * @param certData       Data of the certificate to extract the public key from
- * @param sizeOfCertData The size of the certData buffer
- * @param certStore      Pointer to the handle of the certificate store to use
+ * @param provider        The cryto provider
+ * @param certData        Data of the certificate to extract the public key from
+ * @param sizeOfCertData  The size of the certData buffer
+ * @param certStore       Pointer to the handle of the certificate store to use
  * @param CryptoX_Success on success
 */
 CryptoX_Result
@@ -250,7 +250,7 @@ CryptoAPI_VerifyBegin(HCRYPTPROV provider, HCRYPTHASH* hash)
 /**
   * Updates a signature verification hash context
   *
-  * @param hash The hash context to udpate
+  * @param hash The hash context to update
   * @param buf  The buffer to update the hash context with
   * @param len The size of the passed in buffer
   * @return CryptoX_Success on success, CryptoX_Error on error.

@@ -307,7 +307,7 @@
         <desc>Contains settings related to load and save operations.</desc>
       </info>
       <prop oor:name="IsSaveOnlyUsedSymbols" oor:type="xs:boolean" oor:nillable="false">
-        <!-- UIHints: - Tools/Options - OpenOffice Maths - Settings -->
+        <!-- UIHints: - Tools/Options - LibreOffice Maths - Settings -->
         <info>
           <desc>When set only symbols used in the current formula will be saved. Otherwise all user defined symbols will be saved in each formula.</desc>
           <label>Save only used symbols.</label>
