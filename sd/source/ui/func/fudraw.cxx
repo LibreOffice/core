@@ -403,7 +403,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 // changeover to the next object
                 if(!mpView->MarkNextObj( !aCode.IsShift() ))
                 {
-                    //If there is only one object, don't do the UnmarkAlllObj() & MarkNextObj().
+                    //If there is only one object, don't do the UnmarkAllObj() & MarkNextObj().
                     if ( mpView->GetMarkableObjCount() > 1 && mpView->AreObjectsMarked() )
                     {
                         // No next object: go over open end and get first from

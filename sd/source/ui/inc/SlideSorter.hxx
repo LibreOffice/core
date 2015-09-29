@@ -101,7 +101,7 @@ public:
         ScrollBar* pVerticalScrollBar,
         ScrollBarBox* pScrollBarBox);
 
-    /** Create a new slide sorter that is losely coupled to the given view
+    /** Create a new slide sorter that is loosely coupled to the given view
         shell.  The view shell may even be missing.
         @param rBase
             ViewShellBase object of the enclosing application.

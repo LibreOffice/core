@@ -106,7 +106,7 @@ void FuMorph::DoExecute( SfxRequest& )
             pDlg->SaveSettings();
 
             // #i48168# Not always is the pPolyObj1/pPolyObj2 a SdrPathObj, it may also be a group object
-            // containing SdrPathObjs. To get the polygons, i add two iters here
+            // containing SdrPathObjs. To get the polygons, I add two iters here
             SdrObjListIter aIter1(*pPolyObj1);
             SdrObjListIter aIter2(*pPolyObj2);
 

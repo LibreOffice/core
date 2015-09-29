@@ -45,7 +45,7 @@ namespace sd { namespace framework {
     It has three main tasks:
     1. Provide frequently used strings of resource URLs and event names.
     2. Provide shortcuts for accessing the sd framework.
-    3. Ease the migration to the drawing framwork.
+    3. Ease the migration to the drawing framework.
 
     Note that a FrameworkHelper disposes itself when one of the resource
     controllers called by it throws a DisposedException.
