@@ -806,7 +806,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_KEEP
     // not required
     // RES_URL
-    // not required (exprted as draw:a element)
+    // not required (exported as draw:a element)
     // RES_EDIT_IN_READONLY
     MG_ED( "EditInReadonly",        STYLE,  EDITABLE,                   XML_TYPE_BOOL, 0 ),
     // RES_LAYOUT_SPLIT

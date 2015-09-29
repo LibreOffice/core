@@ -78,7 +78,7 @@ private:
 
     /*
      * the compressed document handler provided by the XMLDocumentWrapper
-     * component, the handler has more effient method definition that the
+     * component, the handler has more efficient method definition that the
      * normal document handler.
      */
     com::sun::star::uno::Reference<

@@ -491,7 +491,7 @@ void SAXEventKeeperImpl::smashBufferNode(
                 /*
                  * If this is a blocker, then remove any out-element data
                  * which caused by blocking. The removal process will stop
-                 * at the next blokcer to avoid removing any useful data.
+                 * at the next blocker to avoid removing any useful data.
                  */
             if (bClearRoot)
             {

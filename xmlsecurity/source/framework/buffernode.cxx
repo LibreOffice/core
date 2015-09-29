@@ -199,7 +199,7 @@ void BufferNode::setBlocker(const ElementMark* pBlocker)
  *  empty
  *
  *   NOTES
- *  Because there is only one blocker permited for a BufferNode, so the
+ *  Because there is only one blocker permitted for a BufferNode, so the
  *  old blocker on this BufferNode, if there is one, will be overcasted.
  *
  *   AUTHOR

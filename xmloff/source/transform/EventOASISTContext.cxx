@@ -241,7 +241,7 @@ void XMLEventOASISTransformerContext::StartElement(
             case XML_ATACTION_EVENT_NAME:
                 {
                     // Check if the event belongs to a form or control by
-                    // cehcking the 2nd ancestor element, f.i.:
+                    // checking the 2nd ancestor element, f.i.:
                     // <form:button><form:event-listeners><form:event-listener>
                     const XMLTransformerContext *pObjContext =
                         GetTransformer().GetAncestorContext( 1 );

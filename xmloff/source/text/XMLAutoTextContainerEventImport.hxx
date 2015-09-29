@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
 
 /**
  * Import the text:auto-text-container element.
- * This only instantiates text:auto-text-group contexta.
+ * This only instantiates text:auto-text-group context.
  */
 class XMLAutoTextContainerEventImport : public SvXMLImportContext
 {

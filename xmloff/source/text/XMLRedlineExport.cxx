@@ -593,7 +593,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
     {
         DBG_ASSERT( !sId.isEmpty(), "Redlines must have IDs" );
 
-        // TODO: use GetRedlineID or elimiate that function
+        // TODO: use GetRedlineID or eliminate that function
         OUStringBuffer sBuffer(sChangePrefix);
         sBuffer.append(sId);
 

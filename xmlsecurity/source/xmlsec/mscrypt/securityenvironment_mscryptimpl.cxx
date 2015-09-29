@@ -937,7 +937,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
                 if ( pSimpleChain->TrustStatus.dwErrorStatus & revocationFlags)
                 {
                     //No revocation information. Because MSDN documentation is not
-                    //clear about if all other tests are performed if an error occurrs,
+                    //clear about if all other tests are performed if an error occurs,
                     //we test again, without requiring revocation checking.
                     CertFreeCertificateChain(pChainContext);
                     pChainContext = NULL;
