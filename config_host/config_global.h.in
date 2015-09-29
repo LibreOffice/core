@@ -17,6 +17,8 @@ Any change in this header will cause a rebuild of almost everything.
 #define HAVE_CXX11_FINAL 0
 #define HAVE_CXX11_PERFECT_FORWARDING 0
 #define HAVE_CXX11_CONSTEXPR 0
+#define HAVE_CXX14_CONSTEXPR 0
+#define HAVE_CXX14_SIZED_DEALLOCATION 0
 #define HAVE_GCC_BUILTIN_ATOMIC 0
 /* _Pragma */
 #define HAVE_GCC_PRAGMA_OPERATOR 0
