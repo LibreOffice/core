@@ -209,7 +209,7 @@ public:
     // When a table is splitted into two tables, the row spans which overlaps
     // the split have to be corrected and stored for undo
     // SwSavRowSpan is the structure needed by Undo to undo the split operation
-    // CleanUpRowSpan corrects the (top of the) second table and delviers the structure
+    // CleanUpRowSpan corrects the (top of the) second table and delivers the structure
     // for Undo
     SwSaveRowSpan* CleanUpTopRowSpan( sal_uInt16 nSplitLine );
     // RestoreRowSpan is called by Undo to restore the old row span values

@@ -370,7 +370,7 @@ DECLARE_OOXMLEXPORT_TEST(testShape3DEffectPreservation, "shape-3d-effect-preserv
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:extrusionClr/a:schemeClr/a:lumOff",
             "val", "60000");
 
-    // third shape: colored countour and top and bottom bevel, plastic material
+    // third shape: colored contour and top and bottom bevel, plastic material
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
             "contourW", "50800");
@@ -730,7 +730,7 @@ DECLARE_OOXMLEXPORT_TEST(testWordArtWithinDraingtool, "testWordArtWithinDraingto
      * <p> <r> <ac> <drawing> <txbx> <txbxContent> ..  <pict> </pict> </txbxContent></txbx> </drawing> </ac> </r> </p>
      *  After RT :
      * <p> <r> <ac> <drawing> <txbx> <txbxContent> ..  <drawing> <txbx> <txbxContent> ..  </txbxContent></txbx> </drawing> .. </txbxContent></txbx> </drawing> </ac> </r> </p>
-     *  Expected : As there is nesting of a 2007 Word Art within a draing tool, then can be separated in two different runs.
+     *  Expected : as there is nesting of a 2007 Word Art within a drawing tool, then can be separated in two different runs.
      * */
 
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

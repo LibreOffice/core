@@ -395,7 +395,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78469, "fdo78469.docx")
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
     if (!pXmlDoc)
        return;
-    // make sure dataBinding & text tags not presernt in sdtcontent
+    // make sure dataBinding & text tags not present in sdtcontent
     assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:dataBinding[1]",0);
     assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:text[1]",0);
 }
@@ -453,8 +453,8 @@ DECLARE_OOXMLEXPORT_TEST(testfdo76934, "fdo76934.docx")
 DECLARE_OOXMLEXPORT_TEST(testfdo79540, "fdo79540.docx")
 {
     /* Issue was, <w:drawing> was getting written inside <w:drawing>.
-     * So Postone the writing of Inner Drawing tag.
-     * MS Office does not allow Nestimg of drawing tags.
+     * So postpone the writing of Inner Drawing tag.
+     * MS Office does not allow nesting of drawing tags.
      */
 
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

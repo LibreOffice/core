@@ -381,7 +381,7 @@ DECLARE_RTFEXPORT_TEST(testFdo77979, "fdo77979.odt")
 DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")
 {
     /*
-     * The problem was that a custom shape was missings its second (and all the other remaining) coordinates.
+     * The problem was that a custom shape was missing its second (and all the other remaining) coordinates.
      *
      * oShape = ThisComponent.DrawPage(0)
      * oPathPropVec = oShape.CustomShapeGeometry(1).Value

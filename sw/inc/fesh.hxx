@@ -578,7 +578,7 @@ public:
                         const Graphic* pGrf = 0 );
 
     // --> #i972#
-    /** for starmath formulas anchored 'as char' it alignes it baseline to baseline
+    /** for starmath formulas anchored 'as char' it aligns it baseline to baseline
      changing the previous vertical orientation */
     void AlignFormulaToBaseline( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly = 0 );
 
@@ -650,7 +650,7 @@ public:
 
     void SetRowHeight( const SwFormatFrmSize &rSz );
 
-    /// Pointer must be detroyed by caller != 0.
+    /// Pointer must be destroyed by caller != 0.
     void GetRowHeight( SwFormatFrmSize *&rpSz ) const;
 
     void SetRowSplit( const SwFormatRowSplit &rSz );
