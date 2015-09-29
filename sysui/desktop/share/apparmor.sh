@@ -19,8 +19,12 @@ PROFILESFROM=$2  #Where the profile files are
 INSTALLTO=$3  #Where should the apparmor profiles live (to be be linked to)
 INSTALL=$4  #True means try to run sudo to link (doesn't reload profiles)
 
-#For example to get this to work on Ubuntu 15.04 with stock LibreOffice:
+#For example to get this to work on Ubuntu 15.10 with stock LibreOffice:
 # ./sysui/desktop/share/apparmor.sh /usr/lib/libreoffice/ sysui/desktop/apparmor/ /mnt/store/git/libo/instdir/apparmor-testing/ true
+
+#For example on Ubuntu 15.10, with built debs from the LibreOffice website
+# At the current time you need run /opt/libreofficedev5.1/program/soffice.bin directly - splash screen doesn't work
+# ./sysui/desktop/share/apparmor.sh /opt/libreofficedev5.1/ sysui/desktop/apparmor/ /mnt/store/git/libo/instdir/apparmor-testing/ true
 
 mkdir -p $INSTALLTO
 
