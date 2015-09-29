@@ -194,9 +194,14 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
         }
 
         int baseGlyph = mvGlyphs.size();
-        mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, gr_slot_before(baseSlot)));
-        mvChar2BaseGlyph[firstChar - mnMinCharPos] = baseGlyph;
-        mvCharDxs[firstChar - mnMinCharPos] = static_cast<int>((bRtl ? thisBoundary : nextBoundary) * fScaling) + mnWidth + nDxOffset;
+        int scaledGlyphPos = round_to_long(gr_slot_origin_X(baseSlot) * fScaling) + mnWidth + nDxOffset;
+        if (mvChar2Glyph[firstChar - mnMinCharPos] == -1 || mvGlyphs[mvChar2Glyph[firstChar - mnMinCharPos]].maLinearPos.X() < scaledGlyphPos)
+        {
+            mvChar2Glyph[firstChar - mnMinCharPos] = mvGlyphs.size();
+            mvCharDxs[firstChar - mnMinCharPos] = static_cast<int>((bRtl ? thisBoundary : nextBoundary) * fScaling) + mnWidth + nDxOffset;
+            mvChar2BaseGlyph[firstChar - mnMinCharPos] = baseGlyph;
+            mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, gr_slot_before(baseSlot)));
+        }
         mvGlyph2Char[baseGlyph] = firstChar;
         append(pSegment, rArgs, baseSlot, thisBoundary, nextBoundary, fScaling, nDxOffset, true, firstChar, baseGlyph, bRtl);
         if (thisBoundary < fMinX) fMinX = thisBoundary;
@@ -274,17 +279,17 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     assert(mvGlyphs.size() < mvGlyph2Char.size());
     if (firstChar < mnMinCharPos || firstChar >= mnEndCharPos)
         return nextGlyphOrigin;
-    mvChar2Glyph[firstChar - mnMinCharPos] = mvGlyphs.size();
+
+    long glyphId = gr_slot_gid(gi);
+    long deltaOffset = 0;
+    int scaledGlyphPos = round_to_long(gr_slot_origin_X(gi) * scaling) + mnWidth + rDXOffset;
+    int glyphWidth = round_to_long((nextGlyphOrigin - gOrigin) * scaling);
     if (!bIsBase)
     {
         mvChar2BaseGlyph[firstChar - mnMinCharPos] = baseGlyph;
         mvCharDxs[firstChar - mnMinCharPos] = mvCharDxs[baseChar - mnMinCharPos];
         mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSeg, gr_slot_before(gi)));
     }
-    long glyphId = gr_slot_gid(gi);
-    long deltaOffset = 0;
-    int scaledGlyphPos = round_to_long(gr_slot_origin_X(gi) * scaling) + mnWidth;
-    int glyphWidth = round_to_long((nextGlyphOrigin - gOrigin) * scaling);
 
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"c%d g%ld,X%d W%d nX%f @%d=%d ", firstChar, glyphId,
@@ -323,7 +328,7 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     nGlyphFlags |= (bRtl)? GlyphItem::IS_RTL_GLYPH : 0;
     GlyphItem aGlyphItem(mvGlyphs.size(),
         glyphId,
-        Point(scaledGlyphPos + rDXOffset, round_to_long((-gr_slot_origin_Y(gi) * scaling))),
+        Point(scaledGlyphPos, round_to_long((-gr_slot_origin_Y(gi) * scaling))),
         nGlyphFlags,
         glyphWidth);
     if (glyphId != static_cast<long>(GF_DROPPED))
@@ -458,12 +463,12 @@ sal_Int32 GraphiteLayout::GetTextBreak(DeviceCoordinate maxmnWidth, DeviceCoordi
     {
         nWidth += char_extra;
         if (nWidth > maxmnWidth) break;
-        if (mvChar2BaseGlyph[i] != -1)
+        int gi = mvChar2BaseGlyph[i];
+        if (gi != -1)
         {
-            if (
+            if (!mvGlyphs[gi].IsDiacritic() &&
                 (mvCharBreaks[i] > -35 || (mvCharBreaks[i-1] > 0 && mvCharBreaks[i-1] < 35)) &&
-                (mvCharBreaks[i-1] < 35 || (mvCharBreaks[i] < 0 && mvCharBreaks[i] > -35))
-               )
+                (mvCharBreaks[i-1] < 35 || (mvCharBreaks[i] < 0 && mvCharBreaks[i] > -35)))
             {
                 nLastBreak = static_cast<int>(i);
                 wLastBreak = nWidth;
