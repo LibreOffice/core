@@ -177,7 +177,7 @@ public:
     /**
         With this virtual method, which is automatically overridden by each subclass
         with its own slots through the macro <SFX_DECL_INTERFACE>, one can access
-        each of the <SfxInterface> instance beloning to the subclass.
+        each of the <SfxInterface> instance belonging to the subclass.
 
         The class SfxShell itself has no own SfxInterface (no slots), therefore a
         NULL-pointer is returned.

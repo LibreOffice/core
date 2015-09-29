@@ -291,7 +291,7 @@ HTML_OPTION_BOOL_START          = HTML_OPTION_START,
     HTML_O_DECLARE, // IExplorer 3.0b5
     HTML_O_DISABLED,
     HTML_O_ISMAP,
-    HTML_O_MAYSCRIPT, // Netcape 3.0
+    HTML_O_MAYSCRIPT, // Netscape 3.0
     HTML_O_MULTIPLE,
     HTML_O_NOHREF, // Netscape
     HTML_O_NORESIZE, // Netscape 2.0

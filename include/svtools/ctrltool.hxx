@@ -92,7 +92,7 @@ vcl::FontInfo FontList::Get( const String& rName, const String& rStyleName ) con
 This method search a vcl::FontInfo for the given name and the given style name.
 The Stylename can also be a synthetic one.
 In that case the relevant vcl::FontInfo fields will be set.
-If a StyleName is provived, a vcl::FontInfo structure without a Stylename can be
+If a StyleName is provided, a vcl::FontInfo structure without a Stylename can be
 returned. To get a representation of the StyleName for displaying it to the user,
 call GetStyleName() on this vcl::FontInfo structure.
 

@@ -123,7 +123,7 @@ namespace ConversionHelper
         @param roVmlOpacity  The opacity of the color. If existing, this should
             be a floating-point value in the range [0.0;1.0].
 
-        @param nDefaultRgb  Deafult RGB color used if the parameter roVmlColor
+        @param nDefaultRgb  Default RGB color used if the parameter roVmlColor
             is empty.
 
         @param nPrimaryRgb  If set to something else than API_RGB_TRANSPARENT,
