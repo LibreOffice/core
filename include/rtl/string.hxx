@@ -1405,7 +1405,7 @@ public:
       @param    cTok        the character which separate the tokens.
       @param    index       the position at which the token is searched in the
                             string.
-                            The index must not be greater thanthe length of the
+                            The index must not be greater than the length of the
                             string.
                             This param is set to the position of the
                             next token or to -1, if it is the last token.

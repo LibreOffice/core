@@ -48,7 +48,7 @@ typedef enum {
 
 typedef sal_uInt32 oslPipeOptions;
 #define osl_Pipe_OPEN        0x0000     /* open existing pipe */
-#define osl_Pipe_CREATE      0x0001     /* create pipe and open it, fails if already existst */
+#define osl_Pipe_CREATE      0x0001     /* create pipe and open it, fails if already exists */
 
 typedef struct oslPipeImpl * oslPipe;
 

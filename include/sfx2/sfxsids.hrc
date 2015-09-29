@@ -379,7 +379,7 @@
 #define SID_VIEWSHELL3                      (SID_SFX_START + 633)
 #define SID_VIEWSHELL4                      (SID_SFX_START + 634)
 
-// id for thesaurs entry in context menu
+// id for thesaurus entry in context menu
 #define SID_THES                            (SID_SFX_START + 698)
 
 // default-ids for editing, cursor travellung and selection
@@ -447,7 +447,7 @@
 #define SID_CFGFILE                         (SID_SFX_START + 927)
 #define SID_SHOWPOPUPS                      (SID_SFX_START + 929)
 
-// Item-Id for the assinged event Tabpage
+// Item-Id for the assigned event Tabpage
 #define SID_ATTR_MACROITEM                  (SID_SFX_START + 934)
 
 #define SID_SAVECONFIG                      (SID_SFX_START + 930)

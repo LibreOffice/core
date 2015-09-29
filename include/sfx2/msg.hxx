@@ -36,7 +36,7 @@ enum class SfxSlotMode {
     AUTOUPDATE      =    0x0008L, // invalidated the status automatically after execute
     SYNCHRON        =    0x0010L, // exclusive to ASYNCHRON, default
     ASYNCHRON       =    0x0020L, // via Post-Message, exclusive to SYNCHRON
-    HASDIALOG       =    0x0080L, // Coordinates for dialogue after recofig
+    HASDIALOG       =    0x0080L, // Coordinates for dialogue after reconfig
 
     NORECORD        =    0x0100L, // no recording
     RECORDPERITEM   =    0x0200L, // each item, one statement
