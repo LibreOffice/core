@@ -4459,8 +4459,8 @@ void Test::testFuncINDIRECT()
 
     m_pDoc->CalcAll();
     {
-        // Default is to use compatibility mode, accept both Calc A1 and
-        // Excel A1 syntax
+        // Default (for new documents) is to use current formula syntax
+        // which is Calc A1
         const OUString* aChecks[] = {
             &aTest, &aTest, &aRefErr, &aTest
         };

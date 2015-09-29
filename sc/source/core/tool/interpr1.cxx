@@ -7081,10 +7081,7 @@ void ScInterpreter::ScIndirect()
             // Use the current address syntax if unspecified.
             eConv = pDok->GetAddressConvention();
 
-        // either CONV_A1_XL_A1 was explicitly configured, or nothing at all
-        // was configured
-        bool bTryXlA1 = (eConv == FormulaGrammar::CONV_A1_XL_A1 ||
-                          !maCalcConfig.mbHasStringRefSyntax);
+        bool bTryXlA1 = (eConv == FormulaGrammar::CONV_A1_XL_A1);
 
         if (nParamCount == 2 && 0.0 == ::rtl::math::approxFloor( GetDouble()))
         {
