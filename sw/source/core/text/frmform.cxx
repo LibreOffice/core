@@ -1895,18 +1895,21 @@ bool SwTextFrm::FormatQuick( bool bForceQuickFormat )
     const sal_Int32 nEnd = GetFollow()
                       ? GetFollow()->GetOfst() : aInf.GetText().getLength();
 
-    bool bPreviousLayoutWasZeroWidth = false;
+    int nLoopProtection = 0;
     do
     {
         sal_Int32 nNewStart = aLine.FormatLine(nStart);
-        bool bThisLayoutIsZeroWidth = (nNewStart == nStart);
+        if (nNewStart == nStart)
+            ++nLoopProtection;
+        else
+            nLoopProtection = 0;
         nStart = nNewStart;
-        bool bWillEndlessInsert = (bPreviousLayoutWasZeroWidth && bThisLayoutIsZeroWidth);
+        const bool bWillEndlessInsert = nLoopProtection > 2;
+        SAL_WARN_IF(bWillEndlessInsert, "sw", "loop detection triggered");
         if ((!bWillEndlessInsert) // Check for special case: line is invisible,
                                   // like in too thin table cell: tdf#66141
          && (aInf.IsNewLine() || (!aInf.IsStop() && nStart < nEnd)))
             aLine.Insert( new SwLineLayout() );
-        bPreviousLayoutWasZeroWidth = bThisLayoutIsZeroWidth;
     } while( aLine.Next() );
 
     // Last exit: the heights need to match
