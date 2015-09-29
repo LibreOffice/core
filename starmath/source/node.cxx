@@ -624,6 +624,10 @@ void SmStructureNode::GetAccessibleText( OUStringBuffer &rText ) const
 }
 
 
+void SmStructureNode::ClaimPaternity()
+{
+    ForEachNonNull(this, [this](SmNode *pNode){pNode->SetParent(this);});
+}
 
 
 bool SmVisibleNode::IsVisible() const
