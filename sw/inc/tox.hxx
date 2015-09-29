@@ -422,7 +422,7 @@ class SW_DLLPUBLIC SwTOXBase : public SwClient
 
 protected:
     // Add a data member, for record the TOC field expression of MS Word binary format
-    // For keeping fedality and may giving a better exporting performance
+    // For keeping fidality and may giving a better exporting performance
     OUString maMSTOCExpression;
     bool mbKeepExpression;
 

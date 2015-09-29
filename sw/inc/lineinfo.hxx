@@ -42,13 +42,13 @@ class SW_DLLPUBLIC SwLineNumberInfo : public SwClient /**< purpose of derivation
     sal_uInt16              nPosFromLeft;       ///< Position for paint
     sal_uInt16              nCountBy;           ///< Paint only for every n line
     sal_uInt16              nDividerCountBy;    /**< Interval for display of an user defined
-                                                   string every n lines */
-    LineNumberPosition  ePos;                   ///< Where should the display occur (number and divicer)
-    bool                bPaintLineNumbers;  ///< Should anything be displayed?
-    bool                bCountBlankLines;   ///< Count empty lines?
-    bool                bCountInFlys;       ///< Count also within FlyFrames?
-    bool                bRestartEachPage;   /**< Restart counting at the first paragraph of each page
-                                                    (even on follows when paragraphs are splitted) */
+                                                       string every n lines */
+    LineNumberPosition  ePos;                   ///< Where should the display occur (number and divider)
+    bool                bPaintLineNumbers;      ///< Should anything be displayed?
+    bool                bCountBlankLines;       ///< Count empty lines?
+    bool                bCountInFlys;           ///< Count also within FlyFrames?
+    bool                bRestartEachPage;       /**< Restart counting at the first paragraph of each page
+                                                       (even on follows when paragraphs are splitted) */
 protected:
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 

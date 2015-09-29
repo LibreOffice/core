@@ -52,7 +52,7 @@ SW_DLLPUBLIC bool UCB_DeleteFile( const OUString& rURL );
 bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL,
                     bool bCopyIsMove = false );
 
-    // is the URL on the current system case sentive?
+    // is the URL on the current system case sensitive?
 SW_DLLPUBLIC bool UCB_IsCaseSensitiveFileName( const OUString& rURL );
 
     // is the URL readonly?

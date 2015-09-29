@@ -1598,7 +1598,7 @@ void SwUiWriterTest::testTdf60967()
     //moving cursor forward to check whether there is any node following the table, BTW there should not be any such node
     pCrsr->Move(fnMoveForward);
     SwPosition aPosMoveAfterDel(*(pCrsr->GetPoint()));
-    //checking the positons to verify that the paragraph is actually deleted
+    //checking the positions to verify that the paragraph is actually deleted
     CPPUNIT_ASSERT(aPosInTable == aPosAfterDel);
     CPPUNIT_ASSERT(aPosInTable == aPosMoveAfterDel);
     //Undo the changes
@@ -1621,7 +1621,7 @@ void SwUiWriterTest::testTdf60967()
     SwPosition aPosAfterRedo(*(pCrsr->GetPoint()));
     //position should be exactly same as it was after deletion of *text node*
     CPPUNIT_ASSERT(aPosMoveAfterDel == aPosAfterRedo);
-    //moving the cursor forward, but it should not actually move as there is no *text node* after the table due to this same postion is expected after move as it was before move
+    //moving the cursor forward, but it should not actually move as there is no *text node* after the table due to this same position is expected after move as it was before move
     pCrsr->Move(fnMoveForward);
     SwPosition aPosAfterUndoMove(*(pCrsr->GetPoint()));
     CPPUNIT_ASSERT(aPosAfterUndoMove == aPosAfterRedo);
@@ -2054,7 +2054,7 @@ void SwUiWriterTest::testTdf57197()
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
-    //Insering one row after the existing row
+    //Inserting one row after the existing row
     pWrtShell->SttDoc(); //moves the cursor to the start of Doc
     pWrtShell->InsertRow(1, true);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
