@@ -565,7 +565,7 @@ CMM2UnitString(const uno::Any& rAny)
 static bool
 UnitString2CMM( uno::Any& rAny, const gchar * value )
 {
-    float fValue = 0.0; // pb: dont use double here because of warning on linux
+    float fValue = 0.0; // pb: don't use double here because of warning on linux
 
     if( 1 != sscanf( value, "%gmm", &fValue ) )
         return false;

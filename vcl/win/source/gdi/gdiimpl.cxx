@@ -1606,7 +1606,7 @@ void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAr
 
     POINT* pWinPtAry = (POINT*)pPtAry;
 
-    // we assume there are at least 2 points (Polyline requres at least 2 point, see MSDN)
+    // we assume there are at least 2 points (Polyline requires at least 2 point, see MSDN)
     // we must paint the endpoint for last line
     BOOL bPaintEnd = TRUE;
     if ( pWinPtAry[nPoints-2].x == pWinPtAry[nPoints-1].x )

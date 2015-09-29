@@ -925,7 +925,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
     while( GTK_RESPONSE_NO == btn )
     {
-        btn = GTK_RESPONSE_YES; // we dont want to repeat unless user clicks NO for file save.
+        btn = GTK_RESPONSE_YES; // we don't want to repeat unless user clicks NO for file save.
 
         gint nStatus = pRunDialog->run();
         switch( nStatus )
@@ -1794,7 +1794,7 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
     if( !g_ascii_strcasecmp( pFilter, pExtn ) )
         bRetval = true;
 
-    SAL_INFO( "vcl.gtk", "'" << filter_info->uri << "' match extn '" << pExtn << "' vs '" << pFilter << "' yeilds " << bRetval );
+    SAL_INFO( "vcl.gtk", "'" << filter_info->uri << "' match extn '" << pExtn << "' vs '" << pFilter << "' yields " << bRetval );
 
     return bRetval;
 }

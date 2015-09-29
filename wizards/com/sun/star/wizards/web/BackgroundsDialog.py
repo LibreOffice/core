@@ -167,7 +167,7 @@ class BackgroundsDialog(ImageListDialog):
 
         '''
         when instanciating the model, it checks if each image
-        exists. If it doesnot, it will be removed from
+        exists. If it doesn't, it will be removed from
         the configuration.
         This is what this method does...
         @param imageName

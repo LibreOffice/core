@@ -93,7 +93,7 @@ STDMETHODIMP CAccTable::get_accessibleAt(long row, long column, IUnknown * * acc
 /**
   * Gets accessible table caption.
   *
-  * @param    accessible    the accessible object of table cpation.
+  * @param    accessible    the accessible object of table caption.
   */
 STDMETHODIMP CAccTable::get_caption(IUnknown * *)
 {

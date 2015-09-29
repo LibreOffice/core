@@ -93,7 +93,7 @@ public class ColumnPropertySet
 
     public void assignPropertyValues(PropertyValue[] _aNewColPropertyValues, boolean _bsetDefaultProperties)
     {
-        assignPropertyValues(null /* dont change the name */, _aNewColPropertyValues, _bsetDefaultProperties);
+        assignPropertyValues(null /* don't change the name */, _aNewColPropertyValues, _bsetDefaultProperties);
     }
 
     private void setType(String _sTypeName, Integer precision)

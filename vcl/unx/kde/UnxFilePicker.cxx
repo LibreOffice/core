@@ -860,7 +860,7 @@ void UnxFilePicker::checkFilePicker() throw( ::com::sun::star::uno::RuntimeExcep
 {
     if ( m_nFilePickerPid > 0 )
     {
-        // TODO check if external file picker is runnning
+        // TODO check if external file picker is running
     }
     else
     {

@@ -518,7 +518,7 @@ class Process(ProcessErrors):
 
             # if two files with the same name
             # need to be exported ? So here
-            # i get a new filename, so I do not
+            # I get a new filename, so I do not
             # overwrite files...
             f = self.fileAccess.getNewFile(folder, fn, destExt)
 
