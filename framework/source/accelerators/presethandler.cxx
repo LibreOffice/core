@@ -493,7 +493,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 void PresetHandler::copyPresetToTarget(const OUString& sPreset,
                                        const OUString& sTarget)
 {
-    // dont check our preset list, if element exists
+    // don't check our preset list, if element exists
     // We try to open it and forward all errors to the user!
 
     css::uno::Reference< css::embed::XStorage > xWorkingShare;
@@ -638,7 +638,7 @@ void PresetHandler::addStorageListener(IStorageListener* pListener)
     EConfigType eCfgType;
     {
         SolarMutexGuard g;
-        sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
+        sRelPath = m_sRelPathUser; // use user path ... because we don't work directly on the share layer!
         eCfgType = m_eConfigType;
     }
 
@@ -668,7 +668,7 @@ void PresetHandler::removeStorageListener(IStorageListener* pListener)
     EConfigType eCfgType;
     {
         SolarMutexGuard g;
-        sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
+        sRelPath = m_sRelPathUser; // use user path ... because we don't work directly on the share layer!
         eCfgType = m_eConfigType;
     }
 

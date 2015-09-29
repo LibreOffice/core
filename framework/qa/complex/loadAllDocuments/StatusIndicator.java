@@ -129,10 +129,10 @@ public class StatusIndicator implements com.sun.star.task.XStatusIndicator
 
 
 
-    /**
+    /*
      * Internal helper to show the status.
      * Currently it's implement as normal text out on stdout.
-     * But of course other thimngs are possible here too.
+     * But of course other things are possible here too.
      * e.g. a dialog
      */
     private void impl_show()

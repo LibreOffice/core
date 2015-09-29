@@ -99,7 +99,7 @@ void GlobalAcceleratorConfiguration::fillCache()
     /** read all data into the cache. */
 
 #if 0
-    // get current office locale ... but dont cache it.
+    // get current office locale ... but don't cache it.
     // Otherwise we must be listener on the configuration layer
     // which seems to superflous for this small implementation .-)
     // XXX: what is this good for? it was a comphelper::Locale but unused
