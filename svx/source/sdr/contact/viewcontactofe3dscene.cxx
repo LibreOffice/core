@@ -77,7 +77,7 @@ void createSubPrimitive3DVector(
             // add created content to all target
             drawinglayer::primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(o_rAllTarget, xReference);
 
-            // add created content to visibiel target if exists
+            // add created content to visible target if exists
             if(o_pVisibleTarget)
             {
                 drawinglayer::primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(*o_pVisibleTarget, xReference);

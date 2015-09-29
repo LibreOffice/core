@@ -420,7 +420,7 @@ namespace
             // get the content's relative pos within its parent container
             sal_Int32 nPos = getElementPos(xParent, xChild);
 
-            // prepend this current relaive pos
+            // prepend this current relative pos
             sCurrentIndex = OUString::number(nPos);
             if (!sReturn.isEmpty())
             {
