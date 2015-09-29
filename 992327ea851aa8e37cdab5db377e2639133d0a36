@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_771d1066",
+        "filename": "external/twain/inc/twain/twain.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-29T18:41:45Z",
+      "side": 1,
+      "message": "\"At the time of this writing\" doesn\u0027t mean that this original text is identical to the archived in 2012 version. If TWAIN doesn\u0027t care about the proper text being linked to under the original URL anymore, well.. so be it.",
+      "revId": "992327ea851aa8e37cdab5db377e2639133d0a36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_b725e8af",
+        "filename": "tools/source/generic/fract.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-29T18:41:45Z",
+      "side": 1,
+      "message": "Why the 2008-03-29 version? i.e. why not one closer to the original code commit?",
+      "revId": "992327ea851aa8e37cdab5db377e2639133d0a36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
