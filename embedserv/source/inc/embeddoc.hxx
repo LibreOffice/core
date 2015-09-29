@@ -50,19 +50,19 @@ class EmbedDocument_Impl
       public IExternalConnection
 {
 protected:
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                fillArgsForLoading_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream,
+    css::uno::Sequence< css::beans::PropertyValue >
+                fillArgsForLoading_Impl( css::uno::Reference< css::io::XInputStream > xStream,
                                          DWORD nStreamMode,
                                          LPCOLESTR pFilePath = NULL );
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                fillArgsForStoring_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream );
+    css::uno::Sequence< css::beans::PropertyValue >
+                fillArgsForStoring_Impl( css::uno::Reference< css::io::XOutputStream > xStream );
 
     HRESULT SaveTo_Impl( IStorage* pStg );
 
     sal_uInt64 getMetaFileHandle_Impl( sal_Bool isEnhMeta );
 
 public:
-    EmbedDocument_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& smgr,
+    EmbedDocument_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& smgr,
                         const GUID* guid );
     virtual ~EmbedDocument_Impl();
 
@@ -154,7 +154,7 @@ public:
 protected:
     oslInterlockedCount                 m_refCount;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
     DocumentHolder*                     m_pDocHolder;
     OUString                     m_aFileName;

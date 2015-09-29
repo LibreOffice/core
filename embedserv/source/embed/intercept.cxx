@@ -71,7 +71,7 @@ Interceptor::removeEventListener(
 
 
 void SAL_CALL Interceptor::dispose()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(css::uno::RuntimeException)
 {
     lang::EventObject aEvt;
     aEvt.Source = static_cast< frame::XDispatch* >( this );
