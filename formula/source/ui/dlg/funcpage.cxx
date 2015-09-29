@@ -82,6 +82,7 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
         m_pLbCategory->SetEntryData(m_pLbCategory->InsertEntry(pCategory->getName()),const_cast<IFunctionCategory *>(pCategory));
     }
 
+    m_pLbCategory->SetDropDownLineCount(m_pLbCategory->GetEntryCount());
     m_pLbCategory->SelectEntryPos(1);
     UpdateFunctionList();
     m_pLbCategory->SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
