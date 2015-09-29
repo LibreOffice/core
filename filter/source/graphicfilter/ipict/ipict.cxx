@@ -84,16 +84,15 @@ namespace PictReaderInternal {
   };
 
   sal_uLong Pattern::read(SvStream &stream) {
-    short nx,ny;
     unsigned char nbyte[8];
     sal_uLong nHiBytes, nLoBytes;
     isColor = false;
 
     // count the no of bits in pattern which are set to 1:
     nBitCount=0;
-    for (ny=0; ny<8; ny++) {
+    for (short ny=0; ny<8; ny++) {
       stream.ReadChar( reinterpret_cast<char&>(nbyte[ny]) );
-      for (nx=0; nx<8; nx++) {
+      for (short nx=0; nx<8; nx++) {
     if ( (nbyte[ny] & (1<<nx)) != 0 ) nBitCount++;
       }
     }
@@ -706,7 +705,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     Bitmap              aBitmap;
     BitmapWriteAccess*  pAcc = NULL;
     BitmapReadAccess*   pReadAcc = NULL;
-    sal_uInt16              ny, nx, nColTabSize;
+    sal_uInt16              nColTabSize;
     sal_uInt16              nRowBytes, nBndX, nBndY, nWidth, nHeight, nVersion, nPackType, nPixelType,
                         nPixelSize, nCmpCount, nCmpSize;
     sal_uInt32          nPackSize, nPlaneBytes, nHRes, nVRes;
@@ -835,9 +834,14 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         if ( nRowBytes < nSrcBPL || nRowBytes > nDestBPL )
             BITMAPERROR;
 
-        for ( ny = 0; ny < nHeight; ny++ )
+        if ( nRowBytes < 8 || nPackType == 1 ) {
+            if (pPict->remainingSize() < sizeof(sal_uInt8) * nHeight * nRowBytes)
+                BITMAPERROR;
+        }
+
+        for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
         {
-            nx = 0;
+            sal_uInt16 nx = 0;
             if ( nRowBytes < 8 || nPackType == 1 )
             {
                 for ( i = 0; i < nRowBytes; i++ )
@@ -908,9 +912,9 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                 BITMAPERROR;
         }
 
-        for ( ny = 0; ny < nHeight; ny++ )
+        for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
         {
-            nx = 0;
+            sal_uInt16 nx = 0;
             if ( nRowBytes < 8 || nPackType == 1 )
             {
                 for ( i = 0; i < nWidth; i++ )
@@ -1005,9 +1009,9 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             if (nWidth > nMaxCols)
                 BITMAPERROR;
 
-            for ( ny = 0; ny < nHeight; ny++ )
+            for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
             {
-                for ( nx = 0; nx < nWidth; nx++ )
+                for (sal_uInt16 nx = 0; nx < nWidth; ++nx)
                 {
                     pPict->ReadUChar( nDummy ).ReadUChar( nRed ).ReadUChar( nGreen ).ReadUChar( nBlue );
                     pAcc->SetPixel( ny, nx, BitmapColor( nRed, nGreen, nBlue) );
@@ -1025,9 +1029,9 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             if (nWidth > nMaxCols)
                 BITMAPERROR;
 
-            for ( ny = 0; ny < nHeight; ny++ )
+            for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
             {
-                for ( nx = 0; nx < nWidth; nx++ )
+                for (sal_uInt16 nx = 0; nx < nWidth; ++nx)
                 {
                     pPict->ReadUChar( nRed ).ReadUChar( nGreen ).ReadUChar( nBlue );
                     pAcc->SetPixel( ny, nx, BitmapColor( nRed, nGreen, nBlue ) );
@@ -1040,7 +1044,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             if ( ( nCmpCount == 3 ) || ( nCmpCount == 4 ) )
             {
                 std::unique_ptr<sal_uInt8[]> pScanline(new sal_uInt8[static_cast<size_t>(nWidth) * nCmpCount]);
-                for ( ny = 0; ny < nHeight; ny++ )
+                for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
                 {
                     nSrcBitsPos = pPict->Tell();
                     if ( nRowBytes > 250 )
@@ -1086,7 +1090,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                     sal_uInt8* pTmp = pScanline.get();
                     if ( nCmpCount == 4 )
                         pTmp += nWidth;
-                    for ( nx = 0; nx < nWidth; pTmp++ )
+                    for (sal_uInt16 nx = 0; nx < nWidth; pTmp++)
                         pAcc->SetPixel( ny, nx++, BitmapColor( *pTmp, pTmp[ nWidth ], pTmp[ 2 * nWidth ] ) );
                     nDataSize += (sal_uLong)nByteCount;
                     pPict->Seek( nSrcBitsPos + (sal_uLong)nByteCount );
