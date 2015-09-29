@@ -231,7 +231,7 @@ public class utils {
      * "Temp" returns the temp folder of the office instance.
      * @param msf a XMultiServiceFactory
      * @param setting  the name of the setting the value should be returned.
-     * For example "Temp" reutrns the temp folder of the current office instance.
+     * For example "Temp" returns the temp folder of the current office instance.
      * @see com.sun.star.util.PathSettings
      * @return the value as String
      */
