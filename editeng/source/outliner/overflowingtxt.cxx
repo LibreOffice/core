@@ -193,6 +193,13 @@ OFlowChainedText::OFlowChainedText(Outliner *pOutl, bool bIsDeepMerge)
     mbIsDeepMerge = bIsDeepMerge;
 }
 
+OFlowChainedText::~OFlowChainedText()
+{
+    delete mpNonOverflowingTxt;
+    delete mpOverflowingTxt;
+}
+
+
 ESelection OFlowChainedText::GetInsertionPointSel()
 {
     return OverflowingText::GetInsertionPointSel();
