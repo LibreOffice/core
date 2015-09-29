@@ -89,7 +89,7 @@ public:
 
     virtual SalGraphics*        AcquireGraphics() SAL_OVERRIDE;
     virtual void                ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
-    virtual bool                PostEvent( void* pData ) SAL_OVERRIDE;
+    virtual bool                PostEvent(ImplSVEvent* pData) SAL_OVERRIDE;
     virtual void                SetTitle( const OUString& rTitle ) SAL_OVERRIDE;
     virtual void                SetIcon( sal_uInt16 nIcon ) SAL_OVERRIDE;
     virtual void                SetMenu( SalMenu* pSalMenu ) SAL_OVERRIDE;
