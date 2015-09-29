@@ -59,8 +59,6 @@
 #include <stdio.h>
 #endif
 
-#include "sal/alloca.h"
-
 #include <algorithm>
 #include <set>
 #include <unordered_set>
@@ -472,7 +470,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
 
         // first transform the character codes to unicode
         // note: this only works with single byte encodings
-        sal_Unicode* pUnicodes = static_cast<sal_Unicode*>(alloca( pInfo->numOfChars * sizeof(sal_Unicode)));
+        std::unique_ptr<sal_Unicode[]> const pUnicodes(new sal_Unicode[pInfo->numOfChars]);
         CharMetricInfo* pChar = pInfo->cmi;
         int i;
 

@@ -18,7 +18,6 @@
  */
 
 #include <sal/types.h>
-#include <sal/alloca.h>
 
 #include <vector>
 
@@ -244,7 +243,7 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
             // there is a matching fallback in the cache
             // so update rMissingCodes with codepoints not yet resolved by this fallback
             int nRemainingLength = 0;
-            sal_UCS4* pRemainingCodes = static_cast<sal_UCS4*>(alloca( rMissingCodes.getLength() * sizeof(sal_UCS4) ));
+            std::unique_ptr<sal_UCS4[]> const pRemainingCodes(new sal_UCS4[rMissingCodes.getLength()]);
             OUString aFontName;
 
             while( nStrIndex < rMissingCodes.getLength() )
@@ -254,7 +253,7 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
                 if( !bCached || (rFontSelData.maSearchName != aFontName) )
                     pRemainingCodes[ nRemainingLength++ ] = cChar;
             }
-            rMissingCodes = OUString( pRemainingCodes, nRemainingLength );
+            rMissingCodes = OUString( pRemainingCodes.get(), nRemainingLength );
         }
         else
         {

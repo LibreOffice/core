@@ -22,7 +22,6 @@
 #include "vcl/printerinfomanager.hxx"
 #include "tools/stream.hxx"
 
-#include <sal/alloca.h>
 #include <rtl/strbuf.hxx>
 #include <memory>
 
@@ -293,9 +292,9 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
                 {
                     rJobData.m_aContext.setParser( rJobData.m_pParser );
                     int nBytes = bytes - aStream.Tell();
-                    char* pRemain = static_cast<char*>(alloca( bytes - aStream.Tell() ));
-                    aStream.Read( pRemain, nBytes );
-                    rJobData.m_aContext.rebuildFromStreamBuffer( pRemain, nBytes );
+                    std::unique_ptr<char[]> pRemain(new char[bytes - aStream.Tell()]);
+                    aStream.Read( pRemain.get(), nBytes );
+                    rJobData.m_aContext.rebuildFromStreamBuffer( pRemain.get(), nBytes );
                     bContext = true;
                 }
             }

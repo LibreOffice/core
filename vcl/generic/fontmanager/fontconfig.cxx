@@ -53,8 +53,6 @@ using namespace psp;
 
 #include "rtl/ustrbuf.hxx"
 
-#include "sal/alloca.h"
-
 #include <utility>
 #include <algorithm>
 
@@ -1086,7 +1084,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
             // update rMissingCodes by removing resolved unicodes
             if( !rMissingCodes.isEmpty() )
             {
-                sal_uInt32* pRemainingCodes = static_cast<sal_uInt32*>(alloca( rMissingCodes.getLength() * sizeof(sal_uInt32) ));
+                std::unique_ptr<sal_uInt32[]> const pRemainingCodes(new sal_uInt32[rMissingCodes.getLength()]);
                 int nRemainingLen = 0;
                 FcCharSet* unicodes;
                 if (!FcPatternGetCharSet(pSet->fonts[0], FC_CHARSET, 0, &unicodes))
@@ -1099,7 +1097,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                             pRemainingCodes[ nRemainingLen++ ] = nCode;
                     }
                 }
-                OUString sStillMissing(pRemainingCodes, nRemainingLen);
+                OUString sStillMissing(pRemainingCodes.get(), nRemainingLen);
 #if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
                 if (get_xid_for_dbus())
                 {
