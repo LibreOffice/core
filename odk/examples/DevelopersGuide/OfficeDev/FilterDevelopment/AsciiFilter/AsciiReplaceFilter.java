@@ -457,7 +457,7 @@ public class AsciiReplaceFilter
                 // Create a new paragraph for every line inside original file.
                 // May not all data could be readed - but that doesn't matter here.
                 // Reason: somewhere cancelled this function.
-                // But check for optioanl replace request before ...
+                // But check for optional replace request before...
                 int nStart  =  0;
                 int nEnd    = -1;
                 int nLength = sText.length();

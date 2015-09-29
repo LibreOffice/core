@@ -1339,10 +1339,10 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
         }
     }
 
-    /**
+    /*
      *To fully understand the example one has to be aware that the passed ???Index??? parameter
      * refers to the position of the roadmap item in the roadmapmodel container
-     * whereas the variable ???_ID??? directyl references to a certain step of dialog.
+     * whereas the variable ???_ID??? directly references to a certain step of dialog.
      */
     public void insertRoadmapItem(int Index, boolean _bEnabled, String _sLabel, int _ID) {
         try {
