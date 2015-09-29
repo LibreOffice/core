@@ -91,7 +91,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         /** set a new owner for this helper.
          *
          *  This owner is used as source for all broadcasted events.
-         *  Further we hold it weak, because we dont wish to be disposed() .-)
+         *  Further we hold it weak, because we don't wish to be disposed() .-)
          */
         void impl_setPropertyChangeBroadcaster(const css::uno::Reference< css::uno::XInterface >& xBroadcaster);
 

@@ -429,7 +429,7 @@ class Desktop : private cppu::BaseMutex,
         /** special terminate listener which loads images asynchronous for current open documents.
           * Because internally it uses blocking system APIs ... it can't be guaranteed that
           * running jobs can be cancelled successfully if the corressponding document will be closed ...
-          * it will not hinder those documents on closing. Instead it let all jobs running ...
+          * it will not hinder those documents on closing. Instead it let all jobs running...
           * but at least on terminate we have to wait for all those blocked requests.
           * So these implementation must be a special terminate listener too .-(
           */
@@ -437,13 +437,13 @@ class Desktop : private cppu::BaseMutex,
 
         /** special terminate listener shuting down the SfxApplication.
           * Because these desktop instance closes documents and informs listener
-          * only ... it does not really shutdown the whole application.
+          * only... it does not really shutdown the whole application.
           *
-          * Btw: That wouldnt be possible by design ... because Desktop.terminate()
-          * has to return a boolean value about success ... it can't really shutdown the
+          * Btw: that wouldn't be possible by design... because Desktop.terminate()
+          * has to return a boolean value about success... it can't really shutdown the
           * process .-)
           *
-          * So we uses a trick: A special listener (exactly these one here) listen for notifyTermination()
+          * So we uses a trick: a special listener (exactly these one here) listen for notifyTermination()
           * and shutdown the process asynchronous. But desktop has to make this special
           * notification as really last one ... Otherwise it can happen that asynchronous
           * shutdown will be faster then all other code around Desktop.terminate() .-))

@@ -255,8 +255,8 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
 
         /** @short      Is called from our owner frame, in case he will be disposed.
 
-            @descr      We have to relaease all references to him then.
-                        Normally we will die by ref count too ...
+            @descr      We have to release all references to him then.
+                        Normally we will die by ref count too...
          */
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
