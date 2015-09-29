@@ -77,20 +77,23 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
 
 ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_Library_add_cxxflags,sofficeapp,\
-    $(gb_OBJCXXFLAGS) \
-))
-
 $(eval $(call gb_Library_use_system_darwin_frameworks,sofficeapp,\
     Foundation \
 ))
 
 endif
 
+ifeq ($(ENABLE_MACOSX_SANDBOX),TRUE)
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_cxxflags,sofficeapp,\
+    $(gb_OBJCXXFLAGS) \
+))
+endif
 ifeq ($(OS),IOS)
 $(eval $(call gb_Library_add_cflags,sofficeapp,\
     $(gb_OBJCFLAGS) \
 ))
+endif
 endif
 
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
