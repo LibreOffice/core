@@ -348,7 +348,7 @@ IMPL_LINK_TYPED(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         else if( mnPageNumber != -1 )
         {
             const SvxFieldData* pField = pInfo->GetField().GetField();
-            if( pField && pField->ISA( SvxPageField ) )
+            if( pField && dynamic_cast<const SvxPageField*>( pField) !=  nullptr )
             {
                 OUString aPageNumValue;
                 bool bUpper = false;
@@ -698,9 +698,9 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 }
 
                 std::unique_ptr< SdrView > pLocalView;
-                if( PTR_CAST( FmFormModel, mpDoc ) )
+                if( dynamic_cast<FmFormModel*>( mpDoc )  )
                 {
-                    pLocalView.reset( new FmFormView( PTR_CAST( FmFormModel, mpDoc ), aVDev ) );
+                    pLocalView.reset( new FmFormView( dynamic_cast<FmFormModel*>( mpDoc ), aVDev )  );
                 }
                 else
                 {
@@ -731,9 +731,9 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 
                 // create a view
                 std::unique_ptr< SdrView > pView;
-                if( PTR_CAST( FmFormModel, mpDoc ) )
+                if( dynamic_cast<FmFormModel*>( mpDoc ) !=  nullptr  )
                 {
-                    pView.reset(new FmFormView( PTR_CAST( FmFormModel, mpDoc ), aVDev ));
+                    pView.reset(new FmFormView( dynamic_cast<FmFormModel*>( mpDoc ), aVDev ) );
                 }
                 else
                 {
@@ -827,7 +827,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             if( !bVectorType )
             {
                 SdrObject* pObj = aShapes.front();
-                if( pObj && pObj->ISA( SdrGrafObj ) && !static_cast<SdrGrafObj*>(pObj)->HasText() )
+                if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && !static_cast<SdrGrafObj*>(pObj)->HasText() )
                 {
                     aGraphic = static_cast<SdrGrafObj*>(pObj)->GetTransformedGraphic();
                     if ( aGraphic.GetType() == GRAPHIC_BITMAP )
@@ -853,7 +853,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             else if( rSettings.mbScrollText )
             {
                 SdrObject* pObj = aShapes.front();
-                if( pObj && pObj->ISA( SdrTextObj )
+                if( pObj && dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr
                     && static_cast<SdrTextObj*>(pObj)->HasText() )
                 {
                     Rectangle aScrollRectangle;

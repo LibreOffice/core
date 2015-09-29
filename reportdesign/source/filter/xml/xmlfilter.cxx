@@ -641,7 +641,7 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                 const SvXMLStylesContext* pAutoStyles = GetAutoStyles();
                 if ( pAutoStyles )
                 {
-                    XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,OUString("pm1"))));
+                    XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext *>(pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,OUString("pm1"))));
                     if ( pAutoStyle )
                     {
                         pAutoStyle->FillPropertySet(getReportDefinition().get());

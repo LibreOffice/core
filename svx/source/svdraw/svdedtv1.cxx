@@ -158,7 +158,7 @@ std::vector< SdrUndoAction* > SdrEditView::CreateConnectorUndo( SdrObject& rO )
             while( aIter.IsMore() )
             {
                 SdrObject* pPartObj = aIter.Next();
-                if ( pPartObj->ISA( SdrEdgeObj ) )
+                if ( dynamic_cast<const SdrEdgeObj*>( pPartObj) !=  nullptr )
                 {
                     if ( ( pPartObj->GetConnectedNode( false ) == &rO ) ||
                          ( pPartObj->GetConnectedNode( true  ) == &rO ) )
@@ -509,7 +509,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear, b
 void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad,
     SdrCrookMode eMode, bool bVertical, bool bNoContortion, bool bRotate, const Rectangle& rMarkRect)
 {
-    SdrPathObj* pPath=PTR_CAST(SdrPathObj,pO);
+    SdrPathObj* pPath=dynamic_cast<SdrPathObj*>( pO );
     bool bDone = false;
 
     if(pPath!=NULL && !bNoContortion)
@@ -630,7 +630,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
 
 void SdrEditView::ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion)
 {
-    SdrPathObj* pPath = PTR_CAST(SdrPathObj, pO);
+    SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pO );
 
     if(!bNoContortion && pPath)
     {
@@ -1136,7 +1136,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
                 }
             }
 
-            if(pObj->ISA(SdrTextObj))
+            if(dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
             {
                 SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObj);
 

@@ -176,7 +176,7 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
         for (size_t i = 0; i<nCount; ++i)
         {
             SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
-            if ( pObj->ISA(OCustomShape) )
+            if ( dynamic_cast< const OCustomShape *>( pObj ) !=  nullptr )
             {
                 AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), _nLayerNo) );
                 pObj->SetLayer( _nLayerNo );
@@ -209,7 +209,7 @@ bool OSectionView::OnlyShapesMarked() const
     for (size_t i = 0; i<nCount; ++i)
     {
         SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
-        if ( !pObj->ISA(OCustomShape) )
+        if ( dynamic_cast< const OCustomShape *>( pObj ) ==  nullptr )
         {
             return false;
         }

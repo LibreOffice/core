@@ -159,7 +159,7 @@ SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
 // virtual
 bool SfxBoolItem::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_ASSERT(rItem.ISA(SfxBoolItem),
+    DBG_ASSERT(dynamic_cast<const SfxBoolItem*>( &rItem ) !=  nullptr,
                "SfxBoolItem::operator ==(): Bad type");
     return m_bValue == static_cast< SfxBoolItem const * >(&rItem)->m_bValue;
 }

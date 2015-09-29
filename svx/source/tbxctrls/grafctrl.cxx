@@ -666,7 +666,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             {
                 SdrGrafObj* pObj = static_cast<SdrGrafObj*>( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
 
-                if( pObj && pObj->ISA( SdrGrafObj ) &&
+                if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr &&
                     ( pObj->GetGraphicType() != GRAPHIC_NONE ) &&
                     ( pObj->GetGraphicType() != GRAPHIC_DEFAULT ) )
                 {

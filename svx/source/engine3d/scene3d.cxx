@@ -129,7 +129,7 @@ Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene& rScene)
 
         if(pCandidate)
         {
-            if(pCandidate->ISA(E3dCompoundObject))
+            if(dynamic_cast< const E3dCompoundObject*>(pCandidate))
             {
                 // single 3d object, calc depth
                 const double fMinimalDepth(getMinimalDepthInViewCoordinates(static_cast< const E3dCompoundObject& >(*pCandidate)));
@@ -402,7 +402,7 @@ void E3dScene::removeAllNonSelectedObjects()
         {
             bool bRemoveObject(false);
 
-            if(pObj->ISA(E3dScene))
+            if(dynamic_cast< const E3dScene*>(pObj))
             {
                 E3dScene* pScene = static_cast<E3dScene*>(pObj);
 
@@ -418,7 +418,7 @@ void E3dScene::removeAllNonSelectedObjects()
                     bRemoveObject = true;
                 }
             }
-            else if(pObj->ISA(E3dCompoundObject))
+            else if(dynamic_cast< const E3dCompoundObject*>(pObj))
             {
                 E3dCompoundObject* pCompound = static_cast<E3dCompoundObject*>(pObj);
 
@@ -666,7 +666,7 @@ bool E3dScene::IsBreakObjPossible()
     while ( a3DIterator.IsMore() )
     {
         E3dObject* pObj = static_cast<E3dObject*>(a3DIterator.Next());
-        DBG_ASSERT(pObj->ISA(E3dObject), "only 3D objects are allowed in scenes!");
+        DBG_ASSERT(dynamic_cast< const E3dObject*>(pObj), "only 3D objects are allowed in scenes!");
         if(!pObj->IsBreakObjPossible())
             return false;
     }

@@ -119,7 +119,7 @@ SdrObject* OReportPage::RemoveObject(size_t nObjNum)
     reportdesign::OSection* pSection = reportdesign::OSection::getImplementation(m_xSection);
     uno::Reference< drawing::XShape> xShape(pObj->getUnoShape(),uno::UNO_QUERY);
     pSection->notifyElementRemoved(xShape);
-    if (pObj->ISA(OUnoObject))
+    if (dynamic_cast< const OUnoObject *>( pObj ) !=  nullptr)
     {
         OUnoObject& rUnoObj = dynamic_cast<OUnoObject&>(*pObj);
         uno::Reference< container::XChild> xChild(rUnoObj.GetUnoControlModel(),uno::UNO_QUERY);

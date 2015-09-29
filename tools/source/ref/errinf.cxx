@@ -285,7 +285,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
     else
         nErrFlags |= ERRCODE_MSG_ERROR;
 
-    DynamicErrorInfo* pDynPtr=PTR_CAST(DynamicErrorInfo,pInfo);
+    DynamicErrorInfo* pDynPtr=dynamic_cast<DynamicErrorInfo*>(pInfo);
     if(pDynPtr)
     {
         sal_uInt16 nDynFlags = pDynPtr->GetDialogMask();

@@ -550,7 +550,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                 for(size_t i=0; i<nCount; ++i)
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-                    if( pObj->ISA(SdrObjCustomShape) )
+                    if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
                     {
                         if( bUndo )
                         {
@@ -640,7 +640,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
     for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        if( pObj->ISA(SdrObjCustomShape) )
+        if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
 
@@ -788,7 +788,7 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
     for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        if( pObj->ISA(SdrObjCustomShape) )
+        if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             // see if this is an extruded customshape
             if( !bHasCustomShape )
@@ -846,7 +846,7 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
     for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        if( pObj->ISA(SdrObjCustomShape) )
+        if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
 
@@ -932,7 +932,7 @@ void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
     for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        if( pObj->ISA(SdrObjCustomShape) )
+        if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
 
@@ -1018,7 +1018,7 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
     for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        if( pObj->ISA(SdrObjCustomShape) )
+        if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
 
@@ -1093,7 +1093,7 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
     for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        if( pObj->ISA(SdrObjCustomShape) )
+        if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
 
@@ -1163,7 +1163,7 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
     for(size_t i=0; i<nCount; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        if( pObj->ISA(SdrObjCustomShape) )
+        if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
 
@@ -1229,7 +1229,7 @@ bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
     for(size_t i=0;(i<nCount) && !bFound ; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        if( pObj->ISA(SdrObjCustomShape) )
+        if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             if( bOnlyExtruded )
             {

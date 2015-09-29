@@ -263,11 +263,11 @@ void DbGridColumn::impl_toggleScriptManager_nothrow( bool _bAttach )
 
 void DbGridColumn::UpdateFromField(const DbGridRow* pRow, const Reference< XNumberFormatter >& xFormatter)
 {
-    if (m_pCell && m_pCell->ISA(FmXFilterCell))
-        PTR_CAST(FmXFilterCell, m_pCell)->Update();
+    if (m_pCell && dynamic_cast<const FmXFilterCell*>( m_pCell) !=  nullptr)
+        dynamic_cast<FmXFilterCell*>( m_pCell)->Update( );
     else if (pRow && pRow->IsValid() && m_nFieldPos >= 0 && m_pCell && pRow->HasField(m_nFieldPos))
     {
-        PTR_CAST(FmXDataCell, m_pCell)->UpdateFromField( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter );
+        dynamic_cast<FmXDataCell*>( m_pCell)->UpdateFromField( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter  );
     }
 }
 
@@ -281,7 +281,7 @@ bool DbGridColumn::Commit()
         bResult = m_pCell->Commit();
 
         // store the data into the model
-        FmXDataCell* pDataCell = PTR_CAST(FmXDataCell, m_pCell);
+        FmXDataCell* pDataCell = dynamic_cast<FmXDataCell*>( m_pCell );
         if (bResult && pDataCell)
         {
             Reference< ::com::sun::star::form::XBoundComponent >  xComp(m_xModel, UNO_QUERY);
@@ -413,7 +413,7 @@ void DbGridColumn::setLock(bool _bLock)
 OUString DbGridColumn::GetCellText(const DbGridRow* pRow, const Reference< XNumberFormatter >& xFormatter) const
 {
     OUString aText;
-    if (m_pCell && m_pCell->ISA(FmXFilterCell))
+    if (m_pCell && dynamic_cast<const FmXFilterCell*>( m_pCell) !=  nullptr)
         return aText;
 
     if (!pRow || !pRow->IsValid())
@@ -431,7 +431,7 @@ OUString DbGridColumn::GetCellText(const Reference< ::com::sun::star::sdb::XColu
     OUString aText;
     if (xField.is())
     {
-        FmXTextCell* pTextCell = PTR_CAST(FmXTextCell, m_pCell);
+        FmXTextCell* pTextCell = dynamic_cast<FmXTextCell*>( m_pCell );
         if (pTextCell)
             aText = pTextCell->GetText(xField, xFormatter);
         else if (m_bObject)
@@ -461,7 +461,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
     bool bEnabled = ( rDev.GetOutDevType() != OUTDEV_WINDOW )
                 ||  ( static_cast< vcl::Window& >( rDev ).IsEnabled() );
 
-    FmXDataCell* pDataCell = PTR_CAST(FmXDataCell, m_pCell);
+    FmXDataCell* pDataCell = dynamic_cast<FmXDataCell*>( m_pCell );
     if (pDataCell)
     {
         if (!pRow || !pRow->IsValid())
@@ -515,7 +515,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             rDev.DrawText(rRect, OUString(OBJECTTEXT), nStyle);
         }
     }
-    else if ( m_pCell->ISA( FmXFilterCell ) )
+    else if ( dynamic_cast<const FmXFilterCell*>( m_pCell) !=  nullptr )
         static_cast< FmXFilterCell* >( m_pCell )->PaintCell( rDev, rRect );
 }
 
@@ -3588,7 +3588,7 @@ FmXEditCell::FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl )
             ,m_bOwnEditImplementation( false )
 {
 
-    DbTextField* pTextField = PTR_CAST( DbTextField, &_rControl );
+    DbTextField* pTextField = dynamic_cast<DbTextField*>( &_rControl  );
     if ( pTextField )
     {
 
@@ -4546,7 +4546,7 @@ FmXFilterCell::FmXFilterCell(DbGridColumn* pColumn, DbCellControl* pControl )
               ,m_aTextListeners(m_aMutex)
 {
 
-    DBG_ASSERT( m_pCellControl->ISA( DbFilterField ), "FmXFilterCell::FmXFilterCell: invalid cell control!" );
+    DBG_ASSERT( dynamic_cast<const DbFilterField*>( m_pCellControl) !=  nullptr, "FmXFilterCell::FmXFilterCell: invalid cell control!" );
     static_cast< DbFilterField* >( m_pCellControl )->SetCommitHdl( LINK( this, FmXFilterCell, OnCommit ) );
 }
 

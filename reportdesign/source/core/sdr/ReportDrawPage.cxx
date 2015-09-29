@@ -74,7 +74,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
         OUString sServiceName = pBaseObj->getServiceName();
         OSL_ENSURE(!sServiceName.isEmpty(),"No Service Name given!");
 
-        if ( pObj->ISA(OUnoObject) )
+        if ( typeid(*pObj) == typeid(OUnoObject) )
         {
             OUnoObject& rUnoObj = dynamic_cast<OUnoObject&>(*pObj);
             if (rUnoObj.GetObjIdentifier() == OBJ_DLG_FIXEDTEXT)
@@ -89,14 +89,14 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
             xShape.set(static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper *>(pShape)),uno::UNO_QUERY);
             pShape->setShapeKind(pObj->GetObjIdentifier());
         }
-        else if ( pObj->ISA(OCustomShape) )
+        else if ( typeid(*pObj) == typeid(OCustomShape) )
         {
             SvxCustomShape* pShape = new SvxCustomShape( pObj );
             uno::Reference < drawing::XEnhancedCustomShapeDefaulter > xShape2 = pShape;
             xShape.set(xShape2,uno::UNO_QUERY);
             pShape->setShapeKind(pObj->GetObjIdentifier());
         }
-        else if ( pObj->ISA(SdrOle2Obj) )
+        else if ( typeid(*pObj) == typeid(SdrOle2Obj) )
         {
             SdrOle2Obj& rOle2Obj = dynamic_cast<SdrOle2Obj&>(*pObj);
             if (!rOle2Obj.GetObjRef().is())

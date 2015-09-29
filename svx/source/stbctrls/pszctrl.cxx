@@ -238,7 +238,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         if ( eState == SfxItemState::DEFAULT )
         {
             pImp->bHasMenu = true;
-            if ( pState && pState->ISA(SfxUInt16Item) )
+            if ( pState && dynamic_cast< const SfxUInt16Item* >(pState) !=  nullptr )
                 pImp->nFunction = static_cast<const SfxUInt16Item*>(pState)->GetValue();
         }
         else
@@ -260,21 +260,21 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             SAL_WARN( "svx.stbcrtls","unknown slot id");
         }
     }
-    else if ( pState->ISA( SfxPointItem ) )
+    else if ( dynamic_cast<const SfxPointItem*>( pState) !=  nullptr )
     {
         // show position
         pImp->aPos = static_cast<const SfxPointItem*>(pState)->GetValue();
         pImp->bPos = true;
         pImp->bTable = false;
     }
-    else if ( pState->ISA( SvxSizeItem ) )
+    else if ( dynamic_cast<const SvxSizeItem*>( pState) !=  nullptr )
     {
         // show size
         pImp->aSize = static_cast<const SvxSizeItem*>(pState)->GetSize();
         pImp->bSize = true;
         pImp->bTable = false;
     }
-    else if ( pState->ISA( SfxStringItem ) )
+    else if ( dynamic_cast<const SfxStringItem*>( pState) !=  nullptr )
     {
         // show string (table cel or different)
         pImp->aStr = static_cast<const SfxStringItem*>(pState)->GetValue();
