@@ -109,8 +109,6 @@ public:
     inline              BitmapColor( const Color& rColor );
     explicit inline     BitmapColor( sal_uInt8 cIndex );
 
-    inline              ~BitmapColor() {};
-
     inline bool         operator==( const BitmapColor& rBitmapColor ) const;
     inline bool         operator!=( const BitmapColor& rBitmapColor ) const;
 
@@ -246,8 +244,6 @@ public:
     {
     }
 
-    ~ColorMask() {}
-
     inline sal_uInt32   GetRedMask() const;
     inline sal_uInt32   GetGreenMask() const;
     inline sal_uInt32   GetBlueMask() const;
@@ -279,9 +275,6 @@ struct VCL_DLLPUBLIC BitmapBuffer
     ColorMask       maColorMask;
     BitmapPalette   maPalette;
     sal_uInt8*      mpBits;
-
-                    BitmapBuffer(){}
-                    ~BitmapBuffer() {}
 };
 
 // - Access modes -
