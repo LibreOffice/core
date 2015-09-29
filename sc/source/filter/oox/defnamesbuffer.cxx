@@ -95,7 +95,7 @@ OUString lclGetPrefixedName( sal_Unicode cBuiltinId )
     return OUStringBuffer().appendAscii( spcOoxPrefix ).append( lclGetBaseName( cBuiltinId ) ).makeStringAndClear();
 }
 
-/** returns the built-in name identifier from a perfixed built-in name, e.g. '_xlnm.Print_Area'. */
+/** returns the built-in name identifier from a prefixed built-in name, e.g. '_xlnm.Print_Area'. */
 sal_Unicode lclGetBuiltinIdFromPrefixedName( const OUString& rModelName )
 {
     OUString aPrefix = OUString::createFromAscii( spcOoxPrefix );
@@ -248,7 +248,7 @@ void DefinedName::importDefinedName( const AttributeList& rAttribs )
     mnCalcSheet = (maModel.mnSheet >= 0) ? getWorksheets().getCalcSheetIndex( maModel.mnSheet ) : -1;
 
     /*  Detect built-in state from name itself, there is no built-in flag.
-        Built-in names are prexixed with '_xlnm.' instead. */
+        Built-in names are prefixed with '_xlnm.' instead. */
     mcBuiltinId = lclGetBuiltinIdFromPrefixedName( maModel.maName );
 }
 

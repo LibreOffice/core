@@ -49,7 +49,7 @@
 
 #include <algorithm>
 
-//  toleance, how much spac above the folded size is still small
+//  tolerance, how much spac above the folded size is still small
 #define SCNAV_MINTOL        5
 
 //  maximum values for UI
@@ -1222,7 +1222,7 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
 
             if ( pManualSel ? ( aName == *pManualSel )
                             : ( pSh == pCurrentSh ) )
-                aSelEntry = aEntry;                     // compelte entry for selection
+                aSelEntry = aEntry;                     // complete entry for selection
         }
 
         pSh = SfxObjectShell::GetNext( *pSh );

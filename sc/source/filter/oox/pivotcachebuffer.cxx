@@ -891,7 +891,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 /*  Find the group object and the auto-generated group name.
                     The returned field contains all groups derived from the
                     previous field if that is grouped too. To find the correct
-                    group, the first item used to create the group is serached.
+                    group, the first item used to create the group is searched.
                     Calc provides the original item names of the base field
                     when the group is querried for its members. Its does not
                     provide the names of members that are already groups in the

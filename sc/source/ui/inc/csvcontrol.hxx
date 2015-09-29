@@ -154,7 +154,7 @@ inline bool operator!=( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rD
     @descr  Controls have to send commands instead of changing their settings directly.
     This helps to keep the different controls consistent to each other.
     A command can contain 0 to 2 sal_Int32 parameters. In the description of each
-    command the required parameters are swown in brackets. [-] means no parameter. */
+    command the required parameters are shown in brackets. [-] means no parameter. */
 enum ScCsvCmdType
 {
     // misc

@@ -2312,7 +2312,7 @@ void Sc10Import::LoadObjects()
         {
             sal_uInt8 ObjectType;
             Sc10GraphHeader GraphHeader;
-            bool IsOleObject = false; // TODO: this is only a bandaid
+            bool IsOleObject = false; // TODO: this is only a band-aid
             for (sal_uInt16 i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
             {
                 rStream.ReadUChar( ObjectType );

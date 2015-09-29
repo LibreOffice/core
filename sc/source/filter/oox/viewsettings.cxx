@@ -375,7 +375,7 @@ void SheetViewSettings::finalizeImport()
     {
         /*  Frozen panes: handle split position as row/column positions.
             #i35812# Excel uses number of visible rows/columns in the
-                frozen area (rows/columns scolled outside are not incuded),
+                frozen area (rows/columns scolled outside are not included),
                 Calc uses absolute position of first unfrozen row/column. */
         const CellAddress& rMaxApiPos = getAddressConverter().getMaxApiAddress();
         if( (xModel->mfSplitX >= 1.0) && (xModel->maFirstPos.Column + xModel->mfSplitX <= rMaxApiPos.Column) )

@@ -92,7 +92,7 @@ void ScInputStatusItem::SetMisspellRanges( const std::vector<editeng::MisspellRa
     mpMisspellRanges = pRanges;
 }
 
-// ScPaintHint was moved to schints.cxx
+// ScPaintHint was moved to hints.cxx
 
 /**
  * Adapt Views when inserting/deleting a table
