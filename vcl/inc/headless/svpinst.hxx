@@ -97,7 +97,7 @@ public:
     SvpSalInstance( SalYieldMutex *pMutex );
     virtual ~SvpSalInstance();
 
-    void                    PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
+    void                    PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent);
 
     bool                    PostedEventsInQueue();
 
