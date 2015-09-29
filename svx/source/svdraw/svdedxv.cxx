@@ -517,13 +517,14 @@ void SdrObjEditView::ImpChainingEventHdl()
             // Handling Undo
             const int nText = 0; // XXX: hardcoded index (SdrTextObj::getText handles only 0)
 
-            SdrUndoObjSetText *pTxtUndo  = dynamic_cast< SdrUndoObjSetText* >
-                ( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nText ) );
+            const bool bUndoEnabled = GetModel() && IsUndoEnabled();
+            SdrUndoObjSetText *pTxtUndo = bUndoEnabled ? dynamic_cast< SdrUndoObjSetText* >
+                ( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nText ) ) : nullptr;
 
             // trigger actual chaining
             pTextObj->onChainingEvent();
 
-           if (pTxtUndo!=NULL)
+            if (pTxtUndo)
             {
                 pTxtUndo->AfterSetText();
                 if (!pTxtUndo->IsDifferent())
@@ -846,7 +847,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             if( mxSelectionController.is() )
                 mxSelectionController->onSelectionHasChanged();
 
-            if(IsUndoEnabled() && GetModel() && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
+            if (GetModel() && IsUndoEnabled() && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
             {
                 SdrUndoManager* pSdrUndoManager = getSdrUndoManagerForEnhancedTextEdit();
 
@@ -926,7 +927,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     SdrUndoManager* pUndoEditUndoManager = 0;
     bool bNeedToUndoSavedRedoTextEdit(false);
 
-    if(IsUndoEnabled() && GetModel() && pTEObj && pTEOutliner && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
+    if (GetModel() && IsUndoEnabled() && pTEObj && pTEOutliner && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
     {
         // change back the UndoManager to the remembered original one
         ::svl::IUndoManager* pOriginal = pTEOutliner->SetUndoManager(mpOldTextEditUndoManager);
