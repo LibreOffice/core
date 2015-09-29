@@ -527,7 +527,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         }
     }
 
-    //  SetDragRectPixel also whithout Scrollbars etc., when already split
+    //  SetDragRectPixel also without Scrollbars etc., when already split
     if ( bHScroll || aViewData.GetHSplitMode() != SC_SPLIT_NONE )
         pHSplitter->SetDragRectPixel(
             Rectangle( nPosX, nPosY, nPosX+nSizeX, nPosY+nSizeY ), pFrameWin );
@@ -1132,7 +1132,7 @@ IMPL_LINK_TYPED( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             break;
         case SCROLL_DRAG:
             {
-                // only scroll in the corret direction, do not jitter around hidden ranges
+                // only scroll in the correct direction, do not jitter around hidden ranges
                 long nScrollMin = 0;        // simulate RangeMin
                 if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == aHScrollRight.get() )
                     nScrollMin = aViewData.GetFixPosX();
@@ -1352,8 +1352,8 @@ namespace
 SCROW lcl_LastVisible( ScViewData& rViewData )
 {
     // If many rows are hidden at end of the document (what kind of idiot does that?),
-    // then there should not be a switch to wide row headers beacause of this
-    //! as a member to the document ???
+    // then there should not be a switch to wide row headers because of this
+    //! as a member to the document???
     ScDocument* pDoc = rViewData.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
 

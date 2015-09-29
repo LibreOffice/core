@@ -68,7 +68,7 @@ public:
         const css::awt::Rectangle& rInnerBox,
         const css::drawing::framework::BorderType eBorderType) const;
 
-    /** Transorm the outer bounding box of a window to the bounding box of
+    /** Transform the outer bounding box of a window to the bounding box of
         the inner content area.
         @param rsPaneURL
             Specifies the pane style that is used to determine the border sizes.

@@ -57,7 +57,7 @@ BreakDlg::BreakDlg(
     mpProgress = new SfxProgress( pShell, SD_RESSTR(STR_BREAK_METAFILE), nSumActionCount*3 );
 
     pProgrInfo = new SvdProgressInfo( LINK(this, BreakDlg, UpDate) );
-    // every action is editedt 3 times in DoImport()
+    // every action is edited 3 times in DoImport()
     pProgrInfo->Init( nSumActionCount*3, nObjCount );
 
     pDrView = _pDrView;

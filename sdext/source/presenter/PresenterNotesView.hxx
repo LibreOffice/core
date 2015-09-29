@@ -77,7 +77,7 @@ public:
     /** Typically called from setCurrentSlide() with the notes page that is
         associeted with the slide given to setCurrentSlide().
 
-        Iterates over all text shapes on the given notes page and diplays
+        Iterates over all text shapes on the given notes page and displays
         the concatenated text of these.
     */
     void SetSlide (

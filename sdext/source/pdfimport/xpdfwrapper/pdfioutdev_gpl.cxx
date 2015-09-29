@@ -58,7 +58,7 @@
 /* SYNC STREAMS
    ============
 
-   We stream human-readble tokens to stdout, and binary data (fonts,
+   We stream human-readable tokens to stdout, and binary data (fonts,
    bitmaps) to g_binary_out. Another process reads from those pipes, and
    there lies the rub: things can deadlock, if the two involved
    processes access the pipes in different order. At any point in

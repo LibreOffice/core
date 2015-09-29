@@ -228,7 +228,7 @@ private:
     */
     double mnPageAspectRatio;
 
-    /** This broadcast helper is used to notify listeners registed to a
+    /** This broadcast helper is used to notify listeners registered to a
         SlideShowView object.
     */
     ::cppu::OBroadcastHelper maBroadcaster;
