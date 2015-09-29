@@ -85,6 +85,9 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::getParts().
     int (*getParts) (LibreOfficeKitDocument* pThis);
 
+    /// @see lok::Document::getPartPageRectangles().
+    char* (*getPartPageRectangles) (LibreOfficeKitDocument* pThis);
+
     /// @see lok::Document::getPart().
     int (*getPart) (LibreOfficeKitDocument* pThis);
 
