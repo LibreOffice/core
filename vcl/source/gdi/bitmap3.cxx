@@ -1121,8 +1121,9 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
                     }
 
                     bRet = true;
-                    ReleaseAccess( pWriteAcc );
                 }
+
+                ReleaseAccess( pWriteAcc );
             }
             ReleaseAccess( pReadAcc );
 
