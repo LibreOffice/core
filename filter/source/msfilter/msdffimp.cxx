@@ -3627,7 +3627,7 @@ void SvxMSDffManager::ReadObjText( SvStream& rStream, SdrObject* pObj )
 // our outliner is too complicate to be used properly,
 void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
 {
-    SdrTextObj* pText = PTR_CAST( SdrTextObj, pObj );
+    SdrTextObj* pText = dynamic_cast<SdrTextObj*>( pObj  );
     if ( pText )
     {
         SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
@@ -4011,7 +4011,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     pRet->SetModel( pSdrModel ); // required for GraphicLink
     pRet->SetLogicRect( rObjData.aBoundRect );
 
-    if ( pRet->ISA( SdrGrafObj ) )
+    if ( dynamic_cast<const SdrGrafObj* >(pRet) !=  nullptr )
     {
         if( aLinkFileName.getLength() )
             static_cast<SdrGrafObj*>(pRet)->SetGraphicLink( aLinkFileName, ""/*TODO?*/, aLinkFilterName );

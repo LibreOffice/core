@@ -132,7 +132,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 sal_uIntPtr OIndexIterator::GetCompare(bool bFirst)
 {
     ONDXKey* pKey = NULL;
-    sal_Int32 ePredicateType = PTR_CAST(file::OOp_COMPARE,m_pOperator)->getPredicateType();
+    sal_Int32 ePredicateType = dynamic_cast<file::OOp_COMPARE*>(m_pOperator)->getPredicateType();
 
     if (bFirst)
     {

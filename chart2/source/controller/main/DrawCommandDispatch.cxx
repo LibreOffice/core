@@ -466,7 +466,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                     case COMMAND_ID_DRAW_LINE:
                     case COMMAND_ID_LINE_ARROW_END:
                         {
-                            if ( pObj->ISA( SdrPathObj ) )
+                            if ( dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr )
                             {
                                 Point aStart = aRect.TopLeft();
                                 Point aEnd = aRect.BottomRight();
@@ -483,7 +483,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                         break;
                     case COMMAND_ID_DRAW_FREELINE_NOFILL:
                         {
-                            if ( pObj->ISA( SdrPathObj ) )
+                            if ( dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr )
                             {
                                 basegfx::B2DPolygon aInnerPoly;
                                 aInnerPoly.append( basegfx::B2DPoint( aRect.Left(), aRect.Bottom() ) );
@@ -504,7 +504,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                     case COMMAND_ID_DRAW_TEXT:
                     case COMMAND_ID_DRAW_TEXT_VERTICAL:
                         {
-                            if ( pObj->ISA( SdrTextObj ) )
+                            if ( dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr )
                             {
                                 SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                                 if ( pTextObj )
@@ -528,7 +528,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                     case COMMAND_ID_DRAW_CAPTION:
                     case COMMAND_ID_DRAW_CAPTION_VERTICAL:
                         {
-                            if ( pObj->ISA( SdrCaptionObj ) )
+                            if ( dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr )
                             {
                                 bool bIsVertical( COMMAND_ID_DRAW_CAPTION_VERTICAL == nID );
                                 SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );

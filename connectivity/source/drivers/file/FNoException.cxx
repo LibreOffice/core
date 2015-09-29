@@ -61,7 +61,7 @@ void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
     OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
     for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end();++aIter)
     {
-        OOperandParam* pParam = PTR_CAST(OOperandParam,(*aIter));
+        OOperandParam* pParam = dynamic_cast<OOperandParam*>(*aIter);
         if ( pParam )
             pParam->bindValue(_pRow);
     }

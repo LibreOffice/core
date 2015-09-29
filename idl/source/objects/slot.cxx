@@ -428,7 +428,7 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     if( pAttr )
     {
         // c
-        SvMetaSlot * pKnownSlot = PTR_CAST( SvMetaSlot, pAttr );
+        SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr  );
         if( pKnownSlot )
         {
             SetRef( pKnownSlot );
@@ -453,7 +453,7 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         if( pAttr2 )
         {
             // for testing purposes: reference in case of complete definition
-            SvMetaSlot * pKnownSlot = PTR_CAST( SvMetaSlot, pAttr2 );
+            SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr2  );
             if( pKnownSlot )
             {
                 SetRef( pKnownSlot );
@@ -555,7 +555,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
     // iron out EnumSlots
     SvMetaTypeEnum * pEnum = NULL;
     SvMetaType * pBType = GetType()->GetBaseType();
-    pEnum = PTR_CAST( SvMetaTypeEnum, pBType );
+    pEnum = dynamic_cast<SvMetaTypeEnum*>( pBType  );
     if( GetPseudoSlots() && pEnum && pEnum->Count() )
     {
         // clone the MasterSlot

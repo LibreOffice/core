@@ -2659,7 +2659,7 @@ namespace accessibility
         for (sal_Int32 n = 0; n < nFields; ++n)
         {
             EFieldInfo aField = rT.GetFieldInfo( nPara, n );
-            if ( aField.pFieldItem->GetField()->ISA( SvxURLField ) )
+            if ( dynamic_cast<const SvxURLField* >(aField.pFieldItem->GetField() ) != nullptr)
                 nHyperLinks++;
         }
         return nHyperLinks;
@@ -2677,7 +2677,7 @@ namespace accessibility
         for (sal_Int32 n = 0; n < nFields; ++n)
         {
             EFieldInfo aField = rT.GetFieldInfo( nPara, n );
-            if ( aField.pFieldItem->GetField()->ISA( SvxURLField ) )
+            if ( dynamic_cast<const SvxURLField* >(aField.pFieldItem->GetField()) != nullptr )
             {
                 if ( nHyperLink == nLinkIndex )
                 {
@@ -2708,7 +2708,7 @@ namespace accessibility
         for (sal_Int32 n = 0; n < nFields; ++n)
         {
             EFieldInfo aField = rT.GetFieldInfo( nPara, n );
-            if ( aField.pFieldItem->GetField()->ISA( SvxURLField ) )
+            if ( dynamic_cast<const SvxURLField* >( aField.pFieldItem->GetField() ) != nullptr)
             {
                 if ( aField.aPosition.nIndex == nEEIndex )
                 {

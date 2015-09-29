@@ -2895,7 +2895,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
     SvxFont aTmpFont( GetParaPortions()[0]->GetNode()->GetCharAttribs().GetDefFont() );
     vcl::Font aOldFont( pOutDev->GetFont() );
-    vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOutDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( pOutDev->GetExtOutDevData() );
 
     // In the case of rotated text is aStartPos considered TopLeft because
     // other information is missing, and since the whole object is shown anyway
@@ -3179,7 +3179,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 {
                                     const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                     DBG_ASSERT( pAttr, "Field not found");
-                                    DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Field of the wrong type! ");
+                                    DBG_ASSERT( dynamic_cast< const SvxFieldItem* >( pAttr ) !=  nullptr, "Field of the wrong type! ");
                                     aText = static_cast<const EditCharAttribField*>(pAttr)->GetFieldValue();
                                     nTextStart = 0;
                                     nTextLen = aText.getLength();
@@ -3481,7 +3481,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                 if( pFieldItem )
                                                 {
                                                     const SvxFieldData* pFieldData = pFieldItem->GetField();
-                                                    if ( pFieldData->ISA( SvxURLField ) )
+                                                    if ( dynamic_cast< const SvxURLField* >( pFieldData ) !=  nullptr)
                                                     {
                                                         Point aTopLeft( aTmpPos );
                                                         aTopLeft.Y() -= pLine->GetMaxAscent();
@@ -3527,7 +3527,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 {
                                     const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                     DBG_ASSERT( pAttr, "Field not found" );
-                                    DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Wrong type of field!" );
+                                    DBG_ASSERT( dynamic_cast< const SvxFieldItem* >( pAttr  ) !=  nullptr, "Wrong type of field!" );
 
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
