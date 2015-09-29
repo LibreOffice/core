@@ -585,7 +585,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         {
             //maybe this should be a procedure name
             //TODO for procedure name
-            //browse::XBrowseNodeFactory is a singlton. OUString( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")
+            //browse::XBrowseNodeFactory is a singleton. OUString( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")
             //and the createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) to get a root browse::XBrowseNode.
             //for query XInvocation interface.
             //but how to directly get the XInvocation?
@@ -601,7 +601,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         ScGridWindow* gridWindow = static_cast<ScGridWindow*>(pShell->GetWindow());
         if ( xVbaRange.is() )
         {
-            //TODO bScroll should be using, In this time, it doesenot have effection
+            //TODO bScroll should be using. An this time, it does not have effection
             if( bScroll )
             {
                 xVbaRange->Select();

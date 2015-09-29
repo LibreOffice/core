@@ -1705,7 +1705,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
 
                     nNeededWidth = aVars.GetTextSize().Width() + nTotalMargin;
 
-                    // GetOutputArea gives justfied rectangles
+                    // GetOutputArea gives justified rectangles
                     GetOutputArea( nX, nArrY, nPosX, nPosY, nCellX, nCellY, nNeededWidth,
                                    *pPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
                                    bCellIsValue || bRepeat || bShrink, bBreak, false,
