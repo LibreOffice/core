@@ -107,7 +107,7 @@ void FmFormObj::ClearObjEnv()
 
 void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
 {
-    const FmFormModel* pFormModel = PTR_CAST( FmFormModel, GetModel() );
+    const FmFormModel* pFormModel = dynamic_cast<FmFormModel*>( GetModel()  );
     if ( !pFormModel || !pFormModel->ControlsUseRefDevice() )
         return;
 
@@ -174,11 +174,11 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         return;
     }
 
-    FmFormPage* pOldFormPage = PTR_CAST( FmFormPage, GetPage() );
+    FmFormPage* pOldFormPage = dynamic_cast<FmFormPage*>( GetPage()  );
     if ( pOldFormPage )
         pOldFormPage->GetImpl().formObjectRemoved( *this );
 
-    FmFormPage* pNewFormPage = PTR_CAST( FmFormPage, _pNewPage );
+    FmFormPage* pNewFormPage = dynamic_cast<FmFormPage*>( _pNewPage  );
     if ( !pNewFormPage )
     {   // Maybe it makes sense to create an environment history here : if somebody set's our page to NULL, and we have a valid page before,
         // me may want to remember our place within the old page. For this we could create a new m_xEnvironmentHistory to store it.
@@ -623,7 +623,7 @@ void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XContr
 {
     SdrUnoObj::SetUnoControlModel( _rxModel );
 
-    FmFormPage* pFormPage = PTR_CAST( FmFormPage, GetPage() );
+    FmFormPage* pFormPage = dynamic_cast<FmFormPage*>( GetPage()  );
     if ( pFormPage )
         pFormPage->GetImpl().formModelAssigned( *this );
 

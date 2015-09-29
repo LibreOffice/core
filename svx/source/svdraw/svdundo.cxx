@@ -63,21 +63,21 @@ SdrUndoAction::~SdrUndoAction() {}
 
 bool SdrUndoAction::CanRepeat(SfxRepeatTarget& rView) const
 {
-    SdrView* pV=PTR_CAST(SdrView,&rView);
+    SdrView* pV=dynamic_cast<SdrView*>( &rView );
     if (pV!=NULL) return CanSdrRepeat(*pV);
     return false;
 }
 
 void SdrUndoAction::Repeat(SfxRepeatTarget& rView)
 {
-    SdrView* pV=PTR_CAST(SdrView,&rView);
+    SdrView* pV=dynamic_cast<SdrView*>( &rView );
     if (pV!=NULL) SdrRepeat(*pV);
     DBG_ASSERT(pV!=NULL,"Repeat: SfxRepeatTarget that was handed over is not a SdrView");
 }
 
 OUString SdrUndoAction::GetRepeatComment(SfxRepeatTarget& rView) const
 {
-    SdrView* pV=PTR_CAST(SdrView,&rView);
+    SdrView* pV=dynamic_cast<SdrView*>( &rView );
     if (pV!=NULL) return GetSdrRepeatComment(*pV);
     return OUString();
 }
@@ -279,7 +279,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
 
     SdrObjList* pOL = rNewObj.GetSubList();
     bool bIsGroup(pOL!=NULL && pOL->GetObjCount());
-    bool bIs3DScene(bIsGroup && pObj->ISA(E3dScene));
+    bool bIs3DScene(bIsGroup && dynamic_cast< E3dScene* >(pObj) !=  nullptr);
 
     if(bIsGroup)
     {
@@ -323,7 +323,7 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
 void SdrUndoAttrObj::Undo()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pObj);
-    bool bIs3DScene(pObj && pObj->ISA(E3dScene));
+    bool bIs3DScene(pObj && dynamic_cast< E3dScene* >(pObj) !=  nullptr);
 
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
@@ -379,7 +379,7 @@ void SdrUndoAttrObj::Undo()
 
         if(pUndoSet)
         {
-            if(pObj->ISA(SdrCaptionObj))
+            if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
             {
                 // do a more smooth item deletion here, else the text
                 // rect will be reformatted, especially when information regarding
@@ -430,7 +430,7 @@ void SdrUndoAttrObj::Undo()
 void SdrUndoAttrObj::Redo()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pObj);
-    bool bIs3DScene(pObj && pObj->ISA(E3dScene));
+    bool bIs3DScene(pObj && dynamic_cast< E3dScene* >(pObj) !=  nullptr);
 
     if(!pUndoGroup || bIs3DScene)
     {
@@ -456,7 +456,7 @@ void SdrUndoAttrObj::Redo()
 
         if(pRedoSet)
         {
-            if(pObj->ISA(SdrCaptionObj))
+            if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
             {
                 // do a more smooth item deletion here, else the text
                 // rect will be reformatted, especially when information regarding
@@ -606,7 +606,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
      , pUndoGroup(NULL)
 {
     SdrObjList* pOL=rNewObj.GetSubList();
-    if (pOL!=NULL && pOL->GetObjCount() && !rNewObj.ISA(E3dScene))
+    if (pOL!=NULL && pOL->GetObjCount() && dynamic_cast<const E3dScene* >( &rNewObj) ==  nullptr)
     {
         // this is a group object!
         // If this were 3D scene, we'd only add an Undo for the scene itself
@@ -731,7 +731,7 @@ void SdrUndoRemoveObj::Undo()
 
         if(pObjList &&
            pObjList->GetOwnerObj() &&
-           pObjList->GetOwnerObj()->ISA(SdrObjGroup))
+           dynamic_cast<const SdrObjGroup*>(pObjList->GetOwnerObj()) != nullptr)
         {
             aOwnerAnchorPos = pObjList->GetOwnerObj()->GetAnchorPos();
         }
@@ -794,7 +794,7 @@ void SdrUndoInsertObj::Redo()
         Point aAnchorPos( 0, 0 );
         if ( pObjList &&
              pObjList->GetOwnerObj() &&
-             pObjList->GetOwnerObj()->ISA(SdrObjGroup) )
+             dynamic_cast<const SdrObjGroup*>(pObjList->GetOwnerObj()) != nullptr )
         {
             aAnchorPos = pObj->GetAnchorPos();
         }
@@ -1119,7 +1119,7 @@ void SdrUndoObjSetText::Undo()
     pTarget->ActionChanged();
 
     // #i124389# if it's a table, also need to relayout TextFrame
-    if(0 != dynamic_cast< sdr::table::SdrTableObj* >(pTarget))
+    if(dynamic_cast< sdr::table::SdrTableObj* >(pTarget) !=  nullptr)
     {
         pTarget->NbcAdjustTextFrameWidthAndHeight();
     }
@@ -1152,7 +1152,7 @@ void SdrUndoObjSetText::Redo()
     pTarget->ActionChanged();
 
     // #i124389# if it's a table, also need to relayout TextFrame
-    if(0 != dynamic_cast< sdr::table::SdrTableObj* >(pTarget))
+    if(dynamic_cast< sdr::table::SdrTableObj* >(pTarget) !=  nullptr)
     {
         pTarget->NbcAdjustTextFrameWidthAndHeight();
     }
@@ -1198,7 +1198,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
         for (size_t nm=0; nm<nCount; ++nm)
         {
             SdrObject* pObj2=rML.GetMark(nm)->GetMarkedSdrObj();
-            SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pObj2);
+            SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( pObj2 );
             if (pTextObj!=NULL)
             {
                 if( bUndo )

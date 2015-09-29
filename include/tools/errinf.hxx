@@ -34,7 +34,7 @@ namespace vcl { class Window; }
 class EDcr_Impl;
 class ErrHdl_Impl;
 
-class ErrorInfo
+class TOOLS_DLLPUBLIC ErrorInfo
 {
 private:
     sal_uIntPtr             lUserId;
@@ -44,7 +44,7 @@ public:
 
                             ErrorInfo( sal_uIntPtr lArgUserId ) :
                                 lUserId( lArgUserId ){}
-    virtual                 ~ErrorInfo(){}
+    virtual                 ~ErrorInfo();
 
     sal_uIntPtr             GetErrorCode() const { return lUserId; }
 

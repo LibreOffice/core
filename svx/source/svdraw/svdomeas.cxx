@@ -586,7 +586,7 @@ bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, 
     Color*& rpTxtColor, Color*& rpFldColor, OUString& rRet) const
 {
     const SvxFieldData* pField=rField.GetField();
-    const SdrMeasureField* pMeasureField=PTR_CAST(SdrMeasureField,pField);
+    const SdrMeasureField* pMeasureField=dynamic_cast<const SdrMeasureField*>( pField );
     if (pMeasureField!=NULL) {
         rRet = TakeRepresentation(pMeasureField->GetMeasureFieldKind());
         if (rpFldColor!=NULL) {

@@ -1458,13 +1458,13 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
         }
         else if ( SfxItemState::DEFAULT <= eState && pState )
         {
-            if ( pState->ISA( SvxColorItem ) )
+            if ( dynamic_cast<const SvxColorItem*>( pState) !=  nullptr )
                 aColor = static_cast<const SvxColorItem*>(pState)->GetValue();
-            else if ( pState->ISA( XLineColorItem ) )
+            else if ( dynamic_cast<const XLineColorItem*>( pState) !=  nullptr )
                 aColor = static_cast<const XLineColorItem*>(pState)->GetColorValue();
-            else if ( pState->ISA( XFillColorItem ) )
+            else if ( dynamic_cast<const XFillColorItem*>( pState) !=  nullptr )
                 aColor = static_cast<const XFillColorItem*>(pState)->GetColorValue();
-            else if ( pState->ISA( SvxBackgroundColorItem ) )
+            else if ( dynamic_cast<const SvxBackgroundColorItem*>( pState) !=  nullptr )
                 aColor = static_cast<const SvxBackgroundColorItem*>(pState)->GetValue();
         }
 
@@ -1498,11 +1498,11 @@ void BorderColorStatus::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
 {
     if ( SfxItemState::DEFAULT <= eState && pState )
     {
-        if ( nSID == SID_FRAME_LINECOLOR && pState->ISA( SvxColorItem ) )
+        if ( nSID == SID_FRAME_LINECOLOR && dynamic_cast<const SvxColorItem*>( pState) !=  nullptr )
         {
             maColor = static_cast< const SvxColorItem* >(pState)->GetValue();
         }
-        else if ( pState->ISA( SvxLineItem ) )
+        else if ( dynamic_cast<const SvxLineItem*>( pState) !=  nullptr )
         {
             const SvxBorderLine* pLine = static_cast< const SvxLineItem* >(pState)->GetLine();
             Color aColor ( COL_TRANSPARENT );
@@ -1786,7 +1786,7 @@ void SvxFrameWindow_Impl::StateChanged(
 {
     if ( pState && nSID == SID_BORDER_REDUCED_MODE)
     {
-        const SfxBoolItem* pItem = PTR_CAST( SfxBoolItem, pState );
+        const SfxBoolItem* pItem = dynamic_cast<const SfxBoolItem*>( pState  );
 
         if ( pItem )
         {
@@ -1979,7 +1979,7 @@ void SfxStyleControllerItem_Impl::StateChanged(
             if ( SfxItemState::DEFAULT == eState )
             {
                 const SfxTemplateItem* pStateItem =
-                    PTR_CAST( SfxTemplateItem, pState );
+                    dynamic_cast<const SfxTemplateItem*>( pState  );
                 DBG_ASSERT( pStateItem != NULL, "SfxTemplateItem expected" );
                 rControl.SetFamilyState( nIdx, pStateItem );
             }
@@ -2694,11 +2694,11 @@ void SvxColorToolBoxControl::StateChanged(
         }
         else if ( SfxItemState::DEFAULT <= eState && pState )
         {
-            if ( pState->ISA( SvxColorItem ) )
+            if ( dynamic_cast<const SvxColorItem*>( pState) !=  nullptr )
                 aColor = static_cast< const SvxColorItem* >(pState)->GetValue();
-            else if ( pState->ISA( XLineColorItem ) )
+            else if ( dynamic_cast<const XLineColorItem*>( pState) !=  nullptr )
                 aColor = static_cast< const XLineColorItem* >(pState)->GetColorValue();
-            else if ( pState->ISA( XFillColorItem ) )
+            else if ( dynamic_cast<const XFillColorItem*>( pState) !=  nullptr )
                 aColor = static_cast< const XFillColorItem* >(pState)->GetColorValue();
         }
         m_xBtnUpdater->Update( aColor );
@@ -2895,7 +2895,7 @@ SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
 
 void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
-    const SfxStringItem* pItem = PTR_CAST( SfxStringItem, pState );
+    const SfxStringItem* pItem = dynamic_cast<const SfxStringItem*>( pState  );
     ToolBox& rBox = GetToolBox();
     if ( pItem && eState != SfxItemState::DISABLED )
     {

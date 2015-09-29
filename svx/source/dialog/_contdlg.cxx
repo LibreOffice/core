@@ -56,7 +56,7 @@ void SvxContourDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/, 
 {
     if ( pItem && ( SID_CONTOUR_EXEC == nSID ) )
     {
-        const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
+        const SfxBoolItem* pStateItem = dynamic_cast<const SfxBoolItem*>( pItem  );
         assert(pStateItem); //SfxBoolItem expected
         if (pStateItem)
             rDlg.SetExecState(!pStateItem->GetValue());
@@ -606,7 +606,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
 {
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrView*      pView = pWnd->GetSdrView();
-    const bool          bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
+    const bool          bPolyEdit = ( pObj != NULL ) && dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr;
     const bool          bDrawEnabled = !(bPolyEdit && m_pTbx1->IsItemChecked(mnPolyEditId));
     const bool          bPipette = m_pTbx1->IsItemChecked(mnPipetteId);
     const bool          bWorkplace = m_pTbx1->IsItemChecked(mnWorkSpaceId);

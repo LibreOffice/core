@@ -637,7 +637,7 @@ namespace svx
 
     void FmTextControlShell::executeAttributeDialog( AttributeSet _eSet, SfxRequest& _rReq )
     {
-        const SvxFontListItem* pFontList = PTR_CAST( SvxFontListItem, m_pViewFrame->GetObjectShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
+        const SvxFontListItem* pFontList = dynamic_cast<const SvxFontListItem*>( m_pViewFrame->GetObjectShell()->GetItem( SID_ATTR_CHAR_FONTLIST )  );
         DBG_ASSERT( pFontList, "FmTextControlShell::executeAttributeDialog: no font list item!" );
         if ( !pFontList )
             return;
@@ -710,7 +710,7 @@ namespace svx
                             // handle them
                             DBG_ASSERT( aArgs.getLength() == 0, "FmTextControlShell::executeAttributeDialog: these are no UNO slots - are they?" );
 
-                            const SfxBoolItem* pBoolItem = PTR_CAST( SfxBoolItem, pModifiedItem );
+                            const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>( pModifiedItem  );
                             DBG_ASSERT( pBoolItem, "FmTextControlShell::executeAttributeDialog: no bool item?!" );
                             if ( pBoolItem )
                             {
@@ -862,7 +862,7 @@ namespace svx
                 const SfxPoolItem* pItem = aToggled.GetItem( nWhich );
                 if ( ( SID_ATTR_CHAR_UNDERLINE == nSlot ) || ( SID_ATTR_CHAR_OVERLINE == nSlot ) )
                 {
-                    const SvxOverlineItem* pTextLine = PTR_CAST( SvxOverlineItem, pItem );
+                    const SvxOverlineItem* pTextLine = dynamic_cast<const SvxOverlineItem*>( pItem  );
                     DBG_ASSERT( pTextLine, "FmTextControlShell::ExecuteTextAttribute: ooops - no underline/overline item!" );
                     if ( pTextLine )
                     {
@@ -876,7 +876,7 @@ namespace svx
                 }
                 else
                 {
-                    const SvxCrossedOutItem* pCrossedOut = PTR_CAST( SvxCrossedOutItem, pItem );
+                    const SvxCrossedOutItem* pCrossedOut = dynamic_cast<const SvxCrossedOutItem*>( pItem  );
                     DBG_ASSERT( pCrossedOut, "FmTextControlShell::ExecuteTextAttribute: ooops - no CrossedOut item!" );
                     if ( pCrossedOut )
                     {

@@ -319,7 +319,7 @@ const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCrea
             m_aFormsCreationHdl.Call( *this );
         }
 
-        FmFormModel* pFormsModel = PTR_CAST( FmFormModel, m_rPage.GetModel() );
+        FmFormModel* pFormsModel = dynamic_cast<FmFormModel*>( m_rPage.GetModel()  );
 
         // give the newly created collection a place in the universe
         SfxObjectShell* pObjShell = pFormsModel ? pFormsModel->GetObjectShell() : NULL;

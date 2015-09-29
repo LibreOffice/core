@@ -142,7 +142,7 @@ void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const S
 
     if ( SfxItemState::DEFAULT == eState )
     {
-        const SvxSmartTagItem* pSmartTagItem = PTR_CAST( SvxSmartTagItem, pState );
+        const SvxSmartTagItem* pSmartTagItem = dynamic_cast<const SvxSmartTagItem*>( pState  );
         if ( 0 != pSmartTagItem )
         {
             delete mpSmartTagItem;

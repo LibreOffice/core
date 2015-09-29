@@ -100,8 +100,8 @@ void FmFormView::Init()
     // Model setzen
     SdrModel* pModel = GetModel();
 
-    DBG_ASSERT( pModel->ISA(FmFormModel), "Falsches Model" );
-    if( !pModel->ISA(FmFormModel) ) return;
+    DBG_ASSERT( dynamic_cast<const FmFormModel*>( pModel) !=  nullptr, "Falsches Model" );
+    if( dynamic_cast<const FmFormModel*>( pModel) ==  nullptr ) return;
     FmFormModel* pFormModel = static_cast<FmFormModel*>(pModel);
 
 
@@ -150,7 +150,7 @@ FmFormView::~FmFormView()
 FmFormPage* FmFormView::GetCurPage()
 {
     SdrPageView* pPageView = GetSdrPageView();
-    FmFormPage*  pCurPage = pPageView ? PTR_CAST( FmFormPage, pPageView->GetPage() ) : NULL;
+    FmFormPage*  pCurPage = pPageView ? dynamic_cast<FmFormPage*>( pPageView->GetPage()  ) : NULL;
     return pCurPage;
 }
 
@@ -229,7 +229,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
     if (bDesign == IsDesignMode())
         return;
 
-    FmFormModel* pModel = PTR_CAST(FmFormModel, GetModel());
+    FmFormModel* pModel = dynamic_cast<FmFormModel*>( GetModel() );
     if (pModel)
     {   // fuer die Zeit des Uebergangs das Undo-Environment ausschalten, das sichert, dass man dort auch nicht-transiente
         // Properties mal eben aendern kann (sollte allerdings mit Vorsicht genossen und beim Rueckschalten des Modes

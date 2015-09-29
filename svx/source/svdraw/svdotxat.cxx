@@ -347,7 +347,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
 
             SfxStyleFamily eFam = ReadFamilyFromStyleName(aName);
             SfxStyleSheetBase* pStyleBase = pStylePool->Find(aName,eFam);
-            SfxStyleSheet* pStyle = PTR_CAST(SfxStyleSheet,pStyleBase);
+            SfxStyleSheet* pStyle = dynamic_cast<SfxStyleSheet*>( pStyleBase );
             if (pStyle!=NULL && pStyle!=GetStyleSheet()) {
                 aStyleSheets.insert(pStyle);
             }
@@ -357,7 +357,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
         while (nNum>0) {
             nNum--;
             SfxBroadcaster* pBroadcast=GetBroadcasterJOE((sal_uInt16)nNum);
-            SfxStyleSheet* pStyle=PTR_CAST(SfxStyleSheet,pBroadcast);
+            SfxStyleSheet* pStyle=dynamic_cast<SfxStyleSheet*>( pBroadcast );
             if (pStyle!=NULL && pStyle!=GetStyleSheet()) { // special case for stylesheet of the object
                 if (aStyleSheets.find(pStyle)==aStyleSheets.end()) {
                     EndListening(*pStyle);

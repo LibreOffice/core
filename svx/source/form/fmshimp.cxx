@@ -564,7 +564,7 @@ bool isControlList(const SdrMarkList& rMarkList)
     for (size_t i = 0; i < nMarkCount && bControlList; ++i)
     {
         SdrObject *pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        E3dObject* pAs3DObject = PTR_CAST(E3dObject, pObj);
+        E3dObject* pAs3DObject = dynamic_cast< E3dObject* >( pObj);
         // E3dObject's do not contain any 2D-objects (by definition)
         // we need this extra check here : an E3dObject->IsGroupObject says "YES", but an SdrObjListIter working
         // with an E3dObject doesn't give me any Nodes (E3dObject has a sub list, but no members in that list,
@@ -3658,7 +3658,7 @@ void FmXFormShell::viewActivated( FmFormView& _rCurrentView, bool _bSyncAction /
         // first-time initializations for the views
         if ( !_rCurrentView.GetImpl()->hasEverBeenActivated( ) )
         {
-            _rCurrentView.GetImpl()->onFirstViewActivation( PTR_CAST( FmFormModel, _rCurrentView.GetModel() ) );
+            _rCurrentView.GetImpl()->onFirstViewActivation( dynamic_cast<FmFormModel*>( _rCurrentView.GetModel() )  );
             _rCurrentView.GetImpl()->setHasBeenActivated( );
         }
 
@@ -3842,7 +3842,7 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
     {
         // lock the undo env so the forms can change non-transient properties while loading
         // (without this my doc's modified flag would be set)
-        FmFormModel* pModel = PTR_CAST( FmFormModel, _pPage->GetModel() );
+        FmFormModel* pModel = dynamic_cast<FmFormModel*>( _pPage->GetModel()  );
         DBG_ASSERT( pModel, "FmXFormShell::loadForms: invalid model!" );
         if ( pModel )
             pModel->GetUndoEnv().Lock();

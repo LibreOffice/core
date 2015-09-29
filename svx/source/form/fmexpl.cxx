@@ -307,7 +307,7 @@ bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
     if(this == pEntryData)
         return true;
-    if( !pEntryData->ISA(FmFormData) )
+    if( dynamic_cast<const FmFormData*>( pEntryData) ==  nullptr )
         return false;
     FmFormData* pFormData = static_cast<FmFormData*>(pEntryData);
     if( m_xForm.get() != pFormData->GetFormIface().get() )
@@ -471,7 +471,7 @@ bool FmControlData::IsEqualWithoutChildren( FmEntryData* pEntryData )
     if(this == pEntryData)
         return true;
 
-    if( !pEntryData->ISA(FmControlData) )
+    if( dynamic_cast<const FmControlData*>( pEntryData) ==  nullptr )
         return false;
     FmControlData* pControlData = static_cast<FmControlData*>(pEntryData);
 
@@ -538,7 +538,7 @@ namespace svxform
 
         if( eState >= SfxItemState::DEFAULT )
         {
-            FmFormShell* pShell = PTR_CAST( FmFormShell, static_cast<const SfxObjectItem*>(pState)->GetShell() );
+            FmFormShell* pShell = dynamic_cast<FmFormShell*>( static_cast<const SfxObjectItem*>(pState)->GetShell()  );
             UpdateContent( pShell );
         }
         else

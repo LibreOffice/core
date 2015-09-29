@@ -861,8 +861,8 @@ bool SdrDragMethod::DoAddConnectorOverlays()
     }
 
     if(!getMoveOnly() && !(
-        IS_TYPE(SdrDragMove, this) || IS_TYPE(SdrDragResize, this) ||
-        IS_TYPE(SdrDragRotate,this) || IS_TYPE(SdrDragMirror,this)))
+        dynamic_cast<const SdrDragMove*>(this) != nullptr || dynamic_cast<const SdrDragResize*>(this) != nullptr ||
+        dynamic_cast<const SdrDragRotate*>(this) != nullptr || dynamic_cast<const SdrDragMirror*>(this) != nullptr ))
     {
         return false;
     }
@@ -875,7 +875,7 @@ bool SdrDragMethod::DoAddConnectorOverlays()
     }
 
     // one more migrated from SdrEdgeObj::NspToggleEdgeXor
-    if(IS_TYPE(SdrDragObjOwn, this) || IS_TYPE(SdrDragMovHdl, this))
+    if( dynamic_cast< const SdrDragObjOwn* >(this) != nullptr || dynamic_cast< const SdrDragMovHdl* >(this) != nullptr )
     {
         return false;
     }
@@ -3668,7 +3668,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // based on virtual methods added to SdrObject, on MM100/Twip coordinates and so on.
     // If marked object is SdrGrafObj, we do all the work here with matrix based
     // coordinates.
-    if (!pSdrObject->ISA(SdrGrafObj)) {
+    if (dynamic_cast<const SdrGrafObj*>( pSdrObject) ==  nullptr) {
         const bool bUndo = getSdrDragView().IsUndoEnabled();
         if( bUndo )
         {

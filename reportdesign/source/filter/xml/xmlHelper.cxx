@@ -252,7 +252,7 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const OUString& _sStyleName,
 {
     if ( !_xProp.is() || _sStyleName.isEmpty() || !_pAutoStyles )
         return;
-    XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(PTR_CAST(XMLPropStyleContext,_pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,_sStyleName)));
+    XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext *>(_pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,_sStyleName)));
     if ( pAutoStyle )
     {
         ::com::sun::star::awt::FontDescriptor aFont;

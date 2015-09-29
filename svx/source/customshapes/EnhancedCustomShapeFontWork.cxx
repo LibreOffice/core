@@ -514,7 +514,7 @@ basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
     while( aObjListIter.IsMore() )
     {
         SdrObject* pPartObj = aObjListIter.Next();
-        if ( pPartObj->ISA( SdrPathObj ) )
+        if ( dynamic_cast<const SdrPathObj*>( pPartObj) !=  nullptr )
         {
             basegfx::B2DPolyPolygon aCandidate(static_cast<SdrPathObj*>(pPartObj)->GetPathPoly());
             if(aCandidate.areControlPointsUsed())
