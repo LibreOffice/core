@@ -731,7 +731,7 @@ sal_uLong DffPropSet::SanitizeEndPos(SvStream &rIn, sal_uLong nEndRecPos)
 */
 SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pOriginalObj )
 {
-    if ( pOriginalObj && pOriginalObj->ISA( SdrObjCustomShape ) )
+    if ( dynamic_cast<const SdrObjCustomShape* >(pOriginalObj) !=  nullptr )
         pOriginalObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
 
     // we are initializing our return value with the object that was imported by our escher import
@@ -780,7 +780,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                     case PPT_PST_RecolorInfoAtom :
                     {
-                        if ( pRet && ( pRet->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pRet)->HasGDIMetaFile() ) )
+                        if ( dynamic_cast<const SdrGrafObj* >(pRet) != nullptr && static_cast<SdrGrafObj*>(pRet)->HasGDIMetaFile() )
                         {
                             Graphic aGraphic( static_cast<SdrGrafObj*>(pRet)->GetGraphic() );
                             RecolorGraphic( rSt, aClientDataHd.nRecLen, aGraphic );
@@ -841,9 +841,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 if ( pRet )
                 {
                     bool bDeleteSource = aTextObj.GetOEPlaceHolderAtom() != 0;
-                    if ( bDeleteSource  && !pRet->ISA( SdrGrafObj )     // we are not allowed to get
-                            && !pRet->ISA( SdrObjGroup )                // grouped placeholder objects
-                                && !pRet->ISA( SdrOle2Obj ) )
+                    if ( bDeleteSource  && dynamic_cast<const SdrGrafObj* >(pRet) ==  nullptr     // we are not allowed to get
+                            && dynamic_cast<const SdrObjGroup* >(pRet) ==  nullptr                // grouped placeholder objects
+                                && dynamic_cast<const SdrOle2Obj* >(pRet) ==  nullptr )
                         SdrObject::Free( pRet );
                 }
                 sal_uInt32 nTextFlags = aTextObj.GetTextFlags();
@@ -1045,7 +1045,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 bool bWordWrap = (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone;
                 bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 2 ) != 0;
 
-                if ( pRet && pRet->ISA( SdrObjCustomShape ) && ( eTextKind == OBJ_RECT ) )
+                if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr && ( eTextKind == OBJ_RECT ) )
                 {
                     bAutoGrowHeight = bFitShapeToText;
                     if ( bWordWrap )
@@ -1057,7 +1057,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 else
                 {
-                    if ( pRet && pRet->ISA( SdrObjCustomShape ) )
+                    if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr )
                     {
                         SdrObject::Free( pRet );
                         pRet = NULL;
@@ -1097,7 +1097,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     pTObj->SetMergedItem( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
                 }
 
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
+            if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
             {
                  pTObj->SetMergedItem( makeSdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
                 pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
@@ -1113,12 +1113,12 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
             if ( nMinFrameHeight < 0 )
                 nMinFrameHeight = 0;
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
+            if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
                 pTObj->SetMergedItem( makeSdrTextMinFrameHeightItem( nMinFrameHeight ) );
 
             if ( nMinFrameWidth < 0 )
                 nMinFrameWidth = 0;
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
+            if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
                 pTObj->SetMergedItem( makeSdrTextMinFrameWidthItem( nMinFrameWidth ) );
 
             // set margins at the borders of the textbox
@@ -1128,7 +1128,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             pTObj->SetMergedItem( makeSdrTextLowerDistItem( nTextBottom ) );
             pTObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
 
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
+            if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
                 pTObj->SetSnapRect( rTextRect );
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
 
@@ -1140,9 +1140,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     snaprect of the object. Then we will use
                     ADJUST_CENTER instead of ADJUST_BLOCK.
                     */
-                    if ( !pTObj->ISA( SdrObjCustomShape ) && !bFitShapeToText && !bWordWrap )
+                    if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr && !bFitShapeToText && !bWordWrap )
                     {
-                        SdrTextObj* pText = PTR_CAST( SdrTextObj, pTObj );
+                        SdrTextObj* pText = dynamic_cast<SdrTextObj*>( pTObj  );
                         if ( pText )
                         {
                             if ( bVerticalText )
@@ -1173,7 +1173,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     sal_Int32 nAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? -mnFix16Angle : mnFix16Angle;    // #72116# vertical flip -> rotate by using the other way
                     nAngle += nTextRotationAngle;
 
-                    if ( !pTObj->ISA( SdrObjCustomShape ) )
+                    if ( dynamic_cast< const SdrObjCustomShape* >(pTObj) ==  nullptr )
                     {
                         if ( rObjData.nSpFlags & SP_FFLIPV )
                         {
@@ -1252,7 +1252,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 else
                 {
                     SdrObject* pConnectObj = pRet;
-                    if ( pOriginalObj && pRet->ISA( SdrObjGroup ) )
+                    if ( pOriginalObj && dynamic_cast< const SdrObjGroup* >(pRet) !=  nullptr )
                     {   /* check if the original object from the escherimport is part of the group object,
                         if this is the case, we will use the original object to connect to */
                         SdrObjListIter aIter( *pRet, IM_DEEPWITHGROUPS );
@@ -2211,7 +2211,7 @@ SdrOutliner* SdrPowerPointImport::GetDrawOutliner( SdrTextObj* pSdrText )
 
 SdrObject* SdrPowerPointImport::ReadObjText( PPTTextObj* pTextObj, SdrObject* pSdrObj, SdPageCapsule pPage ) const
 {
-    SdrTextObj* pText = PTR_CAST( SdrTextObj, pSdrObj );
+    SdrTextObj* pText = dynamic_cast<SdrTextObj*>( pSdrObj  );
     if ( pText )
     {
         if ( !ApplyTextObj( pTextObj, pText, pPage, NULL, NULL ) )
@@ -6948,7 +6948,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             if ( pCurrent->mpFieldItem )
                                                             {
                                                                 pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
-                                                                if ( pCurrent->mpFieldItem->GetField()->ISA( SvxURLField ) )
+                                                                if ( dynamic_cast< const SvxURLField* >(pCurrent->mpFieldItem->GetField()) != nullptr)
                                                                     break;
                                                                 nHyperLenLeft--;
                                                             }
@@ -7097,7 +7097,7 @@ PPTTextObj& PPTTextObj::operator=( PPTTextObj& rTextObj )
 
 bool IsLine( const SdrObject* pObj )
 {
-    return pObj->ISA( SdrPathObj ) &&
+    return dynamic_cast< const SdrPathObj* >(pObj) !=  nullptr &&
            static_cast<const SdrPathObj*>(pObj)->IsLine() &&
            static_cast<const SdrPathObj*>(pObj)->GetPointCount() == 2;
 }
@@ -7506,7 +7506,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
 {
     SdrObject* pRet = pGroup;
     sal_uInt32 nRows = pTableArry[ 1 ];
-    if ( nRows && pGroup->ISA( SdrObjGroup ) )
+    if ( nRows && dynamic_cast< const SdrObjGroup* >(pGroup) !=  nullptr )
     {
         SdrObjList* pSubList(static_cast<SdrObjGroup*>(pGroup)->GetSubList());
         if ( pSubList )

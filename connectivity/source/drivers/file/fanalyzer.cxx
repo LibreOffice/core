@@ -121,7 +121,7 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow)
 {
     for (OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
     {
-        OOperandAttr* pAttr = PTR_CAST(OOperandAttr,(*aIter));
+        OOperandAttr* pAttr = dynamic_cast<OOperandAttr*>(*aIter);
         if (pAttr)
         {
             pAttr->bindValue(_pRow);

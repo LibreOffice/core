@@ -1264,7 +1264,7 @@ bool EscherPropertyContainer::CreateOLEGraphicProperties(
     if ( rXShape.is() )
     {
         SdrObject* pSdrOLE2( GetSdrObjectFromXShape( rXShape ) );   // SJ: leaving unoapi, because currently there is
-        if ( pSdrOLE2 && pSdrOLE2->ISA( SdrOle2Obj ) )              // no access to the native graphic object
+        if ( pSdrOLE2 && 0 != dynamic_cast<const SdrOle2Obj* > (pSdrOLE2) )              // no access to the native graphic object
         {
             const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pSdrOLE2)->GetGraphic();
             if ( pGraphic )
@@ -1315,7 +1315,7 @@ bool EscherPropertyContainer::CreateMediaGraphicProperties(
     if ( rXShape.is() )
     {
         SdrObject* pSdrMedia( GetSdrObjectFromXShape( rXShape ) );  // SJ: leaving unoapi, because currently there is
-        if ( pSdrMedia && pSdrMedia->ISA( SdrMediaObj ) )               // no access to the native graphic object
+        if ( dynamic_cast<const SdrMediaObj* >(pSdrMedia) !=  nullptr )               // no access to the native graphic object
         {
             GraphicObject aGraphicObject( static_cast<SdrMediaObj*>(pSdrMedia)->getSnapshot() );
             bRetValue = CreateGraphicProperties( rXShape, aGraphicObject );
@@ -4640,7 +4640,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
         if (aType == "drawing.Custom")
         {
             SdrObject* pCustoShape( GetSdrObjectFromXShape( aXShape ) );
-            if ( pCustoShape && pCustoShape->ISA( SdrObjCustomShape ) )
+            if ( dynamic_cast<const SdrObjCustomShape* >(pCustoShape) !=  nullptr )
             {
                 const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(
                     pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
@@ -4685,7 +4685,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                 else if ( nGluePointType == com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS )
                 {
                     SdrObject* pPoly = pCustoShape->DoConvertToPolyObj( true, true );
-                    if ( pPoly && pPoly->ISA( SdrPathObj ) )
+                    if ( dynamic_cast<const SdrPathObj* >( pPoly ) !=  nullptr )
                     {
                         sal_Int16 a, b, nIndex = 0;
                         sal_uInt32 nDistance = 0xffffffff;

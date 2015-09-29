@@ -470,7 +470,7 @@ SelectionHelper::~SelectionHelper()
 bool SelectionHelper::getFrameDragSingles()
 {
     bool bFrameDragSingles = true;//true == green == surrounding handles
-    if( m_pSelectedObj && m_pSelectedObj->ISA(E3dObject) )
+    if( m_pSelectedObj && dynamic_cast<const E3dObject*>( m_pSelectedObj) !=  nullptr )
         bFrameDragSingles = false;
     return bFrameDragSingles;
 }
@@ -592,7 +592,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     if( m_pMarkObj && m_pMarkObj != m_pSelectedObj)
     {
         rHdlList.Clear();
-        if( m_pMarkObj->ISA(SdrPathObj) )
+        if( dynamic_cast<const SdrPathObj*>( m_pMarkObj) !=  nullptr )
         {
             //if th object is a polygon
             //from each point a handle is generated

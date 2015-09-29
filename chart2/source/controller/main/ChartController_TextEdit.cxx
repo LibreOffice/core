@@ -177,7 +177,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
         const SfxPoolItem* pItem=0;
         OUString aString;
         if ( pSet && pSet->GetItemState( SID_CHARMAP, true, &pItem) == SfxItemState::SET &&
-             pItem->ISA(SfxStringItem) )
+             dynamic_cast< const SfxStringItem* >(pItem) !=  nullptr )
                 aString = dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
 
         OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();

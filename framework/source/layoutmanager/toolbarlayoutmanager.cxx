@@ -912,7 +912,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
     // To enable toolbar controllers to change their image when a sub-toolbar function
     // is activated, we need this mechanism. We have NO connection between these toolbars
     // anymore!
-    if ( pEvent && pEvent->ISA( VclWindowEvent ))
+    if ( dynamic_cast< const VclWindowEvent* >(pEvent) != nullptr )
     {
         if ( pEvent->GetId() == VCLEVENT_TOOLBOX_SELECT )
         {
