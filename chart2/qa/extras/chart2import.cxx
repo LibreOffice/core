@@ -58,7 +58,7 @@ public:
     void testFdo78080();
     void testFdo54361();
     void testFdo54361_1();
-    void testTdf86624(); // manualy placed legends
+    void testTdf86624(); // manually placed legends
     void testAutoBackgroundXLSX();
     void testChartAreaStyleBackgroundXLSX();
     void testAxisTextRotationXLSX();

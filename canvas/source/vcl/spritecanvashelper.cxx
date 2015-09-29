@@ -436,7 +436,7 @@ namespace vclcanvas
 
         // no need to clip output to actual update region - there will
         // always be ALL sprites contained in the rectangular update
-        // area containd in rTotalArea (that's the way
+        // area contained in rTotalArea (that's the way
         // B2DConnectedRanges work). If rTotalArea appears to be
         // smaller than the sprite - then this sprite carries a clip,
         // and the update will be constrained to that rect.

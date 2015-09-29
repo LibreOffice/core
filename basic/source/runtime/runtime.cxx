@@ -918,7 +918,7 @@ void SbiRuntime::Error( SbError _errCode, const OUString& _details )
         if ( pInst->pRun == this )
         {
             pInst->Error( _errCode, _details );
-            //OSL_WARN_IF( nError != _errCode, "basic", "SbiRuntime::Error: the instance is expecte to propagate the error code back to me!" );
+            //OSL_WARN_IF( nError != _errCode, "basic", "SbiRuntime::Error: the instance is expected to propagate the error code back to me!" );
         }
         else
         {
@@ -1826,7 +1826,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     // if they are SbxEMPTY I guess
     if ( !bHandleDefaultProp || eValType == SbxOBJECT )
     {
-    // activate GetOject for collections on refVal
+    // activate GetObject for collections on refVal
         SbxBase* pObjVarObj = refVal->GetObject();
         if( pObjVarObj )
         {
@@ -3432,7 +3432,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
                 bool bSetName = true; // preserve normal behaviour
 
                 // i#i68894# if VBAInterOp favour searching vba globals
-                // over searching for uno classess
+                // over searching for uno classes
                 if ( bVBAEnabled )
                 {
                     // Try Find in VBA symbols space

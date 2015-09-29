@@ -87,7 +87,7 @@ public:
      */
     ::com::sun::star::awt::Size GetPageSize() const;
 
-    /** calculates the current axes title sizes and subtract that space them from the given recangle
+    /** calculates the current axes title sizes and subtract that space them from the given rectangle
      */
     ::com::sun::star::awt::Rectangle SubstractAxisTitleSizes( const ::com::sun::star::awt::Rectangle& rPositionRect );
 
