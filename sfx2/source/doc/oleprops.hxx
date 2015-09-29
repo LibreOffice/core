@@ -168,7 +168,7 @@ private:
 
 /** Base class for all classes related to OLE property sets.
 
-    Derived calsses have to implement the pure virtual functions ImplLoad() and
+    Derived classes have to implement the pure virtual functions ImplLoad() and
     ImplSave().
  */
 class SfxOleObjectBase

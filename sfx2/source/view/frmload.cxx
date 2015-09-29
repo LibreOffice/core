@@ -669,7 +669,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     bool bLoadSuccess = false;
     try
     {
-        // extract view releant arguments from the loader args
+        // extract view relevant arguments from the loader args
         ::comphelper::NamedValueCollection aViewCreationArgs( impl_extractViewCreationArgs( aDescriptor ) );
 
         // no model passed from outside? => create one from scratch

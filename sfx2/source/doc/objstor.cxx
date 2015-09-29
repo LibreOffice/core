@@ -2512,7 +2512,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
             pSet->Put( *pComments );
     }
 
-    // create a medium as a copy; this medium is only for writingm, because it
+    // create a medium as a copy; this medium is only for writing, because it
     // uses the same name as the original one writing is done through a copy,
     // that will be transferred to the target (of course after calling HandsOff)
     SfxMedium* pMediumTmp = new SfxMedium( pRetrMedium->GetName(), pRetrMedium->GetOpenMode(), pFilter, pSet );

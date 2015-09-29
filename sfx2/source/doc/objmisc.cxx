@@ -780,7 +780,7 @@ OUString SfxObjectShell::GetTitle
                                 (remote =>:: com:: sun:: star:: util:: URL)
 
                                 3 (==SFX_TITLE_APINAME)
-                                provides the logical filname without path
+                                provides the logical filename without path
                                 and extension
 
                                 4 (==SFX_TITLE_DETECT)

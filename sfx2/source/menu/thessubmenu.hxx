@@ -45,7 +45,7 @@ public:
     // returns the Locale to be used for the selected text when the thesaurus is to be called
     static void GetLocale( css::lang::Locale /*out */ &rLocale, const OUString &rLookUpString, sal_Int32 nDelimPos );
 
-    // returns true if the locale is upported by the theasaurus
+    // returns true if the locale is supported by the theasaurus
     bool    IsSupportedLocale( const css::lang::Locale & rLocale ) const;
 
     // get the first nMax Synonym entries, even if different meanings need to be evaluated

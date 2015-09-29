@@ -1071,7 +1071,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     if ( aFilterName.equals( aFilterFromMediaDescr ) )
     {
-        // preserv current settings if any
+        // preserve current settings if any
         // if there no current settings and the name is the same
         // as old filter name use old filter settings
 
@@ -1815,7 +1815,7 @@ void SfxStoringHelper::SetDocInfoState(
             }
         }
 
-        // sigh... have to set these manually i'm afraid... wonder why
+        // sigh... have to set these manually I'm afraid... wonder why
         // SfxObjectShell doesn't handle this internally, should be easier
         xDocPropsToFill->setAuthor(i_xOldDocProps->getAuthor());
         xDocPropsToFill->setGenerator(i_xOldDocProps->getGenerator());
