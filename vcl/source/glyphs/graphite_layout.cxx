@@ -739,6 +739,12 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
         for (int n = i; n < nLastGlyph; n++)
             mvGlyphs[n].maLinearPos.X() += (nDGlyphOrigin + nDWidth) * (bRtl ? -1 : 1);
 
+        if (nBaseGlyph < 0)
+        {
+            SAL_WARN( "vcl.gdi", "Negative BaseGlyph" );
+            continue;
+        }
+
         rDeltaWidth[nBaseGlyph] = nDWidth;
 #ifdef GRLAYOUT_DEBUG
         fprintf(grLog(),"c%d=%d g%d-%d dW%ld-%ld=%ld dX%ld x%ld @%d=%d\n", firstChar, lastChar, i, nLastGlyph, nNewClusterWidth, nOrigClusterWidth, nDWidth, nDGlyphOrigin, mvGlyphs[i].maLinearPos.X(), mvCharDxs[lastChar - mnMinCharPos], args.mpDXArray[lastChar - args.mnMinCharPos]);
