@@ -666,7 +666,7 @@ void SAL_CALL AccessibleControlShape::disposing()
         }
     }
 
-    // forward the disposel to our inner context
+    // forward the disposal to our inner context
     if ( m_bDisposeNativeContext )
     {
         // don't listen for mode changes anymore

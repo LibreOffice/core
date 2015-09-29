@@ -1826,7 +1826,7 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
 void FmFilterNavigator::DeleteSelection()
 {
     // to avoid the deletion of an entry twice (e.g. deletion of a parent and afterward
-    // the deletion of its child, i have to shrink the selecton list
+    // the deletion of its child, I have to shrink the selecton list
     ::std::vector<SvTreeListEntry*> aEntryList;
     for (SvTreeListEntry* pEntry = FirstSelected();
          pEntry != NULL;

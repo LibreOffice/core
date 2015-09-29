@@ -86,7 +86,7 @@ void SvxXMeasurePreview::dispose()
 {
     // No one is deleting the MeasureObj? This is not only an error but also
     // a memory leak (!). Main problem is that this object is still listening to
-    // a StyleSheet of the model which was set. Thus, if You want to keep the obnject,
+    // a StyleSheet of the model which was set. Thus, if You want to keep the object,
     // set the model to 0L, if object is not needed (seems to be the case here),
     // delete it.
     delete pMeasureObj;

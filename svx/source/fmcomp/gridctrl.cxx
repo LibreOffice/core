@@ -2497,7 +2497,7 @@ void DbGridControl::MoveToNext()
         if(!bOk)
         {
             AdjustRows();
-            if (m_nTotalCount > 0) // only to avoid infinte recursion
+            if (m_nTotalCount > 0) // only to avoid infinite recursion
                 MoveToNext();
         }
     }
@@ -3370,7 +3370,7 @@ void DbGridControl::ShowColumn(sal_uInt16 nId)
         }
     }
     sal_uInt16 nNewViewPos = (nNextNonHidden == BROWSER_INVALIDID)
-        ? 1 // there is no visible column -> insert behinde the handle col
+        ? 1 // there is no visible column -> insert behind the handle col
         : GetViewColumnPos( m_aColumns[ nNextNonHidden ]->GetId() ) + 1;
             // the first non-handle col has "view pos" 0, but the pos arg for InsertDataColumn expects
             // a position 1 for the first non-handle col -> +1

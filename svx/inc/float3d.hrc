@@ -33,7 +33,7 @@
 #define CTL_PREVIEW             12
 #define CTL_LIGHT_PREVIEW       13
 
-// Geomerty
+// Geometry
 #define FT_HORIZONTAL           24
 #define NUM_HORIZONTAL          25
 #define FT_VERTICAL             26

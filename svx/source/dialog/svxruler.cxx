@@ -199,7 +199,7 @@ void SvxRuler_Impl::SetPercSize(sal_uInt16 nSize)
 // Ruler: SetMargin1, SetMargin2
 
 // SID_RULER_PAGE_POS
-// expectes as parameter the initial value of the page and page width
+// expects as parameter the initial value of the page and page width
 // Ruler: SetPagePos
 
 // SID_ATTR_TABSTOP
