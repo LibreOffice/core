@@ -627,7 +627,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             // 10-11 : used width  of source bitmap
             // 12-13 : destination position y (in pixel)
             // 14-15 : destination position x (in pixel)
-            // 16-17 : dont know
+            // 16-17 : don't know
             // 18-19 : Width Bitmap in Pixel
             // 20-21 : Height Bitmap in Pixel
             // 22-23 : bytes per scanline
@@ -1293,7 +1293,7 @@ bool WMFReader::ReadHeader()
     pWMF->SeekRel( 2 ); // Version (of Windows)
     pWMF->SeekRel( 4 ); // Size (of file in words)
     pWMF->SeekRel( 2 ); // NoObjects (maximum number of simultaneous objects)
-    pWMF->SeekRel( 4 ); // MaxRecord (size of largets record in words)
+    pWMF->SeekRel( 4 ); // MaxRecord (size of largest record in words)
     pWMF->SeekRel( 2 ); // NoParameters (Unused
 
     return pWMF->good();

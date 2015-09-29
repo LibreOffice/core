@@ -698,7 +698,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // For MetaFile replay (see task) it may now be necessary to take
                     // into account that the content is AntiAlialiased and needs to be masked
                     // like that. Instead of masking, i will use a copy-modify-paste cycle
-                    // here (as i already use in the VclPrimiziveRenderer with successs)
+                    // here (as i already use in the VclPrimiziveRenderer with success)
                     xVDev->SetAntialiasing(GetAntialiasing());
 
                     // create MapMode for buffer (offset needed) and set

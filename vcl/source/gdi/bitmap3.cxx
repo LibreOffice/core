@@ -1566,7 +1566,7 @@ namespace
 
 // #i121233# Added BmpScaleFlag::Lanczos, BmpScaleFlag::BiCubic, BmpScaleFlag::BiLinear and
 // BmpScaleFlag::Box derived from the original commit from Tomas Vajngerl (see
-// bugzilla task for deitails) Thanks!
+// bugzilla task for details) Thanks!
 bool Bitmap::ImplScaleConvolution(
     const double& rScaleX,
     const double& rScaleY,

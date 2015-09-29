@@ -604,7 +604,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
     // 111100000001111
 
     // Clearly, the leading band sep now goes from 0 to 3, and the
-    // trailing band sep from 11 to 14. This mimicks the xor look of a
+    // trailing band sep from 11 to 14. This mimics the xor look of a
     // bitmap operation.
 
     // band empty? -> add element

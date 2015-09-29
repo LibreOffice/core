@@ -192,7 +192,7 @@ enum StreamEntryType { STREAMENTRY_BANDHEADER, STREAMENTRY_SEPARATION, STREAMENT
 
 void RegionBand::load(SvStream& rIStrm)
 {
-    // clear this nstance's data
+    // clear this instance data
     implReset();
 
     // get all bands

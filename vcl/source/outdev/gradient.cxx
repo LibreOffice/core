@@ -562,7 +562,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
         nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
 
-        // either slow tools::PolyPolygon output or fast Polygon-Paiting
+        // either slow tools::PolyPolygon output or fast Polygon-Painting
         if( xPolyPoly )
         {
             bPaintLastPolygon = true; // #107349# Paint last polygon only if loop has generated any output
