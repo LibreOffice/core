@@ -2426,9 +2426,6 @@ bool ScFormulaCell::IsMultilineResult()
 
 bool ScFormulaCell::NeedsInterpret() const
 {
-    if (mxGroup && mxGroup->meKernelState == sc::OpenCLKernelCompilationScheduled)
-        return false;
-
     if (!IsDirtyOrInTableOpDirty())
         return false;
 

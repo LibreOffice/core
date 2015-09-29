@@ -78,7 +78,6 @@ enum GroupCalcState
 enum OpenCLKernelState
 {
     OpenCLKernelNone = 0,
-    OpenCLKernelCompilationScheduled,
     OpenCLKernelBinaryCreated
 };
 
