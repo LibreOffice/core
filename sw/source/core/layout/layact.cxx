@@ -2229,9 +2229,9 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
                     {
                         // UnlockPaint overwrite the selection from the
                         // CrsrShell and calls the virtual method paint
-                        // to fill the virtual device. This fill dont have
+                        // to fill the virtual device. This fill don't have
                         // paint the selection! -> Set the focus flag at
-                        // CrsrShell and it dont paint the selection.
+                        // CrsrShell and it doesn't paint the selection.
                         pCrsrShell->ShLooseFcs();
                         pCrsrShell->UnlockPaint( true );
                         pCrsrShell->ShGetFcs( false );

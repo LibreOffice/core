@@ -246,7 +246,7 @@ void SwAnchoredDrawObject::MakeObjPos()
 {
     if ( IsPositioningInProgress() )
     {
-        // nothind to do - positioning already in progress
+        // nothing to do - positioning already in progress
         return;
     }
 

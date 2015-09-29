@@ -642,7 +642,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     pDestShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( eOldRedlMode );
     mpDoc->SetCopyIsMove( bCopyIsMove );
 
-    // have new table formules been inserted?
+    // have new table formulas been inserted?
     if( pTableFieldTyp->HasWriterListeners() )
     {
         // finish old actions: the table frames are created and
@@ -661,7 +661,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     return bRet;
 }
 
-// Paste for  the interal clipboard. Copy the content of the clipboard
+// Paste for the internal clipboard. Copy the content of the clipboard
 // in the document
 namespace {
     typedef std::shared_ptr<SwPaM> PaMPtr;

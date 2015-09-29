@@ -1084,7 +1084,7 @@ sal_uInt16 SwFEShell::GetRowSelectionFromTop() const
  * a follow frame
  *
  * 2. case: bRepeat = false
- * returns true if the current frame is localed inside a table headline OR
+ * returns true if the current frame is located inside a table headline OR
  * inside the first line of a table!!!
  */
 bool SwFEShell::CheckHeadline( bool bRepeat ) const

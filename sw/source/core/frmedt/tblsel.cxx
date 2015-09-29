@@ -874,7 +874,7 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
 
     if( bRet )
     {
-        // now check for paragraph bound flyes
+        // now check for paragraph bound flies
         const SwFrameFormats& rFormats = *rPam.GetDoc()->GetSpzFrameFormats();
         sal_uLong nSttIdx = rPam.GetPoint()->nNode.GetIndex(),
               nEndIdx = rBox.GetSttNd()->EndOfSectionIndex(),
