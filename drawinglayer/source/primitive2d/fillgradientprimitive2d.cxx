@@ -191,7 +191,7 @@ namespace drawinglayer
             // prepare return value
             Primitive2DSequence aRetval(rEntries.size() + 1);
 
-            // get outmost viusible range from object
+            // get outmost visible range from object
             basegfx::B2DRange aOutmostRange(getOutputRange());
             basegfx::B2DPolyPolygon aCombinedPolyPoly;
 
@@ -219,7 +219,7 @@ namespace drawinglayer
 
                 for(sal_uInt32 a(0); a < rEntries.size() - 1; a++)
                 {
-                    // create next inner polygon, combinbe with last one
+                    // create next inner polygon, combined with last one
                     basegfx::B2DPolygon aNextPoly(rUnitPolygon);
 
                     aNextPoly.transform(rEntries[a + 1].maB2DHomMatrix);
