@@ -193,7 +193,7 @@ bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOutputS
 
     for( nPage = 0; nPage < nPageCount; nPage++)
     {
-        // #i56084# keep PageNumber? We could determine the PageNumber of the single to-be-eported page
+        // #i56084# keep PageNumber? We could determine the PageNumber of the single to-be-exported page
         // when exporting the selection, but this is only used for swf internal, so no need to do so (AFAIK)
         mnPageNumber = nPage + 1;
 

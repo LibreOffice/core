@@ -96,7 +96,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
             }
 
             // prevent outside code against NoSuchElementException!
-            // But dont implement such defensive strategy for our new create handling :-)
+            // But don't implement such defensive strategy for our new create handling :-)
             if (!m_rCache->hasItem(FilterCache::E_FRAMELOADER, sRealLoader))
                 return css::uno::Reference< css::uno::XInterface>();
         }

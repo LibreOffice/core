@@ -113,7 +113,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
             }
 
             // prevent outside code against NoSuchElementException!
-            // But dont implement such defensive strategy for our new create handling :-)
+            // But don't implement such defensive strategy for our new create handling :-)
             if (!m_rCache->hasItem(FilterCache::E_FILTER, sRealFilter))
                 return css::uno::Reference< css::uno::XInterface>();
         }
@@ -160,7 +160,7 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
 {
     /* Attention: Instead of getElementNames() this method have to return only filter names,
                   which can be created as UNO Services really. Thats why we search for filters,
-                  which dont have a valid value for the property "FilterService".
+                  which don't have a valid value for the property "FilterService".
                   Of course we can't check for corrupted service names here. We can check
                   for empty strings only ...
     */
@@ -547,7 +547,7 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const OUString& 
     try
     {
         css::uno::Reference< css::container::XNameAccess > xUISortConfig = officecfg::TypeDetection::UISort::ModuleDependendFilterOrder::get(xContext);
-        // dont check the module name here. If it does not exists, an exception is thrown and catched below.
+        // don't check the module name here. If it does not exists, an exception is thrown and catched below.
         // We return an empty list as result then.
         css::uno::Reference< css::container::XNameAccess > xModule;
         xUISortConfig->getByName(sModule) >>= xModule;
