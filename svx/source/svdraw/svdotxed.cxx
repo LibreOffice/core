@@ -278,8 +278,6 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
 
 void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 {
-    OutlinerParaObject* pNewText = NULL;
-
     if(rOutl.IsModified())
     {
 
@@ -287,7 +285,8 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         rOutl.UpdateFields();
 
         sal_Int32 nParaAnz = rOutl.GetParagraphCount();
-        pNewText = rOutl.CreateParaObject( 0, nParaAnz );
+        bool bNewTextTransferred = false;
+        OutlinerParaObject* pNewText = rOutl.CreateParaObject( 0, nParaAnz );
 
         // need to end edit mode early since SetOutlinerParaObject already
         // uses GetCurrentBoundRect() which needs to take the text into account
@@ -298,10 +297,17 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         if (IsChainable() && GetTextChain()->GetSwitchingToNextBox(this)) {
             GetTextChain()->SetSwitchingToNextBox(this, false);
             if( getActiveText() )
+            {
                 getActiveText()->SetOutlinerParaObject( pNewText);
+                bNewTextTransferred = true;
+            }
         } else { // If we are not doing in-chaining switching just set the ParaObject
             SetOutlinerParaObject(pNewText);
+            bNewTextTransferred = true;
         }
+
+        if (!bNewTextTransferred)
+            delete pNewText;
     }
 
     /* Beginning Chaining-related code */
