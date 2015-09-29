@@ -57,7 +57,7 @@ class TextSearch: public cppu::WeakImplHelper
     com::sun::star::uno::Reference<
         com::sun::star::i18n::XExtendedTransliteration > xTranslit2;
 
-    // define a function pointer for the different search nethods
+    // define a function pointer for the different search methods
     typedef ::com::sun::star::util::SearchResult
         (SAL_CALL TextSearch:: *FnSrch)( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );

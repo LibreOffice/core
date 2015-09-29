@@ -443,7 +443,7 @@ namespace canvas
             This class internally references a constant, static array of
             sorted MapEntries, and performs a binary search to look up
             values for a given query string. Note that this map is static,
-            i.e. not meant to be extented at runtime.
+            i.e. not meant to be extended at runtime.
 
             @tpl ValueType
             The value type this map should store, associated with an ASCII

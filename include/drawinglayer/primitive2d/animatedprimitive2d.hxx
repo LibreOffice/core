@@ -137,7 +137,7 @@ namespace drawinglayer
         /** AnimatedInterpolatePrimitive2D class
 
             Specialized on multi-step animations based on matrix transformations. The
-            Child sequelce will be embedded in a matrix transformation. That transformation
+            Child sequence will be embedded in a matrix transformation. That transformation
             will be linearly combined from the decomposed values and the animation value
             to allow a smooth animation.
          */

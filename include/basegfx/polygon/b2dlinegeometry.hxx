@@ -119,7 +119,7 @@ namespace basegfx
             subdivisions will be needed to create the filled geometry. Allowed
             range is cropped to [1.0 .. 0.01]
 
-            @praram fMiterMinimumAngle
+            @param fMiterMinimumAngle
             The minimum wanted angle between two edges when edge rounding
             is using miter. When an edge is smaller than this (tighter)
             the usual fallback to bevel is used. Allowed range is cropped

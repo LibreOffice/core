@@ -27,7 +27,7 @@ namespace cppu
 {
 
 /** This function throws the exception given by rExc.  The given value has to
-    be of typeclass EXCEPTION and must be dervived from or of
+    be of typeclass EXCEPTION and must be derived from or of
     type com.sun.star.uno.Exception.
 
     @param rExc
