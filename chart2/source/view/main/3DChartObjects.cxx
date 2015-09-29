@@ -106,7 +106,7 @@ const TextCacheItem& TextCache::getText(OUString const & rText, bool bIs3dText)
     memcpy(pBitmapBuf, buf, 3* nBmpWidth * nBmpHeight);
     TextCacheItem *pItem = new TextCacheItem(pBitmapBuf, aText.GetSizePixel());
     maTextCache.insert(rText, pItem);
-
+    Bitmap::ReleaseAccess(pAcc);
     return *maTextCache.find(rText)->second;
 }
 
