@@ -157,7 +157,7 @@ createOneInstanceComponentFactory(
     ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
     rtl_ModuleCount * pModCount = 0 );
 
-/** Deprecated.  The type of the instanciate function used as argument of the create*Fcatory functions.
+/** Deprecated.  The type of the instanciate function used as argument of the create*Factory functions.
 
     @see createSingleFactory
     @see createOneInstanceFactory

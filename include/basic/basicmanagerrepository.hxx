@@ -125,7 +125,7 @@ namespace basic
                 BasicManagerCreationListener& _rListener
             );
 
-        /** reveokes a BasicManagerCreationListener instance which has previously
+        /** revokes a BasicManagerCreationListener instance which has previously
             been registered to be notified about created BasicManager instances.
         */
         static  void    revokeCreationListener(

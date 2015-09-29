@@ -33,7 +33,7 @@ namespace cppu
  *<BR>
  * @param nEnum         int32 enum value
  * @param rType         enum type
- * @return enum or emoty any.
+ * @return enum or empty any.
  */
 inline ::com::sun::star::uno::Any SAL_CALL int2enum(
     sal_Int32 nEnum, const ::com::sun::star::uno::Type & rType )

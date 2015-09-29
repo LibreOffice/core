@@ -88,7 +88,7 @@ namespace connectivity
     };
 
     // OSQLParseNodesContainer
-    // grabage collection of nodes
+    // garbage collection of nodes
 
     class OSQLParseNodesContainer
     {

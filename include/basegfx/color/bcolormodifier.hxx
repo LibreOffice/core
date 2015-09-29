@@ -287,7 +287,7 @@ namespace basegfx
     /** gamma correction
 
         Input is a gamma correction value in the range ]0.0 .. 10.0]; the
-        color values get correted using
+        color values get corrected using
 
         col(r,g,b) = clamp(pow(col(r,g,b), 1.0 / gamma), 0.0, 1.0)
     */

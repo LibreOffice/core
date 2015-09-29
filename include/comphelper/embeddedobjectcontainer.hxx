@@ -176,7 +176,7 @@ public:
 
     /** call setPersistentEntry for each embedded object in the container
     *
-    * \param _xStorage The storeage where to store the objects.
+    * \param _xStorage The storage where to store the objects.
     * \param _bClearModifedFlag If <TRUE/> then the modified flag will be set to <FALSE/> otherwise nothing happen.
     * \return <FALSE/> if no error occurred, otherwise <TRUE/>.
     */
