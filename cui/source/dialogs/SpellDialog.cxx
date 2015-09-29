@@ -437,7 +437,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
         }
     }
 }
-/* Initialize, asynchronous to prevent virtial calls
+/* Initialize, asynchronous to prevent vertical calls
    from a constructor
  */
 IMPL_LINK_NOARG_TYPED( SpellDialog, InitHdl, void*, void)

@@ -70,7 +70,7 @@ inline connectivity::OSQLInternalNode* newNode(const OUString& _NewValue,
 
 
 // yyi is the internal number of the rule that is currently being reduced
-// This can be mapped to extrnal rule number via the yyrmap.
+// This can be mapped to external rule number via the yyrmap.
 #define SQL_NEW_RULE 			newNode("", SQL_NODE_RULE, yyr1[yyn])
 #define SQL_NEW_LISTRULE 		newNode("", SQL_NODE_LISTRULE, yyr1[yyn])
 #define SQL_NEW_COMMALISTRULE   newNode("", SQL_NODE_COMMALISTRULE, yyr1[yyn])

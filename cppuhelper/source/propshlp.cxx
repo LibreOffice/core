@@ -892,7 +892,7 @@ void OPropertySetHelper::setFastPropertyValues(
 
 // XMultiPropertySet
 /**
- * The sequence may be conatain not known properties. The implementation
+ * The sequence may be contain not known properties. The implementation
  * must ignore these properties.
  */
 void OPropertySetHelper::setPropertyValues(

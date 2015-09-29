@@ -364,7 +364,7 @@ OWeakRefListener::~OWeakRefListener()
     {
     if (m_XWeakConnectionPoint.is())
     {
-        acquire(); // dont die again
+        acquire(); // don't die again
         m_XWeakConnectionPoint->removeReference(static_cast<XReference*>(this));
     }
     }

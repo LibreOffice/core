@@ -324,7 +324,7 @@ void SvxHyperlinkTabPageBase::SetInitFocus()
     GrabFocus();
 }
 
-// Ask dialog whether the curretn doc is a HTML-doc
+// Ask dialog whether the current doc is a HTML-doc
 bool SvxHyperlinkTabPageBase::IsHTMLDoc() const
 {
     return static_cast<SvxHpLinkDlg*>(mpDialog.get())->IsHTMLDoc();

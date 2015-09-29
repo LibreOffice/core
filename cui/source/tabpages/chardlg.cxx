@@ -2035,7 +2035,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         "SvxCharEffectsPage::Reset: inconsistence (1)!");
     m_pUnderlineLB->GetSelectHdl().Call(NULL);
         // don't call SelectHdl_Impl directly!
-        // in DisableControls, we may have re-reouted the select handler
+        // in DisableControls, we may have re-routed the select handler
 
     // the select handler for the emphasis listbox
 //  SelectHdl_Impl( m_pEmphasisLB );

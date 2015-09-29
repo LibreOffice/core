@@ -87,7 +87,7 @@ namespace connectivity
         void Freeze();
 
         /**
-            CreateKeySet creates the keyset which vaalues could be used to travel in your table/result
+            CreateKeySet creates the keyset which values could be used to travel in your table/result
             The returned keyset is frozen.
         */
         ::rtl::Reference<OKeySet> CreateKeySet();
