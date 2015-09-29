@@ -1528,7 +1528,7 @@ void LoadEnv::impl_reactForLoadingState()
     {
         // Bring the new loaded document to front (if allowed!).
         // Note: We show new created frames here only.
-        // We dont hide already visible frames here ...
+        // We don't hide already visible frames here ...
         css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
         bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
         bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), false);
@@ -1700,7 +1700,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     if (!bSystemWindow && !bWorkWindow)
         return;
 
-    // dont overwrite this special state!
+    // don't overwrite this special state!
     WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
     if (pWorkWindow->IsMinimized())
         return;

@@ -253,7 +253,7 @@ sal_Bool SAL_CALL Desktop::terminate()
     // Order of called listener is important!
     // Some of them are harmless,-)
     // but some can be dangerous. E.g. it would be dangerous if we close our pipe
-    // and dont terminate in real because another listener throws a veto exception .-)
+    // and don't terminate in real because another listener throws a veto exception .-)
 
     bool bTerminate = false;
     try
@@ -1027,7 +1027,7 @@ void SAL_CALL Desktop::disposing()
 
     // Now - we are alone and its the first call of this method ...
     // otherwise call before had thrown a DisposedException / hopefully .-)
-    // But we dont use the transaction object created before ... we reset it immediately ...
+    // But we don't use the transaction object created before ... we reset it immediately ...
     // two lines of code ... for what ?
     // The answer: We wished to synchronize concurrent dispose() calls -> OK
     // But next line will wait for all currently running transaction (even if they
@@ -1087,7 +1087,7 @@ void SAL_CALL Desktop::disposing()
                 about our dying!
                 You must release this listener reference during your own disposing() method.
 
-    @attention  Our container is threadsafe himeslf. So we don't need any lock here.
+    @attention  Our container is threadsafe himself. So we don't need any lock here.
     @param      "xListener", reference to valid listener. We don't accept invalid values!
     @threadsafe yes
 */
@@ -1194,7 +1194,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     // get packed request and work on it first
     // Attention: Don't set it on internal member BEFORE interaction is finished - because
     // "loadComponentFromURL()" yield tills this member is changed. If we do it before
-    // interaction finish we can't guarantee right functionality. May be we cancel load process to erliear ...
+    // interaction finish we can't guarantee right functionality. May be we cancel load process to earliear...
     css::uno::Any aRequest = xRequest->getRequest();
 
     // extract continuations from request
@@ -1724,7 +1724,7 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
                 catch(const css::util::CloseVetoException&)
                 {
                     // Any internal process of this frame disagree with our request.
-                    // Safe this state but dont break these loop. Other frames has to be closed!
+                    // Safe this state but don't break these loop. Other frames has to be closed!
                     ++nNonClosedFrames;
 
                     // Reactivate controller.

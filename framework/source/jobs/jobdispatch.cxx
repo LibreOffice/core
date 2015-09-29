@@ -318,9 +318,9 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
 
     css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
-    // no jobs ... no execution
-    // But a may given listener will know something ...
-    // I think this operaton was finished successfully.
+    // no jobs... no execution
+    // But a may given listener will know something...
+    // I think this operation was finished successfully.
     // It's not really an error, if no registered jobs could be located.
     // Step over all found jobs and execute it
     int nExecutedJobs=0;
@@ -350,7 +350,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
             continue;
 
         // Special mode for listener.
-        // We dont notify it directly here. We delegate that
+        // We don't notify it directly here. We delegate that
         // to the job implementation. But we must set ourself there too.
         // Because this job must fake the source address of the event.
         // Otherwise the listener may ignore it.
@@ -411,7 +411,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
     css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
     // Special mode for listener.
-    // We dont notify it directly here. We delegate that
+    // We don't notify it directly here. We delegate that
     // to the job implementation. But we must set ourself there too.
     // Because this job must fake the source address of the event.
     // Otherwise the listener may ignore it.
@@ -461,7 +461,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
     css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
     // Special mode for listener.
-    // We dont notify it directly here. We delegate that
+    // We don't notify it directly here. We delegate that
     // to the job implementation. But we must set ourself there too.
     // Because this job must fake the source address of the event.
     // Otherwise the listener may ignore it.
