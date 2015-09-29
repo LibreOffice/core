@@ -32,17 +32,17 @@ class OleEmbeddedObject;
 #define OLECOMP_ONVIEWCHANGE    1
 #define OLECOMP_ONCLOSE         2
 
-class MainThreadNotificationRequest :  public cppu::WeakImplHelper< com::sun::star::awt::XCallback >
+class MainThreadNotificationRequest :  public cppu::WeakImplHelper< css::awt::XCallback >
 {
     OleEmbeddedObject* m_pObject;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XEmbeddedObject > m_xObject;
+    css::uno::WeakReference< css::embed::XEmbeddedObject > m_xObject;
 
     sal_uInt16 m_nNotificationType;
     sal_uInt32 m_nAspect;
 
 public:
-    virtual void SAL_CALL notify (const com::sun::star::uno::Any& rUserData)
-        throw (com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notify (const css::uno::Any& rUserData)
+        throw (css::uno::RuntimeException);
     MainThreadNotificationRequest( const ::rtl::Reference< OleEmbeddedObject >& xObj, sal_uInt16 nNotificationType, sal_uInt32 nAspect = 0 );
     ~MainThreadNotificationRequest();
 };

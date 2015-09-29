@@ -49,7 +49,7 @@ public:
     InitializedOleGuard()
     {
         if ( !SUCCEEDED( OleInitialize( NULL ) ) )
-            throw ::com::sun::star::uno::RuntimeException();
+            throw css::uno::RuntimeException();
     }
 
     ~InitializedOleGuard()

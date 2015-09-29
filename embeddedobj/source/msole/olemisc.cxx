@@ -665,7 +665,7 @@ void SAL_CALL OleEmbeddedObject::translateAccelerators(
 
 // XChild
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL OleEmbeddedObject::getParent() throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::uno::XInterface > SAL_CALL OleEmbeddedObject::getParent() throw (css::uno::RuntimeException, std::exception)
 {
     // begin wrapping related part ====================
     uno::Reference< container::XChild > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -680,7 +680,7 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL OleEm
 }
 
 
-void SAL_CALL OleEmbeddedObject::setParent( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& xParent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OleEmbeddedObject::setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception)
 {
     // begin wrapping related part ====================
     uno::Reference< container::XChild > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );

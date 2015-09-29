@@ -28,39 +28,39 @@
 
 
 class MSOLEDialogObjectCreator : public ::cppu::WeakImplHelper<
-                                                ::com::sun::star::embed::XInsertObjectDialog,
-                                                ::com::sun::star::embed::XEmbedObjectClipboardCreator,
-                                                ::com::sun::star::lang::XServiceInfo >
+                                                css::embed::XInsertObjectDialog,
+                                                css::embed::XEmbedObjectClipboardCreator,
+                                                css::lang::XServiceInfo >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
 public:
     MSOLEDialogObjectCreator(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
     {
         OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
     }
 
-    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
+    static css::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
 
     static OUString SAL_CALL impl_staticGetImplementationName();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
         impl_staticCreateSelfInstance(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
 
     // XInsertObjectDialog
-    virtual ::com::sun::star::embed::InsertedObjectInfo SAL_CALL createInstanceByDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual css::embed::InsertedObjectInfo SAL_CALL createInstanceByDialog( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::Exception, css::uno::RuntimeException);
 
     // XEmbedObjectClipboardCreator
-    virtual ::com::sun::star::embed::InsertedObjectInfo SAL_CALL createInstanceInitFromClipboard( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const OUString& sEntryName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aObjectArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual css::embed::InsertedObjectInfo SAL_CALL createInstanceInitFromClipboard( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntryName, const css::uno::Sequence< css::beans::PropertyValue >& aObjectArgs ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::Exception, css::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
 };
 

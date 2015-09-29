@@ -186,7 +186,7 @@ bool OwnView_Impl::CreateModel( bool bUseNative )
 
 
 OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                                                    const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
                                                     const OUString& aNameWithExtention,
                                                     const uno::Reference< io::XInputStream >& xInputStream )
 {

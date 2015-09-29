@@ -27,51 +27,51 @@
 class OSpecialEmbeddedObject : public OCommonEmbeddedObject
 {
 private:
-    com::sun::star::awt::Size         maSize;
+    css::awt::Size         maSize;
 public:
     OSpecialEmbeddedObject(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps );
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Sequence< css::beans::NamedValue >& aObjectProps );
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
     // XVisualObject
-    virtual ::com::sun::star::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect )
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect )
+        throw ( css::lang::IllegalArgumentException,
+                css::embed::WrongStateException,
+                css::uno::Exception,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL setVisualAreaSize( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize )
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setVisualAreaSize( sal_Int64 nAspect, const css::awt::Size& aSize )
+        throw ( css::lang::IllegalArgumentException,
+                css::embed::WrongStateException,
+                css::uno::Exception,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getVisualAreaSize( sal_Int64 nAspect )
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::awt::Size SAL_CALL getVisualAreaSize( sal_Int64 nAspect )
+        throw ( css::lang::IllegalArgumentException,
+                css::embed::WrongStateException,
+                css::uno::Exception,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL getMapUnit( sal_Int64 nAspect )
-        throw ( ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw ( css::uno::Exception,
+                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL changeState( sal_Int32 nNewState )
-        throw ( ::com::sun::star::embed::UnreachableStateException,
-                ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::embed::UnreachableStateException,
+                css::embed::WrongStateException,
+                css::uno::Exception,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL doVerb( sal_Int32 nVerbID )
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::embed::UnreachableStateException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IllegalArgumentException,
+                css::embed::WrongStateException,
+                css::embed::UnreachableStateException,
+                css::uno::Exception,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 #endif

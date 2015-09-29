@@ -692,8 +692,8 @@ namespace
     //Dump the objects content to a tempfile, just the "CONTENTS" stream if
     //there is one for non-compound documents, otherwise the whole content.
     //On success a file is returned which must be removed by the caller
-    OUString lcl_ExtractObject(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xObjectStream)
+    OUString lcl_ExtractObject(css::uno::Reference< css::lang::XMultiServiceFactory > xFactory,
+        css::uno::Reference< css::io::XStream > xObjectStream)
     {
         OUString sUrl;
 
@@ -879,9 +879,9 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
                 if (!m_aTempDumpURL.isEmpty())
                 {
-                    uno::Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                        ::com::sun::star::system::SystemShellExecute::create(comphelper::getComponentContext(m_xFactory)) );
-                    xSystemShellExecute->execute(m_aTempDumpURL, OUString(), ::com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
+                    uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                        css::system::SystemShellExecute::create(comphelper::getComponentContext(m_xFactory)) );
+                    xSystemShellExecute->execute(m_aTempDumpURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
                 }
                 else
                     throw embed::UnreachableStateException();

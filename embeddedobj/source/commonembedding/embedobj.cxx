@@ -298,7 +298,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             {
                 uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY_THROW );
                 // TODO:
-                uno::Reference< ::com::sun::star::frame::XLayoutManager > xContainerLM =
+                uno::Reference< css::frame::XLayoutManager > xContainerLM =
                             xInplaceClient->getLayoutManager();
                 if ( xContainerLM.is() )
                 {
@@ -365,7 +365,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         if ( nNextState == embed::EmbedStates::INPLACE_ACTIVE )
         {
             uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY_THROW );
-            uno::Reference< ::com::sun::star::frame::XLayoutManager > xContainerLM =
+            uno::Reference< css::frame::XLayoutManager > xContainerLM =
                         xInplaceClient->getLayoutManager();
 
             bool bOk = false;
@@ -670,12 +670,12 @@ void SAL_CALL OCommonEmbeddedObject::setContainerName( const OUString& sName )
     m_aContainerName = sName;
 }
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL OCommonEmbeddedObject::getParent() throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::uno::XInterface > SAL_CALL OCommonEmbeddedObject::getParent() throw (css::uno::RuntimeException, std::exception)
 {
     return m_xParent;
 }
 
-void SAL_CALL OCommonEmbeddedObject::setParent( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& xParent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OCommonEmbeddedObject::setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception)
 {
     m_xParent = xParent;
     if ( m_nObjectState != -1 && m_nObjectState != embed::EmbedStates::LOADED )
@@ -687,7 +687,7 @@ void SAL_CALL OCommonEmbeddedObject::setParent( const com::sun::star::uno::Refer
 }
 
 // XDefaultSizeTransmitter
-void SAL_CALL OCommonEmbeddedObject::setDefaultSize( const ::com::sun::star::awt::Size& rSize_100TH_MM ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OCommonEmbeddedObject::setDefaultSize( const css::awt::Size& rSize_100TH_MM ) throw (css::uno::RuntimeException, std::exception)
 {
     //#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
     m_aDefaultSizeForChart_In_100TH_MM = rSize_100TH_MM;
