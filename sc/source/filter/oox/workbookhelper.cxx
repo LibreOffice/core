@@ -723,6 +723,16 @@ void WorkbookHelper::finalizeWorkbookImport()
     StorageRef xVbaPrjStrg = mrBookGlob.getVbaProjectStorage();
     if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
         getBaseFilter().getVbaProject().importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
+
+    // Has any string ref syntax been imported?
+    // If not, we need to take action
+    ScCalcConfig aCalcConfig = getScDocument().GetCalcConfig();
+
+    if ( !aCalcConfig.mbHasStringRefSyntax )
+    {
+        aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_A1_XL_A1;
+        getScDocument().SetCalcConfig(aCalcConfig);
+    }
 }
 
 // document model -------------------------------------------------------------
