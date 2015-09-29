@@ -1701,7 +1701,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         sal_Int8 nActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
 
         rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, xData, mxDnDListener );
-        // If Drag&Move in an Engine, thenCopy&Del has to be optional!
+        // If Drag&Move in an Engine, then Copy&Del has to be optional!
         GetCursor()->Hide();
 
     }

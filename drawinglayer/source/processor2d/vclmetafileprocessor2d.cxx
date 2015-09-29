@@ -703,13 +703,13 @@ namespace drawinglayer
             Support for vcl::PDFExtOutDevData:
             PL knows that SJ did that stuff, it's used to hold a pointer to PDFExtOutDevData at
             the OutDev. When set, some extra data is written there. Trying simple PDF export and
-            watching if i get those infos.
+            watching if I get those infos.
             Well, a PDF export does not use e.g. ImpEditEngine::Paint since the PdfFilter uses
             the SdXImpressDocument::render and thus uses the VclMetafileProcessor2D. I will check
-            if i get a PDFExtOutDevData at the target output device.
-            Indeed, i get one. Checking what all may be done when that extra-device-info is there.
+            if I get a PDFExtOutDevData at the target output device.
+            Indeed, I get one. Checking what all may be done when that extra-device-info is there.
 
-            All in all i have to talk to SJ. I will need to emulate some of those actions, but
+            All in all I have to talk to SJ. I will need to emulate some of those actions, but
             i need to discuss which ones.
             In the future, all those infos would be taken from the primitive sequence anyways,
             thus these extensions would potentially be temporary, too.
@@ -730,7 +730,7 @@ namespace drawinglayer
               vcl::PDFWriter::AnyWidget is filled out, which is already part of vcl.
               Wrote an eMail to FS, he is on vacation currently. I see no reason why not to move
               that stuff to somewhere else, maybe tools or svtools ?!? We will see...
-              Moved to toolkit, so i have to link against it. I tried VCL first, but it did
+              Moved to toolkit, so I have to link against it. I tried VCL first, but it did
               not work since VCLUnoHelper::CreateFont is unresolved in VCL (!). Other then the name
               may imply, it is defined in toolkit (!). Since toolkit is linked against VCL itself,
               the lowest movement plane is toolkit.
@@ -1957,7 +1957,7 @@ namespace drawinglayer
                     // - uses DrawTransparent with metafile for content and a gradient
                     // i can detect this here with checking the gradient part for a single
                     // FillGradientPrimitive2D and reconstruct the gradient.
-                    // If that detection goes wrong, i have to create an transparence-blended bitmap. Eventually
+                    // If that detection goes wrong, I have to create an transparence-blended bitmap. Eventually
                     // do that in stripes, else RenderTransparencePrimitive2D may just be used
                     const primitive2d::TransparencePrimitive2D& rTransparenceCandidate = static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate);
                     const primitive2d::Primitive2DSequence rContent = rTransparenceCandidate.getChildren();

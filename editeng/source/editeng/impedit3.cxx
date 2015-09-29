@@ -586,7 +586,7 @@ void ImpEditEngine::CheckPageOverflow()
         mbNeedsChainingHandling = true;
     } else
     {
-        // No overflow if withing box boundaries
+        // No overflow if within box boundaries
         //aStatus.SetPageOverflow(false);
         mbNeedsChainingHandling = false;
     }

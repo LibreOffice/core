@@ -1468,7 +1468,7 @@ SpellInfo * ImpEditEngine::CreateSpellInfo( bool bMultipleDocs )
     pSpellInfo->bMultipleDoc = bMultipleDocs;
     // always spell draw objects completely, startting at the top.
     // (spelling in only a selection or not starting with the top requires
-    // further changes elsewehe to work properly)
+    // further changes elsewhere to work properly)
     pSpellInfo->aSpellStart = EPaM();
     pSpellInfo->aSpellTo    = EPaM( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND );
     return pSpellInfo;
