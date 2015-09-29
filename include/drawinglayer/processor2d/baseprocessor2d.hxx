@@ -132,7 +132,7 @@ namespace drawinglayer
 
                     case PRIMITIVE2D_ID_SOME_TEXT :
                     {
-                        // encapsulate e.g. with changing local varibles, e.g.
+                        // encapsulate e.g. with changing local variables, e.g.
                         // sometimes it's good to know if a basic primitive is
                         // part of a text, especially when not handling the text
                         // self but by purpose want to handle the decomposed
