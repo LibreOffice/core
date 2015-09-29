@@ -44,7 +44,7 @@ SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, bool b
 :   mnIndex(0L),
     mbReverse(bReverse)
 {
-    if ( rObj.ISA( SdrObjGroup ) )
+    if ( dynamic_cast<const SdrObjGroup*>(&rObj) !=  nullptr )
         ImpProcessObjectList(*rObj.GetSubList(), eMode, true);
     else
         maObjList.push_back(const_cast<SdrObject*>(&rObj));
@@ -83,7 +83,7 @@ void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, bool bUse
     bool bIsGroup = pObj->IsGroupObject();
     // 3D objects are not group objects, IsGroupObject()
     // only tests if pSub is not null ptr :-(
-    if( bIsGroup && pObj->ISA( E3dObject ) && !pObj->ISA( E3dScene ) )
+    if( bIsGroup && dynamic_cast<const E3dObject* >(pObj) != nullptr && dynamic_cast<const E3dScene* >(pObj) == nullptr)
         bIsGroup = false;
 
     if( !bIsGroup || (eMode != IM_DEEPNOGROUPS) )

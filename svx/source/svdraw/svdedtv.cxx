@@ -132,7 +132,7 @@ bool SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
         SdrObjList* pSubOL = pObj->GetSubList();
 
         // explicitly test for group objects and 3d scenes
-        if(pSubOL && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dScene)))
+        if(pSubOL && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr || dynamic_cast< const E3dScene* >(pObj) !=  nullptr))
         {
             if(!ImpDelLayerCheck(pSubOL, nDelID))
             {
@@ -167,7 +167,7 @@ void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
 
 
         // explicitly test for group objects and 3d scenes
-        if(pSubOL && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dScene)))
+        if(pSubOL && (dynamic_cast<const SdrObjGroup*>( pObj) != nullptr || dynamic_cast<const E3dScene* >(pObj) !=  nullptr))
         {
             if(ImpDelLayerCheck(pSubOL, nDelID))
             {
@@ -236,7 +236,7 @@ void SdrEditView::DeleteLayer(const OUString& rName)
                     SdrObjList* pSubOL = pObj->GetSubList();
 
                     // explicitly test for group objects and 3d scenes
-                    if(pSubOL && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dScene)))
+                    if(pSubOL && (dynamic_cast<const SdrObjGroup*>(pObj) != nullptr || dynamic_cast<const E3dScene* >(pObj) !=  nullptr))
                     {
                         if(ImpDelLayerCheck(pSubOL, nDelID))
                         {
@@ -311,7 +311,7 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
     // the beginning of UNDO selected objects
     for(size_t a(0); a < rAllMarkedObjects.size(); a++)
     {
-        SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, rAllMarkedObjects[a]);
+        SdrEdgeObj* pEdge = dynamic_cast<SdrEdgeObj*>( rAllMarkedObjects[a] );
 
         if(pEdge)
         {
@@ -349,7 +349,7 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
     for (size_t i=0; i<nMarkedEdgeAnz; ++i) {
         SdrMark* pEM = GetMarkedEdgesOfMarkedNodes().GetMark(i);
         SdrObject* pEdgeTmp=pEM->GetMarkedSdrObj();
-        SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pEdgeTmp);
+        SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pEdgeTmp );
         if (pEdge!=NULL) {
             pEdge->SetEdgeTrackDirty();
         }
@@ -490,7 +490,7 @@ void SdrEditView::CheckPossibilities()
                 // check bCombinePossible more thoroughly
                 // still missing ...
                 const SdrObject* pObj=GetMarkedObjectByIndex(0);
-                //const SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
+                //const SdrPathObj* pPath=dynamic_cast<SdrPathObj*>( pObj );
                 bool bGroup=pObj->GetSubList()!=NULL;
                 bool bHasText=pObj->GetOutlinerParaObject()!=NULL;
                 if (bGroup || bHasText) {
@@ -649,7 +649,7 @@ void SdrEditView::CheckPossibilities()
             // Currently only implemented for single selection.
             if (nMarkCount==1) {
                 SdrObject* pObj=GetMarkedObjectByIndex(0);
-                SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pObj);
+                SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pObj );
                 if (pEdge!=NULL) {
                     SdrObject* pNode1=pEdge->GetConnectedNode(true);
                     SdrObject* pNode2=pEdge->GetConnectedNode(false);

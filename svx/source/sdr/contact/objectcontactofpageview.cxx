@@ -329,7 +329,7 @@ namespace sdr
 
             if(pActiveGroupList)
             {
-                if(pActiveGroupList->ISA(SdrPage))
+                if(dynamic_cast<const SdrPage*>( pActiveGroupList) !=  nullptr)
                 {
                     // It's a Page itself
                     return &(static_cast<SdrPage*>(pActiveGroupList)->GetViewContact());

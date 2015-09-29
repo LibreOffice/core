@@ -144,7 +144,7 @@ namespace svxform
         FmEntryData* pEntryData = m_pNavModel->FindData(xReplaced, m_pNavModel->GetRootList());
         if (pEntryData)
         {
-            if (pEntryData->ISA(FmControlData))
+            if (dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr)
             {
                 Reference< XFormComponent >  xComp;
                 evt.Element >>= xComp;
@@ -152,7 +152,7 @@ namespace svxform
                     // FmControlData should be coupled with XFormComponent
                 m_pNavModel->ReplaceFormComponent(xReplaced, xComp);
             }
-            else if (pEntryData->ISA(FmFormData))
+            else if (dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr)
             {
                 OSL_FAIL("replacing forms not implemented yet !");
             }
@@ -266,7 +266,7 @@ namespace svxform
         if (bAlterModel)
         {
             OUString aStr;
-            if (pEntry->ISA(FmFormData))
+            if (dynamic_cast<const FmFormData*>( pEntry) !=  nullptr)
                 aStr = SVX_RESSTR(RID_STR_FORM);
             else
                 aStr = SVX_RESSTR(RID_STR_CONTROL);
@@ -330,7 +330,7 @@ namespace svxform
 
 
         // Remove data from model
-        if (pEntry->ISA(FmFormData))
+        if (dynamic_cast<const FmFormData*>( pEntry) !=  nullptr)
         {
             Reference< XContainer >  xContainer(xElement, UNO_QUERY);
             if (xContainer.is())
@@ -371,7 +371,7 @@ namespace svxform
         if (bAlterModel)
         {
             OUString        aStr;
-            if (pEntry->ISA(FmFormData))
+            if (dynamic_cast<const FmFormData*>( pEntry) !=  nullptr)
                 aStr = SVX_RESSTR(RID_STR_FORM);
             else
                 aStr = SVX_RESSTR(RID_STR_CONTROL);
@@ -385,7 +385,7 @@ namespace svxform
         }
 
         // now real deletion of data form model
-        if (pEntry->ISA(FmFormData))
+        if (dynamic_cast<const FmFormData*>( pEntry) !=  nullptr)
             RemoveForm(static_cast<FmFormData*>(pEntry));
         else
             RemoveFormComponent(static_cast<FmControlData*>(pEntry));
@@ -457,9 +457,9 @@ namespace svxform
 
 
             // Child is form -> recursive call
-            if( pEntryData->ISA(FmFormData) )
+            if( dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr )
                 RemoveForm( static_cast<FmFormData*>(pEntryData));
-            else if( pEntryData->ISA(FmControlData) )
+            else if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
                 RemoveFormComponent(static_cast<FmControlData*>(pEntryData));
         }
 
@@ -499,7 +499,7 @@ namespace svxform
         for( size_t i = pChildList->size(); i > 0; )
         {
             FmEntryData* pChildData = pChildList->at( --i );
-            if( pChildData->ISA(FmFormData) )
+            if( dynamic_cast<const FmFormData*>( pChildData) !=  nullptr )
                 ClearBranch( static_cast<FmFormData*>(pChildData) );
 
             pChildList->remove( pChildData );
@@ -624,8 +624,8 @@ namespace svxform
     )
     {
         FmEntryData* pData = FindData(xOld, GetRootList());
-        assert(pData && pData->ISA(FmControlData)); //NavigatorTreeModel::ReplaceFormComponent : invalid argument
-        if (!pData || !pData->ISA(FmControlData))
+        assert(pData && dynamic_cast<const FmControlData*>( pData) !=  nullptr); //NavigatorTreeModel::ReplaceFormComponent : invalid argument
+        if (!pData || dynamic_cast<const FmControlData*>( pData) ==  nullptr)
             return;
         static_cast<FmControlData*>(pData)->ModelReplaced( xNew, m_aNormalImages );
 
@@ -675,7 +675,7 @@ namespace svxform
             if (rText == aEntryText)
                 return pEntryData;
 
-            if( bRecurs && pEntryData->ISA(FmFormData) )
+            if( bRecurs && dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr )
             {
                 pChildData = FindData( rText, static_cast<FmFormData*>(pEntryData) );
                 if( pChildData )
@@ -771,7 +771,7 @@ namespace svxform
 
     bool NavigatorTreeModel::InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject)
     {
-        if ( pObject->ISA(SdrObjGroup) )
+        if ( dynamic_cast<const SdrObjGroup*>( pObject) !=  nullptr )
         {   // descend recursively
             const SdrObjList *pChildren = static_cast<SdrObjGroup*>(pObject)->GetSubList();
             for ( size_t i=0; i<pChildren->GetObjCount(); ++i )
@@ -913,14 +913,14 @@ namespace svxform
         // get PropertySet
         Reference< XFormComponent >  xFormComponent;
 
-        if( pEntryData->ISA(FmFormData) )
+        if( dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr )
         {
             FmFormData* pFormData = static_cast<FmFormData*>(pEntryData);
             Reference< XForm >  xForm( pFormData->GetFormIface());
             xFormComponent = xForm;
         }
 
-        if( pEntryData->ISA(FmControlData) )
+        if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
         {
             FmControlData* pControlData = static_cast<FmControlData*>(pEntryData);
             xFormComponent = pControlData->GetFormComponent();

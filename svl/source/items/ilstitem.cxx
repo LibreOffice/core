@@ -58,7 +58,7 @@ SfxIntegerListItem::~SfxIntegerListItem()
 
 bool SfxIntegerListItem::operator==( const SfxPoolItem& rPoolItem ) const
 {
-    if ( !rPoolItem.ISA( SfxIntegerListItem ) )
+    if ( dynamic_cast< const SfxIntegerListItem* >( &rPoolItem) ==  nullptr )
         return false;
 
     const SfxIntegerListItem rItem = static_cast<const SfxIntegerListItem&>(rPoolItem);

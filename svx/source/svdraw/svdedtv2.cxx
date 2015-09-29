@@ -568,7 +568,7 @@ bool SdrEditView::ImpCanConvertForCombine1(const SdrObject* pObj)
     // new condition IsLine() to be able to combine simple Lines
     bool bIsLine(false);
 
-    const SdrPathObj* pPath = PTR_CAST(SdrPathObj,pObj);
+    const SdrPathObj* pPath = dynamic_cast< const SdrPathObj*>( pObj );
 
     if(pPath)
     {
@@ -614,7 +614,7 @@ bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj)
 basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, bool bCombine)
 {
     basegfx::B2DPolyPolygon aRetval;
-    const SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
+    const SdrPathObj* pPath = dynamic_cast<const SdrPathObj*>( pObj );
 
     if(bCombine && pPath && !pObj->GetOutlinerParaObject())
     {
@@ -635,7 +635,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, b
                 while(aIter.IsMore())
                 {
                     SdrObject* pObj1 = aIter.Next();
-                    pPath = PTR_CAST(SdrPathObj, pObj1);
+                    pPath = dynamic_cast<SdrPathObj*>( pObj1 );
 
                     if(pPath)
                     {
@@ -645,7 +645,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, b
             }
             else
             {
-                pPath = PTR_CAST(SdrPathObj, pConvObj);
+                pPath = dynamic_cast<SdrPathObj*>( pConvObj );
 
                 if(pPath)
                 {
@@ -1038,7 +1038,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                 while(aIter.IsMore())
                 {
                     SdrObject* pCandidate = aIter.Next();
-                    SdrPathObj* pPathObj = PTR_CAST(SdrPathObj, pCandidate);
+                    SdrPathObj* pPathObj = dynamic_cast<SdrPathObj*>( pCandidate );
                     if(pPathObj)
                     {
                         basegfx::B2DPolyPolygon aTmpPoly(pPathObj->GetPathPoly());
@@ -1367,7 +1367,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
         const drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(pAttrObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
         // Take fill style/closed state of pAttrObj in account when deciding to change the line style
-        bool bIsClosedPathObj(pAttrObj->ISA(SdrPathObj) && static_cast<const SdrPathObj*>(pAttrObj)->IsClosed());
+        bool bIsClosedPathObj(dynamic_cast<const SdrPathObj*>( pAttrObj) != nullptr && static_cast<const SdrPathObj*>(pAttrObj)->IsClosed());
 
         if(drawing::LineStyle_NONE == eLineStyle && (drawing::FillStyle_NONE == eFillStyle || !bIsClosedPathObj))
         {
@@ -1441,7 +1441,7 @@ bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, bool bMakeLines)
         while(aIter.IsMore() && !bOtherObjs)
         {
             const SdrObject* pObj1 = aIter.Next();
-            const SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj1);
+            const SdrPathObj* pPath = dynamic_cast<const SdrPathObj*>( pObj1 );
 
             if(pPath)
             {
@@ -1506,8 +1506,8 @@ bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, bool bMakeLines)
 
 void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, size_t& rPos, SdrPageView* pPV, bool bMakeLines)
 {
-    const SdrPathObj* pSrcPath = PTR_CAST(SdrPathObj, pObj);
-    const SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pObj);
+    const SdrPathObj* pSrcPath = dynamic_cast<const SdrPathObj*>( pObj );
+    const SdrObjCustomShape* pCustomShape = dynamic_cast<const SdrObjCustomShape*>( pObj );
 
     const bool bUndo = IsUndoEnabled();
 
@@ -1593,7 +1593,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
                 if(static_cast<const SdrOnOffItem&>(pCustomShape->GetMergedItem(SDRATTR_SHADOW)).GetValue())
                 {
-                    if(pReplacement->ISA(SdrObjGroup))
+                    if(dynamic_cast<const SdrObjGroup*>( pReplacement) !=  nullptr)
                     {
                         pCandidate->SetMergedItem(makeSdrShadowItem(true));
                     }
@@ -2036,8 +2036,8 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         SdrPageView* pPV=pM->GetPageView();
         SdrObjList*  pOL=pObj->GetObjList();
         const size_t nInsPos=pObj->GetOrdNum()+1;
-        SdrGrafObj*  pGraf=PTR_CAST(SdrGrafObj,pObj);
-        SdrOle2Obj*  pOle2=PTR_CAST(SdrOle2Obj,pObj);
+        SdrGrafObj*  pGraf= dynamic_cast<SdrGrafObj*>( pObj );
+        SdrOle2Obj*  pOle2= dynamic_cast<SdrOle2Obj*>( pObj );
         sal_uIntPtr        nInsAnz=0;
         Rectangle aLogicRect;
 
