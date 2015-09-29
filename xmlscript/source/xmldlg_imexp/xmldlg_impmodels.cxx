@@ -1142,7 +1142,7 @@ Reference< xml::input::XElement > TitledBoxElement::startChildElement(
     // radio
     else if ( rLocalName == "radio" )
     {
-        // dont create radios here, => titledbox must be inserted first due to radio grouping,
+        // don't create radios here, => titledbox must be inserted first due to radio grouping,
         // possible predecessors!
         Reference< xml::input::XElement > xRet(
             new RadioElement( rLocalName, xAttributes, this, _pImport ) );
@@ -1273,7 +1273,7 @@ Reference< xml::input::XElement > RadioGroupElement::startChildElement(
     // radio
     else if ( rLocalName == "radio" )
     {
-        // dont create radios here, => titledbox must be inserted first due to radio grouping,
+        // don't create radios here, => titledbox must be inserted first due to radio grouping,
         // possible predecessors!
         Reference< xml::input::XElement > xRet(
             new RadioElement( rLocalName, xAttributes, this, _pImport ) );
@@ -1589,7 +1589,7 @@ void CheckBoxElement::endElement()
     }
     else
     {
-        sal_Int16 nVal = (bTriState ? 2 : 0); // if tristate set, but checked omitted => dont know!
+        sal_Int16 nVal = (bTriState ? 2 : 0); // if tristate set, but checked omitted => don't know!
         xControlModel->setPropertyValue( "State", makeAny( nVal ) );
     }
 

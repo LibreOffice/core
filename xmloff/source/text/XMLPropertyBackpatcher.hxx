@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
  * yet known.
  *
  * A good example for appropriate use are footnotes and references to
- * footnoes. Internally, the StarOffice API numbers footnotes, and
+ * footnotes. Internally, the LibreOffice API numbers footnotes, and
  * references to footnotes refer to that internal numbering. In the
  * XML file format, these numbers are replaced with name strings. Now
  * if during import of a document a reference to a footnote is

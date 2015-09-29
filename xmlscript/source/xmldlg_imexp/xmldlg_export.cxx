@@ -414,7 +414,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         // dialog:font-relief (none|embossed|engraved) #IMPLIED
         switch (_fontRelief)
         {
-        case awt::FontRelief::NONE: // dont export default
+        case awt::FontRelief::NONE: // don't export default
             break;
         case awt::FontRelief::EMBOSSED:
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-relief", "embossed" );
@@ -429,7 +429,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         // dialog:font-emphasismark (none|dot|circle|disc|accent|above|below) #IMPLIED
         switch (_fontEmphasisMark)
         {
-        case awt::FontEmphasisMark::NONE: // dont export default
+        case awt::FontEmphasisMark::NONE: // don't export default
             break;
         case awt::FontEmphasisMark::DOT:
             pStyle->addAttribute(XMLNS_DIALOGS_PREFIX ":font-emphasismark", "dot" );

@@ -266,7 +266,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
         case 1:
             addAttribute( XMLNS_DIALOGS_PREFIX ":checked", "true" );
             break;
-        case 2: // tristate=true exported, checked omitted => dont know!
+        case 2: // tristate=true exported, checked omitted => don't know!
             OSL_ENSURE( bTriState, "### detected tristate value, but TriState is not set!" );
             break;
         default:

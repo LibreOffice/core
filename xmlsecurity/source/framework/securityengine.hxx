@@ -81,7 +81,7 @@ protected:
     sal_Int32 m_nIdOfKeyEC;
 
     /*
-     * remembers whether the current opertion has finished.
+     * remembers whether the current operation has finished.
      */
     bool      m_bMissionDone;
 
