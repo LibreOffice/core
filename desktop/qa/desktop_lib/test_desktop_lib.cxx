@@ -52,12 +52,14 @@ public:
     void testGetFonts();
     void testCreateView();
     void testGetFilterTypes();
+    void testGetPartPageRectangles();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
     CPPUNIT_TEST(testGetFonts);
     CPPUNIT_TEST(testCreateView);
     CPPUNIT_TEST(testGetFilterTypes);
+    CPPUNIT_TEST(testGetPartPageRectangles);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -149,6 +151,29 @@ void DesktopLOKTest::testCreateView()
 
     pDocument->m_pDocumentClass->destroyView(pDocument, nId);
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViews(pDocument));
+    closeDoc();
+}
+
+void DesktopLOKTest::testGetPartPageRectangles()
+{
+    // Test that we get as many page rectangles as expected: blank document is
+    // one page.
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    char* pRectangles = pDocument->pClass->getPartPageRectangles(pDocument);
+    OUString sRectangles = OUString::fromUtf8(pRectangles);
+
+    std::vector<OUString> aRectangles;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OUString aRectangle = sRectangles.getToken(0, ';', nIndex);
+        if (!aRectangle.isEmpty())
+            aRectangles.push_back(aRectangle);
+    }
+    while (nIndex >= 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aRectangles.size());
+
+    free(pRectangles);
     closeDoc();
 }
 

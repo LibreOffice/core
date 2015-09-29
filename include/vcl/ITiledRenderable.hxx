@@ -139,6 +139,14 @@ public:
      * @see lok::Document::resetSelection().
      */
     virtual void resetSelection() = 0;
+
+    /**
+     * @see lok::Document::getPartPageRectangles().
+     */
+    virtual OUString getPartPageRectangles()
+    {
+        return OUString();
+    }
 };
 
 } // namespace vcl

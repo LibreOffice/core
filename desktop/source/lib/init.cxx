@@ -204,6 +204,7 @@ static void doc_destroy(LibreOfficeKitDocument* pThis);
 static int  doc_saveAs(LibreOfficeKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 static int doc_getDocumentType(LibreOfficeKitDocument* pThis);
 static int doc_getParts(LibreOfficeKitDocument* pThis);
+static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis);
 static int doc_getPart(LibreOfficeKitDocument* pThis);
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart);
@@ -266,6 +267,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->saveAs = doc_saveAs;
         m_pDocumentClass->getDocumentType = doc_getDocumentType;
         m_pDocumentClass->getParts = doc_getParts;
+        m_pDocumentClass->getPartPageRectangles = doc_getPartPageRectangles;
         m_pDocumentClass->getPart = doc_getPart;
         m_pDocumentClass->setPart = doc_setPart;
         m_pDocumentClass->getPartName = doc_getPartName;
@@ -657,6 +659,23 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
 
     SolarMutexGuard aGuard;
     pDoc->setPart( nPart );
+}
+
+static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return 0;
+    }
+
+    OUString sRectangles = pDoc->getPartPageRectangles();
+    OString aString = OUStringToOString(sRectangles, RTL_TEXTENCODING_UTF8);
+    char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+    strcpy(pMemory, aString.getStr());
+    return pMemory;
+
 }
 
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)

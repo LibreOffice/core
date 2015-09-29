@@ -1200,6 +1200,20 @@ sal_uInt16 SwCrsrShell::GetPageCnt()
     return GetLayout()->GetPageNum();
 }
 
+OUString SwCrsrShell::getPageRectangles()
+{
+    CurrShell aCurr(this);
+    SwRootFrm* pLayout = GetLayout();
+    std::stringstream ss;
+    for (const SwFrm* pFrm = pLayout->GetLower(); pFrm; pFrm = pFrm->GetNext())
+    {
+        if (pFrm != pLayout->GetLower())
+            ss << "; ";
+        ss << pFrm->Frm().Left() << ", " << pFrm->Frm().Top() << ", " << pFrm->Frm().Width() << ", " << pFrm->Frm().Height();
+    }
+    return OUString::fromUtf8(ss.str().c_str());
+}
+
 /// go to the next SSelection
 bool SwCrsrShell::GoNextCrsr()
 {

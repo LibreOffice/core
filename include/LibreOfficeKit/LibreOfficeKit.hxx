@@ -76,6 +76,20 @@ public:
         return mpDoc->pClass->getParts(mpDoc);
     }
 
+    /**
+     * Get the logical rectangle of each part in the document.
+     *
+     * A part refers to an individual page in Writer and has no relevant for
+     * Calc or Impress.
+     *
+     * @return a rectangle list, using the same format as
+     * LOK_CALLBACK_TEXT_SELECTION.
+     */
+    inline char* getPartPageRectangles()
+    {
+        return mpDoc->pClass->getPartPageRectangles(mpDoc);
+    }
+
     /// Get the current part of the document.
     inline int getPart()
     {

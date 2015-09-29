@@ -847,6 +847,8 @@ public:
     OUString GetCrsrDescr() const;
 
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+    /// Implementation of lok::Document::getPartPageRectangles() for Writer.
+    OUString getPageRectangles();
 };
 
 // Cursor Inlines:
