@@ -172,7 +172,7 @@ namespace drawinglayer
             basegfx::BColor                 maColor;
             double                          mfTransparence;
 
-            // the dscrete grow and shrink of the box
+            // the discrete grow and shrink of the box
             double                          mfDiscreteGrow;
             double                          mfDiscreteShrink;
 

@@ -82,7 +82,7 @@ namespace svt { namespace table
         friend class SuspendInvariants;
 
     private:
-        /// the control whose impl-instance we implemnt
+        /// the control whose impl-instance we implement
         TableControl&           m_rAntiImpl;
         /// the model of the table control
         PTableModel             m_pModel;

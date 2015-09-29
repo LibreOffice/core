@@ -92,7 +92,7 @@ namespace svt
             aLowerDrawerPos.Move( 0, -nDrawerHeight );
         }
 
-        // fincally calculate the rectangle for the active panel
+        // finally calculate the rectangle for the active panel
         return Rectangle(
             aUpperDrawerPos,
             Size( nWidth, aLowerDrawerPos.Y() - aUpperDrawerPos.Y() + 1 )

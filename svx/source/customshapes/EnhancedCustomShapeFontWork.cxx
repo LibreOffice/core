@@ -347,7 +347,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             }
             delete[] pDXArry;
 
-            // veritcal alignment
+            // vertical alignment
             std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
             std::vector< FWCharacterData >::iterator aCharacterIEnd ( aParagraphIter->vCharacters.end() );
             while ( aCharacterIter != aCharacterIEnd )

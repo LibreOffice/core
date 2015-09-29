@@ -1966,7 +1966,7 @@ void FmGridControl::Select()
     {
         case SAL_MAX_UINT16: break; // no selection
         case  0 : nSelectedColumn = SAL_MAX_UINT16; break;
-                    // handle col can't be seledted
+                    // handle col can't be selected
         default :
             // get the model col pos instead of the view col pos
             nSelectedColumn = GetModelColumnPos(GetColumnIdFromViewPos(nSelectedColumn - 1));

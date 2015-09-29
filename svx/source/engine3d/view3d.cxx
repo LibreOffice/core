@@ -307,7 +307,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))
             {
-                // releated scene
+                // related scene
                 pScene = static_cast<E3dCompoundObject*>(pObj)->GetScene();
                 if(pScene)
                     pScene->SetSelected(false);
@@ -405,7 +405,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
         }
     }
 
-    // call parent. This will copy all scenes and the selection flags at the 3d objectss. So
+    // call parent. This will copy all scenes and the selection flags at the 3D objects. So
     // it will be possible to delete all non-selected 3d objects from the cloned 3d scenes
     pNewModel = SdrView::GetMarkedObjModel();
 
@@ -1449,7 +1449,7 @@ void E3dView::MovAction(const Point& rPnt)
             {
                 const SdrHdlList &aHdlList = GetHdlList ();
 
-                // delete the mirroed polygon, mirrors the original and draws
+                // delete the mirrored polygon, mirrors the original and draws
                 // it anew
                 SdrView::MovAction (rPnt);
                 mpMirrorOverlay->SetMirrorAxis(

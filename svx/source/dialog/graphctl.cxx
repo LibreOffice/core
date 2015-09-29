@@ -159,7 +159,7 @@ void GraphCtrl::InitSdrModel()
     pView->SetMarkedPointsSmooth( SDRPATHSMOOTH_SYMMETRIC );
     pView->SetEditMode();
 
-    // #i72889# set neeeded flags
+    // #i72889# set needed flags
     pView->SetPagePaintingAllowed(false);
     pView->SetBufferedOutputAllowed(true);
     pView->SetBufferedOverlayAllowed(true);

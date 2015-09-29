@@ -133,7 +133,7 @@ public:
     // overwrite the SetState & ResetState to do special operation for table cell's internal text
     virtual bool SetState (sal_Int16 aState) SAL_OVERRIDE;
     virtual bool ResetState (sal_Int16 aState) SAL_OVERRIDE;
-    // The following two methods are used to set state directly on table object, instread of the internal cell or paragraph.
+    // The following two methods are used to set state directly on table object, instead of the internal cell or paragraph.
     bool SetStateDirectly (sal_Int16 aState);
     bool ResetStateDirectly (sal_Int16 aState);
     // Get the currently active cell which is text editing

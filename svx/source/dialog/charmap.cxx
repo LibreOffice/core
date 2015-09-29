@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 sal_uInt32& SvxShowCharSet::getSelectedChar()
 {
-    static sal_uInt32 cSelectedChar = ' '; // keeps selected character over app livetime
+    static sal_uInt32 cSelectedChar = ' '; // keeps selected character over app lifetime
     return cSelectedChar;
 }
 
