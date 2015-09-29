@@ -280,7 +280,7 @@ protected:
     }
 
     /**
-     * Override this function if calcing layout is not needed
+     * Override this function if calc layout is not needed
      */
     virtual bool mustCalcLayoutOf(const char* /*filename*/)
     {

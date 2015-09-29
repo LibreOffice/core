@@ -272,7 +272,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73556,"fdo73556.docx")
 {
     /*
     *  The file contains a table with 3 columns
-    *  the girdcols are as follows: {1210, 1331, 1210}
+    *  the gridcols are as follows: {1210, 1331, 1210}
     *  whereas the individual cells have {1210, 400, 1210}
     *  The table column separators were taken from the Grid, while
     *  the table width was calculated as 2820 from cells instead

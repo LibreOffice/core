@@ -437,7 +437,7 @@ SW_DLLPUBLIC sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript 
 // return for the given TextAttribute without an end the correct character.
 // This function returns
 //      CH_TXTATR_BREAKWORD for Textattribute which breaks a word (default)
-//      CH_TXTATR_INWORD    for Textattribute which dont breaks a word
+//      CH_TXTATR_INWORD    for Textattribute which doesn't breaks a word
 class SwTextAttr;
 sal_Unicode GetCharOfTextAttr( const SwTextAttr& rAttr );
 

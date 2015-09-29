@@ -1253,7 +1253,7 @@ DECLARE_OOXMLIMPORT_TEST(testBnc865381, "bnc865381.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testFdo53985, "fdo53985.docx")
 {
-    // Unhandled excetion prevented import of the rest of the document.
+    // Unhandled exception prevented import of the rest of the document.
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
@@ -2171,7 +2171,7 @@ DECLARE_OOXMLIMPORT_TEST(testLargeTwips, "large-twips.docx" )
 
 DECLARE_OOXMLIMPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twips.docx" )
 {
-    // Sligtly related to cp#1000043, the twips value was negative, which wrapped around somewhere,
+    // Slightly related to cp#1000043, the twips value was negative, which wrapped around somewhere,
     // while MSO seems to ignore that as well.
     OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds", "width" );
     CPPUNIT_ASSERT( width.toInt32() > 0 );

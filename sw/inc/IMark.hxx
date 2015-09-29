@@ -54,7 +54,7 @@ namespace sw { namespace mark
             //setters
             // not available in IMark
             // inside core, you can cast to MarkBase and use its setters,
-            // make sure to update the sortings in Markmanager in this case
+            // make sure to update the sorting in Markmanager in this case
 
             //operators and comparisons (non-virtual)
             bool operator<(const IMark& rOther) const
