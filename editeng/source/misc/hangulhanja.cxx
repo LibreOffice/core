@@ -85,7 +85,7 @@ namespace editeng
         const vcl::Font*        m_pTargetFont;      // target font of new replacement text
         sal_Int32               m_nConvOptions;     // text conversion options (as used by 'getConversions')
         bool                    m_bIsInteractive;   // specifies if the conversion requires user interaction
-                                                    // (and likeley a specialised dialog) or if it is to run
+                                                    // (and likely a specialised dialog) or if it is to run
                                                     // automatically without any user interaction.
                                                     // True for Hangul / Hanja conversion
                                                     // False for Chinese simlified / traditional conversion

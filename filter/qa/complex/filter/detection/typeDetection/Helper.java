@@ -40,7 +40,7 @@ import util.utils;
 
 
 /** Helper class for "TypeDetection"
- * This class do file hanlding.
+ * This class do file handling.
  */
 public class Helper  {
 

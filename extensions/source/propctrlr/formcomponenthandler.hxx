@@ -171,7 +171,7 @@ namespace pcr
             If the component is a RowSet itself, it's returned directly. Else, the parent
             is examined for the XRowSet interface. If the parent is no XRowSet, then
             a check is made whether our component is a grid control column, and if so,
-            the parent of the grid control is examied for the XRowSet interace.
+            the parent of the grid control is examined for the XRowSet interace.
 
             Normally, at least one of those methods should succeed.
         */
@@ -245,7 +245,7 @@ namespace pcr
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
             ) const;
 
-        /** displays a datbase-related error to the user
+        /** displays a database-related error to the user
         */
         void impl_displaySQLError_nothrow( const ::dbtools::SQLExceptionInfo& _rErrorDescriptor ) const;
 
