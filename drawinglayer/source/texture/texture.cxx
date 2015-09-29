@@ -254,7 +254,7 @@ namespace drawinglayer
                     aNew.scale(mfUnitWidth, 1.0);
                     aNew.translate(mfUnitMinX, 0.0);
 
-                    // already centerd in Y on X-Axis, just scale in Y
+                    // already centered in Y on X-Axis, just scale in Y
                     aNew.scale(1.0, 1.0 - fPos);
 
                     // set at target

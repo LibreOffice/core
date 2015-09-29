@@ -2502,7 +2502,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
                 }
 
                 // select second word
-                // (sometimes aSel mightnot point to the end of the first word
+                // (sometimes aSel might not point to the end of the first word
                 // but to some following char like '.'. ':', ...
                 // In those cases we need aSecondWordSel to see if aSel
                 // will actually effect the first word.)

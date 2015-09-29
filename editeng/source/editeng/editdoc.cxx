@@ -716,7 +716,7 @@ sal_Int32 FastGetPos(const _Array& rArray, const _Val* p, sal_Int32& rLastPos)
             }
         }
     }
-    // The world's lamest linear search from svarray ...
+    // The world's lamest linear search from svarray...
     for (sal_Int32 nIdx = 0; nIdx < nArrayLen; ++nIdx)
         if (&rArray.at(nIdx) == p)
             return rLastPos = nIdx;
@@ -971,7 +971,7 @@ EditLine::EditLine() :
 
     nStart = nEnd = 0;
     nStartPortion = 0;  // to be able to tell the difference between a line
-                        // without Ptorions form one with the Portion number 0
+                        // without Portions from one with the Portion number 0
     nEndPortion = 0;
     nHeight = 0;
     nStartPosX = 0;
@@ -1324,7 +1324,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
             {
                 // Only expand when there is no feature
                 // and if not in exclude list!
-                // Otherwise, a UL will go on until a new ULDB, expaning both
+                // Otherwise, a UL will go on until a new ULDB, expanding both
 //              if ( !pAttrib->IsFeature() && !rExclList.FindAttrib( pAttrib->Which() ) )
                 if ( !pAttrib->IsFeature() && !aCharAttribList.FindEmptyAttrib( pAttrib->Which(), nIndex ) )
                 {

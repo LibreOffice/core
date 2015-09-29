@@ -326,7 +326,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
             aImpl = BorderWidthImpl(
                     BorderWidthImplFlags::CHANGE_LINE1 | BorderWidthImplFlags::CHANGE_LINE2 | BorderWidthImplFlags::CHANGE_DIST,
                     // fdo#46112 fdo#38542 fdo#43249:
-                    // non-constant witdths must sum to 1
+                    // non-constant widths must sum to 1
                     1.0/3.0, 1.0/3.0, 1.0/3.0 );
             break;
 
@@ -368,7 +368,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
 
         // Engraved / Embossed
         /*
-         *  Word compat: the lines widths are exactly following this rule, shouldbe:
+         *  Word compat: the lines widths are exactly following this rule, should be:
          *      0.75pt up to 3pt and then 3pt
          */
 
