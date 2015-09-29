@@ -165,7 +165,7 @@ SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pItem( new SvxBrushItem( rItem ) )
 {
-    // delete any grephic that is existing
+    // delete any graphic that is existing
     pItem->SetGraphicPos( GPOS_NONE );
 
     ProcessAttrs( xAttrList, rUnitConv );

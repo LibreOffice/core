@@ -122,7 +122,7 @@ SwView* GetActiveView()
 
 SwView* SwModule::GetFirstView()
 {
-    // returns only sivible SwView
+    // returns only visible SwView
     const TypeId aTypeId = TYPE(SwView);
     SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(&aTypeId));
     return pView;

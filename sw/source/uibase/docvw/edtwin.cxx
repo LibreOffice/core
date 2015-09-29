@@ -801,7 +801,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
                     // English texts with a German keyboard).
 
                     // For non-latin keyboards overwriting the attribute is
-                    // still valid. We do this for kyrillic and greek ATM.  In
+                    // still valid. We do this for cyrillic and greek ATM.  In
                     // future versions of OOo this should be replaced by a
                     // configuration switch that allows to give the preference
                     // to the OOo setting or the system setting explicitly

@@ -324,7 +324,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                             if (rItem.bSynchron)
                             {
                                 // if there is no content in the fly then
-                                // dont leave the fly!!!
+                                // don't leave the fly!!!
                                 pSh->Push();
                                 pSh->SttDoc();
                                 bool bInFly = 0 != pSh->WizardGetFly();

@@ -1055,7 +1055,7 @@ void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const OUString& rTag
                 SwInsertFlags::NOHINTEXPAND);
     }
     else
-    {                                                   // normal tagggen
+    {                                                   // normal taggen
 
         SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType(
                                 SwSetExpFieldType( &m_rDoc, aName, nsSwGetSetExpType::GSE_STRING ) );

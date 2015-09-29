@@ -2057,7 +2057,7 @@ WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
 
 // Ctor *only* for Fkps
 // The last 2 parameters are needed for PLCF.Chpx and PLCF.Papx.
-// If ncpN != 0, then an incomple PLCF will be completed. This is always required for WW6 with
+// If ncpN != 0, then an incomplete PLCF will be completed. This is always required for WW6 with
 // lack of resources and for WordPad (W95).
 // With nStartPos < 0, the first element of the PLCFs is taken.
 WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
@@ -4926,7 +4926,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 settings its end to the current start, then store the starting
                 position of the current range to clipstart. The pPcd sprms
                 will end as normal (albeit earlier than originally expected),
-                and the existence of a clipstart will force the pPcd iterater
+                and the existence of a clipstart will force the pPcd iterator
                 to reread the current set of sprms instead of advancing to its
                 next set. Then the clipstart will be set as the starting
                 position which will force them to be applied directly after

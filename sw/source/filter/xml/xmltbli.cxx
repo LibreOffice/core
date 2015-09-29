@@ -2251,7 +2251,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                         bHoriSplitPossible |= bHoriSplit;
 
                         // Could the current table fragment be splitted
-                        // horizontally behind the next collumn, too?
+                        // horizontally behind the next column, too?
                         bHoriSplit &= (nCol+1UL < nRightCol &&
                                        1UL == GetCell(nRow,nCol+1UL)->GetRowSpan());
                         bHoriSplitMayContinue |= bHoriSplit;
@@ -2513,7 +2513,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             else if( nAbsForRelWidth <= (nRelWidth * MINLAY) /
                                         nMinRelColWidth )
             {
-                // If there is enougth space for all columns to get the
+                // If there is enough space for all columns to get the
                 // minimum width, but not to get a width that takes the
                 // relative width into account, each column gets the minimum
                 // width plus some extra space that is based on the additional
