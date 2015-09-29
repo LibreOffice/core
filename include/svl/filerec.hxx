@@ -205,7 +205,7 @@ private:
  *  =>  They build on each, for instance the SfxMiniRecord is contained
  *  in all others
  *
- *  It should be possible to distinguish the record from Drawing Enginge
+ *  It should be possible to distinguish the record from Drawing Engine
  *  ones. These start with 'DRMD' und 'DRVW'.
  *  <BR>
  *  =>  Mini-Records with Pre-Tag 'D' can only be up to 4MB in size,
@@ -279,7 +279,7 @@ private:
  *  after streaming the conntents.
  *
  *  To allow for forward and backward compatibility, newer versions
- *  of the data must always inclode the older versions completely,
+ *  of the data must always include the older versions completely,
  *  it is only allowed to append new data!
  *
  *  @par File Format

@@ -163,7 +163,7 @@ typedef void * rtlBootstrapHandle;
 SAL_DLLPUBLIC rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName);
 
 /**
-   Closes a bootstrap agument container.
+   Closes a bootstrap argument container.
    @param handle [in]     The handle got by <code>rtl_bootstrap_args_open()</code>
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)

@@ -41,7 +41,7 @@ private:
     VclPtr<PushButton>   mpBtnClose;
     VclPtr<VclBox>       mpBox;
 
-    VclPtr<vcl::Window>  mpPreviewView;  // gets released when xWindows get destroyed (dont delete in constructor)
+    VclPtr<vcl::Window>  mpPreviewView;  // gets released when xWindows get destroyed (don't delete in constructor)
     VclPtr<svtools::ODocumentInfoPreview> mpInfoView;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 > m_xFrame;

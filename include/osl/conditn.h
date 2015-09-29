@@ -67,7 +67,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition);
     If condition has been destroyed prematurely, wait() will
     return with False.
     @param Condition handle to a created condition.
-    @param pTimeout Tiemout value or NULL for infinite waiting
+    @param pTimeout Timeout value or NULL for infinite waiting
     @return False if system-call failed.
 */
 SAL_DLLPUBLIC oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const TimeValue* pTimeout);

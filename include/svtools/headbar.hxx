@@ -94,7 +94,7 @@ StartDrag()         This handler is called, when dragging is started resp.
                     an item has been clicked. At the latest in this handler,
                     the size of the size-line should be set with
                     SetDragSize(), if IsItemMode() returns false.
-Drag()              This handler is callled, when dragging is taking place.
+Drag()              This handler is called, when dragging is taking place.
                     If no size is set with SetDragSize(), this handler can
                     be used to draw the line in the neighbouring window by
                     oneself. The current dragging position can be requested

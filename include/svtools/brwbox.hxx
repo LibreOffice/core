@@ -225,7 +225,7 @@ private:
 
     long            nDataRowHeight; // height of a single data-row
     sal_uInt16      nTitleLines;    // number of lines in title row
-    sal_uLong       nControlAreaWidth; // width of fixed area beneeth hscroll
+    sal_uLong       nControlAreaWidth; // width of fixed area beneath hscroll
     bool            bThumbDragging; // handle thumb dragging
     bool            bColumnCursor;  // single columns and fields selectable
     bool            bMultiSelection;// allow multiple selected rows
@@ -406,7 +406,7 @@ protected:
 private:
     void*           implGetDataFlavors() const;
         // with this we can make GetDataFlavors() inline, which is strongly needed as SVTOOLS does not export
-        // any sysbols containing an "_STL", so a non-inlined method would not be exported ....
+        // any sysmbol containing an "_STL", so a non-inlined method would not be exported ....
 
 protected:
     // callbacks for the data window
