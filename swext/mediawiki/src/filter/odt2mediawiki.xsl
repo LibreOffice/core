@@ -328,12 +328,12 @@
 		</choose>
 	</template>
 
-	<!-- 
-		Funktion generating a token consisting of the given character 
+	<!--
+		Funktion generating a token consisting of the given character
 		repeated 'level' times.
 		
 		@param level
-			The lengh of the result.
+			The length of the result.
 		@param char
 			The character that should be repeated 'level' times.
 	-->

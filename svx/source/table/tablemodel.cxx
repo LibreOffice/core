@@ -1119,7 +1119,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
 
     if( (nLastRow > getRowCount()) || (nLastCol > getColumnCount() ) )
     {
-        OSL_FAIL("TableModel::merge(), merge beyound the table!");
+        OSL_FAIL("TableModel::merge(), merge beyond the table!");
     }
 
     // merge first cell

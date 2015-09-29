@@ -670,7 +670,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
                 mpOutliner->SetVertical( true );
         }
 
-        // evtually we have to set the border attributes
+        // maybe we have to set the border attributes
         if (mpOutliner->GetParagraphCount()==1)
         {
             // if we only have one paragraph we check if it is empty

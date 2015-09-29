@@ -679,7 +679,7 @@ void SdrMarkView::SetMarkHandles()
         {
             // formally #i33755#: If TextEdit is active the EditEngine will directly paint
             // to the window, so suppress Overlay and handles completely; a text frame for
-            // the active text edit will be painted by the repaitnt mechanism in
+            // the active text edit will be painted by the repaint mechanism in
             // SdrObjEditView::ImpPaintOutlinerView in this case. This needs to be reworked
             // in the future
             // Also formally #122142#: Pretty much the same for SdrCaptionObj's in calc.

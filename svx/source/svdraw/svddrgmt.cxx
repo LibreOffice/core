@@ -4022,7 +4022,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
 
     // not needed since the modification is done in unit coordinates, free from shear/rotate and mirror
-    // // TTTT may be removed or exhanged by other stuff in aw080
+    // // TTTT may be removed or exchanged by other stuff in aw080
     // // to correct the never working combination of cropped images and mirroring
     // // I have to correct the rectangles the calculation is based on here. In the current
     // // core geometry stuff a vertical mirror is expressed as 180 degree rotation. All

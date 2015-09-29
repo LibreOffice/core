@@ -692,7 +692,7 @@ namespace sdr { namespace contact {
 
         /** adjusts the control visibility so it respects its layer's visibility
 
-            The control must never be visibile if it's in design mode.
+            The control must never be visible if it's in design mode.
             In alive mode, it must be visibility if and only it's on a visible layer.
 
             @param _rxControl

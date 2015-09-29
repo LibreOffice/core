@@ -157,7 +157,7 @@ bool TextChainFlow::IsUnderflow() const
 
 // XXX: In editing mode you need to get "underflowing" text from editing outliner, so it's kinda separate from the drawing one!
 
-// XXX:Would it be possible to unify undeflow and its possibly following overrflow?
+// XXX:Would it be possible to unify underflow and its possibly following overflow?
 void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 {
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);

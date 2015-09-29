@@ -716,7 +716,7 @@ namespace sdr
                     aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
                     aObjectRange.getMinX(), aObjectRange.getMinY()));
 
-                // credate an invisible outline for the cases where no visible content exists
+                // created an invisible outline for the cases where no visible content exists
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                         false,

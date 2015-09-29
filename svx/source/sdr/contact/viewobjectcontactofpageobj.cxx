@@ -211,7 +211,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageObj::creat
     // #i102637# add gray frame also when printing and page exists (handout pages)
     const bool bCreateGrayFrame(!GetObjectContact().isOutputToPrinter() || pPage);
 
-    // get displayed page's content. This is the uscaled page content
+    // get displayed page's content. This is the unscaled page content
     if(mpExtractor && pPage)
     {
         // get displayed page's geometry

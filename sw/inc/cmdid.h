@@ -254,7 +254,7 @@
 
 #define FN_DRAWTEXT_ATTR_DLG    (FN_INSERT + 76)    /* position DrawText */
 
-#define FN_TOOL_ANCHOR_CHAR     (FN_INSERT + 84)    /* anchor Draw object to charater */
+#define FN_TOOL_ANCHOR_CHAR     (FN_INSERT + 84)    /* anchor Draw object to character */
 
 #define FN_QRY_INSERT           (FN_INSERT + 86)    /* insert record selection in to text */
 #define FN_QRY_MERGE_FIELD      (FN_INSERT + 87)    /* insert record selection into fields */

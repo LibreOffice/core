@@ -537,7 +537,7 @@ public:
     // (used in PhyPage).
     sal_uInt16 GetNextPrevPageNum( bool bNext = true );
 
-    // Move cursor at the bginning of page "nPage".
+    // Move cursor at the beginning of page "nPage".
     bool GotoPage( sal_uInt16 nPage );
 
     sal_uInt16 GetPageCnt();
