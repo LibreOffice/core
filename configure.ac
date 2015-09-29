@@ -4341,7 +4341,6 @@ mingw*)
     ;;
 
 *netbsd*)
-
     COM=GCC
     USING_X11=TRUE
     OS=NETBSD
@@ -4401,7 +4400,6 @@ openbsd*)
     ;;
 
 solaris*)
-
     COM=GCC
     USING_X11=TRUE
     OS=SOLARIS
@@ -4679,13 +4677,12 @@ if test $_os != "WINNT" -a $_os != "Darwin"; then
 fi
 AC_SUBST(ENABLE_OOENV)
 
-if test "$with_x" = "no"; then
-    # be sure to do not mess with uneeded stuff
+if test "$USING_X11" != TRUE; then
+    # be sure to do not mess with unneeded stuff
     test_randr=no
     test_xrender=no
     test_cups=no
     test_dbus=no
-    test_fontconfig=yes
     test_gtk=no
     build_gstreamer_1_0=no
     build_gstreamer_0_10=no
@@ -9224,7 +9221,7 @@ AC_MSG_CHECKING([whether to use X11])
 dnl ***************************************
 dnl testing for X libraries and includes...
 dnl ***************************************
-if test $USING_X11 = TRUE; then
+if test "$USING_X11" = TRUE; then
     AC_DEFINE(HAVE_FEATURE_X11)
 fi
 AC_MSG_RESULT([$USING_X11])
@@ -10020,7 +10017,7 @@ dnl Test which vclplugs have to be built.
 dnl ===================================================================
 R=""
 AC_MSG_CHECKING([which VCLplugs shall be built])
-if test "$USING_X11" != TRUE -o "$with_x" = "no"; then
+if test "$USING_X11" != TRUE; then
     enable_gtk=no
     enable_gtk3=no
 fi
@@ -10394,7 +10391,7 @@ elif test $_os = WINNT; then
     SYSTEM_MESA_HEADERS=
     BUILD_TYPE="$BUILD_TYPE MESA"
 else
-    if test "$with_x" != "no"; then
+    if test "$USING_X11" = TRUE; then
         ENABLE_OPENGL=TRUE
     fi
     ENABLE_OPENGL_CANVAS=TRUE
