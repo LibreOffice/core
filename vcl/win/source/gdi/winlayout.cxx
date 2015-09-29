@@ -1877,7 +1877,7 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
     int i;
     for( i = 0; i < nMaxIdx; ++i )
         pCaretXArray[ i ] = -1;
-    std::unique_ptr<long[]> const pGlyphPos = new long[mnGlyphCount + 1];
+    std::unique_ptr<long[]> const pGlyphPos(new long[mnGlyphCount + 1]);
     for( i = 0; i <= mnGlyphCount; ++i )
         pGlyphPos[ i ] = -1;
 
