@@ -172,7 +172,7 @@ ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup) 
 {
     // #TODO map the possible index combinations to a container::XIndexAccess wrapper impl
     // using a vector of valid std::pair maybe?
-    // bodgy helperapi port bits
+    // body helper api port bits
     sal_Int32 nAxisGroup = xlPrimary;
     sal_Int32 nType = -1;
     if ( !_nType.hasValue() || !( _nType >>= nType ) )

@@ -143,7 +143,7 @@ bool ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
         pDraw->SetWindow( this );
         sal_uInt8 nUsed = pDraw->Command( rCEvt );
         if( nUsed == SC_CMD_USED )
-            nButtonDown = 0;  // MouseButtonUp is swalloed...
+            nButtonDown = 0;  // MouseButtonUp is swallowed...
         if( nUsed || pDrView->IsAction() )
             return true;
     }

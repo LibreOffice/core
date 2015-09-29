@@ -235,7 +235,7 @@ ScVbaFont::setColorIndex( const uno::Any& _colorindex ) throw( uno::RuntimeExcep
 
     if ( !nIndex || ( nIndex == excel::XlColorIndex::xlColorIndexAutomatic ) )
         {
-        nIndex = 1;  // check defualt ( assume black )
+        nIndex = 1;  // check default ( assume black )
                 ScVbaFont_BASE::setColorIndex( uno::makeAny( nIndex ) );
         }
         else
