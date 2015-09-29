@@ -553,15 +553,15 @@ XImage* X11SalBitmap::ImplCreateXImage(
 #endif
                 // set data in buffer as data member in pImage
                 pImage->data = reinterpret_cast<char*>(pDstBuf->mpBits);
-
-                // destroy buffer; don't destroy allocated data in buffer
-                delete pDstBuf;
             }
             else
             {
                 XDestroyImage( pImage );
                 pImage = NULL;
             }
+
+            // destroy buffer; doesn't destroy allocated data in buffer
+            delete pDstBuf;
         }
     }
 
