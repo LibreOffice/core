@@ -515,7 +515,7 @@
 #define RID_CATEGORY_OTHERS                 (RID_APP_START + 4009)
 #define RID_CATEGORY_EXAMPLES               (RID_APP_START + 4010)
 
-// more tooptips help texts
+// more tooltips help texts
 #define RID_XEQY_HELP               (RID_APP_START + 4011)
 #define RID_XNEQY_HELP              (RID_APP_START + 4012)
 #define RID_XEQUIVY_HELP            (RID_APP_START + 4013)

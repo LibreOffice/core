@@ -750,7 +750,7 @@ PermissionCollection AccessController::getEffectivePermissions(
     }
     catch (RuntimeException &)
     {
-        // dont check postponed, just cleanup
+        // don't check postponed, just cleanup
         clearPostPoned();
         delete static_cast< t_rec_vec * >( m_rec.getData() );
         m_rec.setData( 0 );
@@ -765,7 +765,7 @@ PermissionCollection AccessController::getEffectivePermissions(
     }
     catch (...)
     {
-        // dont check postponed, just cleanup
+        // don't check postponed, just cleanup
         clearPostPoned();
         throw;
     }

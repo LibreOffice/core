@@ -822,7 +822,7 @@ IMPL_LINK_NOARG_TYPED( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
     // Problem: There is no proper way to do this
     // Thus: this timer based solution has been implemented (see GrabFocus below)
 
-    // Follow-up problem (#i114910): grabing the focus may bust the help system since
+    // Follow-up problem (#i114910): grabbing the focus may bust the help system since
     // it relies on getting the current frame which conflicts with grabbing the focus.
     // Thus aside from the 'GrabFocus' call everything else is to get the
     // help reliably working despite using 'GrabFocus'.

@@ -112,7 +112,7 @@ namespace svgio
             // node hierarchy itself which also needs to be used in style entry solving
             SvgStyleAttributeVector     maCssStyleVector;
 
-            /// possibbe local CssStyle, e.g. style="fill:red; stroke:red;"
+            /// possible local CssStyle, e.g. style="fill:red; stroke:red;"
             SvgStyleAttributes*         mpLocalCssStyle;
 
             /// bitfield
