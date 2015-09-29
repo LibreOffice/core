@@ -187,7 +187,7 @@ public class CheckContentProvider {
 
     /**
      * Check a folder on document 2 (document 2 contains an embedded picture and
-     * therefore contans a subfolder "Pictures"
+     * therefore contains a subfolder "Pictures"
      */
     @Test public void checkTDOCFolder() {
         try {
@@ -302,9 +302,9 @@ public class CheckContentProvider {
         // check the XChild interface
         _XChild xChild = new _XChild();
         xChild.oObj = UnoRuntime.queryInterface(XChild.class, xContent);
-        // hasParent dermines, if this content has a parent
+        // hasParent determines if this content has a parent
         assertNotNull("getParent()", xChild._getParent(hasParent));
-        // parameter does dermine, if this funczion is supported: generally not supported with tdcp content
+        // parameter does dermine, if this function is supported: generally not supported with tdcp content
         assertNotNull("setParent()", xChild._setParent(false));
 
         // check the XPropertyChangeNotifier interface

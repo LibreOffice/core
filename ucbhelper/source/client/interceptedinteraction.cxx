@@ -119,7 +119,7 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
         if (rInterception.MatchExact)
             bMatch = aInterceptedType.equals(aRequestType);
         else
-            bMatch = aInterceptedType.isAssignableFrom(aRequestType); // dont change intercepted and request type here -> it will check the wrong direction!
+            bMatch = aInterceptedType.isAssignableFrom(aRequestType); // don't change intercepted and request type here -> it will check the wrong direction!
 
         // intercepted ...
         // Call they might existing derived class, so they can handle that by its own.

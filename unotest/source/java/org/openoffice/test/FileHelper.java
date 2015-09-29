@@ -18,12 +18,12 @@
 
 package org.openoffice.test;
 
-/**
+/*
  * Helper Functions for File handling
  */
 public class FileHelper
 {
-    /**
+    /*
      * Concat a _sRelativePathToAdd to a _sPath and append a '/' to the _sPath only if need.
      *
      * @return a right concated path

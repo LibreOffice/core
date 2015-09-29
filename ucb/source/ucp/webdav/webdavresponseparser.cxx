@@ -746,7 +746,7 @@ namespace
                             }
                             case WebDAVName_response:
                             {
-                                // respose end
+                                // response end
                                 if(maHref.getLength())
                                 {
                                     if(isCollectingProperties())

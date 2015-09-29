@@ -42,7 +42,7 @@ class ProgressBar;
 #define FIXEDTEXT_MODELNAME                     "com.sun.star.awt.UnoControlFixedTextModel"
 #define CONTROLNAME_TEXT                        "Text"                                                  // identifier the control in container
 #define CONTROLNAME_PROGRESSBAR                 "ProgressBar"                                           //              -||-
-#define STATUSINDICATOR_BACKGROUNDCOLOR         TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )                // lighgray
+#define STATUSINDICATOR_BACKGROUNDCOLOR         TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )                // lightgray
 #define STATUSINDICATOR_LINECOLOR_BRIGHT        TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )                // white
 #define STATUSINDICATOR_LINECOLOR_SHADOW        TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )                // black
 #define STATUSINDICATOR_DEFAULT_WIDTH           300
