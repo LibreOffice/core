@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_89d87e1f",
+        "filename": "include/svx/svdhdl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-29T11:29:12Z",
+      "side": 1,
+      "message": "better \"by\" the view than \"from\" the view",
+      "revId": "1baeb81d93db4e6a88f375ae619f5838aab4a89c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_49ce665b",
+        "filename": "include/svx/svdhdl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-29T11:29:12Z",
+      "side": 1,
+      "message": "i think the comment meant to say that they have to be consecutive in the enum",
+      "revId": "1baeb81d93db4e6a88f375ae619f5838aab4a89c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_e903fa74",
+        "filename": "include/svx/svdhdl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-29T11:29:12Z",
+      "side": 1,
+      "message": "still a \"z.b.\" left",
+      "revId": "1baeb81d93db4e6a88f375ae619f5838aab4a89c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_c908b694",
+        "filename": "include/svx/svdhdl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-29T11:29:12Z",
+      "side": 1,
+      "message": "\"takes ownership\" is better here",
+      "revId": "1baeb81d93db4e6a88f375ae619f5838aab4a89c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
