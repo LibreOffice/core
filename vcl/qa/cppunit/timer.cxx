@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 /*
- * Timers are evil beasties across platforms ...
+ * Timers are evil beasts across platforms...
  */
 
 #include <test/bootstrapfixture.hxx>

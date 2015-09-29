@@ -400,7 +400,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
     if( (rPosAry.mnSrcWidth == rPosAry.mnDestWidth &&
          rPosAry.mnSrcHeight == rPosAry.mnDestHeight) &&
         (!mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth)
-        && pSrc->mxLayer ) // workaround a Quartz crasher
+        && pSrc->mxLayer ) // workaround for a Quartz crash
     {
         // in XOR mode the drawing context is redirected to the XOR mask
         // if source and target are identical then copyBits() paints onto the target context though

@@ -1203,7 +1203,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
         size_t idx;
 
         // Event though there is a tab overlap with GTK+, the first tab is not
-        // overlapped on the left side.  Other tookits ignore this option.
+        // overlapped on the left side. Other toolkits ignore this option.
         if (bDrawTabsRTL)
         {
             pFirstTab = &mpTabCtrlData->maItemList.front();
@@ -1722,7 +1722,7 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
             if( ! mpTabCtrlData->maItemList.empty() )
             {
                 // don't do this by simply setting mnCurPageId to pFirstItem->mnId
-                // this leaves a lot of stuff (such trivias as _showing_ the new current page) undone
+                // this leaves a lot of stuff (such trivia as _showing_ the new current page) undone
                 // instead, call SetCurPageId
                 // without this, the next (outside) call to SetCurPageId with the id of the first page
                 // will result in doing nothing (as we assume that nothing changed, then), and the page

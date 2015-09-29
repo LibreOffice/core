@@ -277,7 +277,7 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 /*   ======                                                           */
 /*      Predominantly for diagonal dominant cyclic tridiagonal-       */
 /*      matrices as they occur in spline-interpolations.              */
-/*      For diagonal dominant matices only a LU-decomposition exists. */
+/*      For diagonal dominant matrices only a LU-decomposition exists.*/
 /*                                                                    */
 /*====================================================================*/
 /*                                                                    */
