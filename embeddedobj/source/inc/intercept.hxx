@@ -31,9 +31,9 @@
 class StatusChangeListenerContainer;
 class DocumentHolder;
 
-class Interceptor : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XDispatchProviderInterceptor,
-                                                       ::com::sun::star::frame::XInterceptorInfo,
-                                                       ::com::sun::star::frame::XDispatch>
+class Interceptor : public ::cppu::WeakImplHelper< css::frame::XDispatchProviderInterceptor,
+                                                   css::frame::XInterceptorInfo,
+                                                   css::frame::XDispatch>
 {
 public:
 
@@ -45,87 +45,87 @@ public:
     //XDispatch
     virtual void SAL_CALL
     dispatch(
-        const ::com::sun::star::util::URL& URL,
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue >& Arguments )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::util::URL& URL,
+        const css::uno::Sequence<
+        css::beans::PropertyValue >& Arguments )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     addStatusListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XStatusListener >& Control,
-        const ::com::sun::star::util::URL& URL )
+        const css::uno::Reference<
+        css::frame::XStatusListener >& Control,
+        const css::util::URL& URL )
         throw (
-            ::com::sun::star::uno::RuntimeException, std::exception
+            css::uno::RuntimeException, std::exception
         ) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     removeStatusListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XStatusListener >& Control,
-        const ::com::sun::star::util::URL& URL )
+        const css::uno::Reference<
+        css::frame::XStatusListener >& Control,
+        const css::util::URL& URL )
         throw (
-            ::com::sun::star::uno::RuntimeException, std::exception
+            css::uno::RuntimeException, std::exception
         ) SAL_OVERRIDE;
 
     //XInterceptorInfo
-    virtual ::com::sun::star::uno::Sequence< OUString >
+    virtual css::uno::Sequence< OUString >
     SAL_CALL getInterceptedURLs(  )
         throw (
-            ::com::sun::star::uno::RuntimeException, std::exception
+            css::uno::RuntimeException, std::exception
         ) SAL_OVERRIDE;
 
     //XDispatchProvider ( inherited by XDispatchProviderInterceptor )
-    virtual ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatch > SAL_CALL
+    virtual css::uno::Reference<
+    css::frame::XDispatch > SAL_CALL
     queryDispatch(
-        const ::com::sun::star::util::URL& URL,
+        const css::util::URL& URL,
         const OUString& TargetFrameName,
         sal_Int32 SearchFlags )
         throw (
-            ::com::sun::star::uno::RuntimeException, std::exception
+            css::uno::RuntimeException, std::exception
         ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Sequence<
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatch > > SAL_CALL
+    virtual css::uno::Sequence<
+    css::uno::Reference<
+    css::frame::XDispatch > > SAL_CALL
     queryDispatches(
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::frame::DispatchDescriptor >& Requests )
+        const css::uno::Sequence<
+        css::frame::DispatchDescriptor >& Requests )
         throw (
-            ::com::sun::star::uno::RuntimeException, std::exception
+            css::uno::RuntimeException, std::exception
         ) SAL_OVERRIDE;
 
 
     //XDispatchProviderInterceptor
-    virtual ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatchProvider > SAL_CALL
+    virtual css::uno::Reference<
+    css::frame::XDispatchProvider > SAL_CALL
     getSlaveDispatchProvider(  )
         throw (
-            ::com::sun::star::uno::RuntimeException, std::exception
+            css::uno::RuntimeException, std::exception
         ) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     setSlaveDispatchProvider(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XDispatchProvider >& NewDispatchProvider )
+        const css::uno::Reference<
+        css::frame::XDispatchProvider >& NewDispatchProvider )
         throw (
-            ::com::sun::star::uno::RuntimeException, std::exception
+            css::uno::RuntimeException, std::exception
         ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatchProvider > SAL_CALL
+    virtual css::uno::Reference<
+    css::frame::XDispatchProvider > SAL_CALL
     getMasterDispatchProvider(  )
         throw (
-            ::com::sun::star::uno::RuntimeException, std::exception
+            css::uno::RuntimeException, std::exception
         ) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     setMasterDispatchProvider(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XDispatchProvider >& NewSupplier )
+        const css::uno::Reference<
+        css::frame::XDispatchProvider >& NewSupplier )
         throw (
-            ::com::sun::star::uno::RuntimeException, std::exception
+            css::uno::RuntimeException, std::exception
         ) SAL_OVERRIDE;
 
 
@@ -135,10 +135,10 @@ private:
 
     DocumentHolder*   m_pDocHolder;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xSlaveDispatchProvider;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xMasterDispatchProvider;
+    css::uno::Reference< css::frame::XDispatchProvider > m_xSlaveDispatchProvider;
+    css::uno::Reference< css::frame::XDispatchProvider > m_xMasterDispatchProvider;
 
-    static ::com::sun::star::uno::Sequence< OUString > m_aInterceptedURL;
+    static css::uno::Sequence< OUString > m_aInterceptedURL;
 
     cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
     StatusChangeListenerContainer*    m_pStatCL;

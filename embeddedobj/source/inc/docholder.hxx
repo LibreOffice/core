@@ -42,30 +42,30 @@ class Interceptor;
 
 class DocumentHolder :
     public ::cppu::WeakImplHelper<
-                        ::com::sun::star::util::XCloseListener,
-                          ::com::sun::star::frame::XTerminateListener,
-                        ::com::sun::star::util::XModifyListener,
-                        ::com::sun::star::document::XEventListener,
-                        ::com::sun::star::frame::XBorderResizeListener,
-                        ::com::sun::star::embed::XHatchWindowController >
+                        css::util::XCloseListener,
+                        css::frame::XTerminateListener,
+                        css::util::XModifyListener,
+                        css::document::XEventListener,
+                        css::frame::XBorderResizeListener,
+                        css::embed::XHatchWindowController >
 {
 private:
 
     OCommonEmbeddedObject* m_pEmbedObj;
 
     Interceptor*        m_pInterceptor;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor > m_xOutplaceInterceptor;
+    css::uno::Reference< css::frame::XDispatchProviderInterceptor > m_xOutplaceInterceptor;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > m_xComponent;
+    css::uno::Reference< css::util::XCloseable > m_xComponent;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xOwnWindow; // set for inplace objects
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xHatchWindow; // set for inplace objects
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    css::uno::Reference< css::awt::XWindow > m_xOwnWindow; // set for inplace objects
+    css::uno::Reference< css::awt::XWindow > m_xHatchWindow; // set for inplace objects
 
-    ::com::sun::star::awt::Rectangle m_aObjRect;
-    ::com::sun::star::frame::BorderWidths m_aBorderWidths;
+    css::awt::Rectangle m_aObjRect;
+    css::frame::BorderWidths m_aBorderWidths;
 
     OUString m_aContainerName;
     OUString m_aDocumentNamePart;
@@ -79,49 +79,49 @@ private:
     sal_Int32 m_nNoBorderResizeReact;
     sal_Int32 m_nNoResizeReact;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > m_xCachedDocAreaAcc;
+    css::uno::Reference< css::ui::XDockingAreaAcceptor > m_xCachedDocAreaAcc;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_aOutplaceFrameProps;
+    css::uno::Sequence< css::uno::Any > m_aOutplaceFrameProps;
 
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetDocFrame();
+    css::uno::Reference< css::frame::XFrame > GetDocFrame();
     bool LoadDocToFrame( bool );
 
-    ::com::sun::star::awt::Rectangle CalculateBorderedArea( const ::com::sun::star::awt::Rectangle& aRect );
-    ::com::sun::star::awt::Rectangle AddBorderToArea( const ::com::sun::star::awt::Rectangle& aRect );
+    css::awt::Rectangle CalculateBorderedArea( const css::awt::Rectangle& aRect );
+    css::awt::Rectangle AddBorderToArea( const css::awt::Rectangle& aRect );
 
-    void ResizeWindows_Impl( const ::com::sun::star::awt::Rectangle& aHatchRect );
+    void ResizeWindows_Impl( const css::awt::Rectangle& aHatchRect );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > RetrieveOwnMenu_Impl();
+    css::uno::Reference< css::container::XIndexAccess > RetrieveOwnMenu_Impl();
     bool MergeMenus_Impl(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp,
+                const css::uno::Reference< css::frame::XLayoutManager >& xOwnLM,
+                const css::uno::Reference< css::frame::XLayoutManager >& xContLM,
+                const css::uno::Reference< css::frame::XDispatchProvider >& xContDisp,
                 const OUString& aContModuleName );
 
 public:
 
     static void FindConnectPoints(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMenu,
+        const css::uno::Reference< css::container::XIndexAccess >& xMenu,
         sal_Int32 nConnectPoints[2] )
-            throw ( ::com::sun::star::uno::Exception );
+            throw ( css::uno::Exception );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > MergeMenusForInplace(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xContMenu,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp,
+    static css::uno::Reference< css::container::XIndexAccess > MergeMenusForInplace(
+        const css::uno::Reference< css::container::XIndexAccess >& xContMenu,
+        const css::uno::Reference< css::frame::XDispatchProvider >& xContDisp,
         const OUString& aContModuleName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xOwnMenu,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xOwnDisp )
-            throw ( ::com::sun::star::uno::Exception );
+        const css::uno::Reference< css::container::XIndexAccess >& xOwnMenu,
+        const css::uno::Reference< css::frame::XDispatchProvider >& xOwnDisp )
+            throw ( css::uno::Exception );
 
 
-    DocumentHolder( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    DocumentHolder( const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     OCommonEmbeddedObject* pEmbObj );
     virtual ~DocumentHolder();
 
     OCommonEmbeddedObject* GetEmbedObject() { return m_pEmbedObj; }
 
-    void SetComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >& xDoc, bool bReadOnly );
+    void SetComponent( const css::uno::Reference< css::util::XCloseable >& xDoc, bool bReadOnly );
     void ResizeHatchWindow();
     void FreeOffice();
 
@@ -133,66 +133,66 @@ public:
         return m_aContainerName + " - " + m_aDocumentNamePart;
     }
 
-    void SetOutplaceFrameProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aProps )
+    void SetOutplaceFrameProperties( const css::uno::Sequence< css::uno::Any >& aProps )
         { m_aOutplaceFrameProps = aProps; }
 
-    void PlaceFrame( const ::com::sun::star::awt::Rectangle& aNewRect );
+    void PlaceFrame( const css::awt::Rectangle& aNewRect );
 
-    static bool SetFrameLMVisibility( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+    static bool SetFrameLMVisibility( const css::uno::Reference< css::frame::XFrame >& xFrame,
                                     bool bVisible );
 
-    bool ShowInplace( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,
-                      const ::com::sun::star::awt::Rectangle& aRectangleToShow,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP );
+    bool ShowInplace( const css::uno::Reference< css::awt::XWindowPeer >& xParent,
+                      const css::awt::Rectangle& aRectangleToShow,
+                      const css::uno::Reference< css::frame::XDispatchProvider >& xContainerDP );
 
     bool ShowUI(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP,
+        const css::uno::Reference< css::frame::XLayoutManager >& xContainerLM,
+        const css::uno::Reference< css::frame::XDispatchProvider >& xContainerDP,
         const OUString& aContModuleName );
     bool HideUI(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM );
+        const css::uno::Reference< css::frame::XLayoutManager >& xContainerLM );
 
     void Show();
 
-    bool SetExtent( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize );
-    bool GetExtent( sal_Int64 nAspect, ::com::sun::star::awt::Size *pSize );
+    bool SetExtent( sal_Int64 nAspect, const css::awt::Size& aSize );
+    bool GetExtent( sal_Int64 nAspect, css::awt::Size *pSize );
 
     sal_Int32 GetMapUnit( sal_Int64 nAspect );
 
     void SetOutplaceDispatchInterceptor(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >&
+        const css::uno::Reference< css::frame::XDispatchProviderInterceptor >&
                                                                                             xOutplaceInterceptor )
     {
         m_xOutplaceInterceptor = xOutplaceInterceptor;
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > GetComponent() { return m_xComponent; }
+    css::uno::Reference< css::util::XCloseable > GetComponent() { return m_xComponent; }
 
 // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XCloseListener
-    virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& Source, sal_Bool GetsOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL notifyClosing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, sal_Bool GetsOwnership ) throw (css::util::CloseVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL notifyClosing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XTerminateListener
-    virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XModifyListener
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // XEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // XBorderResizeListener
-    virtual void SAL_CALL borderWidthsChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& aObject, const ::com::sun::star::frame::BorderWidths& aNewSize ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL borderWidthsChanged( const css::uno::Reference< css::uno::XInterface >& aObject, const css::frame::BorderWidths& aNewSize ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XHatchWindowController
-    virtual void SAL_CALL requestPositioning( const ::com::sun::star::awt::Rectangle& aRect ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL calcAdjustedRectangle( const ::com::sun::star::awt::Rectangle& aRect ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL activated(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL deactivated(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL requestPositioning( const css::awt::Rectangle& aRect ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::awt::Rectangle SAL_CALL calcAdjustedRectangle( const css::awt::Rectangle& aRect ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL activated(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL deactivated(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif

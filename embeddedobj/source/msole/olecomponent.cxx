@@ -1649,7 +1649,7 @@ sal_Bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataF
     return sal_False;
 }
 
-void SAL_CALL OleComponent::dispose() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OleComponent::dispose() throw (css::uno::RuntimeException)
 {
     try
     {
@@ -1686,7 +1686,7 @@ void SAL_CALL OleComponent::removeEventListener( const uno::Reference< lang::XEv
                                                 xListener );
 }
 
-sal_Int64 SAL_CALL OleComponent::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int64 SAL_CALL OleComponent::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException)
 {
     try
     {
@@ -1719,13 +1719,13 @@ sal_Int64 SAL_CALL OleComponent::getSomething( const ::com::sun::star::uno::Sequ
     return 0;
 }
 
-sal_Bool SAL_CALL OleComponent::isModified() throw (::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OleComponent::isModified() throw (css::uno::RuntimeException)
 {
     return m_bModified;
 }
 
 void SAL_CALL OleComponent::setModified( sal_Bool bModified )
-        throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException)
+        throw (css::beans::PropertyVetoException, css::uno::RuntimeException)
 {
     m_bModified = bModified;
 
@@ -1752,7 +1752,7 @@ void SAL_CALL OleComponent::setModified( sal_Bool bModified )
     }
 }
 
-void SAL_CALL OleComponent::addModifyListener( const com::sun::star::uno::Reference < com::sun::star::util::XModifyListener >& xListener ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OleComponent::addModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener ) throw(css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1764,7 +1764,7 @@ void SAL_CALL OleComponent::addModifyListener( const com::sun::star::uno::Refere
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XModifyListener>::get(), xListener );
 }
 
-void SAL_CALL OleComponent::removeModifyListener( const com::sun::star::uno::Reference < com::sun::star::util::XModifyListener >& xListener) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OleComponent::removeModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener) throw(css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )

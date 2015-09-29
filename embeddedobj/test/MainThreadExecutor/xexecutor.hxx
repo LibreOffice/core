@@ -28,45 +28,45 @@
 
 #include <tools/link.hxx>
 
-class UNOMainThreadExecutor : public ::cppu::WeakImplHelper< ::com::sun::star::task::XJob,
-                                                              ::com::sun::star::lang::XServiceInfo >
+class UNOMainThreadExecutor : public ::cppu::WeakImplHelper< css::task::XJob,
+                                                             css::lang::XServiceInfo >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
 public:
     UNOMainThreadExecutor(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
     {
     }
 
-    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
+    static css::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
 
     static OUString SAL_CALL impl_staticGetImplementationName();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
         impl_staticCreateSelfInstance(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     // XJob
-    virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
 };
 
 class MainThreadExecutor_Impl
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XJob > m_xJob;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > m_aArgs;
+    css::uno::Reference< css::task::XJob > m_xJob;
+    css::uno::Sequence< css::beans::NamedValue > m_aArgs;
 
     sal_Bool m_bExecuted;
 public:
-    MainThreadExecutor_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XJob >& xJob,
-                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aArguments );
+    MainThreadExecutor_Impl( const css::uno::Reference< css::task::XJob >& xJob,
+                             const css::uno::Sequence< css::beans::NamedValue >& aArguments );
 
     void execute();
 

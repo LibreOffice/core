@@ -361,7 +361,7 @@ bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFrame >
 
     try
     {
-        uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY_THROW );
         xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
         if ( xLayoutManager.is() )
@@ -516,10 +516,10 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
 {
     uno::Reference< container::XIndexAccess > xResult;
 
-    uno::Reference< ::com::sun::star::ui::XUIConfigurationManagerSupplier > xUIConfSupplier(
+    uno::Reference< css::ui::XUIConfigurationManagerSupplier > xUIConfSupplier(
                 m_xComponent,
                 uno::UNO_QUERY );
-    uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xUIConfigManager;
+    uno::Reference< css::ui::XUIConfigurationManager > xUIConfigManager;
     if( xUIConfSupplier.is())
     {
         xUIConfigManager.set(
@@ -550,7 +550,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
         {
             uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier =
                     ui::theModuleUIConfigurationManagerSupplier::get(m_xContext);
-            uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xModUIConfMan(
+            uno::Reference< css::ui::XUIConfigurationManager > xModUIConfMan(
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
                     uno::UNO_QUERY_THROW );
             xResult = xModUIConfMan->getSettings(
@@ -643,15 +643,15 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenusForInplace(
 }
 
 
-bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
-                                               const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
+bool DocumentHolder::MergeMenus_Impl( const uno::Reference< css::frame::XLayoutManager >& xOwnLM,
+                                            const uno::Reference< css::frame::XLayoutManager >& xContLM,
                                             const uno::Reference< frame::XDispatchProvider >& xContDisp,
                                             const OUString& aContModuleName )
 {
     bool bMenuMerged = false;
     try
     {
-        uno::Reference< ::com::sun::star::ui::XUIElementSettings > xUISettings(
+        uno::Reference< css::ui::XUIElementSettings > xUISettings(
             xContLM->getElement(
                 OUString( "private:resource/menubar/menubar" ) ),
             uno::UNO_QUERY_THROW );
@@ -663,7 +663,7 @@ bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star::fr
         uno::Reference< frame::XDispatchProvider > xOwnDisp( m_xFrame, uno::UNO_QUERY_THROW );
 
         uno::Reference< container::XIndexAccess > xMergedMenu = MergeMenusForInplace( xContMenu, xContDisp, aContModuleName, xOwnMenu, xOwnDisp );
-        uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
+        uno::Reference< css::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
                                                                                          uno::UNO_QUERY_THROW );
         bMenuMerged = xMerge->setMergedMenuBar( xMergedMenu );
     }
@@ -673,7 +673,7 @@ bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star::fr
     return bMenuMerged;
 }
 
-bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
+bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >& xContainerLM,
                                  const uno::Reference< frame::XDispatchProvider >& xContainerDP,
                                  const OUString& aContModuleName )
 {
@@ -681,8 +681,8 @@ bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLay
     if ( xContainerLM.is() )
     {
         // the LM of the embedded frame and its current DockingAreaAcceptor
-        uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
-        uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > xDocAreaAcc;
+        uno::Reference< css::frame::XLayoutManager > xOwnLM;
+        uno::Reference< css::ui::XDockingAreaAcceptor > xDocAreaAcc;
 
         try
         {
@@ -746,10 +746,10 @@ bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLay
                     if ( bLock )
                         xOwnLM->lock();
                     xOwnLM->setVisible( sal_False );
-                    xOwnLM->setDockingAreaAcceptor( uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >() );
+                    xOwnLM->setDockingAreaAcceptor( uno::Reference< css::ui::XDockingAreaAcceptor >() );
 
                     // unmerge menu
-                    uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM, uno::UNO_QUERY_THROW );
+                    uno::Reference< css::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM, uno::UNO_QUERY_THROW );
                     xMerge->removeMergedMenuBar();
                 }
                 catch( const uno::Exception& ) {}
@@ -771,13 +771,13 @@ bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLay
 }
 
 
-bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM )
+bool DocumentHolder::HideUI( const uno::Reference< css::frame::XLayoutManager >& xContainerLM )
 {
     bool bResult = false;
 
     if ( xContainerLM.is() )
     {
-           uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
+        uno::Reference< css::frame::XLayoutManager > xOwnLM;
 
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
@@ -792,13 +792,13 @@ bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::XLay
                 if ( xSupp.is() )
                     xSupp->setActiveFrame( 0 );
 
-                uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > xDocAreaAcc = xOwnLM->getDockingAreaAcceptor();
+                uno::Reference< css::ui::XDockingAreaAcceptor > xDocAreaAcc = xOwnLM->getDockingAreaAcceptor();
 
                 xOwnLM->setDockingAreaAcceptor( uno::Reference < ui::XDockingAreaAcceptor >() );
                 xOwnLM->lock();
                 xOwnLM->setVisible( sal_False );
 
-                uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM, uno::UNO_QUERY_THROW );
+                uno::Reference< css::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM, uno::UNO_QUERY_THROW );
                 xMerge->removeMergedMenuBar();
 
                 xContainerLM->setDockingAreaAcceptor( xDocAreaAcc );
@@ -855,7 +855,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
 
     if ( m_xComponent.is() )
     {
-        uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
+        uno::Reference< css::frame::XLayoutManager > xOwnLM;
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
             xPropSet->getPropertyValue("LayoutManager") >>= xOwnLM;
@@ -1092,7 +1092,7 @@ awt::Rectangle DocumentHolder::AddBorderToArea( const awt::Rectangle& aRect )
 }
 
 
-void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject& aSource )
+void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
         throw (uno::RuntimeException, std::exception)
 {
     if ( m_xComponent.is() && m_xComponent == aSource.Source )
@@ -1252,7 +1252,7 @@ awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectan
     return aResult;
 }
 
-void SAL_CALL DocumentHolder::activated(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL DocumentHolder::activated(  ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( (m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
         svt::EmbeddedObjectRef::IsGLChart(m_pEmbedObj) )
@@ -1264,11 +1264,11 @@ void SAL_CALL DocumentHolder::activated(  ) throw (::com::sun::star::uno::Runtim
             {
                 m_pEmbedObj->changeState( embed::EmbedStates::UI_ACTIVE );
             }
-            catch ( const com::sun::star::embed::StateChangeInProgressException& )
+            catch ( const css::embed::StateChangeInProgressException& )
             {
                 // must catch this exception because focus is grabbed while UI activation in doVerb()
             }
-            catch ( const com::sun::star::uno::Exception& )
+            catch ( const css::uno::Exception& )
             {
                 // no outgoing exceptions specified here
             }
@@ -1290,7 +1290,7 @@ void DocumentHolder::ResizeHatchWindow()
     xHatchWindow->setHatchBorderSize( awt::Size( HATCH_BORDER_WIDTH, HATCH_BORDER_WIDTH ) );
 }
 
-void SAL_CALL DocumentHolder::deactivated(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL DocumentHolder::deactivated(  ) throw (css::uno::RuntimeException, std::exception)
 {
     // deactivation is too unspecific to be useful; usually we only trigger code from activation
     // so UIDeactivation is actively triggered by the container
