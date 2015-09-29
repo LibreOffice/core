@@ -2018,7 +2018,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
 
     SwViewShell *pSh = GetCurrShell();
 
-    bool bIgnoreVisArea = false;
+    bool bIgnoreVisArea = true;
     if (pSh)
         bIgnoreVisArea = pSh->GetViewOptions()->IsPDFExport() || pSh->isTiledRendering();
 
