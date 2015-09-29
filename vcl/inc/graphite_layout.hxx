@@ -151,7 +151,7 @@ private:
                 const gr_slot * pSlot, float gOrigin,
                 float nextGlyphOrigin, float fScaling,
                 long & rDXOffset, bool bIsBase, int baseChar, int baseGlyph, bool bRtl);
-    int ScanFwdForChar(int &findChar, bool fallback) const;
+    unsigned int ScanFwdForChar(int &findChar, bool fallback) const;
 };
 
 #endif // INCLUDED_VCL_INC_GRAPHITE_LAYOUT_HXX
