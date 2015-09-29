@@ -85,7 +85,7 @@ LwpSdwGroupLoaderV0102::~LwpSdwGroupLoaderV0102()
 }
 
 /**
- * @descr   entry of lwp-drawing objects. the functin begins to parse the sdw-drawing bento stream and create
+ * @descr   entry of lwp-drawing objects. the function begins to parse the sdw-drawing bento stream and create
  *      the corresponding drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.
  */

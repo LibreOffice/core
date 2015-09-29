@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -52,11 +52,11 @@
  *  Contributor(s): _______________________________________
  *
  *
- ************************************************************************/
-/*************************************************************************
+ */
+/*
  * @file
- * Polylon object.
- ************************************************************************/
+ * Polygon object.
+ */
 #include "xfdrawpolygon.hxx"
 
 XFDrawPolygon::XFDrawPolygon()

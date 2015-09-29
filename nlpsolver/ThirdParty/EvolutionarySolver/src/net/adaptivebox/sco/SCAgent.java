@@ -76,7 +76,7 @@ public class SCAgent {
   public SearchPoint generatePoint() {
     //generate a new point
     generatePoint(trailPoint);
-    //evalute the generated point
+    //evaluete the generated point
     problemEncoder.evaluate(trailPoint);
     return trailPoint;
   }

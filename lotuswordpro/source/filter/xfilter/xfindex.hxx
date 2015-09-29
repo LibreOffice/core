@@ -144,12 +144,12 @@ public:
     void    SetIndexType(enumXFIndex type);
 
     /**
-     * @descr   Add index templaet entry.
+     * @descr   Add index template entry.
      */
     void    AddTemplate(const OUString& level, const OUString& style, XFIndexTemplate* templ);
 
     /**
-     * @descr   Set if protected index to prevent handly-revise.
+     * @descr   Set if protected index to prevent handy-revise.
      */
     void    SetProtected(bool protect);
 
