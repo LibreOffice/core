@@ -62,7 +62,7 @@ namespace dbaui
                                     m_pContextMenuProvider;
 
         Link<SvTreeListEntry*,bool> m_aPreExpandHandler;    // handler to be called before a node is expanded
-        Link<LinkParamNone*,void>   m_aSelChangeHdl;        // handlet to be called (asynchronously) when the selection changes in any way
+        Link<LinkParamNone*,void>   m_aSelChangeHdl;        // handler to be called (asynchronously) when the selection changes in any way
         Link<LinkParamNone*,void>   m_aCutHandler;          // called when someone press CTRL+X
         Link<LinkParamNone*,void>   m_aCopyHandler;         // called when someone press CTRL+C
         Link<LinkParamNone*,void>   m_aPasteHandler;        // called when someone press CTRL+V

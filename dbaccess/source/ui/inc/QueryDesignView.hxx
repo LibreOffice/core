@@ -113,7 +113,7 @@ namespace dbaui
         // save the position of the table window and the pos of the splitters
         // called when fields are deleted
         void DeleteFields( const OUString& rAliasName );
-        // called when a table from tabeview was deleted
+        // called when a table from tabview was deleted
         void TableDeleted(const OUString& rAliasName);
 
         sal_Int32 getColWidth( sal_uInt16 _nColPos) const;

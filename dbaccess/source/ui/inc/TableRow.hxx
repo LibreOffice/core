@@ -59,7 +59,7 @@ namespace dbaui
 
         /** set the row readonly
             @param  _bRead
-                if <TRUE/> then the row is redonly, otherwise not
+                if <TRUE/> then the row is readonly, otherwise not
         */
         inline void SetReadOnly( bool _bRead=true ){ m_bReadOnly = _bRead; }
 

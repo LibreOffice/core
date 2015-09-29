@@ -901,7 +901,7 @@ namespace
             const bool bColumnAliasInOrderBy = rController.getSdbMetaData().supportsColumnAliasInOrderBy();
             Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             OUString aQuote = xMetaData->getIdentifierQuoteString();
-            // * must not containa  filter - have I already shown the warning?
+            // * must not contain filter - have I already shown the warning?
             bool bCritsOnAsterikWarning = false;        // ** TMFS **
             OTableFields::iterator aIter = _rFieldList.begin();
             OTableFields::iterator aEnd = _rFieldList.end();

@@ -261,7 +261,7 @@ void OQueryTableView::ReSync()
         OQueryTableWindowData* pData = static_cast<OQueryTableWindowData*>(aIter->get());
         VclPtr<OTableWindow> pTabWin = createWindow(*aIter);
 
-        // I dont't use ShowTabWin as this adds the window data to the list of documents.
+        // I don't use ShowTabWin as this adds the window data to the list of documents.
         // This would be bad as I am getting them from there.
         // Instead, I do it step by step
         if (!pTabWin->Init())

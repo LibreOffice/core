@@ -226,7 +226,7 @@ namespace dbaui
     {
         bool bIsNewDesign =  _rObjectName.isEmpty();
 
-        // let's see whether the connection can provide a dedicated table desginer
+        // let's see whether the connection can provide a dedicated table designer
         Reference< XInterface > xDesigner;
         if ( !bIsNewDesign )
             xDesigner = impl_getConnectionProvidedDesigner_nothrow( _rObjectName );

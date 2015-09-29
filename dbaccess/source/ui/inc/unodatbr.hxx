@@ -252,7 +252,7 @@ namespace dbaui
         void        showExplorer();
         void        toggleExplorer() { if (haveExplorer()) hideExplorer(); else showExplorer(); }
 
-        // methods for handling the 'selection' (paintin them bold) of SvLBoxEntries
+        // methods for handling the 'selection' (painting them bold) of SvLBoxEntries
         // returns <TRUE/> if the entry is selected (which means it's part of the selected path)
         static bool isSelected(SvTreeListEntry* _pEntry);
         // select the entry (and only the entry, not the whole path)

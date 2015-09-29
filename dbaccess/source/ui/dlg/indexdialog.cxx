@@ -471,12 +471,12 @@ namespace dbaui
                 pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterDropPos - m_pIndexes->begin())));
             }
 
-            // if the remvoved entry was the selected on ...
+            // if the removed entry was the selected on...
             if (m_pPreviousSelection == _pEntry)
                 m_pPreviousSelection = NULL;
 
             // the Remove automatically selected another entry (if possible), but we disabled the calling of the handler
-            // to prevent that we missed something ... call the handler directly
+            // to prevent that we missed something... call the handler directly
             OnIndexSelected(*m_pIndexList);
         }
 

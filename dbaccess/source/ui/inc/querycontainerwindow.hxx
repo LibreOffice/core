@@ -95,7 +95,7 @@ namespace dbaui
         // re-arrange the controls belonging to the document itself
         virtual void resizeAll( const Rectangle& _rPlayground ) SAL_OVERRIDE;
 
-        // arrange dericed classes controls in the rectangle given
+        // arrange derived classes controls in the rectangle given
         virtual void resizeDocumentView(Rectangle& _rPlayground) SAL_OVERRIDE;
     };
     // end of temp classes

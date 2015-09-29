@@ -41,7 +41,7 @@ namespace dbaui
         virtual ~TextConnectionSettingsDialog();
         virtual void dispose() SAL_OVERRIDE;
 
-        /** initializes a set of PropertyStorage instaces, which are bound to
+        /** initializes a set of PropertyStorage instances, which are bound to
             the text-connection relevant items in our item sets
         */
         static void bindItemStorages( SfxItemSet& _rSet, PropertyValues& _rValues );
