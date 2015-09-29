@@ -408,7 +408,7 @@ void PivotCacheItemList::importArray( SequenceInputStream& rStrm )
             case BIFF12_PCITEM_ARRAY_DATE:   createItem().readDate( rStrm );     break;
             default:
                 OSL_FAIL( "PivotCacheItemList::importArray - unknown data type" );
-                nIdx = nCount;
+                return;
         }
     }
 }
