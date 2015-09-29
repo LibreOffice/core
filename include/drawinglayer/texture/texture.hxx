@@ -323,7 +323,7 @@ namespace drawinglayer
         // tile a matrix will be created (by appendTransformations) that
         // represents the needed transformation to map a filling in unit
         // coordinates to that tile.
-        // When offsetX is given, every 2nd line will be ofsetted by the
+        // When offsetX is given, every 2nd line will be offsetted by the
         // given percentage value (offsetX has to be 0.0 <= offsetX <= 1.0).
         // Accordingly to offsetY. If both are given, offsetX is preferred
         // and offsetY is ignored.

@@ -17,7 +17,7 @@
 namespace o3tl
 {
 
-// forward declared because it's default tempate arg for sorted_vector
+// forward declared because it's default template arg for sorted_vector
 template<class Value, class Compare>
 struct find_unique;
 

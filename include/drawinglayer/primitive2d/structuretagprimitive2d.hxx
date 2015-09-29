@@ -33,7 +33,7 @@ namespace drawinglayer
     {
         /** StructureTagPrimitive2D class
 
-            This class is used to provode simple support for adding grouped
+            This class is used to provide simple support for adding grouped
             pdf writer structured element information like used in sd from
             unomodel.cxx where a ViewObjectContactRedirector is used to add
             such information for diverse objects.

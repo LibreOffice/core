@@ -68,7 +68,7 @@ enum class DictionaryError
     NONE, FULL, READONLY, UNKNOWN, NOT_EXISTS
 };
 
-// values asigned to capitalization types
+// values assigned to capitalization types
 enum class CapType
 {
     UNKNOWN,

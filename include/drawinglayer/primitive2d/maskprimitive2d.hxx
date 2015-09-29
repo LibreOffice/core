@@ -40,9 +40,9 @@ namespace drawinglayer
 
             This primitive should be handled by a renderer. If it is not handled,
             it decomposes to its Child content, and thus the visualisation would
-            contaiun no clips.
+            contain no clips.
 
-            The geometrc range of this primitive is completely defined by the Mask
+            The geometry range of this primitive is completely defined by the Mask
             tools::PolyPolygon since by definition nothing outside of the mask is visible.
          */
         class DRAWINGLAYER_DLLPUBLIC MaskPrimitive2D : public GroupPrimitive2D
