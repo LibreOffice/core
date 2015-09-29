@@ -579,7 +579,7 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     blockIdleTimeout = !bWait;
     /* #i33212# only enter g_main_context_iteration in one thread at any one
      * time, else one of them potentially will never end as long as there is
-     * another thread in there. Having only one yieldin thread actually dispatch
+     * another thread in there. Having only one yielding thread actually dispatch
      * fits the vcl event model (see e.g. the generic plugin).
      */
     bool bDispatchThread = false;

@@ -234,7 +234,7 @@ public class TypeInspector
                 }
                 else if (ret.length() == 0)
                 {
-                    // in case we dont find anything else, we at return a typename
+                    // in case we don't find anything else, we at return a typename
                     // with the correct class
                     ret = sDataTypeNames[i];
                 }

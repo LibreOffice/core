@@ -29,7 +29,7 @@ struct IAccessible;
 class AccObjectWinManager;
 
 /****************************************************************
-AccObjectMangerAgent is used for manaing AccObjects,which encapsulates
+AccObjectMangerAgent is used for managing AccObjects, which encapsulates
 platform differences,and call AccObjectWinManager for Windows platform. To do for
 Linux platform
 *****************************************************************/

@@ -1498,7 +1498,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     mnError = 0;
     mbAbort = FALSE;
 
-    // As the Telocom Balloon Fax driver tends to send messages repeatedly
+    // As the Telecom Balloon Fax driver tends to send messages repeatedly
     // we try to process first all, and then insert a dummy message
     bool bWhile = TRUE;
     int  i = 0;

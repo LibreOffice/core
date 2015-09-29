@@ -310,7 +310,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
 
     // Try hard to avoid overlap as we want to be able to use
     // individual rectangles for each glyph. The ABC widths don't
-    // take anti-alising into consideration. Let's hope that leaving
+    // take anti-aliasing into consideration. Let's hope that leaving
     // "extra" space inbetween glyphs will help.
     std::vector<int> aDX(nCount);
     int totWidth = 0;

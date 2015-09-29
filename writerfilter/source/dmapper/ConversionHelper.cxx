@@ -261,7 +261,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineToken,
 
     // Map to our border types, we should use of one equal line
     // thickness, or one of smaller thickness. If too small we
-    // can make the defecit up in additional white space or
+    // can make the deficit up in additional white space or
     // object size
     ::editeng::SvxBorderStyle const nLineStyle(
             ::editeng::ConvertBorderStyleFromWord(nLineType));
