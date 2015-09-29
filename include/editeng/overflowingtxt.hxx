@@ -96,7 +96,6 @@ private:
     NonOverflowingText(const ESelection &aSel, bool bLastParaInterrupted);
 
     friend class Outliner;
-    const EditTextObject *mpContentTextObj;
     const ESelection maContentSel;
     const bool mbLastParaInterrupted;
 };
@@ -112,6 +111,7 @@ class EDITENG_DLLPUBLIC OFlowChainedText
 {
 public:
     OFlowChainedText(Outliner *, bool );
+    ~OFlowChainedText();
 
     OutlinerParaObject *InsertOverflowingText(Outliner *, OutlinerParaObject *);
     OutlinerParaObject *RemoveOverflowingText(Outliner *);
