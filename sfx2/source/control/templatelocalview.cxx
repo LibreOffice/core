@@ -129,7 +129,7 @@ void TemplateLocalView::showRootRegion()
     mnCurRegionId = 0;
     maCurRegionName.clear();
 
-    // Clone root region items so they dont get invalidated when we open another region
+    // Clone root region items so they don't get invalidated when we open another region
     std::vector<ThumbnailViewItem*> items(maRegions.size());
     for (int i = 0, n = maRegions.size(); i < n; ++i)
     {

@@ -106,7 +106,7 @@ namespace sfx2
     the filter itself) nor indirectly (as part of another local group).</p>
 
     <p>The only exception are filters which are part of a global class <em>and</em> a local class. This is allowed.
-    Being cotained in two local classes isn't.</p>
+    Being contained in two local classes isn't.</p>
 
     <p>So that's all what you need to know: Understand the concept of "filter classes" (a filter class combines
     different filters and acts as if it's a filter itself) and the concept of groups (a group just describes a
@@ -646,7 +646,7 @@ namespace sfx2
                     ++aGroupPos;
                 }
                 if ( aGroupPos != _rAllFilters.end() )
-                    // we found a global class name which matchies the doc service name -> fill the filters of this
+                    // we found a global class name which matches the doc service name -> fill the filters of this
                     // group in the respective prepared group
                     aCurrentGroup = aGroupPos;
                 else

@@ -768,7 +768,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 lNewArgs[nIndex++] = aAddArgs[i];
         }
 
-        // Overwrite possible detected sychron argument, if real listener exists (currently no other way)
+        // Overwrite possible detected synchron argument, if real listener exists (currently no other way)
         if ( rListener.is() )
             nCall = SfxCallMode::SYNCHRON;
 

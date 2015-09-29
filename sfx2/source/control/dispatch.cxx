@@ -592,7 +592,7 @@ SfxShell *SfxDispatcher::GetShell(sal_uInt16 nIdx) const
 }
 
 /** This method returns a pointer to the <SfxBinding> Instance on which the
-    SfxDispatcher is curretly bound. A SfxDispatcher is only bound to
+    SfxDispatcher is currently bound. A SfxDispatcher is only bound to
     the SfxBindings when it is <UI-aktiv>. If it is not UI-active,
     a NULL-pointer is returned.
 

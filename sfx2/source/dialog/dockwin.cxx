@@ -1480,7 +1480,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
         bool bChanged = pImp->nLine != pImp->nDockLine || pImp->nPos != pImp->nDockPos || eDockAlign != GetAlignment();
         if ( !bChanged && !IsFloatingMode() )
         {
-            // window only sightly moved, no change of any property
+            // window only slightly moved, no change of any property
             rRect.SetSize( pImp->aSplitSize );
             rRect.SetPos( aDockingRect.TopLeft() );
             return eDockAlign;

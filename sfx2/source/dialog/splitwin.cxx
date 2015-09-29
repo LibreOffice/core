@@ -647,7 +647,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
                 {
                     DBG_ASSERT(rD.bNewLine, "No new line?");
 
-                    // The posption is pushed to nPos==0
+                    // The position is pushed to nPos==0
                     rD.bNewLine = false;
                     pDock->bNewLine = true;
                 }

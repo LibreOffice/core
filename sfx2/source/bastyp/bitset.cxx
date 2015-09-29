@@ -210,7 +210,7 @@ BitSet& BitSet::operator|=( const BitSet& rSet )
     // add the bits blocks by block
     for ( sal_uInt16 nBlock = 0; nBlock < nMax; ++nBlock )
     {
-        // compute numberof additional bits
+        // compute number of additional bits
         sal_uInt32 nDiff = ~*(pBitmap+nBlock) & *(rSet.pBitmap+nBlock);
         nCount = nCount + CountBits(nDiff);
 

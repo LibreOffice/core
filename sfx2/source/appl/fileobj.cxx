@@ -103,7 +103,7 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
             {
                 Graphic aGrf;
 
-                // If the native format is reqested, has to be reset at the
+                // If the native format is requested, has to be reset at the
                 // end of the flag. Is solely in the sw/ndgrf.cxx used when
                 // the link is removed form GraphicNode.
                 bool bOldNativFormat = bNativFormat;
