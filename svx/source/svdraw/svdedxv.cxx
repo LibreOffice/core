@@ -567,12 +567,11 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCu
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
 
     // Check if it has links to move it to
-    if (!pTextObj->IsChainable())
+    if (!pTextObj || !pTextObj->IsChainable())
         return;
 
     TextChain *pTextChain = pTextObj->GetTextChain();
     ESelection aNewSel = pTextChain->GetPostChainingSel(pTextObj);
-
 
     pCursorManager->HandleCursorEventAfterChaining(
         pTextChain->GetCursorEvent(pTextObj),
