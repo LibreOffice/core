@@ -650,7 +650,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
 
                 // If a salvaged file is present, do not enclose the OrigURL
-                // again, since the Tempdate is invalid after reload.
+                // again, since the Template is invalid after reload.
                 SFX_ITEMSET_ARG( pNewSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false);
                 if( pSalvageItem )
                 {
@@ -1526,7 +1526,7 @@ SfxViewFrame* SfxViewFrame::GetFirst
     return 0;
 }
 
-// returns thenext window of spec. type viewing the specified doc.
+// returns the next window of spec. type viewing the specified doc.
 SfxViewFrame* SfxViewFrame::GetNext
 (
     const SfxViewFrame&     rPrev,

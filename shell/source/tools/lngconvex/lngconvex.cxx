@@ -124,7 +124,7 @@ OString get_absolute_file_path(const std::string& file_name)
 }
 
 /** A helper class, enables stream exceptions
-    on construction, restors the old exception
+    on construction, restores the old exception
     state on destruction */
 class StreamExceptionsEnabler
 {

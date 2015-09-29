@@ -3091,7 +3091,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         {
             if ( nErrCode )
             {
-                // must be a warning - use Interactionhandler if possible or abandone
+                // must be a warning - use Interactionhandler if possible or abandon
                 if ( xHandler.is() )
                 {
                     // TODO/LATER: a general way to set the error context should be available
@@ -4147,7 +4147,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createDefaultViewControl
 
 namespace sfx { namespace intern {
 
-    /** a class which, in its dtor, cleans up variuos objects (well, at the moment only the frame) collected during
+    /** a class which, in its dtor, cleans up various objects (well, at the moment only the frame) collected during
         the creation of a document view, unless the creation was successful.
     */
     class ViewCreationGuard

@@ -1281,7 +1281,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
         if ( pImp->aVersions.getLength() )
         {
             // Search for the version fits the comment
-            // The versions are numbered startign with 1, versions with
+            // The versions are numbered starting with 1, versions with
             // negative versions numbers are counted backwards from the
             // current version
             short nVersion = pVersion ? pVersion->GetValue() : 0;

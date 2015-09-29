@@ -325,7 +325,7 @@ SfxObjectShell::SfxObjectShell
 
                                     SfxObjectCreateMode::ORGANIZER
                                         to be displayed in the Organizer, here
-                                        notning of the contents is used  */
+                                        nothing of the contents is used  */
 )
 
 /*  [Description]

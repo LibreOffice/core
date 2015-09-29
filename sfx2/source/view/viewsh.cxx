@@ -1080,7 +1080,7 @@ void SfxViewShell::OuterResizePixel
     The Edit window must not be changed either in size or position.
 
     The Vis-Area of SfxObjectShell, its scale and position can be changed
-    here. The mainuse is to change the size of the Vis-Area.
+    here. The main use is to change the size of the Vis-Area.
 
     If the Border is changed due to the new calculation then this has to be set
     by <SfxViewShell::SetBorderPixel(const SvBorder&)>. The Positioning of Tools

@@ -285,7 +285,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
 
 IMPL_LINK_NOARG_TYPED( SfxNewFileDialog_Impl, DoubleClick, ListBox&, void )
 {
-    // Still loadning
+    // Still loading
     if ( !xDocShell.Is() || !xDocShell->GetProgress() )
         pAntiImpl->EndDialog(RET_OK);
 }

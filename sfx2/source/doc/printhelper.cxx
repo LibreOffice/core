@@ -765,7 +765,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         aCheckedArgs.realloc(nProps);
 
     // Execute the print request every time.
-    // It doesn'tmatter if it is a real printer used or we print to a local file
+    // It doesn't matter if it is a real printer used or we print to a local file
     // nor if we print to a temp file and move it afterwards by using the ucb.
     // That will be handled later. see pUCBPrintFile below!
     pView->ExecPrint( aCheckedArgs, true, false );
