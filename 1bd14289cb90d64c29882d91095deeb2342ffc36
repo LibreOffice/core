@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_7734f0dd",
+        "filename": "sal/osl/unx/process_impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-29T18:58:13Z",
+      "side": 0,
+      "message": "Even if it is 404 now, it is a reference to *something* indicating a specific version of a specific man page of a specific version of a specific OS ;)\n\nInstead of entirely removing rather keep such legacy documentation reference, one could even derive an URL for current man pages from it if interested.",
+      "revId": "1bd14289cb90d64c29882d91095deeb2342ffc36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
