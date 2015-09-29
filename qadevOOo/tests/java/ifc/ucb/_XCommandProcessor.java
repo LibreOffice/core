@@ -100,7 +100,7 @@ public class _XCommandProcessor extends MultiMethodTest {
 
     /**
      * First executes 'geCommandInfo' command and examines returned
-     * command info information. Second tries to execute inproper
+     * command info information. Second tries to execute improper
      * command. <p>
      * Has <b> OK </b> status if in the first case returned information
      * contains info about 'getCommandInfo' command and in the second

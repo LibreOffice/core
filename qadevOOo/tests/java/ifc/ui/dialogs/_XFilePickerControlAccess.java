@@ -144,9 +144,9 @@ public class _XFilePickerControlAccess extends MultiMethodTest {
     /**
     * Changes the label gotten by <code>getLabel</code> method,
     * set this label and then check if it was properly set. <p>
-    * Has <b>OK</b> status if <code>getLael</code> method returns
+    * Has <b>OK</b> status if <code>getLabel</code> method returns
     * the same value which was set. <p>
-    * The following method tests are to be completed successfully before :
+    * The following method tests are to be completed successfully before:
     * <ul>
     *  <li> <code> getLabel </code> </li>
     * </ul>

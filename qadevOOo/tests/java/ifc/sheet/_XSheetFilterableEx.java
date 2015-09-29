@@ -27,7 +27,7 @@ import com.sun.star.uno.UnoRuntime;
 
 
 /**
- * Inteface test for XSheetFilterableEx
+ * Interface test for XSheetFilterableEx
  *
  * methods:
  *

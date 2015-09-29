@@ -111,9 +111,9 @@ public class ScTabViewObj extends TestCase {
         util.DesktopTools.closeDoc(oComp2);
     }
 
-    /**
+    /*
      * Creating a TestEnvironment for the interfaces to be tested.
-     * Retieves the current controller of the spreadsheet document using the
+     * Retrives the current controller of the spreadsheet document using the
      * interface <code>XModel</code>. The controller is the instance of the
      * service <code>com.sun.star.sheet.SpreadsheetView</code>. Retrieves
      * a collection of spreadsheets from the document and takes one of  them.
