@@ -253,11 +253,6 @@ SdrTextObj *TextChainFlow::GetLinkTarget() const
     return mpTargetLink;
 }
 
-SdrTextObj *TextChainFlow::GetNextLink() const
-{
-    return mpNextLink;
-}
-
 OutlinerParaObject *TextChainFlow::impGetMergedUnderflowParaObject(SdrOutliner *pOutliner)
 {
         return mpUnderflChText->CreateMergedUnderflowParaObject(pOutliner, mpNextLink->GetOutlinerParaObject());
@@ -267,17 +262,6 @@ TextChain *TextChainFlow::GetTextChain() const
 {
     return mpTextChain;
 }
-
-OFlowChainedText *TextChainFlow::GetOverflowChainedText() const
-{
-    return mpOverflChText;
-}
-
-UFlowChainedText *TextChainFlow::GetUnderflowChainedText() const
-{
-    return mpUnderflChText;
-}
-
 
 // EditingTextChainFlow
 

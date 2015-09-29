@@ -52,9 +52,6 @@ namespace vcl
         // doIt() completed
         long execute( const TimeValue& _rTimeout ) { return impl_execute( &_rTimeout ); }
 
-    public:
-        bool    didTimeout() const { return m_bTimeout; }
-
     private:
         long impl_execute( const TimeValue* _pTimeout );
     };

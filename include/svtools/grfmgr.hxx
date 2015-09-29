@@ -488,9 +488,6 @@ public:
 
     void                    StopAnimation( OutputDevice* pOut = NULL, long nExtraData = 0L );
 
-    friend SvStream&        WriteGraphicObject( SvStream& rOStm, const GraphicObject& rGraphicObj );
-    friend SvStream&        ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj );
-
     static GraphicObject    CreateGraphicObjectFromURL( const OUString &rURL );
     // will inspect an object ( e.g. a control ) for any 'ImageURL'
     // properties and return these in a vector. Note: this implementation

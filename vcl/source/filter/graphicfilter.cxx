@@ -1205,11 +1205,6 @@ OUString GraphicFilter::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry 
     return pConfig->GetImportWildcard( nFormat, nEntry );
 }
 
-bool GraphicFilter::IsImportPixelFormat( sal_uInt16 nFormat )
-{
-    return pConfig->IsImportPixelFormat( nFormat );
-}
-
 sal_uInt16 GraphicFilter::GetExportFormatCount()
 {
     return pConfig->GetExportFormatCount();

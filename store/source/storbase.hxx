@@ -655,13 +655,6 @@ public:
         return (m_xPage.get() != 0);
     }
 
-    static PageHolderObject<T> createInstance (rtl::Reference< PageData::Allocator > const & rxAllocator)
-    {
-        PageHolderObject<T> tmp;
-        (void) tmp.construct (rxAllocator);
-        return tmp;
-    }
-
     explicit PageHolderObject (PageHolder const & rxPage = PageHolder())
         : m_xPage (rxPage)
     {}

@@ -172,7 +172,6 @@ class VCL_DLLPUBLIC GraphicDescriptor
     bool            ImpDetectSGV( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectEMF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectSVG( SvStream& rStm, bool bExtendedInfo );
-    bool            ImpDetectMOV( SvStream& rStm, bool bExtendedInfo );
     GraphicDescriptor( const GraphicDescriptor& ) SAL_DELETED_FUNCTION;
     GraphicDescriptor& operator=( const GraphicDescriptor& ) SAL_DELETED_FUNCTION;
 
@@ -215,9 +214,6 @@ public:
 
     /** return number of planes or 0 */
     sal_uInt16          GetPlanes() const { return nPlanes; }
-
-    /** @return true if the graphic is compressed */
-    bool            IsCompressed() const { return bCompressed; }
 
     /** @return filter number that is needed by the GraphFilter to read this format */
     static OUString GetImportFormatShortName( GraphicFileFormat nFormat );
@@ -270,7 +266,6 @@ public:
     OUString        GetImportFormatShortName( sal_uInt16 nFormat );
     static OUString GetImportOSFileType( sal_uInt16 nFormat );
     OUString        GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
-    bool            IsImportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16      GetExportFormatCount();
     sal_uInt16      GetExportFormatNumber( const OUString& rFormatName );

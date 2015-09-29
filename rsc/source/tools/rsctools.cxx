@@ -88,45 +88,6 @@ OString GetTmpFileName()
     return OUStringToOString( aTmpFile, RTL_TEXTENCODING_MS_1252 );
 }
 
-bool Append(FILE * fDest, const OString &rTmpFile)
-{
-#define MAX_BUF 4096
-    FILE *fSource = fopen(rTmpFile.getStr(), "rb");
-    if( !fDest || !fSource )
-    {
-        if( fSource )
-            fclose( fSource );
-        return false;
-    }
-
-    bool bSuccess = true;
-    char szBuf[ MAX_BUF ];
-    size_t nItems;
-
-    do //append
-    {
-        nItems = fread( szBuf, 1, MAX_BUF, fSource );
-        bSuccess = (nItems == fwrite(szBuf, 1, nItems, fDest));
-        SAL_WARN_IF(!bSuccess, "rsc", "short write");
-    }
-    while (MAX_BUF == nItems && bSuccess);
-
-    fclose( fSource );
-    return bSuccess;
-}
-
-bool Append(const OString &rOutputSrs, const OString &rTmpFile)
-{
-    FILE * fDest = fopen(rOutputSrs.getStr(), "ab");
-
-    bool bRet = Append(fDest, rTmpFile);
-
-    if( fDest )
-        fclose( fDest );
-
-    return bRet;
-}
-
 /* replaces extension of a file name */
 OString OutputFile(const OString &rInput, const char * pExt)
 {

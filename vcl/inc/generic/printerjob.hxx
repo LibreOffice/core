@@ -104,7 +104,7 @@ public:
      *  rAppName: text to appear in the %%Creator comment
      *  rSetupData: JobData that apply to this job
      *  pGraphics: the graphics used to print this job;
-     *             this graphics must live until End/AbortJob has returned
+     *             this graphics must live until EndJob() has returned
      *  bIsQuickJob: the job was started as "direct print" meaning
      *               the quick command for spooling should be used instead
      *               of the normal command
@@ -118,8 +118,6 @@ public:
                               bool bIsQuickJob
                               );
     bool        EndJob ();
-
-    bool        AbortJob ();
 
     bool        StartPage (const JobData& rJobSetup);
     bool        EndPage ();

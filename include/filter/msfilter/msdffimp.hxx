@@ -181,7 +181,6 @@ struct SvxMSDffConnectorRule
         , pCObj( NULL )
         {};
 
-    friend SvStream& ReadSvxMSDffConnectorRule( SvStream& rIn, SvxMSDffConnectorRule& rAtom );
 };
 
 struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer

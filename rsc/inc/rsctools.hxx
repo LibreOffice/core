@@ -41,8 +41,6 @@ enum RSCBYTEORDER_TYPE { RSC_BIGENDIAN, RSC_LITTLEENDIAN, RSC_SYSTEMENDIAN };
 // Function Forwards
 OString GetTmpFileName();
 
-bool Append(const OString &rDestFile, const OString &rSourceFile);
-
 bool Append(FILE * fDest, OString &raSourceFile);
 
 OString OutputFile(const OString &rInput, const char * ext);

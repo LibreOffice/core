@@ -210,30 +210,6 @@ public:
     bool            GetUseCanvas() const { return bUseCanvas; }
 };
 
-/** Create a special metaaction that delegates rendering to specified
-    service.
-
-    This factory function creates a MetaCommentAction that delegates
-    rendering to the specified services, once played back in the
-    metafile.
-
-    @param rRendererServiceName
-    Renderer service. Gets an awt::XGraphic on instantiation
-
-    @param rGraphicServiceName
-    Graphic service. Gets the raw data on instantiation
-
-    @param pData
-    Raw data. Gets copied
-
-    @param nDataSize
-    Length, in byte, of raw data
- */
-MetaCommentAction* makePluggableRendererAction( const OUString& rRendererServiceName,
-                                                const OUString& rGraphicServiceName,
-                                                const void* pData,
-                                                sal_uInt32 nDataSize );
-
 #endif // INCLUDED_VCL_GDIMTF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

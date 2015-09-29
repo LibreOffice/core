@@ -42,7 +42,6 @@ struct PointType {
 class DtHdType {
 public:
     sal_uInt8  Reserved[256];
-    friend SvStream& ReadDtHdType(SvStream& rIStream, DtHdType& rDtHd);
     friend void DtHdOverSeek(SvStream& rInp);
 };
 
@@ -157,7 +156,6 @@ public:
     }
     virtual ~ObjkType() {}
     friend SvStream& ReadObjkType(SvStream& rIStream, ObjkType& rObjk);
-    friend bool ObjOverSeek(SvStream& rInp, ObjkType& rObjk);
     virtual void Draw(OutputDevice& rOut);
 };
 

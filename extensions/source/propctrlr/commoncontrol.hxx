@@ -54,10 +54,6 @@ namespace pcr
 
         /// sets a ControlHelper instance which some functionality is delegated to
         inline virtual void setControlHelper( ControlHelper& _rControlHelper );
-
-    protected:
-        // Window overridables
-        inline virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
 
@@ -227,15 +223,6 @@ namespace pcr
     inline void ControlWindow< WINDOW >::setControlHelper( ControlHelper& _rControlHelper )
     {
         m_pHelper = &_rControlHelper;
-    }
-
-
-    template< class WINDOW >
-    inline bool ControlWindow< WINDOW >::PreNotify( NotifyEvent& rNEvt )
-    {
-        if ( m_pHelper && m_pHelper->handlePreNotify( rNEvt ) )
-            return true;
-        return WindowType::PreNotify( rNEvt );
     }
 
 

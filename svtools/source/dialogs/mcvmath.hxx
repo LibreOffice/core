@@ -189,10 +189,7 @@ inline FixCpx operator/ ( const FixCpx& a, const FixCpx& b )
 
 
 
-Fix ImpMultBig2( const Fix& a, const Fix& b );
-
 sal_uInt16 ImpSqrt( sal_uLong nRadi );
-FixCpx ImpExPI( sal_uInt16 nPhi );
 
 #endif // INCLUDED_SVTOOLS_SOURCE_DIALOGS_MCVMATH_HXX
 

@@ -89,41 +89,6 @@ static HMemIODev *hmem = 0;
 
 static int count = 0;
 
-inline bool HAVE_FCOLOR(HWPDrawingObject * hdo)
-{
-    return hdo->property.fill_color != HWPDO_COLOR_NONE;
-}
-
-
-inline bool HAVE_PATTERN(HWPDrawingObject * hdo)
-{
-    return (hdo->property.pattern_type & HWPDO_PAT_TYPE_BITS)
-        != HWPDO_PAT_SOLID && hdo->property.pattern_color != HWPDO_COLOR_NONE;
-}
-
-
-inline bool HAVE_GRADATION(HWPDrawingObject * hdo)
-{
-    return hdo->property.gstyle > BEGIN_GRADATION &&
-        hdo->property.gstyle < END_GRADATION &&
-        hdo->property.fromcolor != HWPDO_COLOR_NONE &&
-        hdo->property.tocolor != HWPDO_COLOR_NONE;
-}
-
-
-inline bool HAVE_BITMAP_PATTERN(HWPDrawingObject * hdo)
-{
-    return hdo->property.gstyle == BITMAP_PATTERN &&
-        hdo->property.szPatternFile[0];
-}
-
-
-inline bool HAS_PAT(HWPDrawingObject * hdo)
-{
-    return HAVE_FCOLOR(hdo) || HAVE_PATTERN(hdo) ||
-        HAVE_GRADATION(hdo) || HAVE_BITMAP_PATTERN(hdo);
-}
-
 static void SetHdoParallRgn(HWPDrawingObject * hdo, int width, int height)
 {
     hdo->property.parall.pt[0].x = 0;

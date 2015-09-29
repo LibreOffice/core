@@ -230,7 +230,6 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          ImplInsertBookmarkURL( const OUString& rBookmark, const sal_uInt32 nType,
                                 const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 );
         virtual bool        ImplCreateMainNotes() SAL_OVERRIDE;
-        bool                ImplCreateNotes( sal_uInt32 nPageNum );
         void                ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXBackgroundPropSet );
         void                ImplWriteVBA();
         void                ImplWriteOLE();

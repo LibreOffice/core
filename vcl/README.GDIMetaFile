@@ -108,19 +108,6 @@ COLOR ADJUSTMENT FUNCTIONS
 - GetMonochromeMtf
 
 
-SPECIAL RENDERING FUNCTION
-
-- makePluggableRendererAction               - Create a special meaaction that delegates
-                                              rendering to specified service. This factory
-                                              function creates a MetaCommentAction that
-                                              delegates rendering to the specified services,
-                                              once played back in the metafile. Takes a
-                                              renderer service name string that gets an
-                                              awt::XGraphic on instantiation, and a graphic
-                                              service name string that gets the raw data on
-                                              instantiation.
-
-
 Related classes
 ---------------
 

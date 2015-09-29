@@ -282,11 +282,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     // There may be multiple font ids for TrueType collections
     std::vector<fontID> findFontFileIDs( int nDirID, const OString& rFile ) const;
 
-    bool knownFontFile( int nDirID, const OString& rFile ) const
-    {
-        return findFontFileID(nDirID, rFile, 0) != 0;
-    }
-
     static FontFamily matchFamilyName( const OUString& rFamily );
 
     PrintFont* getFont( fontID nID ) const

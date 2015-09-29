@@ -86,14 +86,6 @@ public:
         return m_hImpl;
     }
 
-    /** Check for a valid Stream Handle.
-        @return sal_True if valid, sal_False otherwise.
-     */
-    inline bool isValid() const
-    {
-        return (m_hImpl != 0);
-    }
-
     /** Open the stream.
         @see store_openStream()
      */
@@ -249,14 +241,6 @@ public:
     inline operator storeDirectoryHandle() const
     {
         return m_hImpl;
-    }
-
-    /** Check for a valid Directory Handle.
-        @return sal_True if valid, sal_False otherwise.
-     */
-    inline bool isValid() const
-    {
-        return (m_hImpl != 0);
     }
 
     /** Open the directory.

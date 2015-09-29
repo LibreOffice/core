@@ -50,12 +50,6 @@ namespace frm
         {
         }
 
-        // still waiting to be overwritten
-        virtual bool    implTypedNotify(
-                            const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener,
-                            const EventClass& _rEvent
-                        ) = 0;
-
     public:
         inline bool notify()
         {

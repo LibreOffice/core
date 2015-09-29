@@ -539,15 +539,6 @@ RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
 
 
 
-//  reg_isReadOnly
-
-bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hRegistry)
-{
-    return isReadOnly(hRegistry);
-}
-
-
-
 //  reg_openRegistry
 
 RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,

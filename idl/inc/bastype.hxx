@@ -57,7 +57,6 @@ public:
     operator    bool() const { return nVal; }
     bool        IsSet() const { return bSet; }
 
-    friend SvStream& WriteSvBOOL(SvStream &, const SvBOOL &);
     friend SvStream& operator >> (SvStream &, SvBOOL &);
 
     bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
@@ -106,7 +105,6 @@ public:
     {
         return !m_aStr.isEmpty();
     }
-    friend SvStream& WriteSvString(SvStream &, const SvString &);
     friend SvStream& operator >> (SvStream &, SvString &);
 
     bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
@@ -152,7 +150,6 @@ public:
     sal_uInt16      GetMajorVersion() const { return nMajorVersion; }
     sal_uInt16      GetMinorVersion() const { return nMinorVersion; }
 
-    friend SvStream& WriteSvVersion(SvStream &, const SvVersion &);
     friend SvStream& operator >> (SvStream &, SvVersion &);
     bool        ReadSvIdl( SvTokenStream & rInStm );
 };

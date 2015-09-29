@@ -42,38 +42,6 @@ inline ::boost::optional<T> make_optional(
         return ::boost::optional<T>();
 }
 
-template <typename T>
-inline ::com::sun::star::beans::Optional<T> makeOptional( T const& v )
-{
-//     CPPU_IS_CPP_MAPPING_OF_NON_VOID_UNO_TYPE(T);
-    return ::com::sun::star::beans::Optional<T>(true, v);
-}
-
-template <typename T>
-inline ::com::sun::star::beans::Optional<T> makeOptional(
-    ::boost::optional<T> const& o )
-{
-//     CPPU_IS_CPP_MAPPING_OF_NON_VOID_UNO_TYPE(T);
-    if (o)
-        return ::com::sun::star::beans::Optional<T>(true, *o);
-    else
-        return ::com::sun::star::beans::Optional<T>();
-}
-
-inline ::com::sun::star::beans::Optional<sal_Bool> makeOptional(
-    ::boost::optional<bool> const& o )
-{
-    if (o)
-        return ::com::sun::star::beans::Optional<sal_Bool>(true, *o);
-    else
-        return ::com::sun::star::beans::Optional<sal_Bool>();
-}
-
-inline ::com::sun::star::beans::Optional<sal_Bool> makeOptional( bool v )
-{
-    return ::com::sun::star::beans::Optional<sal_Bool>(true, v);
-}
-
 } // namespace comphelper
 
 #endif // ! defined(INCLUDED_COMPHELPER_OPTIONAL_HXX)

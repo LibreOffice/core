@@ -737,19 +737,8 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
         {
             const Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-            // #i124085# take out DIBV5 for writing to the clipboard
-            //if(rBitmapEx.IsTransparent())
-            //{
-            //    const Bitmap aMask(rBitmapEx.GetAlpha().GetBitmap());
-
-            //    // explicitely use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
-            //    WriteDIBV5(aBitmap, aMask, aMemStm);
-            //}
-            //else
-            //{
-                // explicitely use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
-                WriteDIB(aBitmap, aMemStm, false, true);
-            //}
+            // explicitely use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
+            WriteDIB(aBitmap, aMemStm, false, true);
         }
 
         maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );

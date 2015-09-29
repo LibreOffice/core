@@ -47,7 +47,7 @@ namespace dbaui
         OUString                    m_sDescendingText;
 
         sal_Int32                   m_nMaxColumnsInIndex;
-        bool                    m_bAddIndexAppendix;
+        bool                        m_bAddIndexAppendix;
 
     public:
         IndexFieldsControl( vcl::Window* _pParent, WinBits nWinStyle);
@@ -66,7 +66,6 @@ namespace dbaui
         void                SaveValue() { m_aSavedValue = m_aFields; }
 
         void SetModifyHdl(const Link<>& _rHdl) { m_aModifyHdl = _rHdl; }
-        Link<> GetModifyHdl() const { return m_aModifyHdl; }
         virtual OUString GetCellText(long _nRow,sal_uInt16 nColId) const SAL_OVERRIDE;
 
     protected:

@@ -353,8 +353,6 @@ public:
     GdkNativeWindow getForeignParentWindow() const { return m_aForeignParentWindow; }
     GdkWindow*  getForeignTopLevel() const { return m_pForeignTopLevel; }
     GdkNativeWindow getForeignTopLevelWindow() const { return m_aForeignTopLevelWindow; }
-    GdkVisibilityState getVisibilityState() const
-    { return m_nVisibility; }
     Pixmap getBackgroundPixmap() const { return m_hBackgroundPixmap; }
     SalX11Screen getXScreenNumber() const { return m_nXScreen; }
     int          GetDisplayScreen() const { return maGeometry.nDisplayScreenNumber; }

@@ -617,10 +617,6 @@ bool SvtAccessibilityOptions::GetIsForPagePreviews() const
 {
     return sm_pSingleImplConfig->GetIsForPagePreviews();
 }
-bool SvtAccessibilityOptions::GetIsHelpTipsDisappear() const
-{
-    return sm_pSingleImplConfig->GetIsHelpTipsDisappear();
-}
 bool SvtAccessibilityOptions::GetIsAllowAnimatedGraphics() const
 {
     return sm_pSingleImplConfig->GetIsAllowAnimatedGraphics();

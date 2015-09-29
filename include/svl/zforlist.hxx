@@ -236,8 +236,6 @@ public:
                            sal_uInt16 nNegativeFmt, sal_uInt16 nDig, sal_Unicode cZero);
     ~NfCurrencyEntry() {}
 
-    inline NfCurrencyEntry* Clone() const;
-
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
 
@@ -295,17 +293,6 @@ NfCurrencyEntry::NfCurrencyEntry(const OUString& rSymbol, const OUString& rBankS
     , nPositiveFormat(nPositiveFmt), nNegativeFormat(nNegativeFmt)
     , nDigits(nDig), cZeroChar(cZero)
 {
-}
-
-NfCurrencyEntry* NfCurrencyEntry::Clone() const
-{
-    return new NfCurrencyEntry(
-       aSymbol, aBankSymbol, eLanguage, nPositiveFormat, nNegativeFormat, nDigits, cZeroChar);
-}
-
-inline NfCurrencyEntry* new_clone( const NfCurrencyEntry& r )
-{
-    return r.Clone();
 }
 
 typedef std::vector< OUString > NfWSStringsDtor;

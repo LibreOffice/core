@@ -37,7 +37,6 @@ class SwViewOption;
 class SwContentOptPage;
 class SwShdwCrsrOptionsTabPage;
 
-SfxPrinter* GetPrt( SwViewShell* );
 void        SetPrt( SfxPrinter* );
 
 // OS 12.01.95

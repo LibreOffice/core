@@ -85,8 +85,6 @@ enum SdrObjListKind {SDROBJLIST_UNKNOWN    =0x00,
                      // Here is space for 8 more types of pages
 };   // reserved for Surrogate
 
-inline bool SdrIsPageKind(SdrObjListKind eK) { return eK>=SDROBJLIST_DRAWPAGE && eK<=0x1A; }
-
 /*
  * Repeat
  */

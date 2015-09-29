@@ -153,38 +153,6 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
     return s;
 }
 
-// TODO: ask the glyph directly, for now we need this method because of #i99367#
-// true if a codepoint doesn't influence the logical text width
-bool IsDiacritic( sal_UCS4 nChar )
-{
-    // shortcut obvious non-diacritics
-    if( nChar < 0x0300 )
-        return false;
-     if( nChar >= 0x2100 )
-        return false;
-
-    // TODO: #i105058# use icu uchar.h's character classification instead of the handcrafted table
-    struct DiaRange { sal_UCS4 mnMin, mnEnd;};
-    static const DiaRange aRanges[] = {
-        {0x0300, 0x0370},
-        {0x0590, 0x05BE}, {0x05BF, 0x05C0}, {0x05C1, 0x05C3}, {0x05C4, 0x05C6}, {0x05C7, 0x05C8},
-        {0x0610, 0x061B}, {0x064B, 0x0660}, {0x0670, 0x0671}, {0x06D6, 0x06DD}, {0x06DF, 0x06E5}, {0x06E7, 0x06E9}, {0x06EA,0x06EF},
-        {0x0730, 0x074D}, {0x07A6, 0x07B1}, {0x07EB, 0x07F4},
-        {0x1DC0, 0x1E00},
-        {0x205F, 0x2070}, {0x20D0, 0x2100},
-        {0xFB1E, 0xFB1F}
-    };
-
-    // TODO: almost anything is faster than an O(n) search
-    static const int nCount = SAL_N_ELEMENTS(aRanges);
-    const DiaRange* pRange = &aRanges[0];
-    for( int i = nCount; --i >= 0; ++pRange )
-        if( (pRange->mnMin <= nChar) && (nChar < pRange->mnEnd) )
-            return true;
-
-    return false;
-}
-
 int GetVerticalFlags( sal_UCS4 nChar )
 {
     if( (nChar >= 0x1100 && nChar <= 0x11f9)    // Hangul Jamo

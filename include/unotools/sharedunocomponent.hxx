@@ -193,9 +193,7 @@ namespace utl
         */
         void reset( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode = TakeOwnership );
 
-        inline bool set( ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_Query _query );
         inline bool set( const ::com::sun::star::uno::BaseReference& _rRef, ::com::sun::star::uno::UnoReference_Query _query );
-        inline bool set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_Query _query );
 
         inline void set( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
         inline void set( const ::com::sun::star::uno::BaseReference & _rRef, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
@@ -308,23 +306,9 @@ namespace utl
     }
 
     template < class INTERFACE, class COMPONENT >
-    bool SharedUNOComponent< INTERFACE, COMPONENT >::set( ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_Query _query )
-    {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _pInterface, _query ) );
-        return is();
-    }
-
-    template < class INTERFACE, class COMPONENT >
     bool SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::BaseReference& _rRef, ::com::sun::star::uno::UnoReference_Query _query )
     {
         reset( ::com::sun::star::uno::Reference< INTERFACE >( _rRef, _query ) );
-        return is();
-    }
-
-    template < class INTERFACE, class COMPONENT >
-    bool SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_Query _query )
-    {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _rAny, _query ) );
         return is();
     }
 

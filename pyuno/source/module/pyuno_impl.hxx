@@ -294,8 +294,6 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
 
 com::sun::star::uno::Any PyEnum2Enum( PyObject *obj )
     throw ( com::sun::star::uno::RuntimeException );
-bool PyBool2Bool( PyObject *o, const Runtime & r )
-    throw ( com::sun::star::uno::RuntimeException );
 sal_Unicode PyChar2Unicode( PyObject *o )
     throw ( com::sun::star::uno::RuntimeException );
 com::sun::star::uno::Type PyType2Type( PyObject * o )

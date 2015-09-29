@@ -758,13 +758,6 @@ SbError SbiStream::Write( const OString& rBuf, sal_uInt16 n )
 
 
 
-SbiIoSystem* SbGetIoSystem()
-{
-    SbiInstance* pInst = GetSbData()->pInst;
-    return pInst ? pInst->GetIoSystem() : NULL;
-}
-
-
 SbiIoSystem::SbiIoSystem()
 {
     for( short i = 0; i < CHANNELS; i++ )

@@ -80,8 +80,6 @@ namespace dbaui
         // detach from the container
         void detach();
 
-        // is the object valid?
-        bool    isValid() const { return m_xIndexes.is(); }
         // number of contained indexes
         sal_Int32   size() const { return m_aIndexes.size(); }
 

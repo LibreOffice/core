@@ -321,7 +321,6 @@ public:
     bool            IsMultiSelectionEnabled() const     { return mbMulti; }
 
     void            SetMultiSelectionSimpleMode( bool bSimple ) { mbSimpleMode = bSimple; }
-    bool            IsMultiSelectionSimpleMode() const          { return mbSimpleMode; }
 
     void            EnableMouseMoveSelect( bool bMouseMoveSelect ) { mbMouseMoveSelect = bMouseMoveSelect; }
     bool            IsMouseMoveSelect() const   { return mbMouseMoveSelect||mbStackMode; }

@@ -99,9 +99,6 @@ public:
     sal_uInt32                 GetJobs() const { return mnJobs; }
 
     bool operator==( const QueueInfo& rInfo ) const;
-
-    friend VCL_DLLPUBLIC SvStream&          ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo );
-    friend VCL_DLLPUBLIC SvStream&          WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo );
 };
 
 

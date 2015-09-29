@@ -28,7 +28,6 @@
 #include <osl/diagnose.h>
 
 #include <cppuhelper/factory.hxx>
-#include <xmloff/xmlreg.hxx>
 
 #include <facreg.hxx>
 

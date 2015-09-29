@@ -391,28 +391,6 @@ namespace basegfx
                 return aWork.ludcmp(nIndex, nParity);
             }
 
-            bool isNormalized() const
-            {
-                if(!mpLine)
-                    return true;
-
-                const double fHomValue(get((RowSize - 1), (RowSize - 1)));
-
-                if(::basegfx::fTools::equalZero(fHomValue))
-                {
-                    return true;
-                }
-
-                const double fOne(1.0);
-
-                if(::basegfx::fTools::equal(fOne, fHomValue))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
             void doInvert(const ImplHomMatrixTemplate& rWork, const sal_uInt16 nIndex[])
             {
                 double fArray[RowSize];

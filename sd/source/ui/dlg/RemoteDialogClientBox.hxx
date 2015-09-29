@@ -124,7 +124,6 @@ class ClientBox : public Control
     long GetTotalHeight() const;
     void SetupScrollBar();
     void DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, const TClientBoxEntry& rEntry);
-    bool HandleTabKey( bool bReverse );
     bool HandleCursorKey( sal_uInt16 nKeyCode );
     void DeleteRemoved();
 
@@ -151,7 +150,6 @@ public:
     long GetActiveEntryIndex();
     long GetEntryCount() { return (long) m_vEntries.size(); }
     Rectangle GetEntryRect( const long nPos ) const;
-    bool HasActive() { return m_bHasActive; }
     long PointToPos( const Point& rPos );
     void DoScroll( long nDelta );
     void RecalcAll();

@@ -242,14 +242,6 @@ private:
 /// to access each given localized configuration property.
 template< typename T, typename U > struct ConfigurationLocalizedProperty
 {
-    /// Get the read-only status of the given localized configuration property.
-    static bool isReadOnly(
-        css::uno::Reference<css::uno::XComponentContext> const & context
-            = comphelper::getProcessComponentContext())
-    {
-        return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
-    }
-
     /// Get the value of the given localized configuration property, for the
     /// locale currently set at the
     /// com.sun.star.configuration.theDefaultProvider.

@@ -135,7 +135,6 @@ protected:
     virtual bool        onFinish() SAL_OVERRIDE;
 
 protected:
-    inline bool isUIEnabled() const { return m_bUIEnabled; }
     inline void     disabledUI() { m_bUIEnabled = false; }
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..

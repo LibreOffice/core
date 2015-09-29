@@ -117,11 +117,8 @@ public:
     long                GetLineHeight() const   { return mnLineHeight; }
     long                GetSlant() const        { return mnSlant; }
 
-    bool                IsDeviceFont() const    { return ((mnMiscFlags & DEVICE_FLAG) != 0); }
     bool                IsScalable() const      { return ((mnMiscFlags & SCALABLE_FLAG) != 0); }
-    bool                SupportsLatin() const   { return ((mnMiscFlags & LATIN_FLAG) != 0); }
     bool                SupportsCJK() const     { return ((mnMiscFlags & CJK_FLAG) != 0); }
-    bool                SupportsCTL() const     { return ((mnMiscFlags & CTL_FLAG) != 0); }
 
     bool                operator==( const ImplFontMetric& ) const;
 };

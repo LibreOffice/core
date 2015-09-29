@@ -49,10 +49,6 @@ public:
     bool IsUnderflow() const;
 
     SdrTextObj *GetLinkTarget() const;
-    SdrTextObj *GetNextLink() const;
-
-    OFlowChainedText *GetOverflowChainedText() const;
-    UFlowChainedText *GetUnderflowChainedText() const;
 
 protected:
     // Cursor related

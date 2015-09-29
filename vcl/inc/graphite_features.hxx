@@ -48,11 +48,7 @@ namespace grutils
         GrFeatureParser(const gr_face * face, const OString& features, const OString& lang);
         GrFeatureParser(const gr_face * face, const OString& lang);
         ~GrFeatureParser();
-        //size_t getFontFeatures(gr::FeatureSetting settings[MAX_FEATURES]) const;
-        bool parseErrors() { return mbErrors; };
-        //static bool isValid(gr::Font & font, gr::FeatureSetting & setting);
         gr_uint32 getLanguage() const { return maLang.num; };
-        bool hasLanguage() const { return (maLang.label[0] != '\0'); }
         sal_Int32 hashCode() const { return mnHash; }
         size_t numFeatures() const { return mnNumSettings; }
         gr_feature_val * values() const { return mpSettings; };

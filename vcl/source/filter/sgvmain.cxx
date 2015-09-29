@@ -134,12 +134,6 @@ sal_uInt16 MulDiv(sal_uInt16 a, sal_uInt16 Mul, sal_uInt16 Div)
 
 // SgfFilterSDrw
 
-SvStream& ReadDtHdType(SvStream& rIStream, DtHdType& rDtHd)
-{
-    rIStream.Read(&rDtHd.Reserved[0], DtHdSize);
-    return rIStream;
-}
-
 void DtHdOverSeek(SvStream& rInp)
 {
     sal_uLong FPos=rInp.Tell();

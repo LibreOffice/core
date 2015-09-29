@@ -1706,12 +1706,4 @@ bool WriteDIBBitmapEx(
     return false;
 }
 
-bool WriteDIBV5(
-    const Bitmap& rSource,
-    const Bitmap& rSourceAlpha,
-    SvStream& rOStm)
-{
-    return ImplWriteDIB(rSource, &rSourceAlpha, rOStm, false, true);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

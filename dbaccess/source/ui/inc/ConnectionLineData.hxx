@@ -65,9 +65,6 @@ namespace dbaui
         void SetSourceFieldName( const OUString& rSourceFieldName){ SetFieldName(JTCS_FROM, rSourceFieldName); }
         void SetDestFieldName( const OUString& rDestFieldName ){ SetFieldName(JTCS_TO, rDestFieldName); }
 
-        inline bool clearSourceFieldName() { SetSourceFieldName(OUString()); return true;}
-        inline bool clearDestFieldName() { SetDestFieldName(OUString());     return true;}
-
         // member access (read)
         OUString GetFieldName(EConnectionSide nWhich) const { return (nWhich == JTCS_FROM) ? m_aSourceFieldName : m_aDestFieldName; }
         OUString GetSourceFieldName() const { return GetFieldName(JTCS_FROM); }

@@ -141,7 +141,6 @@ namespace dbaui
         void                        setActive(bool _bActive = true);
 
         void                        Remove();
-        bool                        IsActiveWindow(){ return m_bActive; }
 
         OUString             GetTableName() const { return m_pData->GetTableName(); }
         OUString             GetWinName() const { return m_pData->GetWinName(); }

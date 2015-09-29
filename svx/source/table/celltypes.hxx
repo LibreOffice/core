@@ -70,12 +70,6 @@ public:
         }
     }
 
-    /* returns true if the next call to next() will return true also. */
-    bool hasNext() const
-    {
-        return maIter != maEnd;
-    }
-
     /* iterates in the configured direction and returns true if rValue
        now contains a valid position in the range of this iterator */
     bool next( T& rValue )

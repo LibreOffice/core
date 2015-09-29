@@ -283,17 +283,6 @@ public:
     static ::com::sun::star::uno::Sequence< typename VectorType::value_type >
                             vectorToSequence( const VectorType& rVector );
 
-    /** Creates a UNO sequence from a std::map with copies of all elements.
-
-        @param rMap  The map to be converted to a sequence.
-
-        @return  A com.sun.star.uno.Sequence object with copies of all objects
-            contained in the passed map.
-     */
-    template< typename MapType >
-    static ::com::sun::star::uno::Sequence< typename MapType::mapped_type >
-                            mapToSequence( const MapType& rMap );
-
     /** Creates a UNO sequence of sequences from a matrix with copies of all elements.
 
         @param rMatrix  The matrix to be converted to a sequence of sequences.
@@ -368,19 +357,6 @@ template< typename VectorType >
     if( rVector.empty() )
         return ::com::sun::star::uno::Sequence< ValueType >();
     return ::com::sun::star::uno::Sequence< ValueType >( &rVector.front(), static_cast< sal_Int32 >( rVector.size() ) );
-}
-
-template< typename MapType >
-/*static*/ ::com::sun::star::uno::Sequence< typename MapType::mapped_type > ContainerHelper::mapToSequence( const MapType& rMap )
-{
-    typedef typename MapType::mapped_type ValueType;
-    if( rMap.empty() )
-        return ::com::sun::star::uno::Sequence< ValueType >();
-    ::com::sun::star::uno::Sequence< ValueType > aSeq( static_cast< sal_Int32 >( rMap.size() ) );
-    sal_Int32 nIndex = 0;
-    for( typename MapType::const_iterator aIt = rMap.begin(), aEnd = rMap.end(); aIt != aEnd; ++aIt, ++nIndex )
-        aSeq[ nIndex ] = *aIt;
-    return aSeq;
 }
 
 template< typename MatrixType >

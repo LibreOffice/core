@@ -358,11 +358,6 @@ namespace drawinglayer
             return mpSdrTextAttribute->isInEditMode();
         }
 
-        bool SdrTextAttribute::isToBeChained() const
-        {
-            return mpSdrTextAttribute->isToBeChained();
-        }
-
         bool SdrTextAttribute::isChainable() const
         {
             return mpSdrTextAttribute->isChainable();

@@ -552,13 +552,6 @@ PrinterJob::EndJob()
     return bSuccess;
 }
 
-bool
-PrinterJob::AbortJob ()
-{
-    m_pGraphics->OnEndJob();
-    return false;
-}
-
 void
 PrinterJob::InitPaperSize (const JobData& rJobSetup)
 {
