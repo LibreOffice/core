@@ -209,7 +209,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                 /* an alternate form of UTF-7 where SHIFT_IN is escaped */
                 /* by SHIFT_IN. This only works for some values of */
                 /* SHIFT_IN. It is so implemented, because this comes */
-                /* from the officel unicode book (The Unicode Standard, */
+                /* from the official unicode book (The Unicode Standard, */
                 /* Version 2.0) and so I think, that someone of the */
                 /* world has used this feature. */
                 if ( !bEnd )
@@ -543,7 +543,7 @@ sal_Size ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
 
         if ( !bEnd )
         {
-            /* Character can be directly endcoded */
+            /* Character can be directly encoded */
             if ( !bNeedShift )
             {
                 if ( pDestBuf >= pEndDestBuf )

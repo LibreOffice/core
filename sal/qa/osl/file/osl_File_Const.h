@@ -37,7 +37,7 @@ extern "C"
 // common used string resource
 // these common used string will be used as assist resource in test
 // they are mostly OS independent, some of the resource can be reused
-// so, acommon test data repository will be better since it can be
+// so, a common test data repository will be better since it can be
 // shared among all test code
 
 const sal_Char pBuffer_Char[]   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

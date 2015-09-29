@@ -543,7 +543,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
  * Two modes of operation are provided.
  * The first is just a simple division by 7 calculation.
  *
- * The second calculates the diffence by week of year.
+ * The second calculates the difference by week of year.
  *
  * The International Standard IS-8601 has decreed that Monday
  * shall be the first day of the week.

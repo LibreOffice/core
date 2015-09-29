@@ -959,7 +959,7 @@ oslFileError SAL_CALL osl_searchFileURL(
 
         /* Repeat calling SearchPath ...
            Start with MAX_PATH for the buffer. In most cases this
-           will be enough and does not force the loop to runtwice */
+           will be enough and does not force the loop to run twice */
         dwResult = MAX_PATH;
 
         do

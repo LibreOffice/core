@@ -783,7 +783,7 @@ public:
                             { pPrevContent = p; }
 
     // don't use:
-    // assigns string / creates forumula cell
+    // assigns string / creates formula cell
     void SetOldValue( const OUString& rOld, ScDocument* pDoc );
 
     void GetOldString( OUString& rStr, const ScDocument* pDoc ) const;

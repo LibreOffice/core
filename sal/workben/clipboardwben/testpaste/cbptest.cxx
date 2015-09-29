@@ -376,7 +376,7 @@ void PasteClipboardData(HWND hwndParent)
                                     &hThread,   //pointer to the array of objects
                                     FALSE,      //Wait for all objects?
                                     INFINITE,   //Wait How Long?
-                                    QS_ALLINPUT //Wait for all messges
+                                    QS_ALLINPUT //Wait for all messages
                                     );
 
             //This means that the object is signaled

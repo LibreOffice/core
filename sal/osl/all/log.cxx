@@ -125,7 +125,7 @@ bool report(sal_detail_LogLevel level, char const * area) {
         switch (*p++) {
         case '\0':
             return senseLen[POSITIVE] >= senseLen[NEGATIVE];
-                // if a specific item is both postiive and negative
+                // if a specific item is both positive and negative
                 // (senseLen[POSITIVE] == senseLen[NEGATIVE]), default to
                 // positive
         case '+':

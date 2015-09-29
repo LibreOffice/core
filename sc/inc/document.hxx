@@ -1168,7 +1168,7 @@ public:
                                         SCROW& rEndRow, bool bNotes = true ) const;
     void            InvalidateTableArea();
 
-    /// Return the number of colums / rows that should be visible for the tiled rendering.
+    /// Return the number of columns / rows that should be visible for the tiled rendering.
     SC_DLLPUBLIC bool           GetTiledRenderingArea(SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow) const;
 
     SC_DLLPUBLIC bool           GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) const;
