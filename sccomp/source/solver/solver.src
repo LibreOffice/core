@@ -48,10 +48,13 @@ String RID_PROPERTY_LIMITBBDEPTH
 {
     Text [ en-US ] = "Limit branch-and-bound depth";
 };
-
+String RID_PROPERTY_NONLINEARTEST
+{
+    Text [ en-US ] = "Run strict linearity checks";
+};
 String RID_ERROR_NONLINEAR
 {
-    Text [ en-US ] = "The model is not linear.";
+    Text [ en-US ] = "The model seems nonlinear (see options).";
 };
 String RID_ERROR_EPSILONLEVEL
 {

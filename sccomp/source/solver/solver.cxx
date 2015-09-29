@@ -58,6 +58,7 @@ using ::rtl::OUString;
 #define STR_TIMEOUT       "Timeout"
 #define STR_EPSILONLEVEL  "EpsilonLevel"
 #define STR_LIMITBBDEPTH  "LimitBBDepth"
+#define STR_NONLINEARTEST "NonLinearTest"
 
 // -----------------------------------------------------------------------
 //  Resources from tools are used for translated strings
@@ -82,7 +83,8 @@ namespace
         PROP_INTEGER,
         PROP_TIMEOUT,
         PROP_EPSILONLEVEL,
-        PROP_LIMITBBDEPTH
+        PROP_LIMITBBDEPTH,
+        PROP_NONLINEARTEST
     };
 }
 
@@ -146,6 +148,7 @@ SolverComponent::SolverComponent( const uno::Reference<uno::XComponentContext>& 
     mnTimeout( 120 ),
     mnEpsilonLevel( 0 ),
     mbLimitBBDepth( sal_True ),
+    mbNonLinearTest( sal_True ),
     mbSuccess( sal_False ),
     mfResultValue( 0.0 )
 {
@@ -155,6 +158,7 @@ SolverComponent::SolverComponent( const uno::Reference<uno::XComponentContext>& 
     registerProperty( C2U(STR_TIMEOUT),      PROP_TIMEOUT,      0, &mnTimeout,      getCppuType( &mnTimeout )      );
     registerProperty( C2U(STR_EPSILONLEVEL), PROP_EPSILONLEVEL, 0, &mnEpsilonLevel, getCppuType( &mnEpsilonLevel ) );
     registerProperty( C2U(STR_LIMITBBDEPTH), PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth, getCppuType( &mbLimitBBDepth ) );
+    registerProperty( C2U(STR_NONLINEARTEST), PROP_NONLINEARTEST, 0, &mbNonLinearTest, getCppuType( &mbNonLinearTest ) );
 }
 
 SolverComponent::~SolverComponent()
@@ -213,6 +217,9 @@ OUString SAL_CALL SolverComponent::getPropertyDescription( const OUString& rProp
             break;
         case PROP_LIMITBBDEPTH:
             nResId = RID_PROPERTY_LIMITBBDEPTH;
+            break;
+        case PROP_NONLINEARTEST:
+            nResId = RID_PROPERTY_NONLINEARTEST;
             break;
         default:
             {
@@ -369,6 +376,16 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
             double fInitial = aCellsIter->second.front();
             double fCoeff   = aCellsIter->second.back();       // last appended: coefficient for this variable
             double fTwo     = lcl_GetValue( mxDoc, aCellsIter->first );
+
+          if ( mbNonLinearTest )
+          {
+              bool bLinear ( sal_True );
+              bLinear = rtl::math::approxEqual( fTwo, fInitial + 2.0 * fCoeff ) ||
+              rtl::math::approxEqual( fInitial, fTwo - 2.0 * fCoeff );
+            // second comparison is needed in case fTwo is zero
+              if ( !bLinear )
+                  maStatus = lcl_GetResourceString( RID_ERROR_NONLINEAR );
+           }
         }
 
         lcl_SetValue( mxDoc, *aVarIter, 0.0 );      // set back to zero for examining next variable
