@@ -1452,7 +1452,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
             if ( xWorkDocSh.Is() && pWorkView->GetWrtShell().IsExpFieldsLocked() )
             {
-                // Unlock ducment fields after merge complete
+                // Unlock document fields after merge complete
                 pWorkView->GetWrtShell().UnlockExpFields();
             }
 

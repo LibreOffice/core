@@ -1937,7 +1937,7 @@ void SwWW8ImplReader::ImportDop()
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_FORMER_OBJECT_POS, false);
 
     // #i27767# - set new compatibility option
-    //      'Conder Wrapping mode when positioning object' to <true>
+    //      'Consider Wrapping mode when positioning object' to <true>
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION, true);
 
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_FORMER_TEXT_WRAPPING, false); // #i13832#, #i24135#
@@ -3215,7 +3215,7 @@ namespace
 // hack the word one onto the range we use. However it's unclear what word's
 // categorization is. So we don't do that here yet.
 
-// Additional to the categorization, when word encounters weak text for ambiguos
+// Additional to the categorization, when word encounters weak text for ambiguous
 // chars it uses idcthint to indicate which way to bias. We don't have a idcthint
 // feature in writer.
 
@@ -3229,7 +3229,7 @@ namespace
 // See https://bugs.libreoffice.org/show_bug.cgi?id=34319 for an example
 //
 // TO-DO: revisit this after the fix of #i119612# which retains the
-// idcthint feature on import from word and has it available for reexport
+// idcthint feature on import from word and has it available for re-export
 // but we don't use it yet for the actual rendering and layout
 void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString)
 {
@@ -4928,7 +4928,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     /*
         RefFieldStck: Keeps track of bookmarks which may be inserted as
-        variables intstead.
+        variables instead.
     */
     m_pReffedStck = new SwWW8ReferencedFltEndStack(&m_rDoc, m_nFieldFlags);
     m_pReffingStck = new SwWW8FltRefStack(&m_rDoc, m_nFieldFlags);

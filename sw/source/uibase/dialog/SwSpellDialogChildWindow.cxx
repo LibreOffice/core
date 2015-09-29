@@ -73,7 +73,7 @@ struct SpellState
     sal_uInt16              m_SpellStartPosition;
     bool                m_bBodySpelled;  // body already spelled
     bool                m_bOtherSpelled; // frames, footnotes, headers and footers spelled
-    bool                m_bStartedInOther; // started the spelling insided of the _other_ area
+    bool                m_bStartedInOther; // started the spelling inside of the _other_ area
     bool                m_bStartedInSelection; // there was an initial text selection
     SwPaM*              pOtherCursor; // position where the spelling inside the _other_ area started
     bool                m_bDrawingsSpelled; // all drawings spelled

@@ -1069,7 +1069,7 @@ bool SwFieldMgr::InsertField(
 #if HAVE_FEATURE_DBCONNECTIVITY
             SwDBData aDBData;
 
-            // excract DBName from rData.m_sPar1. Format: DBName.TableName.CommandType.ExpStrg
+            // extract DBName from rData.m_sPar1. Format: DBName.TableName.CommandType.ExpStrg
             sal_Int32 nTablePos = rData.m_sPar1.indexOf(DB_DELIM);
             sal_Int32 nCmdTypePos = -1;
             sal_Int32 nExpPos = -1;

@@ -4488,10 +4488,10 @@ void SwWW8ImplReader::Read_TextAnim(sal_uInt16 /*nId*/, const sal_uInt8* pData, 
             bool bBlink;
 
             // The 7 animated text effects available in word all get
-            // mapped to a blinking text effect in StarOffice
+            // mapped to a blinking text effect in LibreOffice
             // 0 no animation       1 Las Vegas lights
             // 2 background blink   3 sparkle text
-            // 4 marching ants      5 marchine red ants
+            // 4 marching ants      5 marching red ants
             // 6 shimmer
             if (*pData > 0 && *pData < 7 )
                 bBlink = true;

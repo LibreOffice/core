@@ -405,7 +405,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 {
     SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
 
-    // we can only fullfil the request if
+    // we can only fulfil the request if
     // 1) we have data for this format
     // 2) we have either a clipboard document (pClpDocFac), or
     //    we have a SwWrtShell (so we can generate a new clipboard document)
@@ -417,7 +417,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         SelectionType nSelectionType = m_pWrtShell->GetSelectionType();
 
         // when pending we will not get the correct type, but nsSelectionType::SEL_TXT
-        // as fallback. This *happens* durning D&D, so we need to check if we are in
+        // as fallback. This *happens* during D&D, so we need to check if we are in
         // the fallback and just try to get a graphic
         const bool bPending(m_pWrtShell->BasicActionPend());
 
@@ -3240,7 +3240,7 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
 
     bool bKillPaMs = false;
 
-    //Delete selected content, not at table-selection and table in Clipboard, and dont delete hovering graphics.
+    //Delete selected content, not at table-selection and table in Clipboard, and don't delete hovering graphics.
     if( rShell.HasSelection() && !( nSelection & nsSelectionType::SEL_TBL_CELLS) && !( nSelection & nsSelectionType::SEL_DRW))
     {
         bKillPaMs = true;
