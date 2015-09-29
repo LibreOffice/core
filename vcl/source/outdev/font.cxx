@@ -1856,7 +1856,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     else
         mnWUnderlineSize = ((nWCalcSize*50)+50) / 100;
 
-    // #109280# the following line assures that wavelnes are never placed below the descent, however
+    // #109280# the following line assures that wavelines are never placed below the descent, however
     // for most fonts the waveline then is drawn into the text, so we better keep the old solution
     // pFontEntry->maMetric.mnWUnderlineOffset     = pFontEntry->maMetric.mnDescent + 1 - pFontEntry->maMetric.mnWUnderlineSize;
     mnWUnderlineOffset     = nUnderlineOffset;

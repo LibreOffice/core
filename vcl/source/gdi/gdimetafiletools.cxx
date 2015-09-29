@@ -959,7 +959,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                // need to handle gradient fills (hopefully only unroated ones)
+                // need to handle gradient fills (hopefully only unrotated ones)
 
                 case MetaActionType::GRADIENT :
                 {

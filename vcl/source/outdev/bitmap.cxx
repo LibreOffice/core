@@ -1231,7 +1231,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
 
         // limit maximum area to something looking good for non-pixel-based targets (metafile, printer)
-        // by using a fixed minimum (allow at least, but no need to utilize) for good smooting and an area
+        // by using a fixed minimum (allow at least, but no need to utilize) for good smoothing and an area
         // dependent of original size for good quality when e.g. rotated/sheared. Still, limit to a maximum
         // to avoid crashes/ressource problems (ca. 1500x3000 here)
         const Size& rOriginalSizePixel(rBitmapEx.GetSizePixel());

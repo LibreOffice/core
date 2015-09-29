@@ -601,7 +601,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
     if( GetCapabilities( PrinterCapType::UsePullModel ) )
     {
         mbJobActive             = true;
-        // sallayer does all necessary page printing
+        // SAL layer does all necessary page printing
         // and also handles showing a dialog
         // that also means it must call jobStarted when the dialog is finished
         // it also must set the JobState of the Controller

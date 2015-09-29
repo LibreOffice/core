@@ -1478,7 +1478,7 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
 
                     for( sal_uInt16 i = 0UL; i < nMaxColors; i++ )
                     {
-                        // Hurray, we do have an unsused entry
+                        // Hurray, we do have an unused entry
                         if( !pFlags[ i ] )
                         {
                             pAcc->SetPaletteColor( (sal_uInt16) i, rReplaceColor );

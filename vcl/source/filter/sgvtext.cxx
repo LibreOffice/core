@@ -63,7 +63,7 @@ extern SgfFontLst* pSgfFonts;
 #define  EscLFeed  'L' /* character spacing 1..32767% of max. text angle of the line*/
                         // or 1..32767 for 1..16383<<Pt absolute (if bit 15=1)
 #define  EscSlant  'S' /* italic (angle) 1..8999 for 0.01deg..89.99deg              */
-#define  EscVPos   'V' /* character vercial position 1..255 for <<Pt..127<<Pt       */
+#define  EscVPos   'V' /* character vertical position 1..255 for <<Pt..127<<Pt       */
 #define  EscZAbst  'Z' /* character spacing -128..127%                              */
 #define  EscHJust  'A' /* H-justify  paragraph: left, cent, right, block, aligned, fixed (0..5)*/
 
@@ -196,8 +196,8 @@ sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
 // Index is incremented accordingly.
 // Parameter Rest should always contain the number of characters,
 // the number of remaining characters in that line.
-// Otherwise the hyphenation does not work. If the constand NoTrenn
-// is used instaed, no hyphenation is done. To the contrary then
+// Otherwise the hyphenation does not work. If the constant NoTrenn
+// is used instead, no hyphenation is done. To the contrary then
 // constant DoTrenn triggers hyphenation where a soft-break is present.
 //
 // Soft separators are converted to a minus sign.

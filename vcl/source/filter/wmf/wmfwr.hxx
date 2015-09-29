@@ -107,7 +107,7 @@ private:
     sal_uLong nWrittenBitmaps;  // number of bitmaps written
     sal_uLong nActBitmapPercent; // percentage of next bitmap written.
 
-    bool bEmbedEMF; // optionally embedd EMF data into WMF
+    bool bEmbedEMF; // optionally embed EMF data into WMF
 
     void MayCallback();
         // this function calculates percentage using the above 5 parameters

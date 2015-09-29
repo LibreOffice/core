@@ -637,7 +637,7 @@ static void appendLiteralString( const sal_Char* pStr, sal_Int32 nLength, OStrin
  * even though they expose the content of PDF file (e.g. guessing the PDF content from the
  * destination name).
  *
- * Fhurter limitation: it is advisable to use standard ASCII characters for
+ * Further limitation: it is advisable to use standard ASCII characters for
  * OOo bookmarks.
 */
 static void appendDestinationName( const OUString& rString, OStringBuffer& rBuffer )
@@ -6119,7 +6119,7 @@ typedef struct {
 } TimeStampReq;
 
 // (Partial) ASN.1 for the time stamp response. Very complicated. Pulled
-// together from varuous RFCs.
+// together from various RFCs.
 
 /*
 Accuracy ::= SEQUENCE {
@@ -8776,7 +8776,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         aCurPos += rAlignOffset;
         // the first run can be set with "Td" operator
         // subsequent use of that operator would move
-        // the texline matrix relative to what was set before
+        // the textline matrix relative to what was set before
         // making use of that would drive us into rounding issues
         Matrix3 aMat;
         if( nRun == 0 && fAngle == 0.0 && fXScale == 1.0 && fSkew == 0.0 )
