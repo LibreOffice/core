@@ -3856,7 +3856,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
         xFndBox.reset();
 
-        if( ppUndo && *ppUndo )
+        if (ppUndo && *ppUndo && aParam.pUndo)
         {
             aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(eTableChgMode), eType,
                                             nAbsDiff, nRelDiff );
