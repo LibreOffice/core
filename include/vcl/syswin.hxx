@@ -233,7 +233,7 @@ public:
     void            SetWindowState(const OString& rStr);
     OString         GetWindowState(sal_uInt32 nMask = WINDOWSTATE_MASK_ALL) const;
 
-    void            SetMenuBar(MenuBar* pMenuBar, const css::uno::Reference<css::frame::XFrame>& rFrame = css::uno::Reference<css::frame::XFrame>());
+    void            SetMenuBar(MenuBar* pMenuBar);
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
     void            SetMenuBarMode( MenuBarMode nMode );
 

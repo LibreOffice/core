@@ -423,8 +423,7 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     friend class MenuFloatingWindow;
     friend class SystemWindow;
 
-    SAL_DLLPRIVATE static vcl::Window* ImplCreate(vcl::Window* pParent, vcl::Window* pWindow,
-                                                  MenuBar* pMenu, const css::uno::Reference<css::frame::XFrame> &rFrame);
+    SAL_DLLPRIVATE static vcl::Window* ImplCreate(vcl::Window* pParent, vcl::Window* pWindow, MenuBar* pMenu);
     SAL_DLLPRIVATE static void ImplDestroy(MenuBar* pMenu, bool bDelete);
     SAL_DLLPRIVATE bool ImplHandleKeyEvent(const KeyEvent& rKEvent, bool bFromMenu = true);
     SAL_DLLPRIVATE bool ImplHandleCmdEvent(const CommandEvent& rCEvent);

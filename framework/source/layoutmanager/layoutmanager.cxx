@@ -782,7 +782,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
         if ( pSysWindow )
         {
             if ( bSetVisible )
-                pSysWindow->SetMenuBar(pMenuBar, m_xFrame);
+                pSysWindow->SetMenuBar(pMenuBar);
             else
                 pSysWindow->SetMenuBar( 0 );
         }
@@ -1166,7 +1166,7 @@ throw (uno::RuntimeException, std::exception)
 
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
             if ( pSysWindow )
-                pSysWindow->SetMenuBar(pMenuBar, m_xFrame);
+                pSysWindow->SetMenuBar(pMenuBar);
 
             m_bInplaceMenuSet = true;
             m_xInplaceMenuBar = Reference< XComponent >( static_cast<OWeakObject *>(m_pInplaceMenuBar), UNO_QUERY );
@@ -1193,7 +1193,7 @@ throw (uno::RuntimeException)
         if ( pSysWindow )
         {
             if ( pMenuBarWrapper )
-                pSysWindow->SetMenuBar(static_cast<MenuBar *>(pMenuBarWrapper->GetMenuBarManager()->GetMenuBar()), m_xFrame);
+                pSysWindow->SetMenuBar(static_cast<MenuBar *>(pMenuBarWrapper->GetMenuBarManager()->GetMenuBar()));
             else
                 pSysWindow->SetMenuBar(0);
         }
@@ -1494,7 +1494,7 @@ throw (RuntimeException, std::exception)
                                 MenuBar* pMenuBar = static_cast<MenuBar*>(pAwtMenuBar->GetMenu());
                                 if ( pMenuBar )
                                 {
-                                    pSysWindow->SetMenuBar(pMenuBar, m_xFrame);
+                                    pSysWindow->SetMenuBar(pMenuBar);
                                     pMenuBar->SetDisplayable( m_bMenuVisible );
                                     if ( m_bMenuVisible )
                                         bNotify = true;
@@ -2580,7 +2580,7 @@ bool LayoutManager::implts_resetMenuBar()
     SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
     if ( pSysWindow && bMenuVisible && pSetMenuBar )
     {
-        pSysWindow->SetMenuBar(pSetMenuBar, m_xFrame);
+        pSysWindow->SetMenuBar(pSetMenuBar);
         pSetMenuBar->SetDisplayable( true );
         return true;
     }
