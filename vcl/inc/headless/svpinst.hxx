@@ -69,10 +69,10 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
     struct SalUserEvent
     {
         const SalFrame*     m_pFrame;
-        void*               m_pData;
+        ImplSVEvent*        m_pData;
         sal_uInt16          m_nEvent;
 
-        SalUserEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT )
+        SalUserEvent( const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT )
                 : m_pFrame( pFrame ),
                   m_pData( pData ),
                   m_nEvent( nEvent )
