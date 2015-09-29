@@ -97,7 +97,7 @@ protected:
     bool IsInPopupMode();
     void EndPopupMode();
 
-    // Forwared from XStatusListener (subclasses must override this one to get
+    // Forwarded from XStatusListener (subclasses must override this one to get
     // the status updates):
     virtual void statusChanged(const css::frame::FeatureStateEvent& Event ) throw (css::uno::RuntimeException, std::exception);
 

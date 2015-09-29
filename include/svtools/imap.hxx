@@ -91,7 +91,7 @@ public:
     // rTotalSize is the original size of the image
     // rDisplaySize is the current size;
     // rRelPoint relates to the display size and the upper left
-    // corener of the image
+    // corner of the image
     IMapObject*         GetHitIMapObject( const Size& rOriginalSize,
                                           const Size& rDisplaySize,
                                           const Point& rRelHitPoint,

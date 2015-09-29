@@ -491,7 +491,7 @@ public:
 
     /** forces both scrollbars to be hidden
 
-        For the horizontal srollbar, this is overruled by enabling the navigation bar: A navigation
+        For the horizontal scrollbar, this is overruled by enabling the navigation bar: A navigation
         bar <b>always</b> implies a horizontal scroll bar
         @seealso EnableNavigationBar
     */
@@ -505,7 +505,7 @@ public:
     /// copies the text of the given cell into the clipboard
     void        copyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
 
-    // selectin listener handling
+    // select in listener handling
     void                        setGridListener( FmGridListener* _pListener ) { m_pGridListener = _pListener; }
 
     // helper class to grant access to selected methods from within the DbCellControl class

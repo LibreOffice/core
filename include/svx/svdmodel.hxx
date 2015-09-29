@@ -547,8 +547,8 @@ public:
         undo actions for this model. */
     SdrUndoFactory& GetSdrUndoFactory() const;
 
-    // Accessor methods for Palettes, Lists and Tabeles
-    // FIXME: this badly needs re-factoring ...
+    // Accessor methods for Palettes, Lists and Tables
+    // FIXME: this badly needs re-factoring...
     XPropertyListRef GetPropertyList( XPropertyListType t ) const { return maProperties[ t ]; }
     void             SetPropertyList( XPropertyListRef p ) { maProperties[ p->Type() ] = p; }
 
