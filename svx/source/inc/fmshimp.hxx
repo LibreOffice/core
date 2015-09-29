@@ -344,7 +344,7 @@ protected:
         FmFormArray& _out_rForms,
         ::std::vector< OUString >& _out_rNames );
 
-    /** checks whether the instance is already disposed, if so, this is reported as assertion error (debug
+    /** checks whenever the instance is already disposed, if so, this is reported as assertion error (debug
         builds only) and <TRUE/> is returned.
     */
     SAL_DLLPRIVATE bool    impl_checkDisposed() const;

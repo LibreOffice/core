@@ -314,7 +314,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
 
             if(aAnimatedExtractor.getPrimitive2DSequence().hasElements())
             {
-                // dervied primitiveList is animated, setup new PrimitiveAnimation
+                // derived primitiveList is animated, setup new PrimitiveAnimation
                 mpPrimitiveAnimation =  new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.getPrimitive2DSequence());
             }
         }

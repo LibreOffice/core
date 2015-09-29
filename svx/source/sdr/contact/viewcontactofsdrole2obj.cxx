@@ -98,7 +98,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPr
     if(GetOle2Obj().IsChart())
     {
         // #i123539# allow buffering and reuse of local chart data to not need to rebuild it
-        // on every ViewObjectContact::getPrimitive2DSequence call. TTTT: No tneeded for
+        // on every ViewObjectContact::getPrimitive2DSequence call. TTTT: Not needed for
         // aw080, there this mechanism alraedy works differently
         if(mxChartContent.is())
         {

@@ -510,14 +510,14 @@ class RecoveryDialog : public Dialog
         css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
         enum EInternalRecoveryState
         {
-            E_RECOVERY_PREPARED,            // dialog started ... recovery prepared
+            E_RECOVERY_PREPARED,            // dialog started... recovery prepared
             E_RECOVERY_IN_PROGRESS,         // recovery core still in progress
             E_RECOVERY_CORE_DONE,           // recovery core finished it's task
             E_RECOVERY_DONE,                // user clicked "next" button
             E_RECOVERY_CANCELED,            // user clicked "cancel" button
             E_RECOVERY_CANCELED_BEFORE,     // user clicked "cancel" button before recovery was started
-            E_RECOVERY_CANCELED_AFTERWARDS, // user clicked "cancel" button after reovery was finished
-            E_RECOVERY_HANDLED              // the recovery wizard page was shown already ... and will be shown now again ...
+            E_RECOVERY_CANCELED_AFTERWARDS, // user clicked "cancel" button after recovery was finished
+            E_RECOVERY_HANDLED              // the recovery wizard page was shown already... and will be shown now again...
         };
         sal_Int32 m_eRecoveryState;
         bool  m_bWaitForCore;
