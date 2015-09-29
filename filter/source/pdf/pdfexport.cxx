@@ -184,7 +184,7 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
 
         if( pOut )
         {
-            vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
+            vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData* >( pOut->GetExtOutDevData() );
             if ( nPageCount )
             {
                 pPDFExtOutDevData->SetIsExportNotesPages( bExportNotesPages );

@@ -554,7 +554,7 @@ bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 
     for(;aIter != rCodeList.end();++aIter)
     {
-        OOperand* pOperand = PTR_CAST(OOperand,(*aIter));
+        OOperand* pOperand = dynamic_cast<OOperand* >(*aIter);
         if (pOperand)
             m_aStack.push(pOperand);
         else
@@ -568,7 +568,7 @@ bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
     DBG_ASSERT(pOperand, "StackFehler");
 
     bResult = pOperand->isValid();
-    if (IS_TYPE(OOperandResult,pOperand))
+    if (dynamic_cast<const OOperandResult* >(pOperand) !=  nullptr)
         delete pOperand;
     return bResult;
 }
@@ -581,7 +581,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
 
     for(;aIter != rCodeList.end();++aIter)
     {
-        OOperand* pOperand = PTR_CAST(OOperand,(*aIter));
+        OOperand* pOperand = dynamic_cast<OOperand* >(*aIter);
         if (pOperand)
             m_aStack.push(pOperand);
         else
@@ -595,7 +595,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
     DBG_ASSERT(pOperand, "StackFehler");
 
     (*_rVal) = pOperand->getValue();
-    if (IS_TYPE(OOperandResult,pOperand))
+    if (dynamic_cast<const OOperandResult* >(pOperand) !=  nullptr)
         delete pOperand;
 }
 
