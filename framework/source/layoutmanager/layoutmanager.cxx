@@ -948,7 +948,7 @@ void LayoutManager::implts_backupProgressBarWrapper()
 
 void LayoutManager::implts_destroyProgressBar()
 {
-    // dont remove the progressbar in general
+    // don't remove the progressbar in general
     // We must reuse it if a new status bar is created later.
     // Of course there exists one backup only.
     // And further this backup will be released inside our dtor.

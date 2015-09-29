@@ -285,7 +285,7 @@ bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFrame )
     if (xFrame->isTop())
         return true;
 
-    uno::Reference< awt::XTopWindow > xWindowCheck(xFrame->getContainerWindow(), uno::UNO_QUERY); // dont use _THROW here ... it's a check only
+    uno::Reference< awt::XTopWindow > xWindowCheck(xFrame->getContainerWindow(), uno::UNO_QUERY); // don't use _THROW here ... it's a check only
     if (xWindowCheck.is())
     {
         // #i76867# top and system window is required.

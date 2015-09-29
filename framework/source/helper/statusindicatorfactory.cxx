@@ -165,8 +165,8 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
     aReadLock.clear();
     // <- SAFE ----------------------------------
 
-    // not the top most child => dont change UI
-    // But dont forget Reschedule!
+    // not the top most child => don't change UI
+    // But don't forget Reschedule!
     if (
         (xChild == xActive) &&
         (xProgress.is()   )
@@ -246,7 +246,7 @@ void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStat
     // SAFE -> ----------------------------------
 
     // paint only the top most indicator
-    // but dont forget to Reschedule!
+    // but don't forget to Reschedule!
     if (
         (xChild == xActive) &&
         (xProgress.is()   )
@@ -311,7 +311,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     else
         xParentWindow = xPluggWindow;
 
-    // dont disturb user in case he put the loading document into the background!
+    // don't disturb user in case he put the loading document into the background!
     // Suppress any setVisible() or toFront() call in case the initial show was
     // already made.
     css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xParentWindow, css::uno::UNO_QUERY);
@@ -344,7 +344,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // We need a Hack for our applications: They get her progress from the frame directly
     // on saving documents. Because there is no progress set on the MediaDescriptor.
     // But that's wrong. In case the document was opened hidden, they should not use any progress .-(
-    // They only possible workaround: dont show the parent window here, if the document was opened hidden.
+    // They only possible workaround: don't show the parent window here, if the document was opened hidden.
     bool bHiddenDoc = false;
     if (xFrame.is())
     {
