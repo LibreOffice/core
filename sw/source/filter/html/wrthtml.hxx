@@ -326,7 +326,7 @@ public:
     sal_uInt16 nEndNote;
     sal_uInt16 nFootNote;
     sal_Int32 nLeftMargin;              // linker Einzug (z.B. aus Listen)
-    sal_Int32 nDfltLeftMargin;          // die dafaults, der nicht geschrieben
+    sal_Int32 nDfltLeftMargin;          // die defaults, der nicht geschrieben
     sal_Int32 nDfltRightMargin;     // werden muessen (aus der Vorlage)
     short  nFirstLineIndent;        // Erstzeilen-Einzug (aus Listen)
     short  nDfltFirstLineIndent;    // nicht zu schreibender default
