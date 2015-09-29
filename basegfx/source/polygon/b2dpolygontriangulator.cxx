@@ -325,7 +325,7 @@ namespace basegfx
 
                             if(bNoPointInTriangle)
                             {
-                                // look for end point in triange
+                                // look for end point in triangle
                                 pTestEdge = pEdgeB->getNext();
 
                                 while(bNoPointInTriangle && pTestEdge)

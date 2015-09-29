@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
-/**
+/*
  * Thread that communicates with LibreOffice through LibreOfficeKit JNI interface. The thread
- * consumes events from other threads (maininly the UI thread) and acts accordingly.
+ * consumes events from other threads (mainly the UI thread) and acts accordingly.
  */
 public class LOKitThread extends Thread {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();

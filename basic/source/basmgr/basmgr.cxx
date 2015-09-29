@@ -1197,7 +1197,7 @@ bool BasicManager::IsReference( sal_uInt16 nLib )
 
 bool BasicManager::RemoveLib( sal_uInt16 nLib )
 {
-    // Only pyhsical deletion if no reference
+    // Only physical deletion if no reference
     return RemoveLib( nLib, !IsReference( nLib ) );
 }
 

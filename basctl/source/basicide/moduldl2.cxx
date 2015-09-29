@@ -1134,7 +1134,7 @@ void LibPage::Export()
             else
                 ExportAsBasic( aLibName );
         }
-        catch(const util::VetoException& ) // user cancled operation
+        catch(const util::VetoException& ) // user canceled operation
         {
         }
     }

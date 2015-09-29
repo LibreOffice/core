@@ -1069,7 +1069,7 @@ namespace basegfx
                         const double fZero(0.0);
                         const double fOne(1.0);
 
-                        // inside parameter range edge1 AND fCut2 is calcable
+                        // inside parameter range edge1 AND fCut2 is calculable
                         if(fTools::more(fCut1, fZero) && fTools::less(fCut1, fOne)
                             && (!fTools::equalZero(rEdge2Delta.getX()) || !fTools::equalZero(rEdge2Delta.getY())))
                         {
@@ -1672,7 +1672,7 @@ namespace basegfx
                 // close
                 aRetval.setClosed( true );
 
-                // remove double created points if there are extreme radii envolved
+                // remove double created points if there are extreme radii involved
                 if(fOne == fRadiusX || fOne == fRadiusY)
                 {
                     aRetval.removeDoublePoints();
