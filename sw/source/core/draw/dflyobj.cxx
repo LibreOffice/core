@@ -196,7 +196,7 @@ namespace drawinglayer
             if(!getOuterRange().isEmpty())
             {
                 // currently this SW object has no primitive representation. As long as this is the case,
-                // create invisible geometry to allow corfect HitTest and BoundRect calculations for the
+                // create invisible geometry to allow correct HitTest and BoundRect calculations for the
                 // object. Use a filled primitive to get 'inside' as default object hit. The special cases from
                 // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
                 // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
@@ -449,7 +449,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
     SwViewShell* pShell = pFlyFrm->getRootFrm()->GetCurrShell();
 
     // Only paint when we have a current shell and a DrawingLayer paint is in progress.
-    // This avcoids evtl. problems with renderers which do processing stuff,
+    // This avoids evtl. problems with renderers which do processing stuff,
     // but no paints. IsPaintInProgress() depends on SW repaint, so, as long
     // as SW paints self and calls DrawLayer() for Heaven and Hell, this will
     // be correct

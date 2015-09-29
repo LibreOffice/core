@@ -72,8 +72,8 @@
 using namespace ::com::sun::star;
 
 //JP 16.12.99: definition:
-//      from pos cPosEnDash to cPosEmDash all chars changed to endashes,
-//      from pos cPosEmDash to cPosEnd    all chars changed to emdashes
+//      from pos cPosEnDash to cPosEmDash all chars changed to em dashes,
+//      from pos cPosEmDash to cPosEnd    all chars changed to em dashes
 //      all other chars are changed to the user configuration
 
 const sal_Unicode pBulletChar[6] = { '+', '*', '-', 0x2013, 0x2014, 0 };
@@ -178,7 +178,7 @@ class SwAutoFormat
     sal_uInt16 GetDigitLevel( const SwTextNode& rTextNd, sal_Int32& rPos,
                             OUString* pPrefix = 0, OUString* pPostfix = 0,
                             OUString* pNumTypes = 0 ) const;
-    /// get the FORMATED TextFrame
+    /// get the FORMATTED TextFrame
     SwTextFrm* GetFrm( const SwTextNode& rTextNd ) const;
 
     void BuildIndent();

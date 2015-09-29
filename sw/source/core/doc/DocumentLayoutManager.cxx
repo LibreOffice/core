@@ -311,7 +311,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
                         RES_TXTATR_FLYCNT ));
                 if ( pAttr && (pAttr->GetFlyCnt().GetFrameFormat() == pFormat) )
                 {
-                    // dont delete, set pointer to 0
+                    // don't delete, set pointer to 0
                     const_cast<SwFormatFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFormat();
                     SwIndex aIdx( pPos->nContent );
                     pTextNd->EraseText( aIdx, 1 );

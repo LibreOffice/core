@@ -1075,7 +1075,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField,
 }
 
 /// 1. if _both_ SetExp + GetExp / Footnote + GetExp field are copied,
-///    enusure that both get a new unused matching number
+///    ensure that both get a new unused matching number
 /// 2. if only SetExp / Footnote is copied, it gets a new unused number
 /// 3. if only GetExp field is copied, for the case of copy from / paste to
 ///    same document it's desirable to keep the same number;

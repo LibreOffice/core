@@ -206,7 +206,7 @@ void SwAccessibleTableData_Impl::CollectRowHeaderData( const SwFrm *pFrm )
             else if( pLower->IsCellFrm() &&
                      rLower.IsAccessible( mbIsInPagePreview ) )
             {
-                //Added by yanjun. Can't find the "GetRowHeaderFlag" function(Need vefiry).
+                //Added by yanjun. Can't find the "GetRowHeaderFlag" function (need verify).
                 //if(static_cast<SwCellFrm*>(pLower)->GetRowHeaderFlag())
                 //  maColumns.insert( pLower->Frm().Left() - maTabFrmPos.X() );
             }

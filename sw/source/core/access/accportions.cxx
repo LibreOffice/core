@@ -598,7 +598,7 @@ sal_Int32 SwAccessiblePortionData::FillSpecialPos(
 
         // skip backwards over zero-length portions, since GetCharRect()
         // counts all model-zero-length portions as belonging to the
-        // previus portion
+        // previous portion
         size_t nCorePortionNo = nPortionNo;
         while( nModelPos == nModelEndPos )
         {
