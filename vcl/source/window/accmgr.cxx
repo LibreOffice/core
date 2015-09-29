@@ -167,7 +167,7 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
                 }
                 else
                 {
-                    // stop sequence as the accelerator was disbled
+                    // stop sequence as the accelerator was disabled
                     // transfer the key (to the system)
                     FlushAccel();
                     return false;

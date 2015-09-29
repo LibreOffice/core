@@ -374,7 +374,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
 //            return false;
 
         // no mouse messages to disabled windows
-        // #106845# if the window was disabed during capturing we have to pass the mouse events to release capturing
+        // #106845# if the window was disabled during capturing we have to pass the mouse events to release capturing
         if ( pSVData->maWinData.mpCaptureWin.get() != pChild && (!pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalMode() ) )
         {
             ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave );
@@ -1108,7 +1108,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
             bRet = false;
     }
 
-    // #105591# send keyinput to parent if we are a floating window and the key was not pocessed yet
+    // #105591# send keyinput to parent if we are a floating window and the key was not processed yet
     if( !bRet && pWindow->ImplGetWindowImpl()->mbFloatWin && pWindow->GetParent() && (pWindow->ImplGetWindowImpl()->mpFrame != pWindow->GetParent()->ImplGetWindowImpl()->mpFrame) )
     {
         pChild = pWindow->GetParent();

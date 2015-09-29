@@ -611,7 +611,7 @@ WindowImpl::WindowImpl( WindowType nType )
     maZoom                              = Fraction( 1, 1 );
     maWinRegion                         = vcl::Region(true);
     maWinClipRegion                     = vcl::Region(true);
-    mpWinData                           = NULL;                      // Extra Window Data, that we dont need for all windows
+    mpWinData                           = NULL;                      // Extra Window Data, that we don't need for all windows
     mpOverlapData                       = NULL;                      // Overlap Data
     mpFrameData                         = NULL;                      // Frame Data
     mpFrame                             = NULL;                      // Pointer to frame window

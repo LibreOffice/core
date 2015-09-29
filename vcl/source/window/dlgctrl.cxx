@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 
 static bool ImplHasIndirectTabParent( vcl::Window* pWindow )
 {
-    // The window has inderect tab parent if it is included in tab hierarchy
+    // The window has indirect tab parent if it is included in tab hierarchy
     // of the indirect parent window
 
     vcl::Window* pNonLayoutParent = getNonLayoutParent(pWindow);
@@ -313,7 +313,7 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
           && pSWindow->ImplGetWindow()->IsDialogControlStart() )
             nFormStart = i;
 
-        // SecondWindow for composit controls like ComboBoxes and arrays
+        // SecondWindow for composite controls like ComboBoxes and arrays
         if ( pSWindow->ImplIsWindowOrChild( pWindow ) )
         {
             pSecondWindow = pSWindow;

@@ -670,7 +670,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 
         if( rData.GetMask() & (WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
         {
-            // #i43799# adjust window state sizes if a minimial output size was set
+            // #i43799# adjust window state sizes if a minimal output size was set
             // otherwise the frame and the client might get different sizes
             if( maMinOutSize.Width() > aState.mnWidth )
                 aState.mnWidth = maMinOutSize.Width();

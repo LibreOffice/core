@@ -1411,7 +1411,7 @@ void SplitWindow::dispose()
     // delete Sets
     if (mpMainSet) {
         delete mpMainSet ;
-        mpMainSet = NULL; //NULL for base-class callbacks during dtoring
+        mpMainSet = NULL; //NULL for base-class callbacks during destruction
     }
     DockingWindow::dispose();
 }
