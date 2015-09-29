@@ -235,7 +235,7 @@ protected:
     CComPtr<IUnknown> m_spUnknown;
     CComPtr<IDispatch> m_spDispatch;
         OUString m_sTypeName; // is "" ( not initialised ), "IDispatch" ( we have no idea ) or "SomeLibrary.SomeTypeName" if we managed to get a type
-    /** This value is set dureing XInitialization::initialize. It indicates that the COM interface
+    /** This value is set during XInitialization::initialize. It indicates that the COM interface
     was transported as VT_DISPATCH in a VARIANT rather then a VT_UNKNOWN
     */
     sal_Bool  m_bOriginalDispatch;

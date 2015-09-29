@@ -517,7 +517,7 @@ namespace dbp
             // the shape of the control
             implDetermineShape();
 
-            // get the columns of the object the settins refer to
+            // get the columns of the object the settings refer to
             Reference< XNameAccess >  xColumns;
 
             if (m_aContext.xForm.is())

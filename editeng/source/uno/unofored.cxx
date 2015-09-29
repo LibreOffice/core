@@ -216,7 +216,7 @@ SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelectio
             // if we already found an item
             if( pParaItem )
             {
-                // ... and its different to this one than the state is dont care
+                // ... and its different to this one than the state is don't care
                 if(*pParaItem != *(i->pAttr))
                     return SfxItemState::DONTCARE;
             }

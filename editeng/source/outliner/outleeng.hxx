@@ -30,7 +30,7 @@ class OutlinerEditEng : public EditEngine
 
 protected:
 
-    // derived from EditEngine. Allows Outliner objetcs to provide
+    // derived from EditEngine. Allows Outliner objects to provide
     // bullet access to the EditEngine.
     virtual const SvxNumberFormat*  GetNumberFormat( sal_Int32 nPara ) const SAL_OVERRIDE;
 

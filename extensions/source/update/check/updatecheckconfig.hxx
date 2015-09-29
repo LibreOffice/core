@@ -98,7 +98,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::rtl::Reference< UpdateCheckConfigListener >& rListener = ::rtl::Reference< UpdateCheckConfigListener >());
 
-    // Should really implement ROModel ..
+    // Should really implement ROModel...
     bool isAutoCheckEnabled() const;
     bool isAutoDownloadEnabled() const;
     OUString getUpdateEntryVersion() const;
