@@ -675,7 +675,7 @@ protected:
         column the object is bound to, or with the external value binding, if present.<br/>
         E.g. for a text control model, this property will most probably be "Text".</p>
 
-        <p>Derived classes are stronly recommend to call this method - at least the
+        <p>Derived classes are strongly recommend to call this method - at least the
         "DataFieldProperty" (exposed in getFastPropertyValue) relies on the information
         given herein, and needs to be supplied otherwise else.</p>
 

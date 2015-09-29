@@ -809,7 +809,7 @@ Any OComboBoxModel::translateDbColumnToControlValue()
         m_aLastKnownValue.clear();
 
     return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( OUString() );
-        // (m_aLastKnownValue is alllowed to be VOID, the control value isn't)
+        // (m_aLastKnownValue is allowed to be VOID, the control value isn't)
 }
 
 
