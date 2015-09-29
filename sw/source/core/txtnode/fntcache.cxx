@@ -166,7 +166,7 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
  *
  *  1. RefDef == OutDev (text formatting, online layout...)
  *  2. PDF export from online layout
- *  3. Prospect/PagePreview pringing
+ *  3. Prospect/PagePreview printing
  */
 static bool lcl_IsFontAdjustNecessary( const vcl::RenderContext& rOutDev,
                                 const vcl::RenderContext& rRefDev )
@@ -325,7 +325,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
             nPrtHeight = static_cast<sal_uInt16>(rRefDev.GetTextHeight());
 
 #if OSL_DEBUG_LEVEL > 0
-            // Check if vcl did not change the meading of GetTextHeight
+            // Check if vcl did not change the meaning of GetTextHeight
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
             long nTmpPrtHeight = (sal_uInt16)aOutMet.GetAscent() + aOutMet.GetDescent();
             (void) nTmpPrtHeight;

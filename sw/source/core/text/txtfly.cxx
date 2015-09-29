@@ -1051,7 +1051,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
                 {
                     // If the text flows below, it has no influence on
                     // formatting. In LineIter::DrawText() it is "just"
-                    // necessary to clevely set the ClippingRegions
+                    // necessary to clevery set the ClippingRegions
                     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
                     if( ( SURROUND_THROUGHT == rSur.GetSurround() &&
                           ( !rSur.IsAnchorOnly() ||
