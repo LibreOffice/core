@@ -830,7 +830,7 @@ void WinOpenGLDeviceInfo::GetData()
     mbHasDriverVersionMismatch = false;
     if (maAdapterVendorID == GetDeviceVendor(wgl::VendorIntel))
     {
-        // we've had big crashers (moz#590373 and moz#595364) apparently correlated
+        // we've had big crashes (moz#590373 and moz#595364) apparently correlated
         // with bad Intel driver installations where the DriverVersion reported
         // by the registry was not the version of the DLL.
         OUString aDLLFileName("igd10umd32.dll");

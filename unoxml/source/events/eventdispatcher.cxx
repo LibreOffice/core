@@ -62,7 +62,7 @@ namespace DOM { namespace events {
         TypeListenerMap::const_iterator tIter = pTMap->find(aType);
         if (tIter != pTMap->end()) {
             ListenerMap *pMap = tIter->second;
-            // find listeners of specied type for specified node
+            // find listeners of specified type for specified node
             ListenerMap::iterator iter = pMap->find(pNode);
             while (iter != pMap->end() && iter->first == pNode)
             {
@@ -178,7 +178,7 @@ namespace DOM { namespace events {
         pEvent->m_currentTarget = i_xEvent->getCurrentTarget();
         pEvent->m_time = i_xEvent->getTimeStamp();
 
-        // create the reference to the provate event implementation
+        // create the reference to the private event implementation
         // that will be dispatched to the listeners
         Reference< XEvent > const xEvent(pEvent);
 
@@ -203,7 +203,7 @@ namespace DOM { namespace events {
             targetListeners = m_TargetListeners;
         }
 
-        // the caputre vector now holds the node path from target to root
+        // the capture vector now holds the node path from target to root
         // first we must search for capture listernes in order root to
         // to target. after that, any target listeners have to be called
         // then bubbeling phase listeners are called in target to root

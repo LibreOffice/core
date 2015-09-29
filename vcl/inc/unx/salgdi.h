@@ -178,7 +178,7 @@ public:
 
     virtual bool                    drawGradient( const tools::PolyPolygon&, const Gradient& ) SAL_OVERRIDE;
 
-#if 1 // TODO: remove these obselete methods
+#if 1 // TODO: remove these obsolete methods
     virtual bool                    drawPolyLineBezier(
                                         sal_uInt32 nPoints,
                                         const SalPoint* pPtAry,

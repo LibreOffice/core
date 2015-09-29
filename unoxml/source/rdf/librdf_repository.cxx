@@ -939,7 +939,7 @@ throw (uno::RuntimeException, std::exception)
 
 bool formatNeedsBaseURI(::sal_Int16 i_Format)
 {
-    (void) i_Format; //FIXME any which dont?
+    (void) i_Format; //FIXME any which don't?
     return true;
 }
 

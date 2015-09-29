@@ -106,7 +106,7 @@ public:
     virtual void interactionDone() = 0;
     // signal that we're done saving
     virtual void saveDone() = 0;
-    // try to cancel the sutdown in progress
+    // try to cancel the shutdown in progress
     virtual bool cancelShutdown() = 0;
 };
 
