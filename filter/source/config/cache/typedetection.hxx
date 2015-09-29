@@ -298,7 +298,7 @@ private:
 
                     Note: If the descriptor already include a filter
                     (may be selected by a FilterSelect interaction or preselected
-                    by the user itself) ... we dont change that here !
+                    by the user itself) ... we don't change that here !
 
         @param      rDescriptor
                     reference to the MediaDescriptor (represented by an easy-to-use

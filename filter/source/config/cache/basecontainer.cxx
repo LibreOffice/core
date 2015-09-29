@@ -92,7 +92,7 @@ void BaseContainer::impl_loadOnDemand()
 
     // A generic container needs all items of a set of our cache!
     // Of course it can block for a while, till the cache is really filled.
-    // Note: dont load all sets supported by the cache here!
+    // Note: don't load all sets supported by the cache here!
 
     FilterCache::EFillState eRequiredState = FilterCache::E_CONTAINS_NOTHING;
     switch(m_eType)

@@ -110,7 +110,7 @@ public class FinalizedMandatoryTest
         checkReadonlySupport("com.sun.star.document.FilterFactory");
     }
 
-    /**
+    /*
      * call the function <CODE>checkReadonlySupport</CODE> to test <CODE>com.sun.star.document.TypeDetection</CODE>
      * @see com.sun.star.document.TypeDetection
      */
@@ -119,9 +119,9 @@ public class FinalizedMandatoryTest
         checkReadonlySupport("com.sun.star.document.TypeDetection");
     }
 
-    /**
+    /*
      * test the given service <CODE>serviceName</CODE>.
-     * For every filter a new instace was created and the tests started.
+     * For every filter a new instance was created and the tests started.
      * @param serviceName the name of the service to test
      */
     private void checkReadonlySupport(String serviceName) throws Exception

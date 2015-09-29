@@ -388,8 +388,8 @@ class FilterCache : public BaseLock
         /** @short      indicates if the requested sub container
                         contains some items.
 
-            @descr      We dont provide any information about the count
-                        of such items. Because we dont implement any index
+            @descr      We don't provide any information about the count
+                        of such items. Because we don't implement any index
                         based interface! The information "we have items or not"
                         must be enough for the outside code ... till somewhere
                         give us a good reason. :-)
@@ -449,7 +449,7 @@ class FilterCache : public BaseLock
                         see also EItemType.
 
             @param      sItem
-                        the key name of the requested item inside the pecified sub container.
+                        the key name of the requested item inside the specified sub container.
 
             @throw      [css::uno::Exception]
                         if some input parameter are wrong or the cache itself is not valid
@@ -726,7 +726,7 @@ class FilterCache : public BaseLock
                         Wrong dependencies will be corrected automatically.
                         If something could not be repaired - an exception
                         is thrown.
-                        Further some optmized structures will be created.
+                        Further some optimized structures will be created.
                         E.g.: a hash to map extensions to her types.
 
             @attention  There is no exception, if the cache could be repaired

@@ -132,7 +132,7 @@ private:
     MapMode             aPictureMapMode;
     MapMode             aTargetMapMode;
     sal_uInt32          nActualFieldStartPos;     // start position of the current 'Field'
-    sal_uInt32          nNumberOfDataFields;  // number of commenced 'Graphcis Data Fields'
+    sal_uInt32          nNumberOfDataFields;  // number of commented 'Graphics Data Fields'
     Color               aGDILineColor;
     Color               aGDIFillColor;
     RasterOp            eGDIRasterOp;

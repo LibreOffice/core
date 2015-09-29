@@ -224,7 +224,7 @@ public class TypeDetection extends ComplexTestCase {
             String kName = k.next();
             log.println(kName + ":" + param.get(kName).toString());
         }
-        // create instrace of helper class
+        // create instance of helper class
         helper = new Helper(param, log);
 
     }
