@@ -561,7 +561,6 @@
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/alloca.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>

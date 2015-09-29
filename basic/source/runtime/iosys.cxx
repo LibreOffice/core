@@ -30,8 +30,6 @@
 
 #include "runtime.hxx"
 
-#include <sal/alloca.h>
-
 #include <ctype.h>
 #include <rtl/byteseq.hxx>
 #include <rtl/textenc.h>

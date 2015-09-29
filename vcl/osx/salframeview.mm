@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <sal/alloca.h>
 #include <sal/macros.h>
 #include <tools/helpers.hxx>
 

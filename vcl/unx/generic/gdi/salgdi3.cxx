@@ -33,7 +33,6 @@
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <rtl/tencinfo.h>
-#include <sal/alloca.h>
 #include <tools/stream.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>

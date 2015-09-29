@@ -24,7 +24,6 @@
 #include "externalrefmgr.hxx"
 
 #include "globstr.hrc"
-#include <sal/alloca.h>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/frame/XModel.hpp>

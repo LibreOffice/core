@@ -19,7 +19,6 @@
 
 #include <stdio.h>
 
-#include <sal/alloca.h>
 #include <osl/thread.h>
 
 #include <prex.h>

@@ -27,7 +27,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <sal/alloca.h>
+
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace i18n {

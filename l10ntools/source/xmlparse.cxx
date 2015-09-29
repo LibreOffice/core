@@ -22,7 +22,6 @@
 
 #include <cassert>
 #include <stdio.h>
-#include <sal/alloca.h>
 
 #include "helper.hxx"
 #include "common.hxx"

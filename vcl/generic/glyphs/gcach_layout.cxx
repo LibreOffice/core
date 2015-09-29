@@ -27,7 +27,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 
-#include <sal/alloca.h>
 #include <rtl/instance.hxx>
 
 #include <hb-icu.h>
