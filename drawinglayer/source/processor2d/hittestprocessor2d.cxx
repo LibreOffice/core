@@ -528,7 +528,7 @@ namespace drawinglayer
                         // will be used for HitTest currently.
                         //
                         // This may be refined in the future, e.g:
-                        // - For Bitamps, the mask and/or transparence information may be used
+                        // - For Bitmaps, the mask and/or transparence information may be used
                         // - For MetaFiles, the MetaFile content may be used
                         const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
 

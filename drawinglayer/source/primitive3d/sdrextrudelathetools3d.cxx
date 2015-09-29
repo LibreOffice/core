@@ -594,7 +594,7 @@ namespace drawinglayer
                 basegfx::B3DPolyPolygon aEdgeRounding;
                 sal_uInt32 a;
 
-                // tetxture parameters
+                // texture parameters
                 double fInvTexHeight(1.0);
                 ::std::vector<double> aTexHeightArray;
                 basegfx::B3DRange aTexRangeFront;
