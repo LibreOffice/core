@@ -1254,7 +1254,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*
         else
         {
             // URL doesn't point to a loaded document, try to access it as a single storage
-            // dont forget to release the storage afterwards!
+            // don't forget to release the storage afterwards!
             uno::Reference<lang::XSingleServiceFactory> xStorageFactory(embed::StorageFactory::create(m_xContext));
             uno::Sequence<uno::Any> lArgs(2);
             lArgs[0] <<= sCfgName;
@@ -1284,7 +1284,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*
 
         }
 
-        // dont forget to close the new opened storage!
+        // don't forget to close the new opened storage!
         // We are the owner of it.
         if (xRootStorage.is())
         {

@@ -156,7 +156,7 @@ class TransactionGuard
     com::sun::star::uno::Reference< com::sun::star::sdbc::XStatement > m_stmt;
     bool m_commited;
 public:
-    /// takes over ownership of given statemet
+    /// takes over ownership of given statement
     explicit TransactionGuard( const com::sun::star::uno::Reference< com::sun::star::sdbc::XStatement > &stmt );
     ~TransactionGuard( );
 
