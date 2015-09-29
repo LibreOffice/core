@@ -116,7 +116,7 @@ public class _XRangeSelection extends MultiMethodTest {
         // wait for listeners
         waitForEventIdle();
 
-        // get closer button: move if window cobvers the sheet center
+        // get closer button: move if window covers the sheet center
         Point closer = getCloser(center);
         if (closer == null)
             throw new StatusException(Status.failed("Couldn't get the close Button."));

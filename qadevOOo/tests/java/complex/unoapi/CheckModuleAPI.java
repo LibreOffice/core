@@ -357,7 +357,7 @@ public class CheckModuleAPI extends ComplexTestCase
         aModuleHashMap.put("sfx", "sfx2");
         aModuleHashMap.put("sm", "starmath");
 
-        // it could the that the parameter looks like "fwk,fwl". This results in double "famework,framework".
+        // it could be that the parameter looks like "fwk,fwl". This results in double "famework,framework".
         // The following loop correct this to only one "framework"
 
         final Set<String> keys = aModuleHashMap.keySet();

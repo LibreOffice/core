@@ -49,7 +49,7 @@ public class _XObjectInputStream extends MultiMethodTest {
     public XObjectInputStream oObj = null;
 
     /**
-    * Test reads perisist object from stream and compares properties
+    * Test reads persist object from stream and compares properties
     * of the object with properties of persist object obtained
     * from relation <code>'PersistObject'</code> <p>
     * Has <b> OK </b> status if returned value isn't null and values

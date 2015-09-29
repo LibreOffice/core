@@ -173,7 +173,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
             return;
         }
 
-        // Change one of the property to be sure, that this event was cauched.
+        // Change one of the property to be sure that this event was catched.
         for (int i=0; i<testPropsAmount;i++) {
             log.print("Trying to change property " + testPropsNames[i]);
             try {

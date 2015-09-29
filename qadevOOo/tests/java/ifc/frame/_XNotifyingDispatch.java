@@ -39,7 +39,7 @@ import com.sun.star.frame.DispatchResultEvent;
 *   </code>): URL for passing to <code>dispatch()</code> method. </li>
 *  <li> <code>[OPTIONAL] 'XNotifyingDispatchArgument'</code>
 *    (of type  sequence<code>com::sun::star::beans::PropertyValue
-*   </code>): argumets for <code>dispatchWithNotification()</code> method. </li>
+*   </code>): arguments for <code>dispatchWithNotification()</code> method. </li>
 * <ul> <p>
 * @see com.sun.star.frame.XDispatch
 * @see com.sun.star.frame.XNotifyingDispatch

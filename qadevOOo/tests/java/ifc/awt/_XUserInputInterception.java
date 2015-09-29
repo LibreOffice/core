@@ -92,7 +92,7 @@ public class _XUserInputInterception extends MultiMethodTest {
     /** indicates if the mouseReleased event was called*/
     private boolean m_keyReleased2 = false;
 
-    /** get the object rlation XUserInputInterception.XModel from the
+    /** get the object relation XUserInputInterception.XModel from the
      * test environment
      */
     @Override
