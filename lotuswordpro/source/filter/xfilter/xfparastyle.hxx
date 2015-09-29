@@ -112,7 +112,7 @@ public:
     /**
      * @descr   set the paragraph default font.
      * @param   font font object to be setted.Font object are deleted by font-factory,so
-     *          dont't delete it in the destructure function of para style.
+     *          don't delete it in the destructure function of para style.
      */
     void    SetFont(rtl::Reference<XFFont> const & font);
 

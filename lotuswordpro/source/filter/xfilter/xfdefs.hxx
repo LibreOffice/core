@@ -204,9 +204,9 @@ enum enumXFBorder
 /**************************************************************************
  * @descr
  * Line height type.
- * enumLHHeight: height of the line,in "cm".
- * enumLHLeast: the height may be adjusted,but has a min value.
- * enumLHPercent: the height is a centain times of the normal height.
+ * enumLHHeight: height of the line, in "cm".
+ * enumLHLeast: the height may be adjusted, but has a min value.
+ * enumLHPercent: the height is a certain times of the normal height.
  * enumLHSpace: space between lines.
  *************************************************************************/
 enum enumLHType

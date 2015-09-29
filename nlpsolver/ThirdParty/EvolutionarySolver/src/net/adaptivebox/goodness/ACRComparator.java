@@ -3,7 +3,7 @@
  *  which varied adaptively according to the social information.
  *
  * Applied domain: efficiently for ridge class feasible space (SF), such as
- *  the problem with eqaulity constraints
+ *  the problem with equality constraints
  *
  * Author          Create/Modi     Note
  * Xiaofeng Xie    Jun 24, 2003     Created

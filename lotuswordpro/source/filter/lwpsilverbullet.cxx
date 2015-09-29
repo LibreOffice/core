@@ -243,7 +243,7 @@ LwpPara* LwpSilverBullet::GetBulletPara()
 /**
  * @short:   Get numbering character of the bullet vo_para.
  * @descr:
- * @param:   pParaNumber a pionter to the structure LwpFribParaNumber which
+ * @param:   pParaNumber a pointer to the structure LwpFribParaNumber which
  *          includes numbering prefix, format and suffix.
  * @return:  An OUString object which store the numbering character.
  */
