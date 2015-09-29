@@ -334,7 +334,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             return;
         case SID_UNICODE_NOTATION_TOGGLE:
             {
-                EditView* pActiveView = pHdl ? pHdl->GetActiveView() : pEditView;
+                EditView* pActiveView = pHdl->GetActiveView();
                 if( pActiveView )
                 {
                     OUString sInput = pEngine->GetText();
