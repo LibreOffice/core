@@ -280,7 +280,7 @@ public class DOMDocument
                 // Now call serialize to write the document
                 meth.invoke(serializer, new Object[]{doc, baos});
             } else {
-                // We dont have another parser
+                // We don't have another parser
                 try {
                     DOMSource domSource = new DOMSource(doc);
                     StringWriter writer = new StringWriter();

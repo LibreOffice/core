@@ -900,7 +900,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     rAppendContext.pLastParagraphProperties->GetWrap() :
                     pStyleProperties->GetWrap() >= 0 ? pStyleProperties->GetWrap() : 0 )));
 
-                /** FDO#73546 : distL & distR should be unsigned intgers <Ecma 20.4.3.6>
+                /** FDO#73546 : distL & distR should be unsigned integers <Ecma 20.4.3.6>
                     Swapped the array elements 11,12 & 13,14 since 11 & 12 are
                     LEFT & RIGHT margins and 13,14 are TOP and BOTTOM margins respectively.
                 */

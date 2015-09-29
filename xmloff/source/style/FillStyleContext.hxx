@@ -24,7 +24,7 @@
 #include <xmloff/xmlstyle.hxx>
 #include <rtl/ustring.hxx>
 
-// draw:gardient context
+// draw:gradient context
 
 class XMLGradientStyleContext: public SvXMLStyleContext
 {

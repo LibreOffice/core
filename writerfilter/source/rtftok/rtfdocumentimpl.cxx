@@ -2374,7 +2374,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             if (m_bNeedPar)
                 dispatchSymbol(RTF_PAR);
             m_bIgnoreNextContSectBreak = true;
-            // arrange to clean up the syntetic RTF_SBKPAGE
+            // arrange to clean up the synthetic RTF_SBKPAGE
             m_nResetBreakOnSectBreak = RTF_SBKNONE;
         }
         else

@@ -166,13 +166,13 @@ enum FieldId
     ,FIELD_PAGEREF
     /* REF targetbkm \f \* MERGEFORMAT ->
         imports a ShowVariable (bookmarkname)?
-        \h hyerlink to paragraph
+        \h hyperlink to paragraph
         \p relative to para above/below
         \f refenence number
         \d separator number separator
         \n paragraph number
         \r paragraph number in relative context
-        \t suppres non delimiters
+        \t suppress non delimiters
         \w paragraph number in full context
         \* Upper/Lower...
      */

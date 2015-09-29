@@ -437,7 +437,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
 {
     if( mxStyle.is() && (IsNew() || bOverwrite) )
     {
-        // The families cintaner must exist
+        // The families container must exist
         Reference < XNameContainer > xFamilies =
             static_cast<SvXMLStylesContext *>(&mxStyles)->GetStylesContainer( GetFamily() );
         DBG_ASSERT( xFamilies.is(), "Families lost" );

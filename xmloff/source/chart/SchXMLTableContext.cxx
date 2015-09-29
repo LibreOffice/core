@@ -661,7 +661,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
         ::sax::Converter::convertDouble( fData, aCellContent );
 
         aCell.fValue = fData;
-        // dont read text from following <text:p> or <text:list> element
+        // don't read text from following <text:p> or <text:list> element
         mbReadText = false;
     }
 
