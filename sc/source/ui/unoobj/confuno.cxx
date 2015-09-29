@@ -162,7 +162,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             sal_Int16 n;
             //TODO: css.sheet.XGlobalSheetSettings LinkUpdateMode property is
             // documented to take values in the range 0--2 (always, never, on
-            // demaned), but appears to be routinely set to 3 here,
+            // demand), but appears to be routinely set to 3 here,
             // corresponding to ScLkUpdMode LM_UNKNOWN:
             if (!(aValue >>= n) || n < 0 || n > 3) {
                 throw css::lang::IllegalArgumentException(

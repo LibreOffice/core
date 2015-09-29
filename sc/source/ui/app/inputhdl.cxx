@@ -2056,7 +2056,7 @@ void ScInputHandler::SyncViews( EditView* pSourceView )
                 lcl_SetTopSelection(pTableView, aSel);
         }
     }
-    // Only sync selection from topView if we are actually editiing there
+    // Only sync selection from topView if we are actually editing there
     else if (pTopView && pTableView)
     {
         ESelection aSel(pTopView->GetSelection());

@@ -262,7 +262,7 @@ void RevisionHeadersFragment::finalizeImport()
         if (aPath.isEmpty())
             continue;
 
-        // Parse each reivison log fragment.
+        // Parse each revision log fragment.
         const RevisionMetadata& rData = it->second;
         pCT->SetUser(rData.maUserName);
         pCT->SetFixDateTimeLocal(rData.maDateTime);

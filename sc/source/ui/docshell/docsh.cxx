@@ -299,7 +299,7 @@ void ScDocShell::AfterXMLLoading(bool bRet)
                     if (nLinkTabNameLength < nNameLength)
                     {
 
-                        // remove the quottes on begin and end of the docname and restore the escaped quotes
+                        // remove the quotes on begin and end of the docname and restore the escaped quotes
                         const sal_Unicode* pNameBuffer = aName.getStr();
                         if ( *pNameBuffer == '\'' && // all docnames have to have a ' character on the first pos
                             ScGlobal::UnicodeStrChr( pNameBuffer, SC_COMPILER_FILE_TAB_SEP ) )

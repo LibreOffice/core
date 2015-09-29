@@ -1544,7 +1544,7 @@ ScChart2DataProvider::createDataSource(
         }
     }
 
-    // Fill Serieses (values and label)
+    // Fill Series (values and label)
     sal_Int32 nCount = bOrientCol ? pChartMap->getDataColCount() : pChartMap->getDataRowCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {

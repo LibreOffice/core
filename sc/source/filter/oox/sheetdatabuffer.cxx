@@ -374,7 +374,7 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
             // the range style Rows into sections ( to
             // occupy only rows that have no style definition )
 
-            // We dont want to set any rowstyle 'rows'
+            // We don't want to set any rowstyle 'rows'
             // for rows where there is an existing 'style' )
             std::vector< RowRangeStyle > aRangeRowsSplits;
 

@@ -314,7 +314,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     // changeover to the next object
                     if(!pView->MarkNextObj( !aCode.IsShift() ))
                     {
-                        //If there is only one object, don't do the UnmarkAlllObj() & MarkNextObj().
+                        //If there is only one object, don't do the UnmarkAllObj() & MarkNextObj().
                         if ( pView->GetMarkableObjCount() > 1 && pView->HasMarkableObj() )
                         {
                             // No next object: go over open end and
