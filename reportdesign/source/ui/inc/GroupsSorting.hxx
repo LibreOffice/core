@@ -126,7 +126,7 @@ private:
     */
     void displayGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup);
 
-    /** enables or diables the up and down button
+    /** enables or disables the up and down button
         @param  _nRow   the row which will be active
     */
     void checkButtons(sal_Int32 _nRow);

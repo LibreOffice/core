@@ -69,7 +69,7 @@ public class FormattedTextReadHandler extends ElementReadHandler
 
         // * Print-When-Section-Overflows
         // That property cannot be evaluated yet, as this would require us to
-        // have a clue about pagebreaking. We dont have that - not yet and never
+        // have a clue about pagebreaking. We don't have that - not yet and never
         // in the future, as pagebreaks are computed by OpenOffice instead
     }
 

@@ -1401,7 +1401,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         imageAreaHeightVal = CSSNumericValue.createValue(imageAreaHeightVal.getType(), ret[1]);
                     }
                 }
-                // If we do scale, then we simply use the given image-area-size as valid image size and dont
+                // If we do scale, then we simply use the given image-area-size as valid image size and don't
                 // care about the image itself ..
             }
             else

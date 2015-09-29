@@ -47,7 +47,7 @@ public class InputRepositoryResourceData extends AbstractResourceData
 
     public Object getAttribute(final String key)
     {
-        // we dont support attributes here ..
+        // we don't support attributes here ..
         return null;
     }
 

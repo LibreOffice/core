@@ -80,7 +80,7 @@ public class OfficeStylesCollection extends Element
         }
 
         // And later: Autogenerate one of the default styles.
-        // However, at this moment, we dont have a clue about the default styles
+        // However, at this moment, we don't have a clue about the default styles
         // at all. Maybe we should add them to make this implementation more robust
         // against invalid documents.
         return null;

@@ -773,7 +773,7 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
     ERRTYPE     aError;
     RSCINST     aFileName;
 
-    // retriebe instance with file name "FILENAME"
+    // retrieve instance with file name "FILENAME"
     aFileName = RscClass::GetCopyVar( rInst, pHS->getID( "FILE", true ) );
     if( aFileName.IsInst() )
     {

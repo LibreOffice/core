@@ -77,7 +77,7 @@ public:
                     RscLongRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) SAL_OVERRIDE;
-                    // sets the alloed range
+                    // sets the allowed range
     ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // returns the class size in bytes
     sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
