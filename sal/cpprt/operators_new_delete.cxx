@@ -18,8 +18,11 @@
  */
 
 #include <algorithm>
+#include <cstddef>
 #include <new>
 #include <string.h>
+
+#include <config_global.h>
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 
@@ -152,6 +155,13 @@ void SAL_CALL operator delete (void * p) throw ()
     deallocate (p, ScalarTraits());
 }
 
+#if HAVE_CXX14_SIZED_DEALLOCATION
+void SAL_CALL operator delete (void * p, std::size_t) throw ()
+{
+    deallocate (p, ScalarTraits());
+}
+#endif
+
 // T * p = new(nothrow) T; delete(nothrow) p;
 
 void* SAL_CALL operator new (std::size_t n, std::nothrow_t const &) throw ()
@@ -175,6 +185,13 @@ void SAL_CALL operator delete[] (void * p) throw ()
 {
     deallocate (p, VectorTraits());
 }
+
+#if HAVE_CXX14_SIZED_DEALLOCATION
+void SAL_CALL operator delete[] (void * p, std::size_t) throw ()
+{
+    deallocate (p, VectorTraits());
+}
+#endif
 
 // T * p = new(nothrow) T[n]; delete(nothrow)[] p;
 
