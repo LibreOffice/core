@@ -301,7 +301,7 @@ void DocumentFieldsManager::RemoveFieldType(size_t nField)
     {
         SwFieldType* pTmp = (*mpFieldTypes)[nField];
 
-        // JP 29.07.96: Optionally prepare FieldLst for Calculator
+        // JP 29.07.96: Optionally prepare FieldList for Calculator
         sal_uInt16 nWhich = pTmp->Which();
         switch( nWhich )
         {

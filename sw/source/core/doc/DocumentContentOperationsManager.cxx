@@ -3244,7 +3244,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         //frames at the last source node are not always copied:
         //- if the node is empty and is the last node of the document or a table cell
         //  or a text frame then they have to be copied
-        //- if the content index in this node is > 0 then paragph and frame bound objects are copied
+        //- if the content index in this node is > 0 then paragraph and frame bound objects are copied
         //- to-character bound objects are copied if their index is <= nEndContentIndex
         bool bAdd = false;
         if( pAPos->nNode < rRg.aEnd )
@@ -4100,7 +4100,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
     // Catch when there's no copy to do.
     if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) ||
-        //JP 29.6.2001: 88963 - dont copy if inspos is in region of start to end
+        //JP 29.6.2001: 88963 - don't copy if inspos is in region of start to end
         //JP 15.11.2001: don't test inclusive the end, ever exclusive
         ( pDoc == &m_rDoc && *pStt <= rPos && rPos < *pEnd ))
     {

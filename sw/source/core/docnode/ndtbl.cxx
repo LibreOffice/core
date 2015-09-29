@@ -2384,7 +2384,7 @@ void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
         SwFrm *pNew = pNode->MakeFrm( pFrm );
         // Will the Node receive Frames before or after?
         if ( bBefore )
-            // The new one preceds me
+            // The new one precedes me
             pNew->Paste( pFrm->GetUpper(), pFrm );
         else
             // The new one succeeds me
