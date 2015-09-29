@@ -30,13 +30,13 @@
 
 #include <osl/mutex.hxx>
 
-class OwnView_Impl : public ::cppu::WeakImplHelper < ::com::sun::star::util::XCloseListener,
-                                                      ::com::sun::star::document::XEventListener >
+class OwnView_Impl : public ::cppu::WeakImplHelper < css::util::XCloseListener,
+                                                      css::document::XEventListener >
 {
     ::osl::Mutex m_aMutex;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::frame::XModel > m_xModel;
 
     OUString m_aTempFileURL;
     OUString m_aNativeTempURL;
@@ -52,30 +52,30 @@ private:
 
     bool CreateModel( bool bUseNative );
 
-    bool ReadContentsAndGenerateTempFile( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream, bool bParseHeader );
+    bool ReadContentsAndGenerateTempFile( const css::uno::Reference< css::io::XInputStream >& xStream, bool bParseHeader );
 
     void CreateNative();
 
 public:
     static OUString GetFilterNameFromExtentionAndInStream(
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                                const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
                                 const OUString& aNameWithExtention,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream );
+                                const css::uno::Reference< css::io::XInputStream >& xInputStream );
 
-    OwnView_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
-                  const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream );
+    OwnView_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+                  const css::uno::Reference< css::io::XInputStream >& xStream );
     virtual ~OwnView_Impl();
 
     bool Open();
 
     void Close();
 
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& Source, sal_Bool GetsOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL notifyClosing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, sal_Bool GetsOwnership ) throw (css::util::CloseVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL notifyClosing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif
