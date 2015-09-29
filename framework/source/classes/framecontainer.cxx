@@ -41,7 +41,7 @@ FrameContainer::FrameContainer()
 
 /**-***************************************************************************************************************
     @short      deinitialize may a filled container
-    @descr      Special features (if the currently are running) will be dsiabled and we free all used other resources.
+    @descr      Special features (if the currently are running) will be disabled and we free all used other resources.
 
     @threadsafe not necessary - its not a singleton
  *****************************************************************************************************************/

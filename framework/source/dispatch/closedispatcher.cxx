@@ -281,7 +281,7 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
 
     // Analyze the environment a first time.
     // If we found some special cases, we can
-    // make some decisions erlier!
+    // make some decisions earlier!
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(xContext), css::uno::UNO_QUERY_THROW);
     FrameListAnalyzer aCheck1(xDesktop, xCloseFrame, FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
@@ -430,7 +430,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
         return true;
 
     // Close all views to the same document ... if forced to do so.
-    // But dont touch our own frame here!
+    // But don't touch our own frame here!
     // We must do so ... because the may be following controller->suspend()
     // will show the "save/discard/cancel" dialog for the last view only!
     if (bCloseAllOtherViewsToo)
@@ -458,7 +458,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
     if (bAllowSuspend)
     {
         css::uno::Reference< css::frame::XController > xController = xFrame->getController();
-        if (xController.is()) // some views dont uses a controller .-( (e.g. the help window)
+        if (xController.is()) // some views don't uses a controller .-( (e.g. the help window)
         {
             bControllerSuspended = xController->suspend(sal_True);
             if (! bControllerSuspended)
@@ -466,7 +466,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
         }
     }
 
-    // dont remove the component really by e.g. calling setComponent(null, null).
+    // don't remove the component really by e.g. calling setComponent(null, null).
     // It's enough to suspend the controller.
     // If we close the frame later this controller doesn't show the same dialog again.
     return true;
@@ -484,7 +484,7 @@ bool CloseDispatcher::implts_closeFrame()
     if ( ! xFrame.is() )
         return true;
 
-    // dont deliver ownership; our "UI user" will try it again if it failed.
+    // don't deliver ownership; our "UI user" will try it again if it failed.
     // OK - he will get an empty frame then. But normally an empty frame
     // should be closeable always :-)
     if (!fpf::closeIt(xFrame, false))

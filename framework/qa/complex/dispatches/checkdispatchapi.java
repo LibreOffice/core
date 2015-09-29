@@ -355,14 +355,14 @@ public class checkdispatchapi
                 {
                     // Error
                     fail("At least one DispatchInformation item does not match the requested group.\n\trequested group=[" + nGroup
-                            + "] returned groupd=[" + aInfo.GroupId + "] command=\"" + aInfo.Command + "\""); // true => dont break this test
+                            + "] returned groupd=[" + aInfo.GroupId + "] command=\"" + aInfo.Command + "\""); // true => don't break this test
                     continue;
                 }
 
                 if (aCheckMap.containsKey(aInfo.Command))
                 {
                     // Error
-                    fail("Found a duplicate item: group=[" + aInfo.GroupId + "] command=\"" + aInfo.Command + "\""); // true => dont break this test
+                    fail("Found a duplicate item: group=[" + aInfo.GroupId + "] command=\"" + aInfo.Command + "\""); // true => don't break this test
                     continue;
                 }
 
