@@ -1,4 +1,4 @@
-/*************************************************************************
+/*
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -30,7 +30,7 @@
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *************************************************************************/
+ */
 
 // JDK API
 import java.io.IOException;
@@ -261,7 +261,7 @@ public class ConverterServlet extends HttpServlet {
 
             // Preparing properties for loading the document
             PropertyValue propertyvalue[] = new PropertyValue[ 1 ];
-            // Setting the flag for hidding the open document
+            // Setting the flag to hide the open document
             propertyvalue[ 0 ] = new PropertyValue();
             propertyvalue[ 0 ].Name = "Hidden";
             propertyvalue[ 0 ].Value = Boolean.TRUE;

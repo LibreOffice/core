@@ -305,7 +305,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
                                 bGenerateOnReset = ( 0 == nNewValue );
                             }
                             else if ( sRefValue.equals( "reset" ) )
-                            {   // generat on reset
+                            {   // generate on reset
                                 bGenerateOnReset = ( 0 != nNewValue );
                             }
                             m_aSalesmanKeyGenerator.activateKeyGenerator( bGenerateOnReset );

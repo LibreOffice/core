@@ -242,7 +242,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      *          is shown as title of the info box.
      *
      *  @param  sMessage
-     *          inclused the message body, which is shown as info.
+     *          included the message body, which is shown as info.
      */
 
     private void showInfoModal( com.sun.star.awt.XWindow xParent  ,
@@ -327,7 +327,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      *          contains all shared configuration items for a job
      *
      *  @param  lJobConfig
-     *          contains all job sepcific configuration items
+     *          contains all job specific configuration items
      *
      *  @param  lEnvironment
      *          contains some environment information

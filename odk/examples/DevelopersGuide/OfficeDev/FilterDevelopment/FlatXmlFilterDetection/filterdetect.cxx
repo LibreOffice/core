@@ -95,7 +95,7 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
 
     if (!xInStream.is())
     {
-        // open the stream if it was not suplied by the framework
+        // open the stream if it was not supplied by the framework
         Reference< XSimpleFileAccess3 > xSFI(SimpleFileAccess::create(mxContext));
         if (sURL.getLength() > 0)
         {

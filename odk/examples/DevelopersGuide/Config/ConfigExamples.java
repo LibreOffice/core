@@ -431,7 +431,7 @@ public class ConfigExamples
     }
 
 // BROWSE example
-    /// Interface to procees information when browsing the configuration tree
+    /// Interface to process information when browsing the configuration tree
     public interface IConfigurationProcessor
     {
         /// process a value item

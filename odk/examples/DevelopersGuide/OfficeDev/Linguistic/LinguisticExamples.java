@@ -54,7 +54,7 @@ import com.sun.star.uno.UnoRuntime;
 
 public class LinguisticExamples
 {
-    // The remote office ocntext
+    // The remote office context
     protected XComponentContext mxRemoteContext = null;
     // The MultiServiceFactory interface of the Office
     protected XMultiComponentFactory mxRemoteServiceManager = null;
