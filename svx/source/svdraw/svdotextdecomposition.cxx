@@ -1438,7 +1438,7 @@ void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutlin
         aTxtChainFlow.ExecuteUnderflow(&rOutliner);
         bIsOverflow = aTxtChainFlow.IsOverflow();
     } else {
-        // standard overflow (no underlow before)
+        // standard overflow (no underflow before)
         bIsOverflow = aTxtChainFlow.IsOverflow();
     }
 

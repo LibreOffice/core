@@ -636,7 +636,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
                             nRowSpan = 0;
                     }
 
-                    // The target colomns are outside the span; Start a new span.
+                    // The target columns are outside the span; Start a new span.
                     if( nRowSpan > 0 && ( nNewStartColumn < nSpanInfoCol || nSpanInfoCol + nColSpan <= nNewStartColumn ) )
                         bNewSpan = true;
                 }
@@ -1875,7 +1875,7 @@ void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, co
 
             if(nParaAnz==1 && p1stPara)
             {
-                // Bei nur einem Pararaph
+                // Bei nur einem Paragraph
                 if (pOutl->GetText(p1stPara).isEmpty())
                 {
                     bEmptyOutliner = true;

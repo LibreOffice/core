@@ -195,7 +195,7 @@ public:
     /// Set all numbering start points to a fixed value - mailmerge support.
     void SetNumberingRestart();
 
-    /// Embedds all local links (ranges/graphics).
+    /// Embeds all local links (ranges/graphics).
     sal_uInt16 GetLinkUpdMode(bool bDocSettings = false) const;
     void SetLinkUpdMode( sal_uInt16 nMode );
 
