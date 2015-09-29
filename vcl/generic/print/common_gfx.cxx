@@ -774,7 +774,7 @@ PrinterGfx::PSSetFont ()
         }
         else
         // tt based fonts mustn't reencode, the encoding is implied by the fontname
-        // same for symbol type1 fonts, dont try to touch them
+        // same for symbol type1 fonts, don't try to touch them
         {
             nChar += psp::appendStr  ("(",          pSetFont + nChar);
             nChar += psp::appendStr  (rCurrent.maFont.getStr(),

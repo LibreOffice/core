@@ -80,7 +80,7 @@ sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0  
                     But not every superclass should use them! Because some view types don't
                     have it really.
 
-    @attention      We implement a write-througt-cache! We use it for reading - but write all changes directly to
+    @attention      We implement a write-through cache! We use it for reading - but write all changes directly to
                     configuration. (changes are made on internal cache too!). So it's easier to distinguish
                     between added/changed/removed elements without any complex mask or bool flag information.
                     Caches from configuration and our own one are synchronized every time - if we do so.
@@ -186,7 +186,7 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const OUString& sList )
 *//*-*************************************************************************************************************/
 SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
 {
-    // dont flush configuration changes here to m_xRoot.
+    // don't flush configuration changes here to m_xRoot.
     // That must be done inside every SetXXX() method already !
     // Here its to late - DisposedExceptions from used configuration access can occur otherwise.
 
@@ -322,7 +322,7 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
     {
         css::uno::Reference< css::container::XNameAccess > xNode(
             impl_getSetNode(sName, false),
-            css::uno::UNO_QUERY); // no _THROW ! because we dont create missing items here. So we have to live with zero references .-)
+            css::uno::UNO_QUERY); // no _THROW ! because we don't create missing items here. So we have to live with zero references .-)
         css::uno::Reference< css::container::XNameAccess > xUserData;
         if (xNode.is())
             xNode->getByName(PROPERTY_USERDATA) >>= xUserData;

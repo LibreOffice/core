@@ -246,7 +246,7 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
     }
     else
     {
-        // SAL_DEBUG("SvpSalFrame::Show: nothihg: " << this);
+        // SAL_DEBUG("SvpSalFrame::Show: nothing: " << this);
     }
 }
 

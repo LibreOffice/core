@@ -103,10 +103,10 @@ public class RDFRepositoryTest
             assertNotNull("uint", uint);
             blank = BlankNode.create(xContext, "_:uno");
             assertNotNull("blank", blank);
-            lit = Literal.create(xContext, "i am the literal");
+            lit = Literal.create(xContext, "I am the literal");
             assertNotNull("lit", lit);
             litlang = Literal.createWithLanguage(xContext,
-                "i am the literal", "en");
+                "I am the literal", "en");
             assertNotNull("litlang", litlang);
             littype = Literal.createWithType(xContext, "42", uint);
             assertNotNull("littype", littype);
@@ -441,7 +441,7 @@ public class RDFRepositoryTest
         try {
             System.out.println("Checking RDFa gunk...");
 
-            String content = "behold, for i am the content.";
+            String content = "behold, for I am the content.";
             XTextRange xTR = new TestRange(content);
             XMetadatable xM = (XMetadatable) xTR;
 

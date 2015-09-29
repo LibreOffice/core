@@ -83,7 +83,7 @@ public:
 public:
     FcResult LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **family,
                                          const char *elementtype, const char *elementlangtype);
-//to-do, make private and add some cleanish accessor methods
+//to-do, make private and add some cleaner accessor methods
     std::unordered_map< OString, OString, OStringHash > m_aFontNameToLocalized;
     std::unordered_map< OString, OString, OStringHash > m_aLocalizedToCanonical;
 private:

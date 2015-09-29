@@ -1016,7 +1016,7 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         if( (nKeyCode & KEY_MOD1) != 0 )
             aResult.append( sal_Unicode( 0x2318 ) );
         // we do not really handle Alt (see below)
-        // we map it to MOD3, whichis actually Command
+        // we map it to MOD3, which is actually Command
         if( (nKeyCode & (KEY_MOD2|KEY_MOD3)) != 0 )
             aResult.append( sal_Unicode( 0x2325 ) );
 

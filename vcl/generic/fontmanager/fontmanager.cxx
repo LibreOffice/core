@@ -451,7 +451,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
 
     delete m_pMetrics;
     m_pMetrics = new PrintFontMetrics;
-    // mark all pages as queried (or clear if only global font info queiried)
+    // mark all pages as queried (or clear if only global font info queried)
     memset( m_pMetrics->m_aPages, bOnlyGlobalAttributes ? 0 : 0xff, sizeof( m_pMetrics->m_aPages ) );
 
     m_aGlobalMetricX.width = m_aGlobalMetricY.width =
