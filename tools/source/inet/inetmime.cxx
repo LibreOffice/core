@@ -2426,7 +2426,6 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
 
     /* bool bStartEncodedWord = true; */
     const sal_Char * pWSPBegin = pBegin;
-    bool bQuotedEncodedText = false;
     sal_uInt32 nCommentLevel = 0;
 
     for (const sal_Char * p = pBegin; p != pEnd;)
@@ -2689,30 +2688,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
         }
 
         if (!sEncodedText.isEmpty())
-        {
-            if (bQuotedEncodedText)
-            {
-                sDecoded += "\"";
-                const sal_Unicode * pTextPtr = sEncodedText.getStr();
-                const sal_Unicode * pTextEnd = pTextPtr + sEncodedText.getLength();
-                for (;pTextPtr != pTextEnd; ++pTextPtr)
-                {
-                    switch (*pTextPtr)
-                    {
-                        case '"':
-                        case '\\':
-                        case '\x0D':
-                            sDecoded += "\\";
-                            break;
-                    }
-                    sDecoded += OUString(*pTextPtr);
-                }
-                sDecoded += "\"";
-            }
-            else
-                sDecoded += sEncodedText;
-            bQuotedEncodedText = false;
-        }
+            sDecoded += sEncodedText;
 
         if (p == pEnd)
             break;
