@@ -203,7 +203,7 @@ const basegfx::B3DHomMatrix& B3dTransformationSet::GetProjection()
 
 void B3dTransformationSet::PostSetProjection()
 {
-    // Assign and comptue inverse
+    // Assign and compute inverse
     maInvProjection = GetProjection();
     maInvProjection.invert();
 

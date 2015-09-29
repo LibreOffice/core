@@ -208,7 +208,7 @@ public class GridControl
         test.testUpdateRowHeading();
         test.cleanup();
 
-        // a somehwat less straight-forward test: the data model is expected to implicitly increase its column count
+        // a somewhat less straight-forward test: the data model is expected to implicitly increase its column count
         // when you add a row which has more columns than currently known
         final XMutableGridDataModel dataModel = DefaultGridDataModel.create( m_context );
         dataModel.addRow( 0, new Object[] { 1 } );

@@ -148,7 +148,7 @@ class TestCase( unittest.TestCase):
               uno.Enum( "com.sun.star.uno.TypeClass", "STRUCT" ), "typeclass of type test")
           self.failUnless( t1 == t2 , "equal type test" )
           self.failUnless( t1 == t2 , "equal type test" )
-          self.failUnless( t1 == self.tobj.transportAny( t1 ), "type rountrip test" )
+          self.failUnless( t1 == self.tobj.transportAny( t1 ), "type roundtrip test" )
 
       def testBool( self ):
           self.failUnless( uno.Bool(1) , "uno.Bool true test" )
