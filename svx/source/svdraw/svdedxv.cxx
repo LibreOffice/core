@@ -1311,8 +1311,8 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
         /* Start special handling of keys within a chain */
         // We possibly move to another box before any handling
         bool bHandled = false;
-        TextChainCursorManager *pCursorManager =
-            ImpHandleMotionThroughBoxesKeyInput(rKEvt, pWin, &bHandled);
+        std::unique_ptr<TextChainCursorManager> xCursorManager(
+            ImpHandleMotionThroughBoxesKeyInput(rKEvt, pWin, &bHandled));
         if (bHandled)
             return true;
         /* End special handling of keys within a chain */
@@ -1327,7 +1327,7 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 
             /* Start chaining processing */
             ImpChainingEventHdl();
-            ImpMoveCursorAfterChainingEvent(pCursorManager);
+            ImpMoveCursorAfterChainingEvent(xCursorManager.get());
             /* End chaining processing */
 
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
