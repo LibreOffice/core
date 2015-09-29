@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 // Declaration of a variable
 // If there are errors it will be parsed up to the comma or the newline.
 // Return-value: a new instance, which were inserted and then deleted.
-// Array-Indexex were returned as SbiDimList
+// Array-Index were returned as SbiDimList
 
 SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, bool bStatic, bool bConst )
 {

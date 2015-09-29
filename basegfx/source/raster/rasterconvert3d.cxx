@@ -94,7 +94,7 @@ namespace basegfx
 
                         if(!nStep || aCurrentEntry->decrementRasterConversionLineEntry3D(nStep))
                         {
-                            // add when exactly on current line or when incremet to it did not
+                            // add when exactly on current line or when increment to it did not
                             // completely consume it
                             if(nStep)
                             {

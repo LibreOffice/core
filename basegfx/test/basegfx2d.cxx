@@ -162,7 +162,7 @@ public:
         // The import/export of aPath1 does not reproduce aExport again. This is
         // correct since aPath1 contains a segment with non-used control points
         // which gets exported now correctly as 'l' and also a point (#4, index 3)
-        // with C2 continuity which produces a 's' staement now.
+        // with C2 continuity which produces a 's' statement now.
 
         // The old SVGexport identified nun-used ControlVectors erraneously as bezier segments
         // because the 2nd vector at the start point was used, even when added

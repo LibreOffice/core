@@ -274,7 +274,7 @@ void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
     // the length of the side
     long const nLength = bVertical ? aRect.GetSize().Height() : aRect.GetSize().Width();
     long const nOtherSize = bVertical ? aRect.GetSize().Width() : aRect.GetSize().Height();
-    // bVertical ? horizontal pozition : vertical pozition
+    // bVertical ? horizontal position : vertical position
     long const nPos1 = (bVertical ? aRect.Left() : aRect.Top()) +
         (bLower ? 0 : nOtherSize - (nSize - nSplitThickness));
     // bVertical ? vertical position : horizontal position

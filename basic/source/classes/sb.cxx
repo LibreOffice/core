@@ -1366,7 +1366,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
                     pNamed = p;
                 }
                 // Only variables qualified by the Module Name e.g. Sheet1.foo
-                // should work for Documant && Class type Modules
+                // should work for Document && Class type Modules
                 sal_Int32 nType = p->GetModuleType();
                 if ( nType == ModuleType::DOCUMENT || nType == ModuleType::FORM )
                 {

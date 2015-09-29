@@ -1942,7 +1942,7 @@ OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
     aRet.append("Methods of object ");
     aRet.append( getDbgObjectName( pUnoObj ) );
 
-    // XIntrospectionAccess, so that the types of the parameter could be outputed
+    // XIntrospectionAccess, so that the types of the parameter could be outputted
     Reference< XIntrospectionAccess > xAccess = pUnoObj->getIntrospectionAccess();
     if( !xAccess.is() )
     {
