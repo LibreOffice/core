@@ -11,12 +11,6 @@ $(eval $(call gb_Library_Library,ucpchelp1))
 
 $(eval $(call gb_Library_set_componentfile,ucpchelp1,xmlhelp/util/ucpchelp1))
 
-ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_Library_add_cxxflags,ucpchelp1,\
-	-GR \
-))
-endif
-
 $(eval $(call gb_Library_set_include,ucpchelp1,\
 	-I$(SRCDIR)/xmlhelp/source/cxxhelp/inc \
 	$$(INCLUDE) \
