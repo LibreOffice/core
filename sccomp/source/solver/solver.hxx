@@ -56,8 +56,7 @@ class SolverComponent : public comphelper::OMutexAndBroadcastHelper,
     sal_Int32                                                                     mnTimeout;
     sal_Int32                                                                     mnEpsilonLevel;
     sal_Bool                                                                      mbLimitBBDepth;
-    sal_Bool
- mbNonLinearTest;
+    sal_Bool                                                                      mbNonLinearTest;
     // results
     sal_Bool                                                                      mbSuccess;
     double                                                                        mfResultValue;
