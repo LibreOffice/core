@@ -408,7 +408,7 @@ void SbxVariable::SetParent( SbxObject* p )
 {
 #ifdef DBG_UTIL
     // Will the parent of a SbxObject be set?
-    if (p)
+    if (p && dynamic_cast<SbxObject*>(this))
     {
         // then this had to be a child of the new parent
         bool bFound = false;
