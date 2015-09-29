@@ -182,7 +182,7 @@ public:
     */
     Image maLargePreview;
 
-    /** The prewview provider. May be empty.  May be replaced during the
+    /** The preview provider. May be empty.  May be replaced during the
         lifetime of a MasterPageDescriptor object.
     */
     std::shared_ptr<PreviewProvider> mpPreviewProvider;

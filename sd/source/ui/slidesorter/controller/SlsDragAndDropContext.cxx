@@ -48,7 +48,7 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     if (rSlideSorter.GetModel().GetEditMode() != EM_PAGE)
         return;
 
-    // For poperly handling transferables created by the navigator we
+    // For properly handling transferables created by the navigator we
     // need additional information.  For this a user data object is
     // created that contains the necessary information.
     SdTransferable* pTransferable = SD_MOD()->pTransferDrag;

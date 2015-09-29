@@ -508,7 +508,7 @@ SdPage* DocumentHelper::ProvideMasterPage (
 
     // The given master page does not already belong to the target
     // document so we have to create copies and insert them into the
-    // targer document.
+    // target document.
 
     // Determine the position where the new master pages are inserted.
     // By default they are inserted at the end.  When we assign to a

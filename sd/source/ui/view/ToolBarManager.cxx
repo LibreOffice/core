@@ -135,7 +135,7 @@ public:
     void AddShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId);
 
     /** Releasing all shells means that the given ToolBarRules object is
-        informed that every shell mananged by the called ToolBarShellList is
+        informed that every shell managed by the called ToolBarShellList is
         about to be removed and that the associated framework tool bars can
         be removed as well.  The caller still has to call UpdateShells().
     */
@@ -778,7 +778,7 @@ void ToolBarManager::Implementation::Update (
     // tool bars then update this set now.
     if (mnLockCount == 0)
     {
-        // During ceation of ViewShellBase we may have the situation that
+        // During creation of ViewShellBase we may have the situation that
         // the controller has already been created and attached to the frame
         // but that the ToolBarManager has not yet completed its
         // initialization (by initializing the mxLayouter member.)  We do
@@ -811,7 +811,7 @@ void ToolBarManager::Implementation::Update (
                 mrBase.GetViewShellManager());
 
             // 3) Unlock the ViewShellManager::UpdateLock.  This updates the
-            // shell stack.  We have to be carfull here.  The deletion of
+            // shell stack.  We have to be carefully here.  The deletion of
             // the lock may end in a synchronous call to LockUpdate(). When
             // at this time the lock has been deleted but the unique_ptr has
             // not yet been reset then the lock is deleted a second time.

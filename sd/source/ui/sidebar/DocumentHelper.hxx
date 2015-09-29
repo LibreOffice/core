@@ -41,7 +41,7 @@ public:
         SdPage* pMasterPage);
 
     /** Return and, when not yet present, create a slide that uses the given
-        masster page.
+        master page.
     */
     static SdPage* GetSlideForMasterPage (SdPage* pMasterPage);
 

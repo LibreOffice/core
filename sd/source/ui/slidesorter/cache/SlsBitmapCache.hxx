@@ -65,7 +65,7 @@ public:
     */
     BitmapCache (const sal_Int32 nMaximalNormalCacheSize = 0);
 
-    /** The destructor clears the cache and relases all bitmaps still in it.
+    /** The destructor clears the cache and releases all bitmaps still in it.
     */
     ~BitmapCache();
 
