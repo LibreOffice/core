@@ -18,8 +18,11 @@
  */
 
 #include <algorithm>
+#include <cstddef>
 #include <new>
 #include <string.h>
+
+#include <config_global.h>
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 
@@ -152,6 +155,20 @@ void SAL_CALL operator delete (void * p) throw ()
     deallocate (p, ScalarTraits());
 }
 
+#if HAVE_CXX14_SIZED_DEALLOCATION
+#if defined __clang__
+#pragma GCC diagnostic push // as happens on Mac OS X:
+#pragma GCC diagnostic ignored "-Wimplicit-exception-spec-mismatch"
+#endif
+void SAL_CALL operator delete (void * p, std::size_t) noexcept
+{
+    deallocate (p, ScalarTraits());
+}
+#if defined __clang__
+#pragma GCC diagnostic pop
+#endif
+#endif
+
 // T * p = new(nothrow) T; delete(nothrow) p;
 
 void* SAL_CALL operator new (std::size_t n, std::nothrow_t const &) throw ()
@@ -175,6 +192,20 @@ void SAL_CALL operator delete[] (void * p) throw ()
 {
     deallocate (p, VectorTraits());
 }
+
+#if HAVE_CXX14_SIZED_DEALLOCATION
+#if defined __clang__
+#pragma GCC diagnostic push // as happens on Mac OS X:
+#pragma GCC diagnostic ignored "-Wimplicit-exception-spec-mismatch"
+#endif
+void SAL_CALL operator delete[] (void * p, std::size_t) noexcept
+{
+    deallocate (p, VectorTraits());
+}
+#if defined __clang__
+#pragma GCC diagnostic pop
+#endif
+#endif
 
 // T * p = new(nothrow) T[n]; delete(nothrow)[] p;
 
