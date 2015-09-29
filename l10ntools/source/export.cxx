@@ -243,7 +243,7 @@ Export::Export(
 
 void Export::Init()
 {
-    // resets the internal status, used before parseing another file
+    // resets the internal status, used before parsing another file
     bDefine = false;
     bNextMustBeDefineEOL = false;
     nLevel = 0;

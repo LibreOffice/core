@@ -631,7 +631,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             xRes = NULL;
 
         // list of proposals found (to be checked against entries of
-        // neagtive dictionaries)
+        // negative dictionaries)
         ProposalList aProposalList;
         sal_Int16 eFailureType = -1;    // no failure
         if (xRes.is())

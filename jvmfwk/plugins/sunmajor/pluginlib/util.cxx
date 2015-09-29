@@ -994,7 +994,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                     // 1.3.1 special treatment: jdk/bin/java and /jdk/jre/bin/java are links to
                     //a script, named .java_wrapper. The script starts jdk/bin/sparc/native_threads/java
                     //or jdk/jre/bin/sparc/native_threads/java. The script uses the name with which it was
-                    //invoked to build the path to the executable. It we start the script directy as .java_wrapper
+                    //invoked to build the path to the executable. It we start the script directly as .java_wrapper
                     //then it tries to start a jdk/.../native_threads/.java_wrapper. Therefore the link, which
                     //is named java, must be used to start the script.
                     getJavaProps(sFullPath,
@@ -1003,7 +1003,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 #endif
                                  props, & bProcessRun);
                     // Either we found a working 1.3.1
-                    //Or the java is broken. In both cases we stop searchin under this "root" directory
+                    // Or the java is broken. In both cases we stop searching under this "root" directory
                     bBreak = true;
                     break;
                 }

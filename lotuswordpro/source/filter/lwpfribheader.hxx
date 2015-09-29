@@ -56,7 +56,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBHEADER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBHEADER_HXX
 
-#define FRIB_TAG_NOUNICODE 0x40 // Don't traslate text to/from Unicode
+#define FRIB_TAG_NOUNICODE 0x40 // Don't translate text to/from Unicode
 #define FRIB_TAG_MODIFIER 0x80  // This frib has a modifier on it
 #define FRIB_TAG_TYPEMASK (FRIB_TAG_NOUNICODE | FRIB_TAG_MODIFIER)
 

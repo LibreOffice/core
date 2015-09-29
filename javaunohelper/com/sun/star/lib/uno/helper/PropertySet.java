@@ -303,7 +303,7 @@ XMultiPropertySet
         // Create an event with this as sender
         EventObject aEvt= new EventObject(this);
 
-        // inform all listeners to reelease this object
+        // inform all listeners to release this object
         aBoundLC.disposeAndClear(aEvt);
         aVetoableLC.disposeAndClear(aEvt);
     }
@@ -653,7 +653,7 @@ XMultiPropertySet
                         {
                             // Parameter setVal is not an Any. We need to construct an Any that contains
                             // the argument setVal.
-                            // If setVal is an interface implementation then, we cannot constuct the
+                            // If setVal is an interface implementation then, we cannot construct the
                             // Any with setVal.getClass(), because the Any.Type._typeClass would be TypeClass.UNKNOWN.
                             // We try to get an XInterface of setVal and set an XInterface type.
                             if (setVal instanceof XInterface)

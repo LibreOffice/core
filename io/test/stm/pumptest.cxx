@@ -369,9 +369,9 @@ void OPumpTest::testTerminate( const Reference< XInterface > &r )
     mywait();
     ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
     ERROR_ASSERT( t.m_pTestListener->m_bTerminated , "should be terminiated already" );
-    // terminte leads to an error, that is no surprise, in fact
+    // terminate leads to an error, that is no surprise, in fact
     // one can't tell whether the error occurs because of the terminate
-    // call or for some other reason !
+    // call or for some other reason!
 //     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
     ERROR_ASSERT( t.m_pTestListener->m_bClosed, "should be closed already" );
 }
