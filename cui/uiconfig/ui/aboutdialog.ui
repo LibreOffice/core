@@ -138,7 +138,7 @@
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Locale: $LOCALE</property>
+                        <property name="label" translatable="yes">System Locale: $LOCALE</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
