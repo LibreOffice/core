@@ -543,7 +543,7 @@ namespace dbmm
             {
                 Reference< XModifiable > xModify( m_pData->xDocument, UNO_QUERY_THROW );
                 xModify->setModified( sal_True );
-                    // this is just parnoia - in case saving the doc fails, perhaps the user is tempted to do so
+                    // this is just paranoia - in case saving the doc fails, perhaps the user is tempted to do so
                 Reference< XStorable > xStor( m_pData->xDocument, UNO_QUERY_THROW );
                 xStor->store();
             }
