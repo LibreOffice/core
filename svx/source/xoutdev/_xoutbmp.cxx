@@ -477,7 +477,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
     }
 
     return aRetBmp;
-};
+}
 
 tools::Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                                         const sal_uInt8 cEdgeDetectThreshold,
@@ -610,10 +610,12 @@ tools::Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nF
             if( ( fFactorX != 0. ) && ( fFactorY != 0. ) )
                 aRetPoly.Scale( fFactorX, fFactorY );
         }
+
+        Bitmap::ReleaseAccess(pAcc);
     }
 
     return aRetPoly;
-};
+}
 
 bool DitherBitmap( Bitmap& rBitmap )
 {
