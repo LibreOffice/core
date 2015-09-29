@@ -106,7 +106,7 @@ private:
     MIPs_t maMIPs;                          /// map nodes to their MIPs
 
     bool mbInitialized;                     /// has model been initialized ?
-    bool mbExternalData;                    /// is the data of this model to be considered an ingegral part of the document?
+    bool mbExternalData;                    /// is the data of this model to be considered an integral part of the document?
 
     void initializePropertySet();
 

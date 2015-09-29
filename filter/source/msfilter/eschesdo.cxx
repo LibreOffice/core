@@ -1119,7 +1119,7 @@ basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& rxShape
                             basegfx::B2DVector aScale, aTranslate;
                             double fRotate, fShearX;
 
-                            // decopose transformation
+                            // decompose transformation
                             aHomogenMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
                             // check if rotation needs to be corrected

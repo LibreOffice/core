@@ -195,7 +195,7 @@ void PCXReader::ImplReadHeader()
         return;
     }
 
-    // If the bitmap has only 2 colors, the palatte is most often invalid and it is always(?)
+    // If the bitmap has only 2 colors, the palette is most often invalid and it is always(?)
     // a black and white image:
     if ( nPlanes == 1 && nBitsPerPlanePix == 1 )
     {
