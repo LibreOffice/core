@@ -2426,7 +2426,6 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
 
     /* bool bStartEncodedWord = true; */
     const sal_Char * pWSPBegin = pBegin;
-    sal_uInt32 nCommentLevel = 0;
 
     for (const sal_Char * p = pBegin; p != pEnd;)
     {
@@ -2704,8 +2703,6 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                 break;
 
             case ')':
-                if (nCommentLevel > 0)
-                    --nCommentLevel;
                 /* bStartEncodedWord = false; */
                 break;
 
