@@ -615,7 +615,7 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
 
     if( !bConverted )
     {
-        // TODO: this implementation is for clarety, not for speed
+        // TODO: this implementation is for clarity, not for speed
 
         ImplPixelFormat* pD = ImplPixelFormat::GetFormat( nDestBits, rDestPalette );
         ImplPixelFormat* pS = ImplPixelFormat::GetFormat( nSrcBits, rSrcPalette );

@@ -120,7 +120,7 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
         throw std::runtime_error("IconThemeInfo::ThemeIdToDisplayName() called with invalid id.");
     }
 
-    // sepcial cases
+    // special cases
     if (themeId.equalsIgnoreAsciiCase(HIGH_CONTRAST_ID)) {
         return HIGH_CONTRAST_DISPLAY_NAME;
     }
