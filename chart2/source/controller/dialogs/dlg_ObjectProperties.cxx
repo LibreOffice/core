@@ -176,7 +176,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                         m_bShowAxisOrigin = true;
                 }
 
-                //is the crossin main axis a category axes?:
+                //is the crossing main axis a category axes?:
                 uno::Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, xDiagram ) );
                 uno::Reference< XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ) );
                 if( xCrossingMainAxis.is() )

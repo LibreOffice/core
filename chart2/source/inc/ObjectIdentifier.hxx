@@ -82,7 +82,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS ObjectIdentifier
     //where DragMethodServiceName can be a selfdefined servicename for special actions //todo define standard service for this purpose
     //where DragParameterString is any string you like to transport information to your special drag service
     //                            only semicolon, colon, equal sign and slash are not allowed characters
-    //                            also the keywors used in the ObjectIdentifiers are not allowed
+    //                            also the keywords used in the ObjectIdentifiers are not allowed
 
     //where ObjectID: Parent-Particle:Particle //e.g. Series=2:Point=22
     //where Particle: Type=ParticleID //e.g. Point=22

@@ -126,7 +126,7 @@ PiePositionHelper::~PiePositionHelper()
  *  When orientation for the radius axis is reversed these values are swapped.
  *  (Indeed the orientation for the radius axis is always reversed!
  *  See `PieChartTypeTemplate::adaptScales`.)
- *  The maximum relative offset (see notes for P`ieChart::getMaxOffset`) is
+ *  The maximum relative offset (see notes for `PieChart::getMaxOffset`) is
  *  added to both the inner and the outer radius.
  *  It returns true if the ring is visible (that is not out of the radius
  *  axis scale range).
@@ -144,7 +144,7 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
 
     if( !isMathematicalOrientationRadius() )
     {
-        //in this case the given getMaximumX() was not corrcect instead the minimum should have been smaller by fMaxOffset
+        //in this case the given getMaximumX() was not correct instead the minimum should have been smaller by fMaxOffset
         //but during getMaximumX and getMimumX we do not know the axis orientation
         fLogicInner += fMaxOffset;
         fLogicOuter += fMaxOffset;

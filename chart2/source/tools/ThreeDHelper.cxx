@@ -846,7 +846,7 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         //cosY!=0 sinY!=0 sinX!=0 cosX!=0 sinZ=0
         //element 11
         R=y;
-        //use elenment 13 for sign
+        //use element 13 for sign
         if( (cos(x)*cos(z)*sin(y)*sin(R))<0.0 )
             R*=-1.0;
         //element 22

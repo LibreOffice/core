@@ -473,7 +473,7 @@ String STR_ROW_LABEL
     Text [ en-US ] = "Row %ROWNUMBER" ;
 };
 
-//for range didalog
+//for range dialog
 String STR_DATA_ROLE_LABEL
 {
     Text [ en-US ] = "Name" ;

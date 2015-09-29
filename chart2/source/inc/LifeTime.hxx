@@ -119,7 +119,7 @@ protected:
 };
 
 /*
-Use this Guard in your apicalls to protect access on resources
+Use this Guard in your ApiCalls to protect access on resources
 which will be released in dispose.
 It's guarantied, that the release of resources only starts if your
 guarded call has finished.

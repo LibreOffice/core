@@ -1775,7 +1775,7 @@ bool ChartController::impl_moveOrResizeObject(
             {
                 ControllerLockGuardUNO aCLGuard( xChartModel );
                 xObjProp->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
-                if( bNeedResize || (eObjectType == OBJECTTYPE_DIAGRAM) )//Also set an explicat size at the diagram when an explicit position is set
+                if( bNeedResize || (eObjectType == OBJECTTYPE_DIAGRAM) )//Also set an explicit size at the diagram when an explicit position is set
                     xObjProp->setPropertyValue( "RelativeSize", uno::makeAny( aRelSize ));
             }
             aUndoGuard.commit();

@@ -45,7 +45,7 @@ class OOO_DLLPUBLIC_CHARTVIEW ExplicitValueProvider
 {
 public:
     /** Gives calculated scale and increment values for a given xAxis in the current view.
-        In contrast to the model data these explicit values are always complete as misssing auto properties are calculated.
+        In contrast to the model data these explicit values are always complete as missing auto properties are calculated.
         If the given Axis could not be found or for another reason no correct output can be given false is returned.
      */
     virtual bool getExplicitValuesForAxis(
