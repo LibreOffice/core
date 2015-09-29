@@ -158,7 +158,7 @@ action_wrapper_get_name (AtkAction *action,
 /*
 *  GNOME Expects a string in the format:
 *
-*  <nmemonic>;<full-path>;<accelerator>
+*  <mnemonic>;<full-path>;<accelerator>
 *
 *  The keybindings in <full-path> should be separated by ":"
 */

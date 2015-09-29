@@ -1261,7 +1261,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                                 const ImplControlValue& rValue, const OUString&,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 {
-    /* TODO: all this funcions needs improvements */
+    /* TODO: all this functions needs improvements */
     Rectangle aEditRect = rControlRegion;
     gint indicator_size, indicator_spacing, point;
 

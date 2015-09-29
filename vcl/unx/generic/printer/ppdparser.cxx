@@ -1211,7 +1211,7 @@ void PPDParser::parseOrderDependency(const OString& rLine)
     OString aSetup = GetCommandLineToken( 1, aLine );
     OUString aKey(OStringToOUString(GetCommandLineToken(2, aLine), RTL_TEXTENCODING_MS_1252));
     if( aKey[ 0 ] != '*' )
-        return; // invalid order depency
+        return; // invalid order dependecy
     aKey = aKey.replaceAt( 0, 1, "" );
 
     PPDKey* pKey;

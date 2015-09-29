@@ -1125,7 +1125,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     GetWindow()->mpWindowImpl->mnRightBorder   = 0;
     GetWindow()->mpWindowImpl->mnBottomBorder  = 0;
 
-    // position toolbox below dragrect
+    // position toolbox below DragRect
     GetWindow()->SetPosPixel( pWin->GetToolboxPosition() );
 
     // reparent borderwindow and window
