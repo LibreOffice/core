@@ -668,8 +668,8 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     css::uno::Reference< css::container::XNameAccess > xCfgOld = fa_getCfgOld();
 
     // try to replace path-parts with well known and supported variables.
-    // So an office can be moved easialy to another location without losing
-    // it's related paths.
+    // So an office can be moved easily to another location without losing
+    // its related paths.
     PathInfo aResubstPath(aPath);
     impl_subst(aResubstPath, true);
 

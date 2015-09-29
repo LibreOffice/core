@@ -289,7 +289,7 @@ int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
     return nLimit;
 }
 
-// greatest common divisior according to  Euklid (chaindivision)
+// greatest common divisor according to Euklid (chaindivision)
 // special case: 0 plus anything produces 1
 int WLevDistance::GCD( int a, int b )
 {
@@ -310,7 +310,7 @@ int WLevDistance::GCD( int a, int b )
 // least common multiple : a * b / GCD(a,b)
 int WLevDistance::LCM( int a, int b )
 {
-    if ( a > b )    // decrease owerflow chance
+    if ( a > b )    // decrease overflow chance
         return( (a / GCD(a,b)) * b );
     else
         return( (b / GCD(a,b)) * a );

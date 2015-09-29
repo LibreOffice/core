@@ -418,7 +418,7 @@ Boundary xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos, sal_Int1
         anyPos = boundary.endPos;
         const sal_Int32 nLen = rText.getLength();
         if (anyPos < nLen) {
-            // looknig for the first non-whitespace character from anyPos
+            // looking for the first non-whitespace character from anyPos
             sal_uInt32 ch = rText.iterateCodePoints(&anyPos);
             while (u_isWhitespace(ch) && (anyPos < nLen)) ch=rText.iterateCodePoints(&anyPos);
             if (anyPos > 0)

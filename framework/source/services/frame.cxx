@@ -492,7 +492,7 @@ Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext
         :   TransactionBase             (                                                   )
         ,   PropertySetHelper           ( m_aMutex,
                                           &m_aTransactionManager,
-                                          false) // sal_False => dont release shared mutex on calling us!
+                                          false) // sal_False => don't release shared mutex on calling us!
         //  init member
         ,   m_xContext                  ( xContext                                          )
         ,   m_aListenerContainer        ( m_aMutex )
@@ -948,7 +948,7 @@ OUString SAL_CALL Frame::getName() throw( css::uno::RuntimeException, std::excep
     @short      set new name for frame
     @descr      This name is used to find target of findFrame() or queryDispatch() calls.
 
-    @attention  Special names like "_blank", "_self" aren't allowed ...
+    @attention  Special names like "_blank", "_self" aren't allowed...
                 "_beamer" or "_menubar" excepts this rule!
 
     @seealso    method getName()
@@ -959,7 +959,7 @@ OUString SAL_CALL Frame::getName() throw( css::uno::RuntimeException, std::excep
 void SAL_CALL Frame::setName( const OUString& sName ) throw( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
-    // Set new name ... but look for invalid special target names!
+    // Set new name... but look for invalid special target names!
     // They are not allowed to set.
     if (TargetHelper::isValidNameForFrame(sName))
         m_sName = sName;
@@ -1778,7 +1778,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
     if ( ! setComponent(NULL,NULL) )
         throw css::util::CloseVetoException("Component couldn't be deattached ...",static_cast< ::cppu::OWeakObject*>(this));
 
-    // If closing is allowed ... inform all istener and dispose this frame!
+    // If closing is allowed... inform all listeners and dispose this frame!
     pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
     if (pContainer!=NULL)
     {
@@ -2687,7 +2687,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
 
 {
     /* There is no need to lock any mutex here. Because we share the
-       solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)
+       solar mutex with our base class. And we said to our base class: "don't release it on calling us" .-)
        see ctor of PropertySetHelper for further information.
     */
 
@@ -2744,7 +2744,7 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*
                                                           sal_Int32        nHandle  )
 {
     /* There is no need to lock any mutex here. Because we share the
-       solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)
+       solar mutex with our base class. And we said to our base class: "don't release it on calling us" .-)
        see ctor of PropertySetHelper for further information.
     */
 

@@ -131,7 +131,7 @@ struct HWPDOProperty
     hunit vmargin;
     uint flag;
 
-     /* Lotation properties */
+     /* Rotation properties */
     int rot_originx;
     int rot_originy;
     ZZParall parall;

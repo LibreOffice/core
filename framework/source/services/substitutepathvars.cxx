@@ -186,7 +186,7 @@ enum PreDefVariable
 struct PredefinedPathVariables
 {
     // Predefined variables supported by substitute variables
-    LanguageType    m_eLanguageType;                    // Lanuage type of Office
+    LanguageType    m_eLanguageType;               // Language type of Office
     OUString   m_FixedVar[ PREDEFVAR_COUNT ];      // Variable value access by PreDefVariable
     OUString   m_FixedVarNames[ PREDEFVAR_COUNT ]; // Variable name access by PreDefVariable
 };
@@ -692,7 +692,7 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
             }
         }
 
-        // Decode the environment and optional the operatng system settings
+        // Decode the environment and optional the operating system settings
         Any                             aEnvValue;
         EnvironmentType eEnvType = GetEnvTypeFromString( aEnvUsed );
         if ( eEnvType == ET_OS )
