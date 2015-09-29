@@ -872,7 +872,7 @@ void readDir(
                 continue;
             }
             switch (op) {
-            case Op::None:
+            default: // case Op::None:
                 SAL_WARN(
                     "configmgr.dconf",
                     "bad set element indirection dir " << path
