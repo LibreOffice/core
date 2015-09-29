@@ -20,6 +20,7 @@
 #include "compiler.hxx"
 #include "paramisc.hxx"
 #include "listenercontext.hxx"
+#include "calcconfig.hxx"
 #include <attarray.hxx>
 #include <sharedformula.hxx>
 
@@ -597,6 +598,16 @@ void ScDocumentImport::finalize()
         ScColumn* pColEnd = pCol + static_cast<size_t>(MAXCOLCOUNT);
         for (; pCol != pColEnd; ++pCol)
             initColumn(*pCol);
+    }
+
+    ScCalcConfig aCalcConfig = mpImpl->mrDoc.GetCalcConfig();
+
+    // Has any string ref syntax been imported?
+    // If no, we need to take action
+    if ( !aCalcConfig.mbHasStringRefSyntax )
+    {
+        aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_A1_XL_A1;
+        mpImpl->mrDoc.SetCalcConfig(aCalcConfig);
     }
 }
 
