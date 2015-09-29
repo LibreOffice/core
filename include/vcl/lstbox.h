@@ -47,7 +47,7 @@ enum class ListBoxEntryFlags
 */
     DisableSelection        = 0x0001,
 
-/** this flag can be used to make an entry multine capable
+/** this flag can be used to make an entry multiline capable
     A normal entry is single line and will therefore be clipped
     at the right listbox border. Setting this flag enables
     word breaks for the entry text.

@@ -449,7 +449,7 @@ public:
     struct SignatureWidget: public AnyWidget
     {
         // Use Sig prefix for members to avoid conflict with
-        // the Location member of the AnyWidget which spcifies the coordinates
+        // the Location member of the AnyWidget which specifies the coordinates
         // of the signature
 
         OUString                    SigLocation;

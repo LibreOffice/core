@@ -49,7 +49,7 @@ public:
       * Constructor.
       *
       * @param lCertificateValidity contains a bitmask which validation error occur.
-      * @param pCertificate contaisn the server certificate.
+      * @param pCertificate contains the server certificate.
       */
     SimpleCertificateValidationRequest( const sal_Int32 & lCertificateValidity,
         const com::sun::star::uno::Reference<com::sun::star::security::XCertificate>& certificate,

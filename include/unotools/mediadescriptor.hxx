@@ -154,7 +154,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
                     of a real readonly file.
 
             @Attention
-                    We dont check the property "ReadOnly" here. Because
+                    We don't check the property "ReadOnly" here. Because
                     this property can be set from outside and overwrites
                     the readonly state of  the stream.
                     If e.g. the stream could be opened read/write ...
