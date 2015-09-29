@@ -1455,7 +1455,7 @@ void XclImpPivotTable::MaybeRefresh()
 
 void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveData& rSaveData)
 {
-    // Apply merge flags for varoius datapilot controls.
+    // Apply merge flags for various datapilot controls.
 
     ScDPOutputGeometry aGeometry(rOutRange, false);
     aGeometry.setColumnFieldCount(maPTInfo.mnColFields);

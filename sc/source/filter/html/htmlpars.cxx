@@ -2084,7 +2084,7 @@ void ScHTMLTable::RowOff( const ImportInfo& rInfo )
 namespace {
 
 /**
- * Decode a numbert format string stored in Excel-generated HTML's CSS
+ * Decode a number format string stored in Excel-generated HTML's CSS
  * region.
  */
 OUString decodeNumberFormat(const OUString& rFmt)

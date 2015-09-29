@@ -1171,13 +1171,13 @@ void ScInterpreter::ScIRR()
         fEstimated = GetDouble();
     else
         fEstimated = 0.1;
-    sal_uInt16 sPos = sp;                       //memory the position of the stack
+    sal_uInt16 sPos = sp;                  // memorize the position of the stack
     double fEps = 1.0;
     double x, fValue;
     if (fEstimated == -1.0)
-        x = 0.1;                            // default result for divion by zero
+        x = 0.1;                           // default result for division by zero
     else
-        x = fEstimated;                   // startvalue
+        x = fEstimated;                    // startvalue
     switch (GetStackType())
     {
         case svDoubleRef :

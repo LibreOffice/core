@@ -1433,7 +1433,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
         else
         {
-            //this will perhabs break undo
+            //this will perhaps break undo
         }
     }
 

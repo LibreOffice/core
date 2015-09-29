@@ -256,7 +256,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
         }
         else
         {
-            // Just shortern the shared range length by one.
+            // Just shorten the shared range length by one.
             --xGroup->mnLength;
         }
     }

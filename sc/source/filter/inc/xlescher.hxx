@@ -201,7 +201,7 @@ const sal_uInt16 EXC_OBJ_DROPDOWN_LISTBOX   = 0;        /// Listbox, text not ed
 const sal_uInt16 EXC_OBJ_DROPDOWN_COMBOBOX  = 1;        /// Dropdown listbox with editable text.
 const sal_uInt16 EXC_OBJ_DROPDOWN_SIMPLE    = 2;        /// Dropdown button only, no text area.
 const sal_uInt16 EXC_OBJ_DROPDOWN_MAX       = 3;
-const sal_uInt16 EXC_OBJ_DROPDOWN_FILTERED  = 0x0008;   /// Drowdown style: filtered.
+const sal_uInt16 EXC_OBJ_DROPDOWN_FILTERED  = 0x0008;   /// Dropdown style: filtered.
 
 // BIFF5 groupboxes
 const sal_uInt16 EXC_OBJ_GROUPBOX_FLAT      = 0x0001;
