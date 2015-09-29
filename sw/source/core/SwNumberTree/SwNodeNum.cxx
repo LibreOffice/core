@@ -190,7 +190,7 @@ bool SwNodeNum::HasCountedChildren() const
     {
         SwNodeNum* pChild( dynamic_cast<SwNodeNum*>(*aIt) );
         OSL_ENSURE( pChild,
-                "<SwNodeNum::HasCountedChildren()> - unexpected type of child -> please inform OD" );
+                "<SwNodeNum::HasCountedChildren()> - unexpected type of child" );
         if ( pChild &&
              ( pChild->IsCountedForNumbering() ||
                pChild->HasCountedChildren() ) )
@@ -263,7 +263,7 @@ bool SwNodeNum::IsCountPhantoms() const
                   mpNumRule->IsCountPhantoms();
     else
     {
-        OSL_FAIL( "<SwNodeNum::IsCountPhantoms(): missing numbering rule - please inform OD" );
+        OSL_FAIL( "<SwNodeNum::IsCountPhantoms(): missing numbering rule" );
     }
 
     return bResult;

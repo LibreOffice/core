@@ -3906,7 +3906,7 @@ void SwTextNode::AddToList()
 {
     if ( IsInList() )
     {
-        OSL_FAIL( "<SwTextNode::AddToList()> - the text node is already added to a list. Serious defect -> please inform OD" );
+        OSL_FAIL( "<SwTextNode::AddToList()> - the text node is already added to a list. Serious defect" );
         return;
     }
 
@@ -3924,7 +3924,7 @@ void SwTextNode::AddToList()
             }
         }
         OSL_ENSURE( pList != 0,
-                "<SwTextNode::AddToList()> - no list for given list id. Serious defect -> please inform OD" );
+                "<SwTextNode::AddToList()> - no list for given list id. Serious defect" );
         if ( pList )
         {
             pList->InsertListItem( *CreateNum(), GetAttrListLevel() );
@@ -4251,7 +4251,7 @@ namespace {
                 const SfxStringItem& pListIdItem =
                                         dynamic_cast<const SfxStringItem&>(pItem);
                 OSL_ENSURE( pListIdItem.GetValue().getLength() > 0,
-                        "<HandleSetAttrAtTextNode(..)> - empty list id attribute not excepted. Serious defect -> please inform OD." );
+                        "<HandleSetAttrAtTextNode(..)> - empty list id attribute not excepted. Serious defect." );
                 const OUString sListIdOfTextNode = rTextNode.GetListId();
                 if ( pListIdItem.GetValue() != sListIdOfTextNode )
                 {

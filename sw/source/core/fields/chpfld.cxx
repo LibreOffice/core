@@ -138,7 +138,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
                     sal_uInt8 nPrevLvl = nLevel;
 
                     OSL_ENSURE( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
-                            "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
+                            "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect." );
                     nLevel = static_cast<sal_uInt8>(pONd->GetAttrOutlineLevel());
 
                     if( nPrevLvl < nLevel )

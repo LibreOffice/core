@@ -596,7 +596,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 
         // #i87493#
         OSL_ENSURE( pNew->GetPageFrm() == 0 || pNew->GetPageFrm() == this,
-                "<SwPageFrm::AppendFlyToPage(..)> - anchored fly frame seems to be registered at another page frame. Serious defect -> please inform OD." );
+                "<SwPageFrm::AppendFlyToPage(..)> - anchored fly frame seems to be registered at another page frame. Serious defect." );
         // #i28701# - use new method <SetPageFrm(..)>
         pNew->SetPageFrm( this );
         pNew->InvalidatePage( this );
@@ -834,7 +834,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
     }
     // #i87493#
     OSL_ENSURE( _rNewObj.GetPageFrm() == 0 || _rNewObj.GetPageFrm() == this,
-            "<SwPageFrm::AppendDrawObjToPage(..)> - anchored draw object seems to be registered at another page frame. Serious defect -> please inform OD." );
+            "<SwPageFrm::AppendDrawObjToPage(..)> - anchored draw object seems to be registered at another page frame. Serious defect." );
     _rNewObj.SetPageFrm( this );
 
     // invalidate page in order to force a reformat of object layout of the page.

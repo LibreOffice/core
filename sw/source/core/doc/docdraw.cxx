@@ -92,7 +92,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
         OSL_ENSURE( !pAnchorFrm ||
                 !pAnchorFrm->IsTextFrm() ||
                 !static_cast<const SwTextFrm*>(pAnchorFrm)->IsFollow(),
-                "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow. Please inform OD." );
+                "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow." );
         bool bVert = false;
         bool bR2L = false;
         // #i45952# - use anchor position of anchor frame, if it exist.

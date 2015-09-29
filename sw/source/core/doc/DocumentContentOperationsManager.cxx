@@ -1086,7 +1086,7 @@ namespace //local functions originally from docfmt.cxx
 
                 if ( !pNumRule )
                 {
-                    OSL_FAIL( "<InsAttr(..)> - PaM in front of label, but text node has no numbering rule set. This is a serious defect, please inform OD." );
+                    OSL_FAIL( "<InsAttr(..)> - PaM in front of label, but text node has no numbering rule set. This is a serious defect." );
                     DELETECHARSETS
                     return false;
                 }

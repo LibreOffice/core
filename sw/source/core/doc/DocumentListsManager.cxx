@@ -42,14 +42,14 @@ SwList* DocumentListsManager::createList( const OUString& rListId,
 
     if ( getListByName( sListId ) )
     {
-        OSL_FAIL( "<DocumentListsManager::createList(..)> - provided list id already used. Serious defect -> please inform OD." );
+        OSL_FAIL( "<DocumentListsManager::createList(..)> - provided list id already used. Serious defect." );
         return 0;
     }
 
     SwNumRule* pDefaultNumRuleForNewList = m_rDoc.FindNumRulePtr( sDefaultListStyleName );
     if ( !pDefaultNumRuleForNewList )
     {
-        OSL_FAIL( "<DocumentListsManager::createList(..)> - for provided default list style name no list style is found. Serious defect -> please inform OD." );
+        OSL_FAIL( "<DocumentListsManager::createList(..)> - for provided default list style name no list style is found. Serious defect." );
         return 0;
     }
 
@@ -87,20 +87,20 @@ SwList* DocumentListsManager::createListForListStyle( const OUString& sListStyle
 {
     if ( sListStyleName.isEmpty() )
     {
-        OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - no list style name provided. Serious defect -> please inform OD." );
+        OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - no list style name provided. Serious defect." );
         return 0;
     }
 
     if ( getListForListStyle( sListStyleName ) )
     {
-        OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - a list for the provided list style name already exists. Serious defect -> please inform OD." );
+        OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - a list for the provided list style name already exists. Serious defect." );
         return 0;
     }
 
     SwNumRule* pNumRule = m_rDoc.FindNumRulePtr( sListStyleName );
     if ( !pNumRule )
     {
-        OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect -> please inform OD." );
+        OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect." );
         return 0;
     }
 

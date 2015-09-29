@@ -1773,7 +1773,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     }
     // get default character attributes and merge these into <pSet>
     OSL_ENSURE( pTextNode->GetTextColl(),
-            "<SwAccessibleParagraph::_getDefaultAttributesImpl(..)> - missing paragraph style. Serious defect, please inform OD!" );
+            "<SwAccessibleParagraph::_getDefaultAttributesImpl(..)> - missing paragraph style. Serious defect!" );
     if ( pTextNode->GetTextColl() )
     {
         SfxItemSet aCharSet( const_cast<SwAttrPool&>(pTextNode->GetDoc()->GetAttrPool()),

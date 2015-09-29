@@ -673,7 +673,7 @@ static SwTextNode* lcl_FindOutlineNum( const SwOutlineNodes& rOutlNds, OUString&
                 // but no numbering tree node. Thus, consider this situation in
                 // the assertion condition.
                 OSL_ENSURE( !pNd->GetNumRule(),
-                        "<lcl_FindOutlineNum(..)> - text node with outline level and numbering rule, but without numbering tree node. This is a serious defect -> inform OD" );
+                        "<lcl_FindOutlineNum(..)> - text node with outline level and numbering rule, but without numbering tree node. This is a serious defect" );
             }
         }
     }
@@ -874,7 +874,7 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
                 // create new list and apply its list id
                 const SwList* pNewList = getIDocumentListsAccess().createList( OUString(), pNewOrChangedNumRule->GetName() );
                 OSL_ENSURE( pNewList,
-                        "<SwDoc::SetNumRule(..)> - could not create new list. Serious defect -> please inform OD." );
+                        "<SwDoc::SetNumRule(..)> - could not create new list. Serious defect." );
                 sListId = pNewList->GetListId();
             }
         }
@@ -1009,7 +1009,7 @@ bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
 
     if ( (*mpNumRuleTable)[ nPos ] == GetOutlineNumRule() )
     {
-        OSL_FAIL( "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect - please inform OD" );
+        OSL_FAIL( "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect" );
         return false;
     }
 

@@ -181,7 +181,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
             if( pPara->pDelSet && pPara->pDelSet->Count() )
             {
                 OSL_ENSURE( !bKeepAttributes,
-                        "<lcl_RstAttr(..)> - certain attributes are kept, but not needed. -> please inform OD" );
+                        "<lcl_RstAttr(..)> - certain attributes are kept, but not needed." );
                 SfxItemIter aIter( *pPara->pDelSet );
                 pItem = aIter.FirstItem();
                 while(pItem)

@@ -2420,7 +2420,7 @@ bool SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
         SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
         // --> make code robust
-        OSL_ENSURE( pContact, "<SwFEShell::GetObjAttr(..)> - missing <pContact> - please inform OD." );
+        OSL_ENSURE( pContact, "<SwFEShell::GetObjAttr(..)> - missing <pContact>." );
         if ( pContact )
         {
             if ( i )

@@ -910,7 +910,7 @@ XMLTextImportHelper::XMLTextImportHelper(
                     xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
                         >>= sListId;
                     assert( !sListId.isEmpty() &&
-                                "no default list id found at chapter numbering rules instance. Serious defect -> please inform OD." );
+                                "no default list id found at chapter numbering rules instance. Serious defect." );
                     if ( !sListId.isEmpty() )
                     {
                         Reference< XNamed > const xChapterNumNamed(

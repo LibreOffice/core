@@ -327,7 +327,7 @@ void SwAnchoredDrawObject::MakeObjPos()
             break;
             default:
             {
-                OSL_FAIL( "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
+                OSL_FAIL( "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type." );
             }
         }
 

@@ -136,14 +136,14 @@ void XMLTextNumRuleInfo::Set(
         {
             Reference < XNamed > xNamed( mxNumRules, UNO_QUERY );
             DBG_ASSERT( xNamed.is(),
-                        "<XMLTextNumRuleInfo::Set(..)> - numbering rules instance have to be named. Serious defect -> please inform OD." );
+                        "<XMLTextNumRuleInfo::Set(..)> - numbering rules instance have to be named. Serious defect." );
             if( xNamed.is() )
             {
                 msNumRulesName = xNamed->getName();
             }
         }
         DBG_ASSERT( !msNumRulesName.isEmpty(),
-                    "<XMLTextNumRuleInfo::Set(..)> - no name found for numbering rules instance. Serious defect -> please inform OD." );
+                    "<XMLTextNumRuleInfo::Set(..)> - no name found for numbering rules instance. Serious defect." );
 
         if( xPropSetInfo->hasPropertyByName( msPropNameListId ) )
         {

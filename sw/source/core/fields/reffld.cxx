@@ -505,7 +505,7 @@ OUString SwGetRefField::MakeRefNumStr( const SwTextNode& rTextNodeOfField,
          rTextNodeOfReferencedItem.IsCountedInList() )
     {
         OSL_ENSURE( rTextNodeOfReferencedItem.GetNum(),
-                "<SwGetRefField::MakeRefNumStr(..)> - referenced paragraph has number, but no <SwNodeNum> instance --> please inform OD!" );
+                "<SwGetRefField::MakeRefNumStr(..)> - referenced paragraph has number, but no <SwNodeNum> instance!" );
 
         // Determine, up to which level the superior list labels have to be
         // included - default is to include all superior list labels.
@@ -561,7 +561,7 @@ OUString SwGetRefField::MakeRefNumStr( const SwTextNode& rTextNodeOfField,
               ( nRefNumFormat == REF_NUMBER || nRefNumFormat == REF_NUMBER_FULL_CONTEXT ) ) );
 
         OSL_ENSURE( rTextNodeOfReferencedItem.GetNumRule(),
-                "<SwGetRefField::MakeRefNumStr(..)> - referenced numbered paragraph has no numbering rule set --> please inform OD!" );
+                "<SwGetRefField::MakeRefNumStr(..)> - referenced numbered paragraph has no numbering rule set!" );
         return rTextNodeOfReferencedItem.GetNumRule()->MakeRefNumString(
                                             *(rTextNodeOfReferencedItem.GetNum()),
                                             bInclSuperiorNumLabels,

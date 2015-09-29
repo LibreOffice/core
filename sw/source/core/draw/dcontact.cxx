@@ -1145,7 +1145,7 @@ class NestedUserCallHdl
 
                 if ( bTmpAssert )
                 {
-                    OSL_FAIL( "<SwDrawContact::_Changed(..)> - unknown nested <UserCall> event. This is serious, please inform OD." );
+                    OSL_FAIL( "<SwDrawContact::_Changed(..)> - unknown nested <UserCall> event. This is serious." );
                 }
             }
         }

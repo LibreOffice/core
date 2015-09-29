@@ -592,7 +592,7 @@ bool SwNumRule::operator==( const SwNumRule& rRule ) const
 
 void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )
 {
-    OSL_ENSURE( i < MAXLEVEL, "Serious defect, please inform OD" );
+    OSL_ENSURE( i < MAXLEVEL, "Serious defect" );
     if( i < MAXLEVEL )
     {
         if( !maFormats[ i ] || !(rNumFormat == Get( i )) )
@@ -606,7 +606,7 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )
 
 void SwNumRule::Set( sal_uInt16 i, const SwNumFormat* pNumFormat )
 {
-    OSL_ENSURE( i < MAXLEVEL, "Serious defect, please inform OD" );
+    OSL_ENSURE( i < MAXLEVEL, "Serious defect" );
     if( i >= MAXLEVEL )
         return;
     SwNumFormat* pOld = maFormats[ i ];
@@ -877,7 +877,7 @@ void SwNumRule::SetInvalidRule(bool bFlag)
             const SwTextNode* pTextNode = *aIter;
             // #i111681# - applying patch from cmc
             SwList* pList = pTextNode->GetDoc()->getIDocumentListsAccess().getListByName( pTextNode->GetListId() );
-            OSL_ENSURE( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue --> please inform OD.");
+            OSL_ENSURE( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue.");
             if ( pList )
             {
                 aLists.insert( pList );

@@ -467,7 +467,7 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
 
     if ( nDepth < 0 )
     {
-        OSL_FAIL( "<SwNumberTreeNode::AddChild(..)> - parameter <nDepth> out of valid range. Serious defect -> please inform OD." );
+        OSL_FAIL( "<SwNumberTreeNode::AddChild(..)> - parameter <nDepth> out of valid range. Serious defect." );
         return;
     }
 
@@ -829,7 +829,7 @@ void SwNumberTreeNode::SetLevelInListTree( const int nLevel )
 {
     if ( nLevel < 0 )
     {
-        OSL_FAIL( "<SwNumberTreeNode::SetLevelInListTree(..)> - parameter <nLevel> out of valid range. Serious defect -> please inform OD." );
+        OSL_FAIL( "<SwNumberTreeNode::SetLevelInListTree(..)> - parameter <nLevel> out of valid range. Serious defect." );
         return;
     }
 
@@ -841,7 +841,7 @@ void SwNumberTreeNode::SetLevelInListTree( const int nLevel )
         {
             SwNumberTreeNode* pRootTreeNode = GetRoot();
             OSL_ENSURE( pRootTreeNode,
-                    "<SwNumberTreeNode::SetLevelInListTree(..)> - no root tree node found. Serious defect -> please inform OD." );
+                    "<SwNumberTreeNode::SetLevelInListTree(..)> - no root tree node found. Serious defect." );
 
             RemoveMe();
             pRootTreeNode->AddChild( this, nLevel );

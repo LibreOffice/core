@@ -569,7 +569,7 @@ static bool lcl_IsNoEndTextAttrAtPos( const SwTextNode& rTNd, sal_Int32 nPos,
         if ( rTNd.IsInList() )
         {
             OSL_ENSURE( rTNd.GetNumRule(),
-                    "<lcl_IsNoEndTextAttrAtPos(..)> - no list style found at text node. Serious defect -> please inform OD." );
+                    "<lcl_IsNoEndTextAttrAtPos(..)> - no list style found at text node. Serious defect." );
             const SwNumRule* pNumRule = rTNd.GetNumRule();
             if(pNumRule)
             {

@@ -2492,7 +2492,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
         SwRect aPrvRect;
 
         OSL_ENSURE( pContent,
-            "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
+            "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect" );
         while ( pContent && pContent != pEndFrm )
         {
             if ( pContent->IsInFly() )

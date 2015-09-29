@@ -137,7 +137,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
             aSet.Put(SvxNumBulletItem(aRule));
             OSL_ENSURE( GetShell().GetNumLevel() < MAXLEVEL,
-                    "<SwTextShell::ExecEnterNum()> - numbered node without valid list level. Serious defect -> please inform OD." );
+                    "<SwTextShell::ExecEnterNum()> - numbered node without valid list level. Serious defect." );
             sal_uInt16 nLevel = GetShell().GetNumLevel();
             if( nLevel < MAXLEVEL )
             {

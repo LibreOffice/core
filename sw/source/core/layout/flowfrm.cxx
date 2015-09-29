@@ -2397,7 +2397,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
     }
 
     OSL_ENSURE( pNewUpper != m_rThis.GetUpper(),
-            "<SwFlowFrm::MoveBwd(..)> - moving backward to the current upper frame!? -> Please inform OD." );
+            "<SwFlowFrm::MoveBwd(..)> - moving backward to the current upper frame!?" );
     if ( pNewUpper )
     {
         PROTOCOL_ENTER( &m_rThis, PROT_MOVE_BWD, 0, 0 );

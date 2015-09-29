@@ -151,7 +151,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                     xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
                         >>= sListStyleDefaultListId;
                     DBG_ASSERT( !sListStyleDefaultListId.isEmpty(),
-                                "no default list id found at numbering rules instance. Serious defect -> please inform OD." );
+                                "no default list id found at numbering rules instance. Serious defect." );
                 }
             }
         }

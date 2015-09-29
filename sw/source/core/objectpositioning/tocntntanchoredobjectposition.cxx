@@ -681,7 +681,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                     else
                                     {
 #if OSL_DEBUG_LEVEL > 1
-                                        OSL_FAIL( "<SwToContentAnchoredObjectPosition::CalcPosition()> - code under investigation by OD, please inform OD about this assertion!" );
+                                        OSL_FAIL( "<SwToContentAnchoredObjectPosition::CalcPosition()> - !bInSct" );
 #endif
                                         nRelDiff = nRelPosY;
                                         nRelPosY = 0;

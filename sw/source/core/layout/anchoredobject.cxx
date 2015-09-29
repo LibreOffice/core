@@ -578,7 +578,7 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
     if ( mbObjRectWithSpacesValid &&
          maLastObjRect != GetObjRect() )
     {
-        OSL_FAIL( "<SwAnchoredObject::GetObjRectWithSpaces> - cache for object rectangle inclusive spaces marked as valid, but it couldn't be. Missing invalidation of cache. Please inform OD." );
+        OSL_FAIL( "<SwAnchoredObject::GetObjRectWithSpaces> - cache for object rectangle inclusive spaces marked as valid, but it couldn't be. Missing invalidation of cache." );
         InvalidateObjRectWithSpaces();
     }
     if ( !mbObjRectWithSpacesValid )

@@ -365,7 +365,7 @@ SwFrmNotify::~SwFrmNotify()
                     }
                     else
                     {
-                        OSL_FAIL( "<SwContentNotify::~SwContentNotify()> - unknown anchored object type. Please inform OD." );
+                        OSL_FAIL( "<SwContentNotify::~SwContentNotify()> - unknown anchored object type." );
                     }
                 }
             }
@@ -940,7 +940,7 @@ SwContentNotify::~SwContentNotify()
                 }
                 if ( rAnch.GetContentAnchor()->nNode == *pIdx )
                 {
-                    OSL_FAIL( "<SwContentNotify::~SwContentNotify()> - to page anchored object with content position. Please inform OD." );
+                    OSL_FAIL( "<SwContentNotify::~SwContentNotify()> - to page anchored object with content position." );
                     if ( !pPage )
                     {
                         pPage = pCnt->FindPageFrm();

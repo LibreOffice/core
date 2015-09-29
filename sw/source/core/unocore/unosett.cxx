@@ -2198,7 +2198,7 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
     else if(rPropertyName == UNO_NAME_DEFAULT_LIST_ID)
     {
         OSL_ENSURE( !pRule->GetDefaultListId().isEmpty(),
-                "<SwXNumberingRules::getPropertyValue(..)> - no default list id found. Serious defect -> please inform OD." );
+                "<SwXNumberingRules::getPropertyValue(..)> - no default list id found. Serious defect." );
         aRet <<= pRule->GetDefaultListId();
     }
     else

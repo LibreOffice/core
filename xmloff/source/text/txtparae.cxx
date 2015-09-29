@@ -812,7 +812,7 @@ void XMLTextParagraphExport::exportListChange(
         {
             // close corresponding sub lists
             DBG_ASSERT( rNextInfo.GetLevel() > 0,
-                        "<rPrevInfo.GetLevel() > 0> not hold. Serious defect -> please inform OD." );
+                        "<rPrevInfo.GetLevel() > 0> not hold. Serious defect." );
             nListLevelsToBeClosed = rPrevInfo.GetLevel() - rNextInfo.GetLevel();
         }
 
@@ -857,7 +857,7 @@ void XMLTextParagraphExport::exportListChange(
         {
             // open corresponding sub lists
             DBG_ASSERT( rPrevInfo.GetLevel() > 0,
-                        "<rPrevInfo.GetLevel() > 0> not hold. Serious defect -> please inform OD." );
+                        "<rPrevInfo.GetLevel() > 0> not hold. Serious defect." );
             nListLevelsToBeOpened = rNextInfo.GetLevel() - rPrevInfo.GetLevel();
         }
 
@@ -1341,7 +1341,7 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
 #endif
     PopTextListsHelper();
     DBG_ASSERT( maTextListsHelperStack.empty(),
-                "misusage of text lists helper stack - it is not empty. Serious defect - please inform OD" );
+                "misusage of text lists helper stack - it is not empty. Serious defect" );
 }
 
 SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateShapeExtPropMapper(

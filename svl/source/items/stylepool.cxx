@@ -362,7 +362,7 @@ public:
         DBG_ASSERT( !pIgnorableItems || !pIgnorableItems->Count(),
                     "<StylePoolImpl::StylePoolImpl(..)> - misusage: item set for ignorable item should be empty. Please correct usage." );
         DBG_ASSERT( !mpIgnorableItems || !mpIgnorableItems->Count(),
-                    "<StylePoolImpl::StylePoolImpl(..)> - <SfxItemSet::Clone( sal_False )> does not work as excepted - <mpIgnorableItems> is not empty. Please inform OD." );
+                    "<StylePoolImpl::StylePoolImpl(..)> - <SfxItemSet::Clone( sal_False )> does not work as excepted - <mpIgnorableItems> is not empty." );
     }
 
     ~StylePoolImpl()

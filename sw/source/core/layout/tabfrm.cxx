@@ -5090,7 +5090,7 @@ sal_uInt16 SwTabFrm::GetBottomLineSize() const
     OSL_ENSURE( IsCollapsingBorders(),
             "BottomLineSize only required for collapsing borders" );
 
-    OSL_ENSURE( Lower(), "Warning! Trying to prevent a crash, please inform FME" );
+    OSL_ENSURE( Lower(), "Warning! Trying to prevent a crash" );
 
     const SwFrm* pTmp = GetLastLower();
 
