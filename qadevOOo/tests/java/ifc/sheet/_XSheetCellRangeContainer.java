@@ -165,7 +165,7 @@ public class _XSheetCellRangeContainer extends MultiMethodTest {
     }
 
     /**
-     * All ranges are remover from contaier.
+     * All ranges are remover from container.
      *
      * Has <b> OK </b> status if there are no more ranges in the container.
      */

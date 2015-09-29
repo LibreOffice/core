@@ -44,7 +44,7 @@ import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by collection of
- * text fields conained in the text of a page header. <p>
+ * text fields contained in the text of a page header. <p>
  *
  * Object implements the following interfaces :
  * <ul>

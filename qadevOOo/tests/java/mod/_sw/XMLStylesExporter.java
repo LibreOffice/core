@@ -83,7 +83,7 @@ public class XMLStylesExporter extends TestCase {
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
-    /**
+    /*
     * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.comp.Calc.XMLStylesExporter</code> with
@@ -120,7 +120,7 @@ public class XMLStylesExporter extends TestCase {
             (XExporter.class,oObj);
         xEx.setSourceDocument(xTextDoc);
 
-        // Cheching Head Tag existence and that property has changed
+        // Checking Head Tag existence and that property has changed
         filter.addTag(new XMLTools.Tag ("office:document-styles"));
         filter.addTag(new XMLTools.Tag ("text:footnotes-configuration",
             "style:num-prefix","New Property")) ;

@@ -195,7 +195,7 @@ public class OQueryDesign extends TestCase {
         XDocumentDataSource xDDS = UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
         XModel xMod = UnoRuntime.queryInterface(XModel.class, xDDS.getDatabaseDocument ());
 
-        // get an intaces of QueryDesign
+        // get an instance of QueryDesign
         Object oQueryDesign = xMSF.createInstance("com.sun.star.sdb.QueryDesign");
 
         XController xCont = UnoRuntime.queryInterface(XController.class, oQueryDesign);

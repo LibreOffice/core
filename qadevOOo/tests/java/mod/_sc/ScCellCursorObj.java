@@ -135,7 +135,7 @@ public class ScCellCursorObj extends TestCase {
     *  <li> <code>'SHEET'</code> for
     *      {@link ifc.table._XCellCursor},
     *      {@link ifc.sheet._XArrayFormulaRange} (the spreadsheet that was
-    *      retieved from collection)</li>
+    *      retrieved from collection)</li>
     * </ul>
     */
     @Override
