@@ -78,7 +78,7 @@ public:
         its internals to us.  Only one of the two functors is called.
         @param rpPaintLock
             This paint lock is released after the whole asynchronous
-            procoess  of rewinding the current effect is completed.  It
+            process of rewinding the current effect is completed.  It
             prevents intermediate repaints  that would show partial replay
             of effects.
         @param rSlideRewindFunctor

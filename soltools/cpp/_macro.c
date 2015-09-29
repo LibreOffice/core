@@ -344,7 +344,7 @@ void
 
         /** If gatherargs passed a macro validating token, this token
             must become valid here.
-            trp->tp+0 was checked in expandrow(), so we dont need to do it
+            trp->tp+0 was checked in expandrow(), so we don't need to do it
             again here:
         */
         for (i = 1; i < ntokc; i++)
