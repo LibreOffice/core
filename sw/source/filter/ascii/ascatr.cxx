@@ -226,7 +226,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
 
 /*
  * Create the table for the ASCII function pointers to the output
- * functon.
+ * function.
  * There are local structures that only need to be known to the ASCII DLL.
  */
 

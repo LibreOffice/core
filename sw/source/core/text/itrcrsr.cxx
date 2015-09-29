@@ -277,8 +277,8 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrm *pNewFrm, SwTextSizeInfo *pNewI
                     case SVX_INTER_LINE_SPACE_PROP:
                     {
                         long nTmp = pSpace->GetPropLineSpace();
-                        // 50% is the minimumm, at 0% we switch to
-                        // the default value 100% ...
+                        // 50% is the minimum, at 0% we switch to
+                        // the default value 100%...
                         if( nTmp < 50 )
                             nTmp = nTmp ? 50 : 100;
 
