@@ -2927,6 +2927,7 @@ void ScExportTest::testRefStringXLSX()
 
 void ScExportTest::testRefStringConfigXLSX()
 {
+    // this doc is configured with CalcA1 ref syntax
     ScDocShellRef xDocSh = loadDoc("empty.", XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
 
@@ -2938,13 +2939,18 @@ void ScExportTest::testRefStringConfigXLSX()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_OOO,
                             aConfig.meStringRefAddressSyntax);
 
+    // this doc has no entry for ref syntax
     xDocSh = loadDoc("empty-noconf.", XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open 2nd doc", xDocSh.Is());
 
-    //set ref syntax to something else than ExcelA1 (native to xlsx format) ...
     ScDocument& rDoc2 = xDocSh->GetDocument();
     aConfig = rDoc2.GetCalcConfig();
-    aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_A1_XL_A1;
+    // therefore after import, ref syntax should be set to CalcA1 | ExcelA1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_A1_XL_A1,
+                            aConfig.meStringRefAddressSyntax);
+
+    //set ref syntax to something else than ExcelA1 (native to xlsx format) ...
+    aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_R1C1;
     rDoc2.SetCalcConfig( aConfig );
 
     ScDocShellRef xNewDocSh = saveAndReload( &(*xDocSh), XLSX);
@@ -2953,7 +2959,7 @@ void ScExportTest::testRefStringConfigXLSX()
     // ... and make sure it got saved
     ScDocument& rDoc3 = xNewDocSh->GetDocument();
     aConfig = rDoc3.GetCalcConfig();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_A1_XL_A1,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_XL_R1C1,
                             aConfig.meStringRefAddressSyntax);
 
     xDocSh->DoClose();

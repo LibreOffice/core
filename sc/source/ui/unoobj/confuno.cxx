@@ -355,6 +355,16 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                     pDocShell->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PAINT_GRID);
             pDocShell->SetDocumentModified();
         }
+
+        ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
+
+        // Has any string ref syntax been imported?
+        // If not, we need to take action
+        if ( !aCalcConfig.mbHasStringRefSyntax )
+        {
+            aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_A1_XL_A1;
+            rDoc.SetCalcConfig(aCalcConfig);
+        }
     }
     else
         throw uno::RuntimeException();

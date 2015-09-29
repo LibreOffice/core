@@ -796,6 +796,16 @@ void WorkbookHelper::finalizeWorkbookImport()
         sheets. Automatic numbering is set by passing the value 0. */
     PropertySet aDefPageStyle( getStyleObject( "Default", true ) );
     aDefPageStyle.setProperty< sal_Int16 >( PROP_FirstPageNumber, 0 );
+
+    // Has any string ref syntax been imported?
+    // If not, we need to take action
+    ScCalcConfig aCalcConfig = getScDocument().GetCalcConfig();
+
+    if ( !aCalcConfig.mbHasStringRefSyntax )
+    {
+        aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_A1_XL_A1;
+        getScDocument().SetCalcConfig(aCalcConfig);
+    }
 }
 
 // document model -------------------------------------------------------------
