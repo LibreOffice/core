@@ -583,7 +583,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
                 pSeries->setRoleOfSequenceForDataLabelNumberFormatDetection(aRole);
 
-                //ignore secondary axis for charttypes that do not suppoert them
+                //ignore secondary axis for charttypes that do not support them
                 if( pSeries->getAttachedAxisIndex() != MAIN_AXIS_INDEX &&
                     !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, 1 ) )
                 {

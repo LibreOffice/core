@@ -149,7 +149,7 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                         // copy means add ranges, move means replace
                                         if( rEvt.mnAction == DND_ACTION_COPY )
                                         {
-                                            // @todo: using implcit knowledge that ranges can be
+                                            // @todo: using implicit knowledge that ranges can be
                                             // merged with ";". This should be done more general
                                             pCellRange->Value <<= (aOldRange + ";" + aRangeString );
                                         }

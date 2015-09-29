@@ -210,7 +210,7 @@ void ChartController::TheModel::tryTermination()
             {
                 //@todo ? are we allowed to use sal_True here if we have the explicit ownership?
                 //I think yes, because there might be other closelistners later in the list which might be interested still
-                //but make sure that we do not throw the CloseVetoException here ourselfs
+                //but make sure that we do not throw the CloseVetoException here ourselves
                 //so stop listening before trying to terminate or check the source of queryclosing event
                 m_xCloseable->close(sal_True);
 

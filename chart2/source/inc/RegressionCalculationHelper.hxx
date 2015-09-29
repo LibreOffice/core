@@ -36,11 +36,11 @@ namespace RegressionCalculationHelper
 
 typedef ::std::pair< ::std::vector< double >, ::std::vector< double > > tDoubleVectorPair;
 
-/** takes the given x- and y-values and copyies them into the resulting pair,
+/** takes the given x- and y-values and copies them into the resulting pair,
     which contains x-values in the first element and the y-values in the second
     one.  All tuples for which aPred is false are not copied.
 
-    <p>The functors below provide a set of useful predicates that can be
+    <p>The function below provide a set of useful predicates that can be
     used to pass as parameter aPred.</p>
  */
 template< class Pred >

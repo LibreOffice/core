@@ -39,7 +39,7 @@ namespace chart
 
     <p>Note that in order to remove an object as listener, you have to remove
     the same wrapper that you added, i.e., you should store the adapter as a
-    member in the adaptee class for later use.</p>
+    member in the adapted class for later use.</p>
  */
 template< class Listener >
     class WeakListenerAdapter : public
