@@ -36,7 +36,7 @@ namespace sdr
     {
         ItemChangeBroadcaster::ItemChangeBroadcaster(const SdrObject& rObj)
         {
-            if(rObj.ISA(SdrObjGroup))
+            if(dynamic_cast<const SdrObjGroup*>( &rObj ) !=  nullptr)
             {
                 SdrObjListIter aIter(static_cast<const SdrObjGroup&>(rObj), IM_DEEPNOGROUPS);
                 mpData = new RectangleVector;

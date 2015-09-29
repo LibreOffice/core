@@ -130,7 +130,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
         throw uno::RuntimeException();
 
     SdrObject* pSdrShape = mxPage->_CreateSdrObject( xShape );
-    if( pSdrShape->ISA(E3dObject) )
+    if( dynamic_cast<const E3dObject* >(pSdrShape) !=  nullptr )
     {
         mpObj->GetSubList()->NbcInsertObject( pSdrShape );
 
@@ -196,7 +196,7 @@ sal_Int32 SAL_CALL Svx3DSceneObject::getCount()
 
     sal_Int32 nRetval = 0;
 
-    if(mpObj.is() && mpObj->ISA(E3dPolyScene) && mpObj->GetSubList())
+    if(mpObj.is() && dynamic_cast<const E3dPolyScene* >(mpObj.get()) != nullptr && mpObj->GetSubList())
         nRetval = mpObj->GetSubList()->GetObjCount();
     return nRetval;
 }

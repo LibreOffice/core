@@ -456,7 +456,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     // check for URL field
     if (IsMacroMode() && eHit==SDRHIT_UNMARKEDOBJECT)
     {
-        SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pHitObj);
+        SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( pHitObj );
         if (pTextObj!=NULL && pTextObj->HasText())
         {
             bool bTEHit(pPV &&
@@ -493,7 +493,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     const SvxFieldItem* pItem=aEV.GetField(aTemporaryTextRelativePosition);
                     if (pItem!=NULL) {
                         const SvxFieldData* pFld=pItem->GetField();
-                        const SvxURLField* pURL=PTR_CAST(SvxURLField,pFld);
+                        const SvxURLField* pURL=dynamic_cast<const SvxURLField*>( pFld );
                         if (pURL!=NULL) {
                             eHit=SDRHIT_URLFIELD;
                             rVEvt.pURLField=pURL;
@@ -512,7 +512,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         Rectangle aBoundRect(pHitObj->GetCurrentBoundRect());
 
         // Force to SnapRect when Fontwork
-        if(pHitObj->ISA(SdrTextObj) && static_cast<SdrTextObj*>(pHitObj)->IsFontwork())
+        if( dynamic_cast<const SdrTextObj*>( pHitObj) != nullptr && static_cast<SdrTextObj*>(pHitObj)->IsFontwork())
         {
             aBoundRect = pHitObj->GetSnapRect();
         }
@@ -1080,7 +1080,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                 bool b3DObjSelected = false;
                 for (size_t a=0; !b3DObjSelected && a<GetMarkedObjectCount(); ++a) {
                     SdrObject* pObj = GetMarkedObjectByIndex(a);
-                    if(pObj && pObj->ISA(E3dObject))
+                    if(dynamic_cast<const E3dObject* >(pObj) !=  nullptr)
                         b3DObjSelected = true;
                 }
                 // If we have a 3D object, go on despite !IsShearAllowed,
@@ -1317,7 +1317,7 @@ SdrViewContext SdrView::GetContext() const
     {
         bool bPath=true;
         for( size_t nMarkNum = 0; nMarkNum < nMarkCount && bPath; ++nMarkNum )
-            if (!GetMarkedObjectByIndex(nMarkNum)->ISA(SdrPathObj))
+            if (dynamic_cast<const SdrPathObj*>(GetMarkedObjectByIndex(nMarkNum)) == nullptr)
                 bPath=false;
 
         if( bPath )
@@ -1336,13 +1336,13 @@ SdrViewContext SdrView::GetContext() const
             if( !pMarkObj )
                 continue;
 
-            if( !pMarkObj->ISA( SdrGrafObj ) )
+            if( dynamic_cast<const SdrGrafObj*>( pMarkObj) ==  nullptr )
                 bGraf = false;
 
-            if( !pMarkObj->ISA( SdrMediaObj ) )
+            if( dynamic_cast<const SdrMediaObj*>( pMarkObj) ==  nullptr )
                 bMedia = false;
 
-            if( !pMarkObj->ISA( sdr::table::SdrTableObj ) )
+            if( dynamic_cast<const sdr::table::SdrTableObj* >( pMarkObj ) ==  nullptr )
                 bTable = false;
         }
 

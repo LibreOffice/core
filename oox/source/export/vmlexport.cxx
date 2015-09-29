@@ -1141,7 +1141,7 @@ sal_Int32 VMLExport::StartShape()
     m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
 
     // now check if we have some editeng text (not associated textbox) and we have a text exporter registered
-    const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);
+    const SdrTextObj* pTxtObj = dynamic_cast<const SdrTextObj*>( m_pSdrObject );
     if (pTxtObj && m_pTextExport && msfilter::util::HasTextBoxContent(m_nShapeType) && !IsWaterMarkShape(m_pSdrObject->GetName()) && !lcl_isTextBox(m_pSdrObject))
     {
         const OutlinerParaObject* pParaObj = 0;

@@ -63,7 +63,7 @@ SvxClipBoardControl::~SvxClipBoardControl()
 
 VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
 {
-    const SvxClipboardFormatItem* pFmtItem = PTR_CAST( SvxClipboardFormatItem, pClipboardFmtItem );
+    const SvxClipboardFormatItem* pFmtItem = dynamic_cast<SvxClipboardFormatItem*>( pClipboardFmtItem  );
     if ( pFmtItem )
     {
         if (pPopup)

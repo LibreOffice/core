@@ -615,7 +615,7 @@ uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
 
             if( !xPage.is() )
             {
-                if( PTR_CAST( FmFormModel, mrModel.mpDoc ) )
+                if( dynamic_cast<FmFormModel*>( mrModel.mpDoc )  )
                     xPage = static_cast<drawing::XDrawPage*>(new SvxFmDrawPage( pPage ));
                 else
                     xPage = static_cast<drawing::XDrawPage*>(new SvxDrawPage( pPage ));
@@ -657,7 +657,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
     {
         SdrPage* pPage;
 
-        if( PTR_CAST( FmFormModel, mrModel.mpDoc ) )
+        if( dynamic_cast<FmFormModel*>( mrModel.mpDoc )  )
             pPage = new FmFormPage(*static_cast<FmFormModel*>(mrModel.mpDoc));
         else
             pPage = new SdrPage(*mrModel.mpDoc);

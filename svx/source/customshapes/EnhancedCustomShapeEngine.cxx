@@ -176,7 +176,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
         {
             if ( pRenderedShape )
             {
-                if ( !pRenderedShape->ISA( SdrObjGroup ) )
+                if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
                 {
                     SdrObject* pTmp = pRenderedShape;
                     pRenderedShape = new SdrObjGroup();
@@ -231,7 +231,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
 
             if ( pRenderedShape )
             {
-                if ( !pRenderedShape->ISA( SdrObjGroup ) )
+                if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
                 {
                     SdrObject* pTmp = pRenderedShape;
                     pRenderedShape = new SdrObjGroup();
@@ -246,7 +246,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
         // force group
         if ( pRenderedShape )
         {
-            if ( !pRenderedShape->ISA( SdrObjGroup ) )
+            if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
             {
                 SdrObject* pTmp = pRenderedShape;
                 pRenderedShape = new SdrObjGroup();
@@ -273,7 +273,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
     throw ( RuntimeException, std::exception )
 {
     Reference< drawing::XShape > xShape;
-    SdrObject* pSdrObjCustomShape( PTR_CAST( SdrObjCustomShape, GetSdrObjectFromXShape( mxShape ) ) );
+    SdrObject* pSdrObjCustomShape( dynamic_cast<SdrObjCustomShape*>( GetSdrObjectFromXShape( mxShape ) )  );
     if ( pSdrObjCustomShape )
     {
         // retrieving the TextPath property to check if feature is enabled
@@ -443,14 +443,14 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
                 basegfx::B2DPolyPolygon aPP;
                 const SdrObject* pNext = aIter.Next();
 
-                if ( pNext->ISA( SdrPathObj ) )
+                if ( dynamic_cast<const SdrPathObj*>( pNext) !=  nullptr )
                 {
                     aPP = static_cast<const SdrPathObj*>(pNext)->GetPathPoly();
                 }
                 else
                 {
                     pNewObj = pNext->ConvertToPolyObj( false, false );
-                    SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
+                    SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pNewObj  );
                     if ( pPath )
                         aPP = pPath->GetPathPoly();
                 }

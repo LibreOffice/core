@@ -285,7 +285,7 @@ void SAL_CALL GalleryTheme::update(  )
     {
         GalleryDrawingModel* pModel = GalleryDrawingModel::getImplementation( Drawing );
 
-        if( pModel && pModel->GetDoc() && pModel->GetDoc()->ISA( FmFormModel ) )
+        if( pModel && pModel->GetDoc() && dynamic_cast<const FmFormModel*>(pModel->GetDoc()) != nullptr )
         {
             // Here we're inserting something that's already a gallery theme drawing
             nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );

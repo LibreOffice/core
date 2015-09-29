@@ -1159,7 +1159,7 @@ void SAL_CALL SvxShape::setPosition( const awt::Point& Position ) throw(uno::Run
     {
         // do NOT move 3D objects, this would change the homogen
         // transformation matrix
-        if(!mpObj->ISA(E3dCompoundObject))
+        if(dynamic_cast<const E3dCompoundObject* >(mpObj.get()) == nullptr)
         {
             Rectangle aRect( svx_getLogicRectHack(mpObj.get()) );
             Point aLocalPos( Position.X, Position.Y );
@@ -2625,7 +2625,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_ISFONTWORK:
     {
-        rValue <<= mpObj->ISA(SdrTextObj) && static_cast<SdrTextObj*>(mpObj.get())->IsFontwork();
+        rValue <<= dynamic_cast<const SdrTextObj*>(mpObj.get()) != nullptr && static_cast<SdrTextObj*>(mpObj.get())->IsFontwork();
         break;
     }
 
@@ -2690,7 +2690,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     case OWN_ATTR_MIRRORED:
     {
         bool bMirror = false;
-        if( mpObj.is() && mpObj->ISA(SdrGrafObj) )
+        if( mpObj.is() && dynamic_cast<const SdrGrafObj*>(mpObj.get()) != nullptr )
             bMirror = static_cast<SdrGrafObj*>(mpObj.get())->IsMirrored();
 
         rValue <<= bMirror;
@@ -3094,7 +3094,7 @@ void SvxShape::setAllPropertiesToDefault() throw (uno::RuntimeException, std::ex
         throw lang::DisposedException();
     mpObj->ClearMergedItem(); // nWhich == 0 => all
 
-    if(mpObj->ISA(SdrGrafObj))
+    if(dynamic_cast<const SdrGrafObj*>(mpObj.get()) != nullptr)
     {
         // defaults for graphic objects have changed:
         mpObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
@@ -3106,7 +3106,7 @@ void SvxShape::setAllPropertiesToDefault() throw (uno::RuntimeException, std::ex
     // does not load lathe or extrude objects, it is possible to set the items
     // here.
     // For other solution possibilities, see task description.
-    if(mpObj->ISA(E3dLatheObj) || mpObj->ISA(E3dExtrudeObj))
+    if( dynamic_cast<const E3dLatheObj* >(mpObj.get())  != nullptr|| dynamic_cast<const E3dExtrudeObj* >(mpObj.get()) != nullptr)
     {
         mpObj->SetMergedItem(Svx3DCharacterModeItem(true));
     }
@@ -3795,14 +3795,14 @@ uno::Reference< uno::XInterface > SAL_CALL SvxShape::getParent(  )
         switch( pObjList->GetListKind() )
         {
         case SDROBJLIST_GROUPOBJ:
-            if( pObjList->GetOwnerObj()->ISA( SdrObjGroup ) )
-                return PTR_CAST( SdrObjGroup, pObjList->GetOwnerObj())->getUnoShape();
-            else if( pObjList->GetOwnerObj()->ISA( E3dScene ) )
-                return PTR_CAST( E3dScene, pObjList->GetOwnerObj())->getUnoShape();
+            if(dynamic_cast<const SdrObjGroup*>( pObjList->GetOwnerObj()) != nullptr )
+                return dynamic_cast<SdrObjGroup*>( pObjList->GetOwnerObj())->getUnoShape( );
+            else if( dynamic_cast<const E3dScene* >(pObjList->GetOwnerObj() ) != nullptr)
+                return dynamic_cast< E3dScene* >(pObjList->GetOwnerObj())->getUnoShape();
             break;
         case SDROBJLIST_DRAWPAGE:
         case SDROBJLIST_MASTERPAGE:
-            return PTR_CAST( SdrPage, pObjList )->getUnoPage();
+            return dynamic_cast<SdrPage*>( pObjList )->getUnoPage( );
         default:
             OSL_FAIL( "SvxShape::getParent(  ): unexpected SdrObjListKind" );
             break;

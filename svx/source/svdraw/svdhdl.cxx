@@ -1553,7 +1553,7 @@ void ImpEdgeHdl::SetLineCode(SdrEdgeLineCode eCode)
 
 Pointer ImpEdgeHdl::GetPointer() const
 {
-    SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pObj);
+    SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pObj );
     if (pEdge==NULL)
         return SdrHdl::GetPointer();
     if (nObjHdlNum<=1)
@@ -1566,7 +1566,7 @@ Pointer ImpEdgeHdl::GetPointer() const
 
 bool ImpEdgeHdl::IsHorzDrag() const
 {
-    SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pObj);
+    SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pObj );
     if (pEdge==NULL)
         return false;
     if (nObjHdlNum<=1)
@@ -1805,7 +1805,7 @@ extern "C" int SAL_CALL ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 
 
     if(p1->mpHdl->GetObj() == p2->mpHdl->GetObj())
     {
-        if(p1->mpHdl->GetObj() && p1->mpHdl->GetObj()->ISA(SdrPathObj))
+        if(p1->mpHdl->GetObj() && dynamic_cast<const SdrPathObj*>(p1->mpHdl->GetObj()) != nullptr)
         {
             // same object and a path object
             if((p1->mpHdl->GetKind() == HDL_POLY || p1->mpHdl->GetKind() == HDL_BWGT)

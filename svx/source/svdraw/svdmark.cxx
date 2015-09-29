@@ -546,7 +546,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
     {
         // if it's a single selection, cache only text frame
         const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
-        const SdrTextObj* pTextObj = PTR_CAST(SdrTextObj, pObj);
+        const SdrTextObj* pTextObj = dynamic_cast<const SdrTextObj*>( pObj );
 
         if(!pTextObj || !pTextObj->IsTextFrame())
         {
@@ -637,7 +637,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
     {
         // if it's a single selection, cache only text frame
         const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
-        const SdrTextObj* pTextObj = PTR_CAST(SdrTextObj,pObj);
+        const SdrTextObj* pTextObj = dynamic_cast<const SdrTextObj*>( pObj );
 
         if(!pTextObj || !pTextObj->IsTextFrame())
         {
@@ -826,7 +826,7 @@ namespace sdr
         {
             bool bIsGroup(pObj->IsGroupObject());
 
-            if(bIsGroup && pObj->ISA(E3dObject) && !pObj->ISA(E3dScene))
+            if(bIsGroup && dynamic_cast< const E3dObject* >(pObj) != nullptr && dynamic_cast< const E3dScene* >(pObj) == nullptr)
             {
                 bIsGroup = false;
             }
@@ -880,7 +880,7 @@ namespace sdr
                             for(size_t nl=0; nl < nLstAnz; ++nl)
                             {
                                 SfxListener* pLst = pBC->GetListener(nl);
-                                SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, pLst);
+                                SdrEdgeObj* pEdge = dynamic_cast<SdrEdgeObj*>( pLst );
 
                                 if(pEdge && pEdge->IsInserted() && pEdge->GetPage() == pCandidate->GetPage())
                                 {

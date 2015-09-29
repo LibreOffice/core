@@ -531,7 +531,7 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                 }
             }
             SFX_ASSERT( !m_pPool->IsItemFlag(nWhich, SfxItemPoolFlags::POOLABLE) ||
-                        rItem.ISA(SfxSetItem) || **ppFnd == rItem,
+                        dynamic_cast<const SfxSetItem*>( &rItem ) !=  nullptr || **ppFnd == rItem,
                         nWhich, "putted Item unequal" );
             return *ppFnd;
         }

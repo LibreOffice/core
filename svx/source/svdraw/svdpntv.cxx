@@ -1002,7 +1002,7 @@ bool SdrPaintView::IsGroupEntered() const
 void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bReplaceAll*/)
 {
     // bReplaceAll has no effect here at all.
-    bool bMeasure=ISA(SdrView) && static_cast<SdrView*>(this)->IsMeasureTool();
+    bool bMeasure= dynamic_cast<const SdrView*>(this) != nullptr && static_cast<SdrView*>(this)->IsMeasureTool();
     const SfxPoolItem *pPoolItem=NULL;
     if (rAttr.GetItemState(SDRATTR_LAYERID,true,&pPoolItem)==SfxItemState::SET) {
         SdrLayerID nLayerId=static_cast<const SdrLayerIdItem*>(pPoolItem)->GetValue();
@@ -1021,7 +1021,7 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bRep
 void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool /*bOnlyHardAttr*/) const
 {
     // bOnlyHardAttr has no effect here at all.
-    bool bMeasure=ISA(SdrView) && static_cast<const SdrView*>(this)->IsMeasureTool();
+    bool bMeasure= dynamic_cast<const SdrView*>(this) != nullptr && static_cast<const SdrView*>(this)->IsMeasureTool();
     const OUString& aNam = bMeasure ? maMeasureLayer : maActualLayer;
     rAttr.Put(SdrLayerNameItem(aNam));
     SdrLayerID nLayer=mpModel->GetLayerAdmin().GetLayerID(aNam,true);
