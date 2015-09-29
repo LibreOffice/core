@@ -1458,7 +1458,7 @@ void SmCursor::EndEdit(){
     if( pDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         pDocShell->OnDocumentPrinterChanged(0);
 
-    //Request a replaint...
+    //Request a repaint...
     RequestRepaint();
 
     //Update the edit engine and text of the document

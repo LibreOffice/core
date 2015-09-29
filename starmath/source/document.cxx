@@ -1279,7 +1279,7 @@ void SmDocShell::SetVisArea(const Rectangle & rVisArea)
         EnableSetModified( false );
 
     //TODO/LATER: it's unclear how this interacts with the SFX code
-    // If outplace editing, then dont resize the OutplaceWindow. But the
+    // If outplace editing, then don't resize the OutplaceWindow. But the
     // ObjectShell has to resize. Bug 56470
     bool bUnLockFrame;
     if( GetCreateMode() == SfxObjectCreateMode::EMBEDDED && !IsInPlaceActive() && GetFrame() )

@@ -637,8 +637,8 @@ void MathType::HandleNudge()
         pS->ReadUInt16( nYLongNudge );
     }
 }
-/*Fabously complicated as many tokens have to be reordered and generally
- *moved around from mathtypes paradigm to starmaths.*/
+/* Fabulously complicated as many tokens have to be reordered and generally
+ * moved around from mathtypes paradigm to starmaths. */
 int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     sal_uInt8 nVariation, int nMatrixRows,int nMatrixCols)
 {

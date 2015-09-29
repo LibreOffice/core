@@ -753,8 +753,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         case JFW_E_NONE: bStarted = true; break;
         case JFW_E_NO_SELECT:
         {
-            // No Java configured. We silenty run the java configuration
-            // Java.
+            // No Java configured. We silently run the Java configuration
             info.clear();
             javaFrameworkError errFind = jfw_findAndSelectJRE(&info.info);
             if (getenv("STOC_FORCE_NO_JRE"))
