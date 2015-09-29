@@ -1628,7 +1628,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     pDocSh->SetUpdateEnabled(false);
 
     if ( GetViewFrame()->GetFrame().IsInPlace() )
-        UpdateHeaderWidth(); // The implace activation requires headers to be calculated
+        UpdateHeaderWidth(); // The inplace activation requires headers to be calculated
 
     SvBorder aBorder;
     GetBorderSize( aBorder, Size() );

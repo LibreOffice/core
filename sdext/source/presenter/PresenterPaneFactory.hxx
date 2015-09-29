@@ -43,9 +43,9 @@ namespace {
     > PresenterPaneFactoryInterfaceBase;
 }
 
-/** The PresenerPaneFactory provides a fixed set of panes.
+/** The PresenterPaneFactory provides a fixed set of panes.
 
-    In order to make the presener screen more easily extendable in the
+    In order to make the presenter screen more easily extendable in the
     future the set of supported panes could be made extendable on demand.
 */
 class PresenterPaneFactory

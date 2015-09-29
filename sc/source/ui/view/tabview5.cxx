@@ -472,7 +472,7 @@ void ScTabView::DrawEnableAnim(bool bSet)
     sal_uInt16 i;
     if ( pDrawView )
     {
-        //  dont start animations if display of graphics is disabled
+        //  don't start animations if display of graphics is disabled
         //  graphics are controlled by VOBJ_TYPE_OLE
         if ( bSet && aViewData.GetOptions().GetObjMode(VOBJ_TYPE_OLE) == VOBJ_MODE_SHOW )
         {

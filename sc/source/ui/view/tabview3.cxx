@@ -1883,7 +1883,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     {
 //      should be done like this, so that Sfx notice it, but it does not work:
 //!     aViewData.GetViewShell()->GetViewFrame()->GetWindow().GrabFocus();
-//      therfore first like this:
+//      therefore first like this:
         GetActiveWin()->GrabFocus();
     }
 

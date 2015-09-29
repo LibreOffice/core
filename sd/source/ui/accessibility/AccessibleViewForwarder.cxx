@@ -68,7 +68,7 @@ Rectangle AccessibleViewForwarder::GetVisibleArea() const
     return aVisibleArea;
 }
 
-/** Tansform the given point into pixel coordinates.  After the pixel
+/** Transform the given point into pixel coordinates.  After the pixel
     coordinates of the window origin are added to make the point coordinates
     absolute.
 */

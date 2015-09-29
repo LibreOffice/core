@@ -369,7 +369,7 @@ sal_Int32 SAL_CALL ScTestAddIn::getColorValue( const ::com::sun::star::uno::Refe
         long nRet = -1;
         uno::Any aTrans = xProp->getPropertyValue( L"IsCellBackgroundTransparent" );
         sal_Bool bIsTrans;
-        aTrans >>= bIsTrans;        //! dont use >>= for BOOL
+        aTrans >>= bIsTrans;        //! don't use >>= for BOOL
         if (!bIsTrans)
         {
             uno::Any aCol = xProp->getPropertyValue( L"CellBackColor" );

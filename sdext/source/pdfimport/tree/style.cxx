@@ -109,7 +109,7 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
         }
         else
         {
-            // decrease refcound on old instance
+            // decrease refcount on old instance
             it->second.RefCount--;
             // acquire new HashedStyle
             HashedStyle aSearchStyle;
