@@ -35,8 +35,8 @@ class ViewShellBase;
     and sub shells on the SFX shell stack.  They form a two level hierarchy
     (the underlying ViewShellBase, the only true SfxViewShell descendant,
     forms a third level.)  On the first level there are the view shells
-    (what formely was called view shell, anyway; nowadays they are derived
-    from SfxShell.) and shells for panes. On the second level there are sub
+    (what formerly was called view shell, anyway; nowadays they are derived
+    from SfxShell) and shells for panes. On the second level there are sub
     shells (also derived from SfxShell) that usually are tool bars.
 
     <p>On the SFX shell stack the regular sub shells are placed above their

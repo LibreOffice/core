@@ -107,7 +107,7 @@ private:
 
     /** This flag is set to </sal_True> when an update of the current
         configurtion was requested (because the last request in the queue
-        was processed) but could not be exected because the
+        was processed) but could not be executed because the
         ConfigurationController was locked.  A call to UpdateConfiguration()
         resets the flag to </sal_False>.
     */
