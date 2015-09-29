@@ -461,7 +461,6 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                     {
                         BitmapColor aPixCol;
                         const BitmapColor aFillCol( GetFillColor() );
-                        const BitmapColor aWhite( pR->GetBestMatchingColor( Color( COL_WHITE ) ) );
                         const BitmapColor aBlack( pR->GetBestMatchingColor( Color( COL_BLACK ) ) );
                         const long nWidth = pW->Width();
                         const long nHeight = pW->Height();
