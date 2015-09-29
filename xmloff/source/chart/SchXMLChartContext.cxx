@@ -345,7 +345,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
     if( bHasAddin )
     {
-        //correct charttype serveice name when having an addin
+        //correct charttype service name when having an addin
         //and don't refresh addin during load
         uno::Reference< beans::XPropertySet > xDocProp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
         if( xDocProp.is() )

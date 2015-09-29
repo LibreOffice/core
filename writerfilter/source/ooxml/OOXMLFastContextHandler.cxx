@@ -1823,7 +1823,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
 
     // We have methods to _add_ individual tokens or whole namespaces to be
     // processed by writerfilter (instead of oox), but we have no method to
-    // filter out a single token. Just hardwire the wrap token here till we
+    // filter out a single token. Just hardwire the wrap token here untill we
     // need a more generic solution.
     bool bIsWrap = Element == static_cast<sal_Int32>(NMSP_vmlWord | XML_wrap);
     bool bSkipImages = getDocument()->IsSkipImages() && oox::getNamespace(Element) == static_cast<sal_Int32>(NMSP_dml) &&

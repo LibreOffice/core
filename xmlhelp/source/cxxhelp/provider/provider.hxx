@@ -115,7 +115,7 @@ namespace chelp {
             (void)aListener;
         }
 
-        // XConainerListener ( deriver from XEventListener )
+        // XConainerListener ( derive from XEventListener )
 
         virtual void SAL_CALL
         disposing( const ::com::sun::star::lang::EventObject& Source )

@@ -606,7 +606,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     return pContext;
 }
 
-// This method is called from SdXMLFrameShapeContext to create children of drawe:frame
+// This method is called from SdXMLFrameShapeContext to create children of draw:frame
 SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     SvXMLImport& rImport,
     sal_uInt16 p_nPrefix,

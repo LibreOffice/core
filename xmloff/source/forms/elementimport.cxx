@@ -1279,7 +1279,7 @@ namespace xmloff
 
         // need to make the URL absolute if
         // * it's the image-data attribute
-        // * it's the target-location attribute, and we're dealign with an object which has the respective property
+        // * it's the target-location attribute, and we're dealing with an object which has the respective property
         bool bMakeAbsolute =
                 _rLocalName.equalsAscii( s_pImageDataAttributeName )
             ||  (   _rLocalName.equalsAscii( s_pTargetLocationAttributeName )

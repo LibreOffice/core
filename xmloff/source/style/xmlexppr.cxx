@@ -653,7 +653,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::_Filter(
         }
     }
 
-    // Call centext-filter
+    // Call context-filter
     if( !aPropStateArray.empty() )
         ContextFilter(bEnableFoFontFamily, aPropStateArray, xPropSet);
 
