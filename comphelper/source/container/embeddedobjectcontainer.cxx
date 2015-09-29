@@ -1479,7 +1479,7 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
                     //TODO/LATER: only storing if changed!
                     //xPersist->storeOwn(); //commented, i120168
 
-            // begin:all charts will be persited as xml format on disk when saving, which is time consuming.
+            // begin:all charts will be persisted as xml format on disk when saving, which is time consuming.
                     // '_bObjectsOnly' mean we are storing to alien formats.
                     //  'isStorageElement' mean current object is NOT an MS OLE format. (may also include in future), i120168
                     if (_bObjectsOnly && (nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING)

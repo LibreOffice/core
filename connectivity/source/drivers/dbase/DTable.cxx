@@ -547,7 +547,7 @@ void ODbaseTable::construct()
 
         if (m_pMemoStream)
         {
-            // set the buffer extactly to the length of a record
+            // set the buffer exactly to the length of a record
             m_pMemoStream->Seek(STREAM_SEEK_TO_END);
             nFileSize = m_pMemoStream->Tell();
             m_pMemoStream->Seek(STREAM_SEEK_TO_BEGIN);

@@ -277,7 +277,7 @@ namespace dbtools
             bool bValidLink = true;
 
             // is there an inner parameter with this name? That is, a parameter which is already part of
-            // the very original statement (not the one we create ourselve, with the additional parameters)
+            // the very original statement (not the one we create ourselves, with the additional parameters)
             ParameterInformation::iterator aPos = m_aParameterInformation.find( *pDetailFields );
             if ( aPos != m_aParameterInformation.end() )
             {   // there is an inner parameter with this name

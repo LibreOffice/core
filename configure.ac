@@ -2889,7 +2889,7 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([that macosx-version-max-allowed is coherent with macos-with-sdk])
     if test $MAC_OS_X_VERSION_MAX_ALLOWED -gt $MACOSX_SDK_VERSION; then
-        AC_MSG_ERROR([the version maximum allowed cannot be greater thatn the sdk level])
+        AC_MSG_ERROR([the version maximum allowed cannot be greater than the sdk level])
     else
         AC_MSG_RESULT([ok])
     fi

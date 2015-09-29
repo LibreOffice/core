@@ -61,7 +61,7 @@ namespace connectivity
 
     typedef ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertyChangeListener>  OConnectionPool_Base;
 
-    // typedef for the interanl structure
+    // typedef for the internal structure
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPooledConnection> > TPooledConnections;
 
      // contains the currently pooled connections

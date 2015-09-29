@@ -33,7 +33,7 @@ enum class Value { Unknown, False, True };
 Value getValue(Expr const * expr) {
     expr = ignoreParenImpCastAndComma(expr);
     if (expr->getType()->isBooleanType()) {
-        // Instead going via Expr::isCXX11ConstantExpr would turn up excatly one
+        // Instead going via Expr::isCXX11ConstantExpr would turn up exactly one
         // additional place in svx/source/dialog/framelinkarray.cxx
         //
         //   const bool DIAG_DBL_CLIP_DEFAULT = false;

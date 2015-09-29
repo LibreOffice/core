@@ -50,12 +50,12 @@ namespace connectivity
 
             if (bInString)
             {
-                // when now the String-Delimiter-character occurs ...
+                // when now the String-Delimiter-character occurs...
                 if ( cChar == cStrDel )
                 {
                     if ((i+1 < nLen) && (m_sString[i+1] == cStrDel))
                     {
-                        // double String-Delimter-character:
+                        // double String-Delimiter-character:
                         ++i;    // no string-end, skip next character.
                     }
                     else

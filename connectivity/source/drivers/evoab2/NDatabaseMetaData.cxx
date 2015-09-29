@@ -994,7 +994,7 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsBatchUpdates(  ) throw(SQLExce
 
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    /* Dont need to change as evoab driver supports only table */
+    /* Don't need to change as evoab driver supports only table */
 
     // there exists no possibility to get table types so we have to check
     static const OUString sTableTypes[] =
