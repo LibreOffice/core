@@ -93,7 +93,7 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
                 (*iter)->release(); // Ref for aAllListeners - pLst may be deleted here
 
                 // this AddIn is no longer used
-                // dont delete, just remove the ref for the list
+                // don't delete, just remove the ref for the list
 
                 iter = aAllListeners.erase( iter );
                 continue;

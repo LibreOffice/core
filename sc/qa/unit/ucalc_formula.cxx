@@ -1949,7 +1949,7 @@ void Test::testFormulaRefUpdateMove()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0,10,0));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,11,0));
 
-    // Move B4:B6 to D4 (two columsn to the right).
+    // Move B4:B6 to D4 (two columns to the right).
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(1,3,0,1,5,0), ScAddress(3,3,0), true, false, false, false);
     CPPUNIT_ASSERT_MESSAGE("Failed to move B4:B6.", bMoved);

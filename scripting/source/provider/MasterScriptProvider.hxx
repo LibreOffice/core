@@ -127,7 +127,7 @@ private:
 
     // This component supports XInitialization, it can be created
     // using createInstanceXXX() or createInstanceWithArgumentsXXX using
-    // the service Mangager.
+    // the service Manager.
     // Need to detect proper initialisation and validity
     // for the object, so m_bIsValid indicates that the object is valid is set in ctor
     // in case of createInstanceWithArgumentsXXX() called m_bIsValid is set to reset

@@ -5294,7 +5294,7 @@ void Test::testAreasWithNotes()
     dataFound = rDoc.GetPrintAreaVer(0,0,1,row, bNotes); // col 0 & 1
     CPPUNIT_ASSERT_MESSAGE("No PrintAreaVer should be found", !dataFound);
 
-    // now add cells with value, check that notes are taken into accompt in good cases
+    // now add cells with value, check that notes are taken into account in good cases
 
     m_pDoc->SetString(0, 3, 0, "Some Text");
     m_pDoc->SetString(3, 3, 0, "Some Text");
@@ -6609,7 +6609,7 @@ void Test::testCopyPasteMatrixFormula()
     //m_pDoc->SetString(ScAddress(2,1,0), "C2");  // C2
     m_pDoc->SetString(ScAddress(3,1,0), "D2");  // D2
 
-    // Set Vallues to D3
+    // Set Values to D3
     //m_pDoc->SetValue(ScAddress(1,2,0), 9.0);    // B3
     //m_pDoc->SetString(ScAddress(2,2,0), "C3");  // C3
     m_pDoc->SetValue(ScAddress(3,2,0), 11.0);   // D3

@@ -188,7 +188,7 @@ throw ( Exception, RuntimeException, std::exception )
     }
     else // no args
     {
-        // use either scriping context or maybe zero args?
+        // use either scripting context or maybe zero args?
         invokeArgs = Sequence< Any >( 0 ); // no arguments
     }
     m_sAargs = invokeArgs;

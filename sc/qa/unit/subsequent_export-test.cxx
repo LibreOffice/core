@@ -919,7 +919,7 @@ void ScExportTest::testRichTextExportODS()
         // Set this edit text to cell B2.
         rDoc.SetEditText(ScAddress(1,1,0), pEE->CreateTextObject());
         pEditText = rDoc.GetEditText(ScAddress(1,1,0));
-        CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
+        CPPUNIT_ASSERT_MESSAGE("Incorrect B2 value.", aCheckFunc.checkB2(pEditText));
     }
 
     // Now, save and reload this document.
@@ -932,7 +932,7 @@ void ScExportTest::testRichTextExportODS()
         ScFieldEditEngine* pEE = &rDoc2.GetEditEngine();
 
         // Make sure the content of B2 is still intact.
-        CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
+        CPPUNIT_ASSERT_MESSAGE("Incorrect B2 value.", aCheckFunc.checkB2(pEditText));
 
         // Insert a multi-line content to B4.
         pEE->Clear();

@@ -41,7 +41,7 @@ class MsgBox(unohelper.Base):
         self.smgr = aContext.ServiceManager
         # UI Dialog object
         self.dialog=None
-        # List of openned Listeners
+        # List of opened Listeners
         self.lst_listeners={}
         #UI parameters
         self.ButtonSize = 50
