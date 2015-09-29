@@ -25,7 +25,7 @@ Service Name
   com.sun.star.i18n.Transliteration.l10n ... other
 
   We have to adopt different service name for internal UNO objects.
-  Case realted functionality vary depending on Locale.
+  Case related functionality vary depending on Locale.
 
 
 Implementation Name

@@ -199,7 +199,7 @@ TabWindowService::TabWindowService()
         :   TransactionBase         (                               )
         ,   PropertySetHelper       ( m_aMutex,
                                       &m_aTransactionManager        ,
-                                      false                     ) // sal_False => dont release shared mutex on calling us!
+                                      false                     ) // sal_False => don't release shared mutex on calling us!
         ,   OWeakObject             (                               )
 
         // Init member
@@ -399,7 +399,7 @@ css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const OUString& /
                                                                        sal_Int32        nHandle      )
 {
     /* There is no need to lock any mutex here. Because we share the
-       solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)
+       solar mutex with our base class. And we said to our base class: "don't release it on calling us" .-)
        see ctor of PropertySetHelper for further information.
     */
     css::uno::Any aValue;

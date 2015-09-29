@@ -62,7 +62,7 @@ static bool eq_sentence(MzString& outs, istream *strm, const char *end = 0);
 
 struct hwpeq {
   const char    *key;       // hwp math keyword
-  const char    *latex;     // corresponding latex keywork
+  const char    *latex;     // corresponding latex keyword
   int           nargs;      // # of argument
   unsigned char flag;       // case sensitive?
 };
