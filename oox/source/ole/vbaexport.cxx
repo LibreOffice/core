@@ -379,7 +379,7 @@ void writePROJECTCODEPAGE(SvStream& rStrm)
 void writePROJECTNAME(SvStream& rStrm, const OUString& name)
 {
     rStrm.WriteUInt16(0x0004); // id
-    sal_uInt32 sizeOfProjectName = name.getLength(); // for project name "VBAProject"
+    sal_uInt32 sizeOfProjectName = name.getLength();
     rStrm.WriteUInt32(sizeOfProjectName); // sizeOfProjectName
     exportString(rStrm, name); // ProjectName
 }
