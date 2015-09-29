@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_d7721cad",
+        "filename": "include/comphelper/listenernotification.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-29T19:34:17Z",
+      "side": 0,
+      "message": "This @see OListenerContainerBase is a link to an implementation, don\u0027t remove.",
+      "range": {
+        "startLine": 55,
+        "startChar": 13,
+        "endLine": 55,
+        "endChar": 35
+      },
+      "revId": "eb35f6e153cb002efda5b65ec4282e9224cef4d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
