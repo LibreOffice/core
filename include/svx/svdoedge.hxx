@@ -264,7 +264,7 @@ public:
     virtual void NbcMove(const Size& aSize) SAL_OVERRIDE;
     virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact) SAL_OVERRIDE;
 
-    // #i54102# added rotate, mirrorn and shear support
+    // #i54102# added rotate, mirror and shear support
     virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
     virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) SAL_OVERRIDE;

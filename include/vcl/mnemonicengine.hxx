@@ -101,7 +101,7 @@ namespace vcl
 
             This way, you can implement cyclic selection of entries: In
             FirstSearchEntry, return the entry which was previously
-            selected, and in NextSearchEntry, interlly cycle around
+            selected, and in NextSearchEntry, internally cycle around
             in your list. Then, multiple user inputs of <code>Alt-C</code> will
             cycle through all entries with the mnemonic being "c".
 

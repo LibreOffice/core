@@ -846,7 +846,7 @@ public:
 
     /** Post a user event to the default window.
 
-     User events allow for the deferral of work to later in the main-loop - at idle.
+     User events allow for the deferreal of work to later in the main-loop - at idle.
 
      @param     rLink           Link to event callback function
      @param     pCaller         Pointer to data sent to the event by the caller. Optional.

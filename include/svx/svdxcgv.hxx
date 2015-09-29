@@ -50,7 +50,7 @@ public:
     // E.g. for Clipboard, Drag'n'Drop, ...
     // Add all marked objects to a metafile.
     // FIXME: This is known to be somewhat buggy still (Offset...,
-    // foreign graphics objects (SdrGrafObj), virutal object
+    // foreign graphics objects (SdrGrafObj), virtual object
     // copies (SdrVirtObj) with anchor position <>(0,0)).
     GDIMetaFile GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked = false) const;
 
