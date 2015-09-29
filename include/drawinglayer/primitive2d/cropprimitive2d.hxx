@@ -35,7 +35,7 @@ namespace drawinglayer
             Caution: Due to old constraints (old core definitions) the
             crop distances describe how the uncropped content is defined
             relative to the current object size. This means that maTransformation
-            describes the rurrent object size (the part of the object visible
+            describes the current object size (the part of the object visible
             with the crop applied). To get the original size and orientation
             of the uncropped content it is necessary to calc back from the
             current situation (maTransformation) using the crop values

@@ -71,8 +71,8 @@
  ! (sic!), or strange things like 'ar-Ploc-SA' and 'ja-Ploc-JP' ('Ploc'??).
  !
  ! Use THAT ^^^ as the ultimate reference source (haha?) as of 2013-10-17 it
- ! inludes also Windows 8.1 (Release: Monday, July 22, 2013; well, its table
- ! says 08/08/2013 Revision 6.0, but hey, who cares ...)
+ ! includes also Windows 8.1 (Release: Monday, July 22, 2013; well, its table
+ ! says 08/08/2013 Revision 6.0, but hey, who cares...)
 
    For completeness, you can never have enough lists:
    List of supported locale identifiers in Word

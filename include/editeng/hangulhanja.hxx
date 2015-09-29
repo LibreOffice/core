@@ -60,7 +60,7 @@ namespace editeng
         {
             eExchange,              // simply exchange one text with another
             eReplacementBracketed,  // keep the original, and put the replacement in brackets after it
-            eOriginalBracketed,     // replace the original text, but put it in brackeds after the replacement
+            eOriginalBracketed,     // replace the original text, but put it in brackets after the replacement
             eReplacementAbove,      // keep the original, and put the replacement text as ruby text above it
             eOriginalAbove,         // replace the original text, but put it as ruby text above it
             eReplacementBelow,      // keep the original, and put the replacement text as ruby text below it
@@ -98,7 +98,7 @@ namespace editeng
         ::std::unique_ptr< HangulHanjaConversion_Impl >   m_pImpl;
 
         // used to set initial values of m_pImpl object from saved ones
-        static bool                 m_bUseSavedValues;  // defines if the followng two values should be used for initialization
+        static bool                 m_bUseSavedValues;  // defines if the following two values should be used for initialization
         static bool                 m_bTryBothDirectionsSave;
         static ConversionDirection  m_ePrimaryConversionDirectionSave;
 
@@ -220,7 +220,7 @@ namespace editeng
             @param _rOrigText
                 the original text to be replaced (as returned by GetNextPortion).
                 Since in Chinese conversion the original text is needed as well
-                in order to only do the minimal necassry text changes and to keep
+                in order to only do the minimal necessary text changes and to keep
                 as much attributes as possible this is supplied here as well.
 
             @param _rReplaceWith

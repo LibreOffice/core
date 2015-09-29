@@ -119,7 +119,7 @@ namespace drawinglayer
 
             For primitive identification, getPrimitiveID is used currently in this implementations
             to allow a fast switch/case processing. This needs a unique identifier mechanism which
-            currently uses defines (see drawinglayer_primitivetypes2d.hxx). For UNO prmitive API
+            currently uses defines (see drawinglayer_primitivetypes2d.hxx). For UNO primitive API
             it will be needed to add a unique descriptor (Name?) later to the API.
 
             This base implementation provides mappings from the methods from XPrimitive2D

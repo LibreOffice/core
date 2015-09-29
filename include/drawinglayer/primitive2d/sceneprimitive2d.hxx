@@ -105,7 +105,7 @@ namespace drawinglayer
         public:
             /// public helpers
             /** Geometry extractor. Shadow will be added as in create2DDecomposition, but
-                the 3D content is not converted to a bitmap visualisation but to projected 2D gemetry. This
+                the 3D content is not converted to a bitmap visualisation but to projected 2D geometry. This
                 helper is useful e.g. for Contour extraction or HitTests.
               */
             Primitive2DSequence getGeometry2D() const;

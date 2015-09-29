@@ -42,7 +42,7 @@ namespace drawinglayer
         /** SliceType3D definition */
         enum SliceType3D
         {
-            SLICETYPE3D_REGULAR,        // normal geoemtry Slice3D
+            SLICETYPE3D_REGULAR,        // normal geometry Slice3D
             SLICETYPE3D_FRONTCAP,       // front cap
             SLICETYPE3D_BACKCAP         // back cap
         };
