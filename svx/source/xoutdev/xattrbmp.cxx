@@ -248,6 +248,8 @@ Bitmap createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, C
 
 bool isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront)
 {
+    bool bRet(false);
+
     if(!rBitmapEx.IsTransparent())
     {
         Bitmap aBitmap(rBitmapEx.GetBitmap());
@@ -269,14 +271,16 @@ bool isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColo
                         o_rFront = rPalette[1];
                         o_rBack = rPalette[0];
 
-                        return true;
+                        bRet = true;
                     }
+
+                    Bitmap::ReleaseAccess(pRead);
                 }
             }
         }
     }
 
-    return false;
+    return bRet;
 }
 
 XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
