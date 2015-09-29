@@ -180,7 +180,7 @@ private:
     /** @short  holds the information about the finished load process.
 
         @descr  The content of m_xTargetFrame can't be used as valid indicator,
-                (in case the micht existing old document was reactivated)
+                (in case the existing old document was reactivated)
                 we must hold the result of the load process explicitly.
      */
     bool m_bLoaded;

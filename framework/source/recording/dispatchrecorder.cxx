@@ -28,7 +28,7 @@ using namespace ::com::sun::star::uno;
 
 namespace framework{
 
-// used to mark a dispatch as comment (mostly it indicates an error) Changing of this wdefine will impact all using of such comments ...
+// used to mark a dispatch as comment (mostly it indicates an error) Changing of this define will impact all using of such comments...
 #define REM_AS_COMMENT    "rem "
 
 //  XInterface, XTypeProvider, XServiceInfo

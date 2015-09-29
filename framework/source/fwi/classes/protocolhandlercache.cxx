@@ -74,7 +74,7 @@ sal_Int32    HandlerCache::m_nRefCount = 0;
 HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
 
 /**
-    @short      ctor of the cache of all registered protoco handler
+    @short      ctor of the cache of all registered protocol handler
     @descr      It tries to open the right configuration package automatically
                 and fill the internal structures. After that the cache can be
                 used for read access on this data and perform some search

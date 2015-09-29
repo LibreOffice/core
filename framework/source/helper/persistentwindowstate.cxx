@@ -275,7 +275,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     SystemWindow* pSystemWindow = static_cast<SystemWindow*>(pWindow);
     WorkWindow*   pWorkWindow   = static_cast<WorkWindow*  >(pWindow);
 
-    // dont save this special state!
+    // don't save this special state!
     if (pWorkWindow->IsMinimized())
         return;
 

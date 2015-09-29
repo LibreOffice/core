@@ -29,7 +29,7 @@ namespace framework{
             <type scope="com::sun::star::document">XActionLockable</type>.
 
     @descr  This guard should be used to be sure, that any lock will be
-            released. Otherwise the locaked document can hinder the office on shutdown!
+            released. Otherwise the locked document can hinder the office on shutdown!
 */
 class ActionLockGuard
 {
@@ -141,7 +141,7 @@ class ActionLockGuard
             if (m_bActionLocked && m_xActionLock.is())
             {
                 m_xActionLock->removeActionLock();
-                // dont check for any locks here ...
+                // don't check for any locks here ...
                 // May another guard use the same lock object :-(
                 m_bActionLocked = false;
             }

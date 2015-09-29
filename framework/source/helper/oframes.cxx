@@ -196,7 +196,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
     // Else; Do nothing! Our owner is dead.
     SAL_WARN_IF( !xOwner.is(), "fwk", "OFrames::queryFrames(): Our owner is dead - you can't query for frames ...!" );
 
-    // Resturn result of this operation.
+    // Return result of this operation.
     return seqFrames;
 }
 

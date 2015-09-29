@@ -234,7 +234,7 @@ public:
         /** timer must be started with a very(!) short time interval,
             to poll for the end of an user action, which does not allow saving documents in general */
         E_POLL_TILL_AUTOSAVE_IS_ALLOWED,
-        /** dont start the timer - but calls the same action then before immediately again! */
+        /** don't start the timer - but calls the same action then before immediately again! */
         E_CALL_ME_BACK
     };
 
@@ -421,7 +421,7 @@ private:
 
                 And further it's not possible to use a simple boolean value here.
                 Because if more than one operation iterates over the same stl container ...
-                (only to modify it's elements but dont add new or removing existing ones!)
+                (only to modify it's elements but don't add new or removing existing ones!)
                 it should be possible doing so. But we must guarantee that the last operation reset
                 this lock ... not the first one ! So we use a "ref count" mechanism for that."
      */
@@ -435,8 +435,8 @@ private:
 
     /** @short  special debug option to make testing faster.
 
-        @descr  We dont interpret the timer unit as [min] ...
-                we use [ms] instead of that. Further we dont
+        @descr  We don't interpret the timer unit as [min] ...
+                we use [ms] instead of that. Further we don't
                 wait 10 s for user idle ...
      */
     #if OSL_DEBUG_LEVEL > 1
@@ -664,8 +664,8 @@ private:
                 the new document, which should be deregistered.
 
         @param  bStopListening
-                sal_False: must be used in case this method is called withion disposing() of the document,
-                       where it make no sense to deregister our listener. The container dies ...
+                sal_False: must be used in case this method is called within disposing() of the document,
+                       where it make no sense to deregister our listener. The container dies...
                 sal_True : must be used in case this method is used on "dergistration" of this document, where
                        we must deregister our listener .-)
 
@@ -725,7 +725,7 @@ private:
                              If a document is the most active one, saving it
                              will be postponed if there exists other unsaved
                              documents. This feature was implemented, because
-                             we dont wish to disturb the user on it's work.
+                             we don't wish to disturb the user on it's work.
                              ... bAllowUserIdleLoop should be set to sal_True
                 EMERGENCY_SAVE / SESSION_SAVE =>
                              Here we must finish our work ASAP! It's not allowed
@@ -963,7 +963,7 @@ private:
         @descr  The problem behind: There exists different use case of this method.
                 a) An external progress is provided by our CrashSave or Recovery dialog.
                 b) We must create our own progress e.g. for an AutoSave
-                c) Sometimes our application filters dont use the progress
+                c) Sometimes our application filters don't use the progress
                    provided by the MediaDescriptor. They use the Frame every time to create
                    it's own progress. So we implemented a HACK for these and now we set
                    an InterceptedProgress there for the time WE use this frame for loading/storing documents .-)
@@ -993,12 +993,12 @@ private:
         Every URL supported by our UCB component can be used here.
         Further it doesn't matter if the file really exists or not.
         Because removing a non exsistent file will have the same
-        result at the end ... a non existing file .-)
+        result at the end... a non existing file .-)
 
         On the other side removing of files from disc is an optional
-        feature. If we are not able doing so ... its not a real problem.
-        Ok - users disc place will be samller then ... but we should produce
-        a crash during crash save because we can't delete a temporary file only !
+        feature. If we are not able doing so... its not a real problem.
+        Ok - users disc place will be smaller then... but we should produce
+        a crash during crash save because we can't delete a temporary file only!
 
         @param  sURL
                 the url of the file, which should be removed.
@@ -1360,7 +1360,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
         bool bOn = lArgs.getUnpackedValueOrDefault(PROP_AUTOSAVE_STATE, true);
         if (bOn)
         {
-            // dont enable AutoSave hardly !
+            // don't enable AutoSave hardly !
             // reload configuration to know the current state.
             implts_readAutoSaveConfig();
             implts_updateTimer();
@@ -1744,7 +1744,7 @@ void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
     css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
     if (xDocument.is())
     {
-        implts_deregisterDocument(xDocument, false); // sal_False => dont call removeEventListener() .. because it's not needed here
+        implts_deregisterDocument(xDocument, false); // sal_False => don't call removeEventListener() .. because it's not needed here
         return;
     }
 
@@ -2225,7 +2225,7 @@ void AutoRecovery::implts_stopListening()
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     // Attention: Dont reset our internal members here too.
-    // May be we must work with our configuration, but dont wish to be informed
+    // May be we must work with our configuration, but don't wish to be informed
     // about changes any longer. Needed e.g. during EMERGENCY_SAVE!
     xCFG.set                   (m_xRecoveryCFG      , css::uno::UNO_QUERY);
     xGlobalEventBroadcaster.set(m_xNewDocBroadcaster, css::uno::UNO_QUERY);
@@ -2451,7 +2451,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // Can happen if events came in asynchronous on recovery time.
     // Then our cache was filled from the configuration ... but now we get some
     // asynchronous events from the global event broadcaster. We must be sure that
-    // we dont add the same document more than once.
+    // we don't add the same document more than once.
     AutoRecovery::TDocumentList::iterator pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt != m_lDocCache.end())
     {
@@ -2467,7 +2467,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     utl::MediaDescriptor lDescriptor(xDocument->getArgs());
 
     // check if this document must be ignored for recovery !
-    // Some use cases dont wish support for AutoSave/Recovery ... as e.g. OLE-Server / ActiveX Control etcpp.
+    // Some use cases don't wish support for AutoSave/Recovery ... as e.g. OLE-Server / ActiveX Control etcpp.
     bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE(), false);
     if (bNoAutoSave)
         return;
@@ -2619,7 +2619,7 @@ void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::
     if (pIt != m_lDocCache.end())
     {
         /* Now we know, that this document was modified again and must be saved next time.
-           But we dont need this information for every e.g. key input of the user.
+           But we don't need this information for every e.g. key input of the user.
            So we stop listening here.
            But if the document was saved as temp. file we start listening for this event again.
         */
@@ -2949,7 +2949,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
 
         // already auto saved during this session :-)
         // This state must be reset for all documents
-        // if timer is started with normnal AutoSaveTimerIntervall!
+        // if timer is started with normal AutoSaveTimerIntervall!
         if ((aInfo.DocumentState & AutoRecovery::E_HANDLED) == AutoRecovery::E_HANDLED)
             continue;
 
@@ -3231,7 +3231,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         // a1,b1,c1,d2,e2,f2)
         if ((rInfo.DocumentState & AutoRecovery::E_DAMAGED) == AutoRecovery::E_DAMAGED)
         {
-            // dont forget to inform listener! May be this document was
+            // don't forget to inform listener! May be this document was
             // damaged on last saving time ...
             // Then our listener need this notification.
             // If it was damaged during last "try to open" ...
@@ -3268,7 +3268,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
             if (!bOriginalWasTried)
             {
                 rInfo.DocumentState |= AutoRecovery::E_INCOMPLETE;
-                // try original URL ... ! dont continue with next item here ...
+                // try original URL ... ! don't continue with next item here ...
             }
             else
             {
@@ -3384,7 +3384,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
            since our last AutoSave. And we deregister us in case we know this state.
            But directly after one document as recovered ... we must start listening.
            Otherwhise the first "modify" doesn't reach us. Because we ourself called setModified()
-           on the document via API. And currently we dont listen for any events (not at theGlobalEventBroadcaster
+           on the document via API. And currently we don't listen for any events (not at theGlobalEventBroadcaster
            nor at any document!).
         */
         implts_startModifyListeningOnDoc(rInfo);
@@ -3528,7 +3528,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
     // In case we are asked to save unmodified documents too - and one of them
     // is an empty one (because it was new created using e.g. an URL private:factory/...)
     // we should not save it really. Then we put the information about such "empty document"
-    // into the configuration and dont create any recovery file on disk.
+    // into the configuration and don't create any recovery file on disk.
     // We use the title of the document to make it unique.
     OUStringBuffer sUniqueName;
     if (!rInfo.OrgURL.isEmpty())
@@ -3710,7 +3710,7 @@ void AutoRecovery::implts_prepareEmergencySave()
 
 void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
 {
-    // Write a hint "we chrashed" into the configuration, so
+    // Write a hint "we crashed" into the configuration, so
     // the error report tool is started too in case no recovery
     // documents exists and was saved.
     ::comphelper::ConfigurationHelper::writeDirectKey(
@@ -3832,7 +3832,7 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
     // confusing for the user
     AutoRecovery::st_impl_removeLockFile();
 
-    // reset all modified documents, so the dont show any UI on closing ...
+    // reset all modified documents, so the don't show any UI on closing ...
     // and close all documents, so we can shutdown the OS!
     implts_prepareSessionShutdown();
 
@@ -4237,7 +4237,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
                                                                                 css::uno::Reference< css::task::XStatusIndicator >() );
 
     // Normally a progress is set from outside (e.g. by the CrashSave/Recovery dialog, which uses our dispatch API).
-    // But for a normal auto save we dont have such "external progress"... because this function is triggered by our own timer then.
+    // But for a normal auto save we don't have such "external progress"... because this function is triggered by our own timer then.
     // In such case we must create our own progress !
     if (
         (! xExternalProgress.is()) &&

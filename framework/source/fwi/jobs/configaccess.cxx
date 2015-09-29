@@ -82,7 +82,7 @@ ConfigAccess::EOpenMode ConfigAccess::getMode() const
             which needs cfg access, can use it. That prevent us against multiple open/close requests.
             But you can use this method to upgrade an already opened configuration too.
             It's possible to open a config access in READONLY mode first and "open" it at a second
-            time within the mode READWRITE. Then we will upgrade it. Dowgrade will be possible too.
+            time within the mode READWRITE. Then we will upgrade it. Downgrade will be possible too.
 
             But note: closing will be done explicitly by calling method close() ... not by
             downgrading with mode CLOSED!
