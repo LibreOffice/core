@@ -78,7 +78,7 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, i
         return;
     // TODO: If the if/else/while/for comes from a macro expansion, ignore it completely for
     // now. The code below could assume everything is in the same place (and thus also column)
-    // and give a false warning. Moreover some macros are rather lousily written and would
+    // and give a false warning. Moreover some macros are rather loosely written and would
     // result in poor formatting. To be evaluated later, maybe this could be handled
     // including macro expansion.
     if( stmtLocation.isMacroID())

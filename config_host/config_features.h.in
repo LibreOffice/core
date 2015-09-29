@@ -18,7 +18,7 @@
 /* DESKTOP - Whether we have a "normal" desktop UI or not.
  *
  * Non-DESKTOP in practice means touch-based mobile devices, Android
- * or iOS for now. Support for those is work in pogress.
+ * or iOS for now. Support for those is work in progress.
  *
  * Non-DESKTOP implies that the OS makes sure that only one instance
  * of each LibreOffice-based "app" at a time can be running, and thus
@@ -95,15 +95,15 @@
 
 #define HAVE_FEATURE_OPENCL 0
 
-/* 
- * Whether the OS has Avahi support, 
+/*
+ * Whether the OS has Avahi support,
  * This library is used for zeroconf service publication on the local network
- * for the Impress remote control, so that the remote can automatically 
- * discover the running libO instance and its IP address. 
- * 
- * This library should be present on most mordern linux distributions
- * but not on "all" of them. For now, you should add --enable-avahi for 
- * this to be taken into account. Otherwise the test of its presence 
+ * for the Impress remote control, so that the remote can automatically
+ * discover the running libO instance and its IP address.
+ *
+ * This library should be present on most modern linux distributions
+ * but not on "all" of them. For now, you should add --enable-avahi for
+ * this to be taken into account. Otherwise the test of its presence
  * will not take place.
  */
 

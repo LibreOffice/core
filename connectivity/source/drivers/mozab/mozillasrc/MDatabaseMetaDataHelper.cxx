@@ -136,7 +136,7 @@ static nsresult insertPABDescription()
     // mozilla loads the descriptions of pab and history from a file named addressbook.properties
     // we never deliver it with OOo,so mozab does not auto load personal addressbook and Collected addresses
     // If we want to deliver addressbook.properties with OOo,we have to deal with hole mozilla chrome mechanism.
-    // So I insert the descriptiones as user prefes,they will cover the default value.
+    // So I insert the descriptiones as user prefs, they will cover the default value.
 
     //"Personal Address Book" "Collected Addresses" are loaded from officecfg
     nsCOMPtr<nsIPref> prefs = do_GetService(NS_PREF_CONTRACTID, &rv);

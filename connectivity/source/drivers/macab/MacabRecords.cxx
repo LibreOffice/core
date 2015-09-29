@@ -90,7 +90,7 @@ MacabRecords::MacabRecords(const ABAddressBookRef _addressBook, MacabHeader *_he
  * The idea is that the only reason to copy a MacabRecords is to create
  * a filtered version of it, which can have the same length (to avoid
  * resizing) and will work from the same base addressbook, but might have
- * entirey different values and even (possibly in the future) a different
+ * entirely different values and even (possibly in the future) a different
  * header.
  */
 MacabRecords::MacabRecords(const MacabRecords *_copy)
@@ -435,7 +435,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
         }
     }
 
-    // Somehow, we got too many or too few non-requird properties...
+    // Somehow, we got too many or too few non-required properties...
     // Most likely, one of the required properties no longer exists, which
     // we also test later.
     OSL_ENSURE(k == numNonRequiredProperties, "MacabRecords::createHeaderForRecordType: Found an unexpected number of non-required properties");

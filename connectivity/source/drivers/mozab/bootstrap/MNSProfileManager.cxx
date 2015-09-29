@@ -76,7 +76,7 @@ namespace connectivity
             OUString ProfileManager::setCurrentProfile( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
             {
                 OUString currentProfile = getCurrentProfile();
-                //if profileName not given, then skip and return curernt profile
+                //if profileName not given, then skip and return current profile
                 if (profileName.isEmpty() && m_CurrentProduct == product)
                     return currentProfile;
 

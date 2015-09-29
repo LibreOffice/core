@@ -1369,7 +1369,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 code->Emit( Emit::OpCodes::Ldarg_0 );
                 code->Emit(
                     Emit::OpCodes::Newobj,
-                    //GetConstructor requies that the member types of the object which is to be constructed are already known.
+                    //GetConstructor requires that the member types of the object which is to be constructed are already known.
                     field_type->GetConstructor(
                     gcnew array< ::System::Type^> ( 0 ) ) );
                 code->Emit( Emit::OpCodes::Stfld, field );
@@ -1638,7 +1638,7 @@ Assembly ^ TypeEmitter::type_resolve(
 
         //We create a try/ catch around the createInstanceWithContext, etc. functions
         //There are 3 cases
-        //1. function do not specify exceptions. Then RuntimeExceptions are retrhown and other
+        //1. function do not specify exceptions. Then RuntimeExceptions are re-thrown and other
         //   exceptions produce a DeploymentException.
         //2. function specify  Exception. Then all exceptions fly through
         //3. function specifies exceptions but no Exception. Then these are rethrown
@@ -1829,7 +1829,7 @@ Assembly ^ TypeEmitter::type_resolve(
             //catch (unoidl.com.sun.star.uno.Exception) {throw DeploymentException...}
             ilGen->BeginCatchBlock(type_uno_exception);
 
-            //Define the local variabe that keeps the exception
+            //Define the local variable that keeps the exception
              Emit::LocalBuilder ^ local_exception = ilGen->DeclareLocal(
                  type_uno_exception);
 
