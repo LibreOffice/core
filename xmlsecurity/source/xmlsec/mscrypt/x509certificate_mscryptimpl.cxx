@@ -39,7 +39,7 @@ using namespace ::com::sun::star::security ;
 using ::com::sun::star::security::XCertificate ;
 using ::com::sun::star::util::DateTime ;
 
-/*Resturns the index within rRawString where sTypeName starts and where it ends.
+/*Returns the index within rRawString where sTypeName starts and where it ends.
     The starting index is pair.first. The ending index in pair.second points
     one char after the last character of the type.
     sTypeName can be
