@@ -418,6 +418,7 @@ void Outliner::SetToEmptyText()
 {
     OutlinerParaObject *pEmptyTxt =  GetEmptyParaObject();
     SetText(*pEmptyTxt);
+    delete pEmptyTxt;
 }
 
 void Outliner::SetText( const OUString& rText, Paragraph* pPara )
