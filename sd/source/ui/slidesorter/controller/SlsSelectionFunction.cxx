@@ -1320,7 +1320,7 @@ void MultiSelectionModeHandler::ProcessEvent (
 {
     // During a multi selection we do not want sudden jumps of the
     // visible area caused by moving newly selected pages into view.
-    // Therefore disable that temporarily.  The disabler object is
+    // Therefore disable that temporarily.  The disabled object is
     // released at the end of the event processing, after the focus and
     // current slide have been updated.
     VisibleAreaManager::TemporaryDisabler aDisabler (mrSlideSorter);

@@ -165,7 +165,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
 }
 
 /**
- * Destructor, restore Links, clear Oultiner
+ * Destructor, restore Links, clear Outliner
  */
 OutlineView::~OutlineView()
 {

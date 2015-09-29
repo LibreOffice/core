@@ -277,7 +277,7 @@ private:
 
     /** Prepare for several model changes, i.e. prevent time-consuming and
         non-critical operations like repaints until UnlockModelChange() is
-        called.  Ciritcal operations like releasing references to pages that
+        called. Critical operations like releasing references to pages that
         do not exist anymore are executed.
     */
     void LockModelChange();
