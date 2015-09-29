@@ -160,9 +160,9 @@ bool TextChainFlow::IsUnderflow() const
 // XXX:Would it be possible to unify undeflow and its possibly following overrflow?
 void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 {
-
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // making whole text
+    bool bNewTextTransferred = false;
     OutlinerParaObject *pNewText = impGetMergedUnderflowParaObject(pOutl);
 
     // Set the other box empty; it will be replaced by the rest of the text if overflow occurs
@@ -174,13 +174,18 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 
     // This should not be done in editing mode!! //XXX
     if (!mpTargetLink->IsInEditMode())
+    {
         mpTargetLink->NbcSetOutlinerParaObject(pNewText);
+        bNewTextTransferred = true;
+    }
 
     // Restore size and set new text
     //pOutl->SetMaxAutoPaperSize(aOldSize); // XXX (it seems to be working anyway without this)
     pOutl->SetText(*pNewText);
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
+    if (!bNewTextTransferred)
+        delete pNewText;
 
     // Check for new overflow
     CheckForFlowEvents(pOutl);
