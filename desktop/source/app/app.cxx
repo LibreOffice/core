@@ -414,7 +414,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 // Mostly the installation was damaged and must be repaired manually .. or by calling
 // setup again.
 // On the other side we must make sure that no further actions will be possible within
-// the current office process ! No pipe requests, no menu/toolbar/shortuct actions
+// the current office process ! No pipe requests, no menu/toolbar/shortcut actions
 // are allowed. Otherwise we will force a "crash inside a crash".
 // Thats why we have to use a special native message box here which does not use yield :-)
 
@@ -2424,7 +2424,7 @@ OUString GetURL_Impl(
         return rName;
     }
 
-    // dont touch file urls, those should already be in internal form
+    // don't touch file urls, those should already be in internal form
     // they won't get better here (#112849#)
     if (comphelper::isFileUrl(rName))
     {

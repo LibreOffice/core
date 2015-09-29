@@ -52,7 +52,7 @@ public:
     virtual OUString  GetText() const SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 
-    /** Showsthe Prefix
+    /** Shows the Prefix
         @param  _bShowPrefix
             If <TRUE/> than the prefix will be visible, otherwise not.
     */

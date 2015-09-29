@@ -67,7 +67,7 @@ void OTableDesignUndoAct::Redo()
 {
     m_pTabDgnCtrl->m_nCurUndoActId++;
 
-    // restore Modifed-flag after Redo of first Undo-action
+    // restore Modified-flag after Redo of first Undo-action
     if( m_pTabDgnCtrl->m_nCurUndoActId > 0 )
     {
         m_pTabDgnCtrl->GetView()->getController().setModified(sal_True);

@@ -1045,7 +1045,7 @@ bool OSelectionBrowseBox::SaveModified()
 
                         if ( !m_bGroupByUnRelated && !pEntry->IsVisible() )
                         {
-                            // we have to change the visblie flag, so we must append also an undo action
+                            // we have to change the visible flag, so we must append also an undo action
                             pEntry->SetVisible();
                             m_pVisibleCell->GetBox().Check();
                             appendUndoAction("0","1",BROW_VIS_ROW,bListAction);
