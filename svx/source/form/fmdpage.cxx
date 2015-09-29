@@ -96,7 +96,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  xForms;
 
-    FmFormPage *pFmPage = PTR_CAST( FmFormPage, GetSdrPage() );
+    FmFormPage *pFmPage = dynamic_cast<FmFormPage*>( GetSdrPage()  );
     if( pFmPage )
         xForms.set( pFmPage->GetForms(), css::uno::UNO_QUERY_THROW );
 
@@ -107,7 +107,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 sal_Bool SAL_CALL SvxFmDrawPage::hasForms() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     bool bHas = false;
-    FmFormPage* pFormPage = PTR_CAST( FmFormPage, GetSdrPage() );
+    FmFormPage* pFormPage = dynamic_cast<FmFormPage*>( GetSdrPage()  );
     if ( pFormPage )
         bHas = pFormPage->GetForms( false ).is();
     return bHas;

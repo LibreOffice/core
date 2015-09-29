@@ -509,7 +509,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
     if (!pNewObj)
         return NULL;
 
-    if( pNewObj->ISA(E3dPolyScene))
+    if( dynamic_cast<const E3dPolyScene* >(pNewObj) !=  nullptr)
     {
         // initialise scene
         E3dScene* pScene = static_cast<E3dScene*>(pNewObj);
@@ -529,7 +529,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
 
         pScene->SetRectsDirty();
     }
-    else if(pNewObj->ISA(E3dExtrudeObj))
+    else if(dynamic_cast<const E3dExtrudeObj* >(pNewObj) !=  nullptr)
     {
         E3dExtrudeObj* pObj = static_cast<E3dExtrudeObj*>(pNewObj);
         basegfx::B2DPolygon aNewPolygon;
@@ -542,7 +542,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
         // #107245# pObj->SetExtrudeCharacterMode(sal_True);
         pObj->SetMergedItem(Svx3DCharacterModeItem(true));
     }
-    else if(pNewObj->ISA(E3dLatheObj))
+    else if(dynamic_cast<const E3dLatheObj* >(pNewObj) !=  nullptr)
     {
         E3dLatheObj* pObj = static_cast<E3dLatheObj*>(pNewObj);
         basegfx::B2DPolygon aNewPolygon;

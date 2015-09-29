@@ -50,7 +50,7 @@ void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
     {
         SdrObject* pObj = GetMarkedObjectByIndex(0);
 
-        if (pObj && pObj->ISA(E3dPolyScene))
+        if (pObj && dynamic_cast< const E3dPolyScene* >(pObj) !=  nullptr)
         {
             bool bBezier = false;
             pNewObj = static_cast<E3dPolyScene*>(pObj)->ConvertToPolyObj(bBezier, bLineToArea);
@@ -72,19 +72,19 @@ void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
 
 void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
 {
-    if(pObj->ISA(E3dLatheObj))
+    if(dynamic_cast< const E3dLatheObj* >(pObj) !=  nullptr)
     {
         rMask |= 0x0001;
     }
-    else if(pObj->ISA(E3dExtrudeObj))
+    else if(dynamic_cast< const E3dExtrudeObj* >(pObj) !=  nullptr)
     {
         rMask |= 0x0002;
     }
-    else if(pObj->ISA(E3dSphereObj))
+    else if(dynamic_cast< const E3dSphereObj* >(pObj) !=  nullptr)
     {
         rMask |= 0x0004;
     }
-    else if(pObj->ISA(E3dCubeObj))
+    else if(dynamic_cast< const E3dCubeObj* >(pObj) !=  nullptr)
     {
         rMask |= 0x0008;
     }

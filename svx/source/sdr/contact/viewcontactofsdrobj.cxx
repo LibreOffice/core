@@ -52,7 +52,7 @@ ViewContactOfSdrObj::ViewContactOfSdrObj(SdrObject& rObj)
     meRememberedAnimationKind(SDRTEXTANI_NONE)
 {
     // init AnimationKind
-    if(GetSdrObject().ISA(SdrTextObj))
+    if(dynamic_cast<const SdrTextObj*>( &GetSdrObject() ) != nullptr)
     {
         SdrTextObj& rTextObj = static_cast<SdrTextObj&>(GetSdrObject());
         meRememberedAnimationKind = rTextObj.GetTextAniKind();
@@ -90,7 +90,7 @@ ViewContact* ViewContactOfSdrObj::GetParentContact() const
 
     if(pObjList)
     {
-        if(pObjList->ISA(SdrPage))
+        if(dynamic_cast<const SdrPage*>( pObjList) !=  nullptr)
         {
             // Is a page
             pRetval = &(static_cast<SdrPage*>(pObjList)->GetViewContact());
@@ -112,7 +112,7 @@ ViewContact* ViewContactOfSdrObj::GetParentContact() const
 void ViewContactOfSdrObj::ActionChanged()
 {
     // look for own changes
-    if(GetSdrObject().ISA(SdrTextObj))
+    if(dynamic_cast<const SdrTextObj*>( &GetSdrObject() ) != nullptr)
     {
         SdrTextObj& rTextObj = static_cast<SdrTextObj&>(GetSdrObject());
 

@@ -115,7 +115,7 @@ private:
     bool                            HasView() const { return mpView != nullptr; }
     bool                            IsEditMode() const
                                     {
-                                        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+                                        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
                                         return mbShapeIsEditMode && pTextObj && pTextObj->IsTextEditActive();
                                     }
 
@@ -395,7 +395,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                     // AccessibleCell
                     if (mpObject && mpText)
                     {
-                        sdr::table::SdrTableObj* pTableObj = PTR_CAST( sdr::table::SdrTableObj, mpObject );
+                        sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mpObject );
                         if(pTableObj)
                         {
                             sdr::table::CellRef xCell = pTableObj->getActiveCell();
@@ -531,7 +531,7 @@ void SvxTextEditSourceImpl::SetupOutliner()
     // layout
     if( mpObject && mpOutliner )
     {
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         Rectangle aPaintRect;
         if( pTextObj )
         {
@@ -554,7 +554,7 @@ void SvxTextEditSourceImpl::UpdateOutliner()
     // layout
     if( mpObject && mpOutliner )
     {
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         Rectangle aPaintRect;
         if( pTextObj )
         {
@@ -582,7 +582,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
     {
         if( mpOutliner == NULL )
         {
-            SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+            SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
             sal_uInt16 nOutlMode = OUTLINERMODE_TEXTOBJECT;
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
                 nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
@@ -628,7 +628,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         mpTextForwarder->flushCache();
 
         OutlinerParaObject* pOutlinerParaObject = NULL;
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         if( pTextObj && pTextObj->getActiveText() == mpText )
             pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
         bool bOwnParaObj(false);
@@ -766,7 +766,7 @@ SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
         // register as listener - need to broadcast state change messages
         mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
 
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         if( pTextObj )
         {
             Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
@@ -822,7 +822,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate 
 
             if(mpView->SdrBeginTextEdit(mpObject, 0L, 0L, false, nullptr, 0L, false, false))
             {
-                SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+                SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
                 if (pTextObj && pTextObj->IsTextEditActive())
                 {
                     // create new view forwarder
@@ -937,7 +937,7 @@ Rectangle SvxTextEditSourceImpl::GetVisArea()
         }
 
         // offset vis area by edit engine left-top position
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         if( pTextObj )
         {
             Rectangle aAnchorRect;

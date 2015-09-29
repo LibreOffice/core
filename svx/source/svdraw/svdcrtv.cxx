@@ -628,7 +628,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 SdrLayerID nLayer(0);
 
                 // #i72535#
-                if(pObj->ISA(FmFormObj))
+                if(dynamic_cast<const FmFormObj*>( pObj) !=  nullptr)
                 {
                     // for FormControls, force to form layer
                     nLayer = rAd.GetLayerID(rAd.GetControlLayerName(), true);
@@ -649,10 +649,10 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 bool bSceneIntoScene(false);
 
                 if(pObjMerk
-                    && pObjMerk->ISA(E3dScene)
+                    && dynamic_cast<const E3dScene* >(pObjMerk) !=  nullptr
                     && pCreatePV
                     && pCreatePV->GetAktGroup()
-                    && pCreatePV->GetAktGroup()->ISA(E3dScene))
+                    && dynamic_cast<const E3dScene* >(pCreatePV->GetAktGroup()) != nullptr)
                 {
                     bool bDidInsert = static_cast<E3dView*>(this)->ImpCloneAll3DObjectsToDestScene(
                         static_cast<E3dScene*>(pObjMerk), static_cast<E3dScene*>(pCreatePV->GetAktGroup()), Point(0, 0));
@@ -698,7 +698,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
         }
         if (bRet && pObjMerk!=NULL && IsTextEditAfterCreate())
         {
-            SdrTextObj* pText=PTR_CAST(SdrTextObj,pObjMerk);
+            SdrTextObj* pText=dynamic_cast<SdrTextObj*>( pObjMerk );
             if (pText!=NULL && pText->IsTextFrame())
             {
                 SdrBeginTextEdit(pText, pPVMerk, nullptr, true, nullptr, nullptr);
@@ -779,7 +779,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             // check for form controls
             if(bUseSolidDragging)
             {
-                if(pAktCreate->ISA(SdrUnoObj))
+                if(dynamic_cast<const SdrUnoObj*>( pAktCreate) !=  nullptr)
                 {
                     bUseSolidDragging = false;
                 }
@@ -804,7 +804,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             {
                 basegfx::B2DPolyPolygon aDragPolyPolygon;
 
-                if(pAktCreate->ISA(SdrRectObj))
+                if(dynamic_cast<const SdrRectObj*>( pAktCreate) !=  nullptr)
                 {
                     // ensure object has some size, necessary for SdrTextObj because
                     // there are still untested divisions by that sizes
@@ -817,7 +817,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                     }
                 }
 
-                if(pAktCreate->ISA(SdrPathObj))
+                if(dynamic_cast<const SdrPathObj*>( pAktCreate) !=  nullptr)
                 {
                     // The up-to-now created path needs to be set at the object to have something
                     // that can be visualized

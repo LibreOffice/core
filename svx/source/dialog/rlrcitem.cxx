@@ -55,20 +55,20 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         // Left / right margin
         case SID_RULER_LR_MIN_MAX:
         {
-            const SfxRectangleItem *pItem = PTR_CAST(SfxRectangleItem, pState);
+            const SfxRectangleItem *pItem = dynamic_cast<const SfxRectangleItem*>( pState );
             rRuler.UpdateFrameMinMax(pItem);
             break;
         }
         case SID_ATTR_LONG_LRSPACE:
         {
-            const SvxLongLRSpaceItem *pItem = PTR_CAST(SvxLongLRSpaceItem, pState);
+            const SvxLongLRSpaceItem *pItem = dynamic_cast<const SvxLongLRSpaceItem*>( pState );
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxLRSpaceItem expected");
             rRuler.UpdateFrame(pItem);
             break;
         }
         case SID_ATTR_LONG_ULSPACE:
         {
-            const SvxLongULSpaceItem *pItem = PTR_CAST(SvxLongULSpaceItem, pState);
+            const SvxLongULSpaceItem *pItem = dynamic_cast<const SvxLongULSpaceItem*>( pState );
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxULSpaceItem expected");
             rRuler.UpdateFrame(pItem);
             break;
@@ -76,7 +76,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_ATTR_TABSTOP_VERTICAL:
         case SID_ATTR_TABSTOP:
         {
-            const SvxTabStopItem *pItem = PTR_CAST(SvxTabStopItem, pState);
+            const SvxTabStopItem *pItem = dynamic_cast<const SvxTabStopItem*>( pState );
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxTabStopItem expected");
             rRuler.Update(pItem);
             break;
@@ -84,7 +84,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_ATTR_PARA_LRSPACE_VERTICAL:
         case SID_ATTR_PARA_LRSPACE:
         {
-            const SvxLRSpaceItem *pItem = PTR_CAST(SvxLRSpaceItem, pState);
+            const SvxLRSpaceItem *pItem = dynamic_cast<const SvxLRSpaceItem*>( pState );
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxLRSpaceItem expected");
             rRuler.UpdatePara(pItem);
             break;
@@ -94,7 +94,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_RULER_ROWS:
         case SID_RULER_ROWS_VERTICAL:
         {
-            const SvxColumnItem *pItem = PTR_CAST(SvxColumnItem, pState);
+            const SvxColumnItem *pItem = dynamic_cast<const SvxColumnItem*>( pState );
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxColumnItem expected");
 #ifdef DBG_UTIL
             if(pItem)
@@ -113,35 +113,35 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         }
         case SID_RULER_PAGE_POS:
         {   // Position page, page width
-            const SvxPagePosSizeItem *pItem = PTR_CAST(SvxPagePosSizeItem, pState);
+            const SvxPagePosSizeItem *pItem = dynamic_cast<const SvxPagePosSizeItem*>( pState );
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxPagePosSizeItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_OBJECT:
         {   // Object selection
-            const SvxObjectItem *pItem = PTR_CAST(SvxObjectItem, pState);
+            const SvxObjectItem *pItem = dynamic_cast<const SvxObjectItem*>( pState );
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxObjectItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_PROTECT:
         {
-            const SvxProtectItem *pItem = PTR_CAST(SvxProtectItem, pState);
+            const SvxProtectItem *pItem = dynamic_cast<const SvxProtectItem*>( pState );
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxProtectItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_BORDER_DISTANCE:
         {
-            const SvxLRSpaceItem *pItem = PTR_CAST(SvxLRSpaceItem, pState);
+            const SvxLRSpaceItem *pItem = dynamic_cast<const SvxLRSpaceItem*>( pState );
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxLRSpaceItem expected");
             rRuler.UpdateParaBorder(pItem);
         }
         break;
         case SID_RULER_TEXT_RIGHT_TO_LEFT :
         {
-            const SfxBoolItem *pItem = PTR_CAST(SfxBoolItem, pState);
+            const SfxBoolItem *pItem = dynamic_cast<const SfxBoolItem*>( pState );
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SfxBoolItem expected");
             rRuler.UpdateTextRTL(pItem);
         }

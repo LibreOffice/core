@@ -742,7 +742,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 const SfxPoolItem* pItem;
                 if ( ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) ) == SfxItemState::SET )
                 {
-                    const SfxInt32Item* pTypedItem = PTR_CAST( SfxInt32Item, pItem );
+                    const SfxInt32Item* pTypedItem = dynamic_cast<const SfxInt32Item* >( pItem );
                     if ( pTypedItem )
                         nRecord = std::max( pTypedItem->GetValue(), sal_Int32(0) );
                 }
@@ -1185,7 +1185,7 @@ FmFormPage* FmFormShell::GetCurPage() const
 {
     FmFormPage* pP = NULL;
     if (m_pFormView && m_pFormView->GetSdrPageView())
-        pP = PTR_CAST(FmFormPage,m_pFormView->GetSdrPageView()->GetPage());
+        pP = dynamic_cast<FmFormPage*>( m_pFormView->GetSdrPageView()->GetPage() );
     return pP;
 }
 
@@ -1301,7 +1301,7 @@ namespace
         while ( aIter.IsMore() )
         {
             SdrObject* pObject = aIter.Next();
-            SdrUnoObj* pUnoObject = pObject ? PTR_CAST( SdrUnoObj, pObject ) : NULL;
+            SdrUnoObj* pUnoObject = pObject ? dynamic_cast<SdrUnoObj*>( pObject  ) : NULL;
             if ( !pUnoObject )
                 continue;
 

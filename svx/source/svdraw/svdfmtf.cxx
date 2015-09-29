@@ -523,7 +523,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                     while(aIter.IsMore())
                     {
                         SdrObject* pCandidate = aIter.Next();
-                        OSL_ENSURE(pCandidate && 0 == dynamic_cast< SdrObjGroup* >(pCandidate), "SdrObjListIter with IM_DEEPNOGROUPS error (!)");
+                        OSL_ENSURE(pCandidate && dynamic_cast< SdrObjGroup* >(pCandidate) ==  nullptr, "SdrObjListIter with IM_DEEPNOGROUPS error (!)");
                         SdrObject* pNewClone = pCandidate->Clone();
 
                         if(pNewClone)

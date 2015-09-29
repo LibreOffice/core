@@ -197,7 +197,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                 // ! Poolable is not even saved in the Pool
                 // And itemsets/plain-items depending on the round
                 if ( *itrArr && IsItemFlag(**ppDefItem, SfxItemPoolFlags::POOLABLE) &&
-                     pImp->bInSetItem == (bool) (*ppDefItem)->ISA(SfxSetItem) )
+                     pImp->bInSetItem == (dynamic_cast< const SfxSetItem* >(*ppDefItem) !=  nullptr) )
                 {
                     // Own signature, global WhichId and ItemVersion
                     sal_uInt16 nSlotId = GetSlotId( (*ppDefItem)->Which(), false );
@@ -232,7 +232,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                             else
                                 break;
 #ifdef DBG_UTIL_MI
-                            if ( !pItem->ISA(SfxSetItem) )
+                            if ( dynamic_cast<const SfxSetItem*>( pItem ) ==  nullptr )
                             {
                                 sal_uLong nMark = rStream.Tell();
                                 rStream.Seek( nItemStartPos + sizeof(sal_uInt16) );
@@ -646,7 +646,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
             // SfxSetItems could contain Items from secondary Pools
             SfxPoolItem *pDefItem = *(pImp->ppStaticDefaults + nIndex);
-            pImp->bInSetItem = pDefItem->ISA(SfxSetItem);
+            pImp->bInSetItem = dynamic_cast<const SfxSetItem*>( pDefItem ) !=  nullptr;
             if ( !bSecondaryLoaded && pImp->mpSecondary && pImp->bInSetItem )
             {
                 // Seek to end of own Pool
@@ -1162,7 +1162,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
         if ( 0 == ( pPool = pPool->pImp->mpSecondary ) )
             return false;
 
-    DBG_ASSERT( !pImp->bInSetItem || !rItem.ISA(SfxSetItem),
+    DBG_ASSERT( !pImp->bInSetItem || dynamic_cast<const SfxSetItem*>( &rItem ) ==  nullptr,
                 "SetItem contains ItemSet with SetItem" );
 
     sal_uInt16 nSlotId = pPool->GetSlotId( rItem.Which() );
@@ -1226,7 +1226,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
         nWhich = pRefPool->GetNewWhich( nWhich ); // Map WhichId to new version
 
     DBG_ASSERT( !nWhich || !pImp->bInSetItem ||
-                !pRefPool->pImp->ppStaticDefaults[pRefPool->GetIndex_Impl(nWhich)]->ISA(SfxSetItem),
+                dynamic_cast<const SfxSetItem*>( pRefPool->pImp->ppStaticDefaults[pRefPool->GetIndex_Impl(nWhich)] ) == nullptr,
                 "loading SetItem in ItemSet of SetItem" );
 
     // Are we loading via surrogate?

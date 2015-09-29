@@ -163,7 +163,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     if (nCloneErrCnt==0) {
         for (size_t no=0; no<nCount; ++no) {
             const SdrObject* pSrcOb=rSrcList.GetObj(no);
-            const SdrEdgeObj* pSrcEdge=PTR_CAST(SdrEdgeObj,pSrcOb);
+            const SdrEdgeObj* pSrcEdge=dynamic_cast<const SdrEdgeObj*>( pSrcOb );
             if (pSrcEdge!=NULL) {
                 SdrObject* pSrcNode1=pSrcEdge->GetConnectedNode(true);
                 SdrObject* pSrcNode2=pSrcEdge->GetConnectedNode(false);
@@ -171,7 +171,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
                 if (pSrcNode2!=NULL && pSrcNode2->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode2=NULL; // across all lists (yet)
                 if (pSrcNode1!=NULL || pSrcNode2!=NULL) {
                     SdrObject* pEdgeObjTmp=GetObj(no);
-                    SdrEdgeObj* pDstEdge=PTR_CAST(SdrEdgeObj,pEdgeObjTmp);
+                    SdrEdgeObj* pDstEdge=dynamic_cast<SdrEdgeObj*>( pEdgeObjTmp );
                     if (pDstEdge!=NULL) {
                         if (pSrcNode1!=NULL) {
                             sal_uIntPtr nDstNode1=pSrcNode1->GetOrdNum();
@@ -730,7 +730,7 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
     if( pUngroupObj )
     {
         SdrObjList* pSrcLst = pUngroupObj->GetSubList();
-        if( pUngroupObj->ISA( SdrObjGroup ) && pSrcLst )
+        if( dynamic_cast<const SdrObjGroup*>( pUngroupObj) !=  nullptr && pSrcLst )
         {
             SdrObjGroup* pUngroupGroup = static_cast< SdrObjGroup* > (pUngroupObj);
 
@@ -1680,7 +1680,7 @@ void SdrPage::SetInserted( bool bIns )
          while ( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();
-            if ( pObj->ISA(SdrOle2Obj) )
+            if ( dynamic_cast<const SdrOle2Obj* >(pObj) !=  nullptr )
             {
                 if( mbInserted )
                     static_cast<SdrOle2Obj*>(pObj)->Connect();

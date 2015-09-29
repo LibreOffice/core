@@ -549,7 +549,7 @@ PFormViewPageWindowAdapter FmXFormView::findWindow( const Reference< XControlCon
 
 void FmXFormView::addWindow(const SdrPageWindow& rWindow)
 {
-    FmFormPage* pFormPage = PTR_CAST( FmFormPage, rWindow.GetPageView().GetPage() );
+    FmFormPage* pFormPage = dynamic_cast<FmFormPage*>( rWindow.GetPageView().GetPage()  );
     if ( !pFormPage )
         return;
 
@@ -963,7 +963,7 @@ IMPL_LINK_NOARG_TYPED(FmXFormView, OnAutoFocus, void*, void)
     SdrPageView *pPageView = m_pView ? m_pView->GetSdrPageView() : NULL;
     SdrPage *pSdrPage = pPageView ? pPageView->GetPage() : NULL;
     // get the forms collection of the page we belong to
-    FmFormPage* pPage = PTR_CAST( FmFormPage, pSdrPage );
+    FmFormPage* pPage = dynamic_cast<FmFormPage*>( pSdrPage  );
     Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms(), UNO_QUERY ) : Reference< XIndexAccess >() );
 
     const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];

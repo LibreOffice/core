@@ -44,7 +44,7 @@ public:
 
                             ErrorInfo( sal_uIntPtr lArgUserId ) :
                                 lUserId( lArgUserId ){}
-    virtual                 ~ErrorInfo(){}
+    virtual                 ~ErrorInfo();
 
     sal_uIntPtr             GetErrorCode() const { return lUserId; }
 

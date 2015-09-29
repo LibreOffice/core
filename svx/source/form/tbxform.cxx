@@ -123,7 +123,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
 
     if (pState)
     {
-        const SfxInt32Item* pItem = PTR_CAST( SfxInt32Item, pState );
+        const SfxInt32Item* pItem = dynamic_cast< const SfxInt32Item* >( pState );
         DBG_ASSERT( pItem, "SvxFmTbxCtlAbsRec::StateChanged: invalid item!" );
         pWin->SetValue( pItem ? pItem->GetValue() : -1 );
     }
