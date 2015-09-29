@@ -54,6 +54,11 @@ char const GREGORIAN[] = "gregorian";
 
 const sal_uInt16 UPPER_PRECISION = 300; // entirely arbitrary...
 const double EXP_LOWER_BOUND = 1.0E-4; // prefer scientific notation below this value.
+const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above that absolute value.
+                                            // Back in time was E16 that lead
+                                            // to display rounding errors, see
+                                            // also sal/rtl/math.cxx
+                                            // doubleToString()
 
 } // namespace
 
@@ -1733,7 +1738,7 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& rOutString)
 {
     sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
 
-    if ( fabs(fNumber) > 1.0E15 ) // #58531# was E16
+    if ( fabs(fNumber) > EXP_ABS_UPPER_BOUND )
     {
         nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
         rOutString = ::rtl::math::doubleToUString( fNumber,
@@ -2126,27 +2131,40 @@ bool SvNumberformat::GetOutputString(double fNumber,
                     }
                     fNumber = -fNumber;
                 }
+                /* TODO: why did we insist on 10 decimals for the non-exponent
+                 * case? doubleToUString() handles rtl_math_DecimalPlaces_Max
+                 * gracefully when used with rtl_math_StringFormat_Automatic,
+                 * so all that special casing and mumbo-jumbo in the else
+                 * branch below might not be needed at all. */
+                if (fNumber > EXP_ABS_UPPER_BOUND)
+                {
+                    sBuff.append( ::rtl::math::doubleToUString( fNumber,
+                                rtl_math_StringFormat_Automatic,
+                                rtl_math_DecimalPlaces_Max,
+                                GetFormatter().GetNumDecimalSep()[0], true));
+                }
+                else
                 {
                     OUString sTemp;
                     ImpGetOutputStdToPrecision(fNumber, sTemp, 10); // Use 10 decimals for general 'unlimited' format.
                     sBuff.append(sTemp);
-                }
-                if (fNumber < EXP_LOWER_BOUND)
-                {
-                    sal_Int32 nLen = sBuff.getLength();
-                    if (!nLen)
+                    if (fNumber < EXP_LOWER_BOUND)
                     {
-                        return false;
-                    }
-                    // #i112250# With the 10-decimal limit, small numbers are formatted as "0".
-                    // Switch to scientific in that case, too:
-                    if (nLen > 11 || ((nLen == 1 && sBuff[0] == '0') && fNumber != 0.0))
-                    {
-                        sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
-                        nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
-                        sBuff = ::rtl::math::doubleToUString( fNumber,
-                                                              rtl_math_StringFormat_E2, nStandardPrec /*2*/,
-                                                              GetFormatter().GetNumDecimalSep()[0], true);
+                        sal_Int32 nLen = sBuff.getLength();
+                        if (!nLen)
+                        {
+                            return false;
+                        }
+                        // #i112250# With the 10-decimal limit, small numbers are formatted as "0".
+                        // Switch to scientific in that case, too:
+                        if (nLen > 11 || ((nLen == 1 && sBuff[0] == '0') && fNumber != 0.0))
+                        {
+                            sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
+                            nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
+                            sBuff = ::rtl::math::doubleToUString( fNumber,
+                                    rtl_math_StringFormat_E2, nStandardPrec /*2*/,
+                                    GetFormatter().GetNumDecimalSep()[0], true);
+                        }
                     }
                 }
                 if (bSign)
