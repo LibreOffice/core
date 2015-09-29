@@ -1283,10 +1283,11 @@ TextChainCursorManager *SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(
 {
     *bOutHandled = false;
 
-    SdrTextObj* pTextObj = NULL;
-    if (mxTextEditObj.is())
-        pTextObj= dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
-    else
+    if (!mxTextEditObj.is())
+        return NULL;
+
+    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
+    if (!pTextObj)
         return NULL;
 
     if (!pTextObj->GetNextLinkInChain() && !pTextObj->GetPrevLinkInChain())
@@ -1301,8 +1302,6 @@ TextChainCursorManager *SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(
 
     return pCursorManager;
 }
-
-
 
 bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
