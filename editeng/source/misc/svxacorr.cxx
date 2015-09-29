@@ -1055,7 +1055,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     sChar = rCC.titlecase(sChar); //see fdo#56740
     bool bRet = sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
 
-    // Parahaps someone wants to have the word
+    // Perhaps someone wants to have the word
     if( bRet && SaveWordCplSttLst & nFlags )
         rDoc.SaveCpltSttWord( CapitalStartSentence, nSttPos, sWord, cSave );
 
@@ -2751,7 +2751,7 @@ SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
     // convert from hash to set permanantly
     if ( mpImpl->maSet.empty() )
     {
-        // This beasty has some O(N log(N)) in a terribly slow ICU collate fn.
+        // This beast has some O(N log(N)) in a terribly slow ICU collate fn.
         for (AutocorrWordHashType::const_iterator it = mpImpl->maHash.begin(); it != mpImpl->maHash.end(); ++it)
             mpImpl->maSet.insert( it->second );
         mpImpl->maHash.clear();

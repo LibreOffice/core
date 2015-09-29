@@ -918,7 +918,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 // at the beginning of a paragraph? Move back one position
                 sal_Int32 nNd = pInsPos->GetNodeIdx();
                 MovePos(false);
-                // if can not move backward then later dont move forward !
+                // if can not move backward then later don't move forward !
                 bCrsrBack = nNd != pInsPos->GetNodeIdx();
             }
 

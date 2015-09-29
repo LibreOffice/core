@@ -319,7 +319,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
 
     aObjectInfo.Object = xResult;
 
-    // TODO/LATER: in case of iconifie object the icon should be stored in aObjectInfo
+    // TODO/LATER: in case of iconify object the icon should be stored in aObjectInfo
 
     OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!\n" );
     if ( !aObjectInfo.Object.is() )

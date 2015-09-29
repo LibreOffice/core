@@ -142,7 +142,7 @@ Any IUnknownWrapper_Impl::queryInterface(const Type& t)
     // Put or Get property, the implementation code has no business guessing that, it's up to the caller to decide that. Worse XDirectInvocation duplicates lots of code.
     // XAutomationInvocation provides separate calls for put& get
     // properties. Note: Currently the basic runtime doesn't call put properties directly, it should... after all the basic runtime should know whether it is calling a put or get property.
-    // For the moment for ease of merging we will let the XDirectInvoke and XAuthomationInvocation interfaces stay side by side ( and for the momemnt at least I would prefer the basic
+    // For the moment for ease of merging we will let the XDirectInvoke and XAuthomationInvocation interfaces stay side by side (and for the moment at least I would prefer the basic
     // runtime to call XAutomationInvocation instead of XDirectInvoke
     return WeakImplHelper<XBridgeSupplier2,
         XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod, XDirectInvocation, XAutomationInvocation >::queryInterface(t);
@@ -658,7 +658,7 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
         VarDesc aVarDesc(pInfo);
         getPropDesc(aName, & aDescGet, & aDescPut, & aVarDesc);
 
-    // we should probably just check the funckind
+    // we should probably just check the func kind
         // basic has been modified to handle properties ( 'get' ) props at
     // least with parameters
     // additionally you can call invoke(Get|Set)Property on the bridge
@@ -2023,7 +2023,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             int outParamIndex=0;
             for (int paramIndex = 0; paramIndex < nUnoArgs; paramIndex ++)
             {
-                //Determine the index within the method sinature
+                //Determine the index within the method signature
                 int realParamIndex = paramIndex;
                 int revParamIndex = dispparams.cArgs - paramIndex - 1;
                 if (Params[paramIndex].getValueType()
