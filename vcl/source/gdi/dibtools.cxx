@@ -748,8 +748,13 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
         BitmapPalette aDummyPal;
         Bitmap aNewBmp(aSizePixel, nBitCount, &aDummyPal);
         BitmapWriteAccess* pAcc = aNewBmp.AcquireWriteAccess();
-        if (!pAcc || pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
+        if (!pAcc)
             return false;
+        if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
+        {
+            Bitmap::ReleaseAccess(pAcc);
+            return false;
+        }
         Bitmap aNewBmpAlpha;
         BitmapWriteAccess* pAccAlpha = 0;
         bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
