@@ -370,7 +370,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement )
     }
 
     XMLHashMap::iterator pos = m_pXMLStrings->find( sId );
-    if( pos == m_pXMLStrings->end() ) // No instanze , create new one
+    if( pos == m_pXMLStrings->end() ) // No instance, create new one
     {
         pElem = new LangHashMap();
         (*pElem)[ sLanguage ]=pElement;

@@ -83,7 +83,7 @@ class GrammarCheckingIterator:
     >,
     public LinguDispatcher
 {
-    //the queue is keeping track of all senteces to be checked
+    //the queue is keeping track of all sentences to be checked
     //every element of this queue is a FlatParagraphEntry struct-object
     typedef std::deque< FPEntry > FPQueue_t;
 
