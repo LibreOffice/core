@@ -110,6 +110,7 @@ FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
         aLbCategory.SetEntryData(aLbCategory.InsertEntry(pCategory->getName()),(void*)pCategory);
     }
 
+    aLbCategory.SetDropDownLineCount( aLbCategory.GetEntryCount() );
     aLbCategory.SelectEntryPos(1);
     UpdateFunctionList();
     aLbCategory.SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
