@@ -110,12 +110,12 @@ public class _XControl extends MultiMethodTest {
         tRes.tested("createPeer()",true);
     }
 
-    /**
-    * Test calls the method. Then the object ralation 'WINPEER' is
+    /*
+    * Test calls the method. Then the object relation 'WINPEER' is
     * obtained, and compared with the peer, gotten from (XControl) oObj
     * variable.<p>
     * Has <b> OK </b> status if peer gotten isn't null
-    * The following method tests are to be completed successfully before :
+    * The following method tests are to be completed successfully before:
     */
     public void _getPeer() {
         requiredMethod("createPeer()");

@@ -41,7 +41,7 @@ public class _XProxyFactory extends MultiMethodTest {
      */
     public XProxyFactory oObj;
 
-    /**
+    /*
     * First an implementation of
     * <code>com.sun.star.lang.XInitialization</code> interface
     * is made which sets a flag when its <code>initialize()</code>
@@ -50,7 +50,7 @@ public class _XProxyFactory extends MultiMethodTest {
     * object is tried to query for <code>XInitialization</code>
     * interface and it's <code>initialize</code> method is
     * called. The goal is to check if the real object method
-    * was called throwgh it's proxy. <p>
+    * was called through its proxy. <p>
     * Has <b>OK</b> status if the real object method was
     * called and parameters were passed correctly.
     */

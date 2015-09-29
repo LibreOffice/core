@@ -123,7 +123,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
 
         oObj.startRecording(xFrame);
 
-        // positve test
+        // positive test
         dispURL = utils.parseURL(tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();

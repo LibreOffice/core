@@ -110,7 +110,7 @@ public class _XDictionaryList extends MultiMethodTest {
     * <code>processDictionaryListEvent</code>, removes listener, checks flag
     * <code>listenerCalled</code> and checks returned value. <p>
     * Has <b> OK </b> status if returned value is true and value of flag
-    * <code>listenerCallled</code> is true. <p>
+    * <code>listenerCalled</code> is true. <p>
     */
     public void _addDictionaryListEventListener() {
         listenerCalled = false;
@@ -138,7 +138,7 @@ public class _XDictionaryList extends MultiMethodTest {
     * <code>processDictionaryListEvent</code>, checks flag
     * <code>listenerCalled</code> and checks returned value. <p>
     * Has <b> OK </b> status if returned value is false and value of flag
-    * <code>listenerCallled</code> is false. <p>
+    * <code>listenerCalled</code> is false. <p>
     */
     public void _removeDictionaryListEventListener() {
         listenerCalled = false;
