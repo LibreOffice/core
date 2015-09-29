@@ -31,8 +31,8 @@
 
 class ContainerWindowWrapper:
     public ::cppu::WeakImplHelper<
-                 ::com::sun::star::awt::XWindow,
-                 ::com::sun::star::awt::XSystemDependentWindowPeer>
+                 css::awt::XWindow,
+                 css::awt::XSystemDependentWindowPeer>
 {
 public:
 
@@ -47,37 +47,35 @@ public:
     dispose(
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     addEventListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener >& xListener
+        const css::uno::Reference< css::lang::XEventListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     removeEventListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener >& aListener
+        const css::uno::Reference< css::lang::XEventListener >& aListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
 
     // XSystemDependentWindowPeer
 
-    virtual ::com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
     getWindowHandle(
-        const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId,
+        const css::uno::Sequence< sal_Int8 >& ProcessId,
         sal_Int16 SystemType
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     // XWindow
@@ -91,13 +89,13 @@ public:
         sal_Int16 Flags
     )
         throw (
-            ::com::sun::star::uno::RuntimeException);
+            css::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL
+    virtual css::awt::Rectangle SAL_CALL
     getPosSize(
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
@@ -105,7 +103,7 @@ public:
         sal_Bool Visible
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
@@ -113,122 +111,113 @@ public:
         sal_Bool Enable
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     setFocus(
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     addWindowListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XWindowListener >& xListener
+        const css::uno::Reference< css::awt::XWindowListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     removeWindowListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XWindowListener >& xListener
+        const css::uno::Reference< css::awt::XWindowListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     addFocusListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XFocusListener >& xListener
+        const css::uno::Reference< css::awt::XFocusListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     removeFocusListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XFocusListener >& xListener
+        const css::uno::Reference< css::awt::XFocusListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     addKeyListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XKeyListener >& xListener
+        const css::uno::Reference<
+        css::awt::XKeyListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     removeKeyListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XKeyListener >& xListener
+        const css::uno::Reference< css::awt::XKeyListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     addMouseListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XMouseListener >& xListener
+        const css::uno::Reference< css::awt::XMouseListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     removeMouseListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XMouseListener >& xListener
+        const css::uno::Reference<
+        css::awt::XMouseListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     addMouseMotionListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XMouseMotionListener >& xListener
+        const css::uno::Reference<
+        css::awt::XMouseMotionListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     removeMouseMotionListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XMouseMotionListener >& xListener
+        const css::uno::Reference< css::awt::XMouseMotionListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     addPaintListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XPaintListener >& xListener
+        const css::uno::Reference< css::awt::XPaintListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     removePaintListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XPaintListener >& xListener
+        const css::uno::Reference< css::awt::XPaintListener >& xListener
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
 

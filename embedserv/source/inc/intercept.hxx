@@ -37,9 +37,9 @@ class DocumentHolder;
 
 class Interceptor
     : public ::cppu::WeakImplHelper<
-                   ::com::sun::star::frame::XDispatchProviderInterceptor,
-                   ::com::sun::star::frame::XInterceptorInfo,
-                   ::com::sun::star::frame::XDispatch>
+                   css::frame::XDispatchProviderInterceptor,
+                   css::frame::XInterceptorInfo,
+                   css::frame::XDispatch>
 {
 public:
 
@@ -60,103 +60,94 @@ public:
     // XComponent
     virtual void SAL_CALL
     addEventListener(
-        const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
-        throw( com::sun::star::uno::RuntimeException );
+        const css::uno::Reference< css::lang::XEventListener >& xListener )
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
-        throw( com::sun::star::uno::RuntimeException );
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+        throw( css::uno::RuntimeException );
 
     void SAL_CALL
-    dispose() throw(::com::sun::star::uno::RuntimeException);
+    dispose() throw(css::uno::RuntimeException);
 
 
 
     //XDispatch
     virtual void SAL_CALL
     dispatch(
-        const ::com::sun::star::util::URL& URL,
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue >& Arguments )
-        throw (::com::sun::star::uno::RuntimeException);
+        const css::util::URL& URL,
+        const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL
     addStatusListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XStatusListener >& Control,
-        const ::com::sun::star::util::URL& URL )
+        const css::uno::Reference< css::frame::XStatusListener >& Control,
+        const css::util::URL& URL )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     removeStatusListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XStatusListener >& Control,
-        const ::com::sun::star::util::URL& URL )
+        const css::uno::Reference< css::frame::XStatusListener >& Control,
+        const css::util::URL& URL )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     //XInterceptorInfo
-    virtual ::com::sun::star::uno::Sequence< OUString >
+    virtual css::uno::Sequence< OUString >
     SAL_CALL getInterceptedURLs(  )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
 
     //XDispatchProvider ( inherited by XDispatchProviderInterceptor )
-    virtual ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatch > SAL_CALL
+    virtual css::uno::Reference<
+    css::frame::XDispatch > SAL_CALL
     queryDispatch(
-        const ::com::sun::star::util::URL& URL,
+        const css::util::URL& URL,
         const OUString& TargetFrameName,
         sal_Int32 SearchFlags )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
-    virtual ::com::sun::star::uno::Sequence<
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatch > > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
     queryDispatches(
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::frame::DispatchDescriptor >& Requests )
+        const css::uno::Sequence<
+        css::frame::DispatchDescriptor >& Requests )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
 
     //XDispatchProviderInterceptor
-    virtual ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatchProvider > SAL_CALL
+    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
     getSlaveDispatchProvider(  )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     setSlaveDispatchProvider(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XDispatchProvider >& NewDispatchProvider )
+        const css::uno::Reference< css::frame::XDispatchProvider >& NewDispatchProvider )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
-    virtual ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatchProvider > SAL_CALL
+    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
     getMasterDispatchProvider(  )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     setMasterDispatchProvider(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XDispatchProvider >& NewSupplier )
+        const css::uno::Reference< css::frame::XDispatchProvider >& NewSupplier )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
 
@@ -166,20 +157,17 @@ private:
 
     ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > m_xOleAccess;
 
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > m_xDocHLocker;
+    css::uno::WeakReference< css::uno::XInterface > m_xDocHLocker;
     DocumentHolder*       m_pDocH;
 
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatchProvider > m_xSlaveDispatchProvider;
+    css::uno::Reference< css::frame::XDispatchProvider > m_xSlaveDispatchProvider;
 
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatchProvider > m_xMasterDispatchProvider;
+    css::uno::Reference< css::frame::XDispatchProvider > m_xMasterDispatchProvider;
 
-    static ::com::sun::star::uno::Sequence< OUString >
-    m_aInterceptedURL;
+    static css::uno::Sequence< OUString > m_aInterceptedURL;
 
     cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
-    StatusChangeListenerContainer*    m_pStatCL;
+    StatusChangeListenerContainer*      m_pStatCL;
 
     sal_Bool m_bLink;
 };

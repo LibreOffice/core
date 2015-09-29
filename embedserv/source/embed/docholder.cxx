@@ -367,7 +367,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
             // determine the menuhandle to get menutitems.
             if(m_xLayoutManager.is()) {
-                uno::Reference< ::com::sun::star::ui::XUIElement > xUIEl(
+                uno::Reference< css::ui::XUIElement > xUIEl(
                     m_xLayoutManager->getElement(
                         OUString(
                             "private:resource/menubar/menubar")));
@@ -1215,12 +1215,9 @@ HRESULT DocumentHolder::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
 }
 
 
-::com::sun::star::uno::Reference<
-    ::com::sun::star::awt::XWindow> SAL_CALL
-DocumentHolder::getContainerWindow(
-)
+css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWindow()
     throw (
-        ::com::sun::star::uno::RuntimeException
+        css::uno::RuntimeException
     )
 {
     if(m_xContainerWindow.is())
@@ -1274,12 +1271,9 @@ DocumentHolder::getContainerWindow(
 
 
 
-sal_Bool SAL_CALL
-DocumentHolder::requestDockingAreaSpace(
-    const ::com::sun::star::awt::Rectangle& RequestedSpace
-)
+sal_Bool SAL_CALL DocumentHolder::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
     throw(
-        ::com::sun::star::uno::RuntimeException
+        css::uno::RuntimeException
     )
 {
     if(m_bOnDeactivate)
@@ -1296,12 +1290,9 @@ DocumentHolder::requestDockingAreaSpace(
 }
 
 
-void SAL_CALL
-DocumentHolder::setDockingAreaSpace(
-    const ::com::sun::star::awt::Rectangle& BorderSpace
-)
+void SAL_CALL DocumentHolder::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace )
     throw (
-        ::com::sun::star::uno::RuntimeException
+        css::uno::RuntimeException
     )
 {
     if(m_bOnDeactivate)
@@ -1334,10 +1325,7 @@ DocumentHolder::setDockingAreaSpace(
 }
 
 
-void SAL_CALL
-DocumentHolder::disposing(
-    const com::sun::star::lang::EventObject& aSource
-)
+void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
         throw( uno::RuntimeException )
 {
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
