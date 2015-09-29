@@ -126,9 +126,9 @@ public:
     bool            bUpdateOnUnlock;  // Update() while locked
     bool            bInUpdateScrollbars;  // prevents recursions
     bool            bHadRecursion;        // a recursion occurred
-    bool            bOwnDataChangedHdl;   // dont change colors in DataChanged
+    bool            bOwnDataChangedHdl;   // don't change colors in DataChanged
     bool            bCallingDropCallback; // we're in a callback to AcceptDrop or ExecuteDrop currently
-    sal_uInt16          nUpdateLock;    // lock count, dont call Control::Update()!
+    sal_uInt16          nUpdateLock;    // lock count, don't call Control::Update()!
     short           nCursorHidden;  // new counter for DoHide/ShowCursor
 
     long            m_nDragRowDividerLimit;

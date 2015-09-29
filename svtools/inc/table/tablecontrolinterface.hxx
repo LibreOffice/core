@@ -230,7 +230,7 @@ namespace svt { namespace table
         /// calculates a width, given in pixels, into a AppFont-based width
         virtual long    pixelWidthToAppFont( long const i_pixels ) const = 0;
 
-        /// shows a trackign rectangle
+        /// shows a tracking rectangle
         virtual void    showTracking( Rectangle const & i_location, sal_uInt16 const i_flags ) = 0;
 
         /// hides a prviously shown tracking rectangle

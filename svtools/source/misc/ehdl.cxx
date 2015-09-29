@@ -40,7 +40,7 @@ static sal_uInt16 aWndFunc(
 /*  [Description]
 
     Draw an errorbox on the screen. Depending on nFlags
-    Error/Info etc. boxes with the requested buttosn are shown.
+    Error/Info etc. boxes with the requested buttons are shown.
 
     Returnvalue is the button pressed
 

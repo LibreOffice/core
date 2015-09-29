@@ -129,7 +129,7 @@ bool SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
  * This constructor interprets a 'pStream' from the current position
  * as a continuous sequence of records that should be parsable by
  * this group of classes. The first record that is an <SfxMiniRecord>
- * (possibly an extened-Record> that has the PreTag 'nTag' will be opened
+ * (possibly an extended-Record> that has the PreTag 'nTag' will be opened
  * and represented by this instance.
  *
  * If the end of stream is reached or a record with tag
@@ -459,7 +459,7 @@ sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
  * @param nContentVer  content version
  *
  * With this method new Content is added to a record and
- * its tag and version are regorded. This method must be called
+ * its tag and version are recorded. This method must be called
  * to start each content, including the first record.
  */
 void SfxMultiMixRecordWriter::NewContent(sal_uInt16 nContentTag, sal_uInt8 nContentVer)

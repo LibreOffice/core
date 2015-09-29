@@ -892,7 +892,7 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
     {
         if ( pImp->mpSecondary )
             return pImp->mpSecondary->GetSurrogate( pItem );
-        SFX_ASSERT( false, pItem->Which(), "unknown Which-Id - dont ask me for surrogates" );
+        SFX_ASSERT( false, pItem->Which(), "unknown Which-Id - don't ask me for surrogates" );
     }
 
     // Pointer on static or pool-default attribute?

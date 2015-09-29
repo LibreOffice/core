@@ -252,7 +252,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
-        throw; // dont hide it!
+        throw; // don't hide it!
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -311,7 +311,7 @@ static bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtools::V
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
-        throw; // dont hide it!
+        throw; // don't hide it!
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -342,7 +342,7 @@ static sal_uInt16 GetFolderImageId_Impl( const OUString& rURL )
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
-        throw; // dont hide it!
+        throw; // don't hide it!
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -475,7 +475,7 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const OUString& rURL )
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
-        throw; // dont hide it!
+        throw; // don't hide it!
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
