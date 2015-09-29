@@ -106,7 +106,7 @@ public:
     /** Add the given property name and its associated value to the
         description string.  If the property value does not differ from the
         default value of the shape's style then the description string is
-        not modified.  This method forwards the request to its cousing but
+        not modified.  This method forwards the request to its cousin but
         first replaces the id of the localized name by the associated string
         from the resource.
         @param sPropertyName

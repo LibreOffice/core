@@ -94,7 +94,7 @@ protected:
     bool                        bOrthoDesiredOnMarked : 1;
     bool                        bMoreThanOneNotMovable : 1;   // more then one objects are not moveable
     bool                        bOneOrMoreMovable : 1;        // at least one object is moveable
-    bool                        bMoreThanOneNoMovRot : 1;     // more then one object is not moveble nor turnable (Crook)
+    bool                        bMoreThanOneNoMovRot : 1;     // more then one object is not movable nor turnable (Crook)
     bool                        bContortionPossible : 1;      // all polygones (grouped if necessary)
     bool                        bAllPolys : 1;                // all polygones (not grouped)
     bool                        bOneOrMorePolys : 1;          // at least one polygon (not grouped)

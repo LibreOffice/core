@@ -195,7 +195,7 @@ sal_Int16       getControlTypeByObject(const css::uno::Reference< css::lang::XSe
 
 
 bool isRowSetAlive(const css::uno::Reference< css::uno::XInterface>& _rxRowSet);
-    // checks if the css::sdbcx::XColumnsSupplier provided by _rxRowSet supllies any columns
+    // checks if the css::sdbcx::XColumnsSupplier provided by _rxRowSet supplies any columns
 
 
 typedef ::std::set  < css::uno::Reference< css::uno::XInterface >

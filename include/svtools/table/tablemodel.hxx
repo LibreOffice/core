@@ -235,7 +235,7 @@ namespace svt { namespace table
 
     //= ITableModel
 
-    /** declares the interface to implement by an abtract table model
+    /** declares the interface to implement by an abstract table model
     */
     class SAL_NO_VTABLE SVT_DLLPUBLIC ITableModel
     {

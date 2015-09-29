@@ -82,7 +82,7 @@ class HostDetailsContainer : public DetailsContainer
     protected:
         void setScheme( const OUString& sScheme ) { m_sScheme = sScheme; }
 
-        /** Verifies that the schement split from the URL can be handled by
+        /** Verifies that the scheme split from the URL can be handled by
             the container and set the proper controls accordingly if needed.
           */
         virtual bool verifyScheme( const OUString& rScheme );

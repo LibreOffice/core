@@ -91,7 +91,7 @@ public:
     // access to ViewContact
     ViewContact& GetViewContact() const { return mrViewContact; }
 
-    // get the oebject's size range
+    // get the object size range
     const basegfx::B2DRange& getObjectRange() const;
 
     // React on changes of the object of this ViewContact

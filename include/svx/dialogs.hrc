@@ -1095,7 +1095,7 @@
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be
 // unique relative to a fixed type (you can't have two dialogs with the same
-// resource id), but they do not need to be unique gloablly (means you can have
+// resource id), but they do not need to be unique globally (means you can have
 // a dialog and a string, both with the same id)
 // I suggest sticking to per-type ids instead of per-semantic ids, this is
 // better maintainable (IMO), and does not waste that much ids

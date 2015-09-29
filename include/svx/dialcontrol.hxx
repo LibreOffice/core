@@ -112,7 +112,7 @@ public:
      */
     void                SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces = 0);
 
-    /** The passed handler is called whenever the totation value changes. */
+    /** The passed handler is called whenever the rotation value changes. */
     void                SetModifyHdl( const Link<DialControl*,void>& rLink );
 
     /** Save value for later comparison */
