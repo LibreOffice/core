@@ -2673,7 +2673,7 @@ endef
 else # !SYSTEM_POPPLER
 
 define gb_LinkTarget__use_poppler
-$(call gb_LinkTarget_use_external_project,$(1),poppler)
+$(call gb_LinkTarget_use_external_project,$(1),poppler,full)
 
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,poppler) \
@@ -3124,9 +3124,8 @@ $(eval $(call gb_Helper_register_packages_for_install,python,\
 	python3 \
 ))
 
-# depend on external project because on MACOSX the Package is disabled...
 define gb_LinkTarget__use_python_headers
-$(call gb_LinkTarget_use_external_project,$(1),python3)
+$(call gb_LinkTarget_use_external_project,$(1),python3,full)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,python3) \
 	-I$(call gb_UnpackedTarball_get_dir,python3)/PC \
