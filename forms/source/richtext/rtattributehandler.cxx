@@ -183,7 +183,7 @@ namespace frm
 
     AttributeCheckState ParaAlignmentHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
-        OSL_ENSURE( _rItem.ISA( SvxAdjustItem ), "ParaAlignmentHandler::implGetCheckState: invalid pool item!" );
+        OSL_ENSURE( dynamic_cast<const SvxAdjustItem*>( &_rItem) !=  nullptr, "ParaAlignmentHandler::implGetCheckState: invalid pool item!" );
         SvxAdjust eAdjust = static_cast< const SvxAdjustItem& >( _rItem ).GetAdjust();
         return ( eAdjust == m_eAdjust ) ? eChecked : eUnchecked;
     }
@@ -214,7 +214,7 @@ namespace frm
 
     AttributeCheckState LineSpacingHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
-        OSL_ENSURE( _rItem.ISA( SvxLineSpacingItem ), "LineSpacingHandler::implGetCheckState: invalid pool item!" );
+        OSL_ENSURE( dynamic_cast<const SvxLineSpacingItem*>( &_rItem) !=  nullptr, "LineSpacingHandler::implGetCheckState: invalid pool item!" );
         sal_uInt16 nLineSpace = static_cast< const SvxLineSpacingItem& >( _rItem ).GetPropLineSpace();
         return ( nLineSpace == m_nLineSpace ) ? eChecked : eUnchecked;
     }
@@ -252,7 +252,7 @@ namespace frm
 
     AttributeCheckState EscapementHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
-        OSL_ENSURE( _rItem.ISA( SvxEscapementItem ), "EscapementHandler::getState: invalid pool item!" );
+        OSL_ENSURE( dynamic_cast<const SvxEscapementItem*>( &_rItem) !=  nullptr, "EscapementHandler::getState: invalid pool item!" );
         SvxEscapement eEscapement = static_cast< const SvxEscapementItem& >( _rItem ).GetEscapement();
         return ( eEscapement == m_eEscapement ) ? eChecked : eUnchecked;
     }
@@ -320,7 +320,7 @@ namespace frm
         AttributeState aState( eIndetermined );
 
         const SfxPoolItem* pItem = _rAttribs.GetItem( getWhich() );
-        const SvxFontHeightItem* pFontHeightItem = PTR_CAST( SvxFontHeightItem, pItem );
+        const SvxFontHeightItem* pFontHeightItem = dynamic_cast<const SvxFontHeightItem*>( pItem  );
         OSL_ENSURE( pFontHeightItem || !pItem, "FontSizeHandler::getState: invalid item!" );
         if ( pFontHeightItem )
         {
@@ -346,7 +346,7 @@ namespace frm
 
     void FontSizeHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType _nForScriptType ) const
     {
-        const SvxFontHeightItem* pFontHeightItem = PTR_CAST( SvxFontHeightItem, _pAdditionalArg );
+        const SvxFontHeightItem* pFontHeightItem = dynamic_cast<const SvxFontHeightItem*>( _pAdditionalArg  );
         OSL_ENSURE( pFontHeightItem, "FontSizeHandler::executeAttribute: need a FontHeightItem!" );
 
         if ( pFontHeightItem )
@@ -396,7 +396,7 @@ namespace frm
 
     AttributeCheckState ParagraphDirectionHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
-        OSL_ENSURE( _rItem.ISA( SvxFrameDirectionItem ), "ParagraphDirectionHandler::implGetCheckState: invalid pool item!" );
+        OSL_ENSURE( dynamic_cast<const SvxFrameDirectionItem*>( &_rItem) !=  nullptr, "ParagraphDirectionHandler::implGetCheckState: invalid pool item!" );
         SvxFrameDirection eDirection = static_cast< SvxFrameDirection >( static_cast< const SvxFrameDirectionItem& >( _rItem ).GetValue() );
         return ( eDirection == m_eParagraphDirection ) ? eChecked : eUnchecked;
     }
@@ -425,8 +425,8 @@ namespace frm
 
     AttributeCheckState BooleanHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
-        OSL_ENSURE( _rItem.ISA( SfxBoolItem ), "BooleanHandler::implGetCheckState: invalid item!" );
-        if ( _rItem.ISA( SfxBoolItem ) )
+        OSL_ENSURE( dynamic_cast<const SfxBoolItem*>( &_rItem) !=  nullptr, "BooleanHandler::implGetCheckState: invalid item!" );
+        if ( dynamic_cast<const SfxBoolItem*>( &_rItem) !=  nullptr )
             return static_cast< const SfxBoolItem& >( _rItem ).GetValue() ? eChecked : eUnchecked;
 
         return eIndetermined;
@@ -435,7 +435,7 @@ namespace frm
 
     void BooleanHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType /*_nForScriptType*/ ) const
     {
-        OSL_ENSURE( _pAdditionalArg && _pAdditionalArg->ISA( SfxBoolItem ), "BooleanHandler::executeAttribute: invalid argument!" );
+        OSL_ENSURE( dynamic_cast<const SfxBoolItem*>( _pAdditionalArg) !=  nullptr, "BooleanHandler::executeAttribute: invalid argument!" );
         if ( _pAdditionalArg )
         {
             SfxPoolItem* pCorrectWich = _pAdditionalArg->Clone();

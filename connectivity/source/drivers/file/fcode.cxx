@@ -189,9 +189,9 @@ void OBoolOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pLeft, pRight)));
-    if (IS_TYPE(OOperandResult,pLeft))
+    if( typeid(OOperandResult) == typeid(*pLeft))
         delete pLeft;
-    if (IS_TYPE(OOperandResult,pRight))
+    if( typeid(OOperandResult) == typeid(*pRight))
         delete pRight;
 }
 
@@ -206,7 +206,8 @@ void OOp_NOT::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pOperand)));
-    if (IS_TYPE(OOperandResult,pOperand))
+
+    if( typeid(OOperandResult) == typeid(*pOperand))
         delete pOperand;
 }
 
@@ -228,7 +229,7 @@ void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pOperand)));
-    if (IS_TYPE(OOperandResult,pOperand))
+    if( typeid(OOperandResult) == typeid(*pOperand))
         delete pOperand;
 }
 
@@ -340,9 +341,9 @@ void ONumOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultNUM(operate(pLeft->getValue(), pRight->getValue())));
-    if (IS_TYPE(OOperandResult,pLeft))
+    if( typeid(OOperandResult) == typeid(*pLeft))
         delete pLeft;
-    if (IS_TYPE(OOperandResult,pRight))
+    if( typeid(OOperandResult) == typeid(*pRight))
         delete pRight;
 }
 
@@ -380,11 +381,11 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
         pOperand    = rCodeStack.top();
         rCodeStack.pop();
         assert(pOperand);
-        if (pOperand && !IS_TYPE(OStopOperand,pOperand))
+        if (pOperand && typeid(OStopOperand) != typeid(*pOperand))
             aValues.push_back( pOperand->getValue() );
         aOperands.push_back( pOperand );
     }
-    while (pOperand && !IS_TYPE(OStopOperand,pOperand));
+    while (pOperand && typeid(OStopOperand) != typeid(*pOperand));
 
     rCodeStack.push(new OOperandResult(operate(aValues)));
 
@@ -392,7 +393,7 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
     ::std::vector<OOperand*>::iterator aEnd = aOperands.end();
     for (; aIter != aEnd; ++aIter)
     {
-        if (IS_TYPE(OOperandResult,*aIter))
+        if (typeid(OOperandResult) != typeid(*(*aIter)))
             delete *aIter;
     }
 }
@@ -404,13 +405,13 @@ void OBinaryOperator::Exec(OCodeStack& rCodeStack)
     OOperand  *pLeft    = rCodeStack.top();
     rCodeStack.pop();
 
-    if ( !rCodeStack.empty() && IS_TYPE(OStopOperand,rCodeStack.top()) )
+    if ( !rCodeStack.empty() && typeid(OStopOperand) == typeid(*rCodeStack.top()) )
         rCodeStack.pop();
 
     rCodeStack.push(new OOperandResult(operate(pLeft->getValue(),pRight->getValue())));
-    if (IS_TYPE(OOperandResult,pRight))
+    if(typeid(OOperandResult) == typeid(*pRight))
         delete pRight;
-    if (IS_TYPE(OOperandResult,pLeft))
+    if(typeid(OOperandResult) == typeid(*pLeft))
         delete pLeft;
 }
 
@@ -421,7 +422,7 @@ void OUnaryOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResult(operate(pOperand->getValue())));
-    if (IS_TYPE(OOperandResult,pOperand))
+    if (typeid(OOperandResult) == typeid(*pOperand))
         delete pOperand;
 }
 
