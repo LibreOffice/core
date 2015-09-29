@@ -666,7 +666,7 @@ bool ScTabView::HasHintWindow() const
 
 void ScTabView::RemoveHintWindow()
 {
-    mpInputHintWindow.reset();
+    mpInputHintWindow.disposeAndClear();
 }
 
 // find window that should not be over the cursor
