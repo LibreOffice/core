@@ -284,6 +284,8 @@ ViewShellBase::~ViewShellBase()
     EndListening(*GetDocShell());
 
     SetWindow(NULL);
+
+    mpImpl->mpFormShellManager.reset();
 }
 
 void ViewShellBase::LateInit (const OUString& rsDefaultView)
