@@ -78,7 +78,7 @@ namespace
 
     /* p = sp - 512; new sp will be p - 16, but we don't change sp
      * at this time to avoid breaking ABI--not sure whether changing sp will break
-     * references to local variables. For the same reason, we use abosulte value.
+     * references to local variables. For the same reason, we use absolute value.
      */
     __asm__ __volatile__ (
         "addiu $2,$29,-512\n\t"

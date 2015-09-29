@@ -671,7 +671,7 @@ RTLFUNC(DoEvents)
     (void)pBasic;
     (void)bWrite;
     (void)rPar;
-// don't undstand what upstream are up to
+// don't understand what upstream are up to
 // we already process application events etc. in between
 // basic runtime pcode ( on a timed basis )
     // always return 0

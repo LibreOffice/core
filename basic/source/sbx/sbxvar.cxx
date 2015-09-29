@@ -335,7 +335,7 @@ sal_uInt16 SbxVariable::MakeHashCode( const OUString& rName )
     for( sal_Int32 i=0; i<nLen; ++i )
     {
         sal_uInt8 c = static_cast<sal_uInt8>(rName[i]);
-        // If we have a commen sigen break!!
+        // If we have a comment signe break!!
         if( c >= 0x80 )
         {
             return 0;

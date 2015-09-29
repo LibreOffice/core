@@ -294,7 +294,7 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
                         throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     //the special situation for this property here is that the diagram default can be
-    //different from the normal default and different from all sinlges series values
+    //different from the normal default and different from all singles series values
     //so we need to return PropertyState_DIRECT_VALUE for more cases
 
     if( m_ePropertyType == DATA_SERIES && //single series or point
