@@ -558,7 +558,7 @@ public:
      * Get an array of tokens corresponding with a specified name in a
      * specified file.
      *
-     * @param pCurPos currnet cell address where this name token is used.
+     * @param pCurPos current cell address where this name token is used.
      *                This is purely to keep track of all cells containing
      *                external names for refreshing purposes.  If this is
      *                NULL, then the cell will not be added to the list.
@@ -575,7 +575,7 @@ public:
 
     /**
      * Takes a flat file name, and convert it to an absolute URL path.  An
-     * absolute URL path begines with 'file:///.
+     * absolute URL path begins with 'file:///.
      *
      * @param rFile file name to convert
      */

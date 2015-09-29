@@ -346,7 +346,7 @@ SAL_IMPLEMENT_MAIN()
         //windows
         DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
         SetErrorMode(SEM_NOGPFAULTERRORBOX|dwMode);
-#ifdef _DEBUG // These functions are present only in the debgging runtime
+#ifdef _DEBUG // These functions are present only in the debugging runtime
         _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
         _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
         _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);

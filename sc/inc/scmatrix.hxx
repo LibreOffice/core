@@ -45,7 +45,7 @@ struct CompareOptions;
 
 /**
  * Try NOT to use this struct.  This struct should go away in a hopefully
- * not so distant futture.
+ * not so distant future.
  */
 struct ScMatrixValue
 {

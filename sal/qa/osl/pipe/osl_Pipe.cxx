@@ -888,7 +888,7 @@ namespace osl_StreamPipe
                 thread_sleep( 1 );
                 myDataSourceThread.aListenPipe.close();
                 myDataSourceThread.join( );
-                //no condition judgement here, if the case could finish excuting within 1 or 2 seconds, it passes.
+                //no condition judgement here, if the case could finish executing within 1 or 2 seconds, it passes.
             }
 
         CPPUNIT_TEST_SUITE( recv );

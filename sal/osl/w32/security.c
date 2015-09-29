@@ -246,7 +246,7 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
         /* CheckTokenMembership() can be used on W2K and higher (NT4 no longer supported by OOo)
            and also works on Vista to retrieve the effective user rights. Just checking for
            membership of Administrators group is not enough on Vista this would require additional
-           complicated checks as described in KB arcticle Q118626: http://support.microsoft.com/kb/118626/en-us
+           complicated checks as described in KB article Q118626: http://support.microsoft.com/kb/118626/en-us
         */
 
         if (AllocateAndInitializeSid(&siaNtAuthority,
