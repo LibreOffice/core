@@ -379,7 +379,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     bool bIsCalc = false;
     const SfxPoolItem* pExt1 = GetItem(*rSet, SID_ATTR_PAGE_EXT1);
     const SfxPoolItem* pExt2 = GetItem(*rSet, SID_ATTR_PAGE_EXT2);
-    if (pExt1 && pExt1->ISA(SfxBoolItem) && pExt2 && pExt2->ISA(SfxBoolItem))
+    if (pExt1 && dynamic_cast<const SfxBoolItem*>(pExt1) != nullptr && pExt2 && dynamic_cast<const SfxBoolItem*>(pExt2) != nullptr )
         bIsCalc = true;
     m_pCntSharedFirstBox->Show(!bIsCalc);
 
@@ -1036,7 +1036,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
 
-    if ( pItem && pItem->ISA(SfxBoolItem) )
+    if ( pItem && dynamic_cast<const SfxBoolItem*>( pItem) !=  nullptr )
     {
         m_pBspWin->SetTable( true );
         m_pBspWin->SetHorz( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
@@ -1044,7 +1044,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     pItem = GetItem( rSet, SID_ATTR_PAGE_EXT2 );
 
-    if ( pItem && pItem->ISA(SfxBoolItem) )
+    if ( pItem && dynamic_cast<const SfxBoolItem*>( pItem) !=  nullptr )
     {
         m_pBspWin->SetTable( true );
         m_pBspWin->SetVert( static_cast<const SfxBoolItem*>(pItem)->GetValue() );

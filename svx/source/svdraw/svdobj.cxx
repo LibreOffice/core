@@ -2491,7 +2491,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
 
             // check if original geometry should be added (e.g. filled and closed)
             bool bAddOriginalGeometry(false);
-            SdrPathObj* pPath = PTR_CAST(SdrPathObj, pRet);
+            SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pRet );
 
             if(pPath && pPath->IsClosed())
             {
@@ -2600,7 +2600,7 @@ void SdrObject::SetNotVisibleAsMaster(bool bFlg)
 // convert this path object to contour object, even when it is a group
 SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) const
 {
-    if(pRet->ISA(SdrObjGroup))
+    if(dynamic_cast<const SdrObjGroup*>( pRet) !=  nullptr)
     {
         SdrObjList* pObjList2 = pRet->GetSubList();
         SdrObject* pGroup = new SdrObjGroup;
@@ -2616,7 +2616,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
     }
     else
     {
-        if(pRet && pRet->ISA(SdrPathObj))
+        if(pRet && dynamic_cast<const SdrPathObj*>( pRet) !=  nullptr)
         {
             SdrPathObj* pPathObj = static_cast<SdrPathObj*>(pRet);
 

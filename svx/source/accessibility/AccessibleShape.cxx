@@ -157,7 +157,7 @@ void AccessibleShape::Init()
             SdrObject* pSdrObject = GetSdrObjectFromXShape(mxShape);
             if( pSdrObject )
             {
-                SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pSdrObject );
+                SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pSdrObject  );
                 OutlinerParaObject* pOutlinerParaObject = NULL;
 
                 if( pTextObj )

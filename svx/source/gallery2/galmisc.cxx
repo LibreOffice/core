@@ -162,7 +162,7 @@ bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
         const SdrPage*      pPage = rModel.GetPage( 0 );
         const SdrObject*    pObj = pPage->GetObj( 0 );
 
-        if ( pPage->GetObjCount() == 1 && pObj->ISA( SdrGrafObj ) )
+        if ( pPage->GetObjCount() == 1 && dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr )
         {
             const sal_uInt16 nCount = pObj->GetUserDataCount();
 

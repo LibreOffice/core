@@ -80,7 +80,7 @@ namespace sdr
             {
                 SdrObject* pObj = pSub->GetObj(a);
 
-                if(pObj && pObj->ISA(E3dCompoundObject))
+                if(pObj && dynamic_cast<const E3dCompoundObject* >(pObj) !=  nullptr)
                 {
                     const SfxItemSet& rSet = pObj->GetMergedItemSet();
                     SfxWhichIter aIter(rSet);
@@ -135,7 +135,7 @@ namespace sdr
                     {
                         SdrObject* pObj = pSub->GetObj(a);
 
-                        if(pObj && pObj->ISA(E3dCompoundObject))
+                        if(pObj && dynamic_cast<const E3dCompoundObject* >(pObj) !=  nullptr)
                         {
                             // set merged ItemSet at contained 3d object.
                             pObj->SetMergedItemSet(*pNewSet, bClearAllItems);
@@ -291,7 +291,7 @@ namespace sdr
                     while(a3DIterator.IsMore())
                     {
                         E3dObject* pObj = static_cast<E3dObject*>(a3DIterator.Next());
-                        DBG_ASSERT(pObj->ISA(E3dObject), "In scenes there are only 3D objects allowed (!)");
+                        DBG_ASSERT(dynamic_cast<const E3dObject* >(pObj) !=  nullptr, "In scenes there are only 3D objects allowed (!)");
                         pObj->GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
                     }
                 }

@@ -473,7 +473,7 @@ namespace sdr
                                                 {
                                                     const SvxFieldData* pData = pFieldItem->GetField();
 
-                                                    if(pData && pData->ISA(SvxURLField))
+                                                    if(pData && dynamic_cast<const SvxURLField*>( pData) !=  nullptr)
                                                     {
                                                         bHasURL = true;
                                                         break;

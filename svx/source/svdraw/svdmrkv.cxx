@@ -614,7 +614,7 @@ void SdrMarkView::SetMarkHandles()
 
     if(pSaveOldFocusHdl
         && pSaveOldFocusHdl->GetObj()
-        && pSaveOldFocusHdl->GetObj()->ISA(SdrPathObj)
+        && dynamic_cast<const SdrPathObj*>(pSaveOldFocusHdl->GetObj()) != nullptr
         && (pSaveOldFocusHdl->GetKind() == HDL_POLY || pSaveOldFocusHdl->GetKind() == HDL_BWGT))
     {
         bSaveOldFocus = true;
@@ -643,7 +643,7 @@ void SdrMarkView::SetMarkHandles()
             mpMarkedObj=GetMarkedObjectByIndex(0);
             bSingleTextObjMark =
                 mpMarkedObj &&
-                mpMarkedObj->ISA(SdrTextObj) &&
+                dynamic_cast<const SdrTextObj*>( mpMarkedObj) !=  nullptr &&
                 static_cast<SdrTextObj*>(mpMarkedObj)->IsTextFrame();
         }
 
@@ -1476,7 +1476,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     size_t nSearchBeg = 0;
     E3dScene* pScene = NULL;
     SdrObject* pObjHit = (bPrev) ? pBtmObjHit : pTopObjHit;
-    bool bRemap = pObjHit->ISA(E3dCompoundObject)
+    bool bRemap = dynamic_cast< const E3dCompoundObject* >(pObjHit) !=  nullptr
         && static_cast<E3dCompoundObject*>(pObjHit)->IsAOrdNumRemapCandidate(pScene);
 
     if(bPrev)
@@ -1630,8 +1630,8 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
 
     const bool bCheckIfMarkable(nOptions & SdrSearchOptions::TESTMARKABLE);
     const bool bDeep(nOptions & SdrSearchOptions::DEEP);
-    const bool bOLE(pObj->ISA(SdrOle2Obj));
-    const bool bTXT(pObj->ISA(SdrTextObj) && static_cast<SdrTextObj*>(pObj)->IsTextFrame());
+    const bool bOLE(dynamic_cast< const SdrOle2Obj* >(pObj) !=  nullptr);
+    const bool bTXT(dynamic_cast<const SdrTextObj*>( pObj) != nullptr && static_cast<SdrTextObj*>(pObj)->IsTextFrame());
     SdrObject* pRet=NULL;
     Rectangle aRect(pObj->GetCurrentBoundRect());
     // hack for calc grid sync
@@ -1662,7 +1662,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
                 // adjustment hit point for virtual objects
                 Point aPnt( rPnt );
 
-                if ( pObj->ISA(SdrVirtObj) )
+                if ( dynamic_cast<const SdrVirtObj*>( pObj) !=  nullptr )
                 {
                     Point aOffset = static_cast<SdrVirtObj*>(pObj)->GetOffset();
                     aPnt.Move( -aOffset.X(), -aOffset.Y() );
@@ -1700,7 +1700,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     rpRootObj=NULL;
     if (pOL!=NULL)
     {
-        bool bRemap(pOL->GetOwnerObj() && pOL->GetOwnerObj()->ISA(E3dScene));
+        bool bRemap(pOL->GetOwnerObj() && dynamic_cast< const E3dScene* >(pOL->GetOwnerObj()) != nullptr);
         E3dScene* pRemapScene = (bRemap ? static_cast<E3dScene*>(pOL->GetOwnerObj()) : 0L);
 
         const size_t nObjCount=pOL->GetObjCount();

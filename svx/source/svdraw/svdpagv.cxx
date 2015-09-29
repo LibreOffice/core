@@ -666,7 +666,7 @@ bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
             return false;
         }
 
-        if(pObj->ISA(SdrObjGroup))
+        if(dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr)
         {
             // If object is a Group object, visibility may depend on
             // multiple layers. If one object is markable, Group is markable.

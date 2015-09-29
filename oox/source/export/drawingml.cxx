@@ -2095,7 +2095,7 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& pres
 
     uno::Reference<drawing::XShape> xShape(rXIface, uno::UNO_QUERY);
     SdrObject* pSdrObject = xShape.is() ? GetSdrObjectFromXShape(xShape) : 0;
-    const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, pSdrObject);
+    const SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>( pSdrObject );
     if (pTxtObj && mpTextExport)
     {
         const OutlinerParaObject* pParaObj = 0;

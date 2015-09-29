@@ -89,7 +89,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     {
         mpImpl->mnState = SignatureState::UNKNOWN;
     }
-    else if( pState->ISA( SfxUInt16Item ) )
+    else if( dynamic_cast< const SfxUInt16Item* >(pState) !=  nullptr )
     {
         mpImpl->mnState = static_cast<SignatureState>(static_cast<const SfxUInt16Item*>(pState)->GetValue());
     }

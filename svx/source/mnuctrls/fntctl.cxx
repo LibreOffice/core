@@ -99,7 +99,7 @@ void SvxFontMenuControl::StateChanged(
     {
         if ( !pMenu->GetItemCount() )
             FillMenu();
-        const SvxFontItem* pFontItem = PTR_CAST( SvxFontItem, pState );
+        const SvxFontItem* pFontItem = dynamic_cast<const SvxFontItem*>( pState  );
         OUString aFont;
 
         if ( pFontItem )

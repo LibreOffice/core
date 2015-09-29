@@ -95,7 +95,7 @@ void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
 {
     if ( SfxItemState::DEFAULT == eState )
     {
-        DBG_ASSERT( pState->ISA( SfxUInt16Item ), "invalid item type" );
+        DBG_ASSERT( dynamic_cast< const SfxUInt16Item* >(pState) !=  nullptr, "invalid item type" );
         const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
         mnState = pItem->GetValue();
 

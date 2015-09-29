@@ -94,7 +94,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
         // TODO/LATER: seems to make no sense for iconified object
 
         awt::Rectangle aVisArea;
-        if( (rValue >>= aVisArea) && mpObj->ISA(SdrOle2Obj))
+        if( (rValue >>= aVisArea) && dynamic_cast<const SdrOle2Obj* >(mpObj.get()) != nullptr)
         {
             Size aTmp( aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
             uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(mpObj.get())->GetObjRef();
@@ -264,7 +264,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
     case OWN_ATTR_OLE_VISAREA:
     {
         awt::Rectangle aVisArea;
-        if( mpObj->ISA(SdrOle2Obj))
+        if( dynamic_cast<const SdrOle2Obj* >(mpObj.get()) != nullptr)
         {
             MapMode aMapMode( MAP_100TH_MM ); // the API uses this map mode
             Size aTmp = static_cast<SdrOle2Obj*>(mpObj.get())->GetOrigObjSize( &aMapMode ); // get the size in the requested map mode
