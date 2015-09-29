@@ -56,7 +56,7 @@ sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
         return ACCELENTRY_NOTFOUND;
     }
 
-    // Binairy search
+    // Binary search
     nLow  = 0;
     nHigh = nCount-1;
     do

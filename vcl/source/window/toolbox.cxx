@@ -209,7 +209,7 @@ void ToolBox::ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
 
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
 
-    // reserve dragarea only for dockable toolbars
+    // reserve DragArea only for dockable toolbars
     int    dragwidth = ( pWrapper && !pWrapper->IsLocked() ) ? ImplGetDragWidth( const_cast<ToolBox*>(pThis) ) : 0;
 
     // no shadow border for dockable toolbars

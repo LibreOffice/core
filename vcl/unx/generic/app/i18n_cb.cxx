@@ -151,7 +151,7 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
     if (pInsertText->encoding_is_wchar)
     {
         wchar_t *pWCString = pInsertText->string.wide_char;
-          size_t nBytes = wcstombs ( NULL, pWCString, 1024 /* dont care */);
+          size_t nBytes = wcstombs ( NULL, pWCString, 1024 /* don't care */);
           pMBString = static_cast<char*>(alloca( nBytes + 1 ));
           nMBLength = wcstombs ( pMBString, pWCString, nBytes + 1);
     }

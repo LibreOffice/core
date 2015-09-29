@@ -72,7 +72,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     DBG_ASSERT(pParent, "FloatWindow::FloatingWindow(): - pParent == NULL and no AppWindow exists");
 
-    // no Border, then we dont need a border window
+    // no Border, then we don't need a border window
     if (!nStyle)
     {
         mpWindowImpl->mbOverlapWin = true;
