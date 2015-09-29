@@ -97,7 +97,7 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
 {
     // convert "systemexec:file:///c:/temp/test.html" => "file:///c:/temp/test.html"
     sal_Int32 c = aURL.Complete.getLength()-PROTOCOL_LENGTH;
-    if (c<1) // we dont check for valid URLs here! The system will show an error message ...
+    if (c<1) // we don't check for valid URLs here! The system will show an error message ...
     {
         impl_notifyResultListener(xListener, css::frame::DispatchResultState::FAILURE);
         return;

@@ -56,7 +56,7 @@ import static org.junit.Assert.*;
  * This <CODE>ComplexTest</CODE> checks the interface
  * <CODE>XUserInputInterception</CODE>. Therefore it creates a document,
  * adds a mouse and a key listener onto the interface and fire the
- * correspond events. If all listener works as expected the test resluts in
+ * correspond events. If all listener works as expected the test results in
  * <CODE>OK</CODE> status.
  * @short Check the interface XUserInputIntercaption
  * @descr checks is a simple way the interface XUserInputInteraction
@@ -307,8 +307,8 @@ public class EventTest {
         xUII.removeMouseClickHandler(mouseListener);
     }
 
-    /**
-     * returns the <CODE>XUserInputInterception</CODE> from the <CODE>XMdoel</CODE>
+    /*
+     * returns the <CODE>XUserInputInterception</CODE> from the <CODE>XModel</CODE>
      * @param xModel the XModel of a document
      * @return the <CODE>XUserInputInterception</CODE> of the document
      */

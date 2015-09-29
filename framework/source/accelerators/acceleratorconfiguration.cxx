@@ -178,7 +178,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
 
     sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
-    css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // dont pack list!
+    css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG();
 
     for (i=0; i<c; ++i)
@@ -746,7 +746,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
 
     sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
-    css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // dont pack list!
+    css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG(true);
 
     for (i=0; i<c; ++i)

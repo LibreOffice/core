@@ -219,7 +219,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     // I.IV) no further special targets exist
     //  Now we have to search for the right target frame by calling findFrame() - but should provide our code
     //  against creation of a new task if no frame could be found.
-    //  I said it b efore - it's allowed for dispatch() only.
+    //  I said it before - it's allowed for dispatch() only.
 
     else
     {
@@ -234,7 +234,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
             xDispatcher = xProvider->queryDispatch(aURL,SPECIALTARGET_SELF,0);
         }
         // if it couldn't be found - but creation was allowed
-        // use special dispatcher for creatio or froward it to the browser
+        // use special dispatcher for creation or forwarding to the browser
         else if (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
             xDispatcher = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER, xDesktop, sTargetFrameName, nSearchFlags );
     }
