@@ -643,7 +643,12 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             Point aPoint( ReadYX() );
             pWMF->ReadUInt16( nDontKnow ).ReadUInt16( nWidth ).ReadUInt16( nHeight ).ReadUInt16( nBytesPerScan ).ReadUChar( nPlanes ).ReadUChar( nBitCount );
 
-            if ( nWidth && nHeight && ( nPlanes == 1 ) && ( nBitCount == 1 ) )
+            bool bOk = nWidth && nHeight && nPlanes == 1 && nBitCount == 1;
+            if (bOk)
+            {
+                bOk = nBytesPerScan <= pWMF->remainingSize() / nHeight;
+            }
+            if (bOk)
             {
                 Bitmap aBmp( Size( nWidth, nHeight ), nBitCount );
                 BitmapWriteAccess* pAcc;
