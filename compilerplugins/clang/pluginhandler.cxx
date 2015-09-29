@@ -244,7 +244,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
 #if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ > 3
 std::unique_ptr<ASTConsumer> LibreOfficeAction::CreateASTConsumer( CompilerInstance& Compiler, StringRef )
     {
-    return make_unique<PluginHandler>( Compiler, _args );
+    return llvm::make_unique<PluginHandler>( Compiler, _args );
     }
 #else
 ASTConsumer* LibreOfficeAction::CreateASTConsumer( CompilerInstance& Compiler, StringRef )
