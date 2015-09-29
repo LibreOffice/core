@@ -26,9 +26,6 @@
 #include <functional>
 #include <vector>
 
-#define UC_SPACE (sal_Unicode(' '))
-#define UC_MINUS_SIGN (sal_Unicode('-'))
-
 namespace chart
 {
 namespace RegressionCalculationHelper

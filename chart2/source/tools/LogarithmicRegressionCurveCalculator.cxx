@@ -141,12 +141,12 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
         if( ::rtl::math::approxEqual( fabs( m_fSlope ), 1.0 ))
         {
             if( m_fSlope < 0 )
-                aBuf.append( UC_MINUS_SIGN );
+                aBuf.append( "-" );
         }
         else
         {
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
-            aBuf.append( UC_SPACE );
+            aBuf.append( " " );
         }
         aBuf.append( "ln(x)" );
         bHaveSlope = true;
@@ -156,9 +156,7 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
     {
         if( m_fIntercept < 0.0 )
         {
-            aBuf.append( UC_SPACE );
-            aBuf.append( UC_MINUS_SIGN );
-            aBuf.append( UC_SPACE );
+            aBuf.append( " - " );
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs( m_fIntercept )));
         }
         else if( m_fIntercept > 0.0 )
