@@ -152,7 +152,7 @@ void SAL_CALL CAsyncEventNotifier::shutdown()
     SetEvent(m_ResumeNotifying);
     SetEvent(m_NotifyEvent);
 
-    // releas the mutex here because the event
+    // release the mutex here because the event
     // notifier thread may need it to finish
     aGuard.clear();
 
