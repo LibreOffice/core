@@ -366,7 +366,7 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
         tableData.push_back(row);
     }
 
-    // convert vector to Seqeunce
+    // convert vector to Sequence
     sal_Int32 nTabSize = static_cast<sal_Int32>(tableData.size());
     rTabData.realloc(nTabSize);
     for (sal_Int32 i = 0; i < nTabSize; ++i)

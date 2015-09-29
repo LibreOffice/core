@@ -3769,7 +3769,7 @@ DynamicKernel::~DynamicKernel()
 
 void DynamicKernel::CodeGen()
 {
-    // Travese the tree of expression and declare symbols used
+    // Traverse the tree of expression and declare symbols used
     const DynamicKernelArgument* DK = mSyms.DeclRefArg<DynamicKernelSoPArguments>(mCalcConfig, mpRoot, new OpNop(mnResultSize), mnResultSize);
 
     std::stringstream decl;

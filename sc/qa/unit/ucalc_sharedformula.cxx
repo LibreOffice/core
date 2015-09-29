@@ -314,7 +314,7 @@ void Test::testSharedFormulasRefUpdate()
     pFC = m_pDoc->GetFormulaCell(ScAddress(1,2,0));
     CPPUNIT_ASSERT_MESSAGE("B3 should be a non-shared formula cell.", pFC && !pFC->IsShared());
 
-    // Delelte cells over A11:B11 to bring it back to the previous state.
+    // Delete cells over A11:B11 to bring it back to the previous state.
     m_pDoc->DeleteCol(ScRange(0,10,0,1,10,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "A10"))

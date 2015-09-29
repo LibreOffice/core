@@ -514,7 +514,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         aAnchor.maStart.SetCol( 5 );
         aAnchor.maEnd.SetRow( 3 );
         aAnchor.maEnd.SetCol( 7 );
-        rDoc.ShowRows(0, 9, 0, true); // show relavent rows
+        rDoc.ShowRows(0, 9, 0, true); // show relevant rows
         rDoc.SetDrawPageSize(0); // trigger recalcpos
 
         // apply hefty (1 mm) tolerance here, as some opensuse tinderbox

@@ -2124,7 +2124,7 @@ void Test::testFuncGETPIVOTDATA()
     }
 
     aPos = aOutRange.aEnd;
-    aPos.IncRow(2); // Move 2 rows down from the table outout.
+    aPos.IncRow(2); // Move 2 rows down from the table output.
 
     OUString aPivotPosStr(aOutRange.aStart.Format(SCA_ABS));
 

@@ -71,7 +71,7 @@ public:
 
       @throws CannotConvertException
             if args do not match or cannot be converted the those
-            of the invokee
+            of the invoked
 
       @throws InvocationTargetException
             if the running script throws an exception this information is captured and
