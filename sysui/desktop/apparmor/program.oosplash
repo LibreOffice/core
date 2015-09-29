@@ -23,7 +23,7 @@ profile libreoffice-oopslash INSTDIR-program/oosplash {
   /usr/lib{,32,64}/ure/bin/javaldx      Cx,
   /usr/share/libreoffice/program/*      r,
   INSTDIR-program/soffice.bin rmPUx,
-  INSTDIR-ure/bin/javaldx rmPUx,
+  INSTDIR-program/javaldx rmPUx,
   owner @{HOME}/.Xauthority             r,
   owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
   unix peer=(addr=@/tmp/.ICE-unix/* label=unconfined),
