@@ -571,7 +571,7 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
 void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEvent )
     throw(css::uno::RuntimeException, std::exception)
 {
-    // Attention: dont free m_pAccExec here! see comments inside dtor and
+    // Attention: don't free m_pAccExec here! see comments inside dtor and
     // keyPressed() for further details.
 
     /* SAFE { */

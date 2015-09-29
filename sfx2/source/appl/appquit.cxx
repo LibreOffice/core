@@ -121,7 +121,7 @@ void SfxApplication::Deinitialize()
     DELETEX(SfxViewShellArr_Impl, pAppData_Impl->pViewShells);
     DELETEX(SfxObjectShellArr_Impl, pAppData_Impl->pObjShells);
 
-    //TODO/CLEANTUP
+    //TODO/CLEANUP
     //ReleaseArgs could be used instead!
     pAppData_Impl->pPool = NULL;
     NoChaos::ReleaseItemPool();

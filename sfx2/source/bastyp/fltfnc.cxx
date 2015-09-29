@@ -216,7 +216,7 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const OUString& rNam
     OUString sServiceName   = aOpt.GetFactoryName(eFactory);
     OUString sDefaultFilter = aOpt.GetFactoryDefaultFilter(eFactory);
 
-    // Try to get the default filter. Dont fiorget to verify it.
+    // Try to get the default filter. Don't forget to verify it.
     // May the set default filter does not exists any longer or
     // does not fit the given factory.
     const SfxFilterMatcher aMatcher;
@@ -477,7 +477,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
             }
 
             uno::Sequence< beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();
-            sTypeName = xDetection->queryTypeByDescriptor(lDescriptor, sal_True); // lDescriptor is used as In/Out param ... dont use aDescriptor.getAsConstPropertyValueList() directly!
+            sTypeName = xDetection->queryTypeByDescriptor(lDescriptor, sal_True); // lDescriptor is used as In/Out param ... don't use aDescriptor.getAsConstPropertyValueList() directly!
 
             for (sal_Int32 i = 0; i < lDescriptor.getLength(); ++i)
             {

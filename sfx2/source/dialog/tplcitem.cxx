@@ -76,7 +76,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
                 rTemplateDlg.SetFamilyState( GetId(), pStateItem );
             }
             bool bDisable = eState == SfxItemState::DISABLED;
-            // Disable Familly
+            // Disable Family
             sal_uInt16 nFamily = 0;
             switch( GetId())
             {

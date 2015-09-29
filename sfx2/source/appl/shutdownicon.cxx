@@ -416,7 +416,7 @@ IMPL_LINK_TYPED( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused
 
                     xPickerControls->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 ) >>= bReadOnly;
 
-                    // Only set porperty if readonly is set to TRUE
+                    // Only set property if readonly is set to TRUE
 
                     if ( bReadOnly )
                     {

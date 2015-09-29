@@ -256,7 +256,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
             {
                 HelpHistoryEntry_Impl* pEntry = m_pHistory->at( nPos );
                 if ( pEntry )
-                    m_pWindow->loadHelpContent(pEntry->aURL, false); // false => dont add item to history again!
+                    m_pWindow->loadHelpContent(pEntry->aURL, false); // false => don't add item to history again!
             }
 
             m_pWindow->UpdateToolbox();
