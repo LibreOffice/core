@@ -556,8 +556,8 @@ IMPL_LINK_NOARG_TYPED(SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl, LinkPar
     if (!pTextObj)
         return;
     ImpChainingEventHdl();
-    TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
-    ImpMoveCursorAfterChainingEvent(pCursorManager);
+    TextChainCursorManager aCursorManager(this, pTextObj);
+    ImpMoveCursorAfterChainingEvent(&aCursorManager);
 }
 
 void SdrObjEditView::ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCursorManager)
