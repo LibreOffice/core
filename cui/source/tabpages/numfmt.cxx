@@ -1127,7 +1127,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
 #*------------------------------------------------------------------------
 #*
 #*  Class:      SvxNumberFormatTabPage
-#*  Function:   Updates the text of Thousands seprator checkbox
+#*  Function:   Updates the text of Thousands separator checkbox
 #*              if scientific format "Engineering notation"
 #*              else "Thousands separator"
 #*  Input:      ---

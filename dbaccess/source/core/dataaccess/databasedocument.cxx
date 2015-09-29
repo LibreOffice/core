@@ -481,7 +481,7 @@ void ODatabaseDocument::impl_reset_nothrow()
 
 namespace
 {
-    /** property map for import/exmport info set */
+    /** property map for import/export info set */
     comphelper::PropertyMapEntry const aExportInfoMap[] =
      {
         { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
