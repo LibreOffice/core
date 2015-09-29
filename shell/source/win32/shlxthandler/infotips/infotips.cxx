@@ -255,7 +255,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
             msg += meta_info_accessor.getTagData( META_INFO_DESCRIPTION );
         }
 
-        //display midified time formatted into locale representation.
+        //display modified time formatted into locale representation.
         if ( iso8601_date_to_local_date(meta_info_accessor.getTagData(META_INFO_MODIFIED )).length() > 0)
         {
             if ( msg != EMPTY_STRING )

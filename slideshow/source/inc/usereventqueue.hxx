@@ -149,7 +149,7 @@ public:
     void registerShapeClickEvent( const EventSharedPtr& rEvent,
                                   const ShapeSharedPtr& rShape );
 
-    /** Registes an event that is fired when the current effects(s)
+    /** Registers an event that is fired when the current effects(s)
         are skipped, .e.g. when the left mouse button is pressed.
         Then, all registered events are fired and removed from this
         queue.  After firing, a next effect event is issued to this

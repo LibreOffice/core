@@ -90,7 +90,7 @@ else
       exit 0
     fi
   done
-  # handle all non mozilla browers below
+  # handle all non mozilla browsers below
   # ..
 fi
 exit 1

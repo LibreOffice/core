@@ -475,7 +475,7 @@ private:
     SlideSharedPtr                          mpPrefetchSlide;
     /// slide to be prefetched: best candidate for upcoming slide
     uno::Reference<drawing::XDrawPage>      mxPrefetchSlide;
-    ///  save the XDrawPagesSupplier to retieve polygons
+    ///  save the XDrawPagesSupplier to retrieve polygons
     uno::Reference<drawing::XDrawPagesSupplier>  mxDrawPagesSupplier;
     /// slide animation to be prefetched:
     uno::Reference<animations::XAnimationNode> mxPrefetchAnimationNode;
@@ -884,7 +884,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
 
 PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawPage> const& xDrawPage)
 {
-    // TODO(P2) : Optimze research in the map.
+    // TODO(P2): optimize research in the map.
     PolygonMap::iterator aEnd = maPolygons.end();
     for( auto aIter = maPolygons.begin();
             aIter != aEnd;

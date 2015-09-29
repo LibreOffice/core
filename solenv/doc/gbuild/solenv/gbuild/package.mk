@@ -29,7 +29,7 @@ namespace gb
             /// file extension) from the root of their source repository.
             PackagePart(String name, Path Source);
             friend Package;
-            /// Returns a list of aboslute paths where files are copied to with the PackagePart class.
+            /// Returns a list of absolute paths where files are copied to with the PackagePart class.
 
             /// This function needs to be defined in solenv/gbuild/target_names.mk so that it is available to everywhere.
             static const List<Path> get_destinations();
