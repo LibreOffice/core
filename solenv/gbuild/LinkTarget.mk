@@ -1318,9 +1318,11 @@ endef
 
 # Use artifacts from ExternalProject (i. e. configure) of an external project
 # example in expat: StaticLibrary depends on ExternalProject outcome
-# call gb_LinkTarget_use_external_project,linktarget,externalproject
+# call gb_LinkTarget_use_external_project,linktarget,externalproject,full-dep
 define gb_LinkTarget_use_external_project
-$(call gb_LinkTarget_get_headers_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
+$(call gb_LinkTarget_get_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
+$(call gb_LinkTarget_get_headers_target,$(1)) :| \
+    $(if $(3),$(call gb_ExternalProject_get_target,$(2)),$(call gb_UnpackedTarball_get_final_target,$(2)))
 
 endef
 
