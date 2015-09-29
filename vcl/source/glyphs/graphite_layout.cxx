@@ -689,6 +689,12 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
 
     for (int i = startGi; i < endGi; ++i)
     {
+        if (i < 0)
+        {
+            SAL_WARN( "vcl.gdi", "Negative index" );
+            continue;
+        }
+
         // calculate visual cluster bounds
         int firstChar = mvGlyph2Char[i];
         int nBaseGlyph = mvChar2BaseGlyph[firstChar - mnMinCharPos];
