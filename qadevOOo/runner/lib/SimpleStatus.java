@@ -119,7 +119,7 @@ class SimpleStatus {
     }
 
     /**
-     * Get the ressult: passed or failed.
+     * Get the result: passed or failed.
      */
     public String getStateString() {
         if (state)

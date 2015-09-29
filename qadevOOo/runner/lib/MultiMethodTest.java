@@ -33,7 +33,7 @@ import com.sun.star.uno.UnoRuntime;
  * <p>There are some points that should be fulfilled in a subclass to work
  * correctly in the multi-method framework:
  *
- *   1. each subclass schould define a public field named oObj of type tested
+ *   1. each subclass should define a public field named oObj of type tested
  *   by the subclass, e.g. 'public XText oObj;'. That field will be initialized
  *   by the MultiMethodTest code with the instance of the interface to test.
  *   In a case of service testing the field type should be XPropertySet.

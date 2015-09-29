@@ -128,7 +128,7 @@ public class DataSource
                 doc.storeAsURL( docURL );
             }
 
-            // register the data soource
+            // register the data source
             doing = "registering the data source at the database context";
             dbContext.registerObject( _registrationName, m_dataSource );
         }

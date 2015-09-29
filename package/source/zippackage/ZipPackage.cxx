@@ -1052,7 +1052,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
     // Convert vector into a uno::Sequence
-    // TODO/LATER: use Defaulst entries in future
+    // TODO/LATER: use Default entries in future
     uno::Sequence< beans::StringPair > aDefaultsSequence;
     uno::Sequence< beans::StringPair > aOverridesSequence( aManList.size() );
     sal_Int32 nSeqLength = 0;

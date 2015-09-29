@@ -1024,7 +1024,7 @@ public class ValueChanger {
      *
      * @param val
      *            the value to be checked.
-     * @return <code>true</code> if the value is acssumed to be a structure.
+     * @return <code>true</code> if the value is assumed to be a structure.
      */
     private static boolean isStructure(Object val) {
         boolean result = true;
