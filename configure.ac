@@ -6040,12 +6040,19 @@ if test "$COM" = MSC; then
     # MSVC supports (a subset of) CXX11 without any switch
 elif test "$GCC" = "yes"; then
     HAVE_CXX11=
-    AC_MSG_CHECKING([whether $CXX supports C++11])
-    for flag in -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x ; do
+    AC_MSG_CHECKING([whether $CXX supports C++14 or C++11])
+    for flag in -std=gnu++14 -std=gnu++1y -std=c++14 -std=c++1y -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x ; do
         save_CXXFLAGS=$CXXFLAGS
         CXXFLAGS="$CXXFLAGS $flag -Werror"
         AC_LANG_PUSH([C++])
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[void f() {}]])],[CXXFLAGS_CXX11=$flag])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+            #include <algorithm>
+            #include <functional>
+            #include <vector>
+            void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
+                std::sort(v.begin(), v.end(), fn);
+            }
+            ]])],[CXXFLAGS_CXX11=$flag])
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
         if test -n "$CXXFLAGS_CXX11"; then
@@ -6317,6 +6324,49 @@ CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$cxx11_constexpr])
 if test "$cxx11_constexpr" = yes; then
     AC_DEFINE([HAVE_CXX11_CONSTEXPR])
+fi
+
+AC_MSG_CHECKING([whether $CXX supports C++14 constexpr])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+    struct S {
+        int n_;
+        constexpr bool f() {
+            int n = n_;
+            int i = 0;
+            while (n > 0) { --n; ++i; }
+            return i == 0;
+        }
+    };
+    ]])], [cxx14_constexpr=yes], [cxx14_constexpr=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([$cxx14_constexpr])
+if test "$cxx14_constexpr" = yes; then
+    AC_DEFINE([HAVE_CXX14_CONSTEXPR])
+fi
+
+AC_MSG_CHECKING([whether $CXX supports C++14 sized deallocation])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_LANG_PUSH([C++])
+AC_RUN_IFELSE([AC_LANG_PROGRAM([[
+    #include <cstddef>
+    #include <cstdlib>
+    void operator delete(void *) throw () { std::exit(1); }
+    void operator delete(void *, std::size_t) throw () { std::exit(0); }
+    struct S { S() { throw 0; } };
+    ]],[[
+    try { new S; } catch (...) {}
+    return 1;
+    ]])], [cxx14_sized_deallocation=yes], [cxx14_sized_deallocation=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([$cxx14_sized_deallocation])
+if test "$cxx14_sized_deallocation" = yes; then
+    AC_DEFINE([HAVE_CXX14_SIZED_DEALLOCATION])
 fi
 
 HAVE_GCC_PRAGMA_OPERATOR=
