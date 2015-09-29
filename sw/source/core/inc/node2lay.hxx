@@ -33,7 +33,7 @@
  *
  * This class is an interface between the method and a SwClientIter: it
  * chooses the right SwModify depending on the task, creates a SwClientIter
- * and filters its iterations depeding on the task.
+ * and filters its iterations depending on the task.
  * The task is determined by the choice of ctor.
  *
  * 1. Collecting the UpperFrms (so that later on it becomes RestoreUpperFrms)

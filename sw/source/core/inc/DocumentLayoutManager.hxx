@@ -38,7 +38,7 @@ public:
     DocumentLayoutManager( SwDoc& i_rSwdoc );
 
     virtual const SwViewShell *GetCurrentViewShell() const SAL_OVERRIDE;
-    virtual SwViewShell *GetCurrentViewShell() SAL_OVERRIDE; //< It must be able to communicate to a SwViewShell.This is going to be removerd later.
+    virtual SwViewShell *GetCurrentViewShell() SAL_OVERRIDE; //< It must be able to communicate to a SwViewShell.This is going to be removed later.
     virtual void SetCurrentViewShell( SwViewShell* pNew ) SAL_OVERRIDE;
 
     virtual const SwRootFrm *GetCurrentLayout() const SAL_OVERRIDE;

@@ -165,7 +165,7 @@ const SwTextFormatColl* SwPageDesc::GetRegisterFormatColl() const
     return static_cast<const SwTextFormatColl*>(pReg);
 }
 
-/// notifie all affected page frames
+/// notify all affected page frames
 void SwPageDesc::RegisterChange()
 {
     // #117072# - During destruction of the document <SwDoc>

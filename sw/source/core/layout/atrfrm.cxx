@@ -1705,7 +1705,7 @@ bool SwFormatAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 if (FLY_AT_PAGE == GetAnchorId())
                 {
                     // If the anchor type is page and a valid page number
-                    // is set, the content paoition has to be deleted to not
+                    // is set, the content position has to be deleted to not
                     // confuse the layout (frmtool.cxx). However, if the
                     // anchor type is not page, any content position will
                     // be kept.

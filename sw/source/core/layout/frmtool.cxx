@@ -1299,7 +1299,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     //If the page breaks, for "open" sections a follow will created.
     //For nested sections (which have, however, not a nested layout),
     //the SwActualSection class has a member, which points to an upper(section).
-    //When the "inner" section finishs, the upper will used instead.
+    //When the "inner" section finishes, the upper will used instead.
 
     while( true )
     {

@@ -2149,7 +2149,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
                     }
                     else
                     {
-                        // in non-book view, dont add x gap before
+                        // in non-book view, don't add x gap before
                         // 1. the last empty page in a row
                         // 2. after an empty page
                         const bool bDontAddGap = ( pPageToAdjust->IsEmptyPage() && pPageToAdjust->GetNext() == pEndOfRow ) ||

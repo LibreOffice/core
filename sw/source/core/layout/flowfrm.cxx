@@ -791,7 +791,7 @@ bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
 {
     // Now it's getting a bit complicated:
 
-    // Maybe i'm bringing a Pagedesc myself; in that case,
+    // Maybe I'm bringing a Pagedesc myself; in that case,
     // the pagedesc of the next page needs to correspond.
     // Otherwise, I'll have to dig a bit deeper to see where
     // the following Pagedesc is coming from.

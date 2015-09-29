@@ -776,7 +776,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             // wrapping style.
             //rInvFlags |= 0x40;
             rInvFlags |= 0x41;
-            // The background needs to messaged and invalidated
+            // The background needs to be messaged and invalidated
             const SwRect aTmp( GetObjRectWithSpaces() );
             NotifyBackground( FindPageFrm(), aTmp, PREP_FLY_ATTR_CHG );
 

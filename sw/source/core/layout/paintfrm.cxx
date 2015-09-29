@@ -1892,7 +1892,7 @@ bool DrawFillAttributes(
                 // AAed regions does not add to no transparence (0.5 opacity covered by 0.5 opacity
                 // is not full opacity but 0.75 opacity) we need some overlap here to avoid paint
                 // artifacts. Checked experimentally - a little bit more in Y is needed, probably
-                // due to still existing integer alignment and cruncing in writer.
+                // due to still existing integer alignment and crunching in writer.
                 static double fExpandX = 0.55;
                 static double fExpandY = 0.70;
                 const basegfx::B2DVector aSingleUnit(rOut.GetInverseViewTransformation() * basegfx::B2DVector(fExpandX, fExpandY));
@@ -2153,7 +2153,7 @@ void DrawGraphic(
         // background) is transparent drawn and the background color is
         // "no fill" respectively "auto fill", if background transparency
         // has to be considered.
-        // If YES, memorise transparency of background graphic.
+        // If YES, memorize transparency of background graphic.
         // check also, if background graphic bitmap is transparent.
         bool bTransparentGrfWithNoFillBackgrd = false;
         sal_Int32 nGrfTransparency = 0;
@@ -2247,7 +2247,7 @@ void DrawGraphic(
             {
                 // background region have to be drawn transparent.
                 // Thus, create a poly-polygon from the region and draw it with
-                // the corresponding transparency precent.
+                // the corresponding transparency percent.
                 tools::PolyPolygon aDrawPoly( rOut.SVRect() );
                 if ( aGrf.HasArea() )
                 {
