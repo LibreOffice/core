@@ -40,7 +40,7 @@ extern FILE* pDefOut;                                   /* ER */
 
 #define EOS             '\0'            /* End of string                */
 #define EOF_CHAR        0               /* Returned by get() on eof     */
-#define NULLST          ((char *) NULL) /* Pointer to nowhere (linted)  */
+#define NULLST          ((char *) NULL) /* Pointer to nowhere (linked)  */
 #define DEF_NOARGS      (-1)            /* #define foo vs #define foo() */
 
 /*

@@ -343,7 +343,7 @@ namespace rptui
         // SfxListener
         virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint) SAL_OVERRIDE;
 
-        /** returns <TRUE/> when the command is enbaled
+        /** returns <TRUE/> when the command is enabled
             @param  _nCommand   the command id
             @param  _xControlFormat the report control format
         */

@@ -174,7 +174,7 @@ public class StyleUtilities
                     stylesCollection.getStyle(styleFamily, styleParent);
             if (inherited != null)
             {
-                // OK, recurse (and hope that we dont run into an infinite loop) ..
+                // OK, recurse (and hope that we don't run into an infinite loop) ..
                 copyStyle(styleFamily, styleParent, stylesCollection,
                         commonCollection, predefCollection, inheritanceTracker);
             }

@@ -49,7 +49,7 @@ struct RscArrayInst
     RscInstNode *   pNode;
 };
 
-/* The tree is sorted against its enum value, not gainst its HashId */
+/* The tree is sorted against its enum value, not against its HashId */
 class RscArray : public RscTop
 {
 protected:

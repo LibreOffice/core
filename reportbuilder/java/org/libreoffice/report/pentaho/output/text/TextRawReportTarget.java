@@ -346,7 +346,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         // derive section style ..
 
         // This is a rather cheap solution to the problem. In a sane world, we would have to feed the
-        // footer multiple times. Right now, we simply rely on the balacing, which should make sure that
+        // footer multiple times. Right now, we simply rely on the balancing, which should make sure that
         // the column's content are evenly distributed.
         final XmlWriter writer = getXmlWriter();
         final AttributeList attrs = new AttributeList();
@@ -1014,7 +1014,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
         if (getCurrentRole() == ROLE_TEMPLATE || getCurrentRole() == ROLE_SPREADSHEET_PAGE_HEADER || getCurrentRole() == ROLE_SPREADSHEET_PAGE_FOOTER)
         {
-            // the template section would break the multi-column stuff and we dont open up sections there
+            // the template section would break the multi-column stuff and we don't open up sections there
             // anyway ..
             return;
         }
@@ -1040,7 +1040,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         sectionHeight = new LengthCalculator();
         if (role == OfficeDocumentReportTarget.ROLE_TEMPLATE || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER)
         {
-            // Start buffering with an dummy styles-collection, so that the global styles dont get polluted ..
+            // Start buffering with an dummy styles-collection, so that the global styles don't get polluted ..
             startBuffering(new OfficeStylesCollection(), true);
         }
         else if (role == OfficeDocumentReportTarget.ROLE_PAGE_HEADER)

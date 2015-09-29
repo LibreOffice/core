@@ -123,7 +123,7 @@ public:
                     // returns instance at the position
     virtual RSCINST GetPosEle( const RSCINST & rInst, sal_uInt32 nPos );
 
-                    // smove an instance
+                    // move an instance
     virtual ERRTYPE MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
                                 sal_uInt32 nSourcePos );
 
@@ -163,7 +163,7 @@ public:
     virtual RSCINST Create( RSCINST * pInst,
                             const RSCINST & rDefInst, bool bOwnClass = false );
 
-                    // detroys instance
+                    // destroys instance
     virtual void    Destroy( const RSCINST & rInst );
 
                     // checks consistency

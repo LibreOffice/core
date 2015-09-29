@@ -94,14 +94,14 @@ int rec_recover = TRUE;     /* Unwind recursive macros      */
  * shouldn't delimit tokens, but we'll worry about that some other
  * time -- it is more important to prevent infinitly long output lines.
  *
- * instring and inmarcor are parameters to the get() routine which
+ * instring and inmacro are parameters to the get() routine which
  * were made global for speed.
  */
 int instring = FALSE;       /* TRUE if scanning string      */
 int inmacro = FALSE;        /* TRUE if #defining a macro    */
 
 /*
- * work[] and workp are used to store one piece of text in a temporay
+ * work[] and workp are used to store one piece of text in a temporary
  * buffer.  To initialize storage, set workp = work.  To store one
  * character, call save(c);  (This will fatally exit if there isn't
  * room.)  To terminate the string, call save(EOS).  Note that

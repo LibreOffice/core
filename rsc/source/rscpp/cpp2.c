@@ -373,7 +373,7 @@ FILE_LOCAL void doinclude()
 #ifdef CONTROL_COMMENTS_NOT_ALLOWED
     while ((c = get()) != '\n' && c != EOF_CHAR)
         save(c);                    /* Put it away.                 */
-    unget();                        /* Force nl after includee      */
+    unget();                        /* Force nl after include      */
     /*
      * The draft is unclear if the following should be done.
      */
