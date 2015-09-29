@@ -1183,7 +1183,7 @@ void WW8_WrFkp::MergeToNew( short& rVarLen, sal_uInt8 *& rpNewSprms )
             rVarLen = rVarLen + nOldVarLen;
         }
         --nIMax;
-        // if this sprms dont used from others, remove it
+        // if this sprms don't used from others, remove it
         bool bFnd = false;
         for (sal_uInt16 n = 0; n < nIMax; ++n)
         {

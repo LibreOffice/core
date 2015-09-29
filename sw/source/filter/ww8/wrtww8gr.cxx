@@ -123,7 +123,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     /*
     Now we must see if the object contains a preview itself which is equal to
     the preview that we are currently using. If the graphics are equal then we
-    dont need to store another preview
+    don't need to store another preview
     */
     GDIMetaFile aWMF;
     long nX=0,nY=0;

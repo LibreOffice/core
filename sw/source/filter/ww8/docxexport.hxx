@@ -216,7 +216,7 @@ private:
     /// Write the numbering table.
     virtual void WriteNumbering() SAL_OVERRIDE;
 
-    /// Write reference to a header/foorter + the actual xml containing the text.
+    /// Write reference to a header/footer + the actual xml containing the text.
     void WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const char* pType );
 
     /// Write word/fontTable.xml.

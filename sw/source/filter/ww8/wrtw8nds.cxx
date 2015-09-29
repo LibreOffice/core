@@ -1093,7 +1093,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
     else if ( eProto != INetProtocol::NotValid )
     {
         // version 2 (simple url)
-        // an write some data to the data stream, but dont ask
+        // an write some data to the data stream, but don't ask
         // what the data mean, except for the URL.
         // The First piece is the WW8_PIC structure.
         static sal_uInt8 MAGIC_B[] = {
@@ -2848,7 +2848,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         && rSection.GetType() != TOX_CONTENT_SECTION && rSection.GetType() != TOX_HEADER_SECTION) //No sections in table
     {
         // if the first Node inside the section has an own
-        // PageDesc or PageBreak attribute, then dont write
+        // PageDesc or PageBreak attribute, then don't write
         // here the section break
         sal_uLong nRstLnNum = 0;
         const SfxItemSet* pSet;

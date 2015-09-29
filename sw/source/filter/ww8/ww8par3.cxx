@@ -911,7 +911,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
             eAdj = SVX_ADJUST_LEFT;
             break;
          default:
-            // undefied value
+            // undefined value
             OSL_ENSURE( false, "Value of aLVL.nAlign is not supported" );
             // take default
             eAdj = SVX_ADJUST_LEFT;
@@ -938,7 +938,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
     }
     else
     {
-        // reminder: Garnix ist default Prefix
+        // reminder: Garnix is default Prefix
         if( !sPrefix.isEmpty() )
             rNumFormat.SetPrefix( sPrefix );
         // reminder: Point is default Postfix

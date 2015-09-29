@@ -76,7 +76,7 @@ namespace sw
 
         In word all frames are effectively anchored to character or as
         character. This is nice and simple, writer is massively complex in this
-        area, so this sw::Frame simplies matters by providing a single unified
+        area, so this sw::Frame simplifies matters by providing a single unified
         view of the multitute of elements in writer and their differing quirks.
 
         A sw::Frame wraps a writer frame and is guaranteed to have a suitable
