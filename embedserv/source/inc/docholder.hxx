@@ -44,10 +44,10 @@ namespace winwrap {
 
 class DocumentHolder :
     public ::cppu::WeakImplHelper<
-                        ::com::sun::star::util::XCloseListener,
-                          ::com::sun::star::frame::XTerminateListener,
-                        ::com::sun::star::util::XModifyListener,
-                        ::com::sun::star::ui::XDockingAreaAcceptor>
+                        css::util::XCloseListener,
+                        css::frame::XTerminateListener,
+                        css::util::XModifyListener,
+                        css::ui::XDockingAreaAcceptor>
 {
 private:
     ::osl::Mutex                m_aMutex;
@@ -60,11 +60,10 @@ private:
 
     ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > m_xOleAccess;
 
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProviderInterceptor > m_xInterceptorLocker;
+    css::uno::WeakReference< css::frame::XDispatchProviderInterceptor > m_xInterceptorLocker;
     Interceptor*                m_pInterceptor;
 
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
     RECT                          m_aBorder;
 
@@ -75,22 +74,17 @@ private:
     HMENU                         m_nMenuHandle;
     HMENU                         m_nMenuShared;
     HOLEMENU                      m_nOLEMenu;
-    com::sun::star::uno::Reference<
-        com::sun::star::awt::XWindow> m_xEditWindow;
+    css::uno::Reference< css::awt::XWindow> m_xEditWindow;
 
-    com::sun::star::uno::Reference<
-        com::sun::star::awt::XWindow> m_xContainerWindow;
+    css::uno::Reference< css::awt::XWindow> m_xContainerWindow;
 
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XModel > m_xDocument;
+    css::uno::Reference< css::frame::XModel > m_xDocument;
     sal_Int16                    m_nMacroExecMode;
 
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XLayoutManager> m_xLayoutManager;
+    css::uno::Reference< css::frame::XLayoutManager> m_xLayoutManager;
 
 
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XFrame2 > m_xFrame;
+    css::uno::Reference< css::frame::XFrame2 > m_xFrame;
 
     OUString m_aContainerName,m_aDocumentNamePart,m_aFilterName;
 
@@ -99,11 +93,10 @@ private:
     sal_Bool m_bLink;
 
 
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XFrame2 > DocumentFrame();
+    css::uno::Reference< css::frame::XFrame2 > DocumentFrame();
 
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >
+    css::uno::Reference< css::frame::XDispatchProviderInterceptor >
         CreateNewInterceptor();
 
     void ClearInterceptorInternally();
@@ -126,8 +119,7 @@ public:
     }
 
     DocumentHolder(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
         const ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl >& xOleAccess );
 
     ~DocumentHolder();
@@ -150,8 +142,7 @@ public:
     // further methods
 
     void SetDocument(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel >& xDoc,
+        const css::uno::Reference< css::frame::XModel >& xDoc,
         sal_Bool bLink = sal_False
     );
 
@@ -198,8 +189,7 @@ public:
         return m_hWndxWinParent;
      }
 
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XModel >
+    css::uno::Reference< css::frame::XModel >
     GetDocument() const
     {
         return m_xDocument;
@@ -207,74 +197,74 @@ public:
 
     // XEventListener
     virtual void SAL_CALL
-    disposing( const com::sun::star::lang::EventObject& aSource )
-        throw( ::com::sun::star::uno::RuntimeException );
+    disposing( const css::lang::EventObject& aSource )
+        throw( css::uno::RuntimeException );
 
     // XCloseListener
     virtual void SAL_CALL
     queryClosing(
-        const com::sun::star::lang::EventObject& aSource,
+        const css::lang::EventObject& aSource,
         sal_Bool bGetsOwnership
     )
         throw(
-            ::com::sun::star::util::CloseVetoException
+            css::util::CloseVetoException
         );
 
     virtual void SAL_CALL
     notifyClosing(
-        const com::sun::star::lang::EventObject& aSource
+        const css::lang::EventObject& aSource
     )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     // XTerminateListener
     virtual void SAL_CALL
     queryTermination(
-        const com::sun::star::lang::EventObject& aSource
+        const css::lang::EventObject& aSource
     )
         throw(
-            ::com::sun::star::frame::TerminationVetoException
+            css::frame::TerminationVetoException
         );
 
     virtual void SAL_CALL
     notifyTermination(
-        const com::sun::star::lang::EventObject& aSource
+        const css::lang::EventObject& aSource
     )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
 
     // XModifyListener
     virtual void SAL_CALL
     modified(
-        const ::com::sun::star::lang::EventObject& aEvent
+        const css::lang::EventObject& aEvent
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     // XDockingAreaAcceptor
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XWindow> SAL_CALL
+    virtual css::uno::Reference<
+        css::awt::XWindow> SAL_CALL
     getContainerWindow(
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual sal_Bool SAL_CALL
     requestDockingAreaSpace(
-        const ::com::sun::star::awt::Rectangle& RequestedSpace
+        const css::awt::Rectangle& RequestedSpace
     )
         throw(
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 
     virtual void SAL_CALL
     setDockingAreaSpace(
-        const ::com::sun::star::awt::Rectangle& BorderSpace
+        const css::awt::Rectangle& BorderSpace
     )
         throw (
-            ::com::sun::star::uno::RuntimeException
+            css::uno::RuntimeException
         );
 };
 

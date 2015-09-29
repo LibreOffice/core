@@ -34,7 +34,7 @@ class EmbedProviderFactory_Impl;
 class EmbedServer_Impl: public cppu::WeakImplHelper<css::lang::XServiceInfo>
 {
 public:
-    EmbedServer_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &xFactory );
+    EmbedServer_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory > &xFactory );
     virtual ~EmbedServer_Impl();
 
     OUString SAL_CALL getImplementationName()
@@ -49,14 +49,14 @@ public:
 protected:
 
     CComPtr< EmbedProviderFactory_Impl > m_pOLEFactories[ SUPPORTED_FACTORIES_NUM ];
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 };
 
 class EmbedProviderFactory_Impl : public IClassFactory
 {
 public:
 
-    EmbedProviderFactory_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory, const GUID* pGuid);
+    EmbedProviderFactory_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory, const GUID* pGuid);
     virtual ~EmbedProviderFactory_Impl();
 
     sal_Bool registerClass();
@@ -77,7 +77,7 @@ protected:
     GUID                m_guid;
     DWORD               m_factoryHandle;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 };
 
 #endif
