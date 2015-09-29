@@ -23,6 +23,7 @@
 #include <svx/svdoutl.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/overflowingtxt.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/itemset.hxx>
