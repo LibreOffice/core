@@ -15,7 +15,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,expat,expat))
 
 # no configure step on windows, no dependency
 ifneq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_StaticLibrary_use_external_project,expat,expat))
+$(eval $(call gb_StaticLibrary_use_external_project,expat,expat,full))
 endif
 
 $(eval $(call gb_StaticLibrary_set_include,expat,\
