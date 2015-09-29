@@ -190,7 +190,7 @@ Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     do {
         newjd = NewMoon(newsyn);
 
-        // Decrement syndonic months
+        // Decrement syntonic months
         newsyn--;
     } while (newjd > prevday);
     newsyn++;

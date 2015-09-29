@@ -604,7 +604,7 @@ static const hchar jongseong_to_unicode[] =
 /* The medial sound is 0 or 1
  * first 32 are consonants and vowels and the other 32 is combinations of alphabets
  * (0x8000 ~ 0xa413) are the first 32. the other 32 start from 0x8400
- * consonants and vowels area is made as a general table and the rest are made of a sructure mapping table
+ * consonants and vowels area is made as a general table and the rest are made of a structure mapping table
  *
  * 844, except for the remaining 1152-308 is a combination of consonants and vowels. */
 static const hchar jamo_to_unicode[] =

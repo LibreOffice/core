@@ -31,7 +31,7 @@ class CTextOut;
 class CHTMLOut;
 
 /**
- * Information of page (phisical)
+ * Information of page (physical)
  */
 struct PaperInfo
 {
