@@ -1568,7 +1568,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmAttributNode* pNode )
     mpRightMost = right;
 }
 
-//Consider these single symboles
+//Consider these single symbols
 void SmCaretPosGraphBuildingVisitor::Visit( SmSpecialNode* pNode )
 {
     SmCaretPosGraphEntry* right = mpGraph->Add( SmCaretPos( pNode, 1 ), mpRightMost );

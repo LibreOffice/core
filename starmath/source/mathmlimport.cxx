@@ -1055,7 +1055,7 @@ void SmXMLErrorContext_Impl::EndElement()
     /*Right now the error tag is completely ignored, what
      can I do with it in starmath, ?, maybe we need a
      report window ourselves, do a test for validity of
-     the xml input, use merrors, and then generate
+     the xml input, use mirrors, and then generate
      the markup inside the merror with a big red colour
      of something. For now just throw them all away.
      */

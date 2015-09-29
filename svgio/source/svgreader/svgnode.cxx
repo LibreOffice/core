@@ -230,7 +230,7 @@ namespace svgio
                 // only changing some pointers.
                 // The alternative would be to create the style hierarchy for every element (or even
                 // for the element containing the hierarchy) in a vector of pointers and to use that.
-                // Resetting the CssStyleParent on rOriginal is probably not needeed
+                // Resetting the CssStyleParent on rOriginal is probably not needed
                 // but simply safer to do.
                 const_cast< SvgStyleAttributes& >(rOriginal).setCssStyleParent(0);
 

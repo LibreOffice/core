@@ -305,7 +305,7 @@ namespace svgio
 
                 // add fill. Use geometry even for simple color fill when stroke
                 // is used, else text rendering and the geometry-based stroke will
-                // normally not really match optically due to divrese system text
+                // normally not really match optically due to diverse system text
                 // renderers
                 if(aMergedArea.count() && (pFillGradient || pFillPattern || bStrokeUsed))
                 {
@@ -964,7 +964,7 @@ namespace svgio
                                 {
                                     const sal_uInt32 nPointIndex(b % nSubPolygonPointCount);
 
-                                    // get entering and leaving tangents; this will search backward/froward
+                                    // get entering and leaving tangents; this will search backward/forward
                                     // in the polygon to find tangents unequal to zero, skipping empty edges
                                     // see basegfx descriptions)
                                     // Hint: Mozilla, Inkscape and others use only leaving tangent for start marker
