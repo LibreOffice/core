@@ -2610,9 +2610,11 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
 
 bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc, int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount)
 {
-    BitmapWriteAccess* pWriteAcc = aNewBitmap.AcquireWriteAccess();
+    if (!pReadAcc)
+        return false;
 
-    if (!pReadAcc || !pWriteAcc)
+    BitmapWriteAccess* pWriteAcc = aNewBitmap.AcquireWriteAccess();
+    if (!pWriteAcc)
         return false;
 
     const int nHeight = GetSizePixel().Height();
