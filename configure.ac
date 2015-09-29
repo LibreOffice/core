@@ -4679,7 +4679,7 @@ if test $_os != "WINNT" -a $_os != "Darwin"; then
 fi
 AC_SUBST(ENABLE_OOENV)
 
-if test "$with_x" = "no"; then
+if test "$USING_X11" != TRUE; then
     # be sure to do not mess with uneeded stuff
     test_randr=no
     test_xrender=no
@@ -9138,7 +9138,7 @@ AC_MSG_CHECKING([whether to plug browser plugins into LibreOffice documents])
 # Obviously no such thing on iOS or Android. Also not possible when building
 # 64-bit OS X code as the plugin code uses QuickTime and Carbon.
 if test "$_os" != Android -a "$_os" != iOS -a $_os != Darwin -a \
-        "$with_x" != "no" -a "$enable_mpl_subset" != yes
+        "$with_x" != "no -a "$enable_mpl_subset" != yes
 then
     AC_MSG_RESULT([yes])
     ENABLE_NPAPI_FROM_BROWSER=TRUE
@@ -9948,7 +9948,7 @@ dnl Test which vclplugs have to be built.
 dnl ===================================================================
 R=""
 AC_MSG_CHECKING([which VCLplugs shall be built])
-if test "$USING_X11" != TRUE -o "$with_x" = "no"; then
+if test "$USING_X11" != TRUE; then
     enable_gtk=no
     enable_gtk3=no
 fi
@@ -10005,7 +10005,7 @@ fi
 AC_SUBST(ENABLE_KDE4)
 
 ENABLE_HEADLESS=""
-if test "x$with_x" = "xno"; then
+if test "$USING_X11" != TRUE; then
     ENABLE_HEADLESS="TRUE"
     SCPDEFS="$SCPDEFS -DLIBO_HEADLESS"
     R="headless"
