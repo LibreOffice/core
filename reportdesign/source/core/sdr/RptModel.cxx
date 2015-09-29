@@ -117,7 +117,7 @@ OReportPage* OReportModel::getPage(const uno::Reference< report::XSection >& _xS
     sal_uInt16 nCount = GetPageCount();
     for (sal_uInt16 i = 0; i < nCount && !pPage ; ++i)
     {
-        OReportPage* pRptPage = PTR_CAST( OReportPage, GetPage(i) );
+        OReportPage* pRptPage = dynamic_cast<OReportPage*>( GetPage(i)  );
         if ( pRptPage && pRptPage->getSection() == _xSection )
             pPage = pRptPage;
     }

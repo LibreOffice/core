@@ -166,7 +166,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
         }
     }
 
-    if ( pState && ( pState->ISA( SvxDashListItem ) ) )
+    if ( pState && ( dynamic_cast<const SvxDashListItem*>( pState) !=  nullptr ) )
     {
         // The list of line styles has changed
         SvxLineBox* pBox = static_cast<SvxLineBox*>(GetToolBox().GetItemWindow( GetId() ));
@@ -227,7 +227,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
 
             if ( eState == SfxItemState::DEFAULT )
             {
-                DBG_ASSERT( pState->ISA(XLineWidthItem), "wrong ItemType" );
+                DBG_ASSERT( dynamic_cast<const XLineWidthItem*>( pState) !=  nullptr, "wrong ItemType" );
 
                 // Core-Unit handed over to MetricField
                 // Should not happen in CreateItemWin ()!
@@ -531,7 +531,7 @@ void SvxLineEndWindow::StateChanged(
     if ( nSID == SID_LINEEND_LIST )
     {
         // The list of line ends (LineEndList) has changed
-        if ( pState && pState->ISA( SvxLineEndListItem ))
+        if ( pState && dynamic_cast<const SvxLineEndListItem*>( pState) !=  nullptr)
         {
             pLineEndList = static_cast<const SvxLineEndListItem*>(pState)->GetLineEndList();
             DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );

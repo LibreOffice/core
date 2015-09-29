@@ -136,7 +136,7 @@ SdrView* SdrViewIter::ImpFindView()
         while(mnListenerNum < nLsAnz)
         {
             SfxListener* pLs = mpModel->GetListener(mnListenerNum);
-            mpAktView = PTR_CAST(SdrView, pLs);
+            mpAktView = dynamic_cast<SdrView*>( pLs );
 
             if(mpAktView)
             {

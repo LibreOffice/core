@@ -162,14 +162,14 @@ void OXUndoEnvironment::Clear(const Accessor& /*_r*/)
     sal_uInt16 i;
     for (i = 0; i < nCount; i++)
     {
-        OReportPage* pPage = PTR_CAST( OReportPage, m_pImpl->m_rModel.GetPage(i) );
+        OReportPage* pPage = dynamic_cast<OReportPage*>( m_pImpl->m_rModel.GetPage(i)  );
         RemoveSection(pPage);
     }
 
     nCount = m_pImpl->m_rModel.GetMasterPageCount();
     for (i = 0; i < nCount; i++)
     {
-        OReportPage* pPage = PTR_CAST( OReportPage, m_pImpl->m_rModel.GetMasterPage(i) );
+        OReportPage* pPage = dynamic_cast<OReportPage*>( m_pImpl->m_rModel.GetMasterPage(i)  );
         RemoveSection(pPage);
     }
 

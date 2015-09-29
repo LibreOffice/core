@@ -743,7 +743,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     if ( pAny )
         *pAny >>= bFlipV;
 
-    if ( pCustomShapeObj->ISA( SdrObjCustomShape ) )    // should always be a SdrObjCustomShape, but you don't know
+    if ( dynamic_cast<const SdrObjCustomShape*>( pCustomShapeObj) !=  nullptr )    // should always be a SdrObjCustomShape, but you don't know
         nRotateAngle = (sal_Int32)(static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetObjectRotation() * 100.0);
     else
          nRotateAngle = pCustomShapeObj->GetRotateAngle();
@@ -2343,7 +2343,7 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
 
 bool EnhancedCustomShape2d::IsPostRotate() const
 {
-    return pCustomShapeObj->ISA( SdrObjCustomShape ) && static_cast<SdrObjCustomShape*>(pCustomShapeObj)->IsPostRotate();
+    return dynamic_cast<const SdrObjCustomShape*>( pCustomShapeObj) != nullptr && static_cast<SdrObjCustomShape*>(pCustomShapeObj)->IsPostRotate();
 }
 
 SdrObject* EnhancedCustomShape2d::CreateLineGeometry()

@@ -255,7 +255,7 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
     const SfxPoolItemHint* pPoolItemHint = dynamic_cast<const SfxPoolItemHint*>(&rHint);
     if ( pPoolItemHint
-         && ( pPoolItemHint->GetObject()->ISA( SvxColorListItem ) ) )
+         && ( dynamic_cast<const SvxColorListItem*>(pPoolItemHint->GetObject()) != nullptr ) )
     {
         // Die Liste der Farben hat sich geaendert
         pColorList = static_cast<SvxColorListItem*>( pPoolItemHint->GetObject() )->GetColorList();

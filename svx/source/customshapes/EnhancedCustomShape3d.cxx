@@ -380,7 +380,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             SfxItemSet aLocalSet(aSet);
             drawing::FillStyle aLocalFillStyle(eFillStyle);
 
-            if ( pNext->ISA( SdrPathObj ) )
+            if ( dynamic_cast<const SdrPathObj*>( pNext) !=  nullptr )
             {
                 const SfxItemSet& rSet = pNext->GetMergedItemSet();
                 bool bNeedToConvertToContour(false);
@@ -462,7 +462,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             else
             {
                 SdrObject* pNewObj = pNext->ConvertToPolyObj( false, false );
-                SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
+                SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pNewObj  );
                 if ( pPath )
                     aPolyPoly = pPath->GetPathPoly();
                 SdrObject::Free( pNewObj );

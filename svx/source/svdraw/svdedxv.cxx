@@ -329,7 +329,7 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
 
 void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const
 {
-    const SdrTextObj* pText = PTR_CAST(SdrTextObj,GetTextEditObject());
+    const SdrTextObj* pText = dynamic_cast<SdrTextObj*>( GetTextEditObject() );
     bool bTextFrame(pText && pText->IsTextFrame());
     bool bFitToSize(pTextEditOutliner->GetControlWord() & EEControlBits::STRETCHING);
     bool bModifyMerk(pTextEditOutliner->IsModified());
@@ -394,7 +394,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
 
     if(pWin)
     {
-        const SdrTextObj* pText = PTR_CAST(SdrTextObj,GetTextEditObject());
+        const SdrTextObj* pText = dynamic_cast<SdrTextObj*>( GetTextEditObject() );
         bool bTextFrame(pText && pText->IsTextFrame());
         bool bFitToSize(pText && pText->IsFitToSize());
 
@@ -1021,7 +1021,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
             pTEObj->EndTextEdit(*pTEOutliner);
 
-            if( (pTEObj->GetRotateAngle() != 0) || (pTEObj && pTEObj->ISA(SdrTextObj) && pTEObj->IsFontwork())  )
+            if( (pTEObj->GetRotateAngle() != 0) || (pTEObj && dynamic_cast<const SdrTextObj*>( pTEObj) !=  nullptr && pTEObj->IsFontwork())  )
             {
                 pTEObj->ActionChanged();
             }
@@ -1038,7 +1038,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             // check deletion of entire TextObj
             SdrUndoAction* pDelUndo=NULL;
             bool bDelObj=false;
-            SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pTEObj);
+            SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( pTEObj );
             if (pTextObj!=NULL && bTextEditNewObj)
             {
                 bDelObj=pTextObj->IsTextFrame() &&
@@ -1089,7 +1089,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 EndUndo(); // EndUndo after Remove, in case UndoStack is deleted immediately
 
             // Switch on any TextAnimation again after TextEdit
-            if(pTEObj->ISA(SdrTextObj))
+            if(dynamic_cast<const SdrTextObj*>( pTEObj) !=  nullptr)
             {
                 pTEObj->SetTextAnimationAllowed(true);
             }

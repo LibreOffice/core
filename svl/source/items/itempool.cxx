@@ -530,7 +530,7 @@ void SfxItemPool::Delete()
             // *ppStaticDefaultItem could've already been deleted in a class derived
             // from SfxItemPool
             // This causes chaos in Itempool!
-            if ( *ppStaticDefaultItem && (*ppStaticDefaultItem)->ISA(SfxSetItem) )
+            if ( *ppStaticDefaultItem && dynamic_cast< const SfxSetItem* >(*ppStaticDefaultItem) !=  nullptr )
             {
                 if ( *itrItemArr )
                 {
@@ -743,7 +743,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     pNewItem->SetWhich(nWhich);
 #ifdef DBG_UTIL
     SFX_ASSERT( rItem.Type() == pNewItem->Type(), nWhich, "unequal types in Put(): no Clone()?" )
-    if ( !rItem.ISA(SfxSetItem) )
+    if ( !dynamic_cast<const SfxSetItem*>( &rItem ) !=  nullptr )
     {
         SFX_ASSERT( !IsItemFlag(nWhich, SfxItemPoolFlags::POOLABLE) ||
                     rItem == *pNewItem,

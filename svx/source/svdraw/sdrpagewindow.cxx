@@ -262,7 +262,7 @@ namespace
             SdrPage* pPage = rPageView.GetPage();
             SdrObject* pObjA = pPage->GetObj(0L);
 
-            if(pObjA && pObjA->ISA(SdrPathObj))
+            if(pObjA && dynamic_cast<const SdrPathObj*>( pObjA) !=  nullptr)
             {
                 basegfx::B2DPolyPolygon aPolyA(pObjA->GetPathPoly());
                 aPolyA = basegfx::tools::correctOrientations(aPolyA);
@@ -273,7 +273,7 @@ namespace
                 {
                     SdrObject* pObjB = pPage->GetObj(a);
 
-                    if(pObjB && pObjB->ISA(SdrPathObj))
+                    if(pObjB && dynamic_cast<const SdrPathObj*>( pObjB) !=  nullptr)
                     {
                         basegfx::B2DPolyPolygon aCandidate(pObjB->GetPathPoly());
                         aCandidate = basegfx::tools::correctOrientations(aCandidate);

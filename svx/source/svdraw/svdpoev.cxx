@@ -86,7 +86,7 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
 {
     SdrObject* pObj = pM->GetMarkedSdrObj();
     SdrUShortCont* pPts = pM->GetMarkedPoints();
-    SdrPathObj* pPath = PTR_CAST(SdrPathObj,pObj);
+    SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pObj );
 
     if(pPath && pPts)
     {
@@ -365,7 +365,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
             --nMarkNum;
             SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
             SdrUShortCont* pPts = pM->GetMarkedPoints();
-            SdrPathObj* pObj = PTR_CAST(SdrPathObj, pM->GetMarkedSdrObj());
+            SdrPathObj* pObj = dynamic_cast<SdrPathObj*>( pM->GetMarkedSdrObj() );
 
             if(pPts && pObj)
             {
@@ -549,7 +549,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedPoints();
         sal_uIntPtr nPointCount=pPts==NULL ? 0 : pPts->size();
-        SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
+        SdrPathObj* pPath=dynamic_cast<SdrPathObj*>( pObj );
         if (nPointCount!=0 && pPath!=NULL)
         {
             if( bUndo )

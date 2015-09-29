@@ -208,7 +208,7 @@ void FmXUndoEnvironment::dispose()
     sal_uInt16 i;
     for (i = 0; i < nCount; i++)
     {
-        FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetPage(i) );
+        FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetPage(i)  );
         if ( pPage )
         {
             Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
@@ -220,7 +220,7 @@ void FmXUndoEnvironment::dispose()
     nCount = rModel.GetMasterPageCount();
     for (i = 0; i < nCount; i++)
     {
-        FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetMasterPage(i) );
+        FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetMasterPage(i)  );
         if ( pPage )
         {
             Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
@@ -258,7 +258,7 @@ void FmXUndoEnvironment::ModeChanged()
         sal_uInt16 i;
         for (i = 0; i < nCount; i++)
         {
-            FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetPage(i) );
+            FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetPage(i)  );
             if ( pPage )
             {
                 Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
@@ -270,7 +270,7 @@ void FmXUndoEnvironment::ModeChanged()
         nCount = rModel.GetMasterPageCount();
         for (i = 0; i < nCount; i++)
         {
-            FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetMasterPage(i) );
+            FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetMasterPage(i)  );
             if ( pPage )
             {
                 Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
@@ -340,7 +340,7 @@ void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 {
     if (pObj->GetObjInventor() == FmFormInventor)
     {
-        FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
+        FmFormObj* pFormObj = dynamic_cast<FmFormObj*>( pObj );
         Inserted( pFormObj );
     }
     else if (pObj->IsGroupObject())
@@ -454,7 +454,7 @@ void FmXUndoEnvironment::Removed(SdrObject* pObj)
 
     if (pObj->GetObjInventor() == FmFormInventor)
     {
-        FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
+        FmFormObj* pFormObj = dynamic_cast<FmFormObj*>( pObj );
         Removed(pFormObj);
     }
     else if (pObj->IsGroupObject())

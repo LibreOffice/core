@@ -34,10 +34,10 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
     bool bOriginalIsGroup(pOriginal->IsGroupObject());
     bool bCloneIsGroup(pClone->IsGroupObject());
 
-    if(bOriginalIsGroup && pOriginal->ISA(E3dObject) && !pOriginal->ISA(E3dScene))
+    if(bOriginalIsGroup && dynamic_cast<const E3dObject* >(pOriginal) != nullptr && dynamic_cast<const E3dScene* >(pOriginal) == nullptr )
         bOriginalIsGroup = false;
 
-    if(bCloneIsGroup && pClone->ISA(E3dObject) && !pClone->ISA(E3dScene))
+    if(bCloneIsGroup && dynamic_cast<const E3dObject* >(pClone) != nullptr && dynamic_cast<const E3dScene* >(pClone) == nullptr)
         bCloneIsGroup = false;
 
     if(bOriginalIsGroup && bCloneIsGroup)
@@ -73,8 +73,8 @@ void CloneList::CopyConnections() const
 
     for(size_t a = 0; a < maOriginalList.size(); a++)
     {
-        const SdrEdgeObj* pOriginalEdge = PTR_CAST(SdrEdgeObj, GetOriginal(a));
-        SdrEdgeObj* pCloneEdge = PTR_CAST(SdrEdgeObj, GetClone(a));
+        const SdrEdgeObj* pOriginalEdge = dynamic_cast<const SdrEdgeObj*>( GetOriginal(a) );
+        SdrEdgeObj* pCloneEdge = dynamic_cast<SdrEdgeObj*>( GetClone(a) );
 
         if(pOriginalEdge && pCloneEdge)
         {

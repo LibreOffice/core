@@ -325,7 +325,7 @@ bool SdrExchangeView::Paste(
                     const SdrLayerAdmin& rAd = pPg->GetLayerAdmin();
                     SdrLayerID nLayer(0);
 
-                    if(pNeuObj->ISA(FmFormObj))
+                    if(dynamic_cast<const FmFormObj*>( pNeuObj) !=  nullptr)
                     {
                         // for FormControls, force to form layer
                         nLayer = rAd.GetLayerID(rAd.GetControlLayerName(), true);
@@ -454,7 +454,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
             if(bNoVDevIfOneBmpMarked)
             {
                 SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
-                SdrGrafObj* pGrafObj = PTR_CAST( SdrGrafObj, pGrafObjTmp );
+                SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>( pGrafObjTmp  );
 
                 if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
                 {
@@ -539,7 +539,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
         if( bNoVDevIfOneMtfMarked )
         {
             SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
-            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() ==1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
+            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() ==1 ) ? dynamic_cast<SdrGrafObj*>( pGrafObjTmp  ) : NULL;
 
             if( pGrafObj )
             {
@@ -749,7 +749,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
             const SdrObject*    pObj = aSdrObjects[i];
             SdrObject*          pNeuObj;
 
-            if( pObj->ISA( SdrPageObj ) )
+            if( dynamic_cast<const SdrPageObj*>( pObj) !=  nullptr )
             {
                 // convert SdrPageObj's to a graphic representation, because
                 // virtual connection to referenced page gets lost in new model

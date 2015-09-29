@@ -2742,7 +2742,7 @@ SdrObject* SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         0 :
         ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
 
-    SdrPathObj* pPath = PTR_CAST(SdrPathObj, pRet);
+    SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pRet );
 
     if(pPath)
     {

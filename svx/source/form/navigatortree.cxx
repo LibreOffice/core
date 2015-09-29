@@ -687,14 +687,14 @@ namespace svxform
     bool NavigatorTree::IsFormEntry( SvTreeListEntry* pEntry )
     {
         FmEntryData* pEntryData = static_cast<FmEntryData*>(pEntry->GetUserData());
-        return !pEntryData || pEntryData->ISA(FmFormData);
+        return !pEntryData || dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr;
     }
 
 
     bool NavigatorTree::IsFormComponentEntry( SvTreeListEntry* pEntry )
     {
         FmEntryData* pEntryData = static_cast<FmEntryData*>(pEntry->GetUserData());
-        return pEntryData && pEntryData->ISA(FmControlData);
+        return pEntryData && dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr;
     }
 
 
@@ -1071,7 +1071,7 @@ namespace svxform
             Reference< XIndexContainer >  xContainer(xCurrentChild->getParent(), UNO_QUERY);
 
             FmFormData* pCurrentParentUserData = static_cast<FmFormData*>(pCurrentUserData->GetParent());
-            DBG_ASSERT(pCurrentParentUserData == NULL || pCurrentParentUserData->ISA(FmFormData), "NavigatorTree::implExecuteDataTransfer: invalid parent");
+            DBG_ASSERT(pCurrentParentUserData == NULL || dynamic_cast<const FmFormData*>( pCurrentParentUserData) !=  nullptr, "NavigatorTree::implExecuteDataTransfer: invalid parent");
 
             // remove from parent
             if (pCurrentParentUserData)
@@ -1438,9 +1438,9 @@ namespace svxform
 
         // create base name
         OUString aBaseName;
-        if( pEntryData->ISA(FmFormData) )
+        if( dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr )
             aBaseName = SVX_RESSTR( RID_STR_STDFORMNAME );
-        else if( pEntryData->ISA(FmControlData) )
+        else if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
             aBaseName = SVX_RESSTR( RID_STR_CONTROL );
 
 
@@ -1714,7 +1714,7 @@ namespace svxform
             FmEntryData* pCurrent = static_cast<FmEntryData*>((*it)->GetUserData());
 
             // a form ?
-            bool bIsForm = pCurrent->ISA(FmFormData);
+            bool bIsForm = dynamic_cast<const FmFormData*>( pCurrent) !=  nullptr;
 
             // because deletion is done by the view, and i build on its MarkList,
             // but normally only direct controls, no indirect ones, are marked in a marked form,
@@ -1791,7 +1791,7 @@ namespace svxform
 
             // one remaining subtile problem, before deleting it : if it's a form and the shell
             // knows it as CurrentObject, i have to tell it something else
-            if (pCurrent->ISA(FmFormData))
+            if (dynamic_cast<const FmFormData*>( pCurrent) !=  nullptr)
             {
                 Reference< XForm >  xCurrentForm( static_cast< FmFormData* >( pCurrent )->GetFormIface() );
                 if ( pFormShell->GetImpl()->getCurrentForm() == xCurrentForm )  // shell knows form to be deleted ?
@@ -2009,7 +2009,7 @@ namespace svxform
         // but mechanism doesn't work, if form is empty for example
         if ((m_arrCurrentSelection.size() == 1) && (m_nFormsSelected == 1))
         {
-            FmFormData* pSingleSelectionData = PTR_CAST( FmFormData, static_cast< FmEntryData* >( FirstSelected()->GetUserData() ) );
+            FmFormData* pSingleSelectionData = dynamic_cast<FmFormData*>( static_cast< FmEntryData* >( FirstSelected()->GetUserData() )  );
             DBG_ASSERT( pSingleSelectionData, "NavigatorTree::SynchronizeMarkList: invalid selected form!" );
             if ( pSingleSelectionData )
             {
@@ -2108,12 +2108,12 @@ namespace svxform
         for( size_t i = 0; i < pChildList->size(); ++i )
         {
             FmEntryData* pEntryData = pChildList->at( i );
-            if( pEntryData->ISA(FmControlData) )
+            if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
             {
                 pControlData = static_cast<FmControlData*>(pEntryData);
                 _rObjects.insert(pControlData->GetFormComponent());
-            } // if( pEntryData->ISA(FmControlData) )
-            else if (bDeep && (pEntryData->ISA(FmFormData)))
+            } // if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
+            else if (bDeep && (dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr))
                 CollectObjects(static_cast<FmFormData*>(pEntryData), bDeep, _rObjects);
         } // for( sal_uInt32 i=0; i<pChildList->Count(); i++ )
     }

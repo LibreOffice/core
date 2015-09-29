@@ -305,7 +305,7 @@ OUString
                     SdrObject *pSdrObj = pShape->GetSdrObject();
                     if (pSdrObj)
                     {
-                        if(pSdrObj->ISA(SdrObjCustomShape))
+                        if(dynamic_cast<const SdrObjCustomShape*>( pSdrObj) !=  nullptr)
                         {
                             SdrObjCustomShape* pCustomShape = static_cast<SdrObjCustomShape*>(pSdrObj);
                             if(pCustomShape)

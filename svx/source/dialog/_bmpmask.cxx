@@ -334,7 +334,7 @@ void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*
 {
     if ( ( nSID == SID_BMPMASK_EXEC ) && pItem )
     {
-        const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
+        const SfxBoolItem* pStateItem = dynamic_cast<const SfxBoolItem*>( pItem  );
         assert(pStateItem); //SfxBoolItem erwartet
         if (pStateItem)
             rBmpMask.SetExecState( pStateItem->GetValue() );

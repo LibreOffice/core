@@ -110,10 +110,10 @@ E3dObjList::~E3dObjList()
 void E3dObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
 {
     // Get owner
-    DBG_ASSERT(GetOwnerObj()->ISA(E3dObject), "Insert 3D object in parent != 3DObject");
+    DBG_ASSERT(dynamic_cast<const E3dObject*>(GetOwnerObj()), "Insert 3D object in parent != 3DObject");
 
     // Is it even a 3D object?
-    if(pObj && pObj->ISA(E3dObject))
+    if(pObj && dynamic_cast<const E3dObject*>(pObj))
     {
         // Normal 3D object, insert means
         // call parent
@@ -128,7 +128,7 @@ void E3dObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertRe
 
 void E3dObjList::InsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
 {
-    OSL_ENSURE(GetOwnerObj()->ISA(E3dObject), "Insert 3D object in non-3D Parent");
+    OSL_ENSURE(dynamic_cast<const E3dObject*>(GetOwnerObj()), "Insert 3D object in non-3D Parent");
 
     // call parent
     SdrObjList::InsertObject(pObj, nPos, pReason);
@@ -142,7 +142,7 @@ void E3dObjList::InsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReaso
 
 SdrObject* E3dObjList::NbcRemoveObject(size_t nObjNum)
 {
-    DBG_ASSERT(GetOwnerObj()->ISA(E3dObject), "Remove 3D object from Parent != 3DObject");
+    DBG_ASSERT(dynamic_cast<const E3dObject*>(GetOwnerObj()), "Remove 3D object from Parent != 3DObject");
 
     // call parent
     SdrObject* pRetval = SdrObjList::NbcRemoveObject(nObjNum);
@@ -158,7 +158,7 @@ SdrObject* E3dObjList::NbcRemoveObject(size_t nObjNum)
 
 SdrObject* E3dObjList::RemoveObject(size_t nObjNum)
 {
-    OSL_ENSURE(GetOwnerObj()->ISA(E3dObject), "3D object is removed from non-3D Parent");
+    OSL_ENSURE(dynamic_cast<const E3dObject*>(GetOwnerObj()), "3D object is removed from non-3D Parent");
 
     // call parent
     SdrObject* pRetval = SdrObjList::RemoveObject(nObjNum);
@@ -507,7 +507,7 @@ E3dObject* E3dObject::GetParentObj() const
 
     if(GetObjList()
         && GetObjList()->GetOwnerObj()
-        && GetObjList()->GetOwnerObj()->ISA(E3dObject))
+        && dynamic_cast<const E3dObject*>(GetObjList()->GetOwnerObj()))
         pRetval = static_cast<E3dObject*>(GetObjList()->GetOwnerObj());
     return pRetval;
 }
@@ -968,7 +968,7 @@ bool E3dCompoundObject::IsAOrdNumRemapCandidate(E3dScene*& prScene) const
 {
     if(GetObjList()
         && GetObjList()->GetOwnerObj()
-        && GetObjList()->GetOwnerObj()->ISA(E3dScene))
+        && dynamic_cast<const E3dObject*>(GetObjList()->GetOwnerObj()))
     {
         prScene = static_cast<E3dScene*>(GetObjList()->GetOwnerObj());
         return true;

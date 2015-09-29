@@ -88,7 +88,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
     if ( SfxItemState::DEFAULT != eState )
         return;
 
-    DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
+    DBG_ASSERT( dynamic_cast<const SfxBoolItem*>( pState) !=  nullptr, "invalid item type" );
     const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);
     mxImpl->maIdle.Stop();
 

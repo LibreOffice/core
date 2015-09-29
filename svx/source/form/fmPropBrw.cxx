@@ -632,7 +632,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     {
         if (eState >= SfxItemState::DEFAULT)
         {
-            FmFormShell* pShell = PTR_CAST(FmFormShell, static_cast<const SfxObjectItem*>(pState)->GetShell());
+            FmFormShell* pShell = dynamic_cast<FmFormShell*>( static_cast<const SfxObjectItem*>(pState)->GetShell() );
             InterfaceBag aSelection;
             if ( pShell )
                 pShell->GetImpl()->getCurrentSelection( aSelection );
