@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_9716e4a5",
+        "filename": "qadevOOo/tests/java/mod/_forms/GenericModelTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:08:42Z",
+      "side": 1,
+      "message": "parameter",
+      "revId": "c4749b16487808fdb635f1a7fb69706e430f8b7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
