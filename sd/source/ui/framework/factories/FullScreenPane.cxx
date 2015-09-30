@@ -67,7 +67,7 @@ FullScreenPane::FullScreenPane (
     mpWorkWindow->SetBackground(Wallpaper());
     // Don't show the window right now in order to allow the setting of an
     // accessibility object: accessibility objects are typically
-    // requested by AT-tools when the window is shown.  Chaning it
+    // requested by AT-tools when the window is shown. Chaining it
     // afterwards may or may not work.
 
     // Add resize listener at the work window.

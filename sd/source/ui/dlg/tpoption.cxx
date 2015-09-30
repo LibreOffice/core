@@ -73,7 +73,7 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
 
     rAttrs->Put( aOptsItem );
 
-    // we get a possible existing GridItem, this ensures that we do net set
+    // we get a possible existing GridItem, this ensures that we do not set
     // some default values by accident
     return true;
 }

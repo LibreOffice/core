@@ -122,7 +122,7 @@ public:
         SAL_CALL getResourceId()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /** For the typical pane it makes no sense to be dislayed without a
+    /** For the typical pane it makes no sense to be displayed without a
         view.  Therefore this default implementation returns always <TRUE/>.
     */
     virtual sal_Bool SAL_CALL isAnchorOnly()
