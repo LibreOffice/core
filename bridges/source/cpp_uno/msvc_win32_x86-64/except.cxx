@@ -655,10 +655,9 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
         & ~static_cast<sal_uInt64>(ExceptionInfos::allocationGranularity - 1);
 
     DWORD old_protect;
-#if OSL_DEBUG_LEVEL > 0
     BOOL success =
-#endif
         VirtualProtect(pCode, codeSize, PAGE_EXECUTE_READWRITE, &old_protect);
+    (void) success;
     assert(success && "VirtualProtect() failed!");
 
     ::typelib_typedescription_acquire(pTD);

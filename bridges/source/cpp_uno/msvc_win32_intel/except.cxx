@@ -188,10 +188,9 @@ inline void * ObjectFunction::operator new ( size_t nSize )
     if (pMem != 0)
     {
         DWORD old_protect;
-#if OSL_DEBUG_LEVEL > 0
         BOOL success =
-#endif
-        VirtualProtect( pMem, nSize, PAGE_EXECUTE_READWRITE, &old_protect );
+            VirtualProtect(pMem, nSize, PAGE_EXECUTE_READWRITE, &old_protect);
+        (void) success;
         assert(success && "VirtualProtect() failed!");
     }
     return pMem;
