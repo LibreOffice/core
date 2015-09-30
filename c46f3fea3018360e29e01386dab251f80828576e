@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_f7592090",
+        "filename": "include/vcl/window.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:51:06Z",
+      "side": 1,
+      "message": "nowadays",
+      "revId": "c46f3fea3018360e29e01386dab251f80828576e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
