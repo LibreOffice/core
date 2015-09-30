@@ -28,7 +28,7 @@ namespace dbp
 {
     struct OGridSettings : public OControlWizardSettings
     {
-        ::com::sun::star::uno::Sequence< OUString >      aSelectedFields;
+        css::uno::Sequence< OUString >      aSelectedFields;
     };
 
     class OGridWizard : public OControlWizard
@@ -40,8 +40,8 @@ namespace dbp
     public:
         OGridWizard(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObjectModel,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
         OGridSettings& getSettings() { return m_aSettings; }

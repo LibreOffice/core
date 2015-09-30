@@ -28,7 +28,7 @@ namespace dbp
 
 
     void disambiguateName(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
+        const css::uno::Reference< css::container::XNameAccess >& _rxContainer,
         OUString& _rElementsName);
 
 

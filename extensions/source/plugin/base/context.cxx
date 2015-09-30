@@ -58,23 +58,23 @@ using namespace com::sun::star::frame;
 
 namespace ext_plug {
 
-class FileSink : public ::cppu::WeakAggImplHelper1< ::com::sun::star::io::XOutputStream >
+class FileSink : public ::cppu::WeakAggImplHelper1< css::io::XOutputStream >
 {
 private:
-    Reference< ::com::sun::star::uno::XComponentContext >   m_xContext;
+    Reference< css::uno::XComponentContext >   m_xContext;
     FILE*                   fp;
-    Reference< ::com::sun::star::plugin::XPlugin >          m_xPlugin;
+    Reference< css::plugin::XPlugin >          m_xPlugin;
     OUString                 m_aTarget;
     OUString                 m_aFileName;
 
 public:
-    FileSink( const Reference< ::com::sun::star::uno::XComponentContext > &,
-              const Reference< ::com::sun::star::plugin::XPlugin > & plugin,
+    FileSink( const Reference< css::uno::XComponentContext > &,
+              const Reference< css::plugin::XPlugin > & plugin,
               const OUString& target,
-              const Reference< ::com::sun::star::io::XActiveDataSource > & source );
+              const Reference< css::io::XActiveDataSource > & source );
     virtual ~FileSink();
 
-    // ::com::sun::star::io::XOutputStream
+    // css::io::XOutputStream
     virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw(std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL flush() throw(std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL closeOutput() throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -83,32 +83,32 @@ public:
 }
 using namespace ext_plug;
 
-class XPluginContext_Impl : public ::cppu::WeakAggImplHelper1< ::com::sun::star::plugin::XPluginContext >
+class XPluginContext_Impl : public ::cppu::WeakAggImplHelper1< css::plugin::XPluginContext >
 {
-    Reference< ::com::sun::star::uno::XComponentContext >   m_xContext;
-    rtl_TextEncoding                                        m_aEncoding;
+    Reference< css::uno::XComponentContext >   m_xContext;
+    rtl_TextEncoding                           m_aEncoding;
 public:
 
-    XPluginContext_Impl( const Reference< ::com::sun::star::uno::XComponentContext >  & );
+    XPluginContext_Impl( const Reference< css::uno::XComponentContext >  & );
     virtual ~XPluginContext_Impl();
 
 
-    virtual OUString SAL_CALL getValue(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, ::com::sun::star::plugin::PluginVariable variable) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL getURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Reference< ::com::sun::star::lang::XEventListener > & listener) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL getURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL postURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< ::com::sun::star::lang::XEventListener > & listener) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL postURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL newStream(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& mimetype, const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& message) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & plugin) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getValue(const Reference< css::plugin::XPlugin > & plugin, css::plugin::PluginVariable variable) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL getURLNotify(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Reference< css::lang::XEventListener > & listener) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL getURL(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL postURLNotify(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< css::lang::XEventListener > & listener) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL postURL(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL newStream(const Reference< css::plugin::XPlugin > & plugin, const OUString& mimetype, const OUString& target, const Reference< css::io::XActiveDataSource > & source) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL displayStatusText(const Reference< css::plugin::XPlugin > & plugin, const OUString& message) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getUserAgent(const Reference< css::plugin::XPlugin > & plugin) throw( css::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-Reference< ::com::sun::star::plugin::XPluginContext >  XPluginManager_Impl::createPluginContext() throw(std::exception)
+Reference< css::plugin::XPluginContext >  XPluginManager_Impl::createPluginContext() throw(std::exception)
 {
     return new XPluginContext_Impl( m_xContext );
 }
 
-XPluginContext_Impl::XPluginContext_Impl( const Reference< ::com::sun::star::uno::XComponentContext >  & rxContext )
+XPluginContext_Impl::XPluginContext_Impl( const Reference< css::uno::XComponentContext >  & rxContext )
     : m_xContext( rxContext ),
       m_aEncoding( osl_getThreadTextEncoding() )
 {
@@ -118,14 +118,14 @@ XPluginContext_Impl::~XPluginContext_Impl()
 {
 }
 
-OUString XPluginContext_Impl::getValue( const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/, ::com::sun::star::plugin::PluginVariable /*variable*/ )
-    throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception )
+OUString XPluginContext_Impl::getValue( const Reference< css::plugin::XPlugin > & /*plugin*/, css::plugin::PluginVariable /*variable*/ )
+    throw( css::plugin::PluginException, RuntimeException, std::exception )
 {
     return OUString();
 }
 
 
-void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception )
+void XPluginContext_Impl::getURL(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target) throw( css::plugin::PluginException, RuntimeException, std::exception )
 {
     Reference< XDesktop2 > xDesktop = Desktop::create(m_xContext);
 
@@ -150,52 +150,52 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
     {
         try
         {
-            ::com::sun::star::beans::PropertyValue aValue;
+            css::beans::PropertyValue aValue;
             aValue.Name     = "Referer";
             aValue.Value <<= pPlugin->getRefererURL();
 
-            Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
-            Reference< ::com::sun::star::lang::XComponent >  xComp =
+            Sequence< css::beans::PropertyValue > aArgs( &aValue, 1 );
+            Reference< css::lang::XComponent >  xComp =
                 xDesktop->loadComponentFromURL(
                                               url,
                                               target,
-                                              ::com::sun::star::frame::FrameSearchFlag::PARENT          |
-                                              ::com::sun::star::frame::FrameSearchFlag::SELF            |
-                                              ::com::sun::star::frame::FrameSearchFlag::CHILDREN        |
-                                              ::com::sun::star::frame::FrameSearchFlag::SIBLINGS        |
-                                              ::com::sun::star::frame::FrameSearchFlag::TASKS           |
-                                              ::com::sun::star::frame::FrameSearchFlag::CREATE,
+                                              css::frame::FrameSearchFlag::PARENT          |
+                                              css::frame::FrameSearchFlag::SELF            |
+                                              css::frame::FrameSearchFlag::CHILDREN        |
+                                              css::frame::FrameSearchFlag::SIBLINGS        |
+                                              css::frame::FrameSearchFlag::TASKS           |
+                                              css::frame::FrameSearchFlag::CREATE,
                                               aArgs
                                               );
         }
         catch(...)
         {
-            throw ::com::sun::star::plugin::PluginException();
+            throw css::plugin::PluginException();
         }
     }
 }
 
-void XPluginContext_Impl::getURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Reference< ::com::sun::star::lang::XEventListener > & listener )
-    throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception )
+void XPluginContext_Impl::getURLNotify(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Reference< css::lang::XEventListener > & listener )
+    throw( css::plugin::PluginException, RuntimeException, std::exception )
 {
     getURL( plugin, url, target );
     if( listener.is() )
-        listener->disposing( ::com::sun::star::lang::EventObject() );
+        listener->disposing( css::lang::EventObject() );
 }
 
-OUString XPluginContext_Impl::getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/)
-    throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception )
+OUString XPluginContext_Impl::getUserAgent(const Reference< css::plugin::XPlugin > & /*plugin*/)
+    throw( css::plugin::PluginException, RuntimeException, std::exception )
 {
     return OUString("Mozilla 3.0");
 }
 
-void XPluginContext_Impl::displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/, const OUString& /*message*/)
-    throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception )
+void XPluginContext_Impl::displayStatusText(const Reference< css::plugin::XPlugin > & /*plugin*/, const OUString& /*message*/)
+    throw( css::plugin::PluginException, RuntimeException, std::exception )
 {
 }
 
-void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file)
-    throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception )
+void XPluginContext_Impl::postURL(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file)
+    throw( css::plugin::PluginException, RuntimeException, std::exception )
 {
     Sequence< sal_Int8 > aBuf;
 
@@ -223,43 +223,43 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
     {
         try
         {
-            ::com::sun::star::beans::PropertyValue aValues[2];
+            css::beans::PropertyValue aValues[2];
             aValues[0].Name = "Referer";
             aValues[0].Value <<= pPlugin->getRefererURL();
 
             aValues[1].Name = "PostString";
             aValues[1].Value <<= OStringToOUString( reinterpret_cast<char const *>(( file ? aBuf : buf ).getConstArray()), m_aEncoding );
-            Sequence< ::com::sun::star::beans::PropertyValue > aArgs( aValues, 2 );
-            Reference< ::com::sun::star::lang::XComponent >  xComp =
+            Sequence< css::beans::PropertyValue > aArgs( aValues, 2 );
+            Reference< css::lang::XComponent >  xComp =
                 xDesktop->loadComponentFromURL(
                                               url,
                                               target,
-                                              ::com::sun::star::frame::FrameSearchFlag::PARENT          |
-                                              ::com::sun::star::frame::FrameSearchFlag::SELF            |
-                                              ::com::sun::star::frame::FrameSearchFlag::CHILDREN        |
-                                              ::com::sun::star::frame::FrameSearchFlag::SIBLINGS        |
-                                              ::com::sun::star::frame::FrameSearchFlag::TASKS           |
-                                              ::com::sun::star::frame::FrameSearchFlag::CREATE,
+                                              css::frame::FrameSearchFlag::PARENT          |
+                                              css::frame::FrameSearchFlag::SELF            |
+                                              css::frame::FrameSearchFlag::CHILDREN        |
+                                              css::frame::FrameSearchFlag::SIBLINGS        |
+                                              css::frame::FrameSearchFlag::TASKS           |
+                                              css::frame::FrameSearchFlag::CREATE,
                                               aArgs
                                               );
         }
         catch( ... )
         {
-            throw ::com::sun::star::plugin::PluginException();
+            throw css::plugin::PluginException();
         }
     }
 }
 
-void XPluginContext_Impl::postURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< ::com::sun::star::lang::XEventListener > & listener )
-    throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception )
+void XPluginContext_Impl::postURLNotify(const Reference< css::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< css::lang::XEventListener > & listener )
+    throw( css::plugin::PluginException, RuntimeException, std::exception )
 {
     postURL( plugin, url, target, buf, file );
     if( listener.is() )
-        listener->disposing( ::com::sun::star::lang::EventObject() );
+        listener->disposing( css::lang::EventObject() );
 }
 
-void XPluginContext_Impl::newStream( const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString&, const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source )
-    throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception )
+void XPluginContext_Impl::newStream( const Reference< css::plugin::XPlugin > & plugin, const OUString&, const OUString& target, const Reference< css::io::XActiveDataSource > & source )
+    throw( css::plugin::PluginException, RuntimeException, std::exception )
 {
     FileSink*  pNewSink = new FileSink( m_xContext, plugin, target, source );
     pNewSink->acquire();
@@ -267,8 +267,8 @@ void XPluginContext_Impl::newStream( const Reference< ::com::sun::star::plugin::
 
 
 
-FileSink::FileSink( const Reference< ::com::sun::star::uno::XComponentContext >  & rxContext, const Reference< ::com::sun::star::plugin::XPlugin > & plugin,
-                    const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source ) :
+FileSink::FileSink( const Reference< css::uno::XComponentContext >  & rxContext, const Reference< css::plugin::XPlugin > & plugin,
+                    const OUString& target, const Reference< css::io::XActiveDataSource > & source ) :
         m_xContext( rxContext ),
         m_xPlugin( plugin ),
         m_aTarget( target )
@@ -277,9 +277,9 @@ FileSink::FileSink( const Reference< ::com::sun::star::uno::XComponentContext > 
     OString aFile = OUStringToOString( m_aFileName, osl_getThreadTextEncoding() );
     fp = fopen( aFile.getStr() , "wb" );
 
-    Reference< ::com::sun::star::io::XActiveDataControl >  xControl( source, UNO_QUERY );
+    Reference< css::io::XActiveDataControl >  xControl( source, UNO_QUERY );
 
-    source->setOutputStream( Reference< ::com::sun::star::io::XOutputStream > ( this ) );
+    source->setOutputStream( Reference< css::io::XOutputStream > ( this ) );
     if( xControl.is() )
         xControl->start();
 }
@@ -301,21 +301,21 @@ void FileSink::closeOutput() throw (RuntimeException, std::exception)
     {
         try
         {
-            ::com::sun::star::beans::PropertyValue aValue;
+            css::beans::PropertyValue aValue;
             aValue.Name = "Referer";
             aValue.Value <<= pPlugin->getRefererURL();
 
-            Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
-            Reference< ::com::sun::star::lang::XComponent >  xComp =
+            Sequence< css::beans::PropertyValue > aArgs( &aValue, 1 );
+            Reference< css::lang::XComponent >  xComp =
                 xDesktop->loadComponentFromURL(
                                               m_aFileName,
                                               m_aTarget,
-                                              ::com::sun::star::frame::FrameSearchFlag::PARENT          |
-                                              ::com::sun::star::frame::FrameSearchFlag::SELF            |
-                                              ::com::sun::star::frame::FrameSearchFlag::CHILDREN        |
-                                              ::com::sun::star::frame::FrameSearchFlag::SIBLINGS        |
-                                              ::com::sun::star::frame::FrameSearchFlag::TASKS           |
-                                              ::com::sun::star::frame::FrameSearchFlag::CREATE,
+                                              css::frame::FrameSearchFlag::PARENT          |
+                                              css::frame::FrameSearchFlag::SELF            |
+                                              css::frame::FrameSearchFlag::CHILDREN        |
+                                              css::frame::FrameSearchFlag::SIBLINGS        |
+                                              css::frame::FrameSearchFlag::TASKS           |
+                                              css::frame::FrameSearchFlag::CREATE,
                                               aArgs
                                               );
         }

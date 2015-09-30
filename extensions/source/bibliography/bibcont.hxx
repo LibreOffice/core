@@ -64,11 +64,11 @@ class BibBookContainer: public BibSplitWindow
 {
     private:
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xTopFrameRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xBottomFrameRef;
+        css::uno::Reference< css::frame::XFrame >             xTopFrameRef;
+        css::uno::Reference< css::frame::XFrame >             xBottomFrameRef;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xTopPeerRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xBottomPeerRef;
+        css::uno::Reference< css::awt::XWindow >              xTopPeerRef;
+        css::uno::Reference< css::awt::XWindow >              xBottomPeerRef;
 
         VclPtr<BibWindowContainer>     pTopWin;
         VclPtr<BibWindowContainer>     pBottomWin;

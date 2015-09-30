@@ -33,7 +33,7 @@
 using namespace com::sun::star::uno;
 
 
-Reference< XInterface > SAL_CALL PluginModel_CreateInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception )
+Reference< XInterface > SAL_CALL PluginModel_CreateInstance( const Reference< css::lang::XMultiServiceFactory >  & ) throw( Exception )
 {
     Reference< XInterface >  xService = *new PluginModel();
     return xService;
@@ -42,12 +42,12 @@ Reference< XInterface > SAL_CALL PluginModel_CreateInstance( const Reference< ::
 Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException, std::exception )
 {
     Any aRet( ::cppu::queryInterface( type,
-                                      static_cast< ::com::sun::star::lang::XComponent* >(this),
-                                      static_cast< ::com::sun::star::io::XPersistObject* >(this ),
-                                      static_cast< ::com::sun::star::awt::XControlModel* >(this),
-                                      static_cast< ::com::sun::star::beans::XPropertySet* >(this),
-                                      static_cast< ::com::sun::star::beans::XMultiPropertySet* >(this),
-                                      static_cast< ::com::sun::star::beans::XFastPropertySet* >(this)
+                                      static_cast< css::lang::XComponent* >(this),
+                                      static_cast< css::io::XPersistObject* >(this ),
+                                      static_cast< css::awt::XControlModel* >(this),
+                                      static_cast< css::beans::XPropertySet* >(this),
+                                      static_cast< css::beans::XMultiPropertySet* >(this),
+                                      static_cast< css::beans::XFastPropertySet* >(this)
         ) );
     return aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( type );
 }
@@ -67,18 +67,18 @@ static const char* aMime = "TYPE";
 
 static ::osl::Mutex aPropertyMutex;
 
-static ::com::sun::star::beans::Property aProps[] =
+static css::beans::Property aProps[] =
 {
-    ::com::sun::star::beans::Property(
+    css::beans::Property(
         OUString::createFromAscii( aMime ),
         1,
         ::cppu::UnoType<OUString>::get(),
-        ::com::sun::star::beans::PropertyAttribute::BOUND ),
-    ::com::sun::star::beans::Property(
+        css::beans::PropertyAttribute::BOUND ),
+    css::beans::Property(
         OUString::createFromAscii( aCreationURL ),
         2,
         ::cppu::UnoType<OUString>::get(),
-        ::com::sun::star::beans::PropertyAttribute::BOUND )
+        css::beans::PropertyAttribute::BOUND )
 };
 
 PluginModel::PluginModel() :
@@ -101,9 +101,9 @@ PluginModel::~PluginModel()
 {
 }
 
-Reference< ::com::sun::star::beans::XPropertySetInfo >  PluginModel::getPropertySetInfo() throw(std::exception)
+Reference< css::beans::XPropertySetInfo >  PluginModel::getPropertySetInfo() throw(std::exception)
 {
-    static Reference< ::com::sun::star::beans::XPropertySetInfo > aInfo =
+    static Reference< css::beans::XPropertySetInfo > aInfo =
         createPropertySetInfo( *this );
     return aInfo;
 }
@@ -135,7 +135,7 @@ sal_Bool PluginModel::convertFastPropertyValue( Any & rConvertedValue,
 
 void PluginModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
                                                     const Any& rValue )
-    throw(::com::sun::star::uno::Exception, std::exception)
+    throw(css::uno::Exception, std::exception)
 {
     if( rValue.getValueTypeClass() == TypeClass_STRING ) // FIXME wrong type!
 
@@ -146,7 +146,7 @@ void PluginModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
             rValue >>= m_aMimeType;
     }
     else
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
 }
 
 void PluginModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw()
@@ -157,26 +157,26 @@ void PluginModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const t
         rValue <<= m_aMimeType;
 }
 
-//---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
-void PluginModel::addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw(std::exception)
+//---- css::lang::XComponent ----------------------------------------------------------------------------------
+void PluginModel::addEventListener( const Reference< css::lang::XEventListener > & l ) throw(std::exception)
 {
     m_aDisposeListeners.push_back( l );
 }
 
-//---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
-void PluginModel::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw(std::exception)
+//---- css::lang::XComponent ----------------------------------------------------------------------------------
+void PluginModel::removeEventListener( const Reference< css::lang::XEventListener > & l ) throw(std::exception)
 {
     m_aDisposeListeners.remove( l );
 }
 
-//---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
+//---- css::lang::XComponent ----------------------------------------------------------------------------------
 void PluginModel::dispose() throw(std::exception)
 {
     // send disposing events
-    ::com::sun::star::lang::EventObject aEvt;
+    css::lang::EventObject aEvt;
     aEvt.Source = static_cast<cppu::OWeakObject*>(this);
-    ::std::list< Reference< ::com::sun::star::lang::XEventListener > > aLocalListeners = m_aDisposeListeners;
-    for( ::std::list< Reference< ::com::sun::star::lang::XEventListener > >::iterator it = aLocalListeners.begin();
+    ::std::list< Reference< css::lang::XEventListener > > aLocalListeners = m_aDisposeListeners;
+    for( ::std::list< Reference< css::lang::XEventListener > >::iterator it = aLocalListeners.begin();
          it != aLocalListeners.end(); ++it )
         (*it)->disposing( aEvt );
 
@@ -186,18 +186,18 @@ void PluginModel::dispose() throw(std::exception)
 }
 
 
-// ::com::sun::star::io::XPersistObject
+// css::io::XPersistObject
 OUString PluginModel::getServiceName() throw(std::exception)
 {
     return OUString("com.sun.star.plugin.PluginModel");
 }
 
-void PluginModel::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream) throw(std::exception)
+void PluginModel::write(const Reference< css::io::XObjectOutputStream > & OutStream) throw(std::exception)
 {
     OutStream->writeUTF( m_aCreationURL );
 }
 
-void PluginModel::read(const Reference< ::com::sun::star::io::XObjectInputStream > & InStream) throw(std::exception)
+void PluginModel::read(const Reference< css::io::XObjectInputStream > & InStream) throw(std::exception)
 {
     m_aCreationURL = InStream->readUTF();
 }

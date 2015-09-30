@@ -96,7 +96,7 @@ namespace logging
         bool m_LogTimestamp;
         bool m_LogSource;
         bool m_MultiColumn;
-        ::com::sun::star::uno::Sequence< OUString > m_Columnnames;
+        css::uno::Sequence< OUString > m_Columnnames;
     };
 } // namespace logging
 
@@ -143,9 +143,9 @@ namespace
             buf.append(str);
     };
 
-    ::com::sun::star::uno::Sequence< OUString> initialColumns()
+    css::uno::Sequence< OUString> initialColumns()
     {
-        com::sun::star::uno::Sequence< OUString> result = ::com::sun::star::uno::Sequence< OUString>(1);
+        css::uno::Sequence< OUString> result = css::uno::Sequence< OUString>(1);
         result[0] = "message";
         return result;
     };

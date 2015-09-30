@@ -234,7 +234,7 @@ void DataSource_Impl::setBuffer (const Sequence<sal_Int8> &rBuffer)
 sal_Bool SAL_CALL DataSource_Impl::queryInterface (
     const Uik &rUik, Any &rIfc) throw(RuntimeException)
 {
-    if (com::sun::star::uno::queryInterface (
+    if (css::uno::queryInterface (
         rUik, rIfc,
         (static_cast< XInputStream* >(this))))
         return sal_True;
@@ -345,7 +345,7 @@ DataSink_Impl::~DataSink_Impl()
 sal_Bool SAL_CALL DataSink_Impl::queryInterface (
     const Uik &rUik, Any &rIfc) throw(RuntimeException)
 {
-    if (com::sun::star::uno::queryInterface (
+    if (css::uno::queryInterface (
         rUik, rIfc,
         (static_cast< XOutputStream* >(this))))
         return sal_True;
@@ -444,7 +444,7 @@ DecoderListener_Impl::~DecoderListener_Impl()
 sal_Bool SAL_CALL DecoderListener_Impl::queryInterface (
     const Uik &rUik, Any &rIfc) throw(RuntimeException)
 {
-    if (com::sun::star::uno::queryInterface (
+    if (css::uno::queryInterface (
         rUik, rIfc,
         (static_cast< XEventListener* >(this)),
         (static_cast< XPGPDecoderListener* >(this))))

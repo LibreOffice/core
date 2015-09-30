@@ -37,8 +37,8 @@ namespace dbp
         VclPtr<PushButton>      m_pSearchDatabase;
         VclPtr<ListBox>         m_pTable;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
-                        m_xDSContext;
+        css::uno::Reference< css::sdb::XDatabaseContext >
+                                m_xDSContext;
 
     public:
         explicit OTableSelectionPage(OControlWizard* _pParent);
@@ -59,8 +59,8 @@ namespace dbp
         DECL_LINK_TYPED( OnSearchClicked, Button*, void );
 
         void implCollectDatasource();
-        void implFillTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&
-                        _rxConn = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >());
+        void implFillTables(const css::uno::Reference< css::sdbc::XConnection >&
+                        _rxConn = css::uno::Reference< css::sdbc::XConnection >());
 
         // OControlWizardPage overridables
         virtual bool    canAdvance() const SAL_OVERRIDE;

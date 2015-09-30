@@ -34,15 +34,15 @@ namespace abp
     class OAdminDialogInvokation
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                        m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xDataSource;
+        css::uno::Reference< css::uno::XComponentContext >
+                                                        m_xContext;
+        css::uno::Reference< css::beans::XPropertySet > m_xDataSource;
         VclPtr<vcl::Window>         m_pMessageParent;
 
     public:
         OAdminDialogInvokation(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rDataSource,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::beans::XPropertySet >& _rDataSource,
             vcl::Window* _pMessageParent
         );
 

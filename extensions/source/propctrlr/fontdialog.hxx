@@ -46,20 +46,20 @@ namespace pcr
 
         /// fills the given item set with values obtained from the given property set
         static void         translatePropertiesToItems(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxModel,
             SfxItemSet* _pSet);
 
         /** fills the given property set with values obtained from the given item set
         */
         static void translateItemsToProperties(
             const SfxItemSet& _rSet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel);
+            const css::uno::Reference< css::beans::XPropertySet >& _rxModel);
 
         /** fills the given property set with values obtained from the given item set
         */
         static void translateItemsToProperties(
             const SfxItemSet& _rSet,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _out_properties );
+            css::uno::Sequence< css::beans::NamedValue >& _out_properties );
 
     protected:
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) SAL_OVERRIDE;

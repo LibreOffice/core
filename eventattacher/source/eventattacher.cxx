@@ -241,7 +241,7 @@ public:
 
     // XEventAttacher2
     virtual Sequence< Reference<XEventListener> > SAL_CALL attachMultipleEventListeners(
-        const Reference<XInterface>& xObject, const Sequence<com::sun::star::script::EventListener>& aListeners )
+        const Reference<XInterface>& xObject, const Sequence<css::script::EventListener>& aListeners )
             throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // used by FilterAllListener_Impl
@@ -262,7 +262,7 @@ private:
     Sequence< Reference<XEventListener> > attachListeners(
         const Reference<XInterface>& xObject,
         const Sequence< Reference<XAllListener> >& AllListeners,
-        const Sequence<com::sun::star::script::EventListener>& aListeners );
+        const Sequence<css::script::EventListener>& aListeners );
 
 private:
     Mutex                               m_aMutex;
@@ -702,7 +702,7 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
 Sequence< Reference<XEventListener> > EventAttacherImpl::attachListeners(
     const Reference<XInterface>& xObject,
     const Sequence< Reference<XAllListener> >& AllListeners,
-    const Sequence<com::sun::star::script::EventListener>& aListeners )
+    const Sequence<css::script::EventListener>& aListeners )
 {
     sal_Int32 nCount = aListeners.getLength();
     if (nCount != AllListeners.getLength())
@@ -872,7 +872,7 @@ void EventAttacherImpl::removeListener
 }
 
 Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventListeners(
-    const Reference<XInterface>& xObject, const Sequence<com::sun::star::script::EventListener>& aListeners )
+    const Reference<XInterface>& xObject, const Sequence<css::script::EventListener>& aListeners )
         throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException, std::exception )
 {
     sal_Int32 nCount = aListeners.getLength();

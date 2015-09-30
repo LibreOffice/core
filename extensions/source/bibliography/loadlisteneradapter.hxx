@@ -57,19 +57,18 @@ namespace bib
         friend class OComponentListener;
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-                                            m_xComponent;
+        css::uno::Reference< css::lang::XComponent >  m_xComponent;
         OComponentListener*                 m_pListener;
         sal_Int32                           m_nLockCount;
-        bool                            m_bListening    : 1;
-        bool                            m_bAutoRelease  : 1;
+        bool                                m_bListening    : 1;
+        bool                                m_bAutoRelease  : 1;
 
         // impl method for dispose - virtual, 'cause you at least need to remove the listener from the broadcaster
         virtual void disposing() = 0;
 
     protected:
         // attribute access for derivees
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >&
+        const css::uno::Reference< css::lang::XComponent >&
                                 getComponent() const    { return m_xComponent; }
         OComponentListener*     getListener()           { return m_pListener; }
 
@@ -80,7 +79,7 @@ namespace bib
 
     public:
         OComponentAdapterBase(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComp,
+            const css::uno::Reference< css::lang::XComponent >& _rxComp,
             bool _bAutoRelease = true
         );
 
@@ -102,7 +101,7 @@ namespace bib
 
     protected:
     // XEventListener
-        virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception);
     };
 
     class OLoadListener : public OComponentListener
@@ -113,14 +112,14 @@ namespace bib
         explicit OLoadListener( ::osl::Mutex& _rMutex ) : OComponentListener( _rMutex ) { }
 
     // XLoadListener equivalents
-        virtual void _loaded( const ::com::sun::star::lang::EventObject& aEvent ) = 0;
-        virtual void _unloading( const ::com::sun::star::lang::EventObject& aEvent ) = 0;
-        virtual void _unloaded( const ::com::sun::star::lang::EventObject& aEvent ) = 0;
-        virtual void _reloading( const ::com::sun::star::lang::EventObject& aEvent ) = 0;
-        virtual void _reloaded( const ::com::sun::star::lang::EventObject& aEvent ) = 0;
+        virtual void _loaded( const css::lang::EventObject& aEvent ) = 0;
+        virtual void _unloading( const css::lang::EventObject& aEvent ) = 0;
+        virtual void _unloaded( const css::lang::EventObject& aEvent ) = 0;
+        virtual void _reloading( const css::lang::EventObject& aEvent ) = 0;
+        virtual void _reloaded( const css::lang::EventObject& aEvent ) = 0;
     };
 
-    typedef ::cppu::WeakImplHelper< ::com::sun::star::form::XLoadListener >    OLoadListenerAdapter_Base;
+    typedef ::cppu::WeakImplHelper< css::form::XLoadListener >    OLoadListenerAdapter_Base;
     class OLoadListenerAdapter
         :public OLoadListenerAdapter_Base
         ,public OComponentAdapterBase
@@ -134,7 +133,7 @@ namespace bib
 
     public:
         OLoadListenerAdapter(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable,
+            const css::uno::Reference< css::form::XLoadable >& _rxLoadable,
             bool _bAutoRelease = true
         );
 
@@ -144,14 +143,14 @@ namespace bib
 
     protected:
     // XEventListener
-        virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& _rSource ) throw( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const  css::lang::EventObject& _rSource ) throw( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XLoadListener
-        virtual void SAL_CALL loaded( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL unloading( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL unloaded( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL reloading( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL reloaded( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL loaded( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL unloading( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL unloaded( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL reloading( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL reloaded( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 

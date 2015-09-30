@@ -52,8 +52,8 @@ namespace dbp
     public:
         OListComboWizard(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObjectModel,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
         OListComboSettings& getSettings() { return m_aSettings; }
@@ -89,10 +89,8 @@ namespace dbp
         bool isListBox() { return static_cast<OListComboWizard*>(getDialog())->isListBox(); }
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-            getTables(bool _bNeedIt);
-        ::com::sun::star::uno::Sequence< OUString >
-            getTableFields(bool _bNeedIt);
+        css::uno::Reference< css::container::XNameAccess >  getTables(bool _bNeedIt);
+        css::uno::Sequence< OUString >                      getTableFields(bool _bNeedIt);
     };
 
     class OContentTableSelection : public OLCPage

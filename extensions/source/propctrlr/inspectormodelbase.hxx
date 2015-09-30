@@ -42,9 +42,9 @@ namespace pcr
 
     //= ImplInspectorModel
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::inspection::XObjectInspectorModel
-                                    ,   ::com::sun::star::lang::XInitialization
-                                    ,   ::com::sun::star::lang::XServiceInfo
+    typedef ::cppu::WeakImplHelper <   css::inspection::XObjectInspectorModel
+                                    ,   css::lang::XInitialization
+                                    ,   css::lang::XServiceInfo
                                     >   ImplInspectorModel_Base;
     typedef ::cppu::OPropertySetHelper  ImplInspectorModel_PBase;
 
@@ -65,22 +65,22 @@ namespace pcr
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()
 
-        // ::com::sun::star::beans::XPropertySet and friends
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::beans::XPropertySet and friends
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( ::com::sun::star::uno::Any & rConvertedValue, ::com::sun::star::uno::Any & rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
 
-        // ::com::sun::star::inspection::XObjectInspectorModel
-        virtual sal_Bool SAL_CALL getHasHelpSection() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL getIsReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setIsReadOnly( sal_Bool _IsReadOnly ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::inspection::XObjectInspectorModel
+        virtual sal_Bool SAL_CALL getHasHelpSection() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL getIsReadOnly() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setIsReadOnly( sal_Bool _IsReadOnly ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::lang::XServiceInfo
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         void enableHelpSectionProperties( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines );

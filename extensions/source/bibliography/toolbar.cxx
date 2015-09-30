@@ -57,14 +57,14 @@ BibToolBarListener::~BibToolBarListener()
 {
 }
 
-void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& rEvt)throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void BibToolBarListener::statusChanged(const css::frame::FeatureStateEvent& rEvt)throw( css::uno::RuntimeException, std::exception )
 {
     if(rEvt.FeatureURL.Complete == aCommand)
     {
         SolarMutexGuard aGuard;
         pToolBar->EnableItem(nIndex,rEvt.IsEnabled);
 
-        ::com::sun::star::uno::Any aState=rEvt.State;
+        css::uno::Any aState=rEvt.State;
         if(aState.getValueType()==cppu::UnoType<bool>::get())
         {
             bool bChecked= *static_cast<sal_Bool const *>(aState.getValue());
@@ -84,7 +84,7 @@ BibTBListBoxListener::~BibTBListBoxListener()
 {
 }
 
-void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& rEvt)throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void BibTBListBoxListener::statusChanged(const css::frame::FeatureStateEvent& rEvt)throw( css::uno::RuntimeException, std::exception )
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {

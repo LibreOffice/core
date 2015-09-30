@@ -49,7 +49,7 @@ namespace abp
 
     public:
         explicit ODataSourceContext(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
         ~ODataSourceContext();
 
@@ -113,7 +113,7 @@ namespace abp
 
         /// constructs an object which is initially invalid
         explicit ODataSource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
         /// copy ctor
@@ -176,7 +176,7 @@ namespace abp
         bool    hasTable( const OUString& _rTableName ) const;
 
         /// return the intern data source object
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDataSource() const;
+        css::uno::Reference< css::beans::XPropertySet > getDataSource() const;
 
 
 
@@ -184,7 +184,7 @@ namespace abp
             <p>Available to selected clients only</p>
         */
         void        setDataSource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDS
+             const css::uno::Reference< css::beans::XPropertySet >& _rxDS
             ,const OUString& _sName
             ,PackageAccessControl
         );

@@ -68,7 +68,7 @@ PluginManager& PluginManager::get()
     return *pManager;
 }
 
-void PluginManager::setServiceFactory( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+void PluginManager::setServiceFactory( const Reference< css::lang::XMultiServiceFactory >& xFactory )
 {
     PluginManager& rManager = get();
     if( ! rManager.m_xSMgr.is() )
@@ -100,13 +100,13 @@ const Sequence< OUString >& PluginManager::getAdditionalSearchPaths()
 }
 
 
-Reference< XInterface > SAL_CALL PluginManager_CreateInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr ) throw( Exception )
+Reference< XInterface > SAL_CALL PluginManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >  & rSMgr ) throw( Exception )
 {
     Reference< XInterface >  xService = *new XPluginManager_Impl( comphelper::getComponentContext(rSMgr) );
     return xService;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 OUString XPluginManager_Impl::getImplementationName() throw(  )
 
 {
@@ -114,13 +114,13 @@ OUString XPluginManager_Impl::getImplementationName() throw(  )
 
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 sal_Bool XPluginManager_Impl::supportsService(const OUString& ServiceName) throw(  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 Sequence< OUString > XPluginManager_Impl::getSupportedServiceNames() throw(  )
 {
     return getSupportedServiceNames_Static();
@@ -134,10 +134,10 @@ Sequence< OUString > XPluginManager_Impl::getSupportedServiceNames_Static() thro
     return aSNS;
 }
 
-XPluginManager_Impl::XPluginManager_Impl( const Reference< ::com::sun::star::uno::XComponentContext >  & rxContext )
+XPluginManager_Impl::XPluginManager_Impl( const Reference< css::uno::XComponentContext >  & rxContext )
 : m_xContext( rxContext )
 {
-    PluginManager::setServiceFactory( Reference< ::com::sun::star::lang::XMultiServiceFactory>(rxContext->getServiceManager(), UNO_QUERY_THROW) );
+    PluginManager::setServiceFactory( Reference< css::lang::XMultiServiceFactory>(rxContext->getServiceManager(), UNO_QUERY_THROW) );
 }
 
 XPluginManager_Impl::~XPluginManager_Impl()
@@ -157,23 +157,23 @@ XPlugin_Impl* XPluginManager_Impl::getXPluginFromNPP( NPP instance )
     return NULL;
 }
 
-XPlugin_Impl* XPluginManager_Impl::getPluginImplementation( const Reference< ::com::sun::star::plugin::XPlugin >& plugin )
+XPlugin_Impl* XPluginManager_Impl::getPluginImplementation( const Reference< css::plugin::XPlugin >& plugin )
 {
     ::std::list<XPlugin_Impl*>::iterator iter;
     for( iter = PluginManager::get().getPlugins().begin();
          iter != PluginManager::get().getPlugins().end(); ++iter )
     {
-        if( plugin == Reference< ::com::sun::star::plugin::XPlugin >((*iter)) )
+        if( plugin == Reference< css::plugin::XPlugin >((*iter)) )
             return *iter;
     }
 
     return NULL;
 }
 
-Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPluginDescriptions()
+Sequence<css::plugin::PluginDescription> XPluginManager_Impl::getPluginDescriptions()
     throw (RuntimeException, std::exception)
 {
-    Sequence<com::sun::star::plugin::PluginDescription> aRet;
+    Sequence<css::plugin::PluginDescription> aRet;
 
     vcl::SettingsConfigItem* pCfg = vcl::SettingsConfigItem::get();
     OUString aVal( pCfg->getValue( OUString(  "BrowserPlugins"  ),
@@ -185,10 +185,10 @@ Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPlug
     return aRet;
 }
 
-Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext >& acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype)
-    throw( RuntimeException,::com::sun::star::plugin::PluginException, std::exception )
+Reference< css::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< css::plugin::XPluginContext >& acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const css::plugin::PluginDescription& plugintype)
+    throw( RuntimeException,css::plugin::PluginException, std::exception )
 {
-    XPlugin_Impl* pImpl = new XPlugin_Impl( Reference< ::com::sun::star::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW) );
+    XPlugin_Impl* pImpl = new XPlugin_Impl( Reference< css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW) );
     pImpl->setPluginContext( acontext );
 
     PluginManager::get().getPlugins().push_back( pImpl );
@@ -201,10 +201,10 @@ Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin
     return pImpl;
 }
 
-Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const OUString& url ) throw (RuntimeException, std::exception)
+Reference< css::plugin::XPlugin >  XPluginManager_Impl::createPluginFromURL( const Reference< css::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< css::awt::XToolkit > & toolkit, const Reference< css::awt::XWindowPeer > & parent, const OUString& url ) throw (RuntimeException, std::exception)
 {
-    XPlugin_Impl* pImpl = new XPlugin_Impl( Reference< ::com::sun::star::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW) );
-    Reference< ::com::sun::star::plugin::XPlugin >  xRef = pImpl;
+    XPlugin_Impl* pImpl = new XPlugin_Impl( Reference< css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW) );
+    Reference< css::plugin::XPlugin >  xRef = pImpl;
 
     pImpl->setPluginContext( acontext );
 
@@ -219,7 +219,7 @@ Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPlugi
     pImpl->createPeer( toolkit, parent );
 
     pImpl->provideNewStream( pImpl->getDescription().Mimetype,
-                             Reference< com::sun::star::io::XActiveDataSource >(),
+                             Reference< css::io::XActiveDataSource >(),
                              url,
                              0, 0, comphelper::isFileUrl(url) );
 

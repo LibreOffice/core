@@ -57,7 +57,7 @@ namespace pcr
 
         void    setPageActivationHandler(const Link<LinkParamNone*,void>& _rHdl) { m_aPageActivationHandler = _rHdl; }
 
-        ::com::sun::star::awt::Size getMinimumSize();
+        css::awt::Size getMinimumSize();
 
     protected:
         DECL_LINK_TYPED(OnPageActivation, LinkParamNone*, void);

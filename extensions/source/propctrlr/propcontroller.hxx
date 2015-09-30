@@ -70,19 +70,19 @@ namespace pcr
     class OPropertyEditor;
     struct OLineDescriptor;
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::awt::XFocusListener
-                                    ,   ::com::sun::star::awt::XLayoutConstrains
-                                    ,   ::com::sun::star::beans::XPropertyChangeListener
-                                    ,   ::com::sun::star::inspection::XPropertyControlFactory
-                                    ,   ::com::sun::star::inspection::XObjectInspector
-                                    ,   ::com::sun::star::lang::XInitialization
+    typedef ::cppu::WeakImplHelper <   css::lang::XServiceInfo
+                                    ,   css::awt::XFocusListener
+                                    ,   css::awt::XLayoutConstrains
+                                    ,   css::beans::XPropertyChangeListener
+                                    ,   css::inspection::XPropertyControlFactory
+                                    ,   css::inspection::XObjectInspector
+                                    ,   css::lang::XInitialization
                                     >   OPropertyBrowserController_Base;
 
     class OPropertyBrowserController
                 :public ::comphelper::OMutexAndBroadcastHelper
                 ,public OPropertyBrowserController_Base
-                ,public ::com::sun::star::inspection::XObjectInspectorUI
+                ,public css::inspection::XObjectInspectorUI
                     // that's intentionally *not* part of the OPropertyBrowserController_Base
                     // We do not want this to be available in queryInterface, getTypes, and the like.
                 ,public IPropertyLineListener
@@ -90,16 +90,16 @@ namespace pcr
                 ,public IPropertyExistenceCheck
     {
     private:
-        typedef ::std::multimap< sal_Int32, ::com::sun::star::beans::Property >  OrderedPropertyMap;
-        typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+        typedef ::std::multimap< sal_Int32, css::beans::Property >  OrderedPropertyMap;
+        typedef ::std::vector< css::uno::Reference< css::uno::XInterface > >
                                                                             InterfaceArray;
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xView;
+        css::uno::Reference< css::frame::XFrame > m_xFrame;
+        css::uno::Reference< css::awt::XWindow >  m_xView;
 
         ::cppu::OInterfaceContainerHelper   m_aDisposeListeners;
         ::cppu::OInterfaceContainerHelper   m_aControlObservers;
@@ -109,7 +109,7 @@ namespace pcr
         OUString                     m_sPageSelection;
         OUString                     m_sLastValidPageSelection;
 
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
+        typedef css::uno::Reference< css::inspection::XPropertyHandler >
                                                         PropertyHandlerRef;
         typedef ::std::vector< PropertyHandlerRef >     PropertyHandlerArray;
         typedef std::unordered_map< OUString, PropertyHandlerRef, OUStringHash >
@@ -123,14 +123,14 @@ namespace pcr
         ::std::unique_ptr< ComposedPropertyUIUpdate >   m_pUIRequestComposer;
 
         /// our InspectorModel
-        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >
+        css::uno::Reference< css::inspection::XObjectInspectorModel >
                                                         m_xModel;
         /// the object(s) we're currently inspecting
         InterfaceArray                                  m_aInspectedObjects;
         /// the properties of the currently inspected object(s)
         OrderedPropertyMap                              m_aProperties;
         /// the property we're just committing
-        OUString                                 m_sCommittingProperty;
+        OUString                                        m_sCommittingProperty;
 
         typedef std::unordered_map< OUString, sal_uInt16, OUStringHash >     HashString2Int16;
         HashString2Int16                                m_aPageIds;
@@ -144,93 +144,93 @@ namespace pcr
         DECLARE_XINTERFACE()
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XController
-        virtual void SAL_CALL attachFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL attachModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any SAL_CALL getViewData(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL restoreViewData( const ::com::sun::star::uno::Any& Data ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SAL_CALL getModel(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL getFrame(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL getViewData(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL restoreViewData( const css::uno::Any& Data ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XComponent
-        virtual void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XFocusListener
-        virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL focusGained( const css::awt::FocusEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL focusLost( const css::awt::FocusEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XLayoutConstrains
-        virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::awt::Size SAL_CALL getMinimumSize(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::awt::Size SAL_CALL getPreferredSize(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /** XPropertyControlFactory
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, sal_Bool CreateReadOnly ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, sal_Bool CreateReadOnly ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     public:
         OPropertyBrowserController(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
     protected:
         virtual ~OPropertyBrowserController();
 
     public:
         // XServiceInfo - static versions
-        static OUString getImplementationName_static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-                        Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+        static OUString getImplementationName_static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+                        Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     protected:
         // IPropertyLineListener
         virtual void    Clicked(    const OUString& _rName, bool _bPrimary ) SAL_OVERRIDE;
-        virtual void    Commit(     const OUString& _rName, const ::com::sun::star::uno::Any& _rVal ) SAL_OVERRIDE;
+        virtual void    Commit(     const OUString& _rName, const css::uno::Any& _rVal ) SAL_OVERRIDE;
 
         // IPropertyControlObserver
-        virtual void    focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _Control ) SAL_OVERRIDE;
-        virtual void    valueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _Control ) SAL_OVERRIDE;
+        virtual void    focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& _Control ) SAL_OVERRIDE;
+        virtual void    valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& _Control ) SAL_OVERRIDE;
 
         // IPropertyExistenceCheck
-        virtual bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
         // XObjectInspectorUI
-        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL registerControlObserver( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlObserver >& _Observer ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL revokeControlObserver( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlObserver >& _Observer ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::inspection::XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL registerControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& _Observer ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL revokeControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& _Observer ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XObjectInspector
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel > SAL_CALL getInspectorModel() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setInspectorModel( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >& _inspectormodel ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI > SAL_CALL getInspectorUI() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL inspect( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects ) throw (::com::sun::star::util::VetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::inspection::XObjectInspectorModel > SAL_CALL getInspectorModel() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setInspectorModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _inspectormodel ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::inspection::XObjectInspectorUI > SAL_CALL getInspectorUI() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL inspect( const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects ) throw (css::util::VetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDispatchProvider
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& URL, const OUString& TargetFrameName, ::sal_Int32 SearchFlags ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& Requests ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& URL, const OUString& TargetFrameName, ::sal_Int32 SearchFlags ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         void UpdateUI();
@@ -261,7 +261,7 @@ namespace pcr
                 if set to <FALSE/>, this is a real change in the property value, not just a call
                 for purposes of initialization.
         */
-        void    impl_broadcastPropertyChange_nothrow( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, bool _bFirstTimeInit ) const;
+        void    impl_broadcastPropertyChange_nothrow( const OUString& _rPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, bool _bFirstTimeInit ) const;
 
         /** determines whether the given property is an actuating property, that is, at least one
             handler expressed interest in changes to this property's value.
@@ -280,7 +280,7 @@ namespace pcr
             @return
                 the value of this property
         */
-        ::com::sun::star::uno::Any
+        css::uno::Any
                         impl_getPropertyValue_throw( const OUString& _rPropertyName );
 
         /// calls XPropertyHandler::suspend for all our property handlers
@@ -298,7 +298,7 @@ namespace pcr
         void updateViewDataFromActivePage();
 
         /// describes the UI for the given property
-        void describePropertyLine( const ::com::sun::star::beans::Property& _rPropertyName, OLineDescriptor& _rDescriptor );
+        void describePropertyLine( const css::beans::Property& _rPropertyName, OLineDescriptor& _rDescriptor );
 
         /** retrieves the position of the property given by name in m_aProperties
             @return
@@ -332,7 +332,7 @@ namespace pcr
             respective tab pages into our view
             @precond
                 m_aPageIds is empty
-            @throws ::com::sun::star::uno::RuntimeException
+            @throws css::uno::RuntimeException
                 if one of the callees of this method throws this exception
         */
         void
@@ -354,7 +354,7 @@ namespace pcr
 
         /** binds the instance to a new model
         */
-        void    impl_bindToNewModel_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >& _rxInspectorModel );
+        void    impl_bindToNewModel_nothrow( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _rxInspectorModel );
 
         /** initializes our view, as indicated by the model's view-relevant properties
 
@@ -368,8 +368,8 @@ namespace pcr
             Effectively, this means that the method simply checks the IsReadOnly attribute of the model.
             If there is no model, <FALSE/> is returned.
 
-            @throws ::com::sun::star::uno::RuntimeException
-                in case asking the model for its IsReadOnly attribute throws a ::com::sun::star::uno::RuntimeException
+            @throws css::uno::RuntimeException
+                in case asking the model for its IsReadOnly attribute throws a css::uno::RuntimeException
                 itself.
         */
         bool    impl_isReadOnlyModel_throw() const;
@@ -389,7 +389,7 @@ namespace pcr
     private:
         // constructors
         void    createDefault();
-        void    createWithModel( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >& _rxModel );
+        void    createWithModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _rxModel );
     };
 
 

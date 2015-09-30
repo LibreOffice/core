@@ -34,23 +34,23 @@ namespace pcr
                                     ,public PcrClient
     {
     public:
-        MasterDetailLinkDialog(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& _rxContext);
+        MasterDetailLinkDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
         // XServiceInfo - static methods
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static() throw( ::com::sun::star::uno::RuntimeException );
-        static OUString getImplementationName_static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >&);
+        static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );
+        static OUString getImplementationName_static() throw( css::uno::RuntimeException );
+        static css::uno::Reference< css::uno::XInterface >
+                SAL_CALL Create(const css::uno::Reference< css::uno::XComponentContext >&);
     private:
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         // OPropertyArrayUsageHelper
@@ -58,10 +58,10 @@ namespace pcr
 
         // OGenericUnoDialog overridables
         virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
-        virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
+        virtual void implInitialize(const css::uno::Any& _rValue) SAL_OVERRIDE;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xDetail;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xMaster;
+        css::uno::Reference< css::beans::XPropertySet> m_xDetail;
+        css::uno::Reference< css::beans::XPropertySet> m_xMaster;
         OUString m_sExplanation;
         OUString m_sDetailLabel;
         OUString m_sMasterLabel;

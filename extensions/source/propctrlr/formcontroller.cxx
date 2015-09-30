@@ -68,7 +68,7 @@ namespace pcr
     using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::awt::XWindow;
 
-    namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
+    namespace PropertyAttribute = css::beans::PropertyAttribute;
 
 
     //= FormController
@@ -239,7 +239,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormController::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const
+    void SAL_CALL FormController::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const
     {
         switch ( nHandle )
         {

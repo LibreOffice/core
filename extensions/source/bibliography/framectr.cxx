@@ -146,7 +146,7 @@ public:
                                         virtual ~BibFrameCtrl_Impl();
 
     virtual void                        SAL_CALL frameAction(const FrameActionEvent& aEvent) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void                        SAL_CALL disposing( const lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void                        SAL_CALL disposing( const lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -159,7 +159,7 @@ void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& ) throw( uno::Runtim
 }
 
 void BibFrameCtrl_Impl::disposing( const lang::EventObject& /*Source*/ )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     if ( pController )
@@ -191,37 +191,37 @@ BibFrameController_Impl::~BibFrameController_Impl()
         CloseBibModul(pBibMod);
 }
 
-OUString SAL_CALL BibFrameController_Impl::getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL BibFrameController_Impl::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.extensions.Bibliography");
 }
 
-sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const OUString& sServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const OUString& sServiceName ) throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, sServiceName );
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
 {
     // return only top level services ...
     // base services are included there and should be asked by uno-rtti.
-    ::com::sun::star::uno::Sequence< OUString > lNames(1);
+    css::uno::Sequence< OUString > lNames(1);
     lNames[0] = "com.sun.star.frame.Bibliography";
     return lNames;
 }
 
-void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg ) throw (css::uno::RuntimeException, std::exception)
 {
     xFrame = xArg;
     xFrame->addFrameActionListener( pImp );
 }
 
-sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & /*xModel*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & /*xModel*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-sal_Bool BibFrameController_Impl::suspend( sal_Bool bSuspend ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool BibFrameController_Impl::suspend( sal_Bool bSuspend ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( bSuspend )
         getFrame()->removeFrameActionListener( pImp );
@@ -230,26 +230,26 @@ sal_Bool BibFrameController_Impl::suspend( sal_Bool bSuspend ) throw (::com::sun
     return sal_True;
 }
 
-uno::Any BibFrameController_Impl::getViewData() throw (::com::sun::star::uno::RuntimeException, std::exception)
+uno::Any BibFrameController_Impl::getViewData() throw (css::uno::RuntimeException, std::exception)
 {
     return uno::Any();
 }
 
-void BibFrameController_Impl::restoreViewData( const uno::Any& /*Value*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void BibFrameController_Impl::restoreViewData( const uno::Any& /*Value*/ ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-uno::Reference< XFrame >  BibFrameController_Impl::getFrame() throw (::com::sun::star::uno::RuntimeException, std::exception)
+uno::Reference< XFrame >  BibFrameController_Impl::getFrame() throw (css::uno::RuntimeException, std::exception)
 {
     return xFrame;
 }
 
-uno::Reference< XModel >  BibFrameController_Impl::getModel() throw (::com::sun::star::uno::RuntimeException, std::exception)
+uno::Reference< XModel >  BibFrameController_Impl::getModel() throw (css::uno::RuntimeException, std::exception)
 {
     return uno::Reference< XModel > ();
 }
 
-void BibFrameController_Impl::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void BibFrameController_Impl::dispose() throw (css::uno::RuntimeException, std::exception)
 {
     bDisposing = true;
     lang::EventObject aObject;
@@ -260,17 +260,17 @@ void BibFrameController_Impl::dispose() throw (::com::sun::star::uno::RuntimeExc
     aStatusListeners.clear();
  }
 
-void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (css::uno::RuntimeException, std::exception)
 {
     pImp->aLC.addInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
-void BibFrameController_Impl::removeEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void BibFrameController_Impl::removeEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (css::uno::RuntimeException, std::exception)
 {
     pImp->aLC.removeInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
-uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const OUString& /*aTarget*/, sal_Int32 /*nSearchFlags*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const OUString& /*aTarget*/, sal_Int32 /*nSearchFlags*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( !bDisposing )
     {
@@ -287,7 +287,7 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
     return uno::Reference< frame::XDispatch > ();
 }
 
-uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispatches( const uno::Sequence<DispatchDescriptor>& aDescripts ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispatches( const uno::Sequence<DispatchDescriptor>& aDescripts ) throw (css::uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Reference< XDispatch > > aDispatches( aDescripts.getLength() );
     for ( sal_Int32 i=0; i<aDescripts.getLength(); ++i )
@@ -296,7 +296,7 @@ uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispat
 }
 
 uno::Sequence< ::sal_Int16 > SAL_CALL BibFrameController_Impl::getSupportedCommandGroups()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     uno::Sequence< ::sal_Int16 > aDispatchInfo( 4 );
 
@@ -309,7 +309,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 }
 
 uno::Sequence< frame::DispatchInformation > SAL_CALL BibFrameController_Impl::getConfigurableDispatchInformation( ::sal_Int16 nCommandGroup )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
 
@@ -339,8 +339,8 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
         }
     }
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > aSeq =
-        comphelper::containerToSequence< ::com::sun::star::frame::DispatchInformation, std::list< ::com::sun::star::frame::DispatchInformation > >( aDispatchInfoList );
+    css::uno::Sequence< css::frame::DispatchInformation > aSeq =
+        comphelper::containerToSequence< css::frame::DispatchInformation, std::list< css::frame::DispatchInformation > >( aDispatchInfoList );
 
     return aSeq;
 }
@@ -405,7 +405,7 @@ static vcl::Window* lcl_GetFocusChild( vcl::Window* pParent )
 
 //class XDispatch
 void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequence< beans::PropertyValue >& aArgs)
-    throw (::com::sun::star::uno::RuntimeException,
+    throw (css::uno::RuntimeException,
            std::exception)
 {
     if ( !bDisposing )
@@ -541,9 +541,9 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand == "Bib/DeleteRecord")
         {
-            Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
-            Reference< XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
-            Reference< beans::XPropertySet >  xSet(pDatMan->getForm(), UNO_QUERY);
+            Reference< css::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
+            Reference< XResultSetUpdate >       xUpdateCursor(xCursor, UNO_QUERY);
+            Reference< beans::XPropertySet >    xSet(pDatMan->getForm(), UNO_QUERY);
             bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue("IsNew"));
             if(!bIsNew)
             {
@@ -638,7 +638,7 @@ IMPL_LINK_NOARG_TYPED( BibFrameController_Impl, DisposeHdl, void*, void )
 void BibFrameController_Impl::addStatusListener(
     const uno::Reference< frame::XStatusListener > & aListener,
     const util::URL& aURL)
-    throw (::com::sun::star::uno::RuntimeException,
+    throw (css::uno::RuntimeException,
            std::exception)
 {
     BibConfig* pConfig = BibModul::GetConfig();
@@ -750,9 +750,9 @@ void BibFrameController_Impl::addStatusListener(
     }
     else if(aURL.Path == "Bib/DeleteRecord")
     {
-        Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
-        Reference< XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
-        Reference< beans::XPropertySet >  xSet(pDatMan->getForm(), UNO_QUERY);
+        Reference< css::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
+        Reference< XResultSetUpdate >       xUpdateCursor(xCursor, UNO_QUERY);
+        Reference< beans::XPropertySet >    xSet(pDatMan->getForm(), UNO_QUERY);
         bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue("IsNew"));
         if(!bIsNew)
         {
@@ -771,7 +771,7 @@ void BibFrameController_Impl::addStatusListener(
 
 void BibFrameController_Impl::removeStatusListener(
     const uno::Reference< frame::XStatusListener > & aObject, const util::URL& aURL)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     // search listener array for given listener
     // for checking equality always "cast" to XInterface

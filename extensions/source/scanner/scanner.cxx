@@ -24,7 +24,7 @@
 // - ScannerManager -
 
 
-Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >& /*rxFactory*/ ) throw ( Exception )
+Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& /*rxFactory*/ ) throw ( Exception )
 {
     return *( new ScannerManager() );
 }

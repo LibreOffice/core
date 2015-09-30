@@ -36,20 +36,20 @@ namespace pcr
     //= PropertyControlExtender
 
     struct PropertyControlExtender_Data;
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::awt::XKeyListener
+    typedef ::cppu::WeakImplHelper <   css::awt::XKeyListener
                                     >   PropertyControlExtender_Base;
     class PropertyControlExtender : public PropertyControlExtender_Base
     {
     public:
         PropertyControlExtender(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxObservedControl
+            const css::uno::Reference< css::inspection::XPropertyControl >& _rxObservedControl
         );
 
         // XKeyListener
-        virtual void SAL_CALL keyPressed( const ::com::sun::star::awt::KeyEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL keyReleased( const ::com::sun::star::awt::KeyEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~PropertyControlExtender();

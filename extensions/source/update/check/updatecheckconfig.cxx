@@ -88,8 +88,7 @@ NamedValueByNameAccess::~NamedValueByNameAccess()
 
 
 
-::com::sun::star::uno::Any
-NamedValueByNameAccess::getValue(const sal_Char * pName)
+css::uno::Any NamedValueByNameAccess::getValue(const sal_Char * pName)
 {
     const sal_Int32 nLen = m_rValues.getLength();
     for( sal_Int32 n=0; n < nLen; ++n )
@@ -97,7 +96,7 @@ NamedValueByNameAccess::getValue(const sal_Char * pName)
         if( m_rValues[n].Name.equalsAscii( pName ) )
             return m_rValues[n].Value;
     }
-    return ::com::sun::star::uno::Any();
+    return css::uno::Any();
 }
 
 
@@ -254,7 +253,7 @@ UpdateCheckConfig::get(
     const ::rtl::Reference< UpdateCheckConfigListener >& rListener)
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-        com::sun::star::configuration::theDefaultProvider::get( xContext ) );
+        css::configuration::theDefaultProvider::get( xContext ) );
 
     beans::PropertyValue aProperty;
     aProperty.Name  = "nodepath";

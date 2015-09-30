@@ -34,16 +34,16 @@ namespace pcr
     class UnoURL
     {
     private:
-        ::com::sun::star::util::URL m_aURL;
+        css::util::URL m_aURL;
 
     public:
         UnoURL(
             const OUString& _rCompleteURL,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB
         );
 
         inline operator const OUString&             () const { return m_aURL.Complete; }
-        inline operator const ::com::sun::star::util::URL& () const { return m_aURL;          }
+        inline operator const css::util::URL& () const { return m_aURL;          }
 
     private:
         UnoURL();   // never implemented

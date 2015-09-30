@@ -66,23 +66,23 @@ namespace pcr
     {
     private:
         /// access to property states
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >             m_xPropertyState;
+        css::uno::Reference< css::beans::XPropertyState >             m_xPropertyState;
         /// the parent of our component
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                   m_xObjectParent;
+        css::uno::Reference< css::uno::XInterface >                   m_xObjectParent;
 
         /// the database connection. Owned by us if and only if we created it ourself.
-        mutable ::dbtools::SharedConnection                                                     m_xRowSetConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
+        mutable ::dbtools::SharedConnection                           m_xRowSetConnection;
+        css::uno::Reference< css::sdbc::XRowSet >                     m_xRowSet;
         /** helper component encapsulating the handling for the QueryDesign component for
             interactively designing an SQL command
         */
-        ::rtl::Reference< SQLCommandDesigner >                                                  m_xCommandDesigner;
-        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >    m_xBrowserUI;
+        ::rtl::Reference< SQLCommandDesigner >                        m_xCommandDesigner;
+        css::uno::Reference< css::inspection::XObjectInspectorUI >    m_xBrowserUI;
 
         /// the string indicating a "default" (VOID) value in list-like controls
-        OUString                 m_sDefaultValueString;
+        OUString                        m_sDefaultValueString;
         /// all properties to whose control's we added ->m_sDefaultValueString
-        ::std::set< OUString >   m_aPropertiesWithDefListEntry;
+        ::std::set< OUString >          m_aPropertiesWithDefListEntry;
         /// type of our component
         ComponentClassification         m_eComponentClass;
         /// is our component a (database) sub form?
@@ -96,16 +96,16 @@ namespace pcr
 
     public:
         FormComponentPropertyHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
         DECLARE_XINTERFACE( )
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        static OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
+        static OUString SAL_CALL getImplementationName_static(  ) throw (css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
 
     protected:
         virtual ~FormComponentPropertyHandler();
@@ -114,27 +114,27 @@ namespace pcr
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
         // XPropertyHandler overridables
-        virtual ::com::sun::star::uno::Any                          SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL setPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any                          SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rControlValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any                          SAL_CALL convertToControlValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rPropertyValue, const ::com::sun::star::uno::Type& _rControlValueType ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::beans::PropertyState              SAL_CALL getPropertyState( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupersededProperties() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getActuatingProperties() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::inspection::LineDescriptor        SAL_CALL describePropertyLine( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::inspection::InteractiveSelectionResult
-                                                                    SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, ::com::sun::star::uno::Any& _rData, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool                                            SAL_CALL suspend( sal_Bool _bSuspend ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any                          SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                   SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any                          SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rControlValue ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any                          SAL_CALL convertToControlValue( const OUString& _rPropertyName, const css::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::beans::PropertyState              SAL_CALL getPropertyState( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                   SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                   SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString >         SAL_CALL getSupersededProperties() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString >         SAL_CALL getActuatingProperties() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::inspection::LineDescriptor        SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::inspection::InteractiveSelectionResult
+                                                       SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                   SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool                               SAL_CALL suspend( sal_Bool _bSuspend ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XComponent
-        virtual void                                                SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void                                   SAL_CALL disposing() SAL_OVERRIDE;
 
         // PropertyHandler
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >
-                                            SAL_CALL doDescribeSupportedProperties() const SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::beans::Property >
+                                                       SAL_CALL doDescribeSupportedProperties() const SAL_OVERRIDE;
         virtual void onNewComponent() SAL_OVERRIDE;
 
     private:
@@ -152,14 +152,14 @@ namespace pcr
 
         /** const-version of ->getPropertyValue
         */
-        ::com::sun::star::uno::Any impl_getPropertyValue_throw( const OUString& _rPropertyName ) const;
+        css::uno::Any impl_getPropertyValue_throw( const OUString& _rPropertyName ) const;
 
         // some property values are faked, and not used in the way they're provided by our component
-        void impl_normalizePropertyValue_nothrow( ::com::sun::star::uno::Any& _rValue, PropertyId _nPropId ) const;
+        void impl_normalizePropertyValue_nothrow( css::uno::Any& _rValue, PropertyId _nPropId ) const;
 
         /** determines whether we should exclude a given property from our "supported properties"
         */
-        bool impl_shouldExcludeProperty_nothrow( const ::com::sun::star::beans::Property& _rProperty ) const;
+        bool impl_shouldExcludeProperty_nothrow( const css::beans::Property& _rProperty ) const;
 
         /** initializes the list of field names, if we're handling a control which supports the
             DataField property
@@ -175,11 +175,11 @@ namespace pcr
 
             Normally, at least one of those methods should succeed.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > impl_getRowSet_throw( ) const;
+        css::uno::Reference< css::sdbc::XRowSet > impl_getRowSet_throw( ) const;
 
         /** nothrow-version of ->impl_getRowSet_throw
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > impl_getRowSet_nothrow( ) const;
+        css::uno::Reference< css::sdbc::XRowSet > impl_getRowSet_nothrow( ) const;
 
         /** connects the row set belonging to our introspected data aware form component,
             and remembers the connection in ->m_xRowSetConnection.
@@ -207,8 +207,8 @@ namespace pcr
             @seealso impl_fillQueryNames_throw
         */
         void impl_describeCursorSource_nothrow(
-                ::com::sun::star::inspection::LineDescriptor& _out_rProperty,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
+                css::inspection::LineDescriptor& _out_rProperty,
+                const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
             ) const;
 
         /** describes the UI for selecting a table name
@@ -230,7 +230,7 @@ namespace pcr
             @precond
                 m_xRowSetConnection is not <NULL/>
         */
-        void impl_fillQueryNames_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xQueryNames
+        void impl_fillQueryNames_throw( const css::uno::Reference< css::container::XNameAccess >& _xQueryNames
                     ,::std::vector< OUString >& _out_rNames
                     ,const OUString& _sName = OUString() ) const;
 
@@ -241,8 +241,8 @@ namespace pcr
                 ->m_xComponent is not <NULL/>
         */
         void impl_describeListSourceUI_throw(
-                ::com::sun::star::inspection::LineDescriptor& _out_rDescriptor,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
+                css::inspection::LineDescriptor& _out_rDescriptor,
+                const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
             ) const;
 
         /** displays a database-related error to the user
@@ -289,7 +289,7 @@ namespace pcr
                 <TRUE/> if and only if a new formatting has been chosen by the user.
                 In this case, ->_out_rNewValue is filled with the new property value
         */
-        bool impl_dialogFormatting_nothrow( ::com::sun::star::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_dialogFormatting_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog which allows to the user to change the ImageURL property
             of our component by browsing for an image file.
@@ -301,7 +301,7 @@ namespace pcr
                 <TRUE/> if and only if a new image URL has been chosen by the user.
                 In this case, ->_out_rNewValue is filled with the new property value
         */
-        bool impl_browseForImage_nothrow( ::com::sun::star::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_browseForImage_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog which allows the user to change the TargetURL property of
             our component
@@ -313,7 +313,7 @@ namespace pcr
                 <TRUE/> if and only if a new TargetURL has been chosen by the user.
                 In this case, ->_out_rNewValue is filled with the new property value
         */
-        bool impl_browseForTargetURL_nothrow( ::com::sun::star::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_browseForTargetURL_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog which allows the user to change the font, plus related properties,
             of our component
@@ -324,7 +324,7 @@ namespace pcr
             @return
                 <TRUE/> if and only if the user successfully changed the font of our component
         */
-        bool impl_executeFontDialog_nothrow( ::com::sun::star::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_executeFontDialog_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** allows the user browsing for a database document
             @precond
@@ -335,7 +335,7 @@ namespace pcr
                 <TRUE/> if and only if a new DataSource has been chosen by the user.
                 In this case, ->_out_rNewValue is filled with the new property value
         */
-        bool impl_browseForDatabaseDocument_throw( ::com::sun::star::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_browseForDatabaseDocument_throw( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** raises a dialog which allows the user to choose a color
             @param  _nColorPropertyId
@@ -345,7 +345,7 @@ namespace pcr
             @return
                 <TRUE/> if and only if a color was chosen by the user
         */
-        bool impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, ::com::sun::star::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** raises a dialog which allows the user to choose a label control for our component
             @param  _out_rNewValue
@@ -353,7 +353,7 @@ namespace pcr
             @return
                 <TRUE/> if and only if a label control was chosen by the user
         */
-        bool impl_dialogChooseLabelControl_nothrow( ::com::sun::star::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_dialogChooseLabelControl_nothrow( css::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** raises a dialog which lets the user chose the tab order of controls of a form
             @precond
@@ -373,7 +373,7 @@ namespace pcr
             The ->XComponentContext in which we were created is examined for a value
             named "ControlContext", and this value is returned.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+        css::uno::Reference< css::awt::XControlContainer >
             impl_getContextControlContainer_nothrow() const;
 
         /** opens a query design window for interactively designing the SQL command of a
@@ -387,7 +387,7 @@ namespace pcr
                 <FALSE/> otherwise
         */
         bool impl_doDesignSQLCommand_nothrow(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI,
+            const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI,
             PropertyId _nDesignForProperty
         );
 
@@ -407,7 +407,7 @@ namespace pcr
             @param _rxInspectorUI
                 provides access to the property browser UI. Must not be <NULL/>.
         */
-        void impl_updateDependentProperty_nothrow( PropertyId _nPropId, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) const;
+        void impl_updateDependentProperty_nothrow( PropertyId _nPropId, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) const;
 
         /** determines whether the given form has a valid data source signature.
 
@@ -422,7 +422,7 @@ namespace pcr
                 lead to rejection
         */
         static bool impl_hasValidDataSourceSignature_nothrow(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xFormProperties,
+                const css::uno::Reference< css::beans::XPropertySet >& _xFormProperties,
                 bool _bAllowEmptyDataSourceName );
 
         /** returns the URL of our context document

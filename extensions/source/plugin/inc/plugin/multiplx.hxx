@@ -67,13 +67,13 @@ class MRCListenerMultiplexerHelper  :
     public MRCListenerMultiplexerHelper_Mutex,
 
     public ::cppu::WeakAggImplHelper7<
-      ::com::sun::star::awt::XFocusListener,
-      ::com::sun::star::awt::XWindowListener,
-      ::com::sun::star::awt::XKeyListener,
-      ::com::sun::star::awt::XMouseListener,
-      ::com::sun::star::awt::XMouseMotionListener,
-      ::com::sun::star::awt::XPaintListener,
-      ::com::sun::star::awt::XTopWindowListener >
+      css::awt::XFocusListener,
+      css::awt::XWindowListener,
+      css::awt::XKeyListener,
+      css::awt::XMouseListener,
+      css::awt::XMouseMotionListener,
+      css::awt::XPaintListener,
+      css::awt::XTopWindowListener >
 {
 public:
     /**
@@ -84,14 +84,14 @@ public:
      * @param rPeer     The peer from which the original events are dispatched. Null is
      *                  allowed.
      */
-    MRCListenerMultiplexerHelper( const Reference< ::com::sun::star::awt::XWindow >  & rControl, const Reference< ::com::sun::star::awt::XWindow >  & rPeer );
+    MRCListenerMultiplexerHelper( const Reference< css::awt::XWindow >  & rControl, const Reference< css::awt::XWindow >  & rPeer );
 
     /**
      * Remove all listeners from the previous set peer and add the needed listeners to rPeer.
      * @param rPeer     The peer from which the original events are dispatched. Null is
      *                  allowed.
      */
-    void setPeer( const Reference< ::com::sun::star::awt::XWindow >  & rPeer );
+    void setPeer( const Reference< css::awt::XWindow >  & rPeer );
 
     /**
      * Remove all listeners and send a disposing message.
@@ -107,54 +107,54 @@ public:
      */
     void unadvise(const Type& type, const Reference< XInterface > & listener);
 
-    // ::com::sun::star::lang::XEventListener
-    void SAL_CALL   disposing(const ::com::sun::star::lang::EventObject& Source) throw(std::exception) SAL_OVERRIDE;
-    // ::com::sun::star::awt::XFocusListener
-    void SAL_CALL   focusGained(const ::com::sun::star::awt::FocusEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   focusLost(const ::com::sun::star::awt::FocusEvent& e) throw(std::exception) SAL_OVERRIDE;
-    // ::com::sun::star::awt::XWindowListener
-    void SAL_CALL   windowResized(const ::com::sun::star::awt::WindowEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowMoved(const ::com::sun::star::awt::WindowEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowShown(const ::com::sun::star::lang::EventObject& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowHidden(const ::com::sun::star::lang::EventObject& e) throw(std::exception) SAL_OVERRIDE;
-    // ::com::sun::star::awt::XKeyListener
-    void SAL_CALL   keyPressed( const ::com::sun::star::awt::KeyEvent& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   keyReleased( const ::com::sun::star::awt::KeyEvent& e ) throw(std::exception) SAL_OVERRIDE;
-    // ::com::sun::star::awt::XMouseListener
-    void SAL_CALL   mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
-    // ::com::sun::star::awt::XMouseMotionListener
-    void SAL_CALL   mouseDragged(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   mouseMoved(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
-    // ::com::sun::star::awt::XPaintListener
-    void SAL_CALL   windowPaint(const ::com::sun::star::awt::PaintEvent& e) throw(std::exception) SAL_OVERRIDE;
-    // ::com::sun::star::awt::XTopWindowListener
-    void SAL_CALL   windowOpened( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowClosing( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowClosed( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowMinimized( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowNormalized( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowActivated( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
-    void SAL_CALL   windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    // css::lang::XEventListener
+    void SAL_CALL   disposing(const css::lang::EventObject& Source) throw(std::exception) SAL_OVERRIDE;
+    // css::awt::XFocusListener
+    void SAL_CALL   focusGained(const css::awt::FocusEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   focusLost(const css::awt::FocusEvent& e) throw(std::exception) SAL_OVERRIDE;
+    // css::awt::XWindowListener
+    void SAL_CALL   windowResized(const css::awt::WindowEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowMoved(const css::awt::WindowEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowShown(const css::lang::EventObject& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowHidden(const css::lang::EventObject& e) throw(std::exception) SAL_OVERRIDE;
+    // css::awt::XKeyListener
+    void SAL_CALL   keyPressed( const css::awt::KeyEvent& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   keyReleased( const css::awt::KeyEvent& e ) throw(std::exception) SAL_OVERRIDE;
+    // css::awt::XMouseListener
+    void SAL_CALL   mousePressed(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   mouseReleased(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   mouseEntered(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   mouseExited(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    // css::awt::XMouseMotionListener
+    void SAL_CALL   mouseDragged(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   mouseMoved(const css::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    // css::awt::XPaintListener
+    void SAL_CALL   windowPaint(const css::awt::PaintEvent& e) throw(std::exception) SAL_OVERRIDE;
+    // css::awt::XTopWindowListener
+    void SAL_CALL   windowOpened( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowClosing( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowClosed( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowMinimized( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowNormalized( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowActivated( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowDeactivated( const css::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
 protected:
     /**
      * Remove the listener with the uik rUik from the peer rPeer.
      * @param rPeer the peer from which the listener is removed.
      * @param rUik  the listener uik, which specify the type of the listener.
      */
-    void        adviseToPeer( const Reference< ::com::sun::star::awt::XWindow >  & rPeer, const Type & type );
+    void        adviseToPeer( const Reference< css::awt::XWindow >  & rPeer, const Type & type );
     /**
      * Add the listener with the uik rUik to the peer rPeer.
      * @param rPeer the peer to which the listener is added.
      * @param rUik  the listener uik, which specify the type of the listener.
      */
-    void        unadviseFromPeer( const Reference< ::com::sun::star::awt::XWindow >  & rPeer, const Type & type );
+    void        unadviseFromPeer( const Reference< css::awt::XWindow >  & rPeer, const Type & type );
 private:
     /** The source of the events. Normally this is the peer object.*/
-    Reference< ::com::sun::star::awt::XWindow >         xPeer;
-    WeakReference< ::com::sun::star::awt::XControl >    xControl;
+    Reference< css::awt::XWindow >         xPeer;
+    WeakReference< css::awt::XControl >    xControl;
     ::cppu::OMultiTypeInterfaceContainerHelper  aListenerHolder;
 
 

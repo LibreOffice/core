@@ -33,9 +33,8 @@ namespace bib
             ,public ::bib::OLoadListener
     {
     private:
-        OLoadListenerAdapter*   m_pFormAdapter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >
-                                m_xForm;
+        OLoadListenerAdapter*                        m_pFormAdapter;
+        css::uno::Reference< css::form::XLoadable >  m_xForm;
     private:
         void    implSetDesignMode( bool _bDesign );
 
@@ -43,22 +42,22 @@ namespace bib
         FormControlContainer( );
         virtual ~FormControlContainer( );
 
-        bool    isFormConnected() const { return NULL != m_pFormAdapter; }
-        void        connectForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxForm );
+        bool        isFormConnected() const { return NULL != m_pFormAdapter; }
+        void        connectForm( const css::uno::Reference< css::form::XLoadable >& _rxForm );
         void        disconnectForm();
 
         void        ensureDesignMode();
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+        virtual css::uno::Reference< css::awt::XControlContainer >
                     getControlContainer() = 0;
 
     protected:
     // XLoadListener equivalents
-        virtual void _loaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
-        virtual void _unloading( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
-        virtual void _unloaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
-        virtual void _reloading( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
-        virtual void _reloaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void _loaded( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void _unloading( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void _unloaded( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void _reloading( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void _reloaded( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
 
     };
 

@@ -49,7 +49,7 @@ SAL_IMPLEMENT_MAIN()
 
     // initialize UCB (for backwards compatibility, in case some code still uses
     // plain createInstance w/o args directly to obtain an instance):
-    com::sun::star::ucb::UniversalContentBroker::create(rComponentContext);
+    css::ucb::UniversalContentBroker::create(rComponentContext);
 
 
     OUString aURL;

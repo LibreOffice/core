@@ -40,37 +40,37 @@ namespace dbp
     struct OControlWizardContext
     {
         // the global data source context
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
+        css::uno::Reference< css::sdb::XDatabaseContext >
                     xDatasourceContext;
 
         // the control mode
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                     xObjectModel;
         // the form the control model belongs to
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                     xForm;
         // the form as rowset
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
+        css::uno::Reference< css::sdbc::XRowSet >
                     xRowSet;
 
         // the model of the document
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        css::uno::Reference< css::frame::XModel >
                     xDocumentModel;
         // the page where the control mode resides
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
+        css::uno::Reference< css::drawing::XDrawPage >
                     xDrawPage;
         // the shape which carries the control
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XControlShape >
+        css::uno::Reference< css::drawing::XControlShape >
                     xObjectShape;
 
         // the tables or queries of the data source the form is bound to (if any)
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        css::uno::Reference< css::container::XNameAccess >
                     xObjectContainer;
         // the column types container of the object the form is bound to (table, query or SQL statement)
         typedef std::map<OUString, sal_Int32> TNameTypeMap;
         TNameTypeMap aTypes;
         // the column names of the object the form is bound to (table, query or SQL statement)
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
                     aFieldNames;
 
         bool bEmbedded;

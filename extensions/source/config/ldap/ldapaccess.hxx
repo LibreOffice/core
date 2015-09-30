@@ -93,7 +93,7 @@ public:
         @param aUserProfileMap  Map containing LDAP->00o mapping
        @param aUserProfile     struct for holding OOo values
 
-         @throws com::sun::star::ldap::LdapGenericException
+         @throws css::ldap::LdapGenericException
                   if an LDAP error occurs.
     */
     void getUserProfile(const OUString& aUser, LdapData * data)

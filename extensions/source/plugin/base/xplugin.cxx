@@ -112,7 +112,7 @@ Any XPlugin_Impl::queryAggregation( const Type& type ) throw( RuntimeException, 
 }
 
 
-XPlugin_Impl::XPlugin_Impl( const uno::Reference< com::sun::star::lang::XMultiServiceFactory >  & rSMgr) :
+XPlugin_Impl::XPlugin_Impl( const uno::Reference< css::lang::XMultiServiceFactory >  & rSMgr) :
         PluginControl_Impl(),
         m_xSMgr( rSMgr ),
         m_pPluginComm( NULL ),
@@ -131,7 +131,7 @@ XPlugin_Impl::XPlugin_Impl( const uno::Reference< com::sun::star::lang::XMultiSe
     memset( &m_aNPWindow, 0, sizeof( m_aNPWindow ) );
 
     m_xModel = new PluginModel();
-    uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+    uno::Reference< css::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     xPS->addPropertyChangeListener( OUString(), this );
 
     Guard< Mutex > aGuard( ::PluginManager::get().getPluginMutex() );
@@ -181,7 +181,7 @@ void XPlugin_Impl::checkListeners( const char* normalizedURL )
         if( ! strcmp( normalizedURL, (*iter)->getURL() ) ||
             ! strcmp( normalizedURL, (*iter)->getNormalizedURL() ) )
         {
-            (*iter)->disposing( com::sun::star::lang::EventObject() );
+            (*iter)->disposing( css::lang::EventObject() );
             delete *iter;
             m_aPEventListeners.remove( *iter );
             return;
@@ -216,7 +216,7 @@ IMPL_LINK_NOARG_TYPED( XPlugin_Impl, secondLevelDispose, void*, void )
     }
 
     uno::Reference< XPlugin >  xProtection( this );
-    uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+    uno::Reference< css::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     xPS->removePropertyChangeListener( OUString(), this );
     {
         Guard< Mutex > aPluginGuard( ::PluginManager::get().getPluginMutex() );
@@ -460,7 +460,7 @@ OUString XPlugin_Impl::getCreationURL()
     Guard< Mutex > aGuard( m_aMutex );
 
     OUString aRet;
-    uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+    uno::Reference< css::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     if( xPS.is() )
     {
         Any aValue = xPS->getPropertyValue("URL");
@@ -470,12 +470,12 @@ OUString XPlugin_Impl::getCreationURL()
 }
 
 
-sal_Bool XPlugin_Impl::setModel( const uno::Reference< com::sun::star::awt::XControlModel > & Model )
+sal_Bool XPlugin_Impl::setModel( const uno::Reference< css::awt::XControlModel > & Model )
     throw( RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
 
-    uno::Reference< com::sun::star::beans::XPropertySet >  xPS( Model, UNO_QUERY );
+    uno::Reference< css::beans::XPropertySet >  xPS( Model, UNO_QUERY );
     if( ! xPS.is() )
         return sal_False;
 
@@ -489,7 +489,7 @@ sal_Bool XPlugin_Impl::setModel( const uno::Reference< com::sun::star::awt::XCon
     return sal_False;
 }
 
-void XPlugin_Impl::createPeer( const uno::Reference< com::sun::star::awt::XToolkit > & xToolkit, const uno::Reference< com::sun::star::awt::XWindowPeer > & Parent )
+void XPlugin_Impl::createPeer( const uno::Reference< css::awt::XToolkit > & xToolkit, const uno::Reference< css::awt::XWindowPeer > & Parent )
     throw( RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
@@ -585,7 +585,7 @@ void XPlugin_Impl::loadPlugin()
 #else
     m_aNPWindow.window = (void*)pEnvData->hWnd;
 #endif
-    com::sun::star::awt::Rectangle aPosSize = getPosSize();
+    css::awt::Rectangle aPosSize = getPosSize();
 
     for( int i = 0; i < m_nArgs; i++ )
     {
@@ -649,7 +649,7 @@ PluginStream* XPlugin_Impl::getStreamFromNPStream( NPStream* stream )
 }
 
 sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
-                                        const uno::Reference< com::sun::star::io::XActiveDataSource > & stream,
+                                        const uno::Reference< css::io::XActiveDataSource > & stream,
                                         const OUString& url, sal_Int32 length,
                                         sal_Int32 lastmodified, sal_Bool isfile) throw(std::exception)
 
@@ -662,7 +662,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
         m_nProvidingState = PROVIDING_NOW;
         Any aAny;
         aAny <<= url;
-        uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+        uno::Reference< css::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
         if( xPS.is() )
         {
             try
@@ -724,7 +724,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
      // set mimetype on model
      {
-         uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
+         uno::Reference< css::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
          if( xPS.is() )
          {
              try
@@ -746,7 +746,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
      PluginInputStream* pStream = new PluginInputStream( this, aURL.getStr(),
                                                         length, lastmodified );
-     uno::Reference< com::sun::star::io::XOutputStream > xNewStream( pStream );
+     uno::Reference< css::io::XOutputStream > xNewStream( pStream );
 
      if( iter != m_aPEventListeners.end() )
          pStream->getStream().notifyData = (*iter)->getNotifyData();
@@ -811,21 +811,21 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
             }
             else
             {
-                uno::Reference< com::sun::star::io::XConnectable > xConnectable( stream, UNO_QUERY );
+                uno::Reference< css::io::XConnectable > xConnectable( stream, UNO_QUERY );
                 pStream->setPredecessor( xConnectable );
                 if( xConnectable.is() )
                 {
-                    xConnectable->setSuccessor( static_cast< com::sun::star::io::XConnectable* >(pStream) );
+                    xConnectable->setSuccessor( static_cast< css::io::XConnectable* >(pStream) );
                     while( xConnectable->getPredecessor().is() )
                         xConnectable = xConnectable->getPredecessor();
                 }
                 stream->setOutputStream( xNewStream );
                 pStream->setSource( stream );
-                uno::Reference< com::sun::star::io::XActiveDataControl > xController;
+                uno::Reference< css::io::XActiveDataControl > xController;
                 if( xConnectable.is() )
-                    xController = uno::Reference< com::sun::star::io::XActiveDataControl >( xConnectable, UNO_QUERY );
+                    xController = uno::Reference< css::io::XActiveDataControl >( xConnectable, UNO_QUERY );
                 else
-                    xController = uno::Reference< com::sun::star::io::XActiveDataControl >( stream, UNO_QUERY );
+                    xController = uno::Reference< css::io::XActiveDataControl >( stream, UNO_QUERY );
 
                 if( xController.is() )
                     xController->start();
@@ -839,11 +839,11 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     return bRet;
 }
 
-void XPlugin_Impl::disposing( const com::sun::star::lang::EventObject& /*rSource*/ ) throw(std::exception)
+void XPlugin_Impl::disposing( const css::lang::EventObject& /*rSource*/ ) throw(std::exception)
 {
 }
 
-void XPlugin_Impl::propertyChange(const com::sun::star::beans::PropertyChangeEvent& rEvent)
+void XPlugin_Impl::propertyChange(const css::beans::PropertyChangeEvent& rEvent)
     throw (css::uno::RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
@@ -1062,12 +1062,12 @@ void PluginInputStream::load()
         m_pContent =
             new ::ucbhelper::Content(
                                aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI),
-                               uno::Reference< com::sun::star::ucb::XCommandEnvironment >(),
+                               uno::Reference< css::ucb::XCommandEnvironment >(),
                                comphelper::getProcessComponentContext()
                                );
         m_pContent->openStream( static_cast< XOutputStream* >( this ) );
     }
-    catch(const com::sun::star::uno::Exception &)
+    catch(const css::uno::Exception &)
     {
     }
 }
@@ -1151,7 +1151,7 @@ void PluginInputStream::closeOutput() throw(std::exception)
     Guard< Mutex > aGuard( pPlugin->getMutex() );
 
     flush();
-    m_xSource = uno::Reference< com::sun::star::io::XActiveDataSource >();
+    m_xSource = uno::Reference< css::io::XActiveDataSource >();
 }
 
 sal_uInt32 PluginInputStream::read( sal_uInt32 offset, sal_Int8* buffer, sal_uInt32 size )

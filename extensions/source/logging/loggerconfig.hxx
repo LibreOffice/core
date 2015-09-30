@@ -41,7 +41,7 @@ namespace logging
     */
     void    initializeLoggerFromConfiguration(
                 const css::uno::Reference<css::uno::XComponentContext>& _rContext,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::logging::XLogger >& _rxLogger
+                const css::uno::Reference< css::logging::XLogger >& _rxLogger
             );
 
 

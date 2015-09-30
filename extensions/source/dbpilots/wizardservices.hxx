@@ -31,7 +31,7 @@ namespace dbp
     {
     public:
         static OUString         getImplementationName();
-        static ::com::sun::star::uno::Sequence< OUString >
+        static css::uno::Sequence< OUString >
                                 getServiceNames();
     };
 
@@ -40,7 +40,7 @@ namespace dbp
     {
     public:
         static OUString         getImplementationName();
-        static ::com::sun::star::uno::Sequence< OUString >
+        static css::uno::Sequence< OUString >
                                 getServiceNames();
     };
 
@@ -50,7 +50,7 @@ namespace dbp
     {
     public:
         static OUString         getImplementationName();
-        static ::com::sun::star::uno::Sequence< OUString >
+        static css::uno::Sequence< OUString >
                                 getServiceNames();
     };
 

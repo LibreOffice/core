@@ -2783,7 +2783,7 @@ namespace pcr
             // Not implemented in reports
             if (bHandleNonLink)
             {
-                Reference< XReportDefinition > xReportDef( xModel, ::com::sun::star::uno::UNO_QUERY );
+                Reference< XReportDefinition > xReportDef( xModel, css::uno::UNO_QUERY );
                 bHandleNonLink = !xReportDef.is();
             }
         }

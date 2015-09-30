@@ -43,34 +43,34 @@ namespace pcr
     {
     protected:
         // <properties>
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >
+        css::uno::Reference< css::awt::XTabControllerModel >
                 m_xTabbingModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+        css::uno::Reference< css::awt::XControlContainer >
                 m_xControlContext;
         // </properties>
 
     public:
-        OTabOrderDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& _rxContext );
+        OTabOrderDialog( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
         virtual ~OTabOrderDialog();
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static methods
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static() throw( ::com::sun::star::uno::RuntimeException );
-        static OUString getImplementationName_static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >&);
+        static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );
+        static OUString getImplementationName_static() throw( css::uno::RuntimeException );
+        static css::uno::Reference< css::uno::XInterface >
+                SAL_CALL Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
         // XInitialization
-        virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         // OPropertyArrayUsageHelper

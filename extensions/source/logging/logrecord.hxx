@@ -28,7 +28,7 @@
 namespace logging
 {
 
-    ::com::sun::star::logging::LogRecord createLogRecord(
+    css::logging::LogRecord createLogRecord(
         const OUString& _rLoggerName,
         const OUString& _rClassName,
         const OUString& _rMethodName,
@@ -37,7 +37,7 @@ namespace logging
         oslInterlockedCount _nEventNumber
     );
 
-    inline ::com::sun::star::logging::LogRecord createLogRecord(
+    inline css::logging::LogRecord createLogRecord(
         const OUString& _rLoggerName,
         const OUString& _rMessage,
         sal_Int32 _nLogLevel,

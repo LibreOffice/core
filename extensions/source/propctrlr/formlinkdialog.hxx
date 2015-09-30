@@ -54,16 +54,16 @@ namespace pcr
         VclPtr<OKButton>                       m_pOK;
         VclPtr<PushButton>                     m_pSuggest;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                                         m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                                         m_xDetailForm;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                                         m_xMasterForm;
 
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
                                         m_aRelationDetailColumns;
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
                                         m_aRelationMasterColumns;
 
         OUString                 m_sDetailLabel;
@@ -72,9 +72,9 @@ namespace pcr
     public:
         FormLinkDialog(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDetailForm,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxMasterForm,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxDetailForm,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxMasterForm,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const OUString& _sExplanation = OUString(),
             const OUString& _sDetailLabel = OUString(),
             const OUString& _sMasterLabel = OUString()
@@ -98,36 +98,36 @@ namespace pcr
         void        commitLinkPairs();
 
         void        initializeFieldRowsFrom(
-                        ::com::sun::star::uno::Sequence< OUString >& _rDetailFields,
-                        ::com::sun::star::uno::Sequence< OUString >& _rMasterFields
+                        css::uno::Sequence< OUString >& _rDetailFields,
+                        css::uno::Sequence< OUString >& _rMasterFields
                     );
 
         static OUString getFormDataSourceType(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm
+                        const css::uno::Reference< css::beans::XPropertySet >& _rxForm
                     );
 
         void        getFormFields(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm,
-                            ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rNames
+                        const css::uno::Reference< css::beans::XPropertySet >& _rxForm,
+                            css::uno::Sequence< OUString >& /* [out] */ _rNames
                     ) const;
 
         void        ensureFormConnection(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxFormProps,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& /* [out] */ _rxConnection
+                        const css::uno::Reference< css::beans::XPropertySet >& _rxFormProps,
+                            css::uno::Reference< css::sdbc::XConnection >& /* [out] */ _rxConnection
                     ) const;
 
         static void getConnectionMetaData(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxFormProps,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& /* [out] */ _rxMeta
+                        const css::uno::Reference< css::beans::XPropertySet >& _rxFormProps,
+                            css::uno::Reference< css::sdbc::XDatabaseMetaData >& /* [out] */ _rxMeta
                     );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    getCanonicUnderlyingTable( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxFormProps ) const;
+        css::uno::Reference< css::beans::XPropertySet >
+                    getCanonicUnderlyingTable( const css::uno::Reference< css::beans::XPropertySet >& _rxFormProps ) const;
         static bool getExistingRelation(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxLHS,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxRHS,
-                        ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rLeftFields,
-                        ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rRightFields
+                        const css::uno::Reference< css::beans::XPropertySet >& _rxLHS,
+                        const css::uno::Reference< css::beans::XPropertySet >& _rxRHS,
+                        css::uno::Sequence< OUString >& /* [out] */ _rLeftFields,
+                        css::uno::Sequence< OUString >& /* [out] */ _rRightFields
                     );
     };
 

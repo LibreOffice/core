@@ -115,7 +115,7 @@ objCursor.setPropertyValue( "CharColor", 255);
 objCursor.setPropertyValue( "CharShadowed", true);
 
 //Create a paragraph break
-//The second argument is a com::sun::star::text::ControlCharacter::PARAGRAPH_BREAK constant
+//The second argument is a css::text::ControlCharacter::PARAGRAPH_BREAK constant
 objText.insertControlCharacter( objCursor, 0 , false);
 
 //Inserting colored Text.
@@ -152,7 +152,7 @@ objFrameText.insertString(objFrameTextCursor,
                           "With this second line the height of the frame raises.", false );
 
 //Create a paragraph break
-//The second argument is a com::sun::star::text::ControlCharacter::PARAGRAPH_BREAK constant
+//The second argument is a css::text::ControlCharacter::PARAGRAPH_BREAK constant
 objFrameText.insertControlCharacter( objCursor, 0 , false);
 
 //Change the CharColor and add a Shadow

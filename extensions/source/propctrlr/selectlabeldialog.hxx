@@ -44,26 +44,26 @@ namespace pcr
         VclPtr<SvTreeListBox>   m_pControlTree;
         VclPtr<CheckBox>        m_pNoAssignment;
 
-        ImageList       m_aModelImages;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xControlModel;
+        ImageList               m_aModelImages;
+        css::uno::Reference< css::beans::XPropertySet >   m_xControlModel;
         OUString m_sRequiredService;
-        Image           m_aRequiredControlImage;
-        SvTreeListEntry*    m_pInitialSelection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xInitialLabelControl;
+        Image                   m_aRequiredControlImage;
+        SvTreeListEntry*        m_pInitialSelection;
+        css::uno::Reference< css::beans::XPropertySet >   m_xInitialLabelControl;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xSelectedControl;
-        SvTreeListEntry*    m_pLastSelected;
-        bool        m_bHaveAssignableControl;
+        css::uno::Reference< css::beans::XPropertySet >   m_xSelectedControl;
+        SvTreeListEntry*        m_pLastSelected;
+        bool                    m_bHaveAssignableControl;
 
     public:
-        OSelectLabelDialog(vcl::Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xControlModel);
+        OSelectLabelDialog(vcl::Window* pParent, css::uno::Reference< css::beans::XPropertySet >  _xControlModel);
         virtual ~OSelectLabelDialog();
         virtual void dispose() SAL_OVERRIDE;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  GetSelected() const { return m_pNoAssignment->IsChecked() ? ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > () : m_xSelectedControl; }
+        css::uno::Reference< css::beans::XPropertySet >  GetSelected() const { return m_pNoAssignment->IsChecked() ? css::uno::Reference< css::beans::XPropertySet > () : m_xSelectedControl; }
 
     protected:
-        sal_Int32 InsertEntries(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xContainer, SvTreeListEntry* pContainerEntry);
+        sal_Int32 InsertEntries(const css::uno::Reference< css::uno::XInterface >& _xContainer, SvTreeListEntry* pContainerEntry);
 
         DECL_LINK_TYPED(OnEntrySelected, SvTreeListBox*, void);
         DECL_LINK_TYPED(OnNoAssignmentClicked, Button*, void);
