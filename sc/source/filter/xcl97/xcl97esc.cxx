@@ -287,7 +287,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                         pAnchor->SetFlags( *pObj );
                         pCurrAppData->SetClientAnchor( pAnchor );
                     }
-                    const SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
+                    const SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj  );
                     if( pTextObj && !lcl_IsFontwork( pTextObj ) && (pObj->GetObjIdentifier() != OBJ_CAPTION) )
                     {
                         const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();

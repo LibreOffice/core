@@ -1374,7 +1374,7 @@ bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
     if( !pImp->Init() )
         return false;
 
-    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pDestStm );
+    UCBStorageStream* pStg =  dynamic_cast<UCBStorageStream*>( pDestStm );
     if ( pStg )
         pStg->pImp->m_aContentType = pImp->m_aContentType;
 
@@ -2535,8 +2535,8 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
             bDeleteStorage = true;
         }
 
-        UCBStorage* pUCBDest = PTR_CAST( UCBStorage, pDest );
-        UCBStorage* pUCBCopy = PTR_CAST( UCBStorage, pStorage );
+        UCBStorage* pUCBDest =  dynamic_cast<UCBStorage*>( pDest );
+        UCBStorage* pUCBCopy =  dynamic_cast<UCBStorage*>( pStorage );
 
         bool bOpenUCBStorage = pUCBDest && pUCBCopy;
         std::unique_ptr<BaseStorage> pOtherStorage(bOpenUCBStorage ?
@@ -2588,7 +2588,7 @@ bool UCBStorage::CopyTo( BaseStorage* pDestStg ) const
 
     // For UCB storages, the class id and the format id may differ,
     // do passing the class id is not sufficient.
-    if( pDestStg->ISA( UCBStorage ) )
+    if( dynamic_cast<const UCBStorage *>(pDestStg) != nullptr )
         pDestStg->SetClass( pImp->m_aClassId, pImp->m_nFormat,
                             pImp->m_aUserTypeName );
     else
@@ -2787,7 +2787,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
         if ( !pElement->m_xStream.Is() )
         {
             BaseStorageStream* pStr = OpenStream( rEleName, nMode, bDirect );
-            UCBStorageStream* pStream = PTR_CAST( UCBStorageStream, pStr );
+            UCBStorageStream* pStream =  dynamic_cast<UCBStorageStream*>( pStr );
             if ( !pStream )
             {
                 SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );

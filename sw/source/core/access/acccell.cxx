@@ -60,7 +60,7 @@ bool SwAccessibleCell::IsSelected()
     assert(GetMap());
     const SwViewShell *pVSh = GetMap()->GetShell();
     assert(pVSh);
-    if( pVSh->ISA( SwCrsrShell ) )
+    if( dynamic_cast<const SwCrsrShell*>( pVSh) !=  nullptr )
     {
         const SwCrsrShell *pCSh = static_cast< const SwCrsrShell * >( pVSh );
         if( pCSh->IsTableMode() )
@@ -84,7 +84,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     // SELECTABLE
     const SwViewShell *pVSh = GetMap()->GetShell();
     assert(pVSh);
-    if( pVSh->ISA( SwCrsrShell ) )
+    if( dynamic_cast<const SwCrsrShell*>( pVSh) !=  nullptr )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );
     //Add resizable state to table cell.
     rStateSet.AddState( AccessibleStateType::RESIZABLE );

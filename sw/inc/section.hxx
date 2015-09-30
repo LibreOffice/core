@@ -296,7 +296,7 @@ public:
     TYPEINFO_OVERRIDE();     // Already contained in base class client.
     virtual ~SwSectionFormat();
 
-    // Deletes all Frms in aDepend (Frms are recognized via PTR_CAST).
+    // Deletes all Frms in aDepend (Frms are recognized via dynamic_cast).
     virtual void DelFrms() SAL_OVERRIDE;
 
     // Creates views.
@@ -368,7 +368,7 @@ inline SwSectionFormat* SwSectionFormat::GetParent() const
 {
     SwSectionFormat* pRet = 0;
     if( GetRegisteredIn() )
-        pRet = const_cast<SwSectionFormat*>(PTR_CAST( SwSectionFormat, GetRegisteredIn() ));
+        pRet = const_cast<SwSectionFormat*>(dynamic_cast< const SwSectionFormat* >( GetRegisteredIn() ));
     return pRet;
 }
 

@@ -48,7 +48,7 @@ void SwViewShellImp::StartAction()
     if ( HasDrawView() )
     {
         SET_CURR_SHELL( GetShell() );
-        if ( m_pShell->ISA(SwFEShell) )
+        if ( dynamic_cast<const SwFEShell*>( m_pShell) !=  nullptr )
             static_cast<SwFEShell*>(m_pShell)->HideChainMarker(); // might have changed
     }
 }
@@ -58,7 +58,7 @@ void SwViewShellImp::EndAction()
     if ( HasDrawView() )
     {
         SET_CURR_SHELL( GetShell() );
-        if ( m_pShell->ISA(SwFEShell) )
+        if ( dynamic_cast<const SwFEShell*>(m_pShell) !=  nullptr )
             static_cast<SwFEShell*>(m_pShell)->SetChainMarker(); // might have changed
     }
 }
@@ -210,14 +210,14 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
     for( size_t nObj = 0; nObj < nObjs; ++nObj )
     {
         SdrObject *pObj = pPage->GetObj( nObj );
-        if( !pObj->ISA(SwVirtFlyDrawObj) )
+        if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
         {
             // Objects not anchored to the frame, do not need to be adjusted
             const SwContact *pCont = GetUserCall(pObj);
             // this function might be called by the InsertDocument, when
             // a PageDesc-Attribute is set on a node. Then the SdrObject
             // must not have an UserCall.
-            if( !pCont || !pCont->ISA(SwDrawContact) )
+            if( !pCont || dynamic_cast<const SwDrawContact*>( pCont) ==  nullptr )
                 continue;
 
             const SwFrm *pAnchor = static_cast<const SwDrawContact*>(pCont)->GetAnchorFrm();

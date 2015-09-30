@@ -127,7 +127,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
             //  URL button
 
-            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObject);
+            SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObject );
             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
             {
                 uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
@@ -267,7 +267,7 @@ static bool lcl_HasOnlyControls( SdrModel* pModel )
                 bOnlyControls = true;   // only set if there are any objects at all
                 while ( pObj )
                 {
-                    if (!pObj->ISA(SdrUnoObj))
+                    if (dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr)
                     {
                         bOnlyControls = false;
                         break;
@@ -746,7 +746,7 @@ void ScDrawTransferObj::InitDocShell()
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                if ( pObject->ISA(SdrUnoObj) )
+                if ( dynamic_cast<const SdrUnoObj*>( pObject) !=  nullptr )
                     pObject->NbcSetLayer(SC_LAYER_CONTROLS);
                 else
                     pObject->NbcSetLayer(SC_LAYER_FRONT);

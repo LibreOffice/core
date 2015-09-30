@@ -85,7 +85,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
             const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
             SvxIMapDlg* pImageMapDialog = ViewShell::Implementation::GetImageMapDialog();
-            if ( ( pObj->ISA( SdrGrafObj ) /*|| pObj->ISA( SdrOle2Obj )*/ )
+            if ( ( dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr /*|| pObj->ISA( SdrOle2Obj )*/ )
                 && pImageMapDialog!=NULL
                 && ( pImageMapDialog->GetEditingObject() == static_cast<void const *>(pObj) ) )
             {

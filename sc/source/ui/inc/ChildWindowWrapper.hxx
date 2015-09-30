@@ -28,7 +28,7 @@ public:
     {
         ScTabViewShell* pViewShell = getTabViewShell( pBindings );
         if (!pViewShell)
-            pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+            pViewShell = dynamic_cast< ScTabViewShell *>( SfxViewShell::Current() );
         OSL_ENSURE(pViewShell, "Missing view shell!");
 
         if (pViewShell)

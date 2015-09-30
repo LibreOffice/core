@@ -552,7 +552,7 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
             }
             if (bChange)
             {
-                if ( pObj->ISA( SdrRectObj ) && pData->maStart.IsValid() && pData->maEnd.IsValid() )
+                if ( dynamic_cast<const SdrRectObj*>( pObj) !=  nullptr && pData->maStart.IsValid() && pData->maEnd.IsValid() )
                     pData->maStart.PutInOrder( pData->maEnd );
 
                 // Update also an untransformed anchor thats what we stored ( and still do ) to xml
@@ -2047,7 +2047,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
         Graphic     aGraphic;
         bool        bObjSupported = false;
 
-        if ( pObj->ISA( SdrGrafObj )  ) // Simple Graphics object
+        if ( dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr  ) // Simple Graphics object
         {
             const SdrGrafObj*   pGrafObj = static_cast<const SdrGrafObj*>( pObj );
             const GeoStat&      rGeo = pGrafObj->GetGeoStat();
@@ -2075,7 +2075,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
 
             bObjSupported = true;
         }
-        else if ( pObj->ISA( SdrOle2Obj ) ) // OLE object
+        else if ( dynamic_cast<const SdrOle2Obj*>( pObj) !=  nullptr ) // OLE object
         {
             // TODO/LEAN: working with visual area needs running state
             aGraphSize = static_cast<const SdrOle2Obj*>(pObj)->GetOrigObjSize();

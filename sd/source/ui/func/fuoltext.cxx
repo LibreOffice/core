@@ -144,7 +144,7 @@ bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
         {
             const SvxFieldData* pField = pFieldItem->GetField();
 
-            if( pField && pField->ISA( SvxURLField ) )
+            if( pField && dynamic_cast< const SvxURLField *>( pField ) !=  nullptr )
             {
                 bReturn = true;
                 mpWindow->ReleaseMouse();

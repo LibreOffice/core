@@ -183,7 +183,7 @@ void ConstCustomShape::CreateDefaultObject()
         if ( rMarkList.GetMarkCount() == 1 )
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if ( pObj && pObj->ISA( SdrObjCustomShape ) )
+            if ( pObj && dynamic_cast< const SdrObjCustomShape *>( pObj ) !=  nullptr )
                 SetAttributes( pObj );
         }
     }

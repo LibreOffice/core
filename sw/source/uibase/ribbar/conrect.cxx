@@ -95,7 +95,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     pObj->SetMergedItemSetAndBroadcast(aItemSet);
                 }
             }
-            else if(mbVertical && pObj && pObj->ISA(SdrTextObj))
+            else if(mbVertical && pObj && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
             {
                 SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
                 SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());

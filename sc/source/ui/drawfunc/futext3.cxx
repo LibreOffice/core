@@ -88,7 +88,7 @@ void FuText::StopEditMode(bool /*bTextDirection*/)
             /*  Note has been created before editing, if first undo action is
                 an insert action. Needed below to decide whether to drop the
                 undo if editing a new note has been cancelled. */
-            bNewNote = (pCalcUndo->GetActionCount() > 0) && pCalcUndo->GetAction( 0 )->ISA( SdrUndoNewObj );
+            bNewNote = (pCalcUndo->GetActionCount() > 0) && dynamic_cast< SdrUndoNewObj* >(pCalcUndo->GetAction( 0 ));
 
             // create a "insert note" undo action if needed
             if( bNewNote )

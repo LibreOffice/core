@@ -162,7 +162,7 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
             if(!GetPortionData().IsValidCorePosition( nIndex ) ||
                 ( GetPortionData().IsZeroCorePositionData() && nIndex== 0) )
             {
-                const SwTextFrm *pTextFrm = PTR_CAST( SwTextFrm, GetFrm() );
+                const SwTextFrm *pTextFrm = dynamic_cast<const SwTextFrm*>( GetFrm()  );
                 bool bFormat = (pTextFrm && pTextFrm->HasPara());
                 if(bFormat)
                 {
@@ -331,7 +331,7 @@ SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
     if ( pCrsrShell != NULL &&
          ( _bForSelection || !pCrsrShell->IsTableMode() ) )
     {
-        SwFEShell *pFESh = pCrsrShell->ISA( SwFEShell )
+        SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pCrsrShell) !=  nullptr
                             ? static_cast< SwFEShell * >( pCrsrShell ) : 0;
         if( !pFESh ||
             !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
@@ -945,7 +945,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale()
 {
     SolarMutexGuard aGuard;
 
-    const SwTextFrm *pTextFrm = PTR_CAST( SwTextFrm, GetFrm() );
+    const SwTextFrm *pTextFrm = dynamic_cast<const SwTextFrm*>( GetFrm()  );
     if( !pTextFrm )
     {
         THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (no text frame)" );
