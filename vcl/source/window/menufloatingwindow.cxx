@@ -191,7 +191,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
     long nY = GetInitialItemY();
     long nMouseY = rMEvt.GetPosPixel().Y();
     Size aOutSz = GetOutputSizePixel();
-    if ( ( nMouseY >= nY ) && ( nMouseY < ( aOutSz.Height() + nY ) ) )
+    if ( ( nMouseY >= nY ) && ( nMouseY < ( aOutSz.Height() - nY ) ) )
     {
         bool bHighlighted = false;
         size_t nCount = pMenu->pItemList->size();
