@@ -879,14 +879,22 @@ bool OpenGLContext::ImplInit()
     }
 
     if (!InitGLEW())
+    {
+        wglMakeCurrent(NULL, NULL);
+        wglDeleteContext(hTempRC);
         return false;
+    }
 
     HGLRC hSharedCtx = 0;
     if (!g_vShareList.empty())
         hSharedCtx = g_vShareList.front();
 
     if (!wglCreateContextAttribsARB)
+    {
+        wglMakeCurrent(NULL, NULL);
+        wglDeleteContext(hTempRC);
         return false;
+    }
 
     // now setup the shared context; this needs a temporary context already
     // set up in order to work
@@ -902,6 +910,8 @@ bool OpenGLContext::ImplInit()
     {
         ImplWriteLastError(GetLastError(), "wglCreateContextAttribsARB in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed");
+        wglMakeCurrent(NULL, NULL);
+        wglDeleteContext(hTempRC);
         return false;
     }
 
