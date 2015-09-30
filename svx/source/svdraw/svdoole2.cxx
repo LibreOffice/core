@@ -1668,7 +1668,6 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(
     //TODO/LATER: who takes over control of my old object?!
     if( &rObj != this )
     {
-        // #116235#
         // ImpAssign( rObj );
         const SdrOle2Obj& rOle2Obj = static_cast< const SdrOle2Obj& >( rObj );
 

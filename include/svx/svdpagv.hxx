@@ -45,7 +45,6 @@ class SdrView;
 class SdrPageObj;
 class SdrPageView;
 
-// #110094#
 namespace sdr
 {
     namespace contact
@@ -257,7 +256,6 @@ public:
     // #103834# Set background color for svx at SdrPageViews
     void SetApplicationBackgroundColor(Color aBackgroundColor);
 
-    // #109585#
     Color GetApplicationBackgroundColor() const { return maBackgroundColor;}
 
     // #103911# Set/Get document color for svx at SdrPageViews

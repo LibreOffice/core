@@ -259,7 +259,6 @@ namespace sdr
                 // also clear local ItemSet, it's only temporary for group objects anyways.
                 if(mpItemSet)
                 {
-                    // #121905#
                     // copy/paste is still using clone operators and MoveToItemPool functionality.
                     // Since SfxItemSet contains a pool pointer, ClearItem is not enough here.
                     // The ItemSet for merge is constructed on demand, so it's enough here to

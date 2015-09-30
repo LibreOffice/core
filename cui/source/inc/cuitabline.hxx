@@ -110,7 +110,6 @@ private:
     VclPtr<CheckBox>           m_pCbxSynchronize;
     VclPtr<SvxXLinePreview>    m_pCtlPreview;
 
-    // #116827#
     VclPtr<VclFrame>           m_pFLEdgeStyle;
     VclPtr<VclGrid>            m_pGridEdgeCaps;
     VclPtr<ListBox>            m_pLBEdgeStyle;
@@ -169,7 +168,6 @@ private:
 
     SfxMapUnit          m_ePoolUnit;
 
-    // #63083#
     sal_Int32           m_nActLineWidth;
 
     // handler for gallery popup menu button + size
@@ -186,7 +184,6 @@ private:
     DECL_LINK( ChangePreviewHdl_Impl, void * );
     DECL_LINK( ChangeTransparentHdl_Impl, void * );
 
-    // #116827#
     DECL_LINK( ChangeEdgeStyleHdl_Impl, void * );
 
      // LineCaps

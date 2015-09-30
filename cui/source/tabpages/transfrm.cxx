@@ -496,7 +496,6 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
     if( bModified )
     {
         // set reference points
-        // #75897#
         Rectangle aObjectRect(pView->GetAllMarkedRect());
         pView->GetSdrPageView()->LogicToPagePos(aObjectRect);
         Point aPt = aObjectRect.Center();

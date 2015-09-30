@@ -267,7 +267,7 @@ private:
     SVX_DLLPRIVATE void ImpSetUIUnit();
     SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit = false );
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();
-    SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();    // #103122#
+    SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();
     SVX_DLLPRIVATE void ImpCreateTables();
     SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable,
         bool bLoadRefCounts = true);
@@ -424,7 +424,6 @@ public:
     const SdrPage*   GetPage(sal_uInt16 nPgNum) const;
     SdrPage*         GetPage(sal_uInt16 nPgNum);
     sal_uInt16       GetPageCount() const;
-    // #109538#
     virtual void     PageListChanged();
 
     // Masterpages
@@ -436,7 +435,6 @@ public:
     const SdrPage*   GetMasterPage(sal_uInt16 nPgNum) const;
     SdrPage*         GetMasterPage(sal_uInt16 nPgNum);
     sal_uInt16       GetMasterPageCount() const;
-    // #109538#
     virtual void     MasterPageListChanged();
 
     // modified flag. Is set automatically when something changes on the Pages

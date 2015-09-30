@@ -978,7 +978,6 @@ protected:
     virtual XMLShapeImportHelper* CreateShapeImport() SAL_OVERRIDE;
 
 public:
-    // #110680#
     ScXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlag);

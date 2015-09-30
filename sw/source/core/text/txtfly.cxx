@@ -367,7 +367,6 @@ void SwTextFly::CtorInitTextFly( const SwTextFrm *pFrm )
 {
     mbIgnoreCurrentFrame = false;
     mbIgnoreContour = false;
-    // #118809#
     mbIgnoreObjsInHeaderFooter = false;
     pPage = pFrm->FindPageFrm();
     const SwFlyFrm* pTmp = pFrm->FindFlyFrm();
@@ -796,7 +795,6 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 pTmp = GetVirtualUpper( pTmp, aPos );
             }
             // #i26945#
-            // #115759#
             // If <pTmp> is a text frame inside a table, take the upper
             // of the anchor frame, which contains the anchor position.
             else if ( pTmp->IsTextFrm() && pTmp->IsInTab() )

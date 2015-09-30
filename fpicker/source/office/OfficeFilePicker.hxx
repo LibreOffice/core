@@ -70,7 +70,6 @@ protected:
     OUString            m_aDefaultName;
     OUString            m_aCurrentFilter;
 
-    // #97148# --------------
     OUString            m_aOldDisplayDirectory;
     OUString            m_aOldHideDirectory;
 

@@ -108,7 +108,6 @@ namespace pcr
 
         void    setPageActivationHandler(const Link<LinkParamNone*,void>& _rHdl) { m_aPageActivationHandler = _rHdl; }
 
-        // #95343# -------------------------------
         sal_Int32 getMinimumWidth();
         sal_Int32 getMinimumHeight();
 

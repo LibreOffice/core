@@ -1725,7 +1725,6 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     GetBorderSize( aBorder, Size() );
     SetBorderPixel( aBorder );
 
-    // #114409#
     MakeDrawLayer();
 }
 

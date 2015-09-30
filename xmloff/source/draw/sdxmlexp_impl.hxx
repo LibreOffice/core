@@ -122,7 +122,6 @@ class SdXMLExport : public SvXMLExport
     virtual void _ExportFontDecls() SAL_OVERRIDE;
     virtual void _ExportMasterStyles() SAL_OVERRIDE;
     virtual void _ExportContent() SAL_OVERRIDE;
-    // #82003#
     virtual void _ExportMeta() SAL_OVERRIDE;
 
     ImpXMLEXPPageMasterInfo* ImpGetOrCreatePageMasterInfo( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xMasterPage );

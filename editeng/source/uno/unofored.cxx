@@ -291,7 +291,6 @@ EBulletInfo SvxEditEngineForwarder::GetBulletInfo( sal_Int32 ) const
 
 Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
-    // #101701#
     // EditEngine's 'internal' methods like GetCharacterBounds()
     // don't rotate for vertical text.
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
@@ -346,7 +345,6 @@ Rectangle SvxEditEngineForwarder::GetParaBounds( sal_Int32 nPara ) const
 
     if( rEditEngine.IsVertical() )
     {
-        // #101701#
         // Hargl. EditEngine's 'external' methods return the rotated
         // dimensions, 'internal' methods like GetTextHeight( n )
         // don't rotate.

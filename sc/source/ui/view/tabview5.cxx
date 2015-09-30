@@ -256,7 +256,6 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
     {
         pDrawView->AddWindowToPaintView(pWin, 0);
 
-        // #114409#
         pWin->DrawLayerCreated();
     }
 }

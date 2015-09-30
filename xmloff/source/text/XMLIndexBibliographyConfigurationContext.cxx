@@ -240,7 +240,6 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
         {
             if (aServices[i].equals(sFieldMaster_Bibliography))
             // here we should use a method which compares in reverse order if available
-            // #85282#
                 bFound = true;
             else
                 i++;

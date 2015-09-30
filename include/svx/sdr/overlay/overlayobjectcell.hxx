@@ -26,7 +26,6 @@
 
 
 
-// #114409#
 namespace sdr
 {
     namespace overlay

@@ -815,7 +815,6 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     SwWait aWait( *pSh->GetView().GetDocShell(), true );
     pSh->StartAction();
 
-    // #111827#
     if (aRedlines.size() > 1)
     {
         OUString aTmpStr;
@@ -848,7 +847,6 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
             (pSh->*FnAccRej)( nPosition );
     }
 
-    // #111827#
     if (aRedlines.size() > 1)
     {
         pSh->EndUndo();

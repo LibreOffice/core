@@ -76,12 +76,10 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
 
-    // #107848#
     // Start- and EndElement are needed here to set the inside_deleted_section
     // flag at the corresponding TextImportHelper
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
-    // #107848#
     virtual void EndElement() SAL_OVERRIDE;
 };
 

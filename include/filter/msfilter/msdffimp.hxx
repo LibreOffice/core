@@ -439,7 +439,6 @@ protected:
     void GetCtrlData(sal_uInt32 nOffsDgg);
     void GetDrawingGroupContainerData( SvStream& rSt,
                                        sal_uLong nLenDgg );
-    // #156763#
     // Add internal drawing container id as parameter to the sub methods of
     // reading the control information about the drawing objects.
     // The drawing container id is used to distinguish the text ids of drawing

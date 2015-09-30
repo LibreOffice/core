@@ -572,7 +572,7 @@ void ServerFont::SetFontOptions(std::shared_ptr<ImplFontOptions> xFontOptions)
 
     if( (mnSin != 0) && (mnCos != 0) ) // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
-    mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
+    mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH;
 
     if (mxFontOptions->DontUseAntiAlias())
       mnPrioAntiAlias = 0;

@@ -29,7 +29,6 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <comphelper/broadcasthelper.hxx>
-// #100312# --------------------
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -41,14 +40,12 @@ namespace vcl { class Window; }
 namespace bib
 {
     class BibView;
-    // #100312# -----------
     class BibBeamer;
 }
 
 class BibToolBar;
 struct BibDBDescriptor;
 
-// #100312# ---------------------
 class BibInterceptorHelper
     :public cppu::WeakImplHelper< ::com::sun::star::frame::XDispatchProviderInterceptor >
 {
@@ -89,7 +86,6 @@ private:
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xSourceProps;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xParser;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xFormCtrl;
-        // #100312# -------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >      m_xFormDispatch;
         BibInterceptorHelper* m_pInterceptorHelper;
 
@@ -180,7 +176,6 @@ public:
         void                        ResetIdentifierMapping() {sIdentifierMapping.clear();}
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController();
-        // #100312# ----------
         void                        RegisterInterceptor( ::bib::BibBeamer* pBibBeamer);
 
         bool                        HasActiveConnection();

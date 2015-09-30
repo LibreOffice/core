@@ -207,7 +207,6 @@ namespace comphelper
             case AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
             case AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
             case AccessibleEventId::TABLE_SUMMARY_CHANGED:
-            // #130798#
             // these Ids are also missed: SUB_WINDOW_OF_RELATION_CHANGED & TEXT_ATTRIBUTE_CHANGED
             case AccessibleEventId::TEXT_SELECTION_CHANGED:
                 // nothing to translate

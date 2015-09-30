@@ -722,7 +722,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_SETWINDOWEXTEX :
-                {                                                       // #75383#
+                {
                     pWMF->ReadUInt32( nW ).ReadUInt32( nH );
                     pOut->SetWinExt( Size( nW, nH ), true);
                 }
@@ -764,7 +764,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_EOF :
-                    nRecordCount = 0;           // #76846#
+                    nRecordCount = 0;
                 break;
 
                 case EMR_SETPIXELV :

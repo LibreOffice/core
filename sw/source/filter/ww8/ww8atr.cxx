@@ -1989,7 +1989,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                         if( 3 == nRet )
                             aFillText = aText;
-                        else if ((4 == nRet) || (2 == nRet)) //#109414#
+                        else if ((4 == nRet) || (2 == nRet))
                             aFillText = "\t";
                         else
                             aFillText.clear();

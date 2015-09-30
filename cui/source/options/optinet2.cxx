@@ -552,7 +552,6 @@ IMPL_STATIC_LINK_TYPED( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, 
 
 
 
-//#98647#----------------------------------------------
 void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 {   // try to show tips just like as on toolbars
     sal_Int32 nPos=LISTBOX_ENTRY_NOTFOUND;

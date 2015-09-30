@@ -3755,7 +3755,6 @@ OUString SAL_CALL SchXMLExport_getImplementationName() throw()
 
 Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    // #110680#
     // #103997# removed some flags from EXPORT_ALL
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_getImplementationName(), SvXMLExportFlags::ALL ^ ( SvXMLExportFlags::SETTINGS | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::SCRIPTS )));
 }
@@ -3797,7 +3796,6 @@ OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw()
 
 Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(const Reference< lang::XMultiServiceFactory >& rSMgr) throw( uno::Exception )
 {
-    // #110680#
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Styles_getImplementationName(), SvXMLExportFlags::STYLES ));
 }
 
@@ -3833,7 +3831,6 @@ OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw()
 
 Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    // #110680#
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Content_getImplementationName(), SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::FONTDECLS ));
 }
 

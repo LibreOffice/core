@@ -213,7 +213,6 @@ protected:
     // um ein beschriftetes Grafikobjekt handelt.
     SdrObjKind                  eTextKind;
 
-    // #108784#
     // For text editing in SW Header/Footer it is necessary to be
     // able to set an offset for the text edit to allow text editing at the
     // position of the virtual object. This offset is used when setting up
@@ -248,7 +247,6 @@ protected:
     bool                        bNoMirror : 1;           // Obj darf nicht gespiegelt werden (->Ole,TextFrame)
     bool                        bTextSizeDirty : 1;
 
-    // #101684#
     bool                        mbInEditMode : 1;   // Is this text object in edit mode?
 
     // Fuer Objekt mit freier Groesse im Draw (Mengentext). Das Flag wird vom
@@ -262,11 +260,9 @@ protected:
     // - Positions+Groesse Dialog
     bool                        bDisableAutoWidthOnDragging : 1;
 
-    // #111096#
     // Allow text suppression
     bool                        mbTextHidden : 1;
 
-    // #111096#
     // Flag for allowing text animation. Default is sal_true.
     bool                        mbTextAnimationAllowed : 1;
 
@@ -338,7 +334,6 @@ protected:
 public:
     TYPEINFO_OVERRIDE();
 
-    // #101684#
     bool IsInEditMode() const { return mbInEditMode; }
 
     // via eCharSet kann der CharSet der vorliegenden Datei uebergeben werden.
@@ -591,12 +586,10 @@ public:
     //          given vector
     void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
 
-    // #111096#
     // Get necessary data for text scroll animation. ATM base it on a Text-Metafile and a
     // painting rectangle. Rotation is taken from the object.
     GDIMetaFile* GetTextScrollMetaFileAndRectangle(Rectangle& rScrollRectangle, Rectangle& rPaintRectangle);
 
-    // #111096#
     // Access to TextAnimationAllowed flag
     void SetTextAnimationAllowed(bool bNew);
 

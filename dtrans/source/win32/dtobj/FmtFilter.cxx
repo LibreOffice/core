@@ -279,7 +279,6 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
     // we don't include '>' into the search
     // because the body tag allows parameters
     // e.g. <BODY param>
-    // #92840#
     OString startBodyTag( "<BODY" );
     OString endBodyTag(   "</BODY" );
 

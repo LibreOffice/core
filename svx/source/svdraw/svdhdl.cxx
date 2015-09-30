@@ -41,7 +41,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/xflftrit.hxx>
 
-// #105678#
 #include <svx/svdopath.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

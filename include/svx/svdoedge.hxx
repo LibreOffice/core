@@ -169,12 +169,10 @@ protected:
     bool                        bEdgeTrackDirty : 1; // sal_True=Verbindungsverlauf muss neu berechnet werden.
     bool                        bEdgeTrackUserDefined : 1;
 
-    // #109007#
     // Bool to allow supporession of default connects at object
     // inside test (HitTest) and object center test (see ImpFindConnector())
     bool                        mbSuppressDefaultConnect : 1;
 
-    // #110649#
     // Flag value for avoiding death loops when calculating BoundRects
     // from circulary connected connectors. A coloring algorithm is used
     // here. When the GetCurrentBoundRect() calculation of a SdrEdgeObj
@@ -186,12 +184,10 @@ protected:
     bool                        mbSuppressed : 1;
 
 public:
-    // #109007#
     // Interface to default connect suppression
     void SetSuppressDefaultConnect(bool bNew) { mbSuppressDefaultConnect = bNew; }
     bool GetSuppressDefaultConnect() const { return mbSuppressDefaultConnect; }
 
-    // #110649#
     bool IsBoundRectCalculationRunning() const { return mbBoundRectCalculationRunning; }
 
 protected:

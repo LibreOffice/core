@@ -100,7 +100,6 @@ public:
     void                            SettingsChanged();
     bool GetAutoDetectSystemHC() {return m_bAutoDetectSystemHC;}
 
-    // #100822#
     DECL_LINK_TYPED( DataChangedEventListener, VclSimpleEvent&, void );
 
     void ImplUpdateApplicationSettings();
@@ -206,14 +205,12 @@ ColorConfig_Impl::ColorConfig_Impl(bool bEditMode) :
 
     ImplUpdateApplicationSettings();
 
-    // #100822#
     ::Application::AddEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
 
 }
 
 ColorConfig_Impl::~ColorConfig_Impl()
 {
-    // #100822#
     ::Application::RemoveEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
 }
 

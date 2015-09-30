@@ -1435,7 +1435,6 @@ bool EscherPropertyContainer::CreateGraphicProperties(
         bool bMirrored = false;
         bool bRotate = true;
         bool bIsGraphicMtf = false;
-        // #121074#
         sal_Int16 nTransparency(0);
         sal_Int16 nRed(0);
         sal_Int16 nGreen(0);
@@ -1636,7 +1635,6 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                     pGraphicAttr->SetMirrorFlags(BmpMirrorFlags::Horizontal);
                 }
 
-                // #121074#
                 if(nTransparency)
                 {
                     pGraphicAttr->SetTransparency((nTransparency * 255) / 100);

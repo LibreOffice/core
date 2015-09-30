@@ -169,7 +169,6 @@ protected:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
 public:
-    // #110680#
     SchXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlags );

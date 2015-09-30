@@ -25,7 +25,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
-// #97148# ---------------
 #include "svl/ctypeitm.hxx"
 #include "svl/eitem.hxx"
 #include "unotools/viewoptions.hxx"
@@ -165,7 +164,6 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
         OUString aParentURL(aObject.GetMainURL(INetURLObject::NO_DECODE));
 
         OUString aTitle;
-        // 97148# --------------------------------
         if (!GetDialogParent()->ContentGetTitle(aParentURL, aTitle) || aTitle.isEmpty())
             aTitle = aObject.getName();
 

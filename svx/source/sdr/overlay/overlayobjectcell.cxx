@@ -30,7 +30,6 @@
 
 using namespace ::basegfx;
 
-// #114409#
 namespace sdr
 {
     namespace overlay

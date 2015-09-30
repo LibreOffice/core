@@ -211,7 +211,6 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const Rect
 {
     if (pObjList)
     {
-        // #110094#
         // This will not work anymore. To not start at Adam and Eve, i will
         // ATM not try to change all this stuff to really using an own model
         // and a view. I will just try to provide a mechanism to paint such

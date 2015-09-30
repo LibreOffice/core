@@ -155,7 +155,6 @@ void SvImpLBox::UpdateStringSorter()
     }
 }
 
-// #97680# ----------------------
 short SvImpLBox::UpdateContextBmpWidthVector( SvTreeListEntry* pEntry, short nWidth )
 {
     DBG_ASSERT( pView->pModel, "View and Model aren't valid!" );

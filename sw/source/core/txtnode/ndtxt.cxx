@@ -120,7 +120,6 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
 
     SwNodeIndex aIdx( *pNode );
 
-    // #125329#
     // call method <UpdateOutlineNode(..)> only for the document nodes array
     if ( IsDocNodes() )
         UpdateOutlineNode(*pNode);
@@ -2577,7 +2576,7 @@ SwTextNode* SwTextNode::_MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
     delete pNewAttrSet;
 
     const SwNumRule* pRule = GetNumRule();
-    if( pRule && pRule == pNode->GetNumRule() && rNds.IsDocNodes() ) // #115901#
+    if( pRule && pRule == pNode->GetNumRule() && rNds.IsDocNodes() )
     {
         // #i55459#
         // - correction: parameter <bNext> has to be checked, as it was in the

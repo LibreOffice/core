@@ -94,7 +94,6 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
             SdrObject* pOldObject = aIter.Next();
             while (pOldObject)
             {
-                // #116235#
                 SdrObject* pNewObject = pOldObject->Clone();
                 // SdrObject* pNewObject = pOldObject->Clone( pNewPage, pDrawLayer );
                 pNewObject->SetModel(pDrawLayer);
@@ -221,7 +220,6 @@ void ScDocument::SetDrawPageSize(SCTAB nTab)
 
 bool ScDocument::IsChart( const SdrObject* pObject )
 {
-    // #109985#
     // IsChart() implementation moved to svx drawinglayer
     if(pObject && OBJ_OLE2 == pObject->GetObjIdentifier())
     {

@@ -30,7 +30,6 @@ using namespace ::xmloff::token;
 sal_Char const sXML_np__office[] = "_ooffice";
 sal_Char const sXML_np__text[] = "_otext";
 
-// #110680#
 SwXMLSectionList::SwXMLSectionList(
     const uno::Reference< uno::XComponentContext >& rContext,
     std::vector<OUString*> &rNewSectionList)

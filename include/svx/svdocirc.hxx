@@ -29,7 +29,6 @@ namespace sdr { namespace properties {
 
 // Helper class SdrCircObjGeoData
 
-// #109872#
 class SdrCircObjGeoData : public SdrTextObjGeoData
 {
 public:

@@ -37,7 +37,6 @@ DlgEdView::DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor) 
     SdrView(&rModel, &rOut),
     rDlgEditor(rEditor)
 {
-    // #114898#
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
 }

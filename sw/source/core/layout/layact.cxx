@@ -2172,7 +2172,6 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
                 SwRect aTmp( rSh.VisArea() );
                 rSh.UISizeNotify();
 
-                // #137134#
                 // Are we supposed to crash if rSh isn't a cursor shell?!
                 // bActions |= aTmp != rSh.VisArea() ||
                 //             aBools[nBoolIdx] != ((SwCrsrShell*)&rSh)->GetCharRect().IsOver( rSh.VisArea() );

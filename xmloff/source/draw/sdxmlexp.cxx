@@ -388,7 +388,6 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
     maPresRect.SetSize(aLayoutSize);
 }
 
-// #110680#
 SdXMLExport::SdXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     OUString const & implementationName,
@@ -1739,7 +1738,6 @@ void SdXMLExport::SetProgress(sal_Int32 nProg)
         GetStatusIndicator()->setValue(nProg);
 }
 
-// #82003#
 
 void SdXMLExport::_ExportMeta()
 {

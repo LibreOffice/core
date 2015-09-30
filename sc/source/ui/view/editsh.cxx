@@ -1095,7 +1095,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
 void ScEditShell::GetAttrState(SfxItemSet &rSet)
 {
-    if ( !pViewData->HasEditView( pViewData->GetActivePart() ) )    // #125326#
+    if ( !pViewData->HasEditView( pViewData->GetActivePart() ) )
     {
         lcl_DisableAll( rSet );
         return;
@@ -1184,7 +1184,7 @@ OUString ScEditShell::GetSelectionText( bool bWholeWord )
 {
     OUString aStrSelection;
 
-    if ( pViewData->HasEditView( pViewData->GetActivePart() ) )    // #125326#
+    if ( pViewData->HasEditView( pViewData->GetActivePart() ) )
     {
         if ( bWholeWord )
         {

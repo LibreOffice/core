@@ -1362,7 +1362,7 @@ bool SwFieldMgr::InsertField(
 void SwFieldMgr::UpdateCurField(sal_uLong nFormat,
                             const OUString& rPar1,
                             const OUString& rPar2,
-                            SwField * _pTmpField) // #111840#
+                            SwField * _pTmpField)
 {
     // change format
     OSL_ENSURE(pCurField, "no field at CursorPos");

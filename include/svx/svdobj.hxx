@@ -88,7 +88,6 @@ namespace sdr
     class ObjectUser;
 }
 
-// #110094#
 namespace sdr
 {
     namespace contact
@@ -504,14 +503,12 @@ public:
     // Use SdrObjList::SetObjectNavigationPosition() instead.
     void SetNavigationPosition (const sal_uInt32 nPosition);
 
-    // #111111#
     // To make clearer that this method may trigger RecalcBoundRect and thus may be
     // expensive and sometimes problematic (inside a bigger object change You will get
     // non-useful BoundRects sometimes) i rename that method from GetBoundRect() to
     // GetCurrentBoundRect().
     virtual const Rectangle& GetCurrentBoundRect() const;
 
-    // #111111#
     // To have a possibility to get the last calculated BoundRect e.g for producing
     // the first rectangle for repaints (old and new need to be used) without forcing
     // a RecalcBoundRect (which may be problematical and expensive sometimes) i add here
@@ -926,7 +923,6 @@ public:
     // to use (0,0) as upper left and will be scaled to the given size in the matrix.
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
-    // #116168#
     // give info if object is in destruction
     bool IsInDestruction() const;
 

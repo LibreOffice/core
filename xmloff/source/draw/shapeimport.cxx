@@ -1109,7 +1109,6 @@ void XMLShapeImportHelper::endPage( com::sun::star::uno::Reference< com::sun::st
     mpPageContext = pNextContext;
 }
 
-// #88546#
 /** defines if the import should increment the progress bar or not */
 void XMLShapeImportHelper::enableHandleProgressBar( bool bEnable )
 {

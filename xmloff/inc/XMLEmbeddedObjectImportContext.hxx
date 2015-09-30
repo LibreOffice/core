@@ -34,14 +34,12 @@ class XMLEmbeddedObjectImportContext : public SvXMLImportContext
         ::com::sun::star::lang::XComponent > xComp;
 
     OUString sFilterService;
-    // #100592#
     OUString sCLSID;
 
 public:
     TYPEINFO_OVERRIDE();
 
     const OUString& GetFilterServiceName() const { return sFilterService; }
-    // #100592#
     const OUString& GetFilterCLSID() const { return sCLSID; }
 
     XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,

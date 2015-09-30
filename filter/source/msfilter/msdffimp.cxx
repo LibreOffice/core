@@ -4302,7 +4302,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 caller has not passed an own bounding ractangle. */
             if ( rClientRect.IsEmpty() )
                  rClientRect = aObjData.aBoundRect;
-            nGroupShapeFlags = aObjData.nSpFlags;       // #73013#
+            nGroupShapeFlags = aObjData.nSpFlags;
         }
         else if ( ( aObjData.eShapeType != mso_sptNil ) || IsProperty( DFF_Prop_pVertices ) || bGraphic )
         {
@@ -5752,7 +5752,6 @@ void SvxMSDffManager::CheckTxBxStoryChain()
         if( pObj->nTxBxComp )
         {
             // group change?
-            // #156763#
             // the text id also contains an internal drawing container id
             // to distinguish between text id of drawing objects in different
             // drawing containers.

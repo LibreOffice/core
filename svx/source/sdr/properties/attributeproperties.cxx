@@ -40,7 +40,6 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdpage.hxx>
 
-// #114265#
 #include <svl/smplhint.hxx>
 
 
@@ -549,7 +548,6 @@ namespace sdr
                         SfxStyleSheet* pNewStSh = 0L;
                         SdrModel* pModel = rObj.GetModel();
 
-                        // #111111#
                         // Do nothing if object is in destruction, else a StyleSheet may be found from
                         // a StyleSheetPool which is just being deleted itself. and thus it would be fatal
                         // to register as listener to that new StyleSheet.

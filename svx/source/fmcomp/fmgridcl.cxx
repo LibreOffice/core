@@ -1135,7 +1135,6 @@ void FmGridControl::DeleteSelectedRows()
     {
         ::com::sun::star::util::URL aUrl;
         aUrl.Complete = FMURL_CONFIRM_DELETION;
-        // #100312# ------------
         Reference< ::com::sun::star::util::XURLTransformer > xTransformer(
             ::com::sun::star::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
         xTransformer->parseStrict( aUrl );

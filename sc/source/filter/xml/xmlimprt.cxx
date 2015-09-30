@@ -124,7 +124,6 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw(
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_ALL);
     return static_cast<cppu::OWeakObject*>(new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_getImplementationName(), SvXMLImportFlags::ALL ));
 }
@@ -143,7 +142,6 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceNames() t
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META);
     return static_cast<cppu::OWeakObject*>(new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Meta_getImplementationName(), SvXMLImportFlags::META ));
 }
@@ -162,7 +160,6 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNames()
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlagsSTYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::FONTDECLS);
     return static_cast<cppu::OWeakObject*>(new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Styles_getImplementationName(), SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::FONTDECLS));
 }
@@ -181,7 +178,6 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames(
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlags::META|SvXMLImportFlags::STYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::SETTINGS|SvXMLImportFlags::FONTDECLS);
     return static_cast<cppu::OWeakObject*>(new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Content_getImplementationName(), SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS));
 }
@@ -200,7 +196,6 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Settings_getSupportedServiceNames
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlags::SETTINGS);
     return static_cast<cppu::OWeakObject*>(new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Settings_getImplementationName(), SvXMLImportFlags::SETTINGS ));
 }

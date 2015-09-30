@@ -211,7 +211,6 @@ bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     rStat.TakeCreateRect(maRect);
     ImpJustifyRect(maRect);
 
-    // #115391#
     AdaptTextMinSize();
 
     SetRectsDirty();

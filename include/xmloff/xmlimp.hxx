@@ -201,7 +201,6 @@ protected:
     void _CreateDataStylesImport();
 
 public:
-    // #110680#
     // SvXMLImport( sal_uInt16 nImportFlags = IMPORT_ALL ) throw();
     SvXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,

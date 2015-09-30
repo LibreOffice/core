@@ -239,8 +239,8 @@ struct PropertySetRegistry_Impl
     Reference< XInterface >           m_xRootReadAccess;
     Reference< XInterface >           m_xRootWriteAccess;
     osl::Mutex                        m_aMutex;
-    bool                          m_bTriedToGetRootReadAccess;  // #82494#
-    bool                          m_bTriedToGetRootWriteAccess; // #82494#
+    bool                              m_bTriedToGetRootReadAccess;
+    bool                              m_bTriedToGetRootWriteAccess;
 
     explicit PropertySetRegistry_Impl(const Sequence<Any> &rInitArgs)
         : m_aInitArgs(rInitArgs)
@@ -965,7 +965,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 
         if ( !m_pImpl->m_xRootReadAccess.is() )
         {
-            if ( m_pImpl->m_bTriedToGetRootReadAccess ) // #82494#
+            if ( m_pImpl->m_bTriedToGetRootReadAccess )
             {
                 OSL_FAIL( "PropertySetRegistry::getRootConfigReadAccess - "
                             "Unable to read any config data! -> #82494#" );
@@ -1023,7 +1023,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 
         if ( !m_pImpl->m_xRootWriteAccess.is() )
         {
-            if ( m_pImpl->m_bTriedToGetRootWriteAccess ) // #82494#
+            if ( m_pImpl->m_bTriedToGetRootWriteAccess )
             {
                 OSL_FAIL( "PropertySetRegistry::getConfigWriteAccess - "
                             "Unable to write any config data! -> #82494#" );

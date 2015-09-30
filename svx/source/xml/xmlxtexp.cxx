@@ -143,7 +143,6 @@ private:
 
 
 
-// #110680#
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
     const OUString& rFileName,

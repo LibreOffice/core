@@ -515,7 +515,6 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     aOutputData.SetShowNullValues(bNullVal);
     aOutputData.SetShowFormulas(bFormula);
 
-    // #114135#
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     std::unique_ptr<FmFormView> pDrawView;
 
@@ -1562,7 +1561,6 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pDoc, nPrintTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nScaleX, nScaleY );
 
-    // #114135#
     aOutputData.SetDrawView( pDrawView );
 
     // test if all paint parts are hidden, then a paint is not necessary at all

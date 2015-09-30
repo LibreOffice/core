@@ -133,7 +133,7 @@ public:
     void            UpdateCurField(sal_uLong nFormat,
                                  const OUString& rPar1,
                                  const OUString& rPar2,
-                                 SwField * _pField = 0); // #111840#
+                                 SwField * _pField = 0);
 
     OUString        GetCurFieldPar1() const { return aCurPar1; }
     OUString        GetCurFieldPar2() const { return aCurPar2; }

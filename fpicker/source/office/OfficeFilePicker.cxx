@@ -44,8 +44,6 @@
 #include "osl/mutex.hxx"
 #include "vcl/svapp.hxx"
 
-// using ----------------------------------------------------------------
-
 using namespace     ::com::sun::star::container;
 using namespace     ::com::sun::star::lang;
 using namespace     ::com::sun::star::ui::dialogs;
@@ -53,8 +51,6 @@ using namespace     ::com::sun::star::uno;
 using namespace     ::com::sun::star::beans;
 using namespace     ::com::sun::star::awt;
 using namespace     ::utl;
-
-
 
 
 
@@ -113,8 +109,6 @@ sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
     _rSubFilterList = m_aSubFilters;
     return m_aSubFilters.getLength();
 }
-
-// struct ElementEntry_Impl ----------------------------------------------
 
 struct ElementEntry_Impl
 {
@@ -572,12 +566,10 @@ OUString SAL_CALL SvtFilePicker::getDisplayDirectory() throw( RuntimeException, 
     {
         OUString aPath = getDialog()->GetPath();
 
-        // #97148# ----
         if( m_aOldHideDirectory == aPath )
             return m_aOldDisplayDirectory;
         m_aOldHideDirectory = aPath;
 
-        // #102204# -----
         if( !getDialog()->ContentIsFolder( aPath ) )
         {
             INetURLObject aFolder( aPath );

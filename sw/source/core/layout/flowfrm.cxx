@@ -200,7 +200,6 @@ bool SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKeep 
             if( 0 != (pNxt = m_rThis.FindNextCnt()) &&
                 (!m_pFollow || pNxt != &m_pFollow->GetFrm()))
             {
-                // #135914#
                 // The last row of a table only keeps with the next content
                 // it they are in the same section:
                 if ( bCheckIfLastRowShouldKeep )

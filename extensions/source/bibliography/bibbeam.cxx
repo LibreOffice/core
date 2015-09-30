@@ -77,7 +77,6 @@ namespace bib
             Reference< awt::XControlModel >     m_xGridModel;
             Reference< awt::XControl >          m_xControl;
             Reference< awt::XControlContainer > m_xControlContainer;
-            // #100312#
             Reference< frame::XDispatchProviderInterception> m_xDispatchProviderInterception;
 
     protected:
@@ -94,7 +93,6 @@ namespace bib
             void disposeGridWin();
 
             const Reference< awt::XControlContainer >& getControlContainer() const { return m_xControlContainer; }
-            // #100312#
             const Reference< frame::XDispatchProviderInterception>& getDispatchProviderInterception() const { return m_xDispatchProviderInterception; }
 
             virtual void GetFocus() SAL_OVERRIDE;
@@ -156,7 +154,6 @@ namespace bib
                     // Peer as Child to the FrameWindow
                     m_xControlContainer->addControl("GridControl", m_xControl);
                     m_xGridWin=uno::Reference< awt::XWindow > (m_xControl, UNO_QUERY );
-                    // #100312#
                     m_xDispatchProviderInterception=uno::Reference< frame::XDispatchProviderInterception > (m_xControl, UNO_QUERY );
                     m_xGridWin->setVisible( sal_True );
                     m_xControl->setDesignMode( sal_True );
@@ -248,7 +245,6 @@ namespace bib
         return xReturn;
     }
 
-    // #100312#
     Reference< frame::XDispatchProviderInterception > BibBeamer::getDispatchProviderInterception()
     {
         Reference< frame::XDispatchProviderInterception > xReturn;

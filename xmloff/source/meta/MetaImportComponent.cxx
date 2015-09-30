@@ -29,7 +29,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-// #110680#
 XMLMetaImportComponent::XMLMetaImportComponent(
     const uno::Reference< uno::XComponentContext >& xContext) throw()
     :   SvXMLImport(xContext, ""), mxDocProps()
@@ -91,7 +90,6 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaImportComponent_createInstance
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // #110680#
     return static_cast<cppu::OWeakObject*>(new XMLMetaImportComponent( comphelper::getComponentContext(rSMgr)));
 }
 

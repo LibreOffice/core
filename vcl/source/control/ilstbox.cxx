@@ -891,7 +891,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 DeselectAll();
                 mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
                 SetTopEntry( 0 );
-                if ( mbStackMode ) // #87072#, #92323#
+                if ( mbStackMode )
                 {
                     mbTravelSelect = true;
                     mnSelectModifier = rMEvt.GetModifier();
@@ -923,7 +923,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                     mbTrackingSelect = true;
                     if ( SelectEntries( nSelect, LET_TRACKING, false, false ) )
                     {
-                        if ( mbStackMode ) // #87072#
+                        if ( mbStackMode )
                         {
                             mbTravelSelect = true;
                             mnSelectModifier = rMEvt.GetModifier();
@@ -1266,7 +1266,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                     mbTrackingSelect = true;
                     if ( SelectEntries( nSelect, LET_TRACKING, bShift, bCtrl ) )
                     {
-                        if ( mbStackMode ) // #87734# (#87072#)
+                        if ( mbStackMode )
                         {
                             mbTravelSelect = true;
                             mnSelectModifier = rTEvt.GetMouseEvent().GetModifier();

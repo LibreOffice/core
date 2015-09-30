@@ -300,7 +300,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         }
         break;
 
-        // #97016#
         case KEY_TAB:
         {
             // in calc do NOT start draw object selection using TAB/SHIFT-TAB when
@@ -357,7 +356,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         }
         break;
 
-        // #97016#
         case KEY_END:
         {
             // in calc do NOT select the last draw object when
@@ -382,7 +380,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         }
         break;
 
-        // #97016#
         case KEY_HOME:
         {
             // in calc do NOT select the first draw object when
@@ -407,7 +404,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         }
         break;
 
-        // #97016#
         case KEY_UP:
         case KEY_DOWN:
         case KEY_LEFT:
@@ -580,7 +576,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         }
         break;
 
-        // #97016#
         case KEY_SPACE:
         {
             // in calc do only something when draw objects are selected

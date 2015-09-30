@@ -335,7 +335,6 @@ void SwUndoInsLayFormat::RepeatImpl(::sw::RepeatContext & rContext)
     (void) pFlyFormat;
 }
 
-// #111827#
 OUString SwUndoInsLayFormat::GetComment() const
 {
     OUString aResult;

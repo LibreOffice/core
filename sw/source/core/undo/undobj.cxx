@@ -1098,7 +1098,6 @@ bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
     return true;
 }
 
-// #111827#
 OUString ShortenString(const OUString & rStr, sal_Int32 nLength, const OUString & rFillStr)
 {
     assert(nLength - rFillStr.getLength() >= 2);

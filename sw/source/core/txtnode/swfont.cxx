@@ -1094,7 +1094,6 @@ Size SwSubFont::_GetTextSize( SwDrawTextInfo& rInf )
 
             if(bCaseMapLengthDiffers && rInf.GetLen())
             {
-                // #108203#
                 // If the length of the original string and the CaseMapped one
                 // are different, it is necessary to handle the given text part as
                 // a single snippet since its size may differ, too.
@@ -1209,7 +1208,6 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
 
             if(bCaseMapLengthDiffers && rInf.GetLen())
             {
-                // #108203#
                 // If the length of the original string and the CaseMapped one
                 // are different, it is necessary to handle the given text part as
                 // a single snippet since its size may differ, too.

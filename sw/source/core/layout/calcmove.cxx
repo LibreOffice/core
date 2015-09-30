@@ -1231,7 +1231,6 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         //Set FixSize. VarSize is being adjusted by Format().
         if ( !mbValidSize )
         {
-            // #125452#
             // invalidate printing area flag, if the following conditions are hold:
             // - current frame width is 0.
             // - current printing area width is 0.
@@ -1664,7 +1663,6 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     LOOPING_LOUIE_LIGHT( bMovedFwd && bMovedBwd && !IsInBalancedSection() &&
                             (
 
-                                // #118572#
                                 ( bFootnote && !FindFootnoteFrm()->GetRef()->IsInSct() ) ||
 
                                 // #i33887#

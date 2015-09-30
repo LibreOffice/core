@@ -444,7 +444,6 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 
         SetText( sTitle );
 
-        // #95343# ---------------------------------
         Reference< ::com::sun::star::awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
         if( xLayoutConstrains.is() )
         {

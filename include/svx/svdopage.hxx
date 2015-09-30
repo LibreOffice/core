@@ -33,7 +33,6 @@ public:
     virtual void PageInDestruction(const SdrPage& rPage) SAL_OVERRIDE;
 
 private:
-    // #111111#
     // To make things more safe, remember the page, not a number
     SdrPage*                                mpShownPage;
 
@@ -47,7 +46,6 @@ public:
     SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage = 0L);
     virtual ~SdrPageObj();
 
-    // #111111#
     SdrPage* GetReferencedPage() const { return mpShownPage;}
     void SetReferencedPage(SdrPage* pNewPage);
 

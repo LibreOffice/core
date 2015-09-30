@@ -23,9 +23,7 @@
 #include <vcl/seleng.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/vclevent.hxx>
-// #102891# ----------------
 #include <unotools/intlwrapper.hxx>
-// #97680# -----------------
 #include <vector>
 #include "svtaccessiblefactory.hxx"
 
@@ -155,10 +153,8 @@ private:
     Point               aEditClickPos;
     Idle                aEditIdle;
 
-    // #102891# -------------------
     comphelper::string::NaturalStringSorter *m_pStringSorter;
 
-    // #97680# --------------------
     std::vector< short > aContextBmpWidthVector;
 
     DECL_LINK_TYPED(EditTimerCall, Idle *, void);
@@ -230,7 +226,6 @@ private:
 
     void UpdateStringSorter();
 
-    // #97680# --------------------
     short               UpdateContextBmpWidthVector( SvTreeListEntry* pEntry, short nWidth );
     void                UpdateContextBmpWidthMax( SvTreeListEntry* pEntry );
     void                UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEntry );

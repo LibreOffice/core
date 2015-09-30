@@ -129,7 +129,7 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
     if ( aURL.GetProtocol() != INetProtocol::NotValid )
         m_pCbbTarget->SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
     else
-        m_pCbbTarget->SetText(rStrURL); // #77696#
+        m_pCbbTarget->SetText(rStrURL);
 
     SetScheme(aStrScheme);
 }

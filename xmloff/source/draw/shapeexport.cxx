@@ -2837,7 +2837,6 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
             if(bExportEmbedded && !bIsEmptyPresObj)
             {
-                // #100592#
                 if(bInternal)
                 {
                     // embedded XML

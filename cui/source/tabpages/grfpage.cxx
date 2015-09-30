@@ -272,7 +272,6 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
         SvxSizeItem aSz( nW );
 
         // size could already have been set from another page
-        // #44204#
         const SfxItemSet* pExSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
         const SfxPoolItem* pItem = 0;
         if( pExSet && SfxItemState::SET ==

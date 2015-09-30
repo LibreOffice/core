@@ -66,7 +66,6 @@ namespace
         const AnimationBitmap& rAnimBitmap = maAnimation.Get(sal_uInt16(nIndex));
         sal_uInt32 nWaitTime(rAnimBitmap.nWait * 10);
 
-        // #115934#
         // Take care of special value for MultiPage TIFFs. ATM these shall just
         // show their first page. Later we will offer some switching when object
         // is selected.

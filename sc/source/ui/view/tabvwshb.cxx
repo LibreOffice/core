@@ -373,7 +373,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             }
             break;
 
-        // #98721#
         case SID_FM_CREATE_FIELDCONTROL:
             {
                 SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, false );

@@ -26,7 +26,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-// #110680#
 SwXMLBlockListExport::SwXMLBlockListExport(
     const uno::Reference< uno::XComponentContext >& rContext,
     SwXMLTextBlocks & rBlocks,
@@ -77,7 +76,6 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
     return 0;
 }
 
-// #110680#
 SwXMLTextBlockExport::SwXMLTextBlockExport(
     const uno::Reference< uno::XComponentContext >& rContext,
     SwXMLTextBlocks & rBlocks,

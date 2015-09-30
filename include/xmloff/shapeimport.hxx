@@ -411,7 +411,6 @@ public:
     static SvXMLImportPropertyMapper* CreateShapePropMapper(
         const com::sun::star::uno::Reference< com::sun::star::frame::XModel>& rModel, SvXMLImport& rImport );
 
-    // #88546#
     /** defines if the import should increment the progress bar or not */
     void enableHandleProgressBar( bool bEnable = true );
     bool IsHandleProgressBarEnabled() const;

@@ -61,13 +61,10 @@
 #include "dragdata.hxx"
 #include "clipdata.hxx"
 
-// #108584#
 #include "scitems.hxx"
 
-// #108584#
 #include <editeng/eeitem.hxx>
 
-// #108584#
 #include <editeng/fhgtitem.hxx>
 #include <vcl/svapp.hxx>
 
@@ -463,7 +460,6 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                 SdrModel* pDrawModel = static_cast<SdrModel*>(pUserObject);
                 rxOStm->SetBufferSize( 0xff00 );
 
-                // #108584#
                 // for the changed pool defaults from drawing layer pool set those
                 // attributes as hard attributes to preserve them for saving
                 const SfxItemPool& rItemPool = pModel->GetItemPool();

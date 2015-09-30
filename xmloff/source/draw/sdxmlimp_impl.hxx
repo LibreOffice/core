@@ -280,7 +280,6 @@ public:
     bool IsDraw() const { return mbIsDraw; }
     bool IsImpress() const { return !mbIsDraw; }
 
-    // #80365#
     virtual void SetStatistics(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats) SAL_OVERRIDE;
 

@@ -125,7 +125,6 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
 //              case HINT_LAYERSETCHG:          // layer set changed
 //              case HINT_LAYERSETORDERCHG:     // layer set order changed (Insert/Remove/ChangePos)
 
-// #115423#
 //      case HINT_PAGECHG:              // page changed
 //          aEvent.EventName = "PageModified";
 //          pPage = pSdrHint->GetPage();

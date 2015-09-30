@@ -291,7 +291,6 @@ static OUString & getIniFileName_Impl()
     return *pStaticName;
 }
 
-// #111772#
 // ensure the given file url has no final slash
 
 inline void EnsureNoFinalSlash (rtl::OUString & url)

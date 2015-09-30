@@ -165,7 +165,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     mnPPTY( nPixelPerTwipsY ),
     pEditObj( NULL ),
     pViewShell( NULL ),
-    pDrawView( NULL ), // #114135#
+    pDrawView( NULL ),
     bEditMode( false ),
     nEditCol( 0 ),
     nEditRow( 0 ),

@@ -186,7 +186,6 @@ bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
 
 void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, sal_uLong nLayer )
 {
-    // #109985#
     const ScViewOptions& rOpts = pViewData->GetOptions();
 
     // use new flags at SdrPaintView for hiding objects

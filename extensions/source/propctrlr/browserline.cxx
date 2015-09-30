@@ -252,7 +252,6 @@ namespace pcr
     {
         if ( GetTitle() == _rNewTtile )
             return;
-        // #99102# --------------
         m_aFtTitle->SetText( _rNewTtile );
         if ( m_pControlWindow )
             m_pControlWindow->SetAccessibleName( _rNewTtile );
@@ -261,7 +260,6 @@ namespace pcr
         FullFillTitleString();
     }
 
-    // #99102# ---------------------------------------------------------
     void OBrowserLine::FullFillTitleString()
     {
         if( m_pTheParent )
@@ -467,7 +465,6 @@ namespace pcr
             m_nNameWidth = nWidth+10;
             impl_layoutComponents();
         }
-        // #99102# ---------
         FullFillTitleString();
     }
 

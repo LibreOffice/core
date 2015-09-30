@@ -37,7 +37,6 @@ namespace sdr { namespace properties {
 //   Helper Class SdrCaptObjGeoData
 
 
-// #109872#
 class SdrCaptObjGeoData : public SdrTextObjGeoData
 {
 public:
