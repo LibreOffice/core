@@ -1819,52 +1819,52 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 
 SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrm *pConstructor)
     : SwCacheObj(pMod)
-    , rAttrSet(pConstructor->IsContentFrm()
+    , m_rAttrSet(pConstructor->IsContentFrm()
                     ? static_cast<const SwContentFrm*>(pConstructor)->GetNode()->GetSwAttrSet()
                     : static_cast<const SwLayoutFrm*>(pConstructor)->GetFormat()->GetAttrSet())
-    , rUL(rAttrSet.GetULSpace())
+    , m_rUL(m_rAttrSet.GetULSpace())
     // #i96772#
     // LRSpaceItem is copied due to the possibility that it is adjusted - see below
-    , rLR(rAttrSet.GetLRSpace())
-    , rBox(rAttrSet.GetBox())
-    , rShadow(rAttrSet.GetShadow())
-    , aFrmSize(rAttrSet.GetFrmSize().GetSize())
-    , bIsLine(false)
-    , bJoinedWithPrev(false)
-    , bJoinedWithNext(false)
-    , nTopLine(0)
-    , nBottomLine(0)
-    , nLeftLine(0)
-    , nRightLine(0)
-    , nTop(0)
-    , nBottom(0)
-    , nGetTopLine(0)
-    , nGetBottomLine(0)
+    , m_rLR(m_rAttrSet.GetLRSpace())
+    , m_rBox(m_rAttrSet.GetBox())
+    , m_rShadow(m_rAttrSet.GetShadow())
+    , m_aFrameSize(m_rAttrSet.GetFrmSize().GetSize())
+    , m_bIsLine(false)
+    , m_bJoinedWithPrev(false)
+    , m_bJoinedWithNext(false)
+    , m_nTopLine(0)
+    , m_nBottomLine(0)
+    , m_nLeftLine(0)
+    , m_nRightLine(0)
+    , m_nTop(0)
+    , m_nBottom(0)
+    , m_nGetTopLine(0)
+    , m_nGetBottomLine(0)
 {
     // #i96772#
     const SwTextFrm* pTextFrm = dynamic_cast<const SwTextFrm*>(pConstructor);
     if ( pTextFrm )
     {
-        pTextFrm->GetTextNode()->ClearLRSpaceItemDueToListLevelIndents( rLR );
+        pTextFrm->GetTextNode()->ClearLRSpaceItemDueToListLevelIndents( m_rLR );
     }
     else if ( pConstructor->IsNoTextFrm() )
     {
-        rLR = SvxLRSpaceItem ( RES_LR_SPACE );
+        m_rLR = SvxLRSpaceItem ( RES_LR_SPACE );
     }
 
     // Caution: The USHORTs for the cached values are not initialized by intention!
 
     // everything needs to be calculated at least once:
-    bTopLine = bBottomLine = bLeftLine = bRightLine =
-    bTop     = bBottom     = bLine   = true;
+    m_bTopLine = m_bBottomLine = m_bLeftLine = m_bRightLine =
+    m_bTop     = m_bBottom     = m_bLine   = true;
 
-    bCacheGetLine = bCachedGetTopLine = bCachedGetBottomLine = false;
-    // OD 21.05.2003 #108789# - init cache status for values <bJoinedWithPrev>
-    // and <bJoinedWithNext>, which aren't initialized by default.
-    bCachedJoinedWithPrev = false;
-    bCachedJoinedWithNext = false;
+    m_bCacheGetLine = m_bCachedGetTopLine = m_bCachedGetBottomLine = false;
+    // OD 21.05.2003 #108789# - init cache status for values <m_bJoinedWithPrev>
+    // and <m_bJoinedWithNext>, which aren't initialized by default.
+    m_bCachedJoinedWithPrev = false;
+    m_bCachedJoinedWithNext = false;
 
-    bBorderDist = 0 != (pConstructor->GetType() & (FRM_CELL));
+    m_bBorderDist = 0 != (pConstructor->GetType() & (FRM_CELL));
 }
 
 SwBorderAttrs::~SwBorderAttrs()
@@ -1879,14 +1879,14 @@ SwBorderAttrs::~SwBorderAttrs()
 
 void SwBorderAttrs::_CalcTop()
 {
-    nTop = CalcTopLine() + rUL.GetUpper();
-    bTop = false;
+    m_nTop = CalcTopLine() + m_rUL.GetUpper();
+    m_bTop = false;
 }
 
 void SwBorderAttrs::_CalcBottom()
 {
-    nBottom = CalcBottomLine() + rUL.GetLower();
-    bBottom = false;
+    m_nBottom = CalcBottomLine() + m_rUL.GetLower();
+    m_bBottom = false;
 }
 
 long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
@@ -1904,9 +1904,9 @@ long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
     }
     // for paragraphs, "left" is "before text" and "right" is "after text"
     if ( pCaller->IsTextFrm() && pCaller->IsRightToLeft() )
-        nRight += rLR.GetLeft();
+        nRight += m_rLR.GetLeft();
     else
-        nRight += rLR.GetRight();
+        nRight += m_rLR.GetRight();
 
     // correction: retrieve left margin for numbering in R2L-layout
     if ( pCaller->IsTextFrm() && pCaller->IsRightToLeft() )
@@ -1952,7 +1952,7 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 
     // for paragraphs, "left" is "before text" and "right" is "after text"
     if ( pCaller->IsTextFrm() && pCaller->IsRightToLeft() )
-        nLeft += rLR.GetRight();
+        nLeft += m_rLR.GetRight();
     else
     {
         bool bIgnoreMargin = false;
@@ -1970,7 +1970,7 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
             }
         }
         if (!bIgnoreMargin)
-            nLeft += rLR.GetLeft();
+            nLeft += m_rLR.GetLeft();
     }
 
     // correction: do not retrieve left margin for numbering in R2L-layout
@@ -1989,45 +1989,45 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 
 void SwBorderAttrs::_CalcTopLine()
 {
-    nTopLine = (bBorderDist && !rBox.GetTop())
-                            ? rBox.GetDistance  (SvxBoxItemLine::TOP)
-                            : rBox.CalcLineSpace(SvxBoxItemLine::TOP);
-    nTopLine = nTopLine + rShadow.CalcShadowSpace(SvxShadowItemSide::TOP);
-    bTopLine = false;
+    m_nTopLine = (m_bBorderDist && !m_rBox.GetTop())
+                            ? m_rBox.GetDistance  (SvxBoxItemLine::TOP)
+                            : m_rBox.CalcLineSpace(SvxBoxItemLine::TOP);
+    m_nTopLine = m_nTopLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::TOP);
+    m_bTopLine = false;
 }
 
 void SwBorderAttrs::_CalcBottomLine()
 {
-    nBottomLine = (bBorderDist && !rBox.GetBottom())
-                            ? rBox.GetDistance  (SvxBoxItemLine::BOTTOM)
-                            : rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
-    nBottomLine = nBottomLine + rShadow.CalcShadowSpace(SvxShadowItemSide::BOTTOM);
-    bBottomLine = false;
+    m_nBottomLine = (m_bBorderDist && !m_rBox.GetBottom())
+                            ? m_rBox.GetDistance  (SvxBoxItemLine::BOTTOM)
+                            : m_rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
+    m_nBottomLine = m_nBottomLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::BOTTOM);
+    m_bBottomLine = false;
 }
 
 void SwBorderAttrs::_CalcLeftLine()
 {
-    nLeftLine = (bBorderDist && !rBox.GetLeft())
-                            ? rBox.GetDistance  (SvxBoxItemLine::LEFT)
-                            : rBox.CalcLineSpace(SvxBoxItemLine::LEFT);
-    nLeftLine = nLeftLine + rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT);
-    bLeftLine = false;
+    m_nLeftLine = (m_bBorderDist && !m_rBox.GetLeft())
+                            ? m_rBox.GetDistance  (SvxBoxItemLine::LEFT)
+                            : m_rBox.CalcLineSpace(SvxBoxItemLine::LEFT);
+    m_nLeftLine = m_nLeftLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT);
+    m_bLeftLine = false;
 }
 
 void SwBorderAttrs::_CalcRightLine()
 {
-    nRightLine = (bBorderDist && !rBox.GetRight())
-                            ? rBox.GetDistance  (SvxBoxItemLine::RIGHT)
-                            : rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
-    nRightLine = nRightLine + rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT);
-    bRightLine = false;
+    m_nRightLine = (m_bBorderDist && !m_rBox.GetRight())
+                            ? m_rBox.GetDistance  (SvxBoxItemLine::RIGHT)
+                            : m_rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
+    m_nRightLine = m_nRightLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT);
+    m_bRightLine = false;
 }
 
 void SwBorderAttrs::_IsLine()
 {
-    bIsLine = rBox.GetTop() || rBox.GetBottom() ||
-              rBox.GetLeft()|| rBox.GetRight();
-    bLine = false;
+    m_bIsLine = m_rBox.GetTop() || m_rBox.GetBottom() ||
+              m_rBox.GetLeft()|| m_rBox.GetRight();
+    m_bLine = false;
 }
 
 /* The borders of neighboring paragraphs are condensed by following algorithm:
@@ -2067,9 +2067,9 @@ bool SwBorderAttrs::_JoinWithCmp( const SwFrm& _rCallerFrm,
 
     SwBorderAttrAccess aCmpAccess( SwFrm::GetCache(), &_rCmpFrm );
     const SwBorderAttrs &rCmpAttrs = *aCmpAccess.Get();
-    if ( rShadow == rCmpAttrs.GetShadow() &&
-         CmpLines( rBox.GetTop(), rCmpAttrs.GetBox().GetTop() ) &&
-         CmpLines( rBox.GetBottom(), rCmpAttrs.GetBox().GetBottom() ) &&
+    if ( m_rShadow == rCmpAttrs.GetShadow() &&
+         CmpLines( m_rBox.GetTop(), rCmpAttrs.GetBox().GetTop() ) &&
+         CmpLines( m_rBox.GetBottom(), rCmpAttrs.GetBox().GetBottom() ) &&
          CmpLeftRight( rCmpAttrs, &_rCallerFrm, &_rCmpFrm )
        )
     {
@@ -2080,13 +2080,13 @@ bool SwBorderAttrs::_JoinWithCmp( const SwFrm& _rCallerFrm,
 }
 
 // OD 21.05.2003 #108789# - method to determine, if borders are joined with
-// previous frame. Calculated value saved in cached value <bJoinedWithPrev>
+// previous frame. Calculated value saved in cached value <m_bJoinedWithPrev>
 // OD 2004-02-26 #i25029# - add 2nd parameter <_pPrevFrm>
 void SwBorderAttrs::_CalcJoinedWithPrev( const SwFrm& _rFrm,
                                          const SwFrm* _pPrevFrm )
 {
     // set default
-    bJoinedWithPrev = false;
+    m_bJoinedWithPrev = false;
 
     if ( _rFrm.IsTextFrm() )
     {
@@ -2105,22 +2105,22 @@ void SwBorderAttrs::_CalcJoinedWithPrev( const SwFrm& _rFrm,
              pPrevFrm->GetAttrSet()->GetParaConnectBorder().GetValue()
            )
         {
-            bJoinedWithPrev = _JoinWithCmp( _rFrm, *(pPrevFrm) );
+            m_bJoinedWithPrev = _JoinWithCmp( _rFrm, *(pPrevFrm) );
         }
     }
 
     // valid cache status, if demanded
     // OD 2004-02-26 #i25029# - Do not validate cache, if parameter <_pPrevFrm>
     // is set.
-    bCachedJoinedWithPrev = bCacheGetLine && !_pPrevFrm;
+    m_bCachedJoinedWithPrev = m_bCacheGetLine && !_pPrevFrm;
 }
 
 // OD 21.05.2003 #108789# - method to determine, if borders are joined with
-// next frame. Calculated value saved in cached value <bJoinedWithNext>
+// next frame. Calculated value saved in cached value <m_bJoinedWithNext>
 void SwBorderAttrs::_CalcJoinedWithNext( const SwFrm& _rFrm )
 {
     // set default
-    bJoinedWithNext = false;
+    m_bJoinedWithNext = false;
 
     if ( _rFrm.IsTextFrm() )
     {
@@ -2137,37 +2137,37 @@ void SwBorderAttrs::_CalcJoinedWithNext( const SwFrm& _rFrm )
              _rFrm.GetAttrSet()->GetParaConnectBorder().GetValue()
            )
         {
-            bJoinedWithNext = _JoinWithCmp( _rFrm, *(pNextFrm) );
+            m_bJoinedWithNext = _JoinWithCmp( _rFrm, *(pNextFrm) );
         }
     }
 
     // valid cache status, if demanded
-    bCachedJoinedWithNext = bCacheGetLine;
+    m_bCachedJoinedWithNext = m_bCacheGetLine;
 }
 
-// OD 21.05.2003 #108789# - accessor for cached values <bJoinedWithPrev>
+// OD 21.05.2003 #108789# - accessor for cached values <m_bJoinedWithPrev>
 // OD 2004-02-26 #i25029# - add 2nd parameter <_pPrevFrm>, which is passed to
 // method <_CalcJoindWithPrev(..)>.
 bool SwBorderAttrs::JoinedWithPrev( const SwFrm& _rFrm,
                                     const SwFrm* _pPrevFrm ) const
 {
-    if ( !bCachedJoinedWithPrev || _pPrevFrm )
+    if ( !m_bCachedJoinedWithPrev || _pPrevFrm )
     {
         // OD 2004-02-26 #i25029# - pass <_pPrevFrm> as 2nd parameter
         const_cast<SwBorderAttrs*>(this)->_CalcJoinedWithPrev( _rFrm, _pPrevFrm );
     }
 
-    return bJoinedWithPrev;
+    return m_bJoinedWithPrev;
 }
 
 bool SwBorderAttrs::JoinedWithNext( const SwFrm& _rFrm ) const
 {
-    if ( !bCachedJoinedWithNext )
+    if ( !m_bCachedJoinedWithNext )
     {
         const_cast<SwBorderAttrs*>(this)->_CalcJoinedWithNext( _rFrm );
     }
 
-    return bJoinedWithNext;
+    return m_bJoinedWithNext;
 }
 
 // OD 2004-02-26 #i25029# - added 2nd parameter <_pPrevFrm>, which is passed to
@@ -2184,9 +2184,9 @@ void SwBorderAttrs::_GetTopLine( const SwFrm& _rFrm,
         nRet = 0;
     }
 
-    bCachedGetTopLine = bCacheGetLine;
+    m_bCachedGetTopLine = m_bCacheGetLine;
 
-    nGetTopLine = nRet;
+    m_nGetTopLine = nRet;
 }
 
 void SwBorderAttrs::_GetBottomLine( const SwFrm& _rFrm )
@@ -2199,9 +2199,9 @@ void SwBorderAttrs::_GetBottomLine( const SwFrm& _rFrm )
         nRet = 0;
     }
 
-    bCachedGetBottomLine = bCacheGetLine;
+    m_bCachedGetBottomLine = m_bCacheGetLine;
 
-    nGetBottomLine = nRet;
+    m_nGetBottomLine = nRet;
 }
 
 SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrm *pFrm ) :

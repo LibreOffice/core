@@ -253,50 +253,50 @@ public:
 //          Modify::Modify!
 class SwBorderAttrs : public SwCacheObj
 {
-    const SwAttrSet      &rAttrSet;
-    const SvxULSpaceItem &rUL;
+    const SwAttrSet      &m_rAttrSet;
+    const SvxULSpaceItem &m_rUL;
     // #i96772#
-    SvxLRSpaceItem rLR;
-    const SvxBoxItem     &rBox;
-    const SvxShadowItem  &rShadow;
-    const Size            aFrmSize;
+    SvxLRSpaceItem m_rLR;
+    const SvxBoxItem     &m_rBox;
+    const SvxShadowItem  &m_rShadow;
+    const Size            m_aFrameSize;
 
     // Is it a frame that can have a margin without a border?
-    bool bBorderDist  : 1;
+    bool m_bBorderDist  : 1;
 
     // the following bool values set the cached values to INVALID - until they
     // are calculated for the first time
-    bool bTopLine     : 1;
-    bool bBottomLine  : 1;
-    bool bLeftLine    : 1;
-    bool bRightLine   : 1;
-    bool bTop         : 1;
-    bool bBottom      : 1;
-    bool bLine        : 1;
+    bool m_bTopLine     : 1;
+    bool m_bBottomLine  : 1;
+    bool m_bLeftLine    : 1;
+    bool m_bRightLine   : 1;
+    bool m_bTop         : 1;
+    bool m_bBottom      : 1;
+    bool m_bLine        : 1;
 
-    bool bIsLine      : 1; // border on at least one side?
+    bool m_bIsLine      : 1; // border on at least one side?
 
-    bool bCacheGetLine        : 1; // cache GetTopLine(), GetBottomLine()?
-    bool bCachedGetTopLine    : 1; // is GetTopLine() cached?
-    bool bCachedGetBottomLine : 1; // is GetBottomLine() cached?
-    // Booleans indicate that <bJoinedWithPrev> and <bJoinedWithNext> are
+    bool m_bCacheGetLine        : 1; // cache GetTopLine(), GetBottomLine()?
+    bool m_bCachedGetTopLine    : 1; // is GetTopLine() cached?
+    bool m_bCachedGetBottomLine : 1; // is GetBottomLine() cached?
+    // Booleans indicate that <m_bJoinedWithPrev> and <m_bJoinedWithNext> are
     // cached and valid.
-    // Caching depends on value of <bCacheGetLine>.
-    mutable bool bCachedJoinedWithPrev : 1;
-    mutable bool bCachedJoinedWithNext : 1;
+    // Caching depends on value of <m_bCacheGetLine>.
+    mutable bool m_bCachedJoinedWithPrev : 1;
+    mutable bool m_bCachedJoinedWithNext : 1;
     // Booleans indicate that borders are joined with previous/next frame.
-    bool bJoinedWithPrev :1;
-    bool bJoinedWithNext :1;
+    bool m_bJoinedWithPrev :1;
+    bool m_bJoinedWithNext :1;
 
     // The cached values (un-defined until calculated for the first time)
-    sal_uInt16 nTopLine,
-           nBottomLine,
-           nLeftLine,
-           nRightLine,
-           nTop,
-           nBottom,
-           nGetTopLine,
-           nGetBottomLine;
+    sal_uInt16 m_nTopLine,
+           m_nBottomLine,
+           m_nLeftLine,
+           m_nRightLine,
+           m_nTop,
+           m_nBottom,
+           m_nGetTopLine,
+           m_nGetBottomLine;
 
     // only calculate lines and shadow
     void _CalcTopLine();
@@ -316,7 +316,7 @@ class SwBorderAttrs : public SwCacheObj
                          const SwFrm* _pPrevFrm = 0L );
     void _GetBottomLine( const SwFrm& _rFrm );
 
-    // calculate cached values <bJoinedWithPrev> and <bJoinedWithNext>
+    // calculate cached values <m_bJoinedWithPrev> and <m_bJoinedWithNext>
     // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
     void _CalcJoinedWithPrev( const SwFrm& _rFrm,
@@ -338,10 +338,10 @@ public:
     SwBorderAttrs( const SwModify *pOwner, const SwFrm *pConstructor );
     virtual ~SwBorderAttrs();
 
-    inline const SwAttrSet      &GetAttrSet() const { return rAttrSet;  }
-    inline const SvxULSpaceItem &GetULSpace() const { return rUL;       }
-    inline const SvxBoxItem     &GetBox()     const { return rBox;      }
-    inline const SvxShadowItem  &GetShadow()  const { return rShadow;   }
+    inline const SwAttrSet      &GetAttrSet() const { return m_rAttrSet;  }
+    inline const SvxULSpaceItem &GetULSpace() const { return m_rUL;       }
+    inline const SvxBoxItem     &GetBox()     const { return m_rBox;      }
+    inline const SvxShadowItem  &GetShadow()  const { return m_rShadow;   }
 
     inline sal_uInt16 CalcTopLine() const;
     inline sal_uInt16 CalcBottomLine() const;
@@ -354,9 +354,9 @@ public:
 
     inline bool IsLine() const;
 
-    inline const Size &GetSize()     const { return aFrmSize; }
+    inline const Size &GetSize()     const { return m_aFrameSize; }
 
-    inline bool IsBorderDist() const { return bBorderDist; }
+    inline bool IsBorderDist() const { return m_bBorderDist; }
 
     // Should upper (or lower) border be evaluated for this frame?
     // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
@@ -366,7 +366,7 @@ public:
     inline sal_uInt16 GetBottomLine( const SwFrm& _rFrm ) const;
     inline void   SetGetCacheLine( bool bNew ) const;
 
-    // Accessors for cached values <bJoinedWithPrev> and <bJoinedWithPrev>
+    // Accessors for cached values <m_bJoinedWithPrev> and <m_bJoinedWithNext>
     // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
     bool JoinedWithPrev( const SwFrm& _rFrm,
@@ -434,69 +434,69 @@ public:
 inline sal_uInt16 SwBorderAttrs::GetTopLine ( const SwFrm& _rFrm,
                                           const SwFrm* _pPrevFrm ) const
 {
-    if ( !bCachedGetTopLine || _pPrevFrm )
+    if ( !m_bCachedGetTopLine || _pPrevFrm )
     {
         const_cast<SwBorderAttrs*>(this)->_GetTopLine( _rFrm, _pPrevFrm );
     }
-    return nGetTopLine;
+    return m_nGetTopLine;
 }
 inline sal_uInt16 SwBorderAttrs::GetBottomLine( const SwFrm& _rFrm ) const
 {
-    if ( !bCachedGetBottomLine )
+    if ( !m_bCachedGetBottomLine )
         const_cast<SwBorderAttrs*>(this)->_GetBottomLine( _rFrm );
-    return nGetBottomLine;
+    return m_nGetBottomLine;
 }
 inline void SwBorderAttrs::SetGetCacheLine( bool bNew ) const
 {
-    const_cast<SwBorderAttrs*>(this)->bCacheGetLine = bNew;
-    const_cast<SwBorderAttrs*>(this)->bCachedGetBottomLine =
-    const_cast<SwBorderAttrs*>(this)->bCachedGetTopLine = false;
-    // invalidate cache for values <bJoinedWithPrev> and <bJoinedWithNext>
-    bCachedJoinedWithPrev = false;
-    bCachedJoinedWithNext = false;
+    const_cast<SwBorderAttrs*>(this)->m_bCacheGetLine = bNew;
+    const_cast<SwBorderAttrs*>(this)->m_bCachedGetBottomLine =
+    const_cast<SwBorderAttrs*>(this)->m_bCachedGetTopLine = false;
+    // invalidate cache for values <m_bJoinedWithPrev> and <m_bJoinedWithNext>
+    m_bCachedJoinedWithPrev = false;
+    m_bCachedJoinedWithNext = false;
 }
 
 inline sal_uInt16 SwBorderAttrs::CalcTopLine() const
 {
-    if ( bTopLine )
+    if ( m_bTopLine )
         const_cast<SwBorderAttrs*>(this)->_CalcTopLine();
-    return nTopLine;
+    return m_nTopLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcBottomLine() const
 {
-    if ( bBottomLine )
+    if ( m_bBottomLine )
         const_cast<SwBorderAttrs*>(this)->_CalcBottomLine();
-    return nBottomLine;
+    return m_nBottomLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcLeftLine() const
 {
-    if ( bLeftLine )
+    if ( m_bLeftLine )
         const_cast<SwBorderAttrs*>(this)->_CalcLeftLine();
-    return nLeftLine;
+    return m_nLeftLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcRightLine() const
 {
-    if ( bRightLine )
+    if ( m_bRightLine )
         const_cast<SwBorderAttrs*>(this)->_CalcRightLine();
-    return nRightLine;
+    return m_nRightLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcTop() const
 {
-    if ( bTop )
+    if ( m_bTop )
         const_cast<SwBorderAttrs*>(this)->_CalcTop();
-    return nTop;
+    return m_nTop;
 }
 inline sal_uInt16 SwBorderAttrs::CalcBottom() const
 {
-    if ( bBottom )
+    if ( m_bBottom )
         const_cast<SwBorderAttrs*>(this)->_CalcBottom();
-    return nBottom;
+    return m_nBottom;
 }
 inline bool SwBorderAttrs::IsLine() const
 {
-    if ( bLine )
+    if ( m_bLine )
         const_cast<SwBorderAttrs*>(this)->_IsLine();
-    return bIsLine;
+    return m_bIsLine;
 }
 
 /** method to determine the spacing values of a frame
