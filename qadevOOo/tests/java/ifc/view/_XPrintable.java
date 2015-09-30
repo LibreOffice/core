@@ -61,7 +61,7 @@ public class _XPrintable extends MultiMethodTest {
      * printer configuration and sets changed value as a new printer.<p>
      *
      * Has <b> OK </b> status if the <code>getPrinter</code> method
-     * retursn printer with changed property. <p>
+     * returns printer with changed property. <p>
      *
      * The following method tests are to be completed successfully before :
      * <ul>

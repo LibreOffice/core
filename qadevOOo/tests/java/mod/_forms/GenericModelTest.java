@@ -210,7 +210,7 @@ public class GenericModelTest extends TestCase {
 
     /**
      * Creates Writer document where controls are placed.
-     * @param tParam the test paremter
+     * @param tParam the test parameter
      * @param log the log writer
      */
     @Override
