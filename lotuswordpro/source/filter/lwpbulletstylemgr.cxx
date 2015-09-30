@@ -92,7 +92,7 @@ LwpBulletStyleMgr::~LwpBulletStyleMgr()
 
 /**
  * @short   Register bullet style to style-list. The function only register the bullet and single customized numbering
- *      not inluding the numbering sequence.
+ *      not including the numbering sequence.
  * @param   pPara pointer to the current paragraph which has a bullet/numbering.
  * @param   pBullOver pointer to the bulletoverride of current paragraph.
  * @param   pIndent pointer to the indentoverride of current paragraph.

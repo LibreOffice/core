@@ -61,9 +61,9 @@
 #include "lwpglobalmgr.hxx"
 
 /**
- * @descr   Registe arrow styles that are not directly support by SODC.
- *  There are three kinds,revsered arrow,revered concave arrow and revsered
- *  line arrow. this function should be called before the three arrows be used.
+ * @descr   Register arrow styles that are not directly support by SODC.
+ *  There are three kinds: reversed arrow, reversed concave arrow and reversed
+ *  line arrow. This function should be called before the three arrows be used.
  */
 void    RegisteArrowStyles()
 {
