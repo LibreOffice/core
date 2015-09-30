@@ -682,7 +682,7 @@ bool LwpDocument::GetNumberOfPages(LwpDocument* pEndDivision, sal_uInt16& nCount
     return false;
 }
 /**
- * @descr    Get the numbers of page  before curruent division
+ * @descr    Get the numbers of page  before current division
  */
 sal_uInt16 LwpDocument::GetNumberOfPagesBefore()
 {

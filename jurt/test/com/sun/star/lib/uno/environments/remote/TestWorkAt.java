@@ -43,7 +43,7 @@ class TestWorkAt implements TestIWorkAt {
     public synchronized void syncCall() throws Throwable {
         ++ _sync_counter;
 
-        // at least in currently run tests this should never fire, so dont
+        // at least in currently run tests this should never fire, so don't
         // defer the check until passedAsyncTest and assert here
         assertEquals(MESSAGES, _async_counter);
         if(_async_counter != MESSAGES)
