@@ -16,6 +16,24 @@
       "revId": "12d25b3c7eb66f4819b2b3cf513272ce716e79fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_fa98e56c",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T11:29:02Z",
+      "side": 1,
+      "message": "This is just the rebase. No code changes if you just view the v2 version.",
+      "parentUuid": "9a061dce_5a9c7169",
+      "revId": "12d25b3c7eb66f4819b2b3cf513272ce716e79fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
