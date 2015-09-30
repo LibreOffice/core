@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_17c77446",
+        "filename": "cppu/source/uno/cascade_mapping.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:38:17Z",
+      "side": 1,
+      "message": "generally",
+      "revId": "c76dd2873b8876aaf623e9f9b0be9928988db52e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_77c4f03f",
+        "filename": "cui/source/dialogs/SpellDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:38:17Z",
+      "side": 1,
+      "message": "virtual",
+      "revId": "c76dd2873b8876aaf623e9f9b0be9928988db52e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
