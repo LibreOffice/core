@@ -302,7 +302,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getResolvedKeyName(RegKeyHandle hKe
     @param  keyName points to a null terminated string specifying the name of the key which stores the
                     registry information. If keyName is NULL the registry information will be saved under
                     the key specified by hKey.
-    @param  regFileName points to a null terminated string specifying the file which conains the
+    @param  regFileName points to a null terminated string specifying the file which contains the
                         registry information.
     @return REG_NO_ERROR if succeeds else an error code.
 */

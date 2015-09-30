@@ -290,7 +290,7 @@ public class ODatasourceBrowser extends TestCase {
         tEnv.addObjRelation("HasViewData", Boolean.FALSE);
 
 
-        // Addig relation for XDispatchProvider
+        //Adding relation for XDispatchProvider
         tEnv.addObjRelation("XDispatchProvider.URL",
                             ".uno:DataSourceBrowser/FormLetter");
 

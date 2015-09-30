@@ -71,7 +71,7 @@ public class _XRemoteContentProviderAcceptor extends MultiMethodTest {
      *
      * The following method tests are to be completed successfully before :
      * <ul>
-     *  <li> <code> addRemoteContentProvider() </code> : rovider must
+     *  <li> <code> addRemoteContentProvider() </code> : provider must
      *  be added first </li>
      * </ul>
      */
