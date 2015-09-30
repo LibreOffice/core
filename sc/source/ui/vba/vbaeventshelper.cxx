@@ -170,7 +170,7 @@ private:
     uno::Reference< frame::XModel > mxModel;
     ScDocShell*         mpDocShell;
     WindowControllerMap maControllers;          /// Maps VCL top windows to their controllers.
-    std::set< VclPtr<vcl::Window> > maPostedWindows; /// Keeps processWindowResizeEvent windows from being deleted between postWindowResizeEvent and processWindowResizeEvent
+    std::multiset< VclPtr<vcl::Window> > m_PostedWindows; /// Keeps processWindowResizeEvent windows from being deleted between postWindowResizeEvent and processWindowResizeEvent
     VclPtr<vcl::Window>            mpActiveWindow; /// Currently activated window, to prevent multiple (de)activation.
     bool                mbWindowResized;        /// True = window resize system event processed.
     bool                mbBorderChanged;        /// True = borders changed system event processed.
@@ -472,7 +472,7 @@ void ScVbaEventListener::postWindowResizeEvent( vcl::Window* pWindow )
     {
         mbWindowResized = mbBorderChanged = false;
         acquire();  // ensure we don't get deleted before the timer fires
-        maPostedWindows.insert(pWindow);
+        m_PostedWindows.insert(pWindow);
         Application::PostUserEvent( LINK( this, ScVbaEventListener, processWindowResizeEvent ), pWindow );
     }
 }
@@ -506,7 +506,14 @@ IMPL_LINK_TYPED( ScVbaEventListener, processWindowResizeEvent, void*, p, void )
             }
         }
     }
-    maPostedWindows.erase(pWindow);
+    {
+        // note: there may be multiple processWindowResizeEvent outstanding
+        // for pWindow, so it may have been added to m_PostedWindows multiple
+        // times - so this must delete exactly one of these elements!
+        auto const iter(m_PostedWindows.find(pWindow));
+        assert(iter != m_PostedWindows.end());
+        m_PostedWindows.erase(iter);
+    }
     release();
 }
 
