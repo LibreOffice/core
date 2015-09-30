@@ -110,7 +110,7 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
 
 SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
 {
-    OSL_ENSURE( rStyle.ISA(ScStyleSheet), "Invalid StyleSheet-class! :-/" );
+    OSL_ENSURE( dynamic_cast<const ScStyleSheet*>( &rStyle) !=  nullptr, "Invalid StyleSheet-class! :-/" );
     return new ScStyleSheet( static_cast<const ScStyleSheet&>(rStyle) );
 }
 

@@ -2630,7 +2630,7 @@ void SwXHeadFootText::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *
 
 bool SwXHeadFootText::IsXHeadFootText(SwClient *const pClient)
 {
-    return 0 != dynamic_cast<SwXHeadFootText::Impl*>(pClient);
+    return dynamic_cast<SwXHeadFootText::Impl*>(pClient) !=  nullptr;
 }
 
 uno::Reference< text::XText >

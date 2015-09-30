@@ -866,7 +866,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         }
 
         const SfxBoolItem* pDdeReconnectItem = static_cast<const SfxBoolItem*>(
-            SfxRequest::GetItem(pMedium->GetItemSet(), SID_DDE_RECONNECT_ONLOAD, false, TYPE(SfxBoolItem)));
+            SfxRequest::GetItem(pMedium->GetItemSet(), SID_DDE_RECONNECT_ONLOAD, false, checkSfxPoolItem< SfxBoolItem >));
 
         bool bReconnectDde = true; // by default, we try to auto-connect DDE connections.
         if (pDdeReconnectItem)
@@ -1429,7 +1429,7 @@ bool SfxObjectShell::SaveTo_Impl
         pFilter = rMedium.GetFilter();
 
         const SfxStringItem *pVersionItem = ( !rMedium.IsInCheckIn( ) && pSet )
-                ? static_cast<const SfxStringItem*>( SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, false, TYPE(SfxStringItem) ) )
+                ? static_cast<const SfxStringItem*>( SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, false, checkSfxPoolItem< SfxStringItem > ) )
                 : NULL;
         OUString aTmpVersionURL;
 
@@ -1519,7 +1519,7 @@ bool SfxObjectShell::SaveTo_Impl
             {
                 // store a version also
                 const SfxStringItem *pAuthorItem = pSet
-                    ? static_cast<const SfxStringItem*>( SfxRequest::GetItem( pSet, SID_DOCINFO_AUTHOR, false, TYPE(SfxStringItem) ) )
+                    ? static_cast<const SfxStringItem*>( SfxRequest::GetItem( pSet, SID_DOCINFO_AUTHOR, false, checkSfxPoolItem< SfxStringItem > ) )
                     : NULL;
 
                 // version comment

@@ -382,7 +382,7 @@ void SwTextFrm::DestroyImpl()
     ClearPara();
 
     const SwContentNode* pCNd;
-    if( 0 != ( pCNd = PTR_CAST( SwContentNode, GetRegisteredIn() )) &&
+    if( 0 != ( pCNd = dynamic_cast<SwContentNode*>( GetRegisteredIn() ) ) &&
         !pCNd->GetDoc()->IsInDtor() && HasFootnote() )
     {
         SwTextNode *pTextNd = static_cast<SwTextFrm*>(this)->GetTextNode();
@@ -1183,7 +1183,7 @@ void SwTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                         if( !pFly->IsFlyInCntFrm() )

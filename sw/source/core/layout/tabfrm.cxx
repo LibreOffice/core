@@ -304,7 +304,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
                                 ->Prepare( PREP_FLY_ATTR_CHG,
                                            &(pAnchoredObj->GetFrameFormat()) );
                     }
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                         pFly->GetVirtDrawObj()->SetRectsDirty();
@@ -313,7 +313,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
                 }
 
                 // If anchored object is a fly frame, invalidate its lower objects
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                 {
                     SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     ::lcl_InvalidateLowerObjs( *pFly, _bMoveObjsOutOfRange, _pPageFrm );
@@ -2554,7 +2554,7 @@ bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
         for ( size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
             {
                 SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 const SwRect aFlyRect = pFly->GetObjRectWithSpaces();
@@ -4501,7 +4501,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, bool bInva )
                             default: break;
                         }
                     }
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
 
@@ -4584,7 +4584,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, bool bInva )
                             pFly->SetCompletePaint();
                         }
                     }
-                    else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+                    else if ( dynamic_cast< const SwAnchoredDrawObject *>( pAnchoredObj ) !=  nullptr )
                     {
                         // #i26945#
                         const SwTabFrm* pTabFrm = pLay->FindTabFrm();
@@ -4856,7 +4856,7 @@ void SwCellFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAt
                     if ( SURROUND_THROUGHT != rSur.GetSurround() )
                     {
                         // frames, which the cell is a lower of, aren't relevant
-                        if ( pAnchoredObj->ISA(SwFlyFrm) )
+                        if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                         {
                             const SwFlyFrm *pFly =
                                     static_cast<const SwFlyFrm*>(pAnchoredObj);

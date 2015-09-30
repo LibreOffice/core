@@ -196,7 +196,7 @@ Color   SwEditWin::m_aWaterCanTextColor(COL_RED);
 
 extern bool     g_bExecuteDrag;
 
-static SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType );
+static SfxShell* lcl_GetTextShellFromDispatcher( SwView& rView );
 
 class SwAnchorMarker
 {
@@ -357,7 +357,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
 
             if( bFrameIsValidTarget &&
                         0 !=(pFormat = rSh.GetFormatFromObj( rLPt, &pRect )) &&
-                        PTR_CAST(SwFlyFrameFormat, pFormat))
+                        dynamic_cast<const SwFlyFrameFormat*>( pFormat) )
             {
                 //turn on highlight for frame
                 Rectangle aTmp( pRect->SVRect() );
@@ -953,7 +953,7 @@ void SwEditWin::FlushInBuffer()
         if ( xRecorder.is() )
         {
             // determine shell
-            SfxShell *pSfxShell = lcl_GetShellFromDispatcher( m_rView, TYPE(SwTextShell) );
+            SfxShell *pSfxShell = lcl_GetTextShellFromDispatcher( m_rView );
             // generate request and record
             if (pSfxShell)
             {
@@ -2286,7 +2286,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             if(pObj)
                             {
                                 EnterDrawTextMode(pObj->GetLogicRect().Center());
-                                if ( m_rView.GetCurShell()->ISA(SwDrawTextShell) )
+                                if ( dynamic_cast< const SwDrawTextShell *>(  m_rView.GetCurShell() ) != nullptr  )
                                     static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
                                 rSh.GetDrawView()->KeyInput( rKEvt, this );
                             }
@@ -2329,7 +2329,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             if(pObj)
             {
                 EnterDrawTextMode(pObj->GetLogicRect().Center());
-                if ( m_rView.GetCurShell()->ISA(SwDrawTextShell) )
+                if (dynamic_cast< const SwDrawTextShell *>(  m_rView.GetCurShell() ) != nullptr  )
                     static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
             }
             eKeyState = KS_End;
@@ -2345,7 +2345,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         }
         break;
         case KS_InsTab:
-            if( m_rView.ISA( SwWebView ))     // no Tab for WebView
+            if( dynamic_cast<const SwWebView*>( &m_rView) !=  nullptr)     // no Tab for WebView
             {
                 // then it should be passed along
                 Window::KeyInput( aKeyEvent );
@@ -2632,7 +2632,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if(rHdlList.GetFocusHdl())
                     ChangeDrawing( nDir );
                 else
-                    ChangeFly( nDir, m_rView.ISA( SwWebView ) );
+                    ChangeFly( nDir, dynamic_cast<const SwWebView*>( &m_rView) !=  nullptr );
             }
             break;
             case KS_Draw_Change :
@@ -3301,7 +3301,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             case nsSelectionType::SEL_DRW:
                                 RstMBDownFlags();
                                 EnterDrawTextMode(aDocPos);
-                                if ( m_rView.GetCurShell()->ISA(SwDrawTextShell) )
+                                if ( dynamic_cast< const SwDrawTextShell *>(  m_rView.GetCurShell() ) != nullptr  )
                                     static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
                                 return;
                             }
@@ -3800,7 +3800,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             Point aRelPos = rSh.GetRelativePagePosition(aDocPt);
             if(aRelPos.X() >= 0)
             {
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
+                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &GetView())  != nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
                 const SfxPointItem aTmp1( SID_ATTR_POSITION, aRelPos );
                 rBnd.SetState( aTmp1 );
@@ -4786,7 +4786,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 case SFX_STYLE_FAMILY_FRAME :
                 {
                     const SwFrameFormat* pFormat = rSh.GetFormatFromObj( aDocPt );
-                    if(PTR_CAST(SwFlyFrameFormat, pFormat))
+                    if(dynamic_cast<const SwFlyFrameFormat*>( pFormat) )
                     {
                         rSh.SetFrameFormat( m_pApplyTempl->aColl.pFrameFormat, false, &aDocPt );
                         m_pApplyTempl->nUndo =
@@ -4825,7 +4825,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     m_rView.GetViewFrame()->GetBindings().GetRecorder();
             if ( !aStyleName.isEmpty() && xRecorder.is() )
             {
-                SfxShell *pSfxShell = lcl_GetShellFromDispatcher( m_rView, TYPE(SwTextShell) );
+                SfxShell *pSfxShell = lcl_GetTextShellFromDispatcher( m_rView );
                 if ( pSfxShell )
                 {
                     SfxRequest aReq( m_rView.GetViewFrame(), SID_STYLE_APPLY );
@@ -4861,7 +4861,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             if (SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj())
             {
                 EnterDrawTextMode(pObj->GetLogicRect().Center());
-                if (m_rView.GetCurShell()->ISA(SwDrawTextShell))
+                if ( dynamic_cast< const SwDrawTextShell *>( m_rView.GetCurShell() ) != nullptr )
                     static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
             }
         }
@@ -5308,7 +5308,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     if ( xRecorder.is() )
                     {
                         // determine Shell
-                        SfxShell *pSfxShell = lcl_GetShellFromDispatcher( m_rView, TYPE(SwTextShell) );
+                        SfxShell *pSfxShell = lcl_GetTextShellFromDispatcher( m_rView );
                         // generate request and record
                         if (pSfxShell)
                         {
@@ -5765,7 +5765,7 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     return bRet;
 }
 
-static SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
+static SfxShell* lcl_GetTextShellFromDispatcher( SwView& rView )
 {
     // determine Shell
     SfxShell* pShell;
@@ -5773,7 +5773,7 @@ static SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
     for(sal_uInt16  i = 0; true; ++i )
     {
         pShell = pDispatcher->GetShell( i );
-        if( !pShell || pShell->IsA( nType ) )
+        if( !pShell || dynamic_cast< const SwTextShell *>( pShell ) !=  nullptr )
             break;
     }
     return pShell;

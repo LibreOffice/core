@@ -239,7 +239,7 @@ bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             }
 
             // init text position when vertical caption object is created
-            if(pObj->ISA(SdrCaptionObj) && SID_DRAW_CAPTION_VERTICAL == nSlotId)
+            if( dynamic_cast< const SdrCaptionObj *>( pObj ) !=  nullptr && SID_DRAW_CAPTION_VERTICAL == nSlotId)
             {
                 // draw text object, needs to be initialized when vertical text is used
                 SfxItemSet aSet(pObj->GetMergedItemSet());
@@ -815,7 +815,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             case SID_LINE_ARROW_SQUARE:
             case SID_LINE_SQUARE_ARROW:
             {
-                if(pObj->ISA(SdrPathObj))
+                if( dynamic_cast< const SdrPathObj *>( pObj ) !=  nullptr)
                 {
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
 
@@ -834,7 +834,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
 
             case SID_DRAW_MEASURELINE:
             {
-                if(pObj->ISA(SdrMeasureObj))
+                if( dynamic_cast< SdrMeasureObj *>( pObj ) !=  nullptr)
                 {
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
                     static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
@@ -877,7 +877,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             case SID_CONNECTOR_LINES_CIRCLE_END:
             case SID_CONNECTOR_LINES_CIRCLES:
             {
-                if(pObj->ISA(SdrEdgeObj))
+                if( dynamic_cast< SdrEdgeObj *>( pObj ) !=  nullptr)
                 {
                     static_cast<SdrEdgeObj*>(pObj)->SetTailPoint(false, aStart);
                     static_cast<SdrEdgeObj*>(pObj)->SetTailPoint(true, aEnd);
@@ -892,7 +892,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             case SID_DRAW_CAPTION:
             case SID_DRAW_CAPTION_VERTICAL:
             {
-                if(pObj->ISA(SdrCaptionObj))
+                if( dynamic_cast< SdrCaptionObj *>( pObj ) !=  nullptr)
                 {
                     bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
 

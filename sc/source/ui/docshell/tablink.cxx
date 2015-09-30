@@ -442,8 +442,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
                                       OUString& rFilter, OUString& rOptions,
                                       bool bWithContent, bool bWithInteraction )
 {
-    TypeId aScType = TYPE(ScDocShell);
-    SfxObjectShell* pDocSh = SfxObjectShell::GetFirst( &aScType );
+    SfxObjectShell* pDocSh = SfxObjectShell::GetFirst( checkSfxObjectShell<ScDocShell> );
     while ( pDocSh )
     {
         if ( pDocSh->HasName() )
@@ -456,7 +455,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
                 return true;
             }
         }
-        pDocSh = SfxObjectShell::GetNext( *pDocSh, &aScType );
+        pDocSh = SfxObjectShell::GetNext( *pDocSh, checkSfxObjectShell<ScDocShell> );
     }
 
     INetURLObject aUrl( rFileName );

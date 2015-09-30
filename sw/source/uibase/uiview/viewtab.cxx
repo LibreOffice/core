@@ -1216,7 +1216,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_ATTR_TABSTOP_VERTICAL :
         case RES_PARATR_TABSTOP:
         {
-            if ( ISA( SwWebView ) ||
+            if ( dynamic_cast< const SwWebView *>( this ) !=  nullptr ||
                  IsTabColFromDoc() ||
                  IsTabRowFromDoc() ||
                  ( nSelType & nsSelectionType::SEL_GRF ) ||

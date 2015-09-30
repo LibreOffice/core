@@ -155,7 +155,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
     {
         sal_uInt16 nMetric = pOptions->GetMetric();
 
-        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
+        ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
         SdDrawDocument* pDoc = NULL;
         if (pDocSh)
             pDoc = pDocSh->GetDoc();
@@ -175,7 +175,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
 tools::SvRef<SotStorageStream> SdModule::GetOptionStream( const OUString& rOptionName,
                                               SdOptionStreamMode eMode )
 {
-    ::sd::DrawDocShell*     pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
+    ::sd::DrawDocShell*     pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
     tools::SvRef<SotStorageStream>  xStm;
 
     if( pDocSh )

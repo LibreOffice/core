@@ -386,7 +386,7 @@ SfxItemState SfxToolBoxControl::GetItemState(
                 ? SfxItemState::DISABLED
                 : IsInvalidItem(pState)
                     ? SfxItemState::DONTCARE
-                    : pState->ISA(SfxVoidItem) && !pState->Which()
+                    : dynamic_cast< const SfxVoidItem *>( pState ) !=  nullptr && !pState->Which()
                         ? SfxItemState::UNKNOWN
                         : SfxItemState::DEFAULT;
 }
@@ -680,14 +680,14 @@ void SfxToolBoxControl::StateChanged
         case SfxItemState::DEFAULT:
         if ( pState )
         {
-            if ( pState->ISA(SfxBoolItem) )
+            if ( dynamic_cast< const SfxBoolItem* >(pState) !=  nullptr )
             {
                 // BoolItem for checking
                 if ( static_cast<const SfxBoolItem*>(pState)->GetValue() )
                     eTri = TRISTATE_TRUE;
                 nItemBits |= ToolBoxItemBits::CHECKABLE;
             }
-            else if ( pState->ISA(SfxEnumItemInterface) &&
+            else if ( dynamic_cast< const SfxEnumItemInterface *>( pState ) !=  nullptr &&
                 static_cast<const SfxEnumItemInterface *>(pState)->HasBoolValue())
             {
                 // EnumItem is handled as Bool
@@ -695,7 +695,7 @@ void SfxToolBoxControl::StateChanged
                     eTri = TRISTATE_TRUE;
                 nItemBits |= ToolBoxItemBits::CHECKABLE;
             }
-            else if ( pImpl->bShowString && pState->ISA(SfxStringItem) )
+            else if ( pImpl->bShowString && dynamic_cast< const SfxStringItem *>( pState ) !=  nullptr )
                 pImpl->pBox->SetItemText(nId, static_cast<const SfxStringItem*>(pState)->GetValue() );
         }
         break;

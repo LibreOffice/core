@@ -417,7 +417,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
             bool bVert = false;
             //The default for word in vertical text mode is to center,
             //otherwise a sub/super script hack is employed
-            if (m_pOutFormatNode && m_pOutFormatNode->ISA(SwContentNode) )
+            if (m_pOutFormatNode && dynamic_cast< const SwContentNode *>( m_pOutFormatNode ) !=  nullptr )
             {
                 const SwTextNode* pTextNd = static_cast<const SwTextNode*>(m_pOutFormatNode);
                 SwPosition aPos(*pTextNd);

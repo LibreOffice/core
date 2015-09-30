@@ -56,7 +56,7 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
         }
     }
 
-    OSL_ENSURE( pHoriEnvironmentLayFrm->ISA(SwLayoutFrm),
+    OSL_ENSURE( dynamic_cast< const SwLayoutFrm *>( pHoriEnvironmentLayFrm ) !=  nullptr,
                 "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(..) - found frame isn't a layout frame" );
 
     return static_cast<const SwLayoutFrm&>(*pHoriEnvironmentLayFrm);
@@ -90,7 +90,7 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
         }
     }
 
-    OSL_ENSURE( pVertEnvironmentLayFrm->ISA(SwLayoutFrm),
+    OSL_ENSURE( dynamic_cast< const SwLayoutFrm *>( pVertEnvironmentLayFrm ) !=  nullptr,
                 "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(..) - found frame isn't a layout frame" );
 
     return static_cast<const SwLayoutFrm&>(*pVertEnvironmentLayFrm);

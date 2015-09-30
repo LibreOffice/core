@@ -84,7 +84,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
             SfxViewFrame* pMyViewFrm = pMyDisp->GetFrame();
             if (pMyViewFrm)
             {
-                pScViewShell = PTR_CAST( ScTabViewShell, pMyViewFrm->GetViewShell() );
+                pScViewShell = dynamic_cast<ScTabViewShell*>( pMyViewFrm->GetViewShell()  );
                 if( pScViewShell )
                     pScViewShell->UpdateInputHandler(true);
             }
@@ -265,13 +265,12 @@ bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
 
     //  belongs InputHandler to a ViewShell?
 
-    TypeId aScType = TYPE(ScTabViewShell);
-    SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+    SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
     while ( pSh && !bAlive )
     {
         if (static_cast<ScTabViewShell*>(pSh)->GetInputHandler() == pHdl)
             bAlive = true;
-        pSh = SfxViewShell::GetNext( *pSh, &aScType );
+        pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
     }
 
     return bAlive;
@@ -286,7 +285,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell, ScTabVi
     while( pFrame && pHdl==NULL)
     {
         SfxViewShell* p = pFrame->GetViewShell();
-        ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
         if(pViewSh!=NULL)
         {
             pHdl=pViewSh->GetInputHandler();
@@ -560,7 +559,7 @@ void ScFormulaDlg::clear()
     pScMod->SetRefInputHdl(NULL);
 
     // force Enable() of edit line
-    ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pScViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
     if ( pScViewShell )
         pScViewShell->UpdateInputHandler();
 }
@@ -577,7 +576,7 @@ void ScFormulaDlg::switchBack()
     }
 
     // restore current chart (cause mouse-RefInput)
-    ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pScViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
     if ( pScViewShell )
     {
         ScViewData& rVD=pScViewShell->GetViewData();

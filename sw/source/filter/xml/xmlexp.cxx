@@ -166,7 +166,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                 if( 0 != pItem )
                 {
                     const SvXMLAttrContainerItem *pUnknown =
-                                PTR_CAST( SvXMLAttrContainerItem, pItem );
+                                dynamic_cast<const SvXMLAttrContainerItem*>( pItem  );
                     OSL_ENSURE( pUnknown, "illegal attribute container item" );
                     if( pUnknown && (pUnknown->GetAttrCount() > 0) )
                     {

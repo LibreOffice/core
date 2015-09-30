@@ -521,7 +521,7 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ ) thr
             dispatchExecute( pViewShell, SID_VIEWSHELL1 );
             SfxViewShell*  pShell = SfxViewShell::Get( pViewFrame->GetFrame().GetFrameInterface()->getController() );
 
-            if (  pShell->ISA( ScPreviewShell ) )
+            if (  dynamic_cast<const ScPreviewShell*>( pShell) !=  nullptr )
             {
                 ScPreviewShell* pPrvShell = static_cast<  ScPreviewShell* >( pShell );
                 ScPreview* pPrvView = pPrvShell->GetPreview();

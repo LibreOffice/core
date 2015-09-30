@@ -89,7 +89,7 @@ using namespace com::sun::star::frame;
 
 namespace
 {
-    bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, const TypeId _nExpectedItemType )
+    bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, std::function<bool ( const SfxPoolItem* )> isItemType )
     {
         bool bCorrectType = false;
 
@@ -98,7 +98,7 @@ namespace
         if ( pPool )
         {
             const SfxPoolItem& rDefItem = pPool->GetDefaultItem( _nId );
-            bCorrectType = rDefItem.IsA( _nExpectedItemType );
+            bCorrectType = isItemType(&rDefItem);
         }
         return bCorrectType;
     }
@@ -902,13 +902,14 @@ OString ODbDataSourceAdministrationHelper::translatePropertyId( sal_Int32 _nId )
     OString aReturn( aString.getStr(), aString.getLength(), RTL_TEXTENCODING_ASCII_US );
     return aReturn;
 }
+template<class T> bool checkItemType(const SfxPoolItem* pItem){ return dynamic_cast<const T*>(pItem) != nullptr;}
 
 void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet, sal_Int32  _nId, const Any& _rValue )
 {
     switch ( _rValue.getValueType().getTypeClass() )
     {
         case TypeClass_STRING:
-            if ( implCheckItemType( _rSet, _nId, SfxStringItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, checkItemType<SfxStringItem> ) )
             {
                 OUString sValue;
                 _rValue >>= sValue;
@@ -925,13 +926,13 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_BOOLEAN:
-            if ( implCheckItemType( _rSet, _nId, SfxBoolItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, checkItemType<SfxBoolItem> ) )
             {
                 bool bVal = false;
                 _rValue >>= bVal;
                 _rSet.Put(SfxBoolItem(_nId, bVal));
             }
-            else if ( implCheckItemType( _rSet, _nId, OptionalBoolItem::StaticType() ) )
+            else if ( implCheckItemType( _rSet, _nId, checkItemType<OptionalBoolItem> ) )
             {
                 OptionalBoolItem aItem( _nId );
                 if ( _rValue.hasValue() )
@@ -955,7 +956,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_LONG:
-            if ( implCheckItemType( _rSet, _nId, SfxInt32Item::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, checkItemType<SfxInt32Item> ) )
             {
                 sal_Int32 nValue = 0;
                 _rValue >>= nValue;
@@ -972,7 +973,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_SEQUENCE:
-            if ( implCheckItemType( _rSet, _nId, OStringListItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, checkItemType<OStringListItem> ) )
             {
                 // determine the element type
                 TypeDescription aTD(_rValue.getValueType());

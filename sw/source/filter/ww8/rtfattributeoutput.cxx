@@ -1957,7 +1957,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
 
         if (pObject && pObject->GetObjInventor() == FmFormInventor)
         {
-            if (const SdrUnoObj* pFormObj = PTR_CAST(SdrUnoObj,pObject))
+            if (const SdrUnoObj* pFormObj = dynamic_cast< const SdrUnoObj*>(pObject))
             {
                 uno::Reference< awt::XControlModel > xControlModel =
                     pFormObj->GetUnoControlModel();

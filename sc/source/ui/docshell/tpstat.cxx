@@ -39,7 +39,7 @@ ScDocStatPage::ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet )
     get(m_pFtCells,"nocells");
     get(m_pFtPages,"nopages");
     get(m_pFtFormula,"noformula");
-    ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current()  );
     ScDocStat   aDocStat;
 
     if ( pDocSh )

@@ -74,7 +74,7 @@ AccessibleOutlineView::AccessibleOutlineView (
     {
         ::sd::View* pView = pViewShell->GetView();
 
-        if (pView && pView->ISA(::sd::OutlineView))
+        if (dynamic_cast<const ::sd::OutlineView* >( pView ) !=  nullptr)
         {
             OutlinerView* pOutlineView = static_cast< ::sd::OutlineView*>(
                 pView)->GetViewByWindow( pSdWindow );

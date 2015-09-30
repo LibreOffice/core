@@ -74,9 +74,9 @@ SwTemplateControl::~SwTemplateControl()
 void SwTemplateControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if( eState != SfxItemState::DEFAULT || pState->ISA( SfxVoidItem ) )
+    if( eState != SfxItemState::DEFAULT || dynamic_cast< const SfxVoidItem *>( pState ) !=  nullptr )
         GetStatusBar().SetItemText( GetId(), OUString() );
-    else if ( pState->ISA( SfxStringItem ) )
+    else if ( dynamic_cast< const SfxStringItem *>( pState ) !=  nullptr )
     {
         sTemplate = static_cast<const SfxStringItem*>(pState)->GetValue();
         GetStatusBar().SetItemText( GetId(), sTemplate );

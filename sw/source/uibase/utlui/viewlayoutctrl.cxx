@@ -84,11 +84,11 @@ SwViewLayoutControl::~SwViewLayoutControl()
 
 void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( SfxItemState::DEFAULT != eState || pState->ISA( SfxVoidItem ) )
+    if ( SfxItemState::DEFAULT != eState || dynamic_cast< const SfxVoidItem *>( pState ) !=  nullptr )
         GetStatusBar().SetItemText( GetId(), OUString() );
     else
     {
-        OSL_ENSURE( pState->ISA( SvxViewLayoutItem ), "invalid item type" );
+        OSL_ENSURE( dynamic_cast< const SvxViewLayoutItem *>( pState ) !=  nullptr, "invalid item type" );
         const sal_uInt16 nColumns  = static_cast<const SvxViewLayoutItem*>( pState )->GetValue();
         const bool   bBookMode = static_cast<const SvxViewLayoutItem*>( pState )->IsBookMode();
 

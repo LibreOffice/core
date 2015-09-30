@@ -1769,7 +1769,7 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( SdrObjec
     {
         sal_uInt32 nInventor   = rObject.GetObjInventor();
         sal_uInt16 nIdentifier = rObject.GetObjIdentifier();
-        bool   bIsTextObj  = rObject.ISA( SdrTextObj );
+        bool   bIsTextObj  = dynamic_cast< const SdrTextObj *>( &rObject ) !=  nullptr;
 
         if ( nInventor == SdrInventor )
         {
@@ -1913,7 +1913,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
             if( pOut )
             {
-                vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
+                vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData* >( pOut->GetExtOutDevData() );
 
                 if ( !( (mpDoc->GetSdPage((sal_Int16) nPageNumber-1, PK_STANDARD))->IsExcluded() ) ||
                     (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides()) )

@@ -783,7 +783,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
             {
                 aLine += aAttrs2;
             }
-            if( !pVar->IsA( TYPE(SbxMethod) ) )
+            if( dynamic_cast<const SbxMethod *>(pVar) == nullptr )
             {
                 aLine += "  !! Not a Method !!";
             }
@@ -822,7 +822,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
                 {
                     aLine += aAttrs3;
                 }
-                if( !pVar->IsA( TYPE(SbxProperty) ) )
+                if( dynamic_cast<const SbxProperty *>(pVar) == nullptr )
                 {
                     aLine += "  !! Not a Property !!";
                 }

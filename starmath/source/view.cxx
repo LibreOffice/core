@@ -694,7 +694,7 @@ SmEditController::~SmEditController()
 
 void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
-    const SfxStringItem *pItem = PTR_CAST(SfxStringItem, pState);
+    const SfxStringItem *pItem =  dynamic_cast<const SfxStringItem*>( pState);
 
     if ((pItem != NULL) && (rEdit.GetText() != OUString(pItem->GetValue())))
         rEdit.SetText(pItem->GetValue());
@@ -737,7 +737,7 @@ SmViewShell * SmCmdBoxWindow::GetView()
 {
     SfxDispatcher *pDispatcher = GetBindings().GetDispatcher();
     SfxViewShell *pView = pDispatcher ? pDispatcher->GetFrame()->GetViewShell() : NULL;
-    return PTR_CAST(SmViewShell, pView);
+    return  dynamic_cast<SmViewShell*>( pView);
 }
 
 void SmCmdBoxWindow::Resize()

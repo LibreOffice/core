@@ -1713,7 +1713,7 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         return false;
 
     SwTable& rTable = pTableNd->GetTable();
-    if( rTable.ISA( SwDDETable ))
+    if( dynamic_cast<const SwDDETable*>( &rTable) !=  nullptr)
         return false;
 
     SwTableSortBoxes aTmpLst;
@@ -1775,7 +1775,7 @@ bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         return false;
 
     SwTable& rTable = pTableNd->GetTable();
-    if( rTable.ISA( SwDDETable ))
+    if( dynamic_cast<const SwDDETable*>( &rTable) !=  nullptr)
         return false;
 
     SwTableSortBoxes aTmpLst;
@@ -1836,7 +1836,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
     {
         SwTableNode* pTableNd = rCursor.GetNode().FindTableNode();
 
-        if( pTableNd->GetTable().ISA( SwDDETable ))
+        if(dynamic_cast<const SwDDETable*>( & pTableNd->GetTable()) !=  nullptr)
             return false;
 
         // Find all Boxes/Lines
@@ -1959,7 +1959,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     if( !pTableNd )
         return false;
 
-    if( pTableNd->GetTable().ISA( SwDDETable ))
+    if( dynamic_cast<const SwDDETable*>( &pTableNd->GetTable() ) !=  nullptr)
         return false;
 
     ::ClearFEShellTabCols();
@@ -2171,7 +2171,7 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
         return false;
 
     SwTable& rTable = pTableNd->GetTable();
-    if( rTable.ISA( SwDDETable ))
+    if( dynamic_cast<const SwDDETable*>( &rTable) !=  nullptr)
         return false;
 
     std::vector<sal_uLong> aNdsCnts;
@@ -2240,7 +2240,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
     if( !pTableNd )
         return TBLMERGE_NOSELECTION;
     SwTable& rTable = pTableNd->GetTable();
-    if( rTable.ISA(SwDDETable) )
+    if( dynamic_cast<const SwDDETable*>( &rTable) !=  nullptr )
         return TBLMERGE_NOSELECTION;
     sal_uInt16 nRet = TBLMERGE_NOSELECTION;
     if( !rTable.IsNewModel() )
@@ -3137,7 +3137,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
     if( !pTNd || pNd->IsTableNode() )
         return false;
 
-    if( pTNd->GetTable().ISA( SwDDETable ))
+    if( dynamic_cast<const SwDDETable*>( &pTNd->GetTable() ) !=  nullptr)
         return false;
 
     SwTable& rTable = pTNd->GetTable();
@@ -3505,8 +3505,8 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     if( !pDelTableNd )
         return false;
 
-    if( pTableNd->GetTable().ISA( SwDDETable ) ||
-        pDelTableNd->GetTable().ISA( SwDDETable ))
+    if( dynamic_cast<const SwDDETable*>( &pTableNd->GetTable() ) !=  nullptr ||
+        dynamic_cast<const SwDDETable*>( &pDelTableNd->GetTable() ) !=  nullptr)
         return false;
 
     // Delete HTML Layout
@@ -3982,7 +3982,7 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rAktBox.GetSttNd()->FindTableNode());
     SwUndo* pUndo = 0;
 
-    if( nsTableChgWidthHeightType::WH_FLAG_INSDEL & eType && pTableNd->GetTable().ISA( SwDDETable ))
+    if( nsTableChgWidthHeightType::WH_FLAG_INSDEL & eType && dynamic_cast<const SwDDETable*>( &pTableNd->GetTable()) !=  nullptr)
         return false;
 
     SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );

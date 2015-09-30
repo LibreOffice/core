@@ -1967,9 +1967,9 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
     if ( !pDoc )
     {
         Reference< XModel > xDocument( i_rController->getModel() );
-        for (   pDoc = SfxObjectShell::GetFirst( 0, false );
+        for (   pDoc = SfxObjectShell::GetFirst( nullptr, false );
                 pDoc;
-                pDoc = SfxObjectShell::GetNext( *pDoc, 0, false )
+                pDoc = SfxObjectShell::GetNext( *pDoc, nullptr, false )
             )
         {
             if ( pDoc->GetModel() == xDocument )

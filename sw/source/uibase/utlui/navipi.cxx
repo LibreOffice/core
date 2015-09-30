@@ -1078,14 +1078,14 @@ void SwNavigationPI::UpdateListBox()
 
 IMPL_LINK_TYPED(SwNavigationPI, DoneLink, SfxPoolItem *, pItem, void)
 {
-    const SfxViewFrameItem* pFrameItem = PTR_CAST(SfxViewFrameItem, pItem );
+    const SfxViewFrameItem* pFrameItem = dynamic_cast<SfxViewFrameItem*>( pItem  );
     if( pFrameItem )
     {
         SfxViewFrame* pFrame =  pFrameItem->GetFrame();
         if(pFrame)
         {
             aContentTree->Clear();
-            pContentView = PTR_CAST(SwView, pFrame->GetViewShell());
+            pContentView = dynamic_cast<SwView*>( pFrame->GetViewShell() );
             OSL_ENSURE(pContentView, "no SwView");
             if(pContentView)
                 pContentWrtShell = pContentView->GetWrtShellPtr();

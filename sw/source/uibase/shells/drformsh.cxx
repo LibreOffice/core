@@ -89,7 +89,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
             if (rMarkList.GetMark(0))
             {
-                SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
+                SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( rMarkList.GetMark(0)->GetMarkedSdrObj() );
                 if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                 {
                     if(bConvertToText)
@@ -177,7 +177,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                 SvxHyperlinkItem aHLinkItem;
                 if (rMarkList.GetMark(0))
                 {
-                    SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
+                    SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( rMarkList.GetMark(0)->GetMarkedSdrObj() );
                     if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                     {
                         uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();

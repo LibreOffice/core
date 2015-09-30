@@ -260,7 +260,7 @@ void SwObjectFormatter::_FormatLayout( SwLayoutFrm& _rLayoutFrm )
 */
 void SwObjectFormatter::_FormatObjContent( SwAnchoredObject& _rAnchoredObj )
 {
-    if ( !_rAnchoredObj.ISA(SwFlyFrm) )
+    if ( dynamic_cast<const SwFlyFrm*>( &_rAnchoredObj) ==  nullptr )
     {
         // only Writer fly frames have content
         return;
@@ -312,7 +312,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
         mpPgNumAndTypeOfAnchors->Collect( _rAnchoredObj );
     }
 
-    if ( _rAnchoredObj.ISA(SwFlyFrm) )
+    if ( dynamic_cast<const SwFlyFrm*>( &_rAnchoredObj) !=  nullptr )
     {
         SwFlyFrm& rFlyFrm = static_cast<SwFlyFrm&>(_rAnchoredObj);
         // --> #i34753# - reset flag, which prevents a positioning
@@ -379,7 +379,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
                   !_rAnchoredObj.RestartLayoutProcess() &&
                   rFlyFrm.GetAnchorFrm() == &GetAnchorFrm() );
     }
-    else if ( _rAnchoredObj.ISA(SwAnchoredDrawObject) )
+    else if ( dynamic_cast<const SwAnchoredDrawObject*>( &_rAnchoredObj) !=  nullptr )
     {
         _rAnchoredObj.MakeObjPos();
     }

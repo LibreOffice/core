@@ -153,7 +153,7 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                 {
                     SdrObject* pObj = aIter.Next();
 
-                    if(pObj && pObj->ISA(SdrTextObj))
+                    if(pObj && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
                     {
                         sal_uInt32 nInv(pObj->GetObjInventor());
                         sal_uInt16 nKnd(pObj->GetObjIdentifier());
@@ -507,7 +507,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                  pWin != NULL && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
         {
             sal_uInt16 nSdResId = 0;          // ResourceID for popup menu
-            bool bGraphicShell = this->ISA(GraphicViewShell);
+            bool bGraphicShell = dynamic_cast< const GraphicViewShell *>( this ) !=  nullptr;
 
             // is there a snap object under the cursor?
             SdrPageView* pPV;
@@ -538,10 +538,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 nSdResId = RID_DRAW_GLUEPOINT_POPUP;
             }
             // field command?
-            else if( pFldItem && (pFldItem->GetField()->ISA( SvxDateField ) ||
-                                 pFldItem->GetField()->ISA( SvxExtTimeField ) ||
-                                 pFldItem->GetField()->ISA( SvxExtFileField ) ||
-                                 pFldItem->GetField()->ISA( SvxAuthorField ) ) )
+            else if( pFldItem && (0 != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
+                                 0 != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ||
+                                 0 != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
+                                 0 != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ) )
             {
                 LanguageType eLanguage( LANGUAGE_SYSTEM );
 

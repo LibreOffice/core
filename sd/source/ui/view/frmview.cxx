@@ -84,7 +84,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                 // Count the FrameViews and remember the type of the main
                 // view shell.
                 SfxViewShell* pSfxViewSh = pSfxViewFrame->GetViewShell();
-                ViewShellBase* pBase = PTR_CAST(ViewShellBase, pSfxViewSh );
+                ViewShellBase* pBase = dynamic_cast<ViewShellBase*>( pSfxViewSh  );
 
                 if (pBase != NULL)
                 {

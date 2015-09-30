@@ -877,7 +877,7 @@ void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_Int32, sal
 {
     const SvxFieldData* pFld = rField.GetField();
 
-    if ( pFld && pFld->ISA( SvxURLField ) && bExecuteURL )
+    if ( pFld && dynamic_cast<const SvxURLField*>( pFld) !=  nullptr && bExecuteURL )
     {
         const SvxURLField* pURLField = static_cast<const SvxURLField*>(pFld);
         ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );

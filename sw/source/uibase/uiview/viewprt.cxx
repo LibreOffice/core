@@ -76,7 +76,7 @@ SfxPrinter* SwView::GetPrinter( bool bCreate )
     SfxPrinter *pPrt = rIDDA.getPrinter( bCreate );
     if ( pOld != pPrt )
     {
-        bool bWeb = 0 != dynamic_cast<SwWebView*>(this);
+        bool bWeb = dynamic_cast<SwWebView*>(this) !=  nullptr;
         ::SetAppPrintOptions( &GetWrtShell(), bWeb );
     }
     return pPrt;
@@ -117,7 +117,7 @@ sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFlags
         if ( nDiffFlags & SfxPrinterChangeFlags::PRINTER )
             rSh.SetModified();
     }
-    bool bWeb = this->ISA(SwWebView);
+    bool bWeb = dynamic_cast< const SwWebView *>( this ) !=  nullptr;
     if ( nDiffFlags & SfxPrinterChangeFlags::OPTIONS )
         ::SetPrinter( &rSh.getIDocumentDeviceAccess(), pNew, bWeb );
 
@@ -157,7 +157,7 @@ VclPtr<SfxTabPage> SwView::CreatePrintOptionsPage(vcl::Window* pParent,
 
 void SwView::ExecutePrint(SfxRequest& rReq)
 {
-    bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     ::SetAppPrintOptions( &GetWrtShell(), bWeb );
     switch (rReq.GetSlot())
     {

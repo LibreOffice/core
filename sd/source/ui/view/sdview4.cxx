@@ -86,7 +86,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     SdrObject*      pPickObj = pObj;
     const bool bOnMaster = pPV && pPV->GetPage() && pPV->GetPage()->IsMasterPage();
 
-    if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView))
+    if(pPV && dynamic_cast< const ::sd::slidesorter::view::SlideSorterView* >(this) !=  nullptr)
     {
         if(!pPV->GetPageRect().IsInside(rPos))
             pPV = 0L;
@@ -98,7 +98,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
     }
 
-    const bool bIsGraphic(0 != dynamic_cast< SdrGrafObj* >(pPickObj));
+    const bool bIsGraphic(dynamic_cast< const SdrGrafObj* >(pPickObj) !=  nullptr);
 
     if (DND_ACTION_LINK == mnAction
         && pPickObj
@@ -150,7 +150,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         && pPickObj
         && !bIsGraphic
         && pPickObj->IsClosedObj()
-        && !dynamic_cast< SdrOle2Obj* >(pPickObj))
+        && !dynamic_cast< const SdrOle2Obj* >(pPickObj))
     {
         // fill style change (fill object with graphic), independent of mnAction
         // and thus of DND_ACTION_LINK or DND_ACTION_MOVE
@@ -206,7 +206,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                 && mpViewSh->GetViewShell()!=NULL
                 && mpViewSh->GetViewShell()->GetIPClient()
                 && mpViewSh->GetViewShell()->GetIPClient()->IsObjectInPlaceActive())
-            || this->ISA(::sd::slidesorter::view::SlideSorterView))
+            || dynamic_cast<const ::sd::slidesorter::view::SlideSorterView* >(this))
             nOptions |= SdrInsertFlags::DONTMARK;
 
         if( ( mnAction & DND_ACTION_MOVE ) && pPickObj && (pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall()) )
@@ -330,7 +330,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = GetEmptyPresentationObject( PRESOBJ_MEDIA );
 
-    if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView ))
+    if(pPV && dynamic_cast<const ::sd::slidesorter::view::SlideSorterView* >(this) )
     {
         if(!pPV->GetPageRect().IsInside(rPos))
             pPV = 0L;
@@ -342,7 +342,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
         PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
     }
 
-    if( mnAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
+    if( mnAction == DND_ACTION_LINK && pPickObj && pPV && dynamic_cast< SdrMediaObj *>( pPickObj ) !=  nullptr )
     {
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
         pNewMediaObj->setURL( rMediaURL, ""/*TODO?*/, rMimeType );

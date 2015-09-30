@@ -108,10 +108,10 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     {
         AddLink();      // create m_pDoc / pIo if applicable
 
-        bool bWeb = ISA( SwWebDocShell );
+        bool bWeb = dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr;
         if ( bWeb )
             bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );// Styles from HTML.vor
-        else if( ISA( SwGlobalDocShell ) )
+        else if( dynamic_cast< const SwGlobalDocShell *>( this ) !=  nullptr )
             GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT, true);       // Globaldokument
 
         if ( GetCreateMode() ==  SfxObjectCreateMode::EMBEDDED )
@@ -420,7 +420,7 @@ void SwDocShell::AddLink()
         SwDocFac aFactory;
         m_pDoc = aFactory.GetDoc();
         m_pDoc->acquire();
-        m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, ISA(SwWebDocShell) );
+        m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr );
     }
     else
         m_pDoc->acquire();
@@ -546,12 +546,12 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                         // If a XML document is loaded, the global doc/web doc
                         // flags have to be set, because they aren't loaded
                         // by this formats.
-                        if( ISA( SwWebDocShell ) )
+                        if( dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr )
                         {
                             if (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
                                 m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
                         }
-                        if( ISA( SwGlobalDocShell ) )
+                        if( dynamic_cast< const SwGlobalDocShell *>( this ) !=  nullptr )
                         {
                             if (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT))
                                 m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT, true);
@@ -636,7 +636,7 @@ void SwDocShell::SubInitNew()
     m_pDoc->getIDocumentSettingAccess().setLinkUpdateMode( GLOBALSETTING );
     m_pDoc->getIDocumentSettingAccess().setFieldUpdateFlags( AUTOUPD_GLOBALSETTING );
 
-    bool bWeb = ISA(SwWebDocShell);
+    bool bWeb = dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr;
 
     sal_uInt16 nRange[] =   {
         RES_PARATR_ADJUST, RES_PARATR_ADJUST,

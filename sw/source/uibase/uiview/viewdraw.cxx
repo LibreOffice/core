@@ -128,7 +128,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
     else if( nSlotId == SID_FM_CREATE_FIELDCONTROL)
     {
-        FmFormView* pFormView = PTR_CAST( FmFormView, pSdrView );
+        FmFormView* pFormView = dynamic_cast<FmFormView*>( pSdrView  );
         if ( pFormView )
         {
             SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, false );
@@ -413,10 +413,10 @@ void SwView::ExitDraw()
         if(pTest == m_pShell &&
             // don't call LeaveSelFrmMode() etc. for the below,
             // because objects may still be selected:
-            !m_pShell->ISA(SwDrawBaseShell) &&
-            !m_pShell->ISA(SwBezierShell) &&
-            !m_pShell->ISA(svx::ExtrusionBar) &&
-            !m_pShell->ISA(svx::FontworkBar))
+            dynamic_cast< const SwDrawBaseShell *>( m_pShell ) ==  nullptr &&
+            dynamic_cast< const SwBezierShell *>( m_pShell ) ==  nullptr &&
+            dynamic_cast< const svx::ExtrusionBar *>( m_pShell ) ==  nullptr &&
+            dynamic_cast< const svx::FontworkBar *>( m_pShell ) ==  nullptr)
         {
             SdrView *pSdrView = m_pWrtShell->GetDrawView();
 
@@ -487,9 +487,9 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
         pSdrView->PickObj( aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKTEXTEDIT ) &&
 
         // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
-        ( pObj->ISA( SdrTextObj ) ||
-          ( pObj->ISA(SwDrawVirtObj) &&
-            static_cast<SwDrawVirtObj*>(pObj)->GetReferencedObj().ISA(SdrTextObj) ) ) &&
+        ( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr ||
+          ( dynamic_cast< const SwDrawVirtObj *>( pObj ) !=  nullptr &&
+            dynamic_cast< const SdrTextObj *>(&static_cast<SwDrawVirtObj*>(pObj)->GetReferencedObj() ) != nullptr ) ) &&
 
         m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE )
     {
@@ -567,7 +567,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     // OutlinerView.
     Point aNewTextEditOffset(0, 0);
 
-    if(pObj->ISA(SwDrawVirtObj))
+    if(dynamic_cast< const SwDrawVirtObj *>( pObj ) !=  nullptr)
     {
         SwDrawVirtObj* pVirtObj = static_cast<SwDrawVirtObj*>(pObj);
         pToBeActivated = &const_cast<SdrObject&>(pVirtObj->GetReferencedObj());

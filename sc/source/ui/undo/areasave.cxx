@@ -107,7 +107,7 @@ bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
         for (sal_uInt16 i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScAreaLink))
+            if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
             {
                 if ( nPos >= size() || !(*this)[nPos].IsEqual( *static_cast<ScAreaLink*>(pBase) ) )
                     return false;
@@ -128,7 +128,7 @@ static ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScArea
     for (sal_uInt16 i=0; i<nLinkCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if ( pBase->ISA(ScAreaLink) &&
+        if ( dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr &&
              rSaver.IsEqualSource( *static_cast<ScAreaLink*>(pBase) ) )
         {
             return static_cast<ScAreaLink*>(pBase);     // found
@@ -173,7 +173,7 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
         for (sal_uInt16 i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScAreaLink))
+            if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
             {
                 if (!pColl)
                     pColl = new ScAreaLinkSaveCollection;

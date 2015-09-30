@@ -134,14 +134,14 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
             /* If it is not a group object or 3D object, we disable "enter
                group". */
-            if( !( ( pObj->ISA( SdrObjGroup ) && nInv == SdrInventor ) ||
-                (pObj->ISA (E3dPolyScene) || pObj->ISA (E3dScene) /*|| pObj->ISA (E3dCompoundObject) */) ) )
+            if( !( ( dynamic_cast< const SdrObjGroup *>( pObj ) !=  nullptr && nInv == SdrInventor ) ||
+                (dynamic_cast< const E3dPolyScene* >(pObj) !=  nullptr|| dynamic_cast< const E3dScene* >(pObj) !=  nullptr /*|| pObj->ISA (E3dCompoundObject) */) ) )
             {
                 rSet.DisableItem( SID_ENTER_GROUP );
             }
 
             // If it is not a group object, we disable "ungroup"
-            if (!(pObj->ISA(SdrObjGroup) && nInv == SdrInventor))
+            if(!(dynamic_cast< const SdrObjGroup *>( pObj ) !=  nullptr && nInv == SdrInventor))
             {
                 rSet.DisableItem(SID_UNGROUP);
             }
@@ -170,7 +170,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_ATTR_FILL_TRANSPARENCE );
                 rSet.DisableItem( SID_ATTR_FILL_FLOATTRANSPARENCE );
             }
-            if( (!pObj->ISA( SdrPathObj ) && !aInfoRec.bCanConvToPath) || pObj->ISA( SdrObjGroup ) ) // As long as JOE handles it incorrectly!
+            if( (dynamic_cast< const SdrPathObj *>( pObj ) ==  nullptr&& !aInfoRec.bCanConvToPath) || dynamic_cast< const SdrObjGroup *>( pObj ) !=  nullptr ) // As long as JOE handles it incorrectly!
             { // JOE: a group object may can be converted into a PathObj
                 rSet.DisableItem( SID_LINEEND_POLYGON );
             }
@@ -225,7 +225,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_OBJECT_SHEAR );
             }
 
-            if(pObj->ISA(E3dCompoundObject))
+            if(dynamic_cast< const E3dCompoundObject *>( pObj ) !=  nullptr)
             {
                 rSet.DisableItem( SID_OBJECT_ALIGN );
                 rSet.DisableItem( SID_OBJECT_ALIGN_LEFT );
@@ -268,10 +268,10 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 const SvxFieldItem* pFldItem = pOLV->GetFieldAtSelection();
 
-                if( !( pFldItem && (pFldItem->GetField()->ISA( SvxDateField ) ||
-                                 pFldItem->GetField()->ISA( SvxAuthorField ) ||
-                                 pFldItem->GetField()->ISA( SvxExtFileField ) ||
-                                 pFldItem->GetField()->ISA( SvxExtTimeField ) ) ) )
+                if( !( pFldItem && (0 != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
+                                 0 != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
+                                 0 != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
+                                 0 != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) ) )
                 {
                     rSet.DisableItem( SID_MODIFY_FIELD );
                 }
@@ -360,9 +360,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 }
                 else if (nInv == E3dInventor)
                 {
-                    if(pObj->ISA(E3dScene))
+                    if(dynamic_cast< const E3dScene *>( pObj ) !=  nullptr)
                         b3dObj = true;
-                    else if(pObj->ISA(E3dCompoundObject))
+                    else if(dynamic_cast< const E3dCompoundObject* >(pObj) !=  nullptr)
                         bE3dCompoundObject = true;
                 }
             }

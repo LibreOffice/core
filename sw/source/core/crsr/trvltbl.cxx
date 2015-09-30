@@ -880,7 +880,7 @@ bool SwCrsrShell::EndAllTableBoxEdit()
     bool bRet = false;
     for(SwViewShell& rSh : GetRingContainer())
     {
-        if( rSh.IsA( TYPE( SwCrsrShell ) ) )
+        if( dynamic_cast<const SwCrsrShell *>(&rSh) != nullptr )
             bRet |= static_cast<SwCrsrShell*>(&rSh)->CheckTableBoxContent(
                         static_cast<SwCrsrShell*>(&rSh)->m_pCurCrsr->GetPoint() );
 

@@ -739,7 +739,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
 
     uno::Any anyAtrribute;
     OUString sValue;
-    if (mpViewShell && mpViewShell->ISA(::sd::DrawViewShell))
+    if (0 != dynamic_cast<const ::sd::DrawViewShell* > (mpViewShell))
     {
         ::sd::DrawViewShell* pDrViewSh = static_cast< ::sd::DrawViewShell*>(mpViewShell);
         OUString sDisplay;
@@ -796,7 +796,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             sValue += ";";
         }
     }
-    if (mpViewShell && mpViewShell->ISA(::sd::PresentationViewShell))
+    if (dynamic_cast<const ::sd::PresentationViewShell* >(mpViewShell) !=  nullptr )
     {
         ::sd::PresentationViewShell* pPresViewSh = static_cast< ::sd::PresentationViewShell*>(mpViewShell);
         SdPage* pCurrPge = pPresViewSh->getCurrentPage();
@@ -827,7 +827,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             }
         }
     }
-    if (mpViewShell && mpViewShell->ISA(::sd::OutlineViewShell) )
+    if (dynamic_cast<const ::sd::OutlineViewShell* >(mpViewShell ) !=  nullptr )
     {
         OUString sName;
         OUString sDisplay;

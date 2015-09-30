@@ -75,7 +75,7 @@ public:
                     {                                               \
                         SvPersistBase * pObj;                       \
                         rStm >> pObj;                               \
-                        rpObj = PTR_CAST( Class, pObj );            \
+                        rpObj = dynamic_cast< Class*>( pObj );      \
                         return rStm;                                \
                     }
 

@@ -179,7 +179,7 @@ const SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj
     SwRect aRet;
     const SwFrameFormat* pFormat = &(pAnchoredObj->GetFrameFormat());
     if( pFormat->GetSurround().IsContour() &&
-        ( !pAnchoredObj->ISA(SwFlyFrm) ||
+        ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) ==  nullptr ||
           ( static_cast<const SwFlyFrm*>(pAnchoredObj)->Lower() &&
             static_cast<const SwFlyFrm*>(pAnchoredObj)->Lower()->IsNoTextFrm() ) ) )
     {
@@ -221,7 +221,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         ::basegfx::B2DPolyPolygon aPolyPolygon;
         ::basegfx::B2DPolyPolygon* pPolyPolygon = 0L;
 
-        if ( pObj->ISA(SwVirtFlyDrawObj) )
+        if ( dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr )
         {
             // GetContour() causes the graphic to be loaded, which may cause
             // the graphic to change its size, call ClrObject()
@@ -234,7 +234,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         }
         else
         {
-            if( !pObj->ISA( E3dObject ) )
+            if( dynamic_cast< const E3dObject *>( pObj ) ==  nullptr )
             {
                 aPolyPolygon = pObj->TakeXorPoly();
             }
@@ -665,7 +665,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         // #i26945#
         const SdrObject* pNew = _pAnchoredObj->GetDrawObj();
         // #102344# Ignore connectors which have one or more connections
-        if(pNew && pNew->ISA(SdrEdgeObj))
+        if(pNew && dynamic_cast< const SdrEdgeObj *>( pNew ) !=  nullptr)
         {
             if(static_cast<const SdrEdgeObj*>(pNew)->GetConnectedNode(true)
                 || static_cast<const SdrEdgeObj*>(pNew)->GetConnectedNode(false))

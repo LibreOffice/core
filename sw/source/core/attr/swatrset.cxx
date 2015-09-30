@@ -302,8 +302,8 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
 void SwAttrSet::CopyToModify( SwModify& rMod ) const
 {
     // copy attributes across multiple documents if needed
-    SwContentNode* pCNd = PTR_CAST( SwContentNode, &rMod );
-    SwFormat* pFormat = PTR_CAST( SwFormat, &rMod );
+    SwContentNode* pCNd = dynamic_cast<SwContentNode*>( &rMod  );
+    SwFormat* pFormat = dynamic_cast<SwFormat*>( &rMod  );
 
     if( pCNd || pFormat )
     {

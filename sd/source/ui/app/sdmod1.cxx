@@ -111,7 +111,7 @@ void SdModule::Execute(SfxRequest& rReq)
             {
                 bool bOnlineSpelling = static_cast<const SfxBoolItem*>( pItem )->GetValue();
                 // save at document:
-                ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+                ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
                 if( pDocSh )
                 {
                     SdDrawDocument* pDoc = pDocSh->GetDoc();
@@ -135,7 +135,7 @@ void SdModule::Execute(SfxRequest& rReq)
                     case FUNIT_PICA:
                     case FUNIT_POINT:
                         {
-                            ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
+                            ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
                             if(pDocSh)
                             {
                                 DocumentType eDocType = pDocSh->GetDoc()->GetDocumentType();
@@ -170,7 +170,7 @@ void SdModule::Execute(SfxRequest& rReq)
               )
             {
                 // save at the document:
-                ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+                ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
                 if ( pDocSh )
                 {
                     LanguageType eLanguage = static_cast<const SvxLanguageItem*>(pItem)->GetValue();
@@ -208,7 +208,7 @@ void SdModule::Execute(SfxRequest& rReq)
         case SID_OPENDOC:
         {
             bool bIntercept = false;
-            ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+            ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
             if (pDocShell)
             {
                 ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
@@ -323,7 +323,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
         }
         else
         {
-            ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+            ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
             if (pDocShell)
             {
                 ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
@@ -340,7 +340,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
 
     if( SfxItemState::DEFAULT == rItemSet.GetItemState( SID_ATTR_METRIC ) )
     {
-        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
+        ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
         if(pDocSh)
         {
             DocumentType eDocType = pDocSh->GetDoc()->GetDocumentType();
@@ -369,7 +369,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     if( SfxItemState::DEFAULT == rItemSet.GetItemState( SID_AUTOSPELL_CHECK ) )
     {
         ::sd::DrawDocShell* pDocSh =
-              PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+              dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
         if( pDocSh )
         {
             SdDrawDocument* pDoc = pDocSh->GetDoc();
@@ -379,28 +379,28 @@ void SdModule::GetState(SfxItemSet& rItemSet)
 
     if( SfxItemState::DEFAULT == rItemSet.GetItemState( SID_ATTR_LANGUAGE ) )
     {
-        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+        ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
         if( pDocSh )
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE ) );
     }
 
     if( SfxItemState::DEFAULT == rItemSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE ) )
     {
-        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+        ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
         if( pDocSh )
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE_CJK ), SID_ATTR_CHAR_CJK_LANGUAGE ) );
     }
 
     if( SfxItemState::DEFAULT == rItemSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE ) )
     {
-        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+        ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
         if( pDocSh )
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE_CTL ), SID_ATTR_CHAR_CTL_LANGUAGE ) );
     }
 
     if ( !mbEventListenerAdded )
     {
-        ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+        ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
         if( pDocShell ) // Impress or Draw ?
         {
             ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
@@ -429,7 +429,7 @@ IMPL_STATIC_LINK_TYPED( SdModule, EventListenerHdl, VclSimpleEvent&, rSimpleEven
             {
                 case MediaCommand::Play:
                 {
-                    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+                    ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
                     if( pDocShell )  // Impress or Draw ?
                     {
                         ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
@@ -591,7 +591,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 aSet.Put( aPassword );
 
                             const SfxPoolItem* pRet = SfxFrame::OpenDocumentSynchron( aSet, xTargetFrame );
-                            const SfxViewFrameItem* pFrameItem = PTR_CAST( SfxViewFrameItem, pRet );
+                            const SfxViewFrameItem* pFrameItem = dynamic_cast<const SfxViewFrameItem*>( pRet  );
                             if ( pFrameItem && pFrameItem->GetFrame() )
                                 pFrame = &pFrameItem->GetFrame()->GetFrame();
                         }
@@ -610,7 +610,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             try
                             {
                                 const SfxPoolItem* pRet = SfxGetpApp()->ExecuteSlot (aRequest);
-                                const SfxViewFrameItem* pFrameItem = PTR_CAST( SfxViewFrameItem, pRet );
+                                const SfxViewFrameItem* pFrameItem = dynamic_cast<const SfxViewFrameItem*>( pRet  );
                                 if ( pFrameItem )
                                     pFrame = &pFrameItem->GetFrame()->GetFrame();
                             }
@@ -652,7 +652,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                         SdDrawDocument* pDoc(NULL);
                         if (pShell && pViewFrame)
                         {
-                            pDocShell = PTR_CAST(::sd::DrawDocShell, pShell);
+                            pDocShell = dynamic_cast< ::sd::DrawDocShell *>( pShell );
                             pDoc = pDocShell ? pDocShell->GetDoc() : NULL;
                             pBase = ::sd::ViewShellBase::GetViewShellBase(pViewFrame);
                         }

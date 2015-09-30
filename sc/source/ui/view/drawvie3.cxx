@@ -197,7 +197,7 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
 {
     if ( pViewData &&
          pViewData->GetViewShell()->GetViewFrame()->HasChildWindow( ScIMapChildWindowId() ) &&
-         pObj && ( pObj->ISA(SdrGrafObj) || pObj->ISA(SdrOle2Obj) ) )
+         pObj && ( dynamic_cast<const SdrGrafObj*>( pObj) != nullptr || dynamic_cast<const SdrOle2Obj*>( pObj) != nullptr ) )
     {
         Graphic     aGraphic;
         TargetList  aTargetList;
@@ -210,7 +210,7 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
         pViewData->GetViewShell()->GetViewFrame()->GetTargetList( aTargetList );
 
         // handle graphics from object
-        if ( pObj->ISA( SdrGrafObj ) )
+        if ( dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr )
             aGraphic = static_cast<SdrGrafObj*>(pObj)->GetGraphic();
         else
         {
