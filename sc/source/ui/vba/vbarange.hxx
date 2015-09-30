@@ -279,7 +279,7 @@ public:
         // XDefaultProperty
         OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return OUString("Value"); }
 
-// #TODO completely rewrite ScVbaRange, its become a hackfest
+// #TODO completely rewrite ScVbaRange, it's become a hackfest
 // it needs to be closer to ScCellRangeBase in that the underlying
 // object model should probably be a ScRangelst.
 //     * would be nice to be able to construct a range from an address only

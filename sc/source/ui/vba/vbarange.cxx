@@ -1168,7 +1168,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
     // see if there is a match with a named range
     uno::Reference< beans::XPropertySet > xProps( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
-    // Strangly enough you can have Range( "namedRange1, namedRange2, etc," )
+    // Strange enough you can have Range( "namedRange1, namedRange2, etc," )
     // loop around each ',' separated name
     std::vector< OUString > vNames;
     sal_Int32 nIndex = 0;
@@ -3553,13 +3553,13 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException, std::exc
 
     // #FIXME #TODO
     // euch! found my orig implementation sucked, so
-    // trying this even suckier one ( really need to use/expose code in
-    // around  ScTabView::MoveCursorArea(), thats the bit that calcutes
-    // where the cursor should go )
+    // trying this even sucker one (really need to use/expose code in
+    // around  ScTabView::MoveCursorArea(), thats the bit that calculates
+    // where the cursor should go)
     // Main problem with this method is the ultra hacky attempt to preserve
     // the ActiveCell, there should be no need to go to these extremes
 
-    // Save ActiveSheet/ActiveCell pos ( to restore later )
+    // Save ActiveSheet/ActiveCell pos (to restore later)
     uno::Any aDft;
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XWorksheet > sActiveSheet = xApplication->getActiveSheet();
