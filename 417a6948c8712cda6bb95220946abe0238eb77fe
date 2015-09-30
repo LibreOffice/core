@@ -1,0 +1,265 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_9a1c4979",
+        "filename": "basctl/source/basicide/basides1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "Shouldn\u0027t stay nRet? It\u0027s long, not bool.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_3d41b73a",
+        "filename": "binaryurp/source/bridge.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "Such naming convention is rather unusual in LO code. bCcMode is better.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_1d3e73b8",
+        "filename": "binaryurp/source/bridge.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "Same, bCcMode.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_bd7307b4",
+        "filename": "binaryurp/source/incomingrequest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "Leave isExc and resetCc, please.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 30
+      },
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_7d620fda",
+        "filename": "cli_ure/source/climaker/climaker_app.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "g_bVerbose would be consistent with the existing code.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_bd9ae7c3",
+        "filename": "codemaker/source/javamaker/javatype.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "needsSig should stay as \"it speaks\" for me.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_9d9f23b4",
+        "filename": "comphelper/source/misc/officeresourcebundle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "has should stay, I think.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_9d03a30d",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "For me, better idea would be changing name to isInvalid or leave as it is.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_fd08df2a",
+        "filename": "compilerplugins/clang/salbool.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "Here hasSB name should definitely stay (\u0027prefer is/has over b in new code as it \"speaks\"\u0027 from wiki).",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_dd0d1b39",
+        "filename": "compilerplugins/clang/salbool.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "...as well isSB and so on.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_3d13775e",
+        "filename": "configmgr/source/childaccess.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "isNillable, see in switch below.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_7d1def65",
+        "filename": "configmgr/source/components.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "resolved can stay as \"it speaks\" or you can change it to isResolved.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_9d2a837d",
+        "filename": "connectivity/source/drivers/mork/MQueryHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "handleListTable could stay.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_dd24fbb0",
+        "filename": "connectivity/source/drivers/mork/MorkParser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "Here you can leave listFound may as well or change to isListFound.",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_5d310bec",
+        "filename": "editeng/source/misc/svxacorr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-30T20:41:37Z",
+      "side": 1,
+      "message": "isValidNumber",
+      "revId": "417a6948c8712cda6bb95220946abe0238eb77fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
