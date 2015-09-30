@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_d7b4dcd2",
+        "filename": "sc/source/filter/inc/pivottablebuffer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:36:48Z",
+      "side": 1,
+      "message": "dimension",
+      "revId": "186117aa3515a4e7a93ec79e55c8e9bca0782f6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
