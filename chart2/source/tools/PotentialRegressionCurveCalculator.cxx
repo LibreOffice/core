@@ -54,13 +54,13 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
     m_fSign = 1.0;
 
     size_t nMax = aValues.first.size();
-    if( nMax == 0 )
+    if( nMax <= 1 )  // at least 2 points
     {
         aValues = RegressionCalculationHelper::cleanup(
                     aXValues, aYValues,
                     RegressionCalculationHelper::isValidAndXPositiveAndYNegative());
          nMax = aValues.first.size();
-         if( nMax == 0 )
+         if( nMax <= 1 )
          {
             ::rtl::math::setNan( & m_fSlope );
             ::rtl::math::setNan( & m_fIntercept );
@@ -148,7 +148,7 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
 
     if( m_fIntercept == 0.0 )
     {
-        aBuf.append( '0');
+        aBuf.append( '0' );
     }
     else if( m_fSlope == 0.0 )
     {
@@ -156,16 +156,18 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
     }
     else
     {
-        if( ! rtl::math::approxEqual( m_fIntercept, 1.0 ) )
+        if( ! rtl::math::approxEqual( fabs(m_fIntercept), 1.0 ) )
         {
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
             aBuf.append( ' ');
         }
-        if( m_fSlope != 0.0 )
+        else // skip intercept if its value is 1 (or near 1)
         {
-            aBuf.append( "x^" );
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
+            if ( m_fIntercept < 0.0 )
+                aBuf.append( "- " );
         }
+        aBuf.append( "x^" );
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
     }
 
     return aBuf.makeStringAndClear();
