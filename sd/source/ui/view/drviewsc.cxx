@@ -53,7 +53,7 @@ namespace sd {
 
 void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 {
-    if( ( pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) ) && !mpDrawView->IsTextEdit() &&
+    if( ( dynamic_cast< SdrGrafObj *>( pObj )  != nullptr || dynamic_cast< SdrOle2Obj *>( pObj ) !=  nullptr ) && !mpDrawView->IsTextEdit() &&
          GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
         Graphic     aGraphic;

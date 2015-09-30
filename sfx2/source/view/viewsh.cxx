@@ -1342,9 +1342,9 @@ SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
     if ( !i_rController.is() )
         return NULL;
 
-    for (   SfxViewShell* pViewShell = SfxViewShell::GetFirst( NULL, false );
+    for (   SfxViewShell* pViewShell = SfxViewShell::GetFirst( false );
             pViewShell;
-            pViewShell = SfxViewShell::GetNext( *pViewShell, NULL, false )
+            pViewShell = SfxViewShell::GetNext( *pViewShell, false )
         )
     {
         if ( pViewShell->GetController() == i_rController )
@@ -1503,11 +1503,10 @@ void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue 
 
 
 // returns the first shell of spec. type viewing the specified doc.
-
 SfxViewShell* SfxViewShell::GetFirst
 (
-    const TypeId* pType,
-    bool          bOnlyVisible
+    bool          bOnlyVisible,
+    std::function< bool ( const SfxViewShell* ) > isViewShell
 )
 {
     // search for a SfxViewShell of the specified type
@@ -1527,7 +1526,7 @@ SfxViewShell* SfxViewShell::GetFirst
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
-                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && ( !pType || pShell->IsA(*pType) ) )
+                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && (!isViewShell || isViewShell(pShell)))
                         return pShell;
                     break;
                 }
@@ -1544,8 +1543,8 @@ SfxViewShell* SfxViewShell::GetFirst
 SfxViewShell* SfxViewShell::GetNext
 (
     const SfxViewShell& rPrev,
-    const TypeId*       pType,
-    bool                bOnlyVisible
+    bool                bOnlyVisible,
+    std::function<bool ( const SfxViewShell* )> isViewShell
 )
 {
     SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
@@ -1569,7 +1568,7 @@ SfxViewShell* SfxViewShell::GetNext
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
-                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && ( !pType || pShell->IsA(*pType) ) )
+                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && (!isViewShell || isViewShell(pShell)) )
                         return pShell;
                     break;
                 }

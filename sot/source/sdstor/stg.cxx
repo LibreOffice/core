@@ -185,7 +185,7 @@ StorageStream::~StorageStream()
 
 bool StorageStream::Equals( const BaseStorageStream& rStream ) const
 {
-    const StorageStream* pOther = PTR_CAST( StorageStream, &rStream );
+    const StorageStream* pOther =  dynamic_cast<const StorageStream*>( &rStream );
     return pOther && ( pOther->pEntry == pEntry );
 }
 
@@ -948,7 +948,7 @@ bool Storage::ValidateMode( StreamMode nMode, StgDirEntry* p ) const
 
 bool Storage::Equals( const BaseStorage& rStorage ) const
 {
-    const Storage* pOther = PTR_CAST( Storage, &rStorage );
+    const Storage* pOther =  dynamic_cast<const Storage*>( &rStorage );
     return pOther && ( pOther->pEntry == pEntry );
 }
 

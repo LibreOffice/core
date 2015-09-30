@@ -981,7 +981,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         bool                bObjSupported = false;
 
         // execute HitTest
-        if ( pObj->ISA( SdrGrafObj )  ) // simple graphics object
+        if ( dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr  ) // simple graphics object
         {
             const SdrGrafObj*   pGrafObj = static_cast<const SdrGrafObj*>(pObj);
             const GeoStat&      rGeo = pGrafObj->GetGeoStat();
@@ -1008,7 +1008,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
             delete pGeoData;
             bObjSupported = true;
         }
-        else if ( pObj->ISA( SdrOle2Obj ) ) // OLE object
+        else if ( dynamic_cast<const SdrOle2Obj* >(pObj) !=  nullptr ) // OLE object
         {
             aGraphSize = static_cast<SdrOle2Obj*>( pObj )->GetOrigObjSize();
             bObjSupported = true;

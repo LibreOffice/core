@@ -110,7 +110,7 @@ public:
         for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
         {
             // a DDE table or a DDE field attribute in the text
-            if( !pLast->IsA( TYPE( SwFormatField ) ) ||
+            if( dynamic_cast<const SwFormatField *>(pLast) == nullptr ||
                 static_cast<SwFormatField*>(pLast)->GetTextField() )
             {
                 if( !bCallModify )
@@ -173,7 +173,7 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
     for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
     {
         // a DDE table or a DDE field attribute in the text
-        if( !pLast->IsA( TYPE( SwFormatField ) ))
+        if( dynamic_cast<const SwFormatField *>(pLast) == nullptr)
         {
             SwDepend* pDep = static_cast<SwDepend*>(pLast);
             SwDDETable* pDDETable = static_cast<SwDDETable*>(pDep->GetToTell());
@@ -198,7 +198,7 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
     for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
     {
         // a DDE table or a DDE field attribute in the text
-        if( !pLast->IsA( TYPE( SwFormatField ) ))
+        if( dynamic_cast<const SwFormatField *>(pLast) == nullptr)
         {
             SwDepend* pDep = static_cast<SwDepend*>(pLast);
             SwDDETable* pDDETable = static_cast<SwDDETable*>(pDep->GetToTell());

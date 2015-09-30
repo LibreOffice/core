@@ -300,8 +300,7 @@ void DrawDocShell::InPlaceActivate( bool bActive )
         {
             // determine the number of FrameViews
             SfxViewShell* pSfxViewSh = pSfxViewFrame->GetViewShell();
-            // FIXME this used to be a PTR_CAST, but when I updated the macro, I discovered that SfxViewShell is not statically castable to sd::ViewShell
-            ViewShell* pViewSh = (pSfxViewSh && pSfxViewSh->IsA( TYPE(ViewShell) )) ? dynamic_cast<ViewShell*>(pSfxViewSh) : 0;
+            ViewShell* pViewSh = dynamic_cast<ViewShell*>(pSfxViewSh);
 
             if ( pViewSh && pViewSh->GetFrameView() )
             {
@@ -321,8 +320,7 @@ void DrawDocShell::InPlaceActivate( bool bActive )
         {
             // determine the number of FrameViews
             SfxViewShell* pSfxViewSh = pSfxViewFrame->GetViewShell();
-            // FIXME this used to be a PTR_CAST, but when I updated the macro, I discovered that SfxViewShell is not statically castable to sd::ViewShell
-            ViewShell* pViewSh = (pSfxViewSh && pSfxViewSh->IsA( TYPE(ViewShell) )) ? dynamic_cast<ViewShell*>(pSfxViewSh) : 0;
+            ViewShell* pViewSh = dynamic_cast<ViewShell*>(pSfxViewSh);
 
             if ( pViewSh )
             {

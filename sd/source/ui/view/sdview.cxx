@@ -222,7 +222,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
         {
             bool bCreateOutline(false);
 
-            if( pObject->IsEmptyPresObj() && pObject->ISA(SdrTextObj) )
+            if( pObject->IsEmptyPresObj() && dynamic_cast< SdrTextObj *>( pObject ) !=  nullptr )
             {
                 if( !bSubContentProcessing || !pObject->IsNotVisibleAsMaster() )
                 {
@@ -992,7 +992,7 @@ bool View::IsMorphingAllowed() const
              ( nKind1 != OBJ_GRAF && nKind2 != OBJ_GRAF ) &&
              ( nKind1 != OBJ_OLE2 && nKind2 != OBJ_OLE2 ) &&
              ( nKind1 != OBJ_CAPTION && nKind2 !=  OBJ_CAPTION ) &&
-             !pObj1->ISA( E3dObject) && !pObj2->ISA( E3dObject) )
+             dynamic_cast< const E3dObject *>( pObj1 ) == nullptr && dynamic_cast< const E3dObject *>( pObj2 ) ==  nullptr )
         {
             SfxItemSet      aSet1( mrDoc.GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
             SfxItemSet      aSet2( mrDoc.GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
@@ -1276,7 +1276,7 @@ bool View::ShouldToggleOn(
         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(GetMarkedObjectByIndex(nIndex));
         if (!pTextObj || pTextObj->IsTextEditActive())
             continue;
-        if (pTextObj->ISA(SdrTableObj))
+        if( dynamic_cast< const SdrTableObj *>( pTextObj ) !=  nullptr)
         {
             SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >(pTextObj);
             if (!pTableObj)
@@ -1346,7 +1346,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(GetMarkedObjectByIndex(nIndex));
         if (!pTextObj || pTextObj->IsTextEditActive())
             continue;
-        if (pTextObj->ISA(SdrTableObj))
+        if( dynamic_cast< SdrTableObj *>( pTextObj ) !=  nullptr)
         {
             SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >(pTextObj);
             if (!pTableObj)

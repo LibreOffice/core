@@ -648,7 +648,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     }
                     else
                     {
-                        if (SdrGrafObj* pGraphObject = PTR_CAST(SdrGrafObj, pObject))
+                        if (SdrGrafObj* pGraphObject = dynamic_cast<SdrGrafObj*>( pObject) )
                         {
                             // Now add the link or rather the graphic to the doc
                             const Graphic& rGraph = pGraphObject->GetGraphic();

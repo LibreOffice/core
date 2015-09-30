@@ -2969,7 +2969,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                     case 8: rSubType = ShapeAnimationSubType::ONLY_TEXT; break;
                     case 2: // one paragraph
                     {
-                        if( ((begin == -1) && (end == -1)) || !pSdrObject->ISA( SdrTextObj )  )
+                        if( ((begin == -1) && (end == -1)) || dynamic_cast< SdrTextObj *>( pSdrObject ) ==  nullptr  )
                             break;
 
                         SdrTextObj* pTextObj = static_cast< SdrTextObj* >( pSdrObject );

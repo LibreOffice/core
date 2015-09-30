@@ -990,7 +990,7 @@ void ScNavigatorDlg::SetCurrentDoc( const OUString& rDocName )        // activat
 
 ScTabViewShell* ScNavigatorDlg::GetTabViewShell()
 {
-    return PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    return dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
 }
 
 ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
@@ -1204,13 +1204,13 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
     aLbDocuments->Clear();
     aLbDocuments->SetUpdateMode( false );
 
-    ScDocShell* pCurrentSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
+    ScDocShell* pCurrentSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current()  );
 
     OUString aSelEntry;
     SfxObjectShell* pSh = SfxObjectShell::GetFirst();
     while ( pSh )
     {
-        if ( pSh->ISA(ScDocShell) )
+        if ( dynamic_cast<const ScDocShell*>( pSh) !=  nullptr )
         {
             OUString aName = pSh->GetTitle();
             OUString aEntry = aName;

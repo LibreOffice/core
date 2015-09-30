@@ -39,6 +39,7 @@
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svl/languageoptions.hxx>
+#include <functional>
 
 namespace com { namespace sun { namespace star {
   namespace linguistic2 {
@@ -135,6 +136,10 @@ enum class GetAttribsFlags
 namespace o3tl
 {
     template<> struct typed_flags<GetAttribsFlags> : is_typed_flags<GetAttribsFlags, 0x07> {};
+}
+template<class T> bool checkSvxFieldData(const SvxFieldData* pData)
+{
+    return dynamic_cast<const T*>(pData) != nullptr;
 }
 
 class SdrObject;
@@ -452,7 +457,7 @@ public:
 
     bool UpdateFields();
     bool UpdateFieldsOnly();
-    void            RemoveFields( bool bKeepFieldText, TypeId aType = NULL );
+    void            RemoveFields( bool bKeepFieldText, std::function<bool ( const SvxFieldData* )> isFieldData = [] (const SvxFieldData* ){return true;} );
 
     sal_uInt16      GetFieldCount( sal_Int32 nPara ) const;
     EFieldInfo      GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const;

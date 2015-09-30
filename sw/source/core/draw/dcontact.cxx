@@ -102,7 +102,7 @@ SwFrameFormat *FindFrameFormat( SdrObject *pObj )
 {
     SwFrameFormat* pRetval = 0L;
 
-    if ( pObj->ISA(SwVirtFlyDrawObj) )
+    if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
     {
        pRetval = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFormat();
     }
@@ -154,7 +154,7 @@ SwContact* GetUserCall( const SdrObject* pObj )
     SdrObject *pTmp;
     while ( !pObj->GetUserCall() && 0 != (pTmp = pObj->GetUpGroup()) )
         pObj = pTmp;
-    OSL_ENSURE( !pObj->GetUserCall() || pObj->GetUserCall()->ISA(SwContact),
+    OSL_ENSURE( !pObj->GetUserCall() || 0 != dynamic_cast< const SwContact*> (pObj->GetUserCall()),
             "<::GetUserCall(..)> - wrong type of found object user call." );
     return static_cast<SwContact*>(pObj->GetUserCall());
 }
@@ -275,7 +275,7 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
     SdrLayerID nFromControlLayerId =
         _bToVisible ? rIDDMA.GetInvisibleControlsId() : rIDDMA.GetControlsId();
 
-    if ( _pDrawObj->ISA( SdrObjGroup ) )
+    if ( dynamic_cast<const SdrObjGroup*>( _pDrawObj) !=  nullptr )
     {
         // determine layer for group object
         {
@@ -411,14 +411,14 @@ const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( const SdrObject* _pSdr
 {
     OSL_ENSURE( _pSdrObj,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - no object provided" );
-    OSL_ENSURE( _pSdrObj->ISA(SwVirtFlyDrawObj),
+    OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( _pSdrObj) !=  nullptr,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
     OSL_ENSURE( GetUserCall( _pSdrObj ) == this,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
 
     const SwAnchoredObject* pRetAnchoredObj = 0L;
 
-    if ( _pSdrObj && _pSdrObj->ISA(SwVirtFlyDrawObj) )
+    if ( _pSdrObj && dynamic_cast<const SwVirtFlyDrawObj*>( _pSdrObj) !=  nullptr )
     {
         pRetAnchoredObj = static_cast<const SwVirtFlyDrawObj*>(_pSdrObj)->GetFlyFrm();
     }
@@ -430,14 +430,14 @@ SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( SdrObject* _pSdrObj )
 {
     OSL_ENSURE( _pSdrObj,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - no object provided" );
-    OSL_ENSURE( _pSdrObj->ISA(SwVirtFlyDrawObj),
+    OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( _pSdrObj) !=  nullptr,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - wrong object type provided" );
     OSL_ENSURE( GetUserCall( _pSdrObj ) == this,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
 
     SwAnchoredObject* pRetAnchoredObj = 0L;
 
-    if ( _pSdrObj && _pSdrObj->ISA(SwVirtFlyDrawObj) )
+    if ( _pSdrObj && dynamic_cast<const SwVirtFlyDrawObj*>( _pSdrObj) !=  nullptr )
     {
         pRetAnchoredObj = static_cast<SwVirtFlyDrawObj*>(_pSdrObj)->GetFlyFrm();
     }
@@ -457,7 +457,7 @@ SdrObject* SwFlyDrawContact::GetMaster()
 
 void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
 {
-    OSL_ENSURE( _pNewMaster->ISA(SwFlyDrawObj),
+    OSL_ENSURE( dynamic_cast<const SwFlyDrawObj*>( _pNewMaster) !=  nullptr,
             "<SwFlyDrawContact::SetMaster(..)> - wrong type of new master object" );
     mpMasterObj = static_cast<SwFlyDrawObj *>(_pNewMaster);
 }
@@ -473,7 +473,7 @@ void SwFlyDrawContact::Modify( const SfxPoolItem*, const SfxPoolItem * )
  */
 void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 {
-    OSL_ENSURE( _pDrawObj->ISA(SwVirtFlyDrawObj),
+    OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( _pDrawObj) !=  nullptr,
             "<SwFlyDrawContact::MoveObjToVisibleLayer(..)> - wrong SdrObject type -> crash" );
 
     if ( GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) )
@@ -514,7 +514,7 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
  */
 void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 {
-    OSL_ENSURE( _pDrawObj->ISA(SwVirtFlyDrawObj),
+    OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( _pDrawObj) !=  nullptr,
             "<SwFlyDrawContact::MoveObjToInvisibleLayer(..)> - wrong SdrObject type -> crash" );
 
     if ( !GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) )
@@ -555,7 +555,7 @@ bool CheckControlLayer( const SdrObject *pObj )
 {
     if ( FmFormInventor == pObj->GetObjInventor() )
         return true;
-    if ( pObj->ISA( SdrObjGroup ) )
+    if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
     {
         const SdrObjList *pLst = static_cast<const SdrObjGroup*>(pObj)->GetSubList();
         for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
@@ -632,7 +632,7 @@ void SwDrawContact::GetTextObjectsFromFormat( std::list<SdrTextObj*>& rTextObjec
     for( sal_Int32 n=0; n<(sal_Int32)pDoc->GetSpzFrameFormats()->size(); n++ )
     {
         const SwFrameFormat* pFly = (*pDoc->GetSpzFrameFormats())[n];
-        if( pFly->IsA( TYPE(SwDrawFrameFormat) ) )
+        if( dynamic_cast<const SwDrawFrameFormat*>( pFly ) !=  nullptr )
         {
             SwDrawContact* pContact = SwIterator<SwDrawContact,SwFrameFormat>(*pFly).First();
             if( pContact )
@@ -640,21 +640,21 @@ void SwDrawContact::GetTextObjectsFromFormat( std::list<SdrTextObj*>& rTextObjec
                 SdrObject* pSdrO = pContact->GetMaster();
                 if ( pSdrO )
                 {
-                    if ( pSdrO->IsA( TYPE(SdrObjGroup) ) )
+                    if ( dynamic_cast<const SdrObjGroup*>(pSdrO) !=  nullptr )
                     {
                         SdrObjListIter aListIter( *pSdrO, IM_DEEPNOGROUPS );
                         //iterate inside of a grouped object
                         while( aListIter.IsMore() )
                         {
                             SdrObject* pSdrOElement = aListIter.Next();
-                            if( pSdrOElement && pSdrOElement->IsA( TYPE(SdrTextObj) ) &&
+                            if( pSdrOElement && dynamic_cast<const SdrTextObj*>(pSdrOElement) !=  nullptr &&
                                 static_cast<SdrTextObj*>( pSdrOElement)->HasText() )
                             {
                                 rTextObjects.push_back(static_cast<SdrTextObj*>( pSdrOElement ));
                             }
                         }
                     }
-                    else if( pSdrO->IsA( TYPE(SdrTextObj) ) &&
+                    else if( dynamic_cast<const SdrTextObj*>(pSdrO) !=  nullptr &&
                             static_cast<SdrTextObj*>( pSdrO )->HasText() )
                     {
                         rTextObjects.push_back(static_cast<SdrTextObj*>( pSdrO ));
@@ -676,8 +676,8 @@ const SwAnchoredObject* SwDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj
 
     OSL_ENSURE( _pSdrObj,
             "<SwDrawContact::GetAnchoredObj(..)> - no object provided" );
-    OSL_ENSURE( _pSdrObj->ISA(SwDrawVirtObj) ||
-            ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) ),
+    OSL_ENSURE( dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) !=  nullptr ||
+            ( dynamic_cast<const SdrVirtObj*>( _pSdrObj) == nullptr && dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) == nullptr ),
             "<SwDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
     OSL_ENSURE( GetUserCall( _pSdrObj ) == this ||
             _pSdrObj == GetMaster(),
@@ -687,11 +687,11 @@ const SwAnchoredObject* SwDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj
 
     if ( _pSdrObj )
     {
-        if ( _pSdrObj->ISA(SwDrawVirtObj) )
+        if ( dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) !=  nullptr )
         {
             pRetAnchoredObj = &(static_cast<const SwDrawVirtObj*>(_pSdrObj)->GetAnchoredObj());
         }
-        else if ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) )
+        else if ( dynamic_cast<const SdrVirtObj*>( _pSdrObj) == nullptr && dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) == nullptr)
         {
             pRetAnchoredObj = &maAnchoredDrawObj;
         }
@@ -710,8 +710,8 @@ SwAnchoredObject* SwDrawContact::GetAnchoredObj( SdrObject* _pSdrObj )
 
     OSL_ENSURE( _pSdrObj,
             "<SwDrawContact::GetAnchoredObj(..)> - no object provided" );
-    OSL_ENSURE( _pSdrObj->ISA(SwDrawVirtObj) ||
-            ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) ),
+    OSL_ENSURE( dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) !=  nullptr ||
+            ( dynamic_cast<const SdrVirtObj*>( _pSdrObj) == nullptr && dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) == nullptr),
             "<SwDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
     OSL_ENSURE( GetUserCall( _pSdrObj ) == this || _pSdrObj == GetMaster(),
             "<SwDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
@@ -720,11 +720,11 @@ SwAnchoredObject* SwDrawContact::GetAnchoredObj( SdrObject* _pSdrObj )
 
     if ( _pSdrObj )
     {
-        if ( _pSdrObj->ISA(SwDrawVirtObj) )
+        if ( dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) !=  nullptr )
         {
             pRetAnchoredObj = &(static_cast<SwDrawVirtObj*>(_pSdrObj)->AnchoredObj());
         }
-        else if ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) )
+        else if ( dynamic_cast<const SdrVirtObj*>( _pSdrObj) == nullptr && dynamic_cast<const SwDrawVirtObj*>( _pSdrObj) == nullptr)
         {
             pRetAnchoredObj = &maAnchoredDrawObj;
         }
@@ -776,7 +776,7 @@ const SwFrm* SwDrawContact::GetAnchorFrm( const SdrObject* _pDrawObj ) const
     {
         pAnchorFrm = maAnchoredDrawObj.GetAnchorFrm();
     }
-    else if ( _pDrawObj->ISA(SwDrawVirtObj) )
+    else if ( dynamic_cast<const SwDrawVirtObj*>( _pDrawObj) !=  nullptr )
     {
         pAnchorFrm = static_cast<const SwDrawVirtObj*>(_pDrawObj)->GetAnchorFrm();
     }
@@ -799,7 +799,7 @@ SwFrm* SwDrawContact::GetAnchorFrm( SdrObject* _pDrawObj )
     }
     else
     {
-        OSL_ENSURE( _pDrawObj->ISA(SwDrawVirtObj),
+        OSL_ENSURE( dynamic_cast<const SwDrawVirtObj*>( _pDrawObj) !=  nullptr,
                 "<SwDrawContact::GetAnchorFrm(..)> - unknown drawing object." );
         pAnchorFrm = static_cast<SwDrawVirtObj*>(_pDrawObj)->AnchorFrm();
     }
@@ -1661,7 +1661,7 @@ void SwDrawContact::RemoveMasterFromDrawPage()
 // also working.
 void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
 {
-    if ( _pDrawObj->ISA(SwDrawVirtObj) )
+    if ( dynamic_cast<const SwDrawVirtObj*>( _pDrawObj) !=  nullptr )
     {
         SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(_pDrawObj);
         pDrawVirtObj->RemoveFromWriterLayout();
@@ -2104,7 +2104,7 @@ namespace sdr
                 aOffsetMatrix.set(1, 2, aLocalOffset.Y());
             }
 
-            if(rReferencedObject.ISA(SdrObjGroup))
+            if(dynamic_cast<const SdrObjGroup*>( &rReferencedObject) !=  nullptr)
             {
                 // group object. Since the VOC/OC/VC hierarchy does not represent the
                 // hierarchy virtual objects when they have group objects

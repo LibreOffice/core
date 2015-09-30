@@ -817,7 +817,7 @@ void ScFunctionDockWin::DoEnter()
     {
 
         ScModule* pScMod = SC_MOD();
-        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pCurSh);
+        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pCurSh );
         ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
         if(!pScMod->IsEditMode())
         {
