@@ -61,7 +61,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
         const SdrObject* pNewObj;
         SdrObject* pConvPolyObj = NULL;
 
-        if( pObj->ISA( SdrPathObj ) )
+        if( dynamic_cast< const SdrPathObj *>( pObj ) !=  nullptr )
         {
             pNewObj = pObj;
         }
@@ -78,7 +78,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
             {
                 pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( true, false );
 
-                if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
+                if( !pNewObj || dynamic_cast< const SdrPathObj *>( pNewObj ) ==  nullptr )
                     return; // Cancel, additional security, but it does not help
                             // for group objects
             }

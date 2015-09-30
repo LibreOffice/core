@@ -61,7 +61,7 @@ void FuVectorize::DoExecute( SfxRequest& )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) )
+        if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr )
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             std::unique_ptr<AbstractSdVectorizeDlg> pDlg(pFact ? pFact->CreateSdVectorizeDlg( mpWindow, static_cast<SdrGrafObj*>( pObj )->GetGraphic().GetBitmap(), mpDocSh ) : 0);

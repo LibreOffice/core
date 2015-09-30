@@ -1604,14 +1604,13 @@ sal_uInt32 SwMailMergeConfigItem::GetMergedDocumentCount() const
 
 static SwView* lcl_ExistsView(SwView* pView)
 {
-    const TypeId aType(TYPE(SwView));
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst( &aType, false );
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst( false, checkSfxViewShell<SwView> );
     while(pViewShell)
     {
         if(pViewShell == pView)
             return pView;
 
-        pViewShell = SfxViewShell::GetNext( *pViewShell, &aType, false );
+        pViewShell = SfxViewShell::GetNext( *pViewShell, false, checkSfxViewShell<SwView> );
     }
     return 0;
 }

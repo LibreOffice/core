@@ -87,7 +87,7 @@ public:
                     ScPreviewShell( SfxViewFrame*           pViewFrame,
                                     SfxViewShell*           pOldSh );
 
-    virtual         ~ScPreviewShell();
+    virtual         SC_DLLPUBLIC ~ScPreviewShell();
 
     void            InitStartTable(SCTAB nTab);
 

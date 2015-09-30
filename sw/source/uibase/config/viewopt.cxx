@@ -327,7 +327,7 @@ AuthorCharAttr::AuthorCharAttr() :
 sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
 {
     sal_uInt16 nRet = 0;
-    if(!pShell || PTR_CAST(SwWebDocShell, pShell))
+    if(!pShell || dynamic_cast<const SwWebDocShell*>( pShell) )
     {
         nRet = HTMLMODE_ON | HTMLMODE_SOME_STYLES;
         SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();

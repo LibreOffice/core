@@ -966,14 +966,14 @@ void SbModule::SetSource32( const OUString& r )
 static void _SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
 {
     // Self a BASIC?
-    if( pObj->IsA( TYPE(StarBASIC) ) && pObj->IsBroadcaster() )
+    if( dynamic_cast<const StarBASIC *>(pObj) != nullptr && pObj->IsBroadcaster() )
         pObj->GetBroadcaster().Broadcast( SbxHint( nId, p ) );
     // Then ask for the subobjects
     SbxArray* pObjs = pObj->GetObjects();
     for( sal_uInt16 i = 0; i < pObjs->Count(); i++ )
     {
         SbxVariable* pVar = pObjs->Get( i );
-        if( pVar->IsA( TYPE(SbxObject) ) )
+        if( dynamic_cast<const SbxObject *>(pVar) != nullptr )
             _SendHint( dynamic_cast<SbxObject*>( pVar), nId, p  );
     }
 }

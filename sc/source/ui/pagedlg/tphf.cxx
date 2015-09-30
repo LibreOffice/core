@@ -54,7 +54,7 @@ ScHFPage::ScHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSe
     SetExchangeSupport();
 
     SfxViewShell*   pSh = SfxViewShell::Current();
-    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,pSh);
+    ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( pSh );
     m_pBtnEdit->Show();
 
     aDataSet.Put( rSet );

@@ -91,7 +91,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     pDoc->SetOle2Link( Link<bool,void>() );
 
     pDoc->SetInReading( true );
-    pDoc->SetInXMLImport( 0 != dynamic_cast< XMLReader* >(po) );
+    pDoc->SetInXMLImport( dynamic_cast< XMLReader* >(po) !=  nullptr );
 
     SwPaM *pPam;
     if( pCrsr )

@@ -2533,13 +2533,13 @@ void ScViewFunc::MoveTable(
                     SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON, &aItem, &aTarget, 0L );
         if ( pRetItem )
         {
-            if ( pRetItem->ISA( SfxObjectItem ) )
-                pDestShell = PTR_CAST( ScDocShell, static_cast<const SfxObjectItem*>(pRetItem)->GetShell() );
-            else if ( pRetItem->ISA( SfxViewFrameItem ) )
+            if ( dynamic_cast<const SfxObjectItem*>( pRetItem) !=  nullptr )
+                pDestShell = dynamic_cast<ScDocShell*>( static_cast<const SfxObjectItem*>(pRetItem)->GetShell()  );
+            else if ( dynamic_cast<const SfxViewFrameItem*>( pRetItem) !=  nullptr )
             {
                 SfxViewFrame* pFrm = static_cast<const SfxViewFrameItem*>(pRetItem)->GetFrame();
                 if (pFrm)
-                    pDestShell = PTR_CAST( ScDocShell, pFrm->GetObjectShell() );
+                    pDestShell = dynamic_cast<ScDocShell*>( pFrm->GetObjectShell()  );
             }
             if (pDestShell)
                 pDestViewSh = pDestShell->GetBestViewShell();

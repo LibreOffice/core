@@ -97,7 +97,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                 if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
                 {
                     const SvxFieldData* pField = pFieldItem->GetField();
-                    if (pField->ISA(SvxURLField))
+                    if( dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
                     {
                         aHLinkItem.SetName(static_cast<const SvxURLField*>(pField)->GetRepresentation());
                         aHLinkItem.SetURL(static_cast<const SvxURLField*>(pField)->GetURL());

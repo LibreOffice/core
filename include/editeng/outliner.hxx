@@ -908,7 +908,7 @@ public:
     void            QuickFormatDoc( bool bFull = false );
 
     bool            UpdateFields();
-    void            RemoveFields( bool bKeepFieldText, TypeId aType = NULL );
+    void            RemoveFields( bool bKeepFieldText, std::function<bool ( const SvxFieldData* )> isFieldData = [] (const SvxFieldData* ){return true;} );
 
     void            FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );

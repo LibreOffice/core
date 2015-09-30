@@ -207,7 +207,7 @@ SwTwips SwTextFrm::EmptyHeight() const
 {
     if (IsCollapse()) {
         SwViewShell *pSh = getRootFrm()->GetCurrShell();
-        if ( pSh->IsA( TYPE(SwCrsrShell) ) ) {
+        if ( dynamic_cast<const SwCrsrShell*>( pSh ) !=  nullptr ) {
             SwCrsrShell *pCrSh = static_cast<SwCrsrShell*>(pSh);
             SwContentFrm *pCurrFrm=pCrSh->GetCurrFrm();
             if (pCurrFrm==static_cast<SwContentFrm const *>(this)) {

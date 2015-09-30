@@ -76,7 +76,7 @@ bool SwSdrHdl::IsFocusHdl() const
 
 static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
 {
-    const SwVirtFlyDrawObj *pVirt = pObj->ISA(SwVirtFlyDrawObj) ?
+    const SwVirtFlyDrawObj *pVirt = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr ?
                                             static_cast<const SwVirtFlyDrawObj*>(pObj) : 0;
     if ( pVirt )
     {
@@ -366,7 +366,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                             nNewPos );
                 pDrawPage->RecalcObjOrdNums();
                 // adjustments for accessibility API
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                 {
                     const SwFlyFrm *pTmpFlyFrm = static_cast<SwFlyFrm*>(pAnchoredObj);
                     rImp.DisposeAccessibleFrm( pTmpFlyFrm );
@@ -402,7 +402,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                                 nTmpNewPos );
                     pDrawPage->RecalcObjOrdNums();
                     // adjustments for accessibility API
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                     {
                         const SwFlyFrm *pTmpFlyFrm = static_cast<SwFlyFrm*>(pAnchoredObj);
                         rImp.DisposeAccessibleFrm( pTmpFlyFrm );
@@ -507,7 +507,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
 
     // On move forward, assure that object is moved before its own children.
     // Only Writer fly frames can have children.
-    if ( pMovedAnchoredObj->ISA(SwFlyFrm) &&
+    if ( dynamic_cast< const SwFlyFrm *>( pMovedAnchoredObj ) !=  nullptr &&
          bMovedForward && nNewPos < nObjCount - 1 )
     {
         sal_uInt32 nMaxChildOrdNum =
@@ -578,7 +578,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     std::vector< SdrObject* > aMovedChildObjs;
 
     // move 'children' accordingly
-    if ( pMovedAnchoredObj->ISA(SwFlyFrm) )
+    if ( dynamic_cast< const SwFlyFrm *>( pMovedAnchoredObj ) !=  nullptr )
     {
         const SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pMovedAnchoredObj);
 
@@ -611,7 +611,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
                 // collect 'child' object
                 aMovedChildObjs.push_back( pTmpObj );
                 // adjustments for accessibility API
-                if ( pTmpObj->ISA(SwVirtFlyDrawObj) )
+                if ( dynamic_cast< const SwVirtFlyDrawObj *>( pTmpObj ) !=  nullptr )
                 {
                     const SwFlyFrm *pTmpFlyFrm =
                         static_cast<SwVirtFlyDrawObj*>(pTmpObj)->GetFlyFrm();
@@ -676,7 +676,7 @@ const SwFrm* SwDrawView::CalcAnchor()
     //current anchor. Search only if we currently drag.
     const SwFrm* pAnch;
     Rectangle aMyRect;
-    const bool bFly = pObj->ISA(SwVirtFlyDrawObj);
+    const bool bFly = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr;
     if ( bFly )
     {
         pAnch = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetAnchorFrm();
@@ -819,7 +819,7 @@ void SwDrawView::CheckPossibilities()
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         const SwFrm *pFrm = NULL;
-        if ( pObj->ISA(SwVirtFlyDrawObj) )
+        if ( dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr )
         {
             const SwFlyFrm *pFly = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
             if ( pFly  )
@@ -899,7 +899,7 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
         while ( !aMarkedObjs.empty() )
         {
             SdrObject* pMarkObj = aMarkedObjs.back();
-            if ( pMarkObj->ISA(SwDrawVirtObj) )
+            if ( dynamic_cast< const SwDrawVirtObj *>( pMarkObj ) !=  nullptr )
             {
                 SdrObject* pRefObj = &(static_cast<SwDrawVirtObj*>(pMarkObj)->ReferencedObj());
                 if ( !_rMarkView.IsObjMarked( pRefObj )  )

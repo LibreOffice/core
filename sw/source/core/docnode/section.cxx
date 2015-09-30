@@ -605,7 +605,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
     {
         ::sfx2::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
         if( pBLnk && !pBLnk->IsVisible() &&
-            pBLnk->ISA( SwBaseLink ) &&
+            dynamic_cast< const SwBaseLink *>( pBLnk ) !=  nullptr &&
             0 != ( pNd = static_cast<SwBaseLink*>(pBLnk)->GetAnchor() ) )
         {
             pNd = pNd->StartOfSectionNode(); // If it's a SectionNode
@@ -682,7 +682,7 @@ SwSection * SwSectionFormat::GetSection() const
     return SwIterator<SwSection,SwSectionFormat>( *this ).First();
 }
 
-// Do not destroy all Frms in aDepend (Frms are recognized with a PTR_CAST).
+// Do not destroy all Frms in aDepend (Frms are recognized with a dynamic_cast).
 void SwSectionFormat::DelFrms()
 {
     SwSectionNode* pSectNd;
@@ -825,7 +825,7 @@ void SwSectionFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_FMT_CHG:
         if( !GetDoc()->IsInDtor() &&
             static_cast<const SwFormatChg*>(pNew)->pChangedFormat == static_cast<void*>(GetRegisteredIn()) &&
-            static_cast<const SwFormatChg*>(pNew)->pChangedFormat->IsA( TYPE( SwSectionFormat )) )
+            dynamic_cast<const SwSectionFormat*>(static_cast<const SwFormatChg*>(pNew)->pChangedFormat) != nullptr )
         {
             // My Parent will be changed, thus I need to update
             SwFrameFormat::Modify( pOld, pNew ); // Rewire first!
@@ -953,7 +953,7 @@ void SwSectionFormat::UpdateParent()
     SwIterator<SwClient,SwSectionFormat> aIter(*this);
     for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
     {
-        if( pLast->IsA( TYPE(SwSectionFormat) ) )
+        if( dynamic_cast<const SwSectionFormat*>(pLast) !=  nullptr )
         {
             if( !pSection )
             {
@@ -998,7 +998,7 @@ void SwSectionFormat::UpdateParent()
             }
         }
         else if( !pSection &&
-                pLast->IsA( TYPE(SwSection) ) )
+                dynamic_cast<const SwSection*>(pLast) !=  nullptr )
         {
             pSection = static_cast<SwSection*>(pLast);
             if( GetRegisteredIn() )
@@ -1155,7 +1155,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
         if( pLnk && pLnk != &rUpdLnk &&
             OBJECT_CLIENT_FILE == pLnk->GetObjType() &&
-            pLnk->ISA( SwBaseLink ) &&
+            dynamic_cast< const SwBaseLink *>( pLnk ) !=  nullptr &&
             ( pBLink = static_cast<SwBaseLink*>(pLnk) )->IsInRange( rSectNd.GetIndex(),
                                                 rSectNd.EndOfSectionIndex() ) )
         {

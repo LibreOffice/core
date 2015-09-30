@@ -5220,7 +5220,7 @@ bool ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
     while (nLinkPos<nLinkCount)
     {
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[nLinkPos];
-        if ( pBase->ISA(ScAreaLink) &&
+        if ( dynamic_cast< const ScAreaLink *>( pBase ) !=  nullptr &&
              static_cast<ScAreaLink*>(pBase)->GetDestArea().aStart == rDestRange.aStart )
         {
             if ( bUndo )

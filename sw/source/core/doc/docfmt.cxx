@@ -700,7 +700,7 @@ void SwDoc::DelCharFormat( SwCharFormat *pFormat, bool bBroadcast )
 
 void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
 {
-    if( pFormat->ISA( SwTableBoxFormat ) || pFormat->ISA( SwTableLineFormat ))
+    if( dynamic_cast<const SwTableBoxFormat*>( pFormat) != nullptr || dynamic_cast<const SwTableLineFormat*>( pFormat) != nullptr )
     {
         OSL_ENSURE( false, "Format is not in the DocArray any more, "
                        "so it can be deleted with delete" );

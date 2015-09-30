@@ -1154,7 +1154,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
     }
 
     if ( bGlobalOnly )
-        if ( !pShell->ISA(SfxModule) && !pShell->ISA(SfxApplication) && !pShell->ISA(SfxViewFrame) )
+        if ( dynamic_cast< const SfxModule *>( pShell ) == nullptr && dynamic_cast< const SfxApplication *>( pShell ) == nullptr && dynamic_cast< const SfxViewFrame *>( pShell ) == nullptr )
             return NULL;
 
     SfxItemPool &rPool = pShell->GetPool();
@@ -1223,7 +1223,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                    SfxItemPool::IsWhich(nWhich) &&
                    pOldItem ) )
             {
-                if ( pOldItem->ISA(SfxBoolItem) )
+                if ( dynamic_cast< const SfxBoolItem *>( pOldItem ) !=  nullptr )
                 {
                     // we can toggle Bools
                     bool bOldValue = static_cast<const SfxBoolItem *>(pOldItem)->GetValue();
@@ -1232,7 +1232,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                     aReq.AppendItem( *pNewItem );
                     delete pNewItem;
                 }
-                else if ( pOldItem->ISA(SfxEnumItemInterface) &&
+                else if ( dynamic_cast< const SfxEnumItemInterface *>( pOldItem ) !=  nullptr &&
                         static_cast<const SfxEnumItemInterface *>(pOldItem)->HasBoolValue())
                 {
                     // and Enums with Bool-Interface
@@ -1253,13 +1253,13 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                 DBG_ASSERT( pNewItem, "Toggle to slot without ItemFactory" );
                 pNewItem->SetWhich( nWhich );
 
-                if ( pNewItem->ISA(SfxBoolItem) )
+                if ( dynamic_cast< const SfxBoolItem *>( pNewItem ) !=  nullptr )
                 {
                   // we can toggle Bools
                     static_cast<SfxBoolItem*>(pNewItem)->SetValue( true );
                     aReq.AppendItem( *pNewItem );
                 }
-                else if ( pNewItem->ISA(SfxEnumItemInterface) &&
+                else if ( dynamic_cast< const SfxEnumItemInterface *>( pNewItem ) !=  nullptr &&
                         static_cast<SfxEnumItemInterface *>(pNewItem)->HasBoolValue())
                 {
                     // and Enums with Bool-Interface
@@ -1489,14 +1489,13 @@ void SfxBindings::UpdateControllers_Impl
     // Update the slots for so far available and bound Controllers for
     // Slave-Slots (Enum-value)
     DBG_ASSERT( !pSlot || 0 == pSlot->GetLinkedSlot() || !pItem ||
-                pItem->ISA(SfxEnumItemInterface),
+                dynamic_cast< const SfxEnumItemInterface *>( pItem ) !=  nullptr,
                 "master slot with non-enum-type found" );
     const SfxSlot *pFirstSlave = pSlot ? pSlot->GetLinkedSlot() : 0;
     if ( pIF && pFirstSlave)
     {
         // Items cast on EnumItem
-        const SfxEnumItemInterface *pEnumItem =
-                PTR_CAST(SfxEnumItemInterface,pItem);
+        const SfxEnumItemInterface *pEnumItem = dynamic_cast< const SfxEnumItemInterface* >(pItem);
         if ( eState == SfxItemState::DEFAULT && !pEnumItem )
             eState = SfxItemState::DONTCARE;
         else

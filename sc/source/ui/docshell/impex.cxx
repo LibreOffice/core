@@ -80,7 +80,7 @@ enum SylkVersion
 
 // Whole document without Undo
 ScImportExport::ScImportExport( ScDocument* p )
-    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
+    : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( true ), bSingle( true ), bUndo( false ),
@@ -94,7 +94,7 @@ ScImportExport::ScImportExport( ScDocument* p )
 
 // Insert am current cell without range(es)
 ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
-    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
+    : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
       aRange( rPt ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
@@ -110,7 +110,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
 //  ctor with a range is only used for export
 //! ctor with a string (and bSingle=true) is also used for DdeSetData
 ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
-    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
+    : pDocSh( dynamic_cast<ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
       aRange( r ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
@@ -128,7 +128,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
 // Evaluate input string - either range, cell or the whole document (when error)
 // If a View exists, the TabNo of the view will be used.
 ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
-    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
+    : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != NULL ),

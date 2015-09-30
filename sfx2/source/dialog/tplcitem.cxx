@@ -70,8 +70,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
             if ( !bAvailable )
                 rTemplateDlg.SetFamilyState(GetId(), 0);
             else {
-                const SfxTemplateItem *pStateItem = PTR_CAST(
-                    SfxTemplateItem, pItem);
+                const SfxTemplateItem *pStateItem = dynamic_cast< const SfxTemplateItem* >(pItem);
                 DBG_ASSERT(pStateItem != 0, "SfxTemplateItem expected");
                 rTemplateDlg.SetFamilyState( GetId(), pStateItem );
             }
@@ -146,7 +145,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         }
         case SID_STYLE_FAMILY :
         {
-            const SfxUInt16Item *pStateItem = PTR_CAST( SfxUInt16Item, pItem);
+            const SfxUInt16Item *pStateItem = dynamic_cast< const SfxUInt16Item* >(pItem);
             if (pStateItem)
                 rTemplateDlg.SetFamily( pStateItem->GetValue() );
             break;

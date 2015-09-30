@@ -94,7 +94,7 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 
@@ -111,7 +111,7 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj &&  dynamic_cast<const SdrGrafObj*>( pObj)  != nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
             GraphicObject aFilterObj( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
 
@@ -145,7 +145,7 @@ void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr  && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 
@@ -162,7 +162,7 @@ void ScGraphicShell::ExecuteExternalEdit( SfxRequest& )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
             GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
             m_ExternalEdits.push_back( std::unique_ptr<SdrExternalToolEdit>(
@@ -183,7 +183,7 @@ void ScGraphicShell::GetCompressGraphicState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 
@@ -200,7 +200,7 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj)  != nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
             SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
             ScopedVclPtrInstance< CompressGraphicsDialog > dialog( GetViewData()->GetDialogParent(), pGraphicObj, GetViewData()->GetBindings() );
@@ -228,7 +228,7 @@ void ScGraphicShell::GetCropGraphicState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && 0 != dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 
@@ -245,7 +245,7 @@ void ScGraphicShell::ExecuteCropGraphic( SfxRequest& )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
             pView->SetEditMode(SDREDITMODE_EDIT);
             pView->SetDragMode(SDRDRAG_CROP);
@@ -262,7 +262,7 @@ void ScGraphicShell::ExecuteSaveGraphic(SfxRequest& /*rReq*/)
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
             GraphicObject aGraphicObject( static_cast<SdrGrafObj*>( pObj )->GetGraphicObject() );
             {
@@ -283,7 +283,7 @@ void ScGraphicShell::GetSaveGraphicState(SfxItemSet &rSet)
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 
@@ -300,7 +300,7 @@ void ScGraphicShell::ExecuteChangePicture(SfxRequest& /*rReq*/)
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj && 0 != dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
             SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
             SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC));
@@ -335,7 +335,7 @@ void ScGraphicShell::GetChangePictureState(SfxItemSet &rSet)
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 

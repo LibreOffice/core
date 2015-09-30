@@ -118,7 +118,7 @@ void ScSpellDialogChildWindow::LoseFocus()
 
 void ScSpellDialogChildWindow::Reset()
 {
-    if( mpViewShell && (mpViewShell == PTR_CAST( ScTabViewShell, SfxViewShell::Current() )) )
+    if( mpViewShell && (mpViewShell == dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() ))  )
     {
         if( mxEngine.get() && mxEngine->IsAnyModified() )
         {
@@ -163,7 +163,7 @@ void ScSpellDialogChildWindow::Init()
 {
     if( mpViewShell )
         return;
-    if( (mpViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() )) == 0 )
+    if( (mpViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() )) == 0  )
         return;
 
     mpViewData = &mpViewShell->GetViewData();
@@ -262,7 +262,7 @@ void ScSpellDialogChildWindow::Init()
 
 bool ScSpellDialogChildWindow::IsSelectionChanged()
 {
-    if( !mxOldRangeList.get() || !mpViewShell || (mpViewShell != PTR_CAST( ScTabViewShell, SfxViewShell::Current() )) )
+    if( !mxOldRangeList.get() || !mpViewShell || (mpViewShell != dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() ))  )
         return true;
 
     if( EditView* pEditView = mpViewData->GetSpellingView() )

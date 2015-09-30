@@ -80,7 +80,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
         m_pRbtVar->IsValueChangedFromSaved() ||
         m_pLbFormat->IsValueChangedFromSaved() )
     {
-        if( pField->ISA( SvxDateField ) )
+        if( dynamic_cast< const SvxDateField *>( pField ) !=  nullptr )
         {
             const SvxDateField* pDateField = static_cast<const SvxDateField*>(pField);
             SvxDateType   eType;
@@ -97,7 +97,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             static_cast<SvxDateField*>( pNewField )->SetType( eType );
             static_cast<SvxDateField*>( pNewField )->SetFormat( eFormat );
         }
-        else if( pField->ISA( SvxExtTimeField ) )
+        else if( dynamic_cast< const SvxExtTimeField *>( pField ) !=  nullptr )
         {
             const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( pField );
             SvxTimeType   eType;
@@ -114,7 +114,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             static_cast<SvxExtTimeField*>( pNewField )->SetType( eType );
             static_cast<SvxExtTimeField*>( pNewField )->SetFormat( eFormat );
         }
-        else if( pField->ISA( SvxExtFileField ) )
+        else if( dynamic_cast< const SvxExtFileField *>( pField ) !=  nullptr )
         {
             const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>( pField );
             SvxFileType   eType;
@@ -127,8 +127,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
             eFormat = (SvxFileFormat) ( m_pLbFormat->GetSelectEntryPos() );
 
-            ::sd::DrawDocShell* pDocSh = PTR_CAST( ::sd::DrawDocShell,
-                                               SfxObjectShell::Current() );
+            ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell* >(SfxObjectShell::Current() );
 
             if( pDocSh )
             {
@@ -144,7 +143,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
                 static_cast<SvxExtFileField*>( pNewField )->SetFormat( eFormat );
             }
         }
-        else if( pField->ISA( SvxAuthorField ) )
+        else if( dynamic_cast< const SvxAuthorField *>( pField ) !=  nullptr )
         {
             SvxAuthorType   eType;
             SvxAuthorFormat eFormat;
@@ -173,7 +172,7 @@ void SdModifyFieldDlg::FillFormatList()
 
     m_pLbFormat->Clear();
 
-    if( pField->ISA( SvxDateField ) )
+    if( dynamic_cast< const SvxDateField *>( pField ) !=  nullptr )
     {
         const SvxDateField* pDateField = static_cast<const SvxDateField*>( pField );
         SvxDateField aDateField( *pDateField );
@@ -199,7 +198,7 @@ void SdModifyFieldDlg::FillFormatList()
 
         m_pLbFormat->SelectEntryPos( (sal_uInt16) ( pDateField->GetFormat() - 2 ) );
     }
-    else if( pField->ISA( SvxExtTimeField ) )
+    else if( dynamic_cast< const SvxExtTimeField *>( pField ) !=  nullptr )
     {
         const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( pField );
         SvxExtTimeField aTimeField( *pTimeField );
@@ -227,7 +226,7 @@ void SdModifyFieldDlg::FillFormatList()
 
         m_pLbFormat->SelectEntryPos( (sal_uInt16) ( pTimeField->GetFormat() - 2 ) );
     }
-    else if( pField->ISA( SvxExtFileField ) )
+    else if( dynamic_cast< const SvxExtFileField *>( pField ) !=  nullptr )
     {
         const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>( pField );
         SvxExtFileField aFileField( *pFileField );
@@ -239,7 +238,7 @@ void SdModifyFieldDlg::FillFormatList()
 
         m_pLbFormat->SelectEntryPos( (sal_uInt16) ( pFileField->GetFormat() ) );
     }
-    else if( pField->ISA( SvxAuthorField ) )
+    else if( dynamic_cast< const SvxAuthorField *>( pField ) !=  nullptr )
     {
         const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>( pField );
         SvxAuthorField aAuthorField( *pAuthorField );
@@ -260,7 +259,7 @@ void SdModifyFieldDlg::FillControls()
 {
     m_pLbFormat->Clear();
 
-    if( pField->ISA( SvxDateField ) )
+    if( dynamic_cast< const SvxDateField *>( pField ) !=  nullptr )
     {
         const SvxDateField* pDateField = static_cast<const SvxDateField*>(pField);
         SvxDateField aDateField( *pDateField );
@@ -270,7 +269,7 @@ void SdModifyFieldDlg::FillControls()
         else
             m_pRbtVar->Check();
     }
-    else if( pField->ISA( SvxExtTimeField ) )
+    else if( dynamic_cast< const SvxExtTimeField *>( pField ) !=  nullptr )
     {
         const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>(pField);
         SvxExtTimeField aTimeField( *pTimeField );
@@ -280,7 +279,7 @@ void SdModifyFieldDlg::FillControls()
         else
             m_pRbtVar->Check();
     }
-    else if( pField->ISA( SvxExtFileField ) )
+    else if( dynamic_cast< const SvxExtFileField *>( pField ) !=  nullptr )
     {
         const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>(pField);
         SvxExtFileField aFileField( *pFileField );
@@ -290,7 +289,7 @@ void SdModifyFieldDlg::FillControls()
         else
             m_pRbtVar->Check();
     }
-    else if( pField->ISA( SvxAuthorField ) )
+    else if( dynamic_cast< const SvxAuthorField *>( pField ) !=  nullptr )
     {
         const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>(pField);
         SvxAuthorField aAuthorField( *pAuthorField );
