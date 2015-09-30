@@ -3775,9 +3775,6 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
 
 bool ScFormulaCell::InterpretFormulaGroup()
 {
-    if (!officecfg::Office::Common::Misc::UseOpenCL::get())
-        return false;
-
     if (!mxGroup || !pCode)
         return false;
 
@@ -3802,6 +3799,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
             // Not good.
             return false;
     }
+
+    if (!officecfg::Office::Common::Misc::UseOpenCL::get())
+        return false;
 
     // TODO : Disable invariant formula group interpretation for now in order
     // to get implicit intersection to work.
