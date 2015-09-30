@@ -55,7 +55,7 @@ protected:
 class Download
 {
 public:
-    Download(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext,
+    Download(const css::uno::Reference< css::uno::XComponentContext >& xContext,
              const rtl::Reference< DownloadInteractionHandler >& rHandler) : m_xContext(xContext), m_aHandler(rHandler) {};
 
     // returns true when the content of rURL was successfully written to rLocalFile
@@ -71,7 +71,7 @@ protected:
 
 private:
     osl::Condition m_aCondition;
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& m_xContext;
+    const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const rtl::Reference< DownloadInteractionHandler > m_aHandler;
 };
 

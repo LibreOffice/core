@@ -64,22 +64,22 @@ namespace pcr
 
     class TabOrderDialog : public ModalDialog
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >
+        css::uno::Reference< css::awt::XTabControllerModel >
                                     m_xTempModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >
+        css::uno::Reference< css::awt::XTabControllerModel >
                                     m_xModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+        css::uno::Reference< css::awt::XControlContainer >
                                     m_xControlContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                                     m_xORB;
 
-        VclPtr<TabOrderListBox> m_pLB_Controls;
+        VclPtr<TabOrderListBox>     m_pLB_Controls;
 
-        VclPtr<OKButton> m_pPB_OK;
+        VclPtr<OKButton>            m_pPB_OK;
 
-        VclPtr<PushButton> m_pPB_MoveUp;
-        VclPtr<PushButton> m_pPB_MoveDown;
-        VclPtr<PushButton> m_pPB_AutoOrder;
+        VclPtr<PushButton>          m_pPB_MoveUp;
+        VclPtr<PushButton>          m_pPB_MoveDown;
+        VclPtr<PushButton>          m_pPB_AutoOrder;
 
         ImageList*                  pImageList;
 
@@ -90,15 +90,15 @@ namespace pcr
 
         void FillList();
         Image GetImage(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxSet
+            const css::uno::Reference< css::beans::XPropertySet > & _rxSet
         ) const;
 
     public:
         TabOrderDialog(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& _rxTabModel,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxControlCont,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< css::awt::XTabControllerModel >& _rxTabModel,
+            const css::uno::Reference< css::awt::XControlContainer >& _rxControlCont,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
         virtual ~TabOrderDialog();

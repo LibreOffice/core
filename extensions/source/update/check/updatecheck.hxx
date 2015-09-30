@@ -64,8 +64,8 @@ public:
     inline SAL_CALL operator rtl::Reference< UpdateCheckConfigListener > ()
         { return static_cast< UpdateCheckConfigListener * > (this); }
 
-    void initialize(const com::sun::star::uno::Sequence<com::sun::star::beans::NamedValue>& rValues,
-                    const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext);
+    void initialize(const css::uno::Sequence<css::beans::NamedValue>& rValues,
+                    const css::uno::Reference<css::uno::XComponentContext>& xContext);
 
     // Update internal update info member
     void setUpdateInfo(const UpdateInfo& aInfo);
@@ -104,7 +104,7 @@ public:
     void cancelDownload();
 
     // Returns the XInteractionHandler of the UpdateHandler instance if present (and visible)
-    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
+    css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() const;
 
     // UpdateCheckConfigListener
     virtual void autoCheckStatusChanged(bool enabled) SAL_OVERRIDE;
@@ -163,8 +163,8 @@ private:
     bool m_bShowExtUpdDlg;
 
     rtl::Reference<UpdateHandler> m_aUpdateHandler;
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> m_xMenuBarUI;
-    com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_xContext;
+    css::uno::Reference<css::beans::XPropertySet> m_xMenuBarUI;
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
     friend class UpdateCheckInitData;
 };

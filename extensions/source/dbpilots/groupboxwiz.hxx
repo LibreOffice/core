@@ -47,8 +47,8 @@ namespace dbp
     public:
         OGroupBoxWizard(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObjectModel,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
         OOptionGroupSettings& getSettings() { return m_aSettings; }

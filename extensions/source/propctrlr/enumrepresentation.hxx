@@ -47,13 +47,13 @@ namespace pcr
         */
         virtual void SAL_CALL getValueFromDescription(
                 const OUString& _rDescription,
-                ::com::sun::star::uno::Any& _out_rValue
+                css::uno::Any& _out_rValue
             ) const = 0;
 
         /** converts a given property value into a description
         */
         virtual OUString SAL_CALL getDescriptionForValue(
-                const ::com::sun::star::uno::Any& _rEnumValue
+                const css::uno::Any& _rEnumValue
             ) const = 0;
 
         virtual ~IPropertyEnumRepresentation() { };

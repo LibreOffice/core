@@ -147,15 +147,15 @@ namespace
 class ScannerThread : public osl::Thread
 {
     std::shared_ptr<SaneHolder>               m_pHolder;
-    Reference< com::sun::star::lang::XEventListener > m_xListener;
-    ScannerManager*                             m_pManager; // just for the disposing call
+    Reference< css::lang::XEventListener >    m_xListener;
+    ScannerManager*                           m_pManager; // just for the disposing call
 
 public:
     virtual void run() SAL_OVERRIDE;
     virtual void onTerminated() SAL_OVERRIDE { delete this; }
 public:
     ScannerThread( std::shared_ptr<SaneHolder> pHolder,
-                   const Reference< com::sun::star::lang::XEventListener >& listener,
+                   const Reference< css::lang::XEventListener >& listener,
                    ScannerManager* pManager );
     virtual ~ScannerThread();
 };
@@ -164,7 +164,7 @@ public:
 
 ScannerThread::ScannerThread(
                              std::shared_ptr<SaneHolder> pHolder,
-                             const Reference< com::sun::star::lang::XEventListener >& listener,
+                             const Reference< css::lang::XEventListener >& listener,
                              ScannerManager* pManager )
         : m_pHolder( pHolder ), m_xListener( listener ), m_pManager( pManager )
 {
@@ -206,7 +206,7 @@ void ScannerThread::run()
 
 
     Reference< XInterface > xXInterface( static_cast< OWeakObject* >( m_pManager ) );
-    m_xListener->disposing( com::sun::star::lang::EventObject(xXInterface) );
+    m_xListener->disposing( css::lang::EventObject(xXInterface) );
     m_pHolder->m_bBusy = false;
 }
 
@@ -270,7 +270,7 @@ Sequence< ScannerContext > ScannerManager::getAvailableScanners() throw(std::exc
 
 
 sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_context,
-                                                  const Reference< com::sun::star::lang::XEventListener >& listener )
+                                                  const Reference< css::lang::XEventListener >& listener )
     throw (ScannerException, RuntimeException, std::exception)
 {
     bool bRet;
@@ -313,7 +313,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
 
 
 void ScannerManager::startScan( const ScannerContext& scanner_context,
-                                const Reference< com::sun::star::lang::XEventListener >& listener ) throw( ScannerException, std::exception )
+                                const Reference< css::lang::XEventListener >& listener ) throw( ScannerException, std::exception )
 {
     osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;

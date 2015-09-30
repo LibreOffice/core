@@ -243,7 +243,7 @@ namespace logging
                 throw NullPointerException();
 
             Reference< XMultiServiceFactory > xConfigProvider(
-                com::sun::star::configuration::theDefaultProvider::get(_rContext));
+                css::configuration::theDefaultProvider::get(_rContext));
 
             // write access to the "Settings" node (which includes settings for all loggers)
             Sequence< Any > aArguments(1);

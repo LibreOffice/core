@@ -34,9 +34,9 @@ namespace pcr
     class PushButtonNavigation
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                     m_xControlModel;
-        bool    m_bIsPushButton;
+        bool        m_bIsPushButton;
 
     public:
         /** ctor
@@ -44,41 +44,41 @@ namespace pcr
                 the control model which is or will be bound
         */
         PushButtonNavigation(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel
+            const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel
         );
 
         /** returns the current value of the "ButtonType" property, taking into account
             the "virtual" button types such as "move-to-next-record button".
         */
-        ::com::sun::star::uno::Any
+        css::uno::Any
                 getCurrentButtonType() const;
 
         /** sets the current value of the "ButtonType" property, taking into account
             the "virtual" button types such as "move-to-next-record button".
         */
-        void    setCurrentButtonType( const ::com::sun::star::uno::Any& _rValue ) const;
+        void    setCurrentButtonType( const css::uno::Any& _rValue ) const;
 
         /** retrieves the current state of the "ButtonType" property, taking into account
             the "virtual" button types such as "move-to-next-record button".
         */
-        ::com::sun::star::beans::PropertyState
+        css::beans::PropertyState
                 getCurrentButtonTypeState( ) const;
 
         /** returns the current value of the "TargetURL" property, taking into account
             that some URLs are special values caused by "virtual" ButtonTypes
         */
-        ::com::sun::star::uno::Any
+        css::uno::Any
                 getCurrentTargetURL() const;
 
         /** sets the current value of the "TargetURL" property, taking into account
             that some URLs are special values caused by "virtual" ButtonTypes
         */
-        void    setCurrentTargetURL( const ::com::sun::star::uno::Any& _rValue ) const;
+        void    setCurrentTargetURL( const css::uno::Any& _rValue ) const;
 
         /** retrieves the current state of the "TargetURL" property, taking into account
             that some URLs are special values caused by "virtual" ButtonTypes
         */
-        ::com::sun::star::beans::PropertyState
+        css::beans::PropertyState
                 getCurrentTargetURLState( ) const;
 
         /** determines whether the current button tpye is FormButtonType_URL

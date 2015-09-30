@@ -105,7 +105,7 @@ namespace pcr
     }
 
     // #95343# ---------------------------------------------------------------
-    ::com::sun::star::awt::Size OPropertyBrowserView::getMinimumSize()
+    css::awt::Size OPropertyBrowserView::getMinimumSize()
     {
         Size aSize = GetOutputSizePixel();
         if( m_pPropBox )
@@ -113,7 +113,7 @@ namespace pcr
             aSize.setHeight( m_pPropBox->getMinimumHeight() );
             aSize.setWidth( m_pPropBox->getMinimumWidth() );
         }
-        return ::com::sun::star::awt::Size( aSize.Width(), aSize.Height() );
+        return css::awt::Size( aSize.Width(), aSize.Height() );
     }
 
 

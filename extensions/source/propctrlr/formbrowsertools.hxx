@@ -32,32 +32,32 @@ namespace pcr
 {
 
 
-    OUString GetUIHeadlineName(sal_Int16 _nClassId, const ::com::sun::star::uno::Any& _rUnoObject);
-    sal_Int16 classifyComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+    OUString GetUIHeadlineName(sal_Int16 _nClassId, const css::uno::Any& _rUnoObject);
+    sal_Int16 classifyComponent( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
 
 
-    struct FindPropertyByHandle : public ::std::unary_function< ::com::sun::star::beans::Property, bool >
+    struct FindPropertyByHandle : public ::std::unary_function< css::beans::Property, bool >
     {
     private:
         sal_Int32 m_nId;
 
     public:
         FindPropertyByHandle( sal_Int32 _nId ) : m_nId ( _nId ) { }
-        bool operator()( const ::com::sun::star::beans::Property& _rProp ) const
+        bool operator()( const css::beans::Property& _rProp ) const
         {
             return m_nId == _rProp.Handle;
         }
     };
 
 
-    struct FindPropertyByName : public ::std::unary_function< ::com::sun::star::beans::Property, bool >
+    struct FindPropertyByName : public ::std::unary_function< css::beans::Property, bool >
     {
     private:
         OUString m_sName;
 
     public:
         FindPropertyByName( const OUString& _rName ) : m_sName( _rName ) { }
-        bool operator()( const ::com::sun::star::beans::Property& _rProp ) const
+        bool operator()( const css::beans::Property& _rProp ) const
         {
             return m_sName == _rProp.Name;
         }
@@ -65,8 +65,8 @@ namespace pcr
 
 
     struct PropertyLessByName
-                :public ::std::binary_function  <   ::com::sun::star::beans::Property,
-                                                    ::com::sun::star::beans::Property,
+                :public ::std::binary_function  <   css::beans::Property,
+                                                    css::beans::Property,
                                                     bool
                                                 >
     {
@@ -78,8 +78,8 @@ namespace pcr
 
 
     struct TypeLessByName
-                :public ::std::binary_function  <   ::com::sun::star::uno::Type,
-                                                    ::com::sun::star::uno::Type,
+                :public ::std::binary_function  <   css::uno::Type,
+                                                    css::uno::Type,
                                                     bool
                                                 >
     {
@@ -90,7 +90,7 @@ namespace pcr
     };
 
 
-    typedef ::std::set< ::com::sun::star::beans::Property, PropertyLessByName > PropertyBag;
+    typedef ::std::set< css::beans::Property, PropertyLessByName > PropertyBag;
 
 
 } // namespace pcr

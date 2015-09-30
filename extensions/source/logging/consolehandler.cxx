@@ -91,7 +91,7 @@ namespace logging
         virtual sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
@@ -252,7 +252,7 @@ namespace logging
         if ( !( _rArguments[0] >>= aSettings ) )
             throw IllegalArgumentException( OUString(), *this, 1 );
 
-        // createWithSettings( [in] sequence< ::com::sun::star::beans::NamedValue > Settings )
+        // createWithSettings( [in] sequence< css::beans::NamedValue > Settings )
         ::comphelper::NamedValueCollection aTypedSettings( aSettings );
         m_aHandlerHelper.initFromSettings( aTypedSettings );
 

@@ -36,13 +36,13 @@ namespace logging
     {
     private:
         // <attributes>
-        rtl_TextEncoding    m_eEncoding;
-        sal_Int32           m_nLevel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::logging::XLogFormatter >
-                            m_xFormatter;
+        rtl_TextEncoding            m_eEncoding;
+        sal_Int32                   m_nLevel;
+        css::uno::Reference< css::logging::XLogFormatter >
+                                    m_xFormatter;
         // <//attributes>
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                                     m_xContext;
         ::osl::Mutex&               m_rMutex;
         ::cppu::OBroadcastHelper&   m_rBHelper;
@@ -50,7 +50,7 @@ namespace logging
 
     public:
         LogHandlerHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             ::osl::Mutex& _rMutex,
             ::cppu::OBroadcastHelper& _rBHelper
         );
@@ -65,10 +65,10 @@ namespace logging
         inline  rtl_TextEncoding
                 getTextEncoding() const { return m_eEncoding; }
 
-        inline  ::com::sun::star::uno::Reference< ::com::sun::star::logging::XLogFormatter >
+        inline  css::uno::Reference< css::logging::XLogFormatter >
                 getFormatter() const { return m_xFormatter; }
         inline  void
-                setFormatter( const ::com::sun::star::uno::Reference< ::com::sun::star::logging::XLogFormatter >& _rxFormatter )
+                setFormatter( const css::uno::Reference< css::logging::XLogFormatter >& _rxFormatter )
                 {
                     m_xFormatter = _rxFormatter;
                 }
@@ -104,7 +104,7 @@ namespace logging
             Finally, the unicode string is encoded into a byte string, using our encoding setting. Then,
             <TRUE/> is returned.
         */
-        bool    formatForPublishing( const ::com::sun::star::logging::LogRecord& _rRecord, OString& _out_rEntry ) const;
+        bool    formatForPublishing( const css::logging::LogRecord& _rRecord, OString& _out_rEntry ) const;
 
         /** retrieves our formatter's heading, encoded with our encoding
 

@@ -54,13 +54,13 @@ namespace pcr
         VclPtr<FixedText>       m_aFtTitle;
         Size                    m_aOutputSize;
         Point                   m_aLinePos;
-        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
+        css::uno::Reference< css::inspection::XPropertyControl >
                                 m_xControl;
-        VclPtr<vcl::Window>            m_pControlWindow;
-        VclPtr<PushButton>             m_pBrowseButton;
-        VclPtr<PushButton>             m_pAdditionalBrowseButton;
+        VclPtr<vcl::Window>     m_pControlWindow;
+        VclPtr<PushButton>      m_pBrowseButton;
+        VclPtr<PushButton>      m_pAdditionalBrowseButton;
         IButtonClickListener*   m_pClickListener;
-        VclPtr<vcl::Window>            m_pTheParent;
+        VclPtr<vcl::Window>     m_pTheParent;
         sal_uInt16              m_nNameWidth;
         sal_uInt16              m_nEnableFlags;
         bool                    m_bIndentTitle;
@@ -70,8 +70,8 @@ namespace pcr
                             OBrowserLine( const OUString& _rEntryName, vcl::Window* pParent);
                             ~OBrowserLine();
 
-        void setControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
-        const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& getControl() const
+        void setControl( const css::uno::Reference< css::inspection::XPropertyControl >& _rxControl );
+        const css::uno::Reference< css::inspection::XPropertyControl >& getControl() const
         {
             return m_xControl;
         }
@@ -80,8 +80,7 @@ namespace pcr
             return m_pControlWindow;
         }
 
-        const OUString&
-                            GetEntryName() const { return m_sEntryName; }
+        const OUString&     GetEntryName() const { return m_sEntryName; }
 
         void                SetComponentHelpIds( const OString& _rHelpId, const OString& _sPrimaryButtonId, const OString& _sSecondaryButtonId );
 
@@ -93,12 +92,12 @@ namespace pcr
         void                SetPosSizePixel(Point aPos,Size aSize);
         void                Show(bool bFlag=true);
         void                Hide();
-        bool            IsVisible();
+        bool                IsVisible();
 
-        vcl::Window*             GetRefWindow();
+        vcl::Window*        GetRefWindow();
         void                SetTabOrder(vcl::Window* pRefWindow, ZOrderFlags nFlags );
 
-        bool            GrabFocus();
+        bool                GrabFocus();
         void                ShowBrowseButton( const OUString& _rImageURL, bool _bPrimary );
         void                ShowBrowseButton( const Image& _rImage, bool _bPrimary );
         void                ShowBrowseButton( bool _bPrimary );

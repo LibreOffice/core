@@ -114,26 +114,26 @@ namespace bib
         implSetDesignMode( !m_xForm.is() || !m_xForm->isLoaded() );
     }
 
-    void FormControlContainer::_loaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
+    void FormControlContainer::_loaded( const css::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( false );
     }
 
-    void FormControlContainer::_unloading( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
+    void FormControlContainer::_unloading( const css::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( true );
     }
 
-    void FormControlContainer::_unloaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
+    void FormControlContainer::_unloaded( const css::lang::EventObject& /*_rEvent*/ )
     {
     }
 
-    void FormControlContainer::_reloading( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
+    void FormControlContainer::_reloading( const css::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( true );
     }
 
-    void FormControlContainer::_reloaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
+    void FormControlContainer::_reloaded( const css::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( false );
     }

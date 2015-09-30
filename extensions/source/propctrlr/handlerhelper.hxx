@@ -50,29 +50,29 @@ namespace pcr
         /** helper for implementing XPropertyHandler::describePropertyLine in a generic way
         */
         static  void describePropertyLine(
-                const ::com::sun::star::beans::Property& _rProperty,
-                ::com::sun::star::inspection::LineDescriptor& /* [out] */ _out_rDescriptor,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
+                const css::beans::Property& _rProperty,
+                css::inspection::LineDescriptor& /* [out] */ _out_rDescriptor,
+                const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
             );
 
         /** helper for implementing XPropertyHandler::convertToPropertyValue
         */
-        static ::com::sun::star::uno::Any convertToPropertyValue(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter,
-                const ::com::sun::star::beans::Property& _rProperty,
-                const ::com::sun::star::uno::Any& _rControlValue
+        static css::uno::Any convertToPropertyValue(
+                const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                const css::uno::Reference< css::script::XTypeConverter >& _rxTypeConverter,
+                const css::beans::Property& _rProperty,
+                const css::uno::Any& _rControlValue
             );
 
         /// helper for implementing XPropertyHandler::convertToControlValue
-        static ::com::sun::star::uno::Any convertToControlValue(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter,
-                const ::com::sun::star::uno::Any& _rPropertyValue,
-                const ::com::sun::star::uno::Type& _rControlValueType
+        static css::uno::Any convertToControlValue(
+                const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                const css::uno::Reference< css::script::XTypeConverter >& _rxTypeConverter,
+                const css::uno::Any& _rPropertyValue,
+                const css::uno::Type& _rControlValueType
             );
 
-        /** creates an <member scope="com::sun::star::inspection">PropertyControlType::ListBox</member>-type control
+        /** creates an <member scope="css::inspection">PropertyControlType::ListBox</member>-type control
             and fills it with initial values
 
             @param _rxControlFactory
@@ -90,15 +90,15 @@ namespace pcr
             @return
                 the newly created control
         */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
+        static css::uno::Reference< css::inspection::XPropertyControl >
             createListBoxControl(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
+                const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries,
                 bool _bReadOnlyControl,
                 bool _bSorted
             );
 
-        /** creates an <member scope="com::sun::star::inspection">PropertyControlType::ComboBox</member>-type control
+        /** creates an <member scope="css::inspection">PropertyControlType::ComboBox</member>-type control
             and fills it with initial values
 
             @param _rxControlFactory
@@ -116,47 +116,47 @@ namespace pcr
             @return
                 the newly created control
         */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
+        static css::uno::Reference< css::inspection::XPropertyControl >
             createComboBoxControl(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
+                const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries,
                 bool _bReadOnlyControl,
                 bool _bSorted
             );
 
-        /** creates an <member scope="com::sun::star::inspection">PropertyControlType::NumericField</member>-type control
+        /** creates an <member scope="css::inspection">PropertyControlType::NumericField</member>-type control
             and initializes it
 
             @param _rxControlFactory
                 A control factory. Must not be <NULL/>.
             @param _nDigits
                 number of decimal digits for the control
-                (<member scope="com::sun::star::inspection">XNumericControl::DecimalDigits</member>)
+                (<member scope="css::inspection">XNumericControl::DecimalDigits</member>)
             @param _rMinValue
                 minimum value which can be entered in the control
-                (<member scope="com::sun::star::inspection">XNumericControl::MinValue</member>)
+                (<member scope="css::inspection">XNumericControl::MinValue</member>)
             @param _rMaxValue
                 maximum value which can be entered in the control
-                (<member scope="com::sun::star::inspection">XNumericControl::MaxValue</member>)
+                (<member scope="css::inspection">XNumericControl::MaxValue</member>)
             @param _bReadOnlyControl
                 determines whether the control should be read-only
 
             @return
                 the newly created control
         */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
+        static css::uno::Reference< css::inspection::XPropertyControl >
             createNumericControl(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
+                const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
                 sal_Int16 _nDigits,
-                const ::com::sun::star::beans::Optional< double >& _rMinValue,
-                const ::com::sun::star::beans::Optional< double >& _rMaxValue,
+                const css::beans::Optional< double >& _rMinValue,
+                const css::beans::Optional< double >& _rMaxValue,
                 bool _bReadOnlyControl
             );
 
         /** marks the document passed in our UNO context as modified
 
             The method looks up a value called "ContextDocument" in the given UNO component context,
-            queries it for the ->com::sun::star::util::XModifiable interface, and calls its
+            queries it for the ->css::util::XModifiable interface, and calls its
             setModified method. If either of those steps fails, this is asserted in a non-product
             version, and silently ignore otherwise.
 
@@ -184,15 +184,15 @@ namespace pcr
 
 
         /** determines whether given PropertyAttributes require a to-be-created
-            <type scope="com::sun::star::inspection">XPropertyControl</type> to be read-only
+            <type scope="css::inspection">XPropertyControl</type> to be read-only
 
             @param  _nPropertyAttributes
                 the attributes of the property which should be reflected by a to-be-created
-                <type scope="com::sun::star::inspection">XPropertyControl</type>
+                <type scope="css::inspection">XPropertyControl</type>
         */
         inline static bool requiresReadOnlyControl( sal_Int16 _nPropertyAttributes )
         {
-            return ( _nPropertyAttributes & ::com::sun::star::beans::PropertyAttribute::READONLY ) != 0;
+            return ( _nPropertyAttributes & css::beans::PropertyAttribute::READONLY ) != 0;
         }
 
     private:

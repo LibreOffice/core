@@ -79,7 +79,7 @@ namespace pcr
         inline  sal_Int32   getMinHelpTextLines() const { return m_nMinHelpTextLines; }
         inline  sal_Int32   getMaxHelpTextLines() const { return m_nMaxHelpTextLines; }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+        css::uno::Reference< css::beans::XPropertySetInfo >
                             getPropertySetInfo();
         ::cppu::IPropertyArrayHelper&
                             getInfoHelper();
@@ -223,13 +223,13 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL ImplInspectorModel::getIsReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Bool SAL_CALL ImplInspectorModel::getIsReadOnly() throw (css::uno::RuntimeException, std::exception)
     {
         return m_pProperties->isReadOnly();
     }
 
 
-    void SAL_CALL ImplInspectorModel::setIsReadOnly( sal_Bool _IsReadOnly ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL ImplInspectorModel::setIsReadOnly( sal_Bool _IsReadOnly ) throw (css::uno::RuntimeException, std::exception)
     {
         setFastPropertyValue( MODEL_PROPERTY_ID_IS_READ_ONLY, makeAny( _IsReadOnly ) );
     }

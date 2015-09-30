@@ -109,17 +109,17 @@ public:
         throw(Exception, RuntimeException);
 
     // XDefaultProperty
-    virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return m_sDefaultMember; }
 
     // XDefaultMethod
-    virtual OUString SAL_CALL getDefaultMethodName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
+    virtual OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException) { return m_sDefaultMember; }
 
-    virtual ::com::sun::star::uno::Any SAL_CALL invokeGetProperty( const OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL invokePutProperty( const OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL invokeGetProperty( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL invokePutProperty( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
 
     // XDirectInvocation
-    virtual ::com::sun::star::uno::Any SAL_CALL directInvoke( const OUString& aName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasMember( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL directInvoke( const OUString& aName, const css::uno::Sequence< css::uno::Any >& aParams ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasMember( const OUString& aName ) throw (css::uno::RuntimeException);
 
 
     Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,

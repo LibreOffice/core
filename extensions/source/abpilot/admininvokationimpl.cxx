@@ -43,7 +43,7 @@ namespace abp
     using namespace ::com::sun::star::sdbc;
 
     OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XComponentContext >& _rxContext,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDataSource
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxDataSource
                     , vcl::Window* _pMessageParent)
         :m_xContext(_rxContext)
         ,m_xDataSource(_rxDataSource)

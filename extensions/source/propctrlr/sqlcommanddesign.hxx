@@ -42,7 +42,7 @@ namespace pcr
 
     //= SQLCommandDesigner
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener
                                     >   SQLCommandDesigner_Base;
     /** encapsulates the code for calling and managing a query design frame, used
         for interactively designing the Command property of a ->RowSet
@@ -50,12 +50,12 @@ namespace pcr
     class SQLCommandDesigner : public SQLCommandDesigner_Base
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >  m_xORB;
-        ::dbtools::SharedConnection                                                         m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            m_xDesigner;
-        ::rtl::Reference< ISQLCommandAdapter >                                              m_xObjectAdapter;
-        Link<SQLCommandDesigner&,void>                                                      m_aCloseLink;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< css::lang::XMultiComponentFactory >  m_xORB;
+        ::dbtools::SharedConnection                               m_xConnection;
+        css::uno::Reference< css::frame::XController >            m_xDesigner;
+        ::rtl::Reference< ISQLCommandAdapter >                    m_xObjectAdapter;
+        Link<SQLCommandDesigner&,void>                            m_aCloseLink;
 
     public:
         /** creates the instance, and immediately opens the SQL command design frame
@@ -68,12 +68,12 @@ namespace pcr
             the current connection of ->_rxRowSet. Must not be <NULL/>.
         @param _rCloseLink
             link to call when the component has been closed
-        @throws ::com::sun::star::lang::NullPointerException
+        @throws css::lang::NullPointerException
             if any of the arguments (except ->_rCloseLink) is <NULL/>, or if the component context
             does not provide a valid component factory.
         */
         SQLCommandDesigner(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,
             const ::dbtools::SharedConnection& _rConnection,
             const Link<SQLCommandDesigner&,void>& _rCloseLink
@@ -110,10 +110,10 @@ namespace pcr
 
     protected:
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~SQLCommandDesigner();
@@ -137,7 +137,7 @@ namespace pcr
             return !m_xContext.is();
         }
         /** checks whether we are already disposed
-            @throws ::com::sun::star::lang::DisposedException
+            @throws css::lang::DisposedException
                 if we in fact are disposed
         */
         void impl_checkDisposed_throw() const;
@@ -146,7 +146,7 @@ namespace pcr
             @precond
                 ->m_xORB is not <NULL/>
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+        css::uno::Reference< css::frame::XFrame >
             impl_createEmptyParentlessTask_nothrow() const;
 
         /** called whenever the component denoted by m_xDesigner has been closed

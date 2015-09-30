@@ -41,11 +41,11 @@ namespace bib
         VclPtr<BibView> mpBibView;
     protected:
         // FormControlContainer
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+        virtual css::uno::Reference< css::awt::XControlContainer >
                             getControlContainer() SAL_OVERRIDE;
         // XLoadListener equivalents
-        virtual void        _loaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
-        virtual void        _reloaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void        _loaded( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void        _reloaded( const css::lang::EventObject& _rEvent ) SAL_OVERRIDE;
     public:
         using FormControlContainer::connectForm;
         using FormControlContainer::disconnectForm;
@@ -56,11 +56,11 @@ namespace bib
     class BibView : public BibWindow
     {
     private:
-        BibDataManager*                                                             m_pDatMan;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable>        m_xDatMan;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener>    m_xGeneralPage;
-        VclPtr<BibGeneralPage>                                                      m_pGeneralPage;
-        BibViewFormControlContainer                                                 m_aFormControlContainer;
+        BibDataManager*                                   m_pDatMan;
+        css::uno::Reference< css::form::XLoadable>        m_xDatMan;
+        css::uno::Reference< css::awt::XFocusListener>    m_xGeneralPage;
+        VclPtr<BibGeneralPage>                            m_pGeneralPage;
+        BibViewFormControlContainer                       m_aFormControlContainer;
 
     private:
         DECL_LINK_TYPED(CallMappingHdl, void*, void);

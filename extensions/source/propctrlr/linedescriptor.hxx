@@ -30,12 +30,12 @@ namespace pcr
 
     //= OLineDescriptor
 
-    struct OLineDescriptor : public ::com::sun::star::inspection::LineDescriptor
+    struct OLineDescriptor : public css::inspection::LineDescriptor
     {
-        OUString             sName;              // the name of the property
-        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
+        OUString                    sName;              // the name of the property
+        css::uno::Reference< css::inspection::XPropertyHandler >
                                     xPropertyHandler;   // the handler for this property
-        ::com::sun::star::uno::Any  aValue;             // the current value of the property
+        css::uno::Any               aValue;             // the current value of the property
 
         bool                        bUnknownValue    : 1;   // is the property value currently "unknown"? (PropertyState_AMBIGUOUS)
         bool                        bReadOnly        : 1;
@@ -46,9 +46,9 @@ namespace pcr
         {
         }
 
-        void assignFrom( const ::com::sun::star::inspection::LineDescriptor& _rhs )
+        void assignFrom( const css::inspection::LineDescriptor& _rhs )
         {
-            ::com::sun::star::inspection::LineDescriptor::operator=( _rhs );
+            css::inspection::LineDescriptor::operator=( _rhs );
         }
     };
 

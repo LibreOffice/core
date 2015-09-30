@@ -60,9 +60,9 @@ namespace abp
                 field mapping dialog.
         */
         bool invokeDialog(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             class vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDataSource,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxDataSource,
             AddressSettings& _rSettings
         );
 
@@ -72,7 +72,7 @@ namespace abp
             and this function creates a mapping which uses this configuration information.</p>
         */
         void defaultMapping(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             MapString2String& /* [out] */ _rFieldAssignment
         );
 
@@ -80,7 +80,7 @@ namespace abp
         /** writes a field mapping for the template document address source
         */
         void writeTemplateAddressFieldMapping(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const MapString2String& _rFieldAssignment
         );
 
@@ -98,7 +98,7 @@ namespace abp
             expect it.
         */
         void writeTemplateAddressSource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const OUString& _rDataSourceName,
             const OUString& _rTableName
         );
@@ -106,7 +106,7 @@ namespace abp
         /** writes the configuration entry which states the pilot has been completed successfully
         */
         void markPilotSuccess(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
 

@@ -26,22 +26,22 @@ class ResMgr;
 namespace extensions { namespace resource
 {
     /** This class provides access to tools library text resources */
-    class ResourceIndexAccess : public cppu::WeakImplHelper< ::com::sun::star::container::XNameAccess>
+    class ResourceIndexAccess : public cppu::WeakImplHelper< css::container::XNameAccess>
     {
         public:
             /** The ctor takes a sequence with one element: the name of the resource, e.g. svt */
-            ResourceIndexAccess(::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> const& rArgs, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const&);
+            ResourceIndexAccess(css::uno::Sequence< css::uno::Any> const& rArgs, css::uno::Reference< css::uno::XComponentContext> const&);
             // XNameAccess
             // The XNameAccess provides access to two named elements:
             //    "String" returns a XIndexAccess to String resources
             //    "StringList" returns a XIndexAccess to StringList/StringArray resources
-            virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XElementAccess
-            virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-                { return cppu::UnoType<com::sun::star::uno::XInterface>::get(); };
-            virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+                { return cppu::UnoType<css::uno::XInterface>::get(); };
+            virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
                 { return static_cast<bool>(m_pResMgr.get()); };
 
         private:

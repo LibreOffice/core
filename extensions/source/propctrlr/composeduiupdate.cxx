@@ -70,7 +70,7 @@ namespace pcr
 
     typedef void (ComposedPropertyUIUpdate::*FNotifySingleUIChange)();
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::inspection::XObjectInspectorUI
+    typedef ::cppu::WeakImplHelper <   css::inspection::XObjectInspectorUI
                                     >   CachedInspectorUI_Base;
     struct CachedInspectorUI:
         public CachedInspectorUI_Base, private boost::noncopyable

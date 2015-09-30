@@ -198,7 +198,7 @@ IMPL_LINK_TYPED( AsynchronousGetURL, getURL, void*, p, void )
                         aUrl,
                         aTarget );
     }
-    catch(const ::com::sun::star::plugin::PluginException&)
+    catch(const css::plugin::PluginException&)
     {
     }
     pImpl->leavePluginCallback();
@@ -316,11 +316,11 @@ extern "C" {
                     pImpl,
                     OStringToOUString( type, pImpl->getTextEncoding () ),
                     OStringToOUString( target, pImpl->getTextEncoding() ),
-                    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > ( pStream->getOutputStream(), UNO_QUERY )
+                    css::uno::Reference< css::io::XActiveDataSource > ( pStream->getOutputStream(), UNO_QUERY )
                     );
             pImpl->leavePluginCallback();
         }
-        catch( const ::com::sun::star::plugin::PluginException& e )
+        catch( const css::plugin::PluginException& e )
         {
             pImpl->leavePluginCallback();
             return e.ErrorCode;
@@ -336,7 +336,7 @@ extern "C" {
         if( ! pImpl )
             return NPERR_INVALID_INSTANCE_ERROR;
 
-        ::com::sun::star::uno::Sequence<sal_Int8> Bytes( reinterpret_cast<sal_Int8 const *>(buf), len );
+        css::uno::Sequence<sal_Int8> Bytes( reinterpret_cast<sal_Int8 const *>(buf), len );
 
         OString aPostURL = normalizeURL( pImpl, url );
         PluginEventListener* pListener =
@@ -359,10 +359,10 @@ extern "C" {
                                OStringToOUString( target, pImpl->getTextEncoding() ),
                                Bytes,
                                file,
-                               ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > ( pListener ) );
+                               css::uno::Reference< css::lang::XEventListener > ( pListener ) );
             pImpl->leavePluginCallback();
         }
-        catch( const ::com::sun::star::plugin::PluginException& e )
+        catch( const css::plugin::PluginException& e )
         {
             pImpl->leavePluginCallback();
             return e.ErrorCode;
@@ -378,7 +378,7 @@ extern "C" {
         if( ! pImpl )
             return NPERR_INVALID_INSTANCE_ERROR;
 
-        ::com::sun::star::uno::Sequence<sal_Int8> Bytes( reinterpret_cast<sal_Int8 const *>(buf), len );
+        css::uno::Sequence<sal_Int8> Bytes( reinterpret_cast<sal_Int8 const *>(buf), len );
         OString aPostURL = normalizeURL( pImpl, url );
         try
         {
@@ -391,7 +391,7 @@ extern "C" {
                          file );
             pImpl->leavePluginCallback();
         }
-        catch( const ::com::sun::star::plugin::PluginException& e )
+        catch( const css::plugin::PluginException& e )
         {
             pImpl->leavePluginCallback();
             return e.ErrorCode;
@@ -475,7 +475,7 @@ extern "C" {
                 displayStatusText( pImpl, OStringToOUString( message, pImpl->getTextEncoding() ) );
             pImpl->leavePluginCallback();
         }
-        catch( const ::com::sun::star::plugin::PluginException& )
+        catch( const css::plugin::PluginException& )
         {
             pImpl->leavePluginCallback();
             return;
@@ -500,7 +500,7 @@ extern "C" {
                     free( pAgent );
                 pAgent = strdup( OUStringToOString( UserAgent, pImpl->getTextEncoding() ).getStr() );
             }
-            catch( const ::com::sun::star::plugin::PluginException& )
+            catch( const css::plugin::PluginException& )
             {
                 pImpl->leavePluginCallback();
             }
@@ -533,7 +533,7 @@ int32_t SAL_CALL NP_LOADDS  NPN_Write( NPP instance, NPStream* stream, int32_t l
         return 0;
 
     pImpl->enterPluginCallback();
-    ::com::sun::star::uno::Sequence<sal_Int8> Bytes( static_cast<sal_Int8*>(buffer), len );
+    css::uno::Sequence<sal_Int8> Bytes( static_cast<sal_Int8*>(buffer), len );
     static_cast<PluginOutputStream*>(pStream)->getOutputStream()->writeBytes( Bytes );
     pImpl->leavePluginCallback();
 

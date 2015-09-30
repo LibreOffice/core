@@ -35,7 +35,7 @@
 class BibDataManager;
 class BibToolBar;
 
-class BibToolBarListener: public cppu::WeakImplHelper < ::com::sun::star::frame::XStatusListener>
+class BibToolBarListener: public cppu::WeakImplHelper < css::frame::XStatusListener>
 {
 private:
 
@@ -53,14 +53,14 @@ public:
 
     OUString           GetCommand() const { return aCommand;}
 
-    // ::com::sun::star::lang::XEventListener
+    // css::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal
-    virtual void    SAL_CALL disposing(const ::com::sun::star::lang::EventObject& /*Source*/)
-                                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE {};
+    virtual void    SAL_CALL disposing(const css::lang::EventObject& /*Source*/)
+                                            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE {};
 
-    // ::com::sun::star::frame::XStatusListener
-    virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
-                                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    // css::frame::XStatusListener
+    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
+                                            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 };
 
@@ -71,8 +71,8 @@ public:
     BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     virtual ~BibTBListBoxListener();
 
-    virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
-                                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
+                                            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 };
 
@@ -83,8 +83,8 @@ public:
     BibTBEditListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     virtual ~BibTBEditListener();
 
-    virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
-                                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
+                                            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 };
 
@@ -95,13 +95,13 @@ public:
     BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     virtual ~BibTBQueryMenuListener();
 
-    virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
-                                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
+                                            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 };
 
 
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener> BibToolBarListenerRef;
+typedef css::uno::Reference< css::frame::XStatusListener> BibToolBarListenerRef;
 typedef boost::ptr_vector<BibToolBarListenerRef> BibToolBarListenerArr;
 
 class BibToolBar:   public ToolBox
@@ -152,7 +152,7 @@ class BibToolBar:   public ToolBox
         virtual ~BibToolBar();
         virtual void dispose() SAL_OVERRIDE;
 
-        void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
+        void    SetXController(const css::uno::Reference< css::frame::XController > &);
 
         void    ClearSourceList();
         void    UpdateSourceList(bool bFlag=true);
@@ -168,11 +168,11 @@ class BibToolBar:   public ToolBox
         sal_uInt16  InsertFilterItem(const OUString& );
         void    SelectFilterItem(sal_uInt16 nId);
 
-        void    statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
-                                            throw( ::com::sun::star::uno::RuntimeException );
+        void    statusChanged(const css::frame::FeatureStateEvent& Event)
+                                            throw( css::uno::RuntimeException );
 
         void    SetDatMan(BibDataManager& rDatMan) {pDatMan = &rDatMan;}
-        void    SendDispatch(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs);
+        void    SendDispatch(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue >& rArgs);
 };
 
 

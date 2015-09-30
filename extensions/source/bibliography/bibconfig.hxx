@@ -101,7 +101,7 @@ class BibConfig : public utl::ConfigItem
 
     OUString               aColumnDefaults[COLUMN_COUNT];
 
-    static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    static css::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
@@ -109,7 +109,7 @@ public:
     BibConfig();
     virtual ~BibConfig();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
 
     BibDBDescriptor         GetBibliographyURL();
     void                    SetBibliographyURL(const BibDBDescriptor& rDesc);
@@ -117,7 +117,7 @@ public:
     const Mapping*          GetMapping(const BibDBDescriptor& rDesc) const;
     void                    SetMapping(const BibDBDescriptor& rDesc, const Mapping* pMapping);
 
-    const OUString&    GetDefColumnName(sal_uInt16 nIndex) const
+    const OUString&         GetDefColumnName(sal_uInt16 nIndex) const
                                             {return aColumnDefaults[nIndex];}
 
 
@@ -126,13 +126,13 @@ public:
     void                    setViewSize(long nSize) {SetModified(); nViewSize = nSize;}
     long                    getViewSize() {return nViewSize;}
 
-    const OUString&    getQueryField() const {return sQueryField;}
+    const OUString&         getQueryField() const {return sQueryField;}
     void                    setQueryField(const OUString& rSet) {SetModified(); sQueryField = rSet;}
 
-    const OUString&    getQueryText() const {return sQueryText;}
+    const OUString&         getQueryText() const {return sQueryText;}
     void                    setQueryText(const OUString& rSet) {SetModified(); sQueryText = rSet;}
 
-    bool                IsShowColumnAssignmentWarning() const
+    bool                    IsShowColumnAssignmentWarning() const
                                 { return bShowColumnAssignmentWarning;}
     void                    SetShowColumnAssignmentWarning(bool bSet)
                                 { bShowColumnAssignmentWarning = bSet;}
@@ -140,12 +140,12 @@ public:
 
 class DBChangeDialogConfig_Impl
 {
-    com::sun::star::uno::Sequence<OUString> aSourceNames;
+    css::uno::Sequence<OUString> aSourceNames;
 public:
     DBChangeDialogConfig_Impl();
     ~DBChangeDialogConfig_Impl();
 
-    const com::sun::star::uno::Sequence<OUString>& GetDataSourceNames();
+    const css::uno::Sequence<OUString>& GetDataSourceNames();
 
 };
 #endif

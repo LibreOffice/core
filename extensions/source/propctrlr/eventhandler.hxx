@@ -71,8 +71,8 @@ namespace pcr
 
     //= EventHandler
 
-    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::inspection::XPropertyHandler
-                                                ,   ::com::sun::star::lang::XServiceInfo
+    typedef ::cppu::WeakComponentImplHelper    <   css::inspection::XPropertyHandler
+                                                ,   css::lang::XServiceInfo
                                                 >   EventHandler_Base;
     class EventHandler : public EventHandler_Base
     {
@@ -80,63 +80,61 @@ namespace pcr
         mutable ::osl::Mutex    m_aMutex;
 
         /// the context in which the instance was created
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
+        css::uno::Reference< css::uno::XComponentContext >  m_xContext;
         /// the properties of the object we're handling
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xComponent;
+        css::uno::Reference< css::beans::XPropertySet >     m_xComponent;
         /// our XPropertyChangeListener(s)
-        PropertyChangeListeners                                                     m_aPropertyListeners;
+        PropertyChangeListeners                             m_aPropertyListeners;
         /// cache of the events we found at our introspectee
-        EventMap                                                                    m_aEvents;
+        EventMap                                            m_aEvents;
         /// has m_aEvents been initialized?
-        bool                                                                        m_bEventsMapInitialized;
+        bool                                                m_bEventsMapInitialized;
         /// is our introspectee a dialog element?
-        bool                                                                        m_bIsDialogElement;
+        bool                                                m_bIsDialogElement;
             // TODO: move different handling into different derived classes?
         /// (FormComponent) type of the grid column being inspected, or -1 if we're not inspecting a grid column
-        sal_Int16                                                                   m_nGridColumnType;
+        sal_Int16                                           m_nGridColumnType;
 
     public:
         // XServiceInfo - static versions
-        static OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+        static OUString SAL_CALL getImplementationName_static(  ) throw (css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
+        static css::uno::Reference< css::uno::XInterface > Create( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
     protected:
         EventHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
        );
 
         virtual ~EventHandler();
 
     protected:
         // XPropertyHandler overridables
-        virtual void                                                SAL_CALL inspect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIntrospectee ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any                          SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL setPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any                          SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rControlValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any                          SAL_CALL convertToControlValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rPropertyValue, const ::com::sun::star::uno::Type& _rControlValueType ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::beans::PropertyState              SAL_CALL getPropertyState( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >
-                                                                    SAL_CALL getSupportedProperties() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupersededProperties( ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getActuatingProperties( ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::inspection::LineDescriptor        SAL_CALL describePropertyLine( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool                                          SAL_CALL isComposable( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::inspection::InteractiveSelectionResult
-                                                                    SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, ::com::sun::star::uno::Any& _rData, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool                                            SAL_CALL suspend( sal_Bool _bSuspend ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                         SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any                                SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                         SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any                                SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rControlValue ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any                                SAL_CALL convertToControlValue( const OUString& _rPropertyName, const css::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::beans::PropertyState                    SAL_CALL getPropertyState( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                         SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                         SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::beans::Property >   SAL_CALL getSupportedProperties() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString >               SAL_CALL getSupersededProperties( ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString >               SAL_CALL getActuatingProperties( ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::inspection::LineDescriptor              SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool                                     SAL_CALL isComposable( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::inspection::InteractiveSelectionResult  SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                         SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool                                     SAL_CALL suspend( sal_Bool _bSuspend ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XComponent
         DECLARE_XCOMPONENT()
-        virtual void                                                SAL_CALL disposing() SAL_OVERRIDE;
+        virtual void                                         SAL_CALL disposing() SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         /** returns the script events associated with our introspectee
@@ -146,7 +144,7 @@ namespace pcr
                 Our introspectee is a form component
         */
         void    impl_getFormComponentScriptEvents_nothrow(
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _out_rEvents
+                    css::uno::Sequence< css::script::ScriptEventDescriptor >& _out_rEvents
                 ) const;
 
         /** returns the script events associated with our introspectee
@@ -156,7 +154,7 @@ namespace pcr
                 Our introspectee is a dialog element
         */
         void    impl_getDialogElementScriptEvents_nothrow(
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _out_rEvents
+                    css::uno::Sequence< css::script::ScriptEventDescriptor >& _out_rEvents
                 ) const;
 
         /** returns the script events associated with our introspectee
@@ -164,7 +162,7 @@ namespace pcr
                 Takes, the events currently associated with the introspectee
         */
         inline void impl_getComponentScriptEvents_nothrow(
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _out_rEvents
+                    css::uno::Sequence< css::script::ScriptEventDescriptor >& _out_rEvents
                 ) const
         {
             if ( m_bIsDialogElement )
@@ -178,7 +176,7 @@ namespace pcr
                 Takes, upon successful return, the types of possible listeners at the introspectee
         */
         void    impl_getCopmonentListenerTypes_nothrow(
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >& _out_rTypes
+                    css::uno::Sequence< css::uno::Type >& _out_rTypes
                 ) const;
 
         /** returns a secondary component to be used for event inspection
@@ -197,7 +195,7 @@ namespace pcr
             @precond
                 ->m_xComponent is not <NULL/>
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                 impl_getSecondaryComponentForEventInspection_throw( ) const;
 
         /** returns the event description for the given (programmatic) property name
@@ -205,7 +203,7 @@ namespace pcr
                 the name whose event description should be looked up
             @return
                 the event description for the property name
-            @throws ::com::sun::star::beans::UnknownPropertyException
+            @throws css::beans::UnknownPropertyException
                 if our introspectee does not have an event with the given logical name (see ->getSupportedProperties)
         */
         const EventDescription&
@@ -221,18 +219,18 @@ namespace pcr
             @param  _rScriptEvent
                 the script event to set
         */
-        void    impl_setFormComponentScriptEvent_nothrow( const ::com::sun::star::script::ScriptEventDescriptor& _rScriptEvent );
+        void    impl_setFormComponentScriptEvent_nothrow( const css::script::ScriptEventDescriptor& _rScriptEvent );
 
         /** sets a given script event as event handler at a dialog component
 
             @param  _rScriptEvent
                 the script event to set
         */
-        void    impl_setDialogElementScriptEvent_nothrow( const ::com::sun::star::script::ScriptEventDescriptor& _rScriptEvent );
+        void    impl_setDialogElementScriptEvent_nothrow( const css::script::ScriptEventDescriptor& _rScriptEvent );
 
         /** returns the frame associated with our context document
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+        css::uno::Reference< css::frame::XFrame >
                 impl_getContextFrame_nothrow() const;
 
         /** approves or denies a certain method to be included in the UI

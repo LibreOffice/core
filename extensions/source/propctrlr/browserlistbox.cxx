@@ -116,7 +116,7 @@ namespace pcr
     }
 
 
-    /** implementation for of <type scope="com::sun::star::inspection">XPropertyControlContext</type>
+    /** implementation for of <type scope="css::inspection">XPropertyControlContext</type>
         which forwards all events to a non-UNO version of this interface
     */
     typedef ::cppu::WeakImplHelper< XPropertyControlContext > PropertyControlContext_Impl_Base;
@@ -144,8 +144,8 @@ namespace pcr
         /** disposes the context.
 
             When you call this method, all subsequent callbacks to the
-            <type scope="com::sun::star::inspection">XPropertyControlContext</type> methods
-            will throw a <type scope="com::sun::star::lang">DisposedException</type>.
+            <type scope="css::inspection">XPropertyControlContext</type> methods
+            will throw a <type scope="css::lang">DisposedException</type>.
         */
         void SAL_CALL dispose();
 

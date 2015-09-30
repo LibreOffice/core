@@ -701,7 +701,7 @@ namespace pcr
     {
         if ( _rValue.hasValue() )
         {
-            ::com::sun::star::util::Color nColor = COL_TRANSPARENT;
+            css::util::Color nColor = COL_TRANSPARENT;
             if ( _rValue >>= nColor )
             {
                 ::Color aRgbCol((ColorData)nColor);
@@ -741,7 +741,7 @@ namespace pcr
             else
             {
                 ::Color aRgbCol = getTypedControlWindow()->GetSelectEntryColor();
-                aPropValue <<= (::com::sun::star::util::Color)aRgbCol.GetColor();
+                aPropValue <<= (css::util::Color)aRgbCol.GetColor();
             }
         }
         return aPropValue;

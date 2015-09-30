@@ -294,8 +294,8 @@ public: // XTestSequence
     virtual void SAL_CALL testInterface(  const Reference< XCallback >& xCallback, sal_Int32 mode ) throw(RuntimeException);
     virtual void SAL_CALL testInterface2(  const Reference< XSimple >& xSimple, sal_Int32 mode ) throw(RuntimeException);
     // XSimple --------------------------------------------------------------------------
-    void SAL_CALL func( const OUString &message) throw(::com::sun::star::uno::RuntimeException);
-    OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL func( const OUString &message) throw(css::uno::RuntimeException);
+    OUString SAL_CALL getName() throw(css::uno::RuntimeException);
 
     // XIdentity
     virtual void SAL_CALL setObject( const Reference< XInterface >& val ) throw (RuntimeException);
@@ -308,7 +308,7 @@ class EventListener: public WeakImplHelper<XEventListener>
 public:
     EventListener(): bCalled( sal_False)
         {}
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException);
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (RuntimeException);
 
     sal_Bool bCalled;
 };
@@ -1920,20 +1920,20 @@ Reference< XInterface > SAL_CALL OComponent::getThis(  ) throw (RuntimeException
     return ret;
 }
 
-void SAL_CALL EventListener::disposing( const ::com::sun::star::lang::EventObject& ) throw (RuntimeException)
+void SAL_CALL EventListener::disposing( const css::lang::EventObject& ) throw (RuntimeException)
 {
     bCalled= sal_True;
 }
 
 // XSimple --------------------------------------------------------------------------
-void SAL_CALL OComponent::func( const OUString &message)throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OComponent::func( const OUString &message)throw(css::uno::RuntimeException)
 {
     USES_CONVERSION;
 
     MessageBox( NULL, W2T( message.getStr()), _T("OleTest: XSimple::func"), MB_OK);
 }
 // XSimple --------------------------------------------------------------------------
-OUString SAL_CALL OComponent::getName()throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OComponent::getName()throw(css::uno::RuntimeException)
 {
     return L"XSimple";
 }

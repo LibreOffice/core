@@ -535,7 +535,7 @@ OUString  DBChangeDialog_Impl::GetCurrentURL()const
 }
 
 // XDispatchProvider
-BibInterceptorHelper::BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch)
+BibInterceptorHelper::BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, css::uno::Reference< css::frame::XDispatch > xDispatch)
 {
     if( pBibBeamer )
     {
@@ -558,8 +558,8 @@ void BibInterceptorHelper::ReleaseInterceptor()
     xInterception.clear();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
-    BibInterceptorHelper::queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::frame::XDispatch > SAL_CALL
+    BibInterceptorHelper::queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XDispatch > xReturn;
 
@@ -573,8 +573,8 @@ void BibInterceptorHelper::ReleaseInterceptor()
     return xReturn;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL
-    BibInterceptorHelper::queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
+    BibInterceptorHelper::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw (css::uno::RuntimeException, std::exception)
 {
     Sequence< Reference< XDispatch> > aReturn( aDescripts.getLength() );
     Reference< XDispatch >* pReturn = aReturn.getArray();
@@ -587,24 +587,24 @@ void BibInterceptorHelper::ReleaseInterceptor()
 }
 
 // XDispatchProviderInterceptor
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
-    BibInterceptorHelper::getSlaveDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
+    BibInterceptorHelper::getSlaveDispatchProvider(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return xSlaveDispatchProvider;
 }
 
-void SAL_CALL BibInterceptorHelper::setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL BibInterceptorHelper::setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) throw (css::uno::RuntimeException, std::exception)
 {
     xSlaveDispatchProvider = xNewSlaveDispatchProvider;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
-    BibInterceptorHelper::getMasterDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
+    BibInterceptorHelper::getMasterDispatchProvider(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return xMasterDispatchProvider;
 }
 
-void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (css::uno::RuntimeException, std::exception)
 {
     xMasterDispatchProvider = xNewMasterDispatchProvider;
 }
@@ -1419,7 +1419,7 @@ void SAL_CALL BibDataManager::disposing()
 }
 
 
-void BibDataManager::disposing( const EventObject& /*Source*/ ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void BibDataManager::disposing( const EventObject& /*Source*/ ) throw( css::uno::RuntimeException, std::exception )
 {
     // not interested in
 }
