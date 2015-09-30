@@ -211,7 +211,7 @@ namespace slideshow
             /** Functor struct, for shape ordering
 
                 This defines a strict weak ordering of shapes, primary
-                sort key is the shape priority, and secondy sort key
+                sort key is the shape priority, and secondary sort key
                 the object ptr value. Most typical use is for
                 associative containers holding shapes (and which also
                 have to maintain something like a paint order).

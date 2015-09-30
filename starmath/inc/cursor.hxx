@@ -73,7 +73,7 @@ class SmDocShell;
  *
  * This class is used to represent a cursor in a formula, which can be used to manipulate
  * an formula programmatically.
- * @remarks This class is a very intimite friend of SmDocShell.
+ * @remarks This class is a very intimate friend of SmDocShell.
  */
 class SmCursor{
 public:
@@ -133,7 +133,7 @@ public:
      * Note: This method uses the parser to translate a command text into a
      * tree, then it copies line entries from this tree into the current tree.
      * Will not work for commands such as newline or ##, if position is in a matrix.
-     * This will work for stuff like "A intersection B". But stuff spaning multiple lines
+     * This will work for stuff like "A intersection B". But stuff spanning multiple lines
      * or dependent on the context which position is placed in will not work!
      */
     void InsertCommandText(const OUString& aCommandText);
@@ -370,7 +370,7 @@ private:
     /** Finish editing
      *
      * Finishes editing by parsing pLineList and inserting back into pParent at nParentIndex.
-     * This method also rebuilts the graph, annotates the selection, sets caret position and
+     * This method also rebuilds the graph, annotates the selection, sets caret position and
      * Calls EndEdit.
      *
      * @remarks Please note that this method will delete pLineList, as the elements are taken.
