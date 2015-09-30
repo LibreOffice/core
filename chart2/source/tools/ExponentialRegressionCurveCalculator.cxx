@@ -54,13 +54,13 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
     m_fSign = 1.0;
 
     size_t nMax = aValues.first.size();
-    if( nMax == 0 )
+    if( nMax <= 1 ) // at least 2 points
     {
         aValues = RegressionCalculationHelper::cleanup(
                     aXValues, aYValues,
                     RegressionCalculationHelper::isValidAndYNegative());
         nMax = aValues.first.size();
-        if( nMax == 0 )
+        if( nMax <= 1 )
         {
             ::rtl::math::setNan( & m_fLogSlope );
             ::rtl::math::setNan( & m_fLogIntercept );
@@ -157,16 +157,19 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     ::sal_Int32 nNumberFormatKey ) const
 {
     double fIntercept = m_fSign * exp(m_fLogIntercept);
-    double fSlope = exp(m_fLogSlope);
-    bool bHasSlope = !rtl::math::approxEqual( fSlope, 1.0 );
-    bool bHasIntercept = !rtl::math::approxEqual( fIntercept, 1.0 );
+    bool bHasSlope = !rtl::math::approxEqual( exp(m_fLogSlope), 1.0 );
+    bool bIsLogSlope1 = rtl::math::approxEqual( fabs(m_fLogSlope), 1.0 );
+    bool bHasIntercept = !rtl::math::approxEqual( m_fSign*fIntercept, 1.0 );
 
     OUStringBuffer aBuf( "f(x) = ");
+    const OUString aExpString ( "exp( " );
 
     if ( fIntercept == 0.0)
     {
         // underflow, a true zero is impossible
-        aBuf.append( "exp( ");
+        if ( m_fSign < 0.0 )
+            aBuf.append( "- " );
+        aBuf.append( aExpString );
         aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
         aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
         aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
@@ -177,24 +180,38 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
         if (bHasIntercept)
         {
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept) );
-            aBuf.append( " exp( ");
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogSlope) );
+            aBuf.append( " "+aExpString );
+            if ( m_fLogSlope < 0.0 )
+                aBuf.append( "-");
+            if ( !bIsLogSlope1 )
+                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope) ) );
             aBuf.append( " x )");
         }
         else
         {
             // show logarithmic output, if intercept and slope both are near one
             // otherwise drop output of intercept, which is 1 here
-            aBuf.append( " exp( ");
+            if ( m_fSign < 0.0 )
+                aBuf.append( "- " );
+            aBuf.append( " "+aExpString );
             if (!bHasSlope)
             {
-                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
-                aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
-                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
+                if ( m_fLogIntercept != 0.0 )
+                {
+                    aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
+                    aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
+                }
+                else if ( m_fLogSlope < 0.0 )
+                        aBuf.append( " - " );
+                if ( !bIsLogSlope1 )
+                    aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
             }
             else
             {
-                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogSlope) );
+                if ( m_fLogSlope < 0.0 )
+                    aBuf.append( "-");
+                if ( !bIsLogSlope1 )
+                    aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope) ) );
             }
             aBuf.append( " x )");
         }
