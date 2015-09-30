@@ -406,8 +406,8 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
                 // #i119287# similar to the code in the SdrObject methods the graphic and ole
                 // SdrObjects need another default style than the rest, see task. Adding here, too.
                 // TTTT: Same as for #i119287#: Can be removed in branch aw080 again
-                const bool bIsSdrGrafObj(0 != dynamic_cast< SdrGrafObj* >(pObj));
-                const bool bIsSdrOle2Obj(0 != dynamic_cast< SdrOle2Obj* >(pObj));
+                const bool bIsSdrGrafObj(dynamic_cast< const SdrGrafObj* >(pObj) !=  nullptr);
+                const bool bIsSdrOle2Obj(dynamic_cast< const SdrOle2Obj* >(pObj) !=  nullptr);
 
                 if(bIsSdrGrafObj || bIsSdrOle2Obj)
                 {
@@ -1782,7 +1782,7 @@ static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
 
         if( pViewSh )
         {
-            if( pViewSh->ISA(::sd::DrawViewShell ) )
+            if( dynamic_cast<const ::sd::DrawViewShell* >(pViewSh) !=  nullptr )
                 static_cast< ::sd::DrawViewShell*>(pViewSh)->ResetActualPage();
 
             Size aPageSize = pDoc->GetSdPage(0, ePageKind)->GetSize();
@@ -1917,7 +1917,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
         {
             SdrObject* pObj = aIter.Next();
             OUString aStr( pObj->GetName() );
-            if( aStr.isEmpty() && pObj->ISA( SdrOle2Obj ) )
+            if( aStr.isEmpty() && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr )
                 aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
             if( !aStr.isEmpty() )
                 return sal_True;
@@ -1964,7 +1964,7 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
         {
             SdrObject* pObj = aIter.Next();
             OUString aStr( pObj->GetName() );
-            if( aStr.isEmpty() && pObj->ISA( SdrOle2Obj ) )
+            if( aStr.isEmpty() && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr )
                 aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
             if( !aStr.isEmpty() )
                 nObjCount++;
@@ -1981,7 +1981,7 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
         {
             SdrObject* pObj = aIter.Next();
             OUString aStr( pObj->GetName() );
-            if( aStr.isEmpty() && pObj->ISA( SdrOle2Obj ) )
+            if( aStr.isEmpty() && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr )
                 aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
             if( !aStr.isEmpty() )
                 *pStr++ = aStr;
@@ -2011,7 +2011,7 @@ SdrObject* SdPageLinkTargets::FindObject( const OUString& rName ) const throw()
     {
         SdrObject* pObj = aIter.Next();
         OUString aStr( pObj->GetName() );
-        if( aStr.isEmpty() && pObj->ISA( SdrOle2Obj ) )
+        if( aStr.isEmpty() && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr )
             aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
         if( !aStr.isEmpty() && (aStr == rName) )
             return pObj;
@@ -2319,7 +2319,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         // fake a mode change to repaint the page tab bar
         ::sd::DrawDocShell* pDocSh = GetModel()->GetDocShell();
         ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
-        if( pViewSh && pViewSh->ISA(::sd::DrawViewShell))
+        if( pViewSh && dynamic_cast< const ::sd::DrawViewShell* >(pViewSh) !=  nullptr)
         {
             ::sd::DrawViewShell* pDrawViewSh = static_cast<
                   ::sd::DrawViewShell*>(pViewSh);
@@ -3037,7 +3037,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
         // fake a mode change to repaint the page tab bar
         ::sd::DrawDocShell* pDocSh = GetModel()->GetDocShell();
         ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
-        if( pViewSh && pViewSh->ISA(::sd::DrawViewShell ) )
+        if( pViewSh && dynamic_cast< const ::sd::DrawViewShell* >(pViewSh) !=  nullptr )
         {
             ::sd::DrawViewShell* pDrawViewSh =
                   static_cast< ::sd::DrawViewShell*>(pViewSh);

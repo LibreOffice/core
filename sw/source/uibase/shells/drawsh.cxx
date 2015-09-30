@@ -281,7 +281,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
 
         case SID_FONTWORK:
         {
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
+            FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &rSh.GetView()) != nullptr );
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
             if (pArgs)
@@ -497,7 +497,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                     // Allow creating a TextBox only in case this is a draw format without a TextBox so far.
                     if (pFrameFormat && pFrameFormat->Which() == RES_DRAWFRMFMT && !SwTextBoxHelper::findTextBox(pFrameFormat))
                     {
-                        if (SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pObj))
+                        if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>( pObj) )
                         {
                             const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
                             if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type"))

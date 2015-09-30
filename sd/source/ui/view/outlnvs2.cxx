@@ -546,14 +546,14 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
             const SvxFieldItem* pOldFldItem = pOutlinerView->GetFieldAtSelection();
 
-            if( pOldFldItem && ( pOldFldItem->GetField()->ISA( SvxURLField ) ||
-                                pOldFldItem->GetField()->ISA( SvxDateField ) ||
-                                pOldFldItem->GetField()->ISA( SvxTimeField ) ||
-                                pOldFldItem->GetField()->ISA( SvxExtTimeField ) ||
-                                pOldFldItem->GetField()->ISA( SvxExtFileField ) ||
-                                pOldFldItem->GetField()->ISA( SvxAuthorField ) ||
-                                pOldFldItem->GetField()->ISA( SvxPageField ) ||
-                                pOldFldItem->GetField()->ISA( SvxPagesField )) )
+            if( pOldFldItem && ( 0 != dynamic_cast< const SvxURLField *>( pOldFldItem->GetField() ) ||
+                                0 != dynamic_cast< const SvxDateField *>( pOldFldItem->GetField() ) ||
+                                0 != dynamic_cast< const SvxTimeField *>( pOldFldItem->GetField() ) ||
+                                0 != dynamic_cast< const SvxExtTimeField *>( pOldFldItem->GetField() ) ||
+                                0 != dynamic_cast< const SvxExtFileField *>( pOldFldItem->GetField() ) ||
+                                0 != dynamic_cast< const SvxAuthorField *>( pOldFldItem->GetField() ) ||
+                                0 != dynamic_cast< const SvxPageField *>( pOldFldItem->GetField() ) ||
+                                0 != dynamic_cast< const SvxPagesField *>( pOldFldItem->GetField() )) )
             {
                 // select field, so it gets deleted on Insert
                 ESelection aSel = pOutlinerView->GetSelection();
@@ -576,10 +576,10 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         {
             const SvxFieldItem* pFldItem = pOutlinerView->GetFieldAtSelection();
 
-            if( pFldItem && (pFldItem->GetField()->ISA( SvxDateField ) ||
-                                pFldItem->GetField()->ISA( SvxAuthorField ) ||
-                                pFldItem->GetField()->ISA( SvxExtFileField ) ||
-                                pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
+            if( pFldItem && (0 != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
+                                0 != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
+                                0 != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
+                                0 != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) )
             {
                 // Dialog...
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();

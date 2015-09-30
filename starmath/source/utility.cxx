@@ -42,7 +42,7 @@
 SmViewShell * SmGetActiveView()
 {
     SfxViewShell *pView = SfxViewShell::Current();
-    return PTR_CAST(SmViewShell, pView);
+    return  dynamic_cast<SmViewShell*>( pView);
 }
 
 

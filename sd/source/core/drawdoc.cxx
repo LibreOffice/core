@@ -761,7 +761,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     }
                 }
 
-                if (pObj->ISA(SdrTextObj) && pObj->IsEmptyPresObj())
+                if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr && pObj->IsEmptyPresObj())
                 {
                     PresObjKind ePresObjKind = pPage->GetPresObjKind(pObj);
                     OUString aString( pPage->GetPresObjText(ePresObjKind) );

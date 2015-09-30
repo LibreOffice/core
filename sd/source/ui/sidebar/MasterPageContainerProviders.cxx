@@ -160,7 +160,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
         mxDocumentShell = NULL;
     }
     SfxObjectShell* pShell = mxDocumentShell;
-    return PTR_CAST(::sd::DrawDocShell,pShell);
+    return dynamic_cast< ::sd::DrawDocShell *>( pShell );
 }
 
 int TemplatePageObjectProvider::GetCostIndex()

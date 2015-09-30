@@ -323,7 +323,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                            select object and set to EditMode */
                         mpView->MarkObj(aVEvt.pRootObj, pPV);
 
-                        if (aVEvt.pObj && aVEvt.pObj->ISA(SdrTextObj))
+                        if (aVEvt.pObj && dynamic_cast< const SdrTextObj *>( aVEvt.pObj ) !=  nullptr)
                         {
                             mxTextObj.reset( static_cast<SdrTextObj*>(aVEvt.pObj) );
                         }
@@ -1178,7 +1178,7 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
         const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
         const SvxFieldData* pField = pFieldItem->GetField();
 
-        if (pField && pField->ISA(SvxURLField))
+        if (pField && dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
         {
             // URL-Field
             aHelpText = INetURLObject::decode( static_cast<const SvxURLField*>(pField)->GetURL(), INetURLObject::DECODE_WITH_CHARSET );
@@ -1235,7 +1235,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
                 mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
                 mpView->MarkObj(aVEvt.pRootObj, pPV);
 
-                if (aVEvt.pObj && aVEvt.pObj->ISA(SdrTextObj))
+                if (aVEvt.pObj && dynamic_cast< SdrTextObj *>( aVEvt.pObj ) !=  nullptr)
                 {
                     mxTextObj.reset( static_cast< SdrTextObj* >( aVEvt.pObj ) );
                 }
@@ -1249,7 +1249,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-                if (pObj->ISA(SdrTextObj))
+                if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
                 {
                     mxTextObj.reset( static_cast< SdrTextObj* >( pObj ) );
                 }
@@ -1293,7 +1293,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
 
     if(pObj)
     {
-        if(pObj->ISA(SdrTextObj))
+        if( dynamic_cast< SdrTextObj *>( pObj ) !=  nullptr)
         {
             SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
             pText->SetLogicRect(rRectangle);

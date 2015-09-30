@@ -109,7 +109,7 @@ void ScTpUserLists::dispose()
 void ScTpUserLists::Init()
 {
     SfxViewShell*   pSh = SfxViewShell::Current();
-    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, pSh);
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pSh );
 
     mpLbLists->SetSelectHdl   ( LINK( this, ScTpUserLists, LbSelectHdl ) );
     mpBtnNew->SetClickHdl     ( LINK( this, ScTpUserLists, BtnClickHdl ) );

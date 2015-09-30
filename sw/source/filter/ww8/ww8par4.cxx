@@ -286,7 +286,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
 
     if (pRet)       // OLE object was inserted
     {
-        if (pRet->ISA(SdrOle2Obj))
+        if (dynamic_cast< const SdrOle2Obj *>( pRet ) !=  nullptr)
         {
             pFormat = InsertOle(*static_cast<SdrOle2Obj*>(pRet), *pFlySet, pGrfSet);
             SdrObject::Free( pRet );        // we don't need this anymore

@@ -293,7 +293,7 @@ namespace sdr
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SdrObject& rReferencedObject = GetSwVirtFlyDrawObj().GetReferencedObj();
 
-            if(rReferencedObject.ISA(SwFlyDrawObj))
+            if(dynamic_cast<const SwFlyDrawObj*>( &rReferencedObject) !=  nullptr)
             {
                 // create an own specialized primitive which is used as repaint callpoint and HitTest
                 // for HitTest processor (see primitive implementation above)
@@ -324,7 +324,7 @@ basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
     basegfx::B2DRange aOuterRange;
     const SdrObject& rReferencedObject = GetReferencedObj();
 
-    if(rReferencedObject.ISA(SwFlyDrawObj))
+    if(dynamic_cast<const SwFlyDrawObj*>( &rReferencedObject) !=  nullptr)
     {
         const SwFlyFrm* pFlyFrame = GetFlyFrm();
 
@@ -348,7 +348,7 @@ basegfx::B2DRange SwVirtFlyDrawObj::getInnerBound() const
     basegfx::B2DRange aInnerRange;
     const SdrObject& rReferencedObject = GetReferencedObj();
 
-    if(rReferencedObject.ISA(SwFlyDrawObj))
+    if(dynamic_cast<const SwFlyDrawObj*>( &rReferencedObject) !=  nullptr)
     {
         const SwFlyFrm* pFlyFrame = GetFlyFrm();
 
@@ -733,7 +733,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
 {
     // Get Wrt Shell
     SwWrtShell *pSh = dynamic_cast<SwWrtShell*>( GetFlyFrm()->getRootFrm()->GetCurrShell() );
-    if (!pSh || !pSh->ISA(SwWrtShell))
+    if (!pSh || dynamic_cast<const SwWrtShell*>( pSh) ==  nullptr)
         return;
 
     // Compute old and new rect. This will give us the deformation to apply to

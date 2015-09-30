@@ -260,7 +260,7 @@ void SidebarTextControl::MouseMove( const MouseEvent& rMEvt )
         if ( pItem )
         {
             const SvxFieldData* pField = pItem->GetField();
-            const SvxURLField* pURL = PTR_CAST( SvxURLField, pField );
+            const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pField  );
             if ( pURL )
             {
                 OUString sURL( pURL->GetURL() );
@@ -289,7 +289,7 @@ void SidebarTextControl::MouseButtonDown( const MouseEvent& rMEvt )
             if ( pItem )
             {
                 const SvxFieldData* pField = pItem->GetField();
-                const SvxURLField* pURL = PTR_CAST( SvxURLField, pField );
+                const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pField  );
                 if ( pURL )
                 {
                     GetTextView()->MouseButtonDown( rMEvt );

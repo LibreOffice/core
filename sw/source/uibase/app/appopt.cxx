@@ -85,7 +85,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
         if(pAppView)
         {
         // if Text then no WebView and vice versa
-            bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+            bool bWebView = dynamic_cast<SwWebView*>( pAppView ) !=  nullptr;
             if( (bWebView &&  !bTextDialog) ||(!bWebView &&  bTextDialog))
             {
                 aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
@@ -170,7 +170,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     }
     if(bTextDialog)
         pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));
-    if( PTR_CAST( SwPagePreview, SfxViewShell::Current())!=0)
+    if( dynamic_cast<SwPagePreview*>( SfxViewShell::Current())!=0 )
     {
         SfxBoolItem aBool(SfxBoolItem(SID_PRINTPREVIEW, true));
         pRet->Put(aBool);
@@ -247,7 +247,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if(pAppView)
     {
         // the text dialog mustn't apply data to the web view and vice versa
-        bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+        bool bWebView = dynamic_cast<SwWebView*>( pAppView ) !=  nullptr;
         if(bWebView == bTextDialog)
             pAppView = 0;
     }
@@ -471,7 +471,7 @@ VclPtr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
             if(pCurrView)
             {
                 // if text then not WebView and vice versa
-                bool bWebView = 0 != PTR_CAST(SwWebView, pCurrView);
+                bool bWebView = dynamic_cast<SwWebView*>( pCurrView ) !=  nullptr;
                 if( (bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE == nId) ||
                     (!bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE != nId) )
                 {

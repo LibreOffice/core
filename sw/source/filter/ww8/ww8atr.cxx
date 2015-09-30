@@ -2920,7 +2920,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
 
 void AttributeOutputBase::TextFlyContent( const SwFormatFlyCnt& rFlyContent )
 {
-    if ( GetExport().m_pOutFormatNode && GetExport().m_pOutFormatNode->ISA( SwContentNode ) )
+    if ( GetExport().m_pOutFormatNode && dynamic_cast< const SwContentNode *>( GetExport().m_pOutFormatNode ) != nullptr  )
     {
         const SwTextNode* pTextNd = static_cast<const SwTextNode*>(GetExport().m_pOutFormatNode);
 
@@ -3219,7 +3219,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
             ++nNumId;
             if ( GetExport().m_pOutFormatNode )
             {
-                if ( GetExport().m_pOutFormatNode->ISA( SwContentNode ) )
+                if ( dynamic_cast< const SwContentNode *>( GetExport().m_pOutFormatNode ) != nullptr  )
                 {
                     pTextNd = static_cast<const SwTextNode*>(GetExport().m_pOutFormatNode);
 
@@ -3252,7 +3252,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                         nNumId = 0;
                     }
                 }
-                else if ( GetExport().m_pOutFormatNode->ISA( SwTextFormatColl ) )
+                else if ( dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode ) != nullptr  )
                 {
                     const SwTextFormatColl* pC = static_cast<const SwTextFormatColl*>(GetExport().m_pOutFormatNode);
                     if ( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
@@ -3421,7 +3421,7 @@ void WW8AttributeOutput::TableRowEnd(sal_uInt32 nDepth)
 
 void AttributeOutputBase::FormatPageDescription( const SwFormatPageDesc& rPageDesc )
 {
-    if ( GetExport().m_bStyDef && GetExport().m_pOutFormatNode && GetExport().m_pOutFormatNode->ISA( SwTextFormatColl ) )
+    if ( GetExport().m_bStyDef && GetExport().m_pOutFormatNode && dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode ) != nullptr )
     {
         const SwTextFormatColl* pC = static_cast<const SwTextFormatColl*>(GetExport().m_pOutFormatNode);
         if ( (SfxItemState::SET != pC->GetItemState( RES_BREAK, false ) ) && rPageDesc.KnowsPageDesc() )
@@ -4306,12 +4306,12 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                 sal_uInt16 nScript =
                     i18n::ScriptType::LATIN;
                 const SwAttrSet *pSet = 0;
-                if ( GetExport().m_pOutFormatNode && GetExport().m_pOutFormatNode->ISA( SwFormat ) )
+                if ( GetExport().m_pOutFormatNode && dynamic_cast< const SwFormat *>( GetExport().m_pOutFormatNode ) != nullptr  )
                 {
                     const SwFormat *pFormat = static_cast<const SwFormat*>( GetExport().m_pOutFormatNode );
                     pSet = &pFormat->GetAttrSet();
                 }
-                else if ( GetExport().m_pOutFormatNode && GetExport().m_pOutFormatNode->ISA( SwTextNode ) )
+                else if ( GetExport().m_pOutFormatNode && dynamic_cast< const SwTextNode *>( GetExport().m_pOutFormatNode ) != nullptr  )
                 {
                     const SwTextNode* pNd = static_cast<const SwTextNode*>(GetExport().m_pOutFormatNode);
                     pSet = &pNd->GetSwAttrSet();
@@ -4384,12 +4384,12 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
         if ( m_rWW8Export.m_pOutFormatNode )
         {
             short nDirection = FRMDIR_HORI_LEFT_TOP;
-            if ( m_rWW8Export.m_pOutFormatNode->ISA( SwTextNode ) )
+            if ( dynamic_cast< const SwTextNode *>( m_rWW8Export.m_pOutFormatNode )  != nullptr )
             {
                 SwPosition aPos(*static_cast<const SwContentNode*>(m_rWW8Export.m_pOutFormatNode));
                 nDirection = m_rWW8Export.m_pDoc->GetTextDirection(aPos);
             }
-            else if ( m_rWW8Export.m_pOutFormatNode->ISA( SwTextFormatColl ) )
+            else if ( dynamic_cast< const SwTextFormatColl *>( m_rWW8Export.m_pOutFormatNode ) != nullptr  )
             {
                 const SwTextFormatColl* pC =
                     static_cast<const SwTextFormatColl*>(m_rWW8Export.m_pOutFormatNode);
@@ -4428,14 +4428,14 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
                 nDir = m_rWW8Export.TrueFrameDirection(
                     *static_cast<const SwFrameFormat*>(m_rWW8Export.m_pOutFormatNode) );
             }
-            else if ( m_rWW8Export.m_pOutFormatNode->ISA( SwContentNode ) )   //pagagraph
+            else if ( dynamic_cast< const SwContentNode *>( m_rWW8Export.m_pOutFormatNode ) !=  nullptr )   //pagagraph
             {
                 const SwContentNode* pNd =
                     static_cast<const SwContentNode*>(m_rWW8Export.m_pOutFormatNode);
                 SwPosition aPos( *pNd );
                 nDir = m_rWW8Export.m_pDoc->GetTextDirection( aPos );
             }
-            else if ( m_rWW8Export.m_pOutFormatNode->ISA( SwTextFormatColl ) )
+            else if ( dynamic_cast< const SwTextFormatColl *>( m_rWW8Export.m_pOutFormatNode ) !=  nullptr )
                 nDir = FRMDIR_HORI_LEFT_TOP;    //what else can we do :-(
         }
 
