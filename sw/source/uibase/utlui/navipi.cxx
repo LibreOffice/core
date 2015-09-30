@@ -699,6 +699,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     Rectangle aSecondRect = aContentToolBox->GetItemRect(FN_SELECT_HEADER);
     Size aItemWinSize( aFirstRect.Left() - aSecondRect.Left(),
                        aFirstRect.Bottom() - aFirstRect.Top() );
+    Size aOptimalSize(pEdit->get_preferred_size());
+    aItemWinSize.Width() = std::max(aItemWinSize.Width(), aOptimalSize.Width());
     pEdit->SetSizePixel(aItemWinSize);
     aContentToolBox->InsertSeparator(4);
     aContentToolBox->InsertWindow( FN_PAGENUMBER, pEdit, ToolBoxItemBits::NONE, 4);
