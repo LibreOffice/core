@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_37a398a0",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:33:09Z",
+      "side": 1,
+      "message": "Strange enough",
+      "revId": "669dc6e36b1a115d7ad7266dfbad6be4d6c8fa75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_17a01490",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:33:09Z",
+      "side": 1,
+      "message": "repeat",
+      "revId": "669dc6e36b1a115d7ad7266dfbad6be4d6c8fa75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
