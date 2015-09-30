@@ -60,7 +60,23 @@ const char UNO_SELECTWIDTH[] = ".uno:SelectWidth";
 namespace
 {
 
-void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList)
+void InsertLineEndEntry(ListBox& rListBoxStart, ListBox& rListBoxEnd, const OUString& aName, const Bitmap& rBitmap)
+{
+    Bitmap aCopyStart(rBitmap);
+    Bitmap aCopyEnd(rBitmap);
+
+    const Size aBmpSize(aCopyStart.GetSizePixel());
+    const Rectangle aCropRectStart(Point(), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
+    const Rectangle aCropRectEnd(Point(aBmpSize.Width() / 2, 0), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
+
+    aCopyStart.Crop(aCropRectStart);
+    rListBoxStart.InsertEntry(aName, Image(aCopyStart));
+
+    aCopyEnd.Crop(aCropRectEnd);
+    rListBoxEnd.InsertEntry(aName, Image(aCopyEnd));
+}
+
+void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList, const Bitmap &rZeroBitmap)
 {
     const sal_uInt32 nCount(rList.Count());
     const OUString sNone(SVX_RESSTR(RID_SVXSTR_NONE));
@@ -72,8 +88,15 @@ void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLin
     rListBoxEnd.Clear();
 
     // add 'none' entries
-    rListBoxStart.InsertEntry(sNone);
-    rListBoxEnd.InsertEntry(sNone);
+    if(!rZeroBitmap.IsEmpty())
+    {
+        InsertLineEndEntry( rListBoxStart, rListBoxEnd, sNone, rZeroBitmap );
+    }
+    else
+    {
+        rListBoxStart.InsertEntry(sNone);
+        rListBoxEnd.InsertEntry(sNone);
+    }
 
     for(sal_uInt32 i(0); i < nCount; i++)
     {
@@ -82,22 +105,7 @@ void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLin
 
         if(!aBitmap.IsEmpty())
         {
-            Bitmap aCopyStart(aBitmap);
-            Bitmap aCopyEnd(aBitmap);
-
-            const Size aBmpSize(aCopyStart.GetSizePixel());
-            const Rectangle aCropRectStart(Point(), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
-            const Rectangle aCropRectEnd(Point(aBmpSize.Width() / 2, 0), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
-
-            aCopyStart.Crop(aCropRectStart);
-            rListBoxStart.InsertEntry(
-                pEntry->GetName(),
-                Image(aCopyStart));
-
-            aCopyEnd.Crop(aCropRectEnd);
-            rListBoxEnd.InsertEntry(
-                pEntry->GetName(),
-                Image(aCopyEnd));
+            InsertLineEndEntry( rListBoxStart, rListBoxEnd, pEntry->GetName(), aBitmap );
         }
         else
         {
@@ -761,7 +769,12 @@ void  LinePropertyPanelBase::FillLineEndList()
 
         if (mxLineEndList.is())
         {
-            FillLineEndListBox(*mpLBStart, *mpLBEnd, *mxLineEndList);
+            Bitmap aZeroBitmap;
+
+            if (mxLineStyleList.is())
+                aZeroBitmap = mxLineStyleList->GetBitmapForUISolidLine();
+
+            FillLineEndListBox(*mpLBStart, *mpLBEnd, *mxLineEndList, aZeroBitmap);
         }
 
         mpLBStart->SelectEntryPos(0);
