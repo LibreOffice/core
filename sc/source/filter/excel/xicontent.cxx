@@ -75,10 +75,15 @@ XclImpSst::XclImpSst( const XclImpRoot& rRoot ) :
 void XclImpSst::ReadSst( XclImpStream& rStrm )
 {
     rStrm.Ignore( 4 );
-    sal_uInt32 nStrCount(0);
-    nStrCount = rStrm.ReaduInt32();
+    sal_uInt32 nStrCount = rStrm.ReaduInt32();
+    auto nBytesAvailable = rStrm.GetRecLeft();
+    if (nStrCount > nBytesAvailable)
+    {
+        SAL_WARN("sc.filter", "xls claimed to have " << nStrCount << " strings, but only " << nBytesAvailable << " bytes available, truncating");
+        nStrCount = nBytesAvailable;
+    }
     maStrings.clear();
-    maStrings.reserve( static_cast< size_t >( nStrCount ) );
+    maStrings.reserve(nStrCount);
     while( (nStrCount > 0) && rStrm.IsValid() )
     {
         XclImpString aString;
