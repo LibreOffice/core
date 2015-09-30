@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+#/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -485,7 +485,7 @@ void SlideSorterViewShell::Activate (bool bIsMDIActivate)
         case ViewShell::ST_NOTES:
         case ViewShell::ST_DRAW:
             eContext = EnumContext::Context_DrawPage;
-            if (pMainViewShell->ISA(DrawViewShell))
+            if( 0 != dynamic_cast< const DrawViewShell *>( pMainViewShell.get() ))
             {
                 DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
                 if (pDrawViewShell != NULL)
@@ -726,7 +726,7 @@ void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
     if ( ! IsMainViewShell())
     {
         std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
-        if (pMainViewShell.get() != NULL && pMainViewShell->ISA(DrawViewShell))
+        if (pMainViewShell.get() != NULL && 0 != dynamic_cast< const DrawViewShell *>( pMainViewShell.get() ))
         {
             DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
             if (pDrawViewShell != NULL && pDrawViewShell->GetPageKind() == PK_HANDOUT)
@@ -843,7 +843,7 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
 void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
 {
     std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
-    if (pMainViewShell.get() != NULL && pMainViewShell->ISA(DrawViewShell))
+    if (pMainViewShell.get() != NULL && 0 != dynamic_cast< const DrawViewShell *>( pMainViewShell.get() ))
     {
        DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
         if (pDrawViewShell != NULL && pDrawViewShell->GetPageKind() == PK_HANDOUT)

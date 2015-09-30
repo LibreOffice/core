@@ -54,10 +54,10 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
 #if OSL_DEBUG_LEVEL > 0
     // assert, if object isn't of excepted type
     const bool bObjOfExceptedType =
-            mrDrawObj.ISA(SwVirtFlyDrawObj) || // object representing fly frame
-            mrDrawObj.ISA(SwDrawVirtObj)    || // 'virtual' drawing object
-            ( !mrDrawObj.ISA(SdrVirtObj) &&    // 'master' drawing object
-              !mrDrawObj.ISA(SwFlyDrawObj) );  // - indirectly checked
+            dynamic_cast<const SwVirtFlyDrawObj*>( &mrDrawObj) !=  nullptr || // object representing fly frame
+            dynamic_cast<const SwDrawVirtObj*>( &mrDrawObj) !=  nullptr    || // 'virtual' drawing object
+            ( dynamic_cast<const SdrVirtObj*>( &mrDrawObj) ==  nullptr &&    // 'master' drawing object
+              dynamic_cast<const SwFlyDrawObj*>( &mrDrawObj) ==  nullptr );  // - indirectly checked
     (void) bObjOfExceptedType;
     OSL_ENSURE( bObjOfExceptedType,
             "SwAnchoredObjectPosition(..) - object of unexpected type!" );
@@ -75,7 +75,7 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
 {
     // determine, if object represents a fly frame
     {
-        mbIsObjFly = mrDrawObj.ISA(SwVirtFlyDrawObj);
+        mbIsObjFly = dynamic_cast<const SwVirtFlyDrawObj*>( &mrDrawObj) !=  nullptr;
     }
 
     // determine contact object
@@ -842,7 +842,7 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
     // it is horizontal positioned left or right, but not relative to character,
     // it has to be drawn aside another object, which have the same horizontal
     // position and lay below it.
-    if ( GetAnchoredObj().ISA(SwFlyFrm) &&
+    if ( dynamic_cast<const SwFlyFrm*>( &GetAnchoredObj() ) !=  nullptr &&
          ( GetContact().ObjAnchoredAtPara() || GetContact().ObjAnchoredAtChar() ) &&
          ( eHoriOrient == text::HoriOrientation::LEFT || eHoriOrient == text::HoriOrientation::RIGHT ) &&
          eRelOrient != text::RelOrientation::CHAR )
@@ -877,8 +877,8 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                                           ) const
 {
     // #i26791#
-    if ( !GetAnchorFrm().ISA(SwTextFrm) ||
-         !GetAnchoredObj().ISA(SwFlyAtCntFrm) )
+    if ( dynamic_cast<const SwTextFrm*>( &GetAnchorFrm() ) ==  nullptr ||
+         dynamic_cast<const SwFlyAtCntFrm*>( &GetAnchoredObj() ) ==  nullptr )
     {
         OSL_FAIL( "<SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(..) - usage for wrong anchor type" );
         return _nProposedRelPosX;

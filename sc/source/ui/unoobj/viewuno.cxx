@@ -2229,11 +2229,11 @@ ScTabViewObj* ScTabViewObj::getImplementation(const uno::Reference<uno::XInterfa
            std::exception)
 {
     SolarMutexGuard aGuard;
-    ScEditShell* pShell = PTR_CAST( ScEditShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    ScEditShell* pShell = dynamic_cast<ScEditShell*>( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0)  );
     if (pShell)
         return pShell->GetEditView()->GetTransferable();
 
-    ScDrawTextObjectBar* pTextShell = PTR_CAST( ScDrawTextObjectBar, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    ScDrawTextObjectBar* pTextShell = dynamic_cast<ScDrawTextObjectBar*>( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0)  );
     if (pTextShell)
     {
         ScViewData& rViewData = GetViewShell()->GetViewData();
@@ -2243,7 +2243,7 @@ ScTabViewObj* ScTabViewObj::getImplementation(const uno::Reference<uno::XInterfa
             return pOutView->GetEditView().GetTransferable();
     }
 
-    ScDrawShell* pDrawShell = PTR_CAST( ScDrawShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    ScDrawShell* pDrawShell = dynamic_cast<ScDrawShell*>( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0)  );
     if (pDrawShell)
         return pDrawShell->GetDrawView()->CopyToTransferable();
 
@@ -2258,12 +2258,12 @@ void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Ref
            std::exception)
 {
     SolarMutexGuard aGuard;
-    ScEditShell* pShell = PTR_CAST( ScEditShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    ScEditShell* pShell = dynamic_cast<ScEditShell*>( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0)  );
     if (pShell)
         pShell->GetEditView()->InsertText( xTrans, OUString(), false );
     else
     {
-        ScDrawTextObjectBar* pTextShell = PTR_CAST( ScDrawTextObjectBar, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+        ScDrawTextObjectBar* pTextShell = dynamic_cast<ScDrawTextObjectBar*>( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0)  );
         if (pTextShell)
         {
             ScViewData& rViewData = GetViewShell()->GetViewData();

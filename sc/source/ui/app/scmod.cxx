@@ -246,7 +246,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while(pViewShell)
         {
-            if ( pViewShell->ISA(ScTabViewShell) )
+            if ( dynamic_cast<const ScTabViewShell*>( pViewShell) !=  nullptr )
             {
                 ScTabViewShell* pViewSh = static_cast<ScTabViewShell*>(pViewShell);
                 pViewSh->PaintGrid();
@@ -258,7 +258,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
                 if ( pHdl )
                     pHdl->ForgetLastPattern(); // EditEngine BackgroundColor may change
             }
-            else if ( pViewShell->ISA(ScPreviewShell) )
+            else if ( dynamic_cast<const ScPreviewShell*>( pViewShell) !=  nullptr )
             {
                 vcl::Window* pWin = pViewShell->GetWindow();
                 if (pWin)
@@ -293,7 +293,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
         SfxViewShell* pSh = SfxViewShell::GetFirst();
         while ( pSh )
         {
-            if ( pSh->ISA( ScTabViewShell ) )
+            if ( dynamic_cast<const ScTabViewShell*>( pSh) !=  nullptr )
             {
                 ScTabViewShell* pViewSh = static_cast<ScTabViewShell*>(pSh);
 
@@ -305,7 +305,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
                 pViewSh->DigitLanguageChanged();
                 pViewSh->PaintGrid();
             }
-            else if ( pSh->ISA( ScPreviewShell ) )
+            else if ( dynamic_cast<const ScPreviewShell*>( pSh) !=  nullptr )
             {
                 ScPreviewShell* pPreviewSh = static_cast<ScPreviewShell*>(pSh);
                 ScPreview* pPreview = pPreviewSh->GetPreview();
@@ -398,7 +398,7 @@ void ScModule::Execute( SfxRequest& rReq )
                     bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 else
                 {   // Toggle
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+                    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
                     if ( pDocSh )
                         bSet = !pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
                     else
@@ -476,7 +476,7 @@ void ScModule::Execute( SfxRequest& rReq )
             if (pReqArgs)
             {
                 const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(pReqArgs->Get(SID_PSZ_FUNCTION));
-                OSL_ENSURE(rItem.ISA(SfxUInt16Item),"wrong Parameter");
+                OSL_ENSURE(dynamic_cast<const SfxUInt16Item*>( &rItem) !=  nullptr,"wrong Parameter");
 
                 ScAppOptions aNewOpts( GetAppOptions() );
                 aNewOpts.SetStatusFunc( rItem.GetValue() );
@@ -501,7 +501,7 @@ void ScModule::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( GetPool().GetWhich(nSlot), true, &pItem ) )
                 {
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+                    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
                     if ( pDocSh )
                     {
                         ScDocument& rDoc = pDocSh->GetDocument();
@@ -524,7 +524,7 @@ void ScModule::Execute( SfxRequest& rReq )
                             ScInputHandler* pInputHandler = GetInputHdl();
                             if ( pInputHandler )
                                 pInputHandler->UpdateSpellSettings(); // EditEngine flags
-                            ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+                            ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
                             if ( pViewSh )
                                 pViewSh->UpdateDrawTextOutliner(); // EditEngine flags
 
@@ -570,7 +570,7 @@ void ScModule::Execute( SfxRequest& rReq )
 
 void ScModule::GetState( SfxItemSet& rSet )
 {
-    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
     bool bTabView = pDocSh && (pDocSh->GetBestViewShell() != NULL);
 
     SfxWhichIter aIter(rSet);
@@ -961,8 +961,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     SfxBindings* pBindings = pViewFrm ? &pViewFrm->GetBindings() : NULL;
 
-    ScTabViewShell*         pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-    ScDocShell*             pDocSh  = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+    ScTabViewShell*         pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
+    ScDocShell*             pDocSh  = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
     ScDocument*             pDoc    = pDocSh ? &pDocSh->GetDocument() : NULL;
     const SfxPoolItem*      pItem   = NULL;
     bool bRepaint = false;
@@ -1331,8 +1331,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
 
         // for all (tab-) views:
-        TypeId aScType = TYPE(ScTabViewShell);
-        SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+        SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
         while ( pSh )
         {
             ScTabViewShell* pOneViewSh = static_cast<ScTabViewShell*>(pSh);
@@ -1351,7 +1350,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             pOneViewSh->PaintTop();
             pOneViewSh->PaintLeft();
 
-            pSh = SfxViewShell::GetNext( *pSh, &aScType );
+            pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
         }
     }
 }
@@ -1369,7 +1368,7 @@ ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, bool bUseRef )
     {
         // in case a UIActive embedded object has no ViewShell (UNO component)
         // the own calc view shell will be set as current, but no handling should happen
-        ScTabViewShell* pCurViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+        ScTabViewShell* pCurViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
         if ( pCurViewSh && !pCurViewSh->GetUIActiveClient() )
             pViewSh = pCurViewSh;
     }
@@ -1552,7 +1551,7 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
         {
             //  store the dialog id also in the view shell
             SfxViewShell* pViewSh = pViewFrm->GetViewShell();
-            if ( pViewSh && pViewSh->ISA( ScTabViewShell ) )
+            if ( pViewSh && dynamic_cast<const ScTabViewShell*>( pViewSh) !=  nullptr )
                 static_cast<ScTabViewShell*>(pViewSh)->SetCurRefDlgId( nCurRefDlgId );
             else
             {
@@ -1834,7 +1833,7 @@ static void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
     while ( pFrame )
     {
         SfxViewShell* p = pFrame->GetViewShell();
-        ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
         if ( pViewSh )
             pViewSh->CheckNeedsRepaint();
         pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
@@ -1966,14 +1965,12 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
 
         const ScAppOptions& rAppOpt = GetAppOptions();
 
-        ScDocShell*     pDocSh = PTR_CAST(ScDocShell,
-                                            SfxObjectShell::Current());
+        ScDocShell*     pDocSh = dynamic_cast< ScDocShell *>( SfxObjectShell::Current() );
         ScDocOptions    aCalcOpt = pDocSh
                             ? pDocSh->GetDocument().GetDocOptions()
                             : GetDocOptions();
 
-        ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,
-                                            SfxViewShell::Current());
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( SfxViewShell::Current() );
         ScViewOptions   aViewOpt = pViewSh
                             ? pViewSh->GetViewData().GetOptions()
                             : GetViewOptions();
@@ -2149,7 +2146,7 @@ IMPL_LINK_TYPED( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
     const SvxFieldItem& rField = pInfo->GetField();
     const SvxFieldData* pField = rField.GetField();
 
-    if (pField && pField->ISA(SvxURLField))
+    if (pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr)
     {
         // URLField
         const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);

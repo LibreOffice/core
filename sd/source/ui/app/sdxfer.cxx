@@ -157,7 +157,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
         delete mpBookmark, mpBookmark = NULL;
         delete mpImageMap, mpImageMap = NULL;
 
-        if( pObj->ISA( SdrOle2Obj ) )
+        if( 0!= dynamic_cast< const SdrOle2Obj* >( pObj ) )
         {
             try
             {
@@ -177,7 +177,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
             catch( uno::Exception& )
             {}
         }
-        else if( pObj->ISA( SdrGrafObj ) && (mpSourceDoc && !mpSourceDoc->GetAnimationInfo( pObj )) )
+        else if( dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && (mpSourceDoc && !mpSourceDoc->GetAnimationInfo( pObj )) )
         {
             mpGraphic = new Graphic( static_cast< SdrGrafObj* >( pObj )->GetTransformedGraphic() );
         }
@@ -211,7 +211,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                 }
             }
         }
-        else if( pObj->ISA( SdrTextObj ) )
+        else if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr )
         {
             const OutlinerParaObject* pPara;
 
@@ -223,7 +223,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                 {
                     const SvxFieldData* pData = pField->GetField();
 
-                    if( pData && pData->ISA( SvxURLField ) )
+                    if( pData && dynamic_cast< const SvxURLField *>( pData ) !=  nullptr )
                     {
                         const SvxURLField* pURL = static_cast<const SvxURLField*>(pData);
 
@@ -357,7 +357,7 @@ static bool lcl_HasOnlyControls( SdrModel* pModel )
                 bOnlyControls = true;   // only set if there are any objects at all
                 while ( pObj )
                 {
-                    if (!pObj->ISA(SdrUnoObj))
+                    if (dynamic_cast< const SdrUnoObj *>( pObj ) ==  nullptr)
                     {
                         bOnlyControls = false;
                         break;

@@ -1286,7 +1286,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
-                     pItem->ISA(SfxUInt32Item) )
+                     dynamic_cast<const SfxUInt32Item*>( pItem) !=  nullptr )
                 {
                     nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
                 }
@@ -1541,7 +1541,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxPoolItem* pItem=nullptr;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
-                     pItem->ISA(SfxUInt32Item) )
+                     dynamic_cast<const SfxUInt32Item*>( pItem) !=  nullptr )
                 {
                     SotClipboardFormatId nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
                     bool bRet=true;
@@ -2309,12 +2309,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
                 if ( pItem )
                 {
-                    const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, pItem );
+                    const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>( pItem  );
                     if ( pStringItem )
                         aChars = pStringItem->GetValue();
                     const SfxPoolItem* pFtItem = nullptr;
                     pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
-                    const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+                    const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
                     if ( pFontItem )
                         aFontName = pFontItem->GetValue();
                 }

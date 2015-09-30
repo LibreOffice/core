@@ -93,7 +93,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     /* if we are on a master page, the changes apply for all pages and notes-
        pages who are using the relevant layout */
     bool bOnMaster = false;
-    if( mpViewShell && mpViewShell->ISA(DrawViewShell))
+    if( mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
         EditMode eEditMode =
             static_cast<DrawViewShell*>(mpViewShell)->GetEditMode();
@@ -210,7 +210,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         /* That isn't quite right. If the masterpageview is active and you are
            removing a masterpage, it's possible that you are removing the
            current masterpage. So you have to call ResetActualPage ! */
-        if( mpViewShell->ISA(DrawViewShell) && !bCheckMasters )
+        if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bCheckMasters )
             static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(true);
 
         if (bLoad)
@@ -236,7 +236,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         }
 
         // remove blocking
-        if (mpViewShell->ISA(DrawViewShell) && !bCheckMasters )
+        if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bCheckMasters )
             static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(false);
 
         // if the master page was visible, show it again
@@ -244,7 +244,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         {
             if (bOnMaster)
             {
-                if (mpViewShell->ISA(DrawViewShell))
+                if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
                 {
                     ::sd::View* pView =
                           static_cast<DrawViewShell*>(mpViewShell)->GetView();
@@ -276,7 +276,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
 
         // fake a mode change to repaint the page tab bar
-        if( mpViewShell && mpViewShell->ISA( DrawViewShell ) )
+        if( mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr )
         {
             DrawViewShell* pDrawViewSh =
                 static_cast<DrawViewShell*>(mpViewShell);

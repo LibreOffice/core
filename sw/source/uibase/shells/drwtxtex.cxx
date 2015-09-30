@@ -332,7 +332,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 }
 
                 SwView* pView = &GetView();
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
+                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
 
@@ -400,7 +400,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             if (!pArgs)
             {
                 SwView* pView = &GetView();
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
+                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(),
                                     EE_ITEMS_START, EE_ITEMS_END,
@@ -468,7 +468,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
 
-                if (pFieldItem && pFieldItem->GetField()->ISA(SvxURLField))
+                if (pFieldItem && dynamic_cast< const SvxURLField *>( pFieldItem->GetField() ) != nullptr )
                 {
                     // Select field so that it will be deleted during insert
                     ESelection aSel = pOLV->GetSelection();
@@ -1043,7 +1043,7 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
                     {
                         const SvxFieldData* pField = pFieldItem->GetField();
 
-                        if (pField->ISA(SvxURLField))
+                        if (dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
                         {
                             aHLinkItem.SetName(static_cast<const SvxURLField*>( pField)->GetRepresentation());
                             aHLinkItem.SetURL(static_cast<const SvxURLField*>( pField)->GetURL());

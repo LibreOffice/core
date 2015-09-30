@@ -165,7 +165,7 @@ void SfxShell::PutItem
                                   which is stored in the SfxShell in a list. */
 )
 {
-    DBG_ASSERT( !rItem.ISA(SfxSetItem), "SetItems aren't allowed here" );
+    DBG_ASSERT( dynamic_cast< const SfxSetItem* >( &rItem) ==  nullptr, "SetItems aren't allowed here" );
     DBG_ASSERT( SfxItemPool::IsSlot( rItem.Which() ),
                 "items with Which-Ids aren't allowed here" );
 
@@ -527,7 +527,7 @@ void SfxStubSfxShellVerbState(SfxShell *, SfxItemSet& rSet)
 
 void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs)
 {
-    SfxViewShell *pViewSh = PTR_CAST ( SfxViewShell, this);
+    SfxViewShell *pViewSh = dynamic_cast<SfxViewShell*>( this );
 
     DBG_ASSERT(pViewSh, "Only call SetVerbs at the ViewShell!");
     if ( !pViewSh )

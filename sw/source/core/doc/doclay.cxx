@@ -147,9 +147,9 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
 
     // For drawing objects: set layer of cloned object to invisible layer
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
-    if ( !pObj->ISA(SwFlyDrawObj) &&
-         !pObj->ISA(SwVirtFlyDrawObj) &&
-         !IS_TYPE(SdrObject,pObj) )
+    if ( dynamic_cast<const SwFlyDrawObj*>( pObj) ==  nullptr &&
+         dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr &&
+         typeid(SdrObject) != typeid(pObj) )
     {
         if ( getIDocumentDrawModelAccess().IsVisibleLayerId( nLayerIdForClone ) )
         {
@@ -551,7 +551,7 @@ SwPosFlyFrms SwDoc::GetAllFlyFormats( const SwPaM* pCmpRange, bool bDrawAlso,
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 SwFrameFormat *pFly;
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast<const SwFlyFrm*>( pAnchoredObj) !=  nullptr )
                     pFly = &(pAnchoredObj->GetFrameFormat());
                 else if ( bDrawAlso )
                     pFly = &(pAnchoredObj->GetFrameFormat());

@@ -583,8 +583,6 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         // with the name:
         CharClass aCC( LanguageTag( LANGUAGE_SYSTEM) );
 
-        TypeId aType( TYPE(SfxObjectShell) );
-
         bool bFirst = true;
         SfxObjectShell* pShell = pLinkMgr->GetPersist();
         if( pShell && pShell->GetMedium() )
@@ -600,7 +598,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         if ( !pShell )
         {
             bFirst = false;
-            pShell = SfxObjectShell::GetFirst( &aType, false );
+            pShell = SfxObjectShell::GetFirst( nullptr, false );
         }
 
         OUString sTmp;
@@ -623,10 +621,10 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             if( bFirst )
             {
                 bFirst = false;
-                pShell = SfxObjectShell::GetFirst( &aType, false );
+                pShell = SfxObjectShell::GetFirst( nullptr, false );
             }
             else
-                pShell = SfxObjectShell::GetNext( *pShell, &aType, false );
+                pShell = SfxObjectShell::GetNext( *pShell, nullptr, false );
 
             sTmp.clear();
         }

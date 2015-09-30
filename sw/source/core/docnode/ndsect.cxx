@@ -1202,7 +1202,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     std::unique_ptr<SwTOXBase> pTOXBase;
     if (TOX_CONTENT_SECTION == GetSection().GetType())
     {
-        OSL_ENSURE( GetSection().ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+        OSL_ENSURE( dynamic_cast< const SwTOXBaseSection* >( &GetSection() ) !=  nullptr , "no TOXBaseSection!" );
         SwTOXBaseSection const& rTBS(
             dynamic_cast<SwTOXBaseSection const&>(GetSection()));
         pTOXBase.reset( new SwTOXBase(rTBS, pDoc) );

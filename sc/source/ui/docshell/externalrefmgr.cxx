@@ -2257,8 +2257,7 @@ ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
         return NULL;
 
     ScDocument* pSrcDoc = NULL;
-    TypeId aType(TYPE(ScDocShell));
-    ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType, false));
+    ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
     while (pShell)
     {
         SfxMedium* pMedium = pShell->GetMedium();
@@ -2287,7 +2286,7 @@ ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
                 break;
             }
         }
-        pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, &aType, false));
+        pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, checkSfxObjectShell<ScDocShell>, false));
     }
 
     initDocInCache(maRefCache, pSrcDoc, nFileId);
@@ -2556,14 +2555,13 @@ bool ScExternalRefManager::isOwnDocument(const OUString& rFile) const
 void ScExternalRefManager::convertToAbsName(OUString& rFile) const
 {
     // unsaved documents have no AbsName
-    TypeId aType(TYPE(ScDocShell));
-    ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType, false));
+    ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
     while (pShell)
     {
         if (rFile == pShell->GetName())
             return;
 
-        pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, &aType, false));
+        pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, checkSfxObjectShell<ScDocShell>, false));
     }
 
     SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();

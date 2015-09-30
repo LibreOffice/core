@@ -72,7 +72,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
         const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
         if (rMarkList.GetMark(0))
         {
-            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
+            SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( rMarkList.GetMark(0)->GetMarkedSdrObj() );
             OSL_ENSURE( pUnoCtrl, "not an SdrUnoObj" );
             if (!pUnoCtrl)
                 return;

@@ -251,7 +251,7 @@ void Outliner::PrepareSpelling()
 {
     mbPrepareSpellingPending = false;
 
-    ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
+    ViewShellBase* pBase = dynamic_cast< ViewShellBase *>( SfxViewShell::Current() );
     if (pBase != NULL)
         SetViewShell (pBase->GetMainViewShell());
     SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
@@ -294,7 +294,7 @@ void Outliner::EndSpelling()
     std::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
     std::shared_ptr<ViewShell> pOldViewShell (pViewShell);
 
-    ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
+    ViewShellBase* pBase = dynamic_cast< ViewShellBase *>( SfxViewShell::Current() );
     if (pBase != NULL)
         pViewShell = pBase->GetMainViewShell();
     else
@@ -303,7 +303,7 @@ void Outliner::EndSpelling()
 
     // When in <member>PrepareSpelling()</member> a new outline view has
     // been created then delete it here.
-    bool bViewIsDrawViewShell(pViewShell && pViewShell->ISA(DrawViewShell));
+    bool bViewIsDrawViewShell(pViewShell && 0 != dynamic_cast< const DrawViewShell *>( pViewShell.get() ));
     if (bViewIsDrawViewShell)
     {
         SetStatusEventHdl(Link<EditStatus&,void>());
@@ -331,7 +331,7 @@ void Outliner::EndSpelling()
     // changes were done at SpellCheck
     if(IsModified())
     {
-        if(mpView && mpView->ISA(OutlineView))
+        if(mpView && dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
             static_cast<OutlineView*>(mpView)->PrepareClose(false);
         if(mpDrawDocument && !mpDrawDocument->IsChanged())
             mpDrawDocument->SetChanged();
@@ -354,7 +354,7 @@ void Outliner::EndSpelling()
 bool Outliner::SpellNextDocument()
 {
     std::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
-    if (pViewShell->ISA(OutlineViewShell))
+    if( 0 != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
     {
         // When doing a spell check in the outline view then there is
         // only one document.
@@ -363,7 +363,7 @@ bool Outliner::SpellNextDocument()
     }
     else
     {
-        if (mpView->ISA(OutlineView))
+        if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
             static_cast<OutlineView*>(mpView)->PrepareClose(false);
         mpDrawDocument->GetDocSh()->SetWaitCursor( true );
 
@@ -439,7 +439,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     mpDrawDocument->GetDocSh()->SetWaitCursor( true );
     if (mbPrepareSpellingPending)
         PrepareSpelling();
-    ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
+    ViewShellBase* pBase = dynamic_cast< ViewShellBase *>( SfxViewShell::Current() );
     // Determine whether we have to abort the search.  This is necessary
     // when the main view shell does not support searching.
     bool bAbort = false;
@@ -532,7 +532,7 @@ void Outliner::Initialize (bool bDirectionIsForward)
 
         // In case we are searching in an outline view then first remove the
         // current selection and place cursor at its start or end.
-        if (pViewShell->ISA(OutlineViewShell))
+        if( 0 != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
         {
             ESelection aSelection = mpImpl->GetOutlinerView()->GetSelection ();
             if (mbDirectionIsForward)
@@ -591,7 +591,7 @@ bool Outliner::SearchAndReplaceAll()
         return true;
     }
 
-    if (pViewShell->ISA(OutlineViewShell))
+    if( 0 != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
     {
         // Put the cursor to the beginning/end of the outliner.
         mpImpl->GetOutlinerView()->SetSelection (GetSearchStartPosition ());
@@ -599,7 +599,7 @@ bool Outliner::SearchAndReplaceAll()
         // The outliner does all the work for us when we are in this mode.
         SearchAndReplaceOnce();
     }
-    else if (pViewShell->ISA(DrawViewShell))
+    else if( 0 != dynamic_cast< const DrawViewShell *>( pViewShell.get() ))
     {
         // Go to beginning/end of document.
         maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
@@ -644,7 +644,7 @@ bool Outliner::SearchAndReplaceOnce()
         mpWindow = pViewShell->GetActiveWindow();
         pOutlinerView->SetWindow(mpWindow);
 
-        if (pViewShell->ISA(DrawViewShell) )
+        if( 0 != dynamic_cast< const DrawViewShell *>( pViewShell.get() ))
         {
             // When replacing we first check if there is a selection
             // indicating a match.  If there is then replace it.  The
@@ -689,7 +689,7 @@ bool Outliner::SearchAndReplaceOnce()
                 }
             }
         }
-        else if (pViewShell->ISA(OutlineViewShell))
+        else if( 0 != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
         {
             mpDrawDocument->GetDocSh()->SetWaitCursor(false);
             // The following loop is executed more than once only when a
@@ -835,7 +835,7 @@ void Outliner::RememberStartPosition()
     if ( mnStartPageIndex != (sal_uInt16) -1 )
         return;
 
-    if (pViewShell->ISA(DrawViewShell))
+    if( 0 != dynamic_cast< const DrawViewShell *>( pViewShell.get() ))
     {
         std::shared_ptr<DrawViewShell> pDrawViewShell (
             std::dynamic_pointer_cast<DrawViewShell>(pViewShell));
@@ -863,7 +863,7 @@ void Outliner::RememberStartPosition()
             }
         }
     }
-    else if (pViewShell->ISA(OutlineViewShell))
+    else if( 0 != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
     {
         // Remember the current cursor position.
         OutlinerView* pView = GetView(0);
@@ -890,7 +890,7 @@ void Outliner::RestoreStartPosition()
 
     if (bRestore)
     {
-        if (pViewShell->ISA(DrawViewShell))
+        if( 0 != dynamic_cast< const DrawViewShell *>( pViewShell.get() ))
         {
             std::shared_ptr<DrawViewShell> pDrawViewShell (
                 std::dynamic_pointer_cast<DrawViewShell>(pViewShell));
@@ -898,7 +898,7 @@ void Outliner::RestoreStartPosition()
             if (pDrawViewShell.get() != NULL)
                 SetPage (meStartEditMode, mnStartPageIndex);
         }
-        else if (pViewShell->ISA(OutlineViewShell))
+        else if( 0 != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
         {
             // Set cursor to its old position.
             OutlinerView* pView = GetView(0);
@@ -996,7 +996,7 @@ void Outliner::EndOfSearch()
     // Before we display a dialog we first jump to where the last valid text
     // object was found.  All page and view mode switching since then was
     // temporary and should not be visible to the user.
-    if ( ! pViewShell->ISA(OutlineViewShell))
+    if(  0 == dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
         SetObject (maLastValidPosition);
 
     if (mbRestrictSearchToSelection)
@@ -1016,7 +1016,7 @@ void Outliner::EndOfSearch()
             mbMatchMayExist = false;
             // Everything back to beginning (or end?) of the document.
             maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
-            if (pViewShell->ISA(OutlineViewShell))
+            if( 0 != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
             {
                 // Set cursor to first character of the document.
                 OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
@@ -1425,7 +1425,7 @@ void Outliner::StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLan
         const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
 {
     std::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
-    bool bMultiDoc = pViewShell->ISA(DrawViewShell);
+    bool bMultiDoc = 0 != dynamic_cast< const DrawViewShell *>( pViewShell.get() );
 
     meMode = TEXT_CONVERSION;
     mbDirectionIsForward = true;
@@ -1477,7 +1477,7 @@ void Outliner::BeginConversion()
 {
     SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
 
-    ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
+    ViewShellBase* pBase = dynamic_cast<ViewShellBase*>( SfxViewShell::Current() );
     if (pBase != NULL)
         SetViewShell (pBase->GetMainViewShell());
 
@@ -1510,7 +1510,7 @@ void Outliner::EndConversion()
 bool Outliner::ConvertNextDocument()
 {
     std::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
-    if (pViewShell && pViewShell->ISA(OutlineViewShell) )
+    if (pViewShell && 0 != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ) )
         return false;
 
     mpDrawDocument->GetDocSh()->SetWaitCursor( true );

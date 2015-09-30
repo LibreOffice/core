@@ -174,7 +174,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
                 while (pShell)
                 {
-                    if (pShell->ISA(DrawDocShell))
+                    if( dynamic_cast< const DrawDocShell *>( pShell ) !=  nullptr)
                     {
                         static_cast<DrawDocShell*>(pShell)->CancelSearching();
                     }

@@ -1460,7 +1460,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
             SwFrameFormat *pFrm = m_rDoc.getIDocumentContentOperations().InsertDrawObj( *m_pPaM, *pObject, aSet );
             pObject->SetMergedItemSet(aSet);
 
-            if (pFrm->ISA(SwDrawFrameFormat))
+            if (dynamic_cast< const SwDrawFrameFormat *>( pFrm ) !=  nullptr)
             {
                 static_cast<SwDrawFrameFormat*>(pFrm)->PosAttrSet();
             }
@@ -2142,7 +2142,7 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrameFormat* pFlyFormat)
         SdrObject* pNewObject = m_bNewDoc ? 0 : pFlyFormat->FindRealSdrObject();
         if (!pNewObject)
             pNewObject = pFlyFormat->FindSdrObject();
-        if (!pNewObject && pFlyFormat->ISA(SwFlyFrameFormat))
+        if (!pNewObject && dynamic_cast< const SwFlyFrameFormat *>( pFlyFormat ) !=  nullptr)
         {
             SwFlyDrawContact* pContactObject
                 = new SwFlyDrawContact(static_cast<SwFlyFrameFormat*>(pFlyFormat),
@@ -2745,7 +2745,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     }
 
     // #i44344#, #i44681# - positioning attributes already set
-    if ( pRetFrameFormat /*#i52825# */ && pRetFrameFormat->ISA(SwDrawFrameFormat) )
+    if ( pRetFrameFormat /*#i52825# */ && dynamic_cast< const SwDrawFrameFormat *>( pRetFrameFormat ) !=  nullptr )
     {
         static_cast<SwDrawFrameFormat*>(pRetFrameFormat)->PosAttrSet();
     }
@@ -2779,7 +2779,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
     SdrTextObj* pSdrTextObj;
 
     // Pruefen, ob Gruppenobjekt (z.B. zwei Klammern) vorliegt
-    if (SdrObjGroup* pThisGroup = PTR_CAST(SdrObjGroup, pRecord->pObj))
+    if (SdrObjGroup* pThisGroup = dynamic_cast<SdrObjGroup*>( pRecord->pObj) )
     {
         // Gruppenobjekte haben keinen Text. Fuege ein Textobjekt in die
         // Gruppe ein, um den Text zu halten.
@@ -2805,7 +2805,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         pThisGroup->GetSubList()->NbcInsertObject(pSdrTextObj);
     }
     else
-        pSdrTextObj = PTR_CAST(SdrTextObj, pRecord->pObj);
+        pSdrTextObj = dynamic_cast<SdrTextObj*>( pRecord->pObj );
 
     if( pSdrTextObj )
     {

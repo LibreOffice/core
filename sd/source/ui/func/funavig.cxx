@@ -59,7 +59,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
         case SID_GO_TO_FIRST_PAGE:
         {
             if (!mpView->IsTextEdit()
-                && mpViewShell->ISA(DrawViewShell)
+                && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
                 && !bSlideShow)
             {
                // jump to first page
@@ -70,7 +70,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
 
         case SID_GO_TO_PREVIOUS_PAGE:
         {
-            if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
+            if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bSlideShow)
             {
                 // With no modifier pressed we move to the previous
                 // slide.
@@ -100,7 +100,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
 
         case SID_GO_TO_NEXT_PAGE:
         {
-            if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
+            if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bSlideShow)
             {
                 // With no modifier pressed we move to the next slide.
                 mpView->SdrEndTextEdit();
@@ -129,7 +129,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
         case SID_GO_TO_LAST_PAGE:
         {
             if (!mpView->IsTextEdit()
-                && mpViewShell->ISA(DrawViewShell)
+                && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
                 && !bSlideShow)
             {
                 // jump to last page

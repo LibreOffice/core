@@ -72,7 +72,7 @@ void SwEditShell::StartAllAction()
 {
     for(SwViewShell& rCurrentShell : GetRingContainer())
     {
-        if( rCurrentShell.IsA( TYPE( SwEditShell ) ) )
+        if( dynamic_cast<const SwEditShell *>(&rCurrentShell) != nullptr )
             static_cast<SwEditShell*>(&rCurrentShell)->StartAction();
         else
             rCurrentShell.StartAction();
@@ -83,7 +83,7 @@ void SwEditShell::EndAllAction()
 {
     for(SwViewShell& rCurrentShell : GetRingContainer())
     {
-        if( rCurrentShell.IsA( TYPE( SwEditShell ) ) )
+        if( dynamic_cast<const SwEditShell *>(&rCurrentShell) != nullptr )
             static_cast<SwEditShell*>(&rCurrentShell)->EndAction();
         else
             rCurrentShell.EndAction();
