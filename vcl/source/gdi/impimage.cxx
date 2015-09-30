@@ -182,7 +182,12 @@ void ImplImageBmp::Draw( OutputDevice* pOutDev,
 
         if( nStyle & DrawImageFlags::Disable )
         {
-            ImplUpdateDisabledBmpEx();
+            BitmapChecksum aChecksum = maBmpEx.GetChecksum();
+            if (maBitmapChecksum != aChecksum)
+            {
+                maBitmapChecksum = aChecksum;
+                ImplUpdateDisabledBmpEx();
+            }
             pOutDev->DrawBitmapEx( rPos, aOutSize, aSrcPos, maSize, maDisabledBmpEx );
         }
         else
