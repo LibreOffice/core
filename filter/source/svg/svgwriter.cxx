@@ -30,7 +30,6 @@
 #include <sax/tools/converter.hxx>
 
 #include <memory>
-#include <boost/shared_array.hpp>
 
 
 static const char   aXMLElemG[] = "g";
@@ -2422,7 +2421,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     else
         aPos = rPos;
 
-    boost::shared_array<long> xTmpArray(new long[nLen]);
+    std::unique_ptr<long[]> xTmpArray(new long[nLen]);
     // get text sizes
     if( pDXArray )
     {

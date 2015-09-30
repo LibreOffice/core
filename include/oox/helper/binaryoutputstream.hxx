@@ -20,10 +20,8 @@
 #ifndef INCLUDED_OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 #define INCLUDED_OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 
-#include <memory>
-#include <boost/shared_array.hpp>
-
 #include <oox/helper/binarystreambase.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XOutputStream; }
@@ -103,13 +101,10 @@ void BinaryOutputStream::writeArray( Type* opnArray, sal_Int32 nElemCount )
 template< typename Type >
 void BinaryOutputStream::writeArray( const Type* opnArray, sal_Int32 nElemCount )
 {
-    boost::shared_array<Type> pArray(new Type[nElemCount]);
-    std::uninitialized_copy(opnArray, opnArray + nElemCount, pArray.get());
-    writeArray(pArray.get(), nElemCount);
+    std::unique_ptr<Type[]> xArray(new Type[nElemCount]);
+    std::uninitialized_copy(opnArray, opnArray + nElemCount, xArray.get());
+    writeArray(xArray.get(), nElemCount);
 }
-
-
-
 
 template< typename Type >
 void BinaryOutputStream::writeValue( Type nValue )

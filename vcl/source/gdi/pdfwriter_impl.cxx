@@ -3465,8 +3465,8 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                     }
                     else
                     {
-                        boost::shared_array<unsigned char> pWriteBuffer( new unsigned char[ nLength2 ] );
-                        memset( pWriteBuffer.get(), 0, nLength2 );
+                        std::unique_ptr<unsigned char[]> xWriteBuffer(new unsigned char[nLength2]);
+                        memset(xWriteBuffer.get(), 0, nLength2);
                         int nWriteIndex = 0;
 
                         int nNextSectionIndex = 0;
@@ -3493,11 +3493,11 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                             {
                                 if( !(nWriteIndex & 1 ) )
                                     cNibble <<= 4;
-                                pWriteBuffer.get()[ nWriteIndex/2 ] |= cNibble;
+                                xWriteBuffer.get()[ nWriteIndex/2 ] |= cNibble;
                                 nWriteIndex++;
                             }
                         }
-                        if( ! writeBuffer( pWriteBuffer.get(), nLength2 ) )
+                        if (!writeBuffer(xWriteBuffer.get(), nLength2))
                             throw FontException();
                         if( aSections.empty() )
                         {
@@ -4039,15 +4039,15 @@ bool PDFWriterImpl::emitFonts()
                 }
                 else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::TYPE1_PFB) != 0 ) // TODO: also support PFA?
                 {
-                    boost::shared_array<unsigned char> pBuffer( new unsigned char[ nLength1 ] );
+                    std::unique_ptr<unsigned char[]> xBuffer(new unsigned char[nLength1]);
 
                     sal_uInt64 nBytesRead = 0;
-                    if ( osl::File::E_None != aFontFile.read(pBuffer.get(), nLength1, nBytesRead) ) return false;
+                    if ( osl::File::E_None != aFontFile.read(xBuffer.get(), nLength1, nBytesRead) ) return false;
                     DBG_ASSERT( nBytesRead==nLength1, "PDF-FontSubset read incomplete!" );
                     if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
                     // get the PFB-segment lengths
                     ThreeInts aSegmentLengths = {0,0,0};
-                    getPfbSegmentLengths( pBuffer.get(), (int)nBytesRead, aSegmentLengths );
+                    getPfbSegmentLengths(xBuffer.get(), (int)nBytesRead, aSegmentLengths);
                     // the lengths below are mandatory for PDF-exported Type1 fonts
                     // because the PFB segment headers get stripped! WhyOhWhy.
                     aLine.append( (sal_Int32)aSegmentLengths[0] );
@@ -4064,9 +4064,9 @@ bool PDFWriterImpl::emitFonts()
                     // emit PFB-sections without section headers
                     beginCompression();
                     checkAndEnableStreamEncryption( nFontStream );
-                    if ( !writeBuffer( &pBuffer[6], aSegmentLengths[0] ) ) return false;
-                    if ( !writeBuffer( &pBuffer[12] + aSegmentLengths[0], aSegmentLengths[1] ) ) return false;
-                    if ( !writeBuffer( &pBuffer[18] + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) ) return false;
+                    if ( !writeBuffer( &xBuffer[6], aSegmentLengths[0] ) ) return false;
+                    if ( !writeBuffer( &xBuffer[12] + aSegmentLengths[0], aSegmentLengths[1] ) ) return false;
+                    if ( !writeBuffer( &xBuffer[18] + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) ) return false;
                 }
                 else
                 {
@@ -11440,17 +11440,17 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         else
         {
             const int nScanLineBytes = pAccess->Width()*3;
-            boost::shared_array<sal_uInt8> pCol( new sal_uInt8[ nScanLineBytes ] );
+            std::unique_ptr<sal_uInt8[]> xCol(new sal_uInt8[nScanLineBytes]);
             for( long y = 0; y < pAccess->Height(); y++ )
             {
                 for( long x = 0; x < pAccess->Width(); x++ )
                 {
                     BitmapColor aColor = pAccess->GetColor( y, x );
-                    pCol[3*x+0] = aColor.GetRed();
-                    pCol[3*x+1] = aColor.GetGreen();
-                    pCol[3*x+2] = aColor.GetBlue();
+                    xCol[3*x+0] = aColor.GetRed();
+                    xCol[3*x+1] = aColor.GetGreen();
+                    xCol[3*x+2] = aColor.GetBlue();
                 }
-                CHECK_RETURN( writeBuffer( pCol.get(), nScanLineBytes ) );
+                CHECK_RETURN(writeBuffer(xCol.get(), nScanLineBytes));
             }
         }
         endCompression();
