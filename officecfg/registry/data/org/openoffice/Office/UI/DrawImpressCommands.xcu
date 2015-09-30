@@ -1409,7 +1409,12 @@
       </node>
       <node oor:name=".uno:SelectBackground" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Background Image...</value>
+          <value xml:lang="en-US">Set Background Image...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SaveBackground" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Save Background Image...</value>
         </prop>
       </node>
       <node oor:name=".uno:DisplayMasterBackground" oor:op="replace">

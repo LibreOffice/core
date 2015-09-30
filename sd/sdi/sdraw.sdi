@@ -6439,6 +6439,30 @@ SfxVoidItem SelectBackground SID_SELECT_BACKGROUND
     GroupId = GID_OPTIONS;
 ]
 
+SfxVoidItem SaveBackground SID_SAVE_BACKGROUND
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
 SfxBoolItem DisplayMasterBackground SID_DISPLAY_MASTER_BACKGROUND
 [
     /* flags: */

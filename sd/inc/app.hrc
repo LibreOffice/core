@@ -449,6 +449,7 @@
 #define SID_SLIDE_SORTER_MULTI_PANE_GUI     (SID_SD_START+421)
 
 #define SID_SELECT_BACKGROUND               (SID_SD_START+422)
+#define SID_SAVE_BACKGROUND                 (SID_SD_START+423)
         // FREE
 // Slots for the tool pane popup
 #define SID_TP_APPLY_TO_ALL_SLIDES          (SID_SD_START+425)

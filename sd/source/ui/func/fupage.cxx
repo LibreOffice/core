@@ -36,6 +36,7 @@
 #include <svx/svdundo.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <svx/graphichelper.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xsetit.hxx>
 #include <editeng/ulspitem.hxx>
@@ -164,6 +165,41 @@ void FuPage::Deactivate()
 {
 }
 
+void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool bMasterPage, SfxItemSet& rMergedAttr)
+{
+    if (bMasterPage)
+    {
+        if (pStyleSheet)
+            mergeItemSetsImpl(rMergedAttr, pStyleSheet->GetItemSet());
+    }
+    else
+    {
+        // Only this page, get attributes for background fill
+        const SfxItemSet& rBackgroundAttributes = pPage->getSdrPageProperties().GetItemSet();
+
+        if(drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(rBackgroundAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+        {
+            // page attributes are used, take them
+            rMergedAttr.Put(rBackgroundAttributes);
+        }
+        else
+        {
+            if(pStyleSheet
+                && drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
+            {
+                // if the page has no fill style, use the settings from the
+                // background stylesheet (if used)
+                mergeItemSetsImpl(rMergedAttr, pStyleSheet->GetItemSet());
+            }
+            else
+            {
+                // no fill style from page, start with no fill style
+                rMergedAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
+            }
+        }
+    }
+}
+
 const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
 {
     if (!mpDrawViewShell)
@@ -247,44 +283,27 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     // merge page background filling to the dialogs input set
     if( mbDisplayBackgroundTabPage )
     {
-        if( mbMasterPage )
-        {
-            if(pStyleSheet)
-                mergeItemSetsImpl( aMergedAttr, pStyleSheet->GetItemSet() );
-        }
-        else
-        {
-            // Only this page, get attributes for background fill
-            const SfxItemSet& rBackgroundAttributes = mpPage->getSdrPageProperties().GetItemSet();
-
-            if(drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(rBackgroundAttributes.Get(XATTR_FILLSTYLE)).GetValue())
-            {
-                // page attributes are used, take them
-                aMergedAttr.Put(rBackgroundAttributes);
-            }
-            else
-            {
-                if(pStyleSheet
-                    && drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
-                {
-                    // if the page has no fill style, use the settings from the
-                    // background stylesheet (if used)
-                    mergeItemSetsImpl(aMergedAttr, pStyleSheet->GetItemSet());
-                }
-                else
-                {
-                    // no fill style from page, start with no fill style
-                    aMergedAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
-                }
-            }
-        }
+        MergePageBackgroundFilling(mpPage, pStyleSheet, mbMasterPage, aMergedAttr);
     }
 
     std::unique_ptr< SfxItemSet > pTempSet;
 
-    if( GetSlotID() == SID_SELECT_BACKGROUND )
+    const sal_uInt16 nId = GetSlotID();
+    if (nId == SID_SAVE_BACKGROUND)
     {
-        SvxOpenGraphicDialog    aDlg(SdResId(STR_SET_BACKGROUND_PICTURE));
+        const XFillStyleItem& rStyleItem =
+            static_cast<const XFillStyleItem&>(aMergedAttr.Get(XATTR_FILLSTYLE));
+        if (drawing::FillStyle_BITMAP == (drawing::FillStyle)rStyleItem.GetValue())
+        {
+            const XFillBitmapItem& rBitmap =
+                static_cast<const XFillBitmapItem&>(aMergedAttr.Get(XATTR_FILLBITMAP));
+            const GraphicObject& rGraphicObj = rBitmap.GetGraphicObject();
+            GraphicHelper::ExportGraphic(rGraphicObj.GetGraphic(), "");
+        }
+    }
+    else if (nId == SID_SELECT_BACKGROUND)
+    {
+        SvxOpenGraphicDialog aDlg(SdResId(STR_SET_BACKGROUND_PICTURE));
 
         if( aDlg.Execute() == GRFILTER_OK )
         {

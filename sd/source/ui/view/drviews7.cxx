@@ -84,6 +84,7 @@
 #include "fubullet.hxx"
 #include "fuconcs.hxx"
 #include "fuformatpaintbrush.hxx"
+#include "stlsheet.hxx"
 
 #include <config_features.h>
 
@@ -678,6 +679,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         rSet.DisableItem(SID_PRESENTATION_LAYOUT);
         rSet.DisableItem(SID_SELECT_BACKGROUND);
+        rSet.DisableItem(SID_SAVE_BACKGROUND);
     }
 
     if (mePageKind == PK_NOTES)
@@ -694,6 +696,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem(SID_MODIFYPAGE);
 
         rSet.DisableItem(SID_SELECT_BACKGROUND);
+        rSet.DisableItem(SID_SAVE_BACKGROUND);
         rSet.DisableItem(SID_INSERTLAYER);
         rSet.DisableItem(SID_LAYERMODE);
         rSet.DisableItem(SID_INSERTFILE);
@@ -714,6 +717,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_INSERTFILE);
         rSet.DisableItem(SID_PAGEMODE);
         rSet.DisableItem(SID_SELECT_BACKGROUND);
+        rSet.DisableItem(SID_SAVE_BACKGROUND);
     }
     else
     {
@@ -1593,8 +1597,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         || rSet.GetItemState(SID_DISPLAY_MASTER_OBJECTS) == SfxItemState::DEFAULT)
     {
         SdPage* pPage = GetActualPage();
-        if (pPage != NULL
-            && GetDoc() != NULL)
+        if (pPage != NULL && GetDoc() != NULL)
         {
             SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
@@ -1614,6 +1617,24 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxVisibilityItem(SID_INSERT_3DMODEL, false));
     }
 #endif
+
+    if (rSet.GetItemState(SID_SAVE_BACKGROUND) == SfxItemState::DEFAULT)
+    {
+        bool bDisableSaveBackground = true;
+        SdPage* pPage = GetActualPage();
+        if (pPage != NULL && GetDoc() != NULL)
+        {
+            SfxItemSet aMergedAttr(GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0);
+            SdStyleSheet* pStyleSheet = pPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
+            MergePageBackgroundFilling(pPage, pStyleSheet, meEditMode == EM_MASTERPAGE, aMergedAttr);
+            if (drawing::FillStyle_BITMAP == static_cast<const XFillStyleItem&>(aMergedAttr.Get(XATTR_FILLSTYLE)).GetValue())
+            {
+                bDisableSaveBackground = false;
+            }
+        }
+        if (bDisableSaveBackground)
+            rSet.DisableItem(SID_SAVE_BACKGROUND);
+    }
 
     GetModeSwitchingMenuState (rSet);
 }

@@ -1184,6 +1184,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_SELECT_BACKGROUND:
+        case SID_SAVE_BACKGROUND:
         case SID_PAGESETUP:  // BASIC ??
         {
             SetCurrentFunction( FuPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );

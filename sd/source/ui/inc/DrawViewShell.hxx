@@ -33,6 +33,7 @@
 
 class Outliner;
 class SdPage;
+class SdStyleSheet;
 class SdrExternalToolEdit;
 class DrawDocShell;
 class TabBar;
@@ -514,6 +515,9 @@ private:
     // The colour of the area behind the slide (used to be called "Wiese")
     Color mnAppBackgroundColor;
 };
+
+    /// Merge the background properties together and deposit the result in rMergeAttr
+    void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool bMasterPage, SfxItemSet& rMergedAttr);
 
 } // end of namespace sd
 

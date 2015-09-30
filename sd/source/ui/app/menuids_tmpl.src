@@ -130,6 +130,13 @@
         HelpId = CMD_SID_SELECT_BACKGROUND ; \
         Text [ en-US ] = "Set Background Image..." ; \
     };
+#define MN_SAVE_BACKGROUND \
+    MenuItem\
+    {\
+        Identifier = SID_SAVE_BACKGROUND ; \
+        HelpId = CMD_SID_SAVE_BACKGROUND ; \
+        Text [ en-US ] = "Save Background Image..." ; \
+    };
 #define MN_DISPLAY_MASTER_BACKGROUND \
     MenuItem\
     {\
@@ -161,6 +168,7 @@
                 MN_SELECT_BACKGROUND\
                 MN_PAGE_DESIGN\
                 MN_RENAME_PAGE\
+                MN_SAVE_BACKGROUND\
             };\
         };\
         Text [ en-US ] = "Pag~e" ; \
@@ -192,7 +200,8 @@
                 MN_DISPLAY_MASTER_OBJECTS\
             };\
         };\
-    };
+    }; \
+    MN_SAVE_BACKGROUND
 
  // Layer
 #define MN_RENAME_LAYER \

@@ -90,6 +90,7 @@
 #define CMD_SID_DELETE_MASTER_PAGE                  ".uno:DeleteMasterPage"
 #define CMD_SID_RENAME_MASTER_PAGE                  ".uno:RenameMasterPage"
 #define CMD_SID_SELECT_BACKGROUND                   ".uno:SelectBackground"
+#define CMD_SID_SAVE_BACKGROUND                     ".uno:SaveBackground"
 #define CMD_SID_DISPLAY_MASTER_BACKGROUND           ".uno:DisplayMasterBackground"
 #define CMD_SID_DISPLAY_MASTER_OBJECTS              ".uno:DisplayMasterObjects"
 #define CMD_SID_TABLE_DISTRIBUTE_COLUMNS            ".uno:DistributeColumns"
