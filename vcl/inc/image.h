@@ -40,6 +40,8 @@ public:
 private:
 
     BitmapEx    maBmpEx;
+    BitmapChecksum maBitmapChecksum;
+
     BitmapEx    maDisabledBmpEx;
     BitmapEx*   mpDisplayBmp;
     Size        maSize;
