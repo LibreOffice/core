@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_779fd05f",
+        "filename": "starmath/inc/cursor.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:22:13Z",
+      "side": 1,
+      "message": "intimate",
+      "revId": "c69420304f222a65e09cee921150314b16c68061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
