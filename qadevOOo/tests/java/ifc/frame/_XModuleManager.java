@@ -59,7 +59,7 @@ public class _XModuleManager extends MultiMethodTest {
      * <CODE>XModel</CODE>. The name of the PropertyValue contains the expected return
      * value of method <CODE>indetify()</CODE> if the method was called with
      * coresponding value.<p>
-     * As enhancement the method <CODE>identify()</CODE> was called with incvalid
+     * As enhancement the method <CODE>identify()</CODE> was called with invalid
      * parameter. In this case the thrown exceptions was catched.
      */
     public XModuleManager oObj = null;
@@ -100,7 +100,7 @@ public class _XModuleManager extends MultiMethodTest {
             (Status.failed("Relation 'xModelSeq' not found.")) ;
     }
 
-    /** The method <CODE>identify()</CODE> was used for every entry in sequeze of
+    /* The method <CODE>identify()</CODE> was used for every entry in sequence of
      * object relations.
      */
     public void _identify() {

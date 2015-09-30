@@ -45,7 +45,7 @@ import lib.StatusException;
  * <ul>
  *  <li> <code>'XAccessibleSelection.multiSelection'</code>
  *  (of type <code>Boolean</code>) <b> optional </b>:
- *   Indicates whether or not mutiply children could be selected.
+ *   Indicates whether or not multiply children could be selected.
  *   If the relation is <code>false</code> then more than 1 child
  *   couldn't be selected. </li>
  * </ul> <p>

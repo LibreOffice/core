@@ -123,7 +123,7 @@ public class _XAcceptor extends MultiMethodTest {
         XAcceptor dupAcceptor = null ;
         XConnector xConnector = null ;
 
-        // creating services requierd
+        // creating services required
         try {
             Object oConnector = (tParam.getMSF()).
                 createInstance("com.sun.star.connection.Connector") ;
