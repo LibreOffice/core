@@ -170,7 +170,7 @@ public:
     bool IsDragHelpLine() const { return (0L != mpHelpLineOverlay); }
 
     // SnapAngle is for angles in circle, RotateDragging, ...
-    // The snapping of an angle is beared down, if it is swiched off
+    // The snapping of an angle is beared down, if it is switched off
     // with SetAngleSnapEnabled(sal_False)
     // The snapping angles is independent of snapping coordinates
     // and so independent of the attitude IsSnapEnabled()

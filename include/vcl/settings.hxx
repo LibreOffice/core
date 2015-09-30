@@ -617,7 +617,7 @@ public:
     // the default LineWidth for ListBox UI previews (LineStyle, LineDash, LineStartEnd). Default is 1.
     sal_uInt16                      GetListBoxPreviewDefaultLineWidth() const;
 
-    // defines if previews which containn potentially transparent objects (e.g. the dash/line/LineStartEnd previews and others)
+    // defines if previews which contain potentially transparent objects (e.g. the dash/line/LineStartEnd previews and others)
     // use the default transparent visualization background (checkered background) as it has got standard in graphic programs nowadays
     void                            SetPreviewUsesCheckeredBackground(bool bNew);
     bool                            GetPreviewUsesCheckeredBackground() const;
