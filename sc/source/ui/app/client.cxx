@@ -80,7 +80,7 @@ SdrOle2Obj* ScClient::GetDrawObj()
 void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
-    ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pSfxViewSh  );
     if (!pViewSh)
     {
         OSL_FAIL("Wrong ViewShell");
@@ -142,7 +142,7 @@ void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
 void ScClient::ObjectAreaChanged()
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
-    ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pSfxViewSh  );
     if (!pViewSh)
     {
         OSL_FAIL("Wrong ViewShell");
@@ -174,7 +174,7 @@ void ScClient::ObjectAreaChanged()
         //  set document modified (SdrModel::SetChanged is not used)
         // TODO/LATER: is there a reason that this code is not executed in Draw?
 //        SfxViewShell* pSfxViewSh = GetViewShell();
-//        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+//        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pSfxViewSh  );
         if (pViewSh)
             pViewSh->GetViewData().GetDocShell()->SetDrawModified();
     }
@@ -226,7 +226,7 @@ void ScClient::ViewChanged()
         //SetObjArea( aObjArea );
 
         SfxViewShell* pSfxViewSh = GetViewShell();
-        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pSfxViewSh  );
         if ( pViewSh )
         {
             vcl::Window* pWin = pViewSh->GetActiveWin();

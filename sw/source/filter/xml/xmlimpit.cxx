@@ -159,7 +159,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                                                        &pItem ) )
                 {
                     SfxPoolItem *pNew = pItem->Clone();
-                    pUnknownItem = PTR_CAST( SvXMLAttrContainerItem, pNew );
+                    pUnknownItem = dynamic_cast<SvXMLAttrContainerItem*>( pNew  );
                     OSL_ENSURE( pUnknownItem,
                                 "SvXMLAttrContainerItem expected" );
                     if( !pUnknownItem )
@@ -263,7 +263,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
         {
         case RES_LR_SPACE:
         {
-            SvxLRSpaceItem* pLRSpace = PTR_CAST(SvxLRSpaceItem, &rItem);
+            SvxLRSpaceItem* pLRSpace = dynamic_cast<SvxLRSpaceItem*>( &rItem );
             OSL_ENSURE( pLRSpace != NULL, "Wrong Which-ID!" );
 
             switch( nMemberId )
@@ -326,7 +326,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_UL_SPACE:
         {
-            SvxULSpaceItem* pULSpace = PTR_CAST(SvxULSpaceItem, &rItem);
+            SvxULSpaceItem* pULSpace = dynamic_cast<SvxULSpaceItem*>( &rItem );
             OSL_ENSURE( pULSpace != NULL, "Wrong Which-ID!" );
 
             sal_Int32 nProp = 100;
@@ -353,7 +353,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_SHADOW:
         {
-            SvxShadowItem* pShadow = PTR_CAST(SvxShadowItem, &rItem);
+            SvxShadowItem* pShadow = dynamic_cast<SvxShadowItem*>( &rItem );
             OSL_ENSURE( pShadow != NULL, "Wrong Which-ID" );
 
             bool bColorFound = false;
@@ -434,7 +434,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_BOX:
         {
-            SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
+            SvxBoxItem* pBox = dynamic_cast<SvxBoxItem*>( &rItem );
             OSL_ENSURE( pBox != NULL, "Wrong WHich-ID" );
 
             // copy SvxBorderLines
@@ -590,7 +590,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_BREAK:
         {
-            SvxFormatBreakItem* pFormatBreak = PTR_CAST(SvxFormatBreakItem, &rItem);
+            SvxFormatBreakItem* pFormatBreak = dynamic_cast<SvxFormatBreakItem*>( &rItem );
             OSL_ENSURE( pFormatBreak != NULL, "Wrong Which-ID" );
 
             sal_uInt16 eEnum;
@@ -625,7 +625,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_KEEP:
         {
-            SvxFormatKeepItem* pFormatKeep = PTR_CAST(SvxFormatKeepItem, &rItem);
+            SvxFormatKeepItem* pFormatKeep = dynamic_cast<SvxFormatKeepItem*>( &rItem );
             OSL_ENSURE( pFormatKeep != NULL, "Wrong Which-ID" );
 
             if( IsXMLToken( rValue, XML_ALWAYS ) ||
@@ -645,7 +645,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_BACKGROUND:
         {
-            SvxBrushItem* pBrush = PTR_CAST(SvxBrushItem, &rItem);
+            SvxBrushItem* pBrush = dynamic_cast<SvxBrushItem*>( &rItem );
             OSL_ENSURE( pBrush != NULL, "Wrong Which-ID" );
 
             sal_Int32 nTempColor(0);
@@ -788,7 +788,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_PAGEDESC:
         {
-            SwFormatPageDesc* pPageDesc = PTR_CAST(SwFormatPageDesc, &rItem);
+            SwFormatPageDesc* pPageDesc = dynamic_cast<SwFormatPageDesc*>( &rItem );
             OSL_ENSURE( pPageDesc != NULL, "Wrong Which-ID" );
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
@@ -805,7 +805,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
         case RES_LAYOUT_SPLIT:
         case RES_ROW_SPLIT:
         {
-            SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
+            SfxBoolItem* pSplit = dynamic_cast<SfxBoolItem*>( &rItem );
             OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
 
             if( IsXMLToken( rValue, XML_AUTO ) ||
@@ -825,7 +825,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_HORI_ORIENT:
         {
-            SwFormatHoriOrient* pHoriOrient = PTR_CAST(SwFormatHoriOrient, &rItem);
+            SwFormatHoriOrient* pHoriOrient = dynamic_cast<SwFormatHoriOrient*>( &rItem );
             OSL_ENSURE( pHoriOrient != NULL, "Wrong Which-ID" );
 
             sal_uInt16 nValue;
@@ -838,7 +838,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_VERT_ORIENT:
         {
-            SwFormatVertOrient* pVertOrient = PTR_CAST(SwFormatVertOrient, &rItem);
+            SwFormatVertOrient* pVertOrient = dynamic_cast<SwFormatVertOrient*>( &rItem );
             OSL_ENSURE( pVertOrient != NULL, "Wrong Which-ID" );
 
             sal_uInt16 nValue;
@@ -857,7 +857,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_FRM_SIZE:
         {
-            SwFormatFrmSize* pFrmSize = PTR_CAST(SwFormatFrmSize, &rItem);
+            SwFormatFrmSize* pFrmSize = dynamic_cast<SwFormatFrmSize*>( &rItem );
             OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
 
             bool bSetHeight = false;
@@ -960,7 +960,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_COLLAPSING_BORDERS:
         {
-            SfxBoolItem* pBorders = PTR_CAST(SfxBoolItem, &rItem);
+            SfxBoolItem* pBorders = dynamic_cast<SfxBoolItem*>( &rItem );
             OSL_ENSURE( pBorders != NULL, "Wrong Which-ID" );
 
             if( IsXMLToken( rValue, XML_COLLAPSING ) )

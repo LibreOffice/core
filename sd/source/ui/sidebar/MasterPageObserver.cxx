@@ -232,7 +232,7 @@ void MasterPageObserver::Implementation::Notify(
                 // filters out events that are sent in between the insertion
                 // of a new standard master page and a new notes master
                 // page.
-                if (rBroadcaster.ISA(SdDrawDocument))
+                if (dynamic_cast< const SdDrawDocument *>( &rBroadcaster ) !=  nullptr)
                 {
                     SdDrawDocument& rDocument (
                         static_cast<SdDrawDocument&>(rBroadcaster));

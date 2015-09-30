@@ -441,10 +441,6 @@ VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( vcl::Window* pParent, const Sfx
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
 {
-// os: Such a nonsense! One will always find such an item somewhere,
-//     but it must be existing in the rSet!
-//  const SfxPoolItem* pX = GetOldItem( rSet, SID_VIEW_FLD_PIC );
-//  if( pX && pX->ISA(SfxWallpaperItem))
     if(SfxItemState::DEFAULT <= rSet->GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
     {
         ResetFromWallpaperItem( *rSet );
@@ -640,11 +636,6 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
         pPageImpl->pLoadIdle->Stop();
         LoadIdleHdl_Impl( pPageImpl->pLoadIdle );
     }
-// os: Such a nonsense! One will always find such an item somewhere,
-//     but it must be existing in the rSet!
-
-//  const SfxPoolItem* pX = GetOldItem( rCoreSet, SID_VIEW_FLD_PIC );
-//  if( pX && pX->ISA(SfxWallpaperItem))
     if(SfxItemState::DEFAULT <= rCoreSet->GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
         return FillItemSetWithWallpaperItem( *rCoreSet, SID_VIEW_FLD_PIC );
 

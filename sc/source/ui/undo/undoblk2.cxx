@@ -163,13 +163,13 @@ void ScUndoWidthOrHeight::Redo()
 
 void ScUndoWidthOrHeight::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->SetMarkedWidthOrHeight( bWidth, eMode, nNewSize, true );
 }
 
 bool ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

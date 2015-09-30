@@ -161,7 +161,7 @@ static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBin
     {
         SfxViewFrame* pViewFrm = pDisp->GetFrame();
         if ( pViewFrm )
-            pViewSh = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
+            pViewSh = dynamic_cast<ScTabViewShell*>( pViewFrm->GetViewShell()  );
     }
 
     if ( !lcl_isExperimentalMode() )
@@ -196,7 +196,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
     {
         SfxViewFrame* pViewFrm = pDisp->GetFrame();
         if ( pViewFrm )
-            pViewSh = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
+            pViewSh = dynamic_cast<ScTabViewShell*>( pViewFrm->GetViewShell()  );
     }
     OSL_ENSURE( pViewSh, "no view shell for input window" );
 
@@ -271,8 +271,7 @@ void ScInputWindow::dispose()
 
     if ( !bDown )
     {
-        TypeId aScType = TYPE(ScTabViewShell);
-        SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+        SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
         while ( pSh )
         {
             ScInputHandler* pHdl = static_cast<ScTabViewShell*>(pSh)->GetInputHandler();
@@ -281,7 +280,7 @@ void ScInputWindow::dispose()
                 pHdl->SetInputWindow( NULL );
                 pHdl->StopInputWinEngine( false );  // reset pTopView pointer
             }
-            pSh = SfxViewShell::GetNext( *pSh, &aScType );
+            pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
         }
     }
 
@@ -309,7 +308,7 @@ void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
 bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList)
 {
     bool bSubTotal = false;
-    ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
     if ( pViewSh )
     {
         ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
@@ -401,7 +400,7 @@ void ScInputWindow::Select()
 
         case SID_INPUT_SUM:
             {
-                ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+                ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
                 if ( pViewSh )
                 {
                     const ScMarkData& rMark = pViewSh->GetViewData().GetMarkData();
@@ -511,7 +510,7 @@ void ScInputWindow::Select()
                 sal_Int32 nStartPos = 1;
                 sal_Int32 nEndPos = 1;
 
-                ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+                ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
                 if ( pViewSh )
                 {
                     const OUString& rString = aTextWindow.GetTextString();
@@ -1799,7 +1798,7 @@ void ScTextWnd::StartEditEngine()
         //  as long as EditEngine and DrawText sometimes differ for CTL text,
         //  repaint now to have the EditEngine's version visible
 //        SfxObjectShell* pObjSh = SfxObjectShell::Current();
-        if ( pObjSh && pObjSh->ISA(ScDocShell) )
+        if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
         {
             ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();    // any document
             SvtScriptType nScript = rDoc.GetStringScriptType( aString );
@@ -1896,7 +1895,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
                 SvtScriptType nOldScript = SvtScriptType::NONE;
                 SvtScriptType nNewScript = SvtScriptType::NONE;
                 SfxObjectShell* pObjSh = SfxObjectShell::Current();
-                if ( pObjSh && pObjSh->ISA(ScDocShell) )
+                if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
                 {
                     //  any document can be used (used only for its break iterator)
                     ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();
@@ -2140,7 +2139,7 @@ void ScPosWnd::FillRangeNames()
     Clear();
 
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
-    if ( pObjSh && pObjSh->ISA(ScDocShell) )
+    if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
     {
         ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();
 
@@ -2392,7 +2391,7 @@ void ScPosWnd::DoEnter()
             }
             else
             {
-                ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+                ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
                 ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
                 if (pHdl)
                     pHdl->InsertFunction( aText );
@@ -2531,7 +2530,7 @@ void ScPosWnd::ReleaseFocus_Impl()
     HideTip();
 
     SfxViewShell* pCurSh = SfxViewShell::Current();
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( PTR_CAST( ScTabViewShell, pCurSh ) );
+    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( dynamic_cast<ScTabViewShell*>( pCurSh )  );
     if ( pHdl && pHdl->IsTopMode() )
     {
         // Focus back in input row?

@@ -156,13 +156,13 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
             if( 0 != (pDesc = static_cast<const SwFormatPageDesc*>(rPool.GetItem2( RES_PAGEDESC, n )) )
                 && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
-                const SwContentNode* pNd = PTR_CAST( SwContentNode, pDesc->GetDefinedIn() );
+                const SwContentNode* pNd = dynamic_cast<const SwContentNode*>( pDesc->GetDefinedIn()  );
                 if( pNd )
                 {
                     if ( SwIterator<SwFrm,SwContentNode>(*pNd).First() )
                         bVirtuell = true;
                 }
-                else if( pDesc->GetDefinedIn()->ISA( SwFormat ))
+                else if( dynamic_cast< const SwFormat* >(pDesc->GetDefinedIn()) !=  nullptr)
                 {
                     SwAutoFormatGetDocNode aGetHt( &pDoc->GetNodes() );
                     bVirtuell = !pDesc->GetDefinedIn()->GetInfo( aGetHt );

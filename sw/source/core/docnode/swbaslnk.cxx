@@ -68,7 +68,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     {
         SwIterator<SwClient,SwGrfNode> aIter(rGrfNd);
         for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
-            if(!pLast->ISA(SwContentFrm))
+            if(dynamic_cast<const SwContentFrm*>( pLast) ==  nullptr)
                 pLast->ModifyNotification(&rItem, &rItem);
     }
     {
@@ -230,7 +230,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             {
                 ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
                 if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
-                    pLnk->ISA( SwBaseLink ) && pLnk->GetObj() == GetObj() )
+                    dynamic_cast<const SwBaseLink*>( pLnk) !=  nullptr && pLnk->GetObj() == GetObj() )
                 {
                     SwBaseLink* pBLink = static_cast<SwBaseLink*>(pLnk);
                     SwGrfNode* pGrfNd = static_cast<SwGrfNode*>(pBLink->pContentNode);

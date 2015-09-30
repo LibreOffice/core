@@ -32,7 +32,7 @@ SwUndoTOXChange::~SwUndoTOXChange()
 
 void SwUndoTOXChange::UpdateTOXBaseSection()
 {
-    if (pTOX->ISA(SwTOXBaseSection))
+    if ( dynamic_cast< const SwTOXBaseSection *>( pTOX ) != nullptr )
     {
         SwTOXBaseSection * pTOXBase = static_cast<SwTOXBaseSection *>(pTOX);
         pTOXBase->Update();

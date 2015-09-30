@@ -1904,7 +1904,7 @@ void SwView::InsFrmMode(sal_uInt16 nCols)
 /// show "edit link" dialog
 void SwView::EditLinkDlg()
 {
-    bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     std::unique_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb ));
     if ( pDlg )

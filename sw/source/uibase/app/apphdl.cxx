@@ -154,7 +154,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
 
     SwView* pActView = ::GetActiveView();
-    bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
+    bool bWebView = dynamic_cast<SwWebView*>( pActView ) !=  nullptr;
 
     while(nWhich)
     {
@@ -166,7 +166,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
             {
                 bool bDisable = false;
                 SfxViewShell* pCurrView = SfxViewShell::Current();
-                if( !pCurrView || !pCurrView->ISA(SwView) )
+                if( !pCurrView || dynamic_cast< const SwView *>( pCurrView ) ==  nullptr )
                     bDisable = true;
                 SwDocShell *pDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
                 if ( bDisable ||
@@ -234,9 +234,9 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
             SfxViewShell* pViewShell = pShell->GetViewShell();
             if(pViewShell)
             {
-                if( pViewShell->ISA(SwView) )
+                if( 0!= dynamic_cast<SwView*>(pViewShell) )
                 {
-                    pNewView = PTR_CAST(SwView,pViewShell);
+                    pNewView = dynamic_cast< SwView* >(pViewShell);
                     pNewView->GetViewFrame()->GetFrame().Appear();
                 }
                 else
@@ -254,7 +254,7 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
                                 SfxCallMode::SYNCHRON, &aFactory, 0L));
         SfxFrame* pFrm = pItem ? pItem->GetFrame() : 0;
         SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : 0;
-        pNewView = pFrame ? PTR_CAST(SwView, pFrame->GetViewShell()) : 0;
+        pNewView = pFrame ? dynamic_cast<SwView*>( pFrame->GetViewShell() ) : 0;
     }
 
     return pNewView;
@@ -652,7 +652,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 case FUNIT_POINT:
                 {
                     SwView* pActView = ::GetActiveView();
-                    bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
+                    bool bWebView = dynamic_cast<SwWebView*>( pActView ) !=  nullptr;
                     ::SetDfltMetric(eUnit, bWebView);
                 }
                 break;
@@ -663,7 +663,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 
         case FN_SET_MODOPT_TBLNUMFMT:
             {
-                bool bWebView = 0 != PTR_CAST(SwWebView, ::GetActiveView() ),
+                bool bWebView = dynamic_cast<SwWebView*>( ::GetActiveView() )!=  nullptr ,
                      bSet;
 
                 if( pArgs && SfxItemState::SET == pArgs->GetItemState(
@@ -694,7 +694,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     if( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
         const SfxEventHint& rEvHint = static_cast<const SfxEventHint&>( rHint);
-        SwDocShell* pDocSh = PTR_CAST( SwDocShell, rEvHint.GetObjShell() );
+        SwDocShell* pDocSh = dynamic_cast<SwDocShell*>( rEvHint.GetObjShell()  );
         if( pDocSh )
         {
             SwWrtShell* pWrtSh = pDocSh->GetWrtShell();
@@ -808,23 +808,20 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
             bAccessibility = true;
 
         //invalidate all edit windows
-        const TypeId aSwViewTypeId = TYPE(SwView);
-        const TypeId aSwPreviewTypeId = TYPE(SwPagePreview);
-        const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while(pViewShell)
         {
             if(pViewShell->GetWindow())
             {
-                if((pViewShell->IsA(aSwViewTypeId) ||
-                    pViewShell->IsA(aSwPreviewTypeId) ||
-                    pViewShell->IsA(aSwSrcViewTypeId)))
+                if((dynamic_cast< const SwView *>( pViewShell ) !=  nullptr ||
+                    dynamic_cast< const SwPagePreview *>( pViewShell ) !=  nullptr ||
+                    dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr))
                 {
                     if(bAccessibility)
                     {
-                        if(pViewShell->IsA(aSwViewTypeId))
+                        if(dynamic_cast< const SwView *>( pViewShell ) !=  nullptr)
                             static_cast<SwView*>(pViewShell)->ApplyAccessiblityOptions(*m_pAccessibilityOptions);
-                        else if(pViewShell->IsA(aSwPreviewTypeId))
+                        else if(dynamic_cast< const SwPagePreview *>( pViewShell ) !=  nullptr)
                             static_cast<SwPagePreview*>(pViewShell)->ApplyAccessiblityOptions(*m_pAccessibilityOptions);
                     }
                     pViewShell->GetWindow()->Invalidate();
@@ -838,7 +835,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
         const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while( pObjSh )
         {
-            if( pObjSh->IsA(TYPE(SwDocShell)) )
+            if( dynamic_cast<const SwDocShell*>(pObjSh) !=  nullptr )
             {
                 SwDoc* pDoc = const_cast<SwDocShell*>(static_cast<const SwDocShell*>(pObjSh))->GetDoc();
                 SwViewShell* pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();

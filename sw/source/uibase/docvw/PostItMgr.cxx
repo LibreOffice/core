@@ -226,9 +226,9 @@ void SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool b
         }
     }
     mbLayout = bFocus;
-    if (pItem->ISA(SwFormatField))
+    if (dynamic_cast< const SwFormatField *>( pItem ) !=  nullptr)
         mvPostItFields.push_back(new SwAnnotationItem(static_cast<SwFormatField&>(*pItem), true, bFocus) );
-    OSL_ENSURE(pItem->ISA(SwFormatField),"Mgr::InsertItem: seems like new stuff was added");
+    OSL_ENSURE(dynamic_cast< const SwFormatField *>( pItem ) !=  nullptr,"Mgr::InsertItem: seems like new stuff was added");
     StartListening(*pItem);
 }
 

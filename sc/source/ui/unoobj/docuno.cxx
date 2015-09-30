@@ -719,16 +719,16 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
     ScViewData* pViewData = ScDocShell::GetViewData();
     uno::Reference<datatransfer::XTransferable> xTransferable;
 
-    if (( pShell = PTR_CAST( ScEditShell, pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )))
+    if (( pShell = dynamic_cast<ScEditShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )) )
         xTransferable = pShell->GetEditView()->GetTransferable();
-    else if ((PTR_CAST( ScDrawTextObjectBar, pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )))
+    else if ( 0 != dynamic_cast<ScDrawTextObjectBar*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ))
     {
         ScDrawView* pView = pViewData->GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
         if (pOutView)
             xTransferable = pOutView->GetEditView().GetTransferable();
     }
-    else if (( pDrawShell = PTR_CAST( ScDrawShell, pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )))
+    else if (( pDrawShell = dynamic_cast<ScDrawShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )) )
         xTransferable = pDrawShell->GetDrawView()->CopyToTransferable();
     else
     {
@@ -1571,7 +1571,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >(pDev->GetExtOutDevData() );
     if ( nRenderer == nTabStart )
     {
         // first page of a sheet: add outline item for the sheet name

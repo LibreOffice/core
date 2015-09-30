@@ -214,7 +214,7 @@ bool SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
 
 void SdDocPreviewWin::updateViewSettings()
 {
-    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell,mpObj);
+    ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( mpObj );
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
 
     SvtAccessibilityOptions aAccOptions;

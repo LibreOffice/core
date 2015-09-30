@@ -77,7 +77,7 @@ public:
 
 void SfxMenuImageControl_Impl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState /*eState*/, const SfxPoolItem* pState )
 {
-    const SfxImageItem* pItem = PTR_CAST( SfxImageItem, pState );
+    const SfxImageItem* pItem = dynamic_cast<const SfxImageItem*>( pState  );
     if ( pItem )
     {
         lRotation = pItem->GetRotation();

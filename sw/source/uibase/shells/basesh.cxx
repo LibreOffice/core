@@ -1117,7 +1117,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if( pArgs != NULL
                 && pArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET
                 && pItem != NULL
-                && pItem->ISA( SfxBoolItem ) )
+                && dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr )
             {
                 bool bDesignMode =
                     static_cast<const SfxBoolItem*>( pItem )->GetValue();
@@ -2109,7 +2109,7 @@ void SwBaseShell::GetTextFontCtrlState( SfxItemSet& rSet )
                 if(RES_CHRATR_FONT == nWhich)
                 {
                     vcl::Font aFont;
-                    if(pI && pI->ISA(SvxFontItem))
+                    if(pI && dynamic_cast< const SvxFontItem *>( pI ) !=  nullptr)
                     {
                         aFont.SetName( static_cast<const SvxFontItem*>(pI)->GetFamilyName());
                         aFont.SetStyleName(static_cast<const SvxFontItem*>(pI)->GetStyleName());

@@ -208,7 +208,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         m_pCbQuoteAll->Show();
         m_pCbQuoteAll->Check( false );
         m_pCbFormulas->Show();
-        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current());
+        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
         bool bFormulas = pViewSh &&
                 pViewSh->GetViewData().GetOptions().GetOption( VOPT_FORMULAS);
         m_pCbFormulas->Check( bFormulas );

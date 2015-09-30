@@ -90,7 +90,7 @@ void SwFormatDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
     if( pDefinedIn )
     {
-        if( !pDefinedIn->ISA( SwFormat ))
+        if( dynamic_cast< const SwFormat *>( pDefinedIn ) ==  nullptr)
             pDefinedIn->ModifyNotification( this, this );
         else if( pDefinedIn->HasWriterListeners() &&
                 !pDefinedIn->IsModifyLocked() )

@@ -133,7 +133,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     {
          if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false, &pItem ) == SfxItemState::SET )
          {
-              OSL_ENSURE( pItem->ISA(SfxUInt16Item), "invalid Item" );
+              OSL_ENSURE( dynamic_cast<const SfxUInt16Item*>( pItem) !=  nullptr, "invalid Item" );
               bSkipColBreaks = bSkipRowBreaks = static_cast<const SfxUInt16Item*>(pItem)->GetValue() > 0;
          }
 

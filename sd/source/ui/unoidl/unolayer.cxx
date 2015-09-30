@@ -698,8 +698,7 @@ void SdLayerManager::UpdateLayerView( bool modify ) const throw()
 {
     if(mpModel->mpDocShell)
     {
-        ::sd::DrawViewShell* pDrViewSh =
-            PTR_CAST(::sd::DrawViewShell, mpModel->mpDocShell->GetViewShell());
+        ::sd::DrawViewShell* pDrViewSh = dynamic_cast< ::sd::DrawViewShell* >( mpModel->mpDocShell->GetViewShell());
 
         if(pDrViewSh)
         {

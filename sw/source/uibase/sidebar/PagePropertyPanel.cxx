@@ -488,7 +488,7 @@ void PagePropertyPanel::NotifyItemUpdate(
     case SID_ATTR_PAGE_COLUMN:
         {
             if ( eState >= SfxItemState::DEFAULT &&
-                 pState && pState->ISA(SfxInt16Item) )
+                 pState && dynamic_cast< const SfxInt16Item *>( pState ) !=  nullptr )
             {
                 mpPageColumnTypeItem.reset( static_cast<SfxInt16Item*>(pState->Clone()) );
                 ChangeColumnImage( mpPageColumnTypeItem->GetValue() );
@@ -497,7 +497,7 @@ void PagePropertyPanel::NotifyItemUpdate(
         break;
     case SID_ATTR_PAGE_LRSPACE:
         if ( eState >= SfxItemState::DEFAULT &&
-             pState && pState->ISA(SvxLongLRSpaceItem) )
+             pState && dynamic_cast< const SvxLongLRSpaceItem *>( pState ) !=  nullptr )
         {
             mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
             ChangeMarginImage();
@@ -506,7 +506,7 @@ void PagePropertyPanel::NotifyItemUpdate(
 
     case SID_ATTR_PAGE_ULSPACE:
         if ( eState >= SfxItemState::DEFAULT &&
-             pState && pState->ISA(SvxLongULSpaceItem) )
+             pState && dynamic_cast< const SvxLongULSpaceItem *>( pState ) !=  nullptr )
         {
             mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
             ChangeMarginImage();
@@ -515,7 +515,7 @@ void PagePropertyPanel::NotifyItemUpdate(
 
     case SID_ATTR_PAGE:
         if ( eState >= SfxItemState::DEFAULT &&
-             pState && pState->ISA(SvxPageItem) )
+             pState && dynamic_cast< const SvxPageItem *>( pState ) !=  nullptr )
         {
             const sal_uInt16 nIdOrientation = mpToolBoxOrientation->GetItemId(UNO_ORIENTATION);
             mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
@@ -539,7 +539,7 @@ void PagePropertyPanel::NotifyItemUpdate(
             mpBindings->Invalidate( SID_ATTR_PAGE, true );
         }
         if ( eState >= SfxItemState::DEFAULT &&
-             pState && pState->ISA(SvxSizeItem) )
+             pState && dynamic_cast< const SvxSizeItem *>( pState ) !=  nullptr )
         {
             mpPageSizeItem.reset( static_cast<SvxSizeItem*>(pState->Clone()) );
             ChangeSizeImage();

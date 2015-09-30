@@ -480,7 +480,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlag
             while (pFrame)
             {
                 SfxViewShell* pSh = pFrame->GetViewShell();
-                if (pSh && pSh->ISA(ScTabViewShell))
+                if (pSh && dynamic_cast<const ScTabViewShell*>( pSh) !=  nullptr)
                 {
                     ScTabViewShell* pViewSh = static_cast<ScTabViewShell*>(pSh);
                     ScInputHandler* pInputHdl = pScMod->GetInputHdl(pViewSh);

@@ -124,7 +124,7 @@ bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
 
     //  Repaint (wenn alles ueber Items laufen wuerde, wie es sich gehoert,
     //  waere das nicht noetig...)
-    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
     if (pDocSh)
         pDocSh->PostPaintGridAll();
 

@@ -23,7 +23,7 @@
 #include <tools/ref.hxx>
 #include <bastype.hxx>
 #include <tools/pstm.hxx>
-
+#include <functional>
 class SvTokenStream;
 class SvMetaObject;
 class SvIdlDataBase;
@@ -67,6 +67,10 @@ public:
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 };
+template<class T> bool checkSvMetaObject(const SvMetaObject* pObject)
+{
+    return dynamic_cast<const T*>(pObject) != nullptr;
+}
 
 class SvMetaObjectMemberStack
 {
@@ -77,10 +81,10 @@ public:
     void            Push( SvMetaObject * pObj )
                     { aList.push_back( pObj ); }
     SvMetaObject *  Pop() { return aList.pop_back(); }
-    SvMetaObject *  Get( TypeId nType )
+    SvMetaObject *  Get( std::function<bool ( const SvMetaObject* )> isSvMetaObject )
                     {
                         for( SvMetaObjectMemberList::reverse_iterator it = aList.rbegin(); it != aList.rend(); ++it )
-                            if( (*it)->IsA( nType ) )
+                            if( isSvMetaObject(*it) )
                                 return *it;
                         return NULL;
                     }

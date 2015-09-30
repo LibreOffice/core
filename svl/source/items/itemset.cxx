@@ -882,7 +882,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
                         }
 #ifdef DBG_UTIL
                         const SfxPoolItem *pItem = *ppFnd;
-                        if ( pItem->ISA(SfxVoidItem) || !pItem->Which() )
+                        if ( dynamic_cast<const SfxVoidItem *>(pItem) != nullptr || !pItem->Which() )
                             SAL_INFO("svl.items", "SFX_WARNING: Getting disabled Item");
 #endif
                         return **ppFnd;

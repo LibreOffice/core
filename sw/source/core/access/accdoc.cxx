@@ -563,7 +563,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
     if( !pCrsrShell )
         return anyAtrribute;
 
-    SwFEShell* pFEShell = pCrsrShell->ISA( SwFEShell )
+    SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCrsrShell) !=  nullptr
                                 ? static_cast<SwFEShell*>( pCrsrShell )
                             : 0;
     OUString sAttrName;

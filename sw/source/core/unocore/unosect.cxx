@@ -1099,7 +1099,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     pEnclosingSection = pEnclosingSection->GetParent();
                 }
                 SwTOXBaseSection* const pTOXBaseSect = pEnclosingSection ?
-                    PTR_CAST(SwTOXBaseSection, pEnclosingSection) : NULL;
+                    dynamic_cast<SwTOXBaseSection*>( pEnclosingSection ) : NULL;
                 if (pTOXBaseSect)
                 {
                     // convert section to TOXBase and get SwXDocumentIndex

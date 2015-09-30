@@ -2284,7 +2284,7 @@ bool EditEngine::UpdateFieldsOnly()
     return pImpEditEngine->UpdateFields();
 }
 
-void EditEngine::RemoveFields( bool bKeepFieldText, TypeId aType )
+void EditEngine::RemoveFields( bool bKeepFieldText, std::function<bool ( const SvxFieldData* )> isFieldData )
 {
 
     if ( bKeepFieldText )
@@ -2301,7 +2301,7 @@ void EditEngine::RemoveFields( bool bKeepFieldText, TypeId aType )
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 const SvxFieldData* pFldData = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
-                if ( pFldData && ( !aType || ( pFldData->IsA( aType ) ) ) )
+                if ( pFldData && ( isFieldData( pFldData )  ) )
                 {
                     DBG_ASSERT( dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "no field item..." );
                     EditSelection aSel( EditPaM(pNode, rAttr.GetStart()), EditPaM(pNode, rAttr.GetEnd()) );

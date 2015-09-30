@@ -370,7 +370,7 @@ bool WW8Export::MiserableFormFieldExportHack(const SwFrameFormat& rFrameFormat)
     if (!pObject || pObject->GetObjInventor() != FmFormInventor)
         return false;
 
-    const SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObject);
+    const SdrUnoObj *pFormObj = dynamic_cast< const SdrUnoObj* >(pObject);
     if (!pFormObj)
         return false;
 
@@ -1160,7 +1160,7 @@ void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
 {
     const SvxFieldItem &rField = static_cast<const SvxFieldItem &>(rHt);
     const SvxFieldData *pField = rField.GetField();
-    if (pField && pField->ISA(SvxURLField))
+    if (pField && dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
     {
         sal_uInt8 nOldTextTyp = m_rExport.m_nTextTyp;
         m_rExport.m_nTextTyp = mnTyp;

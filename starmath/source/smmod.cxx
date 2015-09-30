@@ -180,11 +180,10 @@ SmModule::~SmModule()
 void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
 {
     //invalidate all graphic and edit windows
-    const TypeId aSmViewTypeId = TYPE(SmViewShell);
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if ((pViewShell->IsA(aSmViewTypeId)))
+        if ((dynamic_cast<const SmViewShell *>(pViewShell) != nullptr))
         {
             SmViewShell *pSmView = static_cast<SmViewShell *>(pViewShell);
             pSmView->GetGraphicWindow().ApplyColorConfigValues( rColorCfg );

@@ -303,15 +303,15 @@ void SwFlyFrm::DeleteCnt()
         while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->size() )
         {
             SwAnchoredObject *pAnchoredObj = (*pFrm->GetDrawObjs())[0];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast<const SwFlyFrm*>( pAnchoredObj) !=  nullptr )
             {
                 SwFrm::DestroyFrm(static_cast<SwFlyFrm*>(pAnchoredObj));
             }
-            else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+            else if ( dynamic_cast<const SwAnchoredDrawObject*>( pAnchoredObj) !=  nullptr )
             {
                 // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
                 SdrObject* pObj = pAnchoredObj->DrawObj();
-                if ( pObj->ISA(SwDrawVirtObj) )
+                if ( dynamic_cast<const SwDrawVirtObj*>( pObj) !=  nullptr )
                 {
                     SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
                     pDrawVirtObj->RemoveFromWriterLayout();
@@ -1302,7 +1302,7 @@ void SwFlyFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAtt
             {
                 // This fly is a textbox of a draw shape.
                 SdrObject* pShape = aShapes[GetFormat()]->FindSdrObject();
-                if (SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pShape))
+                if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>( pShape) )
                 {
                     // The shape is a customshape: then inform it about the calculated fly size.
                     Size aSize((Frm().*fnRect->fnGetWidth)(), (Frm().*fnRect->fnGetHeight)());
@@ -2083,13 +2083,13 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
 {
     assert(!mpDrawObjs || mpDrawObjs->is_sorted());
 
-    if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
+    if ( dynamic_cast<const SwAnchoredDrawObject*>( &_rNewObj) ==  nullptr )
     {
         OSL_FAIL( "SwFrm::AppendDrawObj(..) - anchored object of unexpected type -> object not appended" );
         return;
     }
 
-    if ( !_rNewObj.GetDrawObj()->ISA(SwDrawVirtObj) &&
+    if ( dynamic_cast<const SwDrawVirtObj*>(_rNewObj.GetDrawObj()) ==  nullptr &&
          _rNewObj.GetAnchorFrm() && _rNewObj.GetAnchorFrm() != this )
     {
         assert(!mpDrawObjs || mpDrawObjs->is_sorted());
@@ -2232,7 +2232,7 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
                 pAnchoredObj->SetClearedEnvironment( false );
             }
             // distinguish between writer fly frames and drawing objects
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast<const SwFlyFrm*>( pAnchoredObj) !=  nullptr )
             {
                 SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 pFly->_Invalidate();
@@ -2270,7 +2270,7 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             // for at-character/as-character anchored objects the anchor character
             // text frame is taken.
             const SwFrm* pAnchorFrm = pObj->GetAnchorFrmContainingAnchPos();
-            if ( pObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr )
             {
                 SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
 
@@ -2302,7 +2302,7 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             }
             else
             {
-                OSL_ENSURE( pObj->ISA(SwAnchoredDrawObject),
+                OSL_ENSURE( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr,
                         "<SwLayoutFrm::NotifyFlys() - anchored object of unexpected type" );
                 // #i26945# - use <pAnchorFrm> to check, if
                 // fly frame is lower of layout frame resp. if fly frame is
@@ -2703,7 +2703,7 @@ SwTwips SwFlyFrm::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips n
             for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast<const SwFlyFrm*>( pAnchoredObj) !=  nullptr )
                 {
                     SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     // OD 06.11.2003 #i22305# - consider

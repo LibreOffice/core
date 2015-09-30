@@ -293,7 +293,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
             }
             break;
         case OBJCNT_FLY:
-            if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+            if( dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) != nullptr  )
                 nDropDestination = SotExchangeDest::DOC_TEXTFRAME_WEB;
             else
                 nDropDestination = SotExchangeDest::DOC_TEXTFRAME;
@@ -309,7 +309,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
     }
     if ( !bool(nDropDestination) )
     {
-        if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+        if( dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) != nullptr  )
             nDropDestination = SotExchangeDest::SWDOC_FREE_AREA_WEB;
         else
             nDropDestination = SotExchangeDest::SWDOC_FREE_AREA;

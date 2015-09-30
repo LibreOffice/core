@@ -92,8 +92,7 @@ void ScFormulaReferenceHelper::dispose()
 
 void ScFormulaReferenceHelper::enableInput( bool bEnable )
 {
-    TypeId aType(TYPE(ScDocShell));
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType));
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>));
     while( pDocShell )
     {
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
@@ -103,7 +102,7 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
             if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
-                ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
+                ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
                 if(pViewSh!=NULL)
                 {
                     vcl::Window *pWin=pViewSh->GetWindow();
@@ -122,7 +121,7 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
             pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
         }
 
-        pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pDocShell, &aType));
+        pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pDocShell, checkSfxObjectShell<ScDocShell>));
     }
 }
 
@@ -655,8 +654,7 @@ void ScFormulaReferenceHelper::SetDispatcherLock( bool bLock )
 {
     //  lock / unlock only the dispatchers of Calc documents
 
-    TypeId aType(TYPE(ScDocShell));
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType));
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>));
     while( pDocShell )
     {
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
@@ -668,7 +666,7 @@ void ScFormulaReferenceHelper::SetDispatcherLock( bool bLock )
 
             pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
         }
-        pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pDocShell, &aType));
+        pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pDocShell, checkSfxObjectShell<ScDocShell>));
     }
 
     //  if a new view is created while the dialog is open,
@@ -684,8 +682,7 @@ void ScFormulaReferenceHelper::ViewShellChanged()
 }
 void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
 {
-    TypeId aType(TYPE(ScDocShell));
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType));
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>));
     while( pDocShell )
     {
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
@@ -695,7 +692,7 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
             if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
-                ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
+                ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
                 if(pViewSh!=NULL)
                 {
                     vcl::Window *pWin=pViewSh->GetWindow();
@@ -714,14 +711,13 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
             pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
         }
 
-        pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pDocShell, &aType));
+        pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pDocShell, checkSfxObjectShell<ScDocShell>));
     }
 }
 
 static void lcl_InvalidateWindows()
 {
-    TypeId aType(TYPE(ScDocShell));
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType));
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>));
     while( pDocShell )
     {
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
@@ -731,7 +727,7 @@ static void lcl_InvalidateWindows()
             if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
-                ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
+                ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
                 if(pViewSh!=NULL)
                 {
                     vcl::Window *pWin=pViewSh->GetWindow();
@@ -746,18 +742,17 @@ static void lcl_InvalidateWindows()
             pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
         }
 
-        pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pDocShell, &aType));
+        pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pDocShell, checkSfxObjectShell<ScDocShell>));
     }
 }
 
 static void lcl_HideAllReferences()
 {
-    TypeId aScType = TYPE(ScTabViewShell);
-    SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+    SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
     while ( pSh )
     {
         static_cast<ScTabViewShell*>(pSh)->ClearHighlightRanges();
-        pSh = SfxViewShell::GetNext( *pSh, &aScType );
+        pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
     }
 }
 
@@ -799,7 +794,7 @@ bool ScRefHandler::EnterRefMode()
             SfxViewFrame* pMyViewFrm = pMyDisp->GetFrame();
             if (pMyViewFrm)
             {
-                pScViewShell = PTR_CAST( ScTabViewShell, pMyViewFrm->GetViewShell() );
+                pScViewShell = dynamic_cast<ScTabViewShell*>( pMyViewFrm->GetViewShell()  );
                 if( pScViewShell )
                     pScViewShell->UpdateInputHandler(true);
                 pParentDoc = pMyViewFrm->GetObjectShell();
@@ -875,8 +870,7 @@ void ScRefHandler::SwitchToDocument()
         }
     }
 
-    TypeId aScType = TYPE(ScTabViewShell);
-    SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+    SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
     while ( pSh )
     {
         SfxObjectShell* pObjSh = pSh->GetObjectShell();
@@ -886,7 +880,7 @@ void ScRefHandler::SwitchToDocument()
             static_cast<ScTabViewShell*>(pSh)->SetActive();
             return;
         }
-        pSh = SfxViewShell::GetNext( *pSh, &aScType );
+        pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
     }
 }
 

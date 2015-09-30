@@ -571,7 +571,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     }
 
     // Set UserPrefs, mark request as modified
-    bool bWebView =  0 != dynamic_cast<const SwWebView*>(this);
+    bool bWebView =  dynamic_cast<const SwWebView*>(this) !=  nullptr;
     SwWrtShell &rSh = GetWrtShell();
     rSh.StartAction();
     SwModule* pModule = SW_MOD();

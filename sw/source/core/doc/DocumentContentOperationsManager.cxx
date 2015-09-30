@@ -2741,7 +2741,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
             aAnch.SetAnchor( rRg.GetPoint() );
             if ( eAnchorId == FLY_AT_PAGE )
             {
-                eAnchorId = rDrawObj.ISA( SdrUnoObj ) ? FLY_AS_CHAR : FLY_AT_PARA;
+                eAnchorId = dynamic_cast<const SdrUnoObj*>( &rDrawObj) !=  nullptr ? FLY_AS_CHAR : FLY_AT_PARA;
                 aAnch.SetType( eAnchorId );
             }
         }

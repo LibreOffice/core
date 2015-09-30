@@ -69,7 +69,7 @@ public:
     TYPEINFO_OVERRIDE();     ///< Already in base class Client.
     virtual ~SwFrameFormat();
 
-    /// Destroys all Frms in aDepend (Frms are identified via PTR_CAST).
+    /// Destroys all Frms in aDepend (Frms are identified via dynamic_cast).
     virtual void DelFrms();
 
     /// Creates the views.

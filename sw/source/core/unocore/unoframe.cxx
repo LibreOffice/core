@@ -1550,7 +1550,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     SwFlyFrm *pFly = 0;
                     {
                         const SwFrameFormat* pFormatXX = pFormat;
-                        if (PTR_CAST(SwFlyFrameFormat, pFormatXX))
+                        if (dynamic_cast<const SwFlyFrameFormat*>( pFormatXX) )
                             pFly = static_cast<const SwFlyFrameFormat*>(pFormatXX)->GetFrm();
                     }
                     if ( pFly )
@@ -1937,7 +1937,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 {
                     // see SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
                     SwFlyFrm *pFly = 0;
-                    if (PTR_CAST(SwFlyFrameFormat, pFormat))
+                    if (dynamic_cast<SwFlyFrameFormat*>( pFormat) )
                         pFly = static_cast<SwFlyFrameFormat*>(pFormat)->GetFrm();
                     if (pFly)
                     {

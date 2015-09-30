@@ -244,7 +244,7 @@ ViewShellBase::ViewShellBase (
     _pFrame->GetWindow().SetBackground(Application::GetSettings().GetStyleSettings().GetLightColor());
 
     // Set up the members in the correct order.
-    if (GetViewFrame()->GetObjectShell()->ISA(DrawDocShell))
+    if (0 != dynamic_cast< DrawDocShell *>( GetViewFrame()->GetObjectShell() ))
         mpDocShell = static_cast<DrawDocShell*>(
             GetViewFrame()->GetObjectShell());
     if (mpDocShell != NULL)
@@ -386,7 +386,7 @@ ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame* pViewFrame)
         // Get the view shell for the frame and cast it to
         // sd::ViewShellBase.
         SfxViewShell* pSfxViewShell = pViewFrame->GetViewShell();
-        if (pSfxViewShell!=NULL && pSfxViewShell->ISA(::sd::ViewShellBase))
+        if (pSfxViewShell!=NULL && dynamic_cast< ::sd::ViewShellBase *>( pSfxViewShell ) !=  nullptr)
             pBase = static_cast<ViewShellBase*>(pSfxViewShell);
     }
 
@@ -689,7 +689,7 @@ void ViewShellBase::ReadUserDataSequence (
             case ViewShell::ST_HANDOUT:
             {
                 OUString sViewURL;
-                switch (PTR_CAST(DrawViewShell, pShell)->GetPageKind())
+                switch (dynamic_cast<DrawViewShell*>( pShell)->GetPageKind() )
                 {
                     default:
                     case PK_STANDARD:
@@ -1270,8 +1270,8 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     ViewShell* pCenterViewShell = FrameworkHelper::Instance(mrBase)->GetViewShell(
                         FrameworkHelper::msCenterPaneURL).get();
                     bool bMasterPageMode (false);
-                    if (pCenterViewShell!=NULL && pCenterViewShell->ISA(DrawViewShell))
-                        if (PTR_CAST(DrawViewShell,pCenterViewShell)->GetEditMode()
+                    if (pCenterViewShell!=NULL && dynamic_cast< DrawViewShell *>( pCenterViewShell ) !=  nullptr)
+                        if (dynamic_cast< DrawViewShell *>( pCenterViewShell )->GetEditMode()
                             == EM_MASTERPAGE)
                         {
                             bMasterPageMode = true;

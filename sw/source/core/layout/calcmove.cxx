@@ -617,7 +617,7 @@ static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot
         // entries.
         SwAnchoredObject* pObj = (*pSortedObjs)[i];
         long nTmp = 0;
-        if ( pObj->ISA(SwFlyFrm) )
+        if ( dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr )
         {
             SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pObj);
             if( pFly->Frm().Top() != FAR_AWAY &&
@@ -940,7 +940,7 @@ bool SwContentFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                     // <SwSortedObjs> entries
                     SwAnchoredObject* pObj = (*GetDrawObjs())[i];
                     const SwFrameFormat& rFormat = pObj->GetFrameFormat();
-                    const bool bFly = pObj->ISA(SwFlyFrm);
+                    const bool bFly = dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr;
                     if ((bFly && (FAR_AWAY == pObj->GetObjRect().Width()))
                         || rFormat.GetFrmSize().GetWidthPercent())
                     {

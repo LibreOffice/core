@@ -61,7 +61,7 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     ScZoomSliderWnd*        pBox = static_cast<ScZoomSliderWnd*>(rTbx.GetItemWindow( nId ));
     OSL_ENSURE( pBox ,"Control not found!" );
 
-    if ( SfxItemState::DEFAULT != eState || pState->ISA( SfxVoidItem ) )
+    if ( SfxItemState::DEFAULT != eState || dynamic_cast<const SfxVoidItem*>( pState) !=  nullptr )
     {
         SvxZoomSliderItem aZoomSliderItem( 100 );
         pBox->Disable();
@@ -70,7 +70,7 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     else
     {
         pBox->Enable();
-        OSL_ENSURE( pState->ISA( SvxZoomSliderItem ), "invalid item type" );
+        OSL_ENSURE( dynamic_cast<const SvxZoomSliderItem*>( pState) !=  nullptr, "invalid item type" );
         const SvxZoomSliderItem* pZoomSliderItem = dynamic_cast< const SvxZoomSliderItem* >( pState );
 
         OSL_ENSURE( pZoomSliderItem, "Sc::ScZoomSliderControl::StateChanged(), wrong item type!" );

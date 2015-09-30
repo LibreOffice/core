@@ -27,7 +27,7 @@ TYPEINIT1_AUTOFACTORY(SfxObjectItem,SfxPoolItem)
 
 bool SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
 {
-     return PTR_CAST(SfxObjectShellItem, &rItem)->pObjSh == pObjSh;
+     return dynamic_cast<const SfxObjectShellItem*>( &rItem )->pObjSh == pObjSh;
 }
 
 SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
@@ -88,7 +88,7 @@ SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
 
 bool SfxObjectItem::operator==( const SfxPoolItem &rItem ) const
 {
-     const SfxObjectItem *pOther = PTR_CAST(SfxObjectItem, &rItem);
+     const SfxObjectItem *pOther = dynamic_cast<const SfxObjectItem*>( &rItem );
      return pOther->_pSh == _pSh;
 }
 

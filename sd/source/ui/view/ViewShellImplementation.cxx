@@ -234,8 +234,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
 void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind ePageKind )
 {
-    const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATPAGE, false, TYPE(SfxUInt32Item) ) );
-    const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATLAYOUT, false, TYPE(SfxUInt32Item) ) );
+    const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATPAGE, false, checkSfxPoolItem< SfxUInt32Item > ) );
+    const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATLAYOUT, false, checkSfxPoolItem< SfxUInt32Item > ) );
 
     SdDrawDocument* pDocument = mrViewShell.GetDoc();
     if( !pDocument )

@@ -2346,7 +2346,7 @@ static ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
     for (size_t i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkMgr->GetLinks()[i];
-        if (pBase->ISA(ScDdeLink))
+        if (dynamic_cast<const ScDdeLink*>( pBase) !=  nullptr)
         {
             ScDdeLink* pLink = static_cast<ScDdeLink*>(pBase);
             if ( pLink->GetAppl() == rA &&

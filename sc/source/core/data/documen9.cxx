@@ -344,7 +344,7 @@ void ScDocument::StartAnimations( SCTAB nTab, vcl::Window* pWin )
     SdrObject* pObject = aIter.Next();
     while (pObject)
     {
-        if (pObject->ISA(SdrGrafObj))
+        if (dynamic_cast<const SdrGrafObj*>( pObject) !=  nullptr)
         {
             SdrGrafObj* pGrafObj = static_cast<SdrGrafObj*>(pObject);
             if ( pGrafObj->IsAnimated() )

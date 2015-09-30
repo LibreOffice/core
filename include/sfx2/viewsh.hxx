@@ -41,6 +41,7 @@
 #include <sfx2/tabdlg.hxx>
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include <functional>
 
 class SfxBaseController;
 class Size;
@@ -137,6 +138,11 @@ public: \
 #define SFX_VIEW_REGISTRATION(DocClass) \
             DocClass::Factory().RegisterViewFactory( *Factory() )
 
+template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
+{
+    return dynamic_cast<const T*>(pShell) != nullptr;
+}
+
 class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener
 {
 #ifdef INCLUDED_SFX2_VIEWSH_HXX
@@ -166,9 +172,10 @@ protected:
 
 public:
     // Iteration
-    static SfxViewShell*        GetFirst( const TypeId* pType = 0, bool bOnlyVisible = true );
+    static SfxViewShell*        GetFirst( bool bOnlyVisible = true, std::function<bool ( const SfxViewShell* )> isViewShell = nullptr );
     static SfxViewShell*        GetNext( const SfxViewShell& rPrev,
-                                         const TypeId* pType = 0, bool bOnlyVisible = true );
+                                         bool bOnlyVisible = true,
+                                         std::function<bool ( const SfxViewShell* )> isViewShell = nullptr );
     static SfxViewShell*        Current();
 
     static SfxViewShell*        Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController );

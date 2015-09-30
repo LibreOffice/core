@@ -250,7 +250,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SW_MOD()->SetEmbeddedLoadSave(
                             SfxObjectCreateMode::EMBEDDED == GetCreateMode() );
 
-    pRdr->GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, ISA(SwWebDocShell));
+    pRdr->GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr);
 
     // Restore the pool default if reading a saved document.
     m_pDoc->RemoveAllFormatLanguageDependencies();
@@ -451,7 +451,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
     if( SfxObjectShell::SaveAs( rMedium ) )
     {
-        if( GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) && !ISA( SwGlobalDocShell ) )
+        if( GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) && dynamic_cast< const SwGlobalDocShell *>( this ) ==  nullptr )
         {
             // This is to set the correct class id if SaveAs is
             // called from SwDoc::SplitDoc to save a normal doc as
@@ -528,7 +528,7 @@ static SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
     // are we in SourceView?
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst( pSh );
     SfxViewShell* pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
-    return PTR_CAST( SwSrcView, pViewShell);
+    return dynamic_cast<SwSrcView*>( pViewShell );
 }
 
 bool SwDocShell::ConvertTo( SfxMedium& rMedium )
@@ -631,9 +631,9 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     {
         // determine the own Type
         sal_uInt8 nMyType = 0;
-        if( ISA( SwWebDocShell) )
+        if( dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr )
             nMyType = 1;
-        else if( ISA( SwGlobalDocShell) )
+        else if( dynamic_cast< const SwGlobalDocShell *>( this ) !=  nullptr )
             nMyType = 2;
 
         // determine the desired Type
@@ -829,7 +829,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetFillColor();
     pDev->SetLineColor();
     pDev->SetBackground();
-    const bool bWeb = this->ISA(SwWebDocShell);
+    const bool bWeb = dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr;
     SwPrintData aOpts;
     SwViewShell::PrtOle2(m_pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, *pDev, aRect);
     pDev->Pop();
@@ -956,7 +956,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
                 while (pTmpFrm)     // Look for Preview
                 {
-                    if ( PTR_CAST(SwView, pTmpFrm->GetViewShell()) &&
+                    if ( dynamic_cast<SwView*>( pTmpFrm->GetViewShell() ) &&
                          static_cast<SwView*>(pTmpFrm->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
                     {
                         bDisable = true;
@@ -971,7 +971,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             else
             {
                 SfxBoolItem aBool( SID_PRINTPREVIEW, false );
-                if( PTR_CAST( SwPagePreview, SfxViewShell::Current()) )
+                if( dynamic_cast<SwPagePreview*>( SfxViewShell::Current())  )
                     aBool.SetValue( true );
                 rSet.Put( aBool );
             }
@@ -981,7 +981,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         {
             SfxViewShell* pCurrView = GetView() ? static_cast<SfxViewShell*>(GetView())
                                         : SfxViewShell::Current();
-            bool bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
+            bool bSourceView = dynamic_cast<SwSrcView*>( pCurrView ) !=  nullptr;
             rSet.Put(SfxBoolItem(SID_SOURCEVIEW, bSourceView));
         }
         break;
@@ -1015,17 +1015,17 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             break;
 
         case FN_NEW_GLOBAL_DOC:
-            if ( ISA(SwGlobalDocShell) )
+            if ( dynamic_cast< const SwGlobalDocShell *>( this ) !=  nullptr )
                 rSet.DisableItem( nWhich );
             break;
 
         case FN_NEW_HTML_DOC:
-            if( ISA( SwWebDocShell ) )
+            if( dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr )
                 rSet.DisableItem( nWhich );
             break;
 
         case FN_OPEN_FILE:
-            if( ISA( SwWebDocShell ) )
+            if( dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr )
                 rSet.DisableItem( nWhich );
             break;
 
@@ -1120,7 +1120,7 @@ void SwDocShell::LoadingFinished()
     if(pVFrame)
     {
         SfxViewShell* pShell = pVFrame->GetViewShell();
-        if(PTR_CAST(SwSrcView, pShell))
+        if(dynamic_cast<SwSrcView*>( pShell) )
             static_cast<SwSrcView*>(pShell)->Load(this);
     }
 

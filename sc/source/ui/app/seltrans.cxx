@@ -43,7 +43,7 @@ static bool lcl_IsURLButton( SdrObject* pObject )
 {
     bool bRet = false;
 
-    SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObject);
+    SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObject );
     if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
        {
         uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();

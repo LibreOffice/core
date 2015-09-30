@@ -413,7 +413,7 @@ void ContentIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32
         return;
     for(SwViewShell& rCurShell : pShell->GetRingContainer())
     {
-        if( rCurShell.IsA( TYPE( SwCrsrShell )) )
+        if( dynamic_cast<const SwCrsrShell *>(&rCurShell) != nullptr )
         {
             SwPaM *_pStkCrsr = static_cast<SwCrsrShell*>(&rCurShell)->GetStkCrsr();
             if( _pStkCrsr )

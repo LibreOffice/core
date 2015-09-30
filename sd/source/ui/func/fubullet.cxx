@@ -103,13 +103,13 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     ::Outliner*   pOL = NULL;
 
     // depending on ViewShell set Outliner and OutlinerView
-    if (mpViewShell->ISA(DrawViewShell))
+    if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
         pOV = mpView->GetTextEditOutlinerView();
         if (pOV)
             pOL = mpView->GetTextEditOutliner();
     }
-    else if (mpViewShell->ISA(OutlineViewShell))
+    else if( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr)
     {
         pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
         pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
@@ -162,7 +162,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         aChars = static_cast<const SfxStringItem*>(pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
         pArgs->GetItemState( mpDoc->GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
-        const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+        const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
         if ( pFontItem )
         {
             OUString aFontName = pFontItem->GetValue();
@@ -223,7 +223,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         ::Outliner*   pOL = NULL;
 
         // determine depending on ViewShell Outliner and OutlinerView
-        if(mpViewShell && mpViewShell->ISA(DrawViewShell))
+        if(mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
         {
             pOV = mpView->GetTextEditOutlinerView();
             if (pOV)
@@ -231,7 +231,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
                 pOL = mpView->GetTextEditOutliner();
             }
         }
-        else if(mpViewShell && mpViewShell->ISA(OutlineViewShell))
+        else if(mpViewShell && dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr)
         {
             pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
             pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(

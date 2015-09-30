@@ -120,7 +120,7 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrm *pCn
     for ( size_t i = 0; i < rObjs.size() && !aTmp.empty(); ++i )
     {
         SdrObject *pO = rObjs[i]->DrawObj();
-        if ( !pO->ISA(SwVirtFlyDrawObj) )
+        if ( dynamic_cast< const SwVirtFlyDrawObj *>( pO ) ==  nullptr )
             continue;
 
         // OD 2004-01-15 #110582# - do not consider invisible objects
@@ -914,7 +914,7 @@ static const SwFrm *lcl_FindFirstInvaContent( const SwLayoutFrm *pLay, long nBot
             for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 const SwAnchoredObject* pObj = rObjs[i];
-                if ( pObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< const SwFlyFrm *>( pObj ) !=  nullptr )
                 {
                     const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pObj);
                     if ( pFly->IsFlyInCntFrm() )
@@ -950,7 +950,7 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
     for ( size_t i = 0; i < _pPage->GetSortedObjs()->size(); ++i )
     {
         const SwAnchoredObject* pObj = (*_pPage->GetSortedObjs())[i];
-        if ( pObj->ISA(SwFlyFrm) )
+        if ( dynamic_cast< const SwFlyFrm *>( pObj ) !=  nullptr )
         {
             const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pObj);
             if ( pFly->Frm().Top() <= _nBottom )
@@ -964,7 +964,7 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
                     return pFly;
             }
         }
-        else if ( pObj->ISA(SwAnchoredDrawObject) )
+        else if ( dynamic_cast< const SwAnchoredDrawObject *>( pObj ) !=  nullptr )
         {
             if ( !static_cast<const SwAnchoredDrawObject*>(pObj)->IsValidPos() )
             {
@@ -1903,7 +1903,7 @@ bool SwLayIdle::_DoIdleJob( const SwContentFrm *pCnt, IdleJobType eJob )
         if( COMPLETE_STRING == nTextPos )
         {
             --nTextPos;
-            if( pSh->ISA(SwCrsrShell) && !static_cast<SwCrsrShell*>(pSh)->IsTableMode() )
+            if( dynamic_cast< const SwCrsrShell *>( pSh ) != nullptr  && !static_cast<SwCrsrShell*>(pSh)->IsTableMode() )
             {
                 SwPaM *pCrsr = static_cast<SwCrsrShell*>(pSh)->GetCrsr();
                 if( !pCrsr->HasMark() && !pCrsr->IsMultiSelection() )
@@ -1972,7 +1972,7 @@ bool SwLayIdle::_DoIdleJob( const SwContentFrm *pCnt, IdleJobType eJob )
         for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pObj = rObjs[i];
-            if ( pObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast< const SwFlyFrm *>( pObj ) !=  nullptr )
             {
                 SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
                 if ( pFly->IsFlyInCntFrm() )
@@ -2051,7 +2051,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
                                 i < pPage->GetSortedObjs()->size(); ++i )
             {
                 const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-                if ( pObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< const SwFlyFrm *>( pObj ) !=  nullptr )
                 {
                     const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
                     const SwContentFrm *pC = pFly->ContainsContent();
@@ -2143,7 +2143,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
         {
             ++rSh.mnStartAction;
             bool bVis = false;
-            if ( rSh.ISA(SwCrsrShell) )
+            if ( dynamic_cast<const SwCrsrShell*>( &rSh) !=  nullptr )
             {
                 bVis = static_cast<SwCrsrShell*>(&rSh)->GetCharRect().IsOver(rSh.VisArea());
             }
@@ -2182,7 +2182,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
                 // aBools[ i ] is true, if the i-th shell is a cursor shell (!!!)
                 // and the cursor is visible.
                 bActions |= aTmp != rSh.VisArea();
-                if ( aTmp == rSh.VisArea() && rSh.ISA(SwCrsrShell) )
+                if ( aTmp == rSh.VisArea() && dynamic_cast<const SwCrsrShell*>( &rSh) !=  nullptr )
                 {
                     bActions |= aBools[nBoolIdx] !=
                                  static_cast<SwCrsrShell*>(&rSh)->GetCharRect().IsOver( rSh.VisArea() );
@@ -2200,7 +2200,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
             for(SwViewShell& rSh : pImp->GetShell()->GetRingContainer())
             {
                 SwCrsrShell* pCrsrShell = nullptr;
-                if(rSh.IsA( TYPE(SwCrsrShell) ))
+                if(dynamic_cast<const SwCrsrShell*>( &rSh) !=  nullptr)
                     pCrsrShell = static_cast<SwCrsrShell*>(&rSh);
 
                 if ( pCrsrShell )

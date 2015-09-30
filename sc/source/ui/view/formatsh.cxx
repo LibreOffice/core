@@ -456,7 +456,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     if ( SfxItemState::SET ==
                          pArgs->GetItemState( nSlotId, true, &pItem ) )
                     {
-                        const SfxStringItem* pStrItem = PTR_CAST(SfxStringItem,pItem);
+                        const SfxStringItem* pStrItem = dynamic_cast< const SfxStringItem *>( pItem );
                         if ( pStrItem )
                         {
                             aStyleName  = pStrItem->GetValue();
@@ -1419,12 +1419,12 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     {
                         const SfxPoolItem& rUnderline = pSet->Get( ATTR_FONT_UNDERLINE );
 
-                        if( rUnderline.ISA(SvxUnderlineItem) )
+                        if( dynamic_cast<const SvxUnderlineItem*>( &rUnderline) !=  nullptr )
                         {
                             pTabViewShell->ApplyAttr( rUnderline );
                             pNewSet->Put( rUnderline,rUnderline.Which() );
                         }
-                        else if ( rUnderline.ISA(SvxTextLineItem) )
+                        else if ( dynamic_cast<const SvxTextLineItem*>( &rUnderline) !=  nullptr )
                         {
                             // #i106580# also allow SvxTextLineItem (base class of SvxUnderlineItem)
                             const SvxTextLineItem& rTextLineItem = static_cast<const SvxTextLineItem&>(rUnderline);

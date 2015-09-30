@@ -300,7 +300,7 @@ void WrapPropertyPanel::NotifyItemUpdate(
     (void)bIsEnabled;
 
     if ( eState == SfxItemState::DEFAULT &&
-        pState->ISA(SfxBoolItem) )
+        dynamic_cast< const SfxBoolItem *>( pState ) !=  nullptr )
     {
         //Set Radio Button enable
         mpRBNoWrap->Enable();

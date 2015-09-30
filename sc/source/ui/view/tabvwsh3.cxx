@@ -945,7 +945,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     if ( pReqArgs &&
                          pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET &&
-                         pItem->ISA( SfxStringItem ) )
+                         dynamic_cast<const SfxStringItem*>( pItem) !=  nullptr )
                     {
                         OUString aComment = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         pDocSh->SetChangeComment( pAction, aComment );

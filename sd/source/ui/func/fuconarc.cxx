@@ -227,7 +227,7 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
 
     if(pObj)
     {
-        if(pObj->ISA(SdrCircObj))
+        if( dynamic_cast< const SdrCircObj *>( pObj ) !=  nullptr)
         {
             Rectangle aRect(rRectangle);
 

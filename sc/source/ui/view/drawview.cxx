@@ -218,7 +218,7 @@ void ScDrawView::SetMarkedToLayer( sal_uInt8 nLayerNo )
         for (size_t i=0; i<nCount; ++i)
         {
             SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
-            if ( !pObj->ISA(SdrUnoObj) && (pObj->GetLayer() != SC_LAYER_INTERN) )
+            if ( dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr && (pObj->GetLayer() != SC_LAYER_INTERN) )
             {
                 AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), (SdrLayerID)nLayerNo) );
                 pObj->SetLayer( nLayerNo );
@@ -241,7 +241,7 @@ bool ScDrawView::HasMarkedControl() const
 {
     SdrObjListIter aIter( GetMarkedObjectList() );
     for( SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next() )
-        if( pObj->ISA( SdrUnoObj ) )
+        if( dynamic_cast<const SdrUnoObj*>( pObj) !=  nullptr )
             return true;
     return false;
 }
@@ -428,7 +428,7 @@ void ScDrawView::MarkListHasChanged()
         for (size_t i=0; i<nMarkCount; ++i)
         {
             SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-            if ( pObj->ISA( SdrObjGroup ) )
+            if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
             {
                 const SdrObjList *pLst = static_cast<SdrObjGroup*>(pObj)->GetSubList();
                 const size_t nListCount = pLst->GetObjCount();
@@ -443,7 +443,7 @@ void ScDrawView::MarkListHasChanged()
                 {
                     SdrObject *pSubObj = pLst->GetObj( j );
 
-                    if (!pSubObj->ISA(SdrUnoObj))
+                    if (dynamic_cast<const SdrUnoObj*>( pSubObj) ==  nullptr)
                         bOnlyControls = false;
                     if (pSubObj->GetObjIdentifier() != OBJ_GRAF)
                         bOnlyGraf = false;
@@ -453,7 +453,7 @@ void ScDrawView::MarkListHasChanged()
             }
             else
             {
-                if (!pObj->ISA(SdrUnoObj))
+                if (dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr)
                     bOnlyControls = false;
                 if (pObj->GetObjIdentifier() != OBJ_GRAF)
                     bOnlyGraf = false;
@@ -897,7 +897,7 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
 void ScDrawView::SyncForGrid( SdrObject* pObj )
 {
     // process members of a group shape separately
-    if ( pObj->ISA( SdrObjGroup ) )
+    if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
     {
         SdrObjList *pLst = static_cast<SdrObjGroup*>(pObj)->GetSubList();
         for ( size_t i = 0, nCount = pLst->GetObjCount(); i < nCount; ++i )

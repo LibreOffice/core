@@ -136,9 +136,7 @@ void ScTabViewShell::Activate(bool bMDI)
 
                     ScInputHandler* pOldHdl=pWin->GetInputHandler();
 
-                    TypeId aScType = TYPE(ScTabViewShell);
-
-                    SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+                    SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
                     while ( pSh!=NULL && pOldHdl!=NULL)
                     {
                         if (static_cast<ScTabViewShell*>(pSh)->GetInputHandler() == pOldHdl)
@@ -146,7 +144,7 @@ void ScTabViewShell::Activate(bool bMDI)
                             pOldHdl->ResetDelayTimer();
                             break;
                         }
-                        pSh = SfxViewShell::GetNext( *pSh, &aScType );
+                        pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
                     }
 
                     pWin->SetInputHandler( pInputHandler );
@@ -1037,7 +1035,7 @@ void ScTabViewShell::SetDrawTextUndo( ::svl::IUndoManager* pNewUndoMgr )
 
 ScTabViewShell* ScTabViewShell::GetActiveViewShell()
 {
-    return PTR_CAST(ScTabViewShell,Current());
+    return dynamic_cast< ScTabViewShell *>( Current() );
 }
 
 SfxPrinter* ScTabViewShell::GetPrinter( bool bCreate )
@@ -1694,7 +1692,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     //  old DesignMode state from form layer must be restored, too
 
     TriState nForceDesignMode = TRISTATE_INDET;
-    if ( pOldSh && pOldSh->ISA( ScPreviewShell ) )
+    if ( pOldSh && dynamic_cast<const ScPreviewShell*>( pOldSh) !=  nullptr )
     {
         ScPreviewShell* pPreviewShell = static_cast<ScPreviewShell*>(pOldSh);
         nForceDesignMode = pPreviewShell->GetSourceDesignMode();

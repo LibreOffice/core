@@ -411,7 +411,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
                 // Does the Master have SetItems?
                 bool bHasSetItems = false;
                 for ( sal_uInt16 i = 0; !bHasSetItems && i < pImp->mnEnd - pImp->mnStart; ++i )
-                    bHasSetItems = pImp->ppStaticDefaults[i]->ISA(SfxSetItem);
+                    bHasSetItems = dynamic_cast<const SfxSetItem *>(pImp->ppStaticDefaults[i]) != nullptr;
 
                 // Detached Pools must be empty
                 bool bOK = bHasSetItems;

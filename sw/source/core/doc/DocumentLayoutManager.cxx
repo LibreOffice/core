@@ -458,8 +458,8 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         // #i49730# - notify draw frame format that position attributes are
         // already set, if the position attributes are already set at the
         // source draw frame format.
-        if ( pDest->ISA(SwDrawFrameFormat) &&
-             rSource.ISA(SwDrawFrameFormat) &&
+        if ( dynamic_cast<const SwDrawFrameFormat*>( pDest) !=  nullptr &&
+             dynamic_cast<const SwDrawFrameFormat*>( &rSource) !=  nullptr &&
              static_cast<const SwDrawFrameFormat&>(rSource).IsPosAttrSet() )
         {
             static_cast<SwDrawFrameFormat*>(pDest)->PosAttrSet();

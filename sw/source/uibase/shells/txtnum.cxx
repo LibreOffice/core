@@ -114,7 +114,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                          SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
                          0 );
         SwDocShell* pDocSh = GetView().GetDocShell();
-        const bool bHtml = 0 != PTR_CAST( SwWebDocShell, pDocSh );
+        const bool bHtml = dynamic_cast<SwWebDocShell*>( pDocSh  ) !=  nullptr;
         const SwNumRule* pNumRuleAtCurrentSelection = GetShell().GetNumRuleAtCurrentSelection();
         if ( pNumRuleAtCurrentSelection != NULL )
         {

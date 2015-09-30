@@ -80,7 +80,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
 
     long nFac = nFactor;
 
-    const bool bWeb = this->ISA(SwWebView);
+    const bool bWeb = dynamic_cast< const SwWebView *>( this ) !=  nullptr;
     SwMasterUsrPref *pUsrPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(bWeb));
 
     const SwPageDesc &rDesc = m_pWrtShell->GetPageDesc( m_pWrtShell->GetCurPageDesc() );
@@ -217,7 +217,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
 
     if ( !GetViewFrame()->GetFrame().IsInPlace() && !bViewOnly )
     {
-        const bool bWeb = this->ISA(SwWebView);
+        const bool bWeb = dynamic_cast< const SwWebView *>( this ) !=  nullptr;
         SwMasterUsrPref *pUsrPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(bWeb));
 
         // Update MasterUsrPrefs and after that update the ViewOptions of the current View.

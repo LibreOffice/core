@@ -89,7 +89,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
     std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
 
-    if (mpView->ISA(OutlineView))
+    if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
     {
         pOLV = static_cast<OutlineView*>(mpView)
             ->GetViewByWindow(mpViewShell->GetActiveWindow());

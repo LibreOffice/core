@@ -230,7 +230,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
                 //  bei Uno-Controls nicht in Textmodus
-                if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
+                if ( dynamic_cast<const SdrTextObj*>( pObj) != nullptr && dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr )
                 {
                     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                     bool bVertical = ( pOPO && pOPO->IsVertical() );

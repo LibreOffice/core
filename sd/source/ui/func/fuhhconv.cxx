@@ -63,12 +63,12 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
     pSdOutliner(NULL),
     bOwnOutliner(false)
 {
-    if ( mpViewShell->ISA(DrawViewShell) )
+    if ( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr )
     {
         bOwnOutliner = true;
         pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
-    else if ( mpViewShell->ISA(OutlineViewShell) )
+    else if ( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr )
     {
         bOwnOutliner = false;
         pSdOutliner = mpDoc->GetOutliner();
@@ -102,13 +102,13 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
 
     mpView->BegUndo(SD_RESSTR(STR_UNDO_HANGULHANJACONVERSION));
 
-    ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
+    ViewShellBase* pBase = dynamic_cast<ViewShellBase*>( SfxViewShell::Current() );
     if (pBase != NULL)
         mpViewShell = pBase->GetMainViewShell().get();
 
     if( mpViewShell )
     {
-        if ( pSdOutliner && mpViewShell->ISA(DrawViewShell) && !bOwnOutliner )
+        if ( pSdOutliner && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bOwnOutliner )
         {
             pSdOutliner->EndConversion();
 
@@ -116,7 +116,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
             pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->BeginConversion();
         }
-        else if ( pSdOutliner && mpViewShell->ISA(OutlineViewShell) && bOwnOutliner )
+        else if ( pSdOutliner && dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr && bOwnOutliner )
         {
             pSdOutliner->EndConversion();
             delete pSdOutliner;

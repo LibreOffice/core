@@ -126,7 +126,7 @@ using namespace svx::sidebar;
 
 void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
 {
-    FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rWrtSh.GetView()));
+    FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rWrtSh.GetView()) != nullptr );
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
     SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(),
                         RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
@@ -912,10 +912,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( !pPaM )
                 pPaM = rWrtSh.GetCrsr();
 
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
+            FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &GetView()) != nullptr );
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
 
-            bool bApplyCharUnit = ::HasCharUnit(0 != PTR_CAST(SwWebView, &GetView()));
+            bool bApplyCharUnit = ::HasCharUnit( dynamic_cast<SwWebView*>( &GetView()) != nullptr  );
             SW_MOD()->PutItem(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bApplyCharUnit));
 
             SfxItemSet aCoreSet( GetPool(), //UUUU sorted by indices, one group of three concatenated
