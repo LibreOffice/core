@@ -377,7 +377,7 @@ bool SwCrsrShell::GotoTOXMarkBase()
 
         for( SwTOXBase* pTOX = aIter.First(); pTOX; pTOX = aIter.Next() )
         {
-            if( pTOX->ISA( SwTOXBaseSection ) &&
+            if( dynamic_cast<const SwTOXBaseSection*>( pTOX) !=  nullptr &&
                 0 != ( pSectFormat = static_cast<SwTOXBaseSection*>(pTOX)->GetFormat() ) &&
                 0 != ( pSectNd = pSectFormat->GetSectionNode() ))
             {

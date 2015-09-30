@@ -232,7 +232,7 @@ static void lcl_SelectSdrMarkList( SwEditShell* pShell,
     OSL_ENSURE( pShell != NULL, "need shell!" );
     OSL_ENSURE( pSdrMarkList != NULL, "need mark list" );
 
-    if( pShell->ISA( SwFEShell ) )
+    if( dynamic_cast<const SwFEShell*>( pShell) !=  nullptr )
     {
         SwFEShell* pFEShell = static_cast<SwFEShell*>( pShell );
         bool bFirst = true;

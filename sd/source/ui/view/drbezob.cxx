@@ -96,12 +96,12 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 
     if(xFunc.is())
     {
-        if(xFunc->ISA(FuSelection))
+        if( 0 != dynamic_cast< const FuSelection *>( xFunc.get() ))
         {
             sal_uInt16 nEditMode = static_cast<FuSelection*>(xFunc.get())->GetEditMode();
             rSet.Put(SfxBoolItem(nEditMode, true));
         }
-        else if (xFunc->ISA(FuConstructBezierPolygon))
+        else if( 0 != dynamic_cast< const FuConstructBezierPolygon *>( xFunc.get() ))
         {
             sal_uInt16 nEditMode = static_cast<FuConstructBezierPolygon*>(xFunc.get())->GetEditMode();
             rSet.Put(SfxBoolItem(nEditMode, true));
@@ -302,11 +302,11 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
 
             if(xFunc.is())
             {
-                if(xFunc->ISA(FuSelection))
+                if( 0 != dynamic_cast< const FuSelection *>( xFunc.get() ))
                 {
                     static_cast<FuSelection*>(xFunc.get())->SetEditMode(rReq.GetSlot());
                 }
-                else if(xFunc->ISA(FuConstructBezierPolygon))
+                else if( 0 != dynamic_cast< const FuConstructBezierPolygon *>( xFunc.get() ))
                 {
                     static_cast<FuConstructBezierPolygon*>(xFunc.get())->SetEditMode(rReq.GetSlot());
                 }

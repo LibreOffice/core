@@ -280,7 +280,7 @@ SwFrmNotify::~SwFrmNotify()
                         // registered at the correct page frame, if frame
                         // position has changed.
                         if ( bAbsP && pContact->ObjAnchoredAtFly() &&
-                             pObj->ISA(SwFlyFrm) )
+                             dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr )
                         {
                             // determine to-fly anchored Writer fly frame
                             SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
@@ -340,7 +340,7 @@ SwFrmNotify::~SwFrmNotify()
                 // perform notification via the corresponding invalidations
                 if ( bNotify )
                 {
-                    if ( pObj->ISA(SwFlyFrm) )
+                    if ( dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr )
                     {
                         SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
                         if ( bNotifySize )
@@ -353,7 +353,7 @@ SwFrmNotify::~SwFrmNotify()
                         }
                         pFlyFrm->_Invalidate();
                     }
-                    else if ( pObj->ISA(SwAnchoredDrawObject) )
+                    else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
                     {
                         // #115759# - no invalidation of
                         // position for as-character anchored objects.
@@ -405,7 +405,7 @@ SwFrmNotify::~SwFrmNotify()
                 // #i50668#, #i50998# - invalidation of position
                 // of as-character anchored fly frames not needed and can cause
                 // layout loops
-                if ( !pFly->ISA(SwFlyInCntFrm) )
+                if ( dynamic_cast<const SwFlyInCntFrm*>( pFly) ==  nullptr )
                 {
                     pFly->InvalidatePos();
                 }
@@ -703,7 +703,7 @@ SwFlyNotify::~SwFlyNotify()
     // #i45180# - no adjustment of layout process flags and
     // further notifications/invalidations, if format is called by grow/shrink
     if ( pFly->ConsiderObjWrapInfluenceOnObjPos() &&
-         ( !pFly->ISA(SwFlyFreeFrm) ||
+         ( dynamic_cast<const SwFlyFreeFrm*>( pFly) ==  nullptr ||
            !static_cast<SwFlyFreeFrm*>(pFly)->IsNoMoveOnCheckClip() ) )
     {
         // #i54138# - suppress restart of the layout process
@@ -862,7 +862,7 @@ SwContentNotify::~SwContentNotify()
                 svt::EmbeddedObjectRef& xObj = pNd->GetOLEObj().GetObject();
                 SwFEShell *pFESh = 0;
                 for(SwViewShell& rCurrentShell : pSh->GetRingContainer())
-                {   if ( rCurrentShell.ISA( SwCrsrShell ) )
+                {   if ( dynamic_cast<const SwCrsrShell*>( &rCurrentShell) !=  nullptr )
                     {
                         pFESh = static_cast<SwFEShell*>(&rCurrentShell);
                         // #108369#: Here used to be the condition if (!bFirst).
@@ -1925,7 +1925,7 @@ static bool lcl_hasTabFrm(const SwTextFrm* pTextFrm)
         if (pSortedObjs->size() > 0)
         {
             SwAnchoredObject* pObject = (*pSortedObjs)[0];
-            if (pObject->IsA(TYPE(SwFlyFrm)))
+            if (dynamic_cast<const SwFlyFrm*>(pObject) !=  nullptr)
             {
                 SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObject);
                 if (pFly->Lower() && pFly->Lower()->IsTabFrm())
@@ -2246,7 +2246,7 @@ const SdrObject *SwOrderIter::Top()
             for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
+                if ( bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp >= nTopOrd )
@@ -2273,7 +2273,7 @@ const SdrObject *SwOrderIter::Bottom()
             for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
+                if ( bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp < nBotOrd )
@@ -2301,7 +2301,7 @@ const SdrObject *SwOrderIter::Next()
             for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
+                if ( bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp > nCurOrd && nTmp < nOrd )
@@ -2329,7 +2329,7 @@ const SdrObject *SwOrderIter::Prev()
             for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
+                if ( bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp < nCurOrd && nTmp >= nOrd )
@@ -2367,7 +2367,7 @@ static void lcl_RemoveObjsFromPage( SwFrm* _pFrm )
         pObj->ResetLayoutProcessBools();
         // #115759# - remove also lower objects of as-character
         // anchored Writer fly frames from page
-        if ( pObj->ISA(SwFlyFrm) )
+        if ( dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr )
         {
             SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
 
@@ -2392,7 +2392,7 @@ static void lcl_RemoveObjsFromPage( SwFrm* _pFrm )
             }
         }
         // #115759# - remove also drawing objects from page
-        else if ( pObj->ISA(SwAnchoredDrawObject) )
+        else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
         {
             if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != FLY_AS_CHAR)
             {
@@ -2529,10 +2529,10 @@ static void lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
         pObj->UnlockPosition();
         // #115759# - add also lower objects of as-character
         // anchored Writer fly frames from page
-        if ( pObj->ISA(SwFlyFrm) )
+        if ( dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr )
         {
             SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
-            if ( pObj->ISA(SwFlyFreeFrm) )
+            if ( dynamic_cast<const SwFlyFreeFrm*>( pObj) !=  nullptr )
             {
                 _pPage->AppendFlyToPage( pFlyFrm );
             }
@@ -2556,7 +2556,7 @@ static void lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
             }
         }
         // #115759# - remove also drawing objects from page
-        else if ( pObj->ISA(SwAnchoredDrawObject) )
+        else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
         {
             if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != FLY_AS_CHAR)
             {
@@ -2718,7 +2718,7 @@ static void lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
     for ( size_t i = 0; i < pObjs->size(); ++i )
     {
         SwAnchoredObject* pObj = (*pObjs)[i];
-        if ( pObj->ISA(SwFlyFrm) )
+        if ( dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr )
         {
             SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pObj);
             // register (not if already known)
@@ -2892,7 +2892,7 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrm *pCnt,
             for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 SwAnchoredObject* pObj = rObjs[i];
-                if ( pObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr )
                 {
                     SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pObj);
                     if ( pFly->IsFlyInCntFrm() )
@@ -2923,7 +2923,7 @@ void Notify_Background( const SdrObject* pObj,
     SwLayoutFrm* pArea;
     SwFlyFrm *pFlyFrm = 0;
     SwFrm* pAnchor;
-    if( pObj->ISA(SwVirtFlyDrawObj) )
+    if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
     {
         pFlyFrm = const_cast<SwVirtFlyDrawObj*>(static_cast<const SwVirtFlyDrawObj*>(pObj))->GetFlyFrm();
         pAnchor = pFlyFrm->AnchorFrm();
@@ -3003,7 +3003,7 @@ void Notify_Background( const SdrObject* pObj,
         for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = rObjs[i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast<const SwFlyFrm*>( pAnchoredObj) !=  nullptr )
             {
                 if( pAnchoredObj->GetDrawObj() == pObj )
                     continue;
@@ -3102,7 +3102,7 @@ bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
 {
     Point aPos;
     const SwFrm* pFrm;
-    if( pObj->ISA(SwVirtFlyDrawObj) )
+    if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
     {
         const SwFlyFrm* pFly = static_cast<const SwVirtFlyDrawObj*>(pObj )->GetFlyFrm();
         pFrm = pFly->GetAnchorFrm();

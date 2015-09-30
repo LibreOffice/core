@@ -232,7 +232,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
         {
             const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
-                pLnk->ISA( SwBaseLink ) &&
+                dynamic_cast<const SwBaseLink*>( pLnk) !=  nullptr &&
                 !static_cast<const SwBaseLink*>(pLnk)->IsNoDataFlag() &&
                 static_cast<const SwBaseLink*>(pLnk)->IsInRange( nSttNd, nEndNd, nStt, nEnd ))
             {
@@ -306,7 +306,7 @@ SwDataChanged::~SwDataChanged()
         {
             ::sfx2::SvLinkSourceRef refObj( *it );
             // Any one else interested in the Object?
-            if( refObj->HasDataLinks() && refObj->ISA( SwServerObject ))
+            if( refObj->HasDataLinks() && dynamic_cast<const SwServerObject*>( refObj.get() ) !=  nullptr)
             {
                 SwServerObject& rObj = *static_cast<SwServerObject*>(&refObj);
                 if( pPos )

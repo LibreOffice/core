@@ -1273,7 +1273,7 @@ void PPTWriter::ImplWriteOLE( )
             case NORMAL_OLE_OBJECT :
             {
                 SdrObject* pSdrObj = GetSdrObjectFromXShape( pPtr->xShape );
-                if ( pSdrObj && pSdrObj->ISA( SdrOle2Obj ) )
+                if ( pSdrObj && dynamic_cast<const SdrOle2Obj* >(pSdrObj) !=  nullptr )
                 {
                     ::uno::Reference < embed::XEmbeddedObject > xObj( static_cast<SdrOle2Obj*>(pSdrObj)->GetObjRef() );
                     if( xObj.is() )

@@ -4778,7 +4778,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
 uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( ScDocument* pDoc, const ScRange& rR )
 {
     SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-    if ( pObjSh && pObjSh->ISA(ScDocShell) )
+    if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
         return new ScCellRangeObj( static_cast<ScDocShell*>(pObjSh), rR );
     return NULL;
 }
@@ -7683,7 +7683,7 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
             for ( sal_uInt16 i=0; i<nCount; i++ )
             {
                 ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
-                if (pBase->ISA(ScTableLink))
+                if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
                 {
                     ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
                     if ( aFileString.equals(pTabLink->GetFileName()) )

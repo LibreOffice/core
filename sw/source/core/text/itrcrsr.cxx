@@ -1876,7 +1876,7 @@ bool SwTextFrm::FillSelection( SwSelectionList& rSelList, const SwRect& rRect ) 
         for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             const SwAnchoredObject* pAnchoredObj = rObjs[i];
-            if( !pAnchoredObj->ISA(SwFlyFrm) )
+            if( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) ==  nullptr )
                 continue;
             const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
             if( pFly->IsFlyInCntFrm() && pFly->FillSelection( rSelList, rRect ) )

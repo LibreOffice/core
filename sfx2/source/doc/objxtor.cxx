@@ -497,7 +497,7 @@ OUString SfxObjectShell::CreateShellID( const SfxObjectShell* pShell )
 
 SfxObjectShell* SfxObjectShell::GetFirst
 (
-    const TypeId* pType ,
+    std::function<bool ( const SfxObjectShell* )> isObjectShell,
     bool          bOnlyVisible
 )
 {
@@ -510,7 +510,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
         if ( bOnlyVisible && pSh->IsPreview() && pSh->IsReadOnly() )
             continue;
 
-        if ( ( !pType || pSh->IsA(*pType) ) &&
+        if ( (!isObjectShell || isObjectShell( pSh)) &&
              ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh  )))
             return pSh;
     }
@@ -524,7 +524,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
 SfxObjectShell* SfxObjectShell::GetNext
 (
     const SfxObjectShell&   rPrev,
-    const TypeId*           pType,
+    std::function<bool ( const SfxObjectShell* )> isObjectShell,
     bool                    bOnlyVisible
 )
 {
@@ -543,7 +543,7 @@ SfxObjectShell* SfxObjectShell::GetNext
         if ( bOnlyVisible && pSh->IsPreview() && pSh->IsReadOnly() )
             continue;
 
-        if ( ( !pType || pSh->IsA(*pType) ) &&
+        if ( (!isObjectShell || isObjectShell( pSh)) &&
              ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh )))
             return pSh;
     }
@@ -655,7 +655,7 @@ bool SfxObjectShell::PrepareClose
                 pPoolItem = pFrame->GetBindings().ExecuteSynchron( IsReadOnlyMedium() ? SID_SAVEASDOC : SID_SAVEDOC, ppArgs );
             }
 
-            if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !static_cast<const SfxBoolItem*>( pPoolItem )->GetValue() ) )
+            if ( !pPoolItem || dynamic_cast< const SfxVoidItem *>( pPoolItem ) != nullptr || ( dynamic_cast< const SfxBoolItem *>( pPoolItem ) != nullptr && !static_cast<const SfxBoolItem*>( pPoolItem )->GetValue() ) )
                 return false;
         }
         else if ( RET_CANCEL == nRet )

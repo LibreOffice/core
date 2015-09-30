@@ -726,7 +726,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     for (i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
+        if (dynamic_cast<const ScDdeLink*>( pBase) !=  nullptr)
             if ( !bExport40 || static_cast<ScDdeLink*>(pBase)->GetMode() == SC_DDE_DEFAULT )
                 ++nDdeCount;
     }
@@ -741,7 +741,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     for (i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
+        if (dynamic_cast<const ScDdeLink*>( pBase) !=  nullptr)
         {
             ScDdeLink* pLink = static_cast<ScDdeLink*>(pBase);
             if ( !bExport40 || pLink->GetMode() == SC_DDE_DEFAULT )
@@ -893,7 +893,7 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
         const sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
+        if (dynamic_cast<const ScDdeLink*>( pBase) !=  nullptr)
         {
             const ScDdeLink* p = static_cast<const ScDdeLink*>(pBase);
             ScDdeLink* pNew = new ScDdeLink(pDestDoc, *p);
@@ -922,7 +922,7 @@ ScDdeLink* lclGetDdeLink(
         for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
         {
             ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
-            if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
+            if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( pLink )  )
             {
                 if( (OUString(pDdeLink->GetAppl()) == rAppl) &&
                     (OUString(pDdeLink->GetTopic()) == rTopic) &&
@@ -949,7 +949,7 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, size_t nDdePos 
         for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
         {
             ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
-            if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
+            if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( pLink )  )
             {
                 if( nDdeIndex == nDdePos )
                     return pDdeLink;
@@ -1046,7 +1046,7 @@ bool ScDocument::HasAreaLinks() const
     const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
     sal_uInt16 nCount = rLinks.size();
     for (sal_uInt16 i=0; i<nCount; i++)
-        if ((*rLinks[i])->ISA(ScAreaLink))
+        if (0 != dynamic_cast<const ScAreaLink* >((*rLinks[i]).get()))
             return true;
 
     return false;
@@ -1062,7 +1062,7 @@ void ScDocument::UpdateAreaLinks()
     for (size_t i=0; i<rLinks.size(); i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScAreaLink))
+        if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
             pBase->Update();
     }
 }
@@ -1078,7 +1078,7 @@ void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
     while ( nPos < rLinks.size() )
     {
         const ::sfx2::SvBaseLink* pBase = *rLinks[nPos];
-        if ( pBase->ISA(ScAreaLink) &&
+        if ( dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr &&
              static_cast<const ScAreaLink*>(pBase)->GetDestArea().aStart.Tab() == nTab )
             pMgr->Remove(nPos);
         else
@@ -1100,7 +1100,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScAreaLink))
+        if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
         {
             ScAreaLink* pLink = static_cast<ScAreaLink*>(pBase);
             ScRange aOutRange = pLink->GetDestArea();
@@ -1136,13 +1136,13 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
         {
             bool bFound = false;
             ::sfx2::SvBaseLink* pFirst = *rLinks[nFirstIndex];
-            if ( pFirst->ISA(ScAreaLink) )
+            if ( dynamic_cast<const ScAreaLink*>( pFirst) !=  nullptr )
             {
                 ScAddress aFirstPos = static_cast<ScAreaLink*>(pFirst)->GetDestArea().aStart;
                 for ( sal_uInt16 nSecondIndex = nFirstIndex + 1; nSecondIndex < nCount && !bFound; ++nSecondIndex )
                 {
                     ::sfx2::SvBaseLink* pSecond = *rLinks[nSecondIndex];
-                    if ( pSecond->ISA(ScAreaLink) &&
+                    if ( dynamic_cast<const ScAreaLink*>( pSecond) !=  nullptr &&
                          static_cast<ScAreaLink*>(pSecond)->GetDestArea().aStart == aFirstPos )
                     {
                         // remove the first link, exit the inner loop, don't increment nFirstIndex

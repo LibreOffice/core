@@ -892,7 +892,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 aEvent.State = com::sun::star::frame::DispatchResultState::FAILURE;
 
             aEvent.Source = static_cast<com::sun::star::frame::XDispatch*>(pDispatch);
-            if ( bSuccess && pItem && !pItem->ISA(SfxVoidItem) )
+            if ( bSuccess && pItem && dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
             {
                 sal_uInt16 nSubId( 0 );
                 if ( eMapUnit == SFX_MAPUNIT_TWIP )
@@ -966,7 +966,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     bool bNotify = true;
     if ( pState && !IsInvalidItem( pState ) )
     {
-        if ( !pState->ISA( SfxVisibilityItem ) )
+        if ( dynamic_cast< const SfxVisibilityItem *>( pState ) ==  nullptr )
         {
             if (pLastState && !IsInvalidItem(pLastState))
             {
@@ -989,7 +989,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if (bNotify)
     {
         ::com::sun::star::uno::Any aState;
-        if ( ( eState >= SfxItemState::DEFAULT ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
+        if ( ( eState >= SfxItemState::DEFAULT ) && pState && !IsInvalidItem( pState ) && dynamic_cast< const SfxVoidItem *>( pState ) ==  nullptr )
         {
             // Retrieve metric from pool to have correct sub ID when calling QueryValue
             sal_uInt16     nSubId( 0 );

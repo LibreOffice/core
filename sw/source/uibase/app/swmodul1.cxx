@@ -117,22 +117,20 @@ SwWrtShell* GetActiveWrtShell()
 SwView* GetActiveView()
 {
     SfxViewShell* pView = SfxViewShell::Current();
-    return PTR_CAST( SwView, pView );
+    return dynamic_cast<SwView*>( pView  );
 }
 
 SwView* SwModule::GetFirstView()
 {
     // returns only visible SwView
-    const TypeId aTypeId = TYPE(SwView);
-    SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(&aTypeId));
+    SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>));
     return pView;
 }
 
 SwView* SwModule::GetNextView(SwView* pView)
 {
-    OSL_ENSURE(PTR_CAST(SwView, pView),"return no SwView");
-    const TypeId aTypeId = TYPE(SwView);
-    SwView* pNView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, &aTypeId));
+    OSL_ENSURE(dynamic_cast<SwView*>( pView),"return no SwView" );
+    SwView* pNView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>));
     return pNView;
 }
 
@@ -146,13 +144,13 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(GetUsrPref(
                                          nDest == VIEWOPT_DEST_WEB
                                          || (nDest != VIEWOPT_DEST_TEXT
-                                             && pCurrView && pCurrView->ISA(SwWebView)) ));
+                                             && pCurrView && dynamic_cast< const SwWebView *>( pCurrView ) !=  nullptr) ));
 
     // with Uno, only sdbcx::View, but not the Module should be changed
     bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
     // fob Preview off
     SwPagePreview* pPPView;
-    if( !pCurrView && 0 != (pPPView = PTR_CAST( SwPagePreview, SfxViewShell::Current())) )
+    if( !pCurrView && 0 != (pPPView = dynamic_cast<SwPagePreview*>( SfxViewShell::Current()))  )
     {
         if(!bViewOnly)
             pPref->SetUIOptions( rUsrPref );
@@ -231,7 +229,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, bool bWeb )
         // switch the ruler for all MDI-Windows
         while(pTmpView)
         {
-            if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
+            if(bWeb == (dynamic_cast<SwWebView*>( pTmpView) !=  nullptr) )
             {
                 pTmpView->ChangeVRulerMetric(eVScrollMetric);
                 pTmpView->ChangeTabMetric(eHScrollMetric);
@@ -265,7 +263,7 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, bool bHorizontal, bool bWeb 
     // switch metric at the appropriate rulers
     while(pTmpView)
     {
-        if(bWeb == (0 != dynamic_cast<SwWebView *>( pTmpView )))
+        if(bWeb == (dynamic_cast<SwWebView *>( pTmpView ) !=  nullptr))
         {
             if( bHorizontal )
                 pTmpView->ChangeTabMetric(eMetric);
@@ -326,7 +324,7 @@ void SwModule::ApplyUserCharUnit(bool bApplyChar, bool bWeb)
     // switch rulers for all MDI-Windows
     while(pTmpView)
     {
-        if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
+        if(bWeb == (dynamic_cast<SwWebView*>( pTmpView) !=  nullptr) )
         {
             pTmpView->ChangeVRulerMetric(eVScrollMetric);
             pTmpView->ChangeTabMetric(eHScrollMetric);
@@ -611,10 +609,9 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
     bool bInvalid = bOnlyWrong || bIsSpellAllAgain;
     if( bOnlineSpelling || bInvalid )
     {
-        TypeId aType = TYPE(SwDocShell);
-        for( SwDocShell *pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(&aType));
+        for( SwDocShell *pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<SwDocShell>));
              pDocSh;
-             pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetNext( *pDocSh, &aType ) ) )
+             pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetNext( *pDocSh, checkSfxObjectShell<SwDocShell> ) ) )
         {
             SwDoc* pTmp = pDocSh->GetDoc();
             if ( pTmp->getIDocumentLayoutAccess().GetCurrentViewShell() )

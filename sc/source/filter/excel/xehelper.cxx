@@ -465,7 +465,7 @@ XclExpStringRef lclCreateFormattedString(
                 if( aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET )
                 {
                     const SvxFieldData* pField = static_cast< const SvxFieldItem* >( pItem )->GetField();
-                    if( const SvxURLField* pUrlField = PTR_CAST( SvxURLField, pField ) )
+                    if( const SvxURLField* pUrlField = dynamic_cast<const SvxURLField*>( pField )  )
                     {
                         // convert URL field to string representation
                         aXclPortionText = pLinkHelper ?
@@ -808,19 +808,19 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 {
                     if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
                     {
-                        if( pFieldData->ISA( SvxPageField ) )
+                        if( dynamic_cast<const SvxPageField*>( pFieldData) !=  nullptr )
                             aParaText += "&P";
-                        else if( pFieldData->ISA( SvxPagesField ) )
+                        else if( dynamic_cast<const SvxPagesField*>( pFieldData) !=  nullptr )
                             aParaText += "&N";
-                        else if( pFieldData->ISA( SvxDateField ) )
+                        else if( dynamic_cast<const SvxDateField*>( pFieldData) !=  nullptr )
                             aParaText += "&D";
-                        else if( pFieldData->ISA( SvxTimeField ) || pFieldData->ISA( SvxExtTimeField ) )
+                        else if( dynamic_cast<const SvxTimeField*>( pFieldData) != nullptr || dynamic_cast<const SvxExtTimeField*>( pFieldData) !=  nullptr )
                             aParaText += "&T";
-                        else if( pFieldData->ISA( SvxTableField ) )
+                        else if( dynamic_cast<const SvxTableField*>( pFieldData) !=  nullptr )
                             aParaText += "&A";
-                        else if( pFieldData->ISA( SvxFileField ) )  // title -> file name
+                        else if( dynamic_cast<const SvxFileField*>( pFieldData) !=  nullptr )  // title -> file name
                             aParaText += "&F";
-                        else if( const SvxExtFileField* pFileField = PTR_CAST( SvxExtFileField, pFieldData ) )
+                        else if( const SvxExtFileField* pFileField = dynamic_cast<const SvxExtFileField*>( pFieldData )  )
                         {
                             switch( pFileField->GetFormat() )
                             {

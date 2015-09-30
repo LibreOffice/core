@@ -145,7 +145,7 @@ VclPtr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(
     {
         //Not for SourceView.
         SfxViewShell *pVSh = SfxViewShell::Current();
-        if ( pVSh && !pVSh->ISA(SwSrcView) )
+        if ( pVSh && dynamic_cast< const SwSrcView *>( pVSh ) ==  nullptr )
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -394,10 +394,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
             {
                 // call on all Docs the idle formatter to start
                 // the collection of Words
-                TypeId aType = TYPE(SwDocShell);
-                for( SwDocShell *pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(&aType));
+                for( SwDocShell *pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<SwDocShell>));
                      pDocSh;
-                     pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetNext( *pDocSh, &aType )) )
+                     pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetNext( *pDocSh, checkSfxObjectShell<SwDocShell> )) )
                 {
                     SwDoc* pTmp = pDocSh->GetDoc();
                     if ( pTmp->getIDocumentLayoutAccess().GetCurrentViewShell() )
@@ -414,13 +413,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
                 SfxViewShell* pViewShell = SfxViewShell::Current();
                 SwView* pCurrView = dynamic_cast< SwView *> ( pViewShell );
-                bool bCurrent = IS_TYPE( SwPagePreview, pViewShell );
+                bool bCurrent = typeid(SwPagePreview) == typeid( pViewShell );
 
                 while( pTmpFrm )    // search Preview
                 {
-                    if( IS_TYPE( SwView, pTmpFrm->GetViewShell()) )
+                    if( typeid(SwView) == typeid( pTmpFrm->GetViewShell()) )
                         bOnly = false;
-                    else if( IS_TYPE( SwPagePreview, pTmpFrm->GetViewShell()))
+                    else if( typeid(SwPagePreview) == typeid( pTmpFrm->GetViewShell()))
                     {
                         pTmpFrm->GetFrame().Appear();
                         bFound = true;
@@ -446,7 +445,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     // PagePreview in the WebDocShell
                     // is found under Id VIEWSHELL2.
-                    if( ISA(SwWebDocShell) && SID_VIEWSHELL1 == nSlotId )
+                    if( dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr && SID_VIEWSHELL1 == nSlotId )
                         nSlotId = SID_VIEWSHELL2;
 
                     if( pCurrView && pCurrView->GetDocShell() == this )
@@ -525,7 +524,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             }
                             pFlt = aIter.Next();
                         }
-                        bool bWeb = 0 != dynamic_cast< SwWebDocShell *>( this );
+                        bool bWeb = dynamic_cast< SwWebDocShell *>( this ) !=  nullptr;
                         const SfxFilter *pOwnFlt =
                                 SwDocShell::Factory().GetFilterContainer()->
                                 GetFilter4FilterName(OUString("writer8"));
@@ -1108,7 +1107,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_ATTR_YEAR2000:
             if ( pArgs && SfxItemState::SET == pArgs->GetItemState( nWhich , false, &pItem ))
             {
-                OSL_ENSURE(pItem->ISA(SfxUInt16Item), "wrong Item");
+                OSL_ENSURE(dynamic_cast< const SfxUInt16Item *>( pItem ) !=  nullptr, "wrong Item");
                 sal_uInt16 nYear2K = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 // iterate over Views and put the State to FormShells
 
@@ -1501,14 +1500,13 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
     aTmpObj.SetMark( OUString() );
 
     // Iterate over the DocShell and get the ones with the name
-    TypeId aType( TYPE(SwDocShell) );
 
     SfxObjectShell* pShell = pDestSh;
     bool bFirst = 0 != pShell;
 
     if( !bFirst )
         // No DocShell passed, starting with the first from the DocShell list
-        pShell = SfxObjectShell::GetFirst( &aType );
+        pShell = SfxObjectShell::GetFirst( checkSfxObjectShell<SwDocShell> );
 
     while( pShell )
     {
@@ -1531,10 +1529,10 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
         if( bFirst )
         {
             bFirst = false;
-            pShell = SfxObjectShell::GetFirst( &aType );
+            pShell = SfxObjectShell::GetFirst( checkSfxObjectShell<SwDocShell> );
         }
         else
-            pShell = SfxObjectShell::GetNext( *pShell, &aType );
+            pShell = SfxObjectShell::GetNext( *pShell, checkSfxObjectShell<SwDocShell> );
     }
 
     // 2. Open the file ourselves

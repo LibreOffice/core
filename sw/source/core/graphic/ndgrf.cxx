@@ -1071,7 +1071,7 @@ bool SwGrfNode::IsSelected() const
         const SwNode* pN = this;
         for(const SwViewShell& rCurrentShell : pESh->GetRingContainer())
         {
-            if( rCurrentShell.ISA( SwEditShell ) && pN == &static_cast<const SwCrsrShell*>(&rCurrentShell)
+            if( dynamic_cast<const SwEditShell*>( &rCurrentShell) != nullptr && pN == &static_cast<const SwCrsrShell*>(&rCurrentShell)
                                 ->GetCrsr()->GetPoint()->nNode.GetNode() )
             {
                 bRet = true;

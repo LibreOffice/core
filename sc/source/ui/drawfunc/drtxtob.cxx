@@ -182,7 +182,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
-                     pItem->ISA(SfxUInt32Item) )
+                     dynamic_cast<const SfxUInt32Item*>( pItem) !=  nullptr )
                 {
                     nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
                 }
@@ -227,7 +227,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     aString = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     const SfxPoolItem* pFtItem = NULL;
                     pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
-                    const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+                    const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
                     if ( pFontItem )
                     {
                         OUString aFontName(pFontItem->GetValue());
@@ -274,7 +274,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                         if (pFieldItem)
                         {
                             const SvxFieldData* pField = pFieldItem->GetField();
-                            if ( pField && pField->ISA(SvxURLField) )
+                            if ( pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr )
                             {
                                 //  altes Feld selektieren
 
@@ -323,7 +323,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     if ( pFieldItem )
                     {
                         const SvxFieldData* pField = pFieldItem->GetField();
-                        if( pField && pField->ISA( SvxURLField ) )
+                        if( pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr )
                         {
                             const SvxURLField* pURLField = static_cast< const SvxURLField* >( pField );
                             ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
@@ -391,7 +391,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             if (pFieldItem)
             {
                 const SvxFieldData* pField = pFieldItem->GetField();
-                if ( pField && pField->ISA(SvxURLField) )
+                if ( pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr )
                 {
                     const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
                     aHLinkItem.SetName( pURLField->GetRepresentation() );
@@ -423,7 +423,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             if ( pFieldItem )
             {
                 const SvxFieldData* pField = pFieldItem->GetField();
-                bEnable = pField && pField->ISA( SvxURLField );
+                bEnable = pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr;
             }
         }
         if( !bEnable )

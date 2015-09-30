@@ -432,10 +432,10 @@ const SfxPoolItem* SfxRequest::GetArg
 (
     sal_uInt16  nSlotId,  // Slot-Id or Which-Id of the parameters
     bool    bDeep,    // sal_False: do not search in the Parent-ItemSets
-    TypeId  aType     // != 0:  RTTI check with Assertion
+    std::function<bool ( const SfxPoolItem* )> isItemType     // != 0:  check for required pool item class
 )   const
 {
-    return GetItem( pArgs, nSlotId, bDeep, aType );
+    return GetItem( pArgs, nSlotId, bDeep, isItemType );
 }
 
 
@@ -445,7 +445,7 @@ const SfxPoolItem* SfxRequest::GetItem
     const SfxItemSet* pArgs,
     sal_uInt16            nSlotId,  // Slot-Id or Which-Id of the parameters
     bool              bDeep,    // sal_False: do not search in the Parent-ItemSets
-    TypeId            aType     // != 0:  RTTI check with Assertion
+    std::function<bool ( const SfxPoolItem* )> isItemType     // != 0:  check for required pool item class
 )
 
 /*  [Description]
@@ -493,7 +493,7 @@ const SfxPoolItem* SfxRequest::GetItem
              <= pArgs->GetItemState( nWhich, bDeep, &pItem ) )
         {
             // Compare type
-            if ( !pItem || pItem->IsA(aType) )
+            if ( !pItem || (!isItemType || isItemType(pItem)) )
                 return pItem;
 
             // Item of wrong type => Programming error

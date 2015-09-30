@@ -902,7 +902,7 @@ bool SdXShape::IsPresObj() const
     SdrObject* pObj = mpShape->GetSdrObject();
     if(pObj)
     {
-        SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+        SdPage* pPage = dynamic_cast<SdPage* >(pObj->GetPage());
         if(pPage)
             return pPage->GetPresObjKind(pObj) != PRESOBJ_NONE;
     }
@@ -945,7 +945,7 @@ OUString SdXShape::GetPlaceholderText() const
     if( pObj == NULL )
         return OUString();
 
-    SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+    SdPage* pPage = dynamic_cast< SdPage* >(pObj->GetPage());
     DBG_ASSERT( pPage, "no page?" );
     if( pPage == NULL )
         return OUString();
@@ -975,10 +975,10 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
 
             // really delete SdrOutlinerObj at pObj
             pObj->NbcSetOutlinerParaObject(0L);
-            if( bVertical && PTR_CAST( SdrTextObj, pObj ) )
+            if( bVertical && dynamic_cast<SdrTextObj*>( pObj )  )
                 static_cast<SdrTextObj*>(pObj)->SetVerticalWriting( true );
 
-            SdrGrafObj* pGraphicObj = PTR_CAST( SdrGrafObj, pObj );
+            SdrGrafObj* pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj  );
             if( pGraphicObj )
             {
                 Graphic aEmpty;
@@ -986,7 +986,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
             }
             else
             {
-                SdrOle2Obj* pOleObj = PTR_CAST( SdrOle2Obj, pObj );
+                SdrOle2Obj* pOleObj = dynamic_cast< SdrOle2Obj* >( pObj );
                 if( pOleObj )
                 {
                     pOleObj->SetGraphic( NULL );
@@ -1010,7 +1010,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
                 if( pOutliner == NULL )
                     break;
 
-                SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+                SdPage* pPage = dynamic_cast< SdPage* >(pObj->GetPage());
                 DBG_ASSERT( pPage, "no page?" );
                 if( pPage == NULL )
                     break;
@@ -1049,7 +1049,7 @@ void SdXShape::SetMasterDepend( bool bDepend ) throw()
         {
             if( bDepend )
             {
-                SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+                SdPage* pPage = dynamic_cast< SdPage* >(pObj->GetPage());
                 pObj->SetUserCall( pPage );
             }
             else

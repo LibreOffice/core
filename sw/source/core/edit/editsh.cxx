@@ -118,7 +118,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
     // calculate cursor bidi level
     SwCursor* pTmpCrsr = _GetCrsr();
     const bool bDoNotSetBidiLevel = ! pTmpCrsr ||
-                                ( 0 != dynamic_cast<SwUnoCrsr*>(pTmpCrsr) );
+                                ( dynamic_cast<SwUnoCrsr*>(pTmpCrsr) !=  nullptr );
 
     if ( ! bDoNotSetBidiLevel )
     {

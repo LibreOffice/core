@@ -70,7 +70,7 @@ void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rO
             rOneOle = (nCount == 1);
             break;
         }
-        else if ( pObj->ISA(SdrObjGroup) )
+        else if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
         {
             SdrObjListIter aIter( *pObj, IM_DEEPNOGROUPS );
             SdrObject* pSubObj = aIter.Next();
