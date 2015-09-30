@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_b7b968ef",
+        "filename": "sw/inc/hintids.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:13:46Z",
+      "side": 1,
+      "message": "doesn\u0027t break",
+      "revId": "83e003d76d01e39272ff5cf9e432d729d34f46b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_97bee4d2",
+        "filename": "sw/inc/tox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:13:46Z",
+      "side": 1,
+      "message": "fidelity",
+      "revId": "83e003d76d01e39272ff5cf9e432d729d34f46b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_f7b3e008",
+        "filename": "sw/qa/extras/inc/swmodeltestbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:13:46Z",
+      "side": 1,
+      "message": "calculating",
+      "revId": "83e003d76d01e39272ff5cf9e432d729d34f46b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
