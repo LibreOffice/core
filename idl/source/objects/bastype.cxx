@@ -223,13 +223,6 @@ bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
     return false;
 }
 
-SvStream& operator >> (SvStream & rStm, SvString & r )
-{
-    r.setString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStm));
-    return rStm;
-}
-
-
 bool SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 {
     return SvString::ReadSvIdl( SvHash_HelpText(), rInStm );

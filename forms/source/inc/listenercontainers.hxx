@@ -41,9 +41,6 @@ namespace frm
         ::cppu::OWeakObject&    m_rInstigator;
 
     protected:
-        ::cppu::OWeakObject&    getInstigator() { return m_rInstigator; }
-
-    protected:
         inline EventListeners( ::cppu::OWeakObject& _rInstigator, ::osl::Mutex& _rMutex )
             :EventListeners_Base( _rMutex )
             ,m_rInstigator( _rInstigator )

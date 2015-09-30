@@ -56,8 +56,6 @@ namespace dbaui
         bool                RecalcLine();
         void                Draw( OutputDevice* pOutDev );
         bool                CheckHit( const Point& rMousePos ) const;
-        OUString            GetSourceFieldName() const { return m_pData->GetSourceFieldName(); }
-        OUString            GetDestFieldName() const { return m_pData->GetDestFieldName(); }
 
         bool                IsValid() const;
 

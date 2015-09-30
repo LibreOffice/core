@@ -45,7 +45,6 @@ class ODbDataSourceAdministrationHelper;
         ::std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
         bool m_bStopExecution; // set when the dialog should not be executed
 
-        DECL_LINK( OKClickHdl, OKButton* );
         SfxItemSet*             m_pOutSet;
     public:
 

@@ -136,11 +136,6 @@ OConnectionLineDataRef OTableConnectionData::CreateLineDataObj()
     return new OConnectionLineData();
 }
 
-OConnectionLineDataRef OTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
-{
-    return new OConnectionLineData( rConnLineData );
-}
-
 OTableConnectionData* OTableConnectionData::NewInstance() const
 {
     return new OTableConnectionData();

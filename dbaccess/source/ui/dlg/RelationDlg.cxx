@@ -230,11 +230,6 @@ short ORelationDialog::Execute()
     return nResult;
 }
 
-TTableConnectionData::value_type ORelationDialog::getConnectionData() const
-{
-    return m_pConnData;
-}
-
 void ORelationDialog::setValid(bool _bValid)
 {
     m_pPB_OK->Enable(_bValid);

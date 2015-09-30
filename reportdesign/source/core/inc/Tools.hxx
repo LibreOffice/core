@@ -43,12 +43,6 @@ namespace reportdesign
             ::comphelper::disposeComponent(_xSection);
     }
 
-    /** gets the properties which should be removed form the property set implementation.
-     *
-     * \return A sequence of all properties which should be removed for none char able implementations.
-     */
-    ::com::sun::star::uno::Sequence< OUString > lcl_getCharOptionals();
-
     /** uses the XChild interface to get the section from any child of it.
      *
      * \param _xReportComponent A report component which is a child of the section.

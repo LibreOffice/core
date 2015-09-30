@@ -35,7 +35,6 @@ namespace dbaui
     class ORelationTableConnectionData :    public OTableConnectionData
     {
         friend bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs);
-        friend bool operator!=(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs) { return !(lhs == rhs); }
 
         ::osl::Mutex    m_aMutex;
 
@@ -50,7 +49,6 @@ namespace dbaui
 
     protected:
         virtual OConnectionLineDataRef CreateLineDataObj() SAL_OVERRIDE;
-        virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData ) SAL_OVERRIDE;
 
         ORelationTableConnectionData& operator=( const ORelationTableConnectionData& rConnData );
     public:

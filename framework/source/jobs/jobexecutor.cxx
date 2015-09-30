@@ -214,7 +214,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
     // Optimization!
     // Check if the given event name exist inside configuration and reject wrong requests.
     // This optimization suppress using of the cfg api for getting event and job descriptions ...
-    if (framework::find(m_lEvents, sEvent) == m_lEvents.end())
+    if (std::find(m_lEvents.begin(), m_lEvents.end(), sEvent) == m_lEvents.end())
         return;
 
     // get list of all enabled jobs
@@ -283,7 +283,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
         (aEvent.EventName == EVENT_ON_LOAD)
        )
     {
-        if (find(m_lEvents, EVENT_ON_DOCUMENT_OPENED) != m_lEvents.end())
+        if (std::find(m_lEvents.begin(), m_lEvents.end(), EVENT_ON_DOCUMENT_OPENED) != m_lEvents.end())
             JobData::appendEnabledJobsForEvent(m_xContext, EVENT_ON_DOCUMENT_OPENED, lJobs);
     }
 
@@ -293,12 +293,12 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
         (aEvent.EventName == EVENT_ON_LOAD_FINISHED)
        )
     {
-        if (find(m_lEvents, EVENT_ON_DOCUMENT_ADDED) != m_lEvents.end())
+        if (std::find(m_lEvents.begin(), m_lEvents.end(), EVENT_ON_DOCUMENT_ADDED) != m_lEvents.end())
             JobData::appendEnabledJobsForEvent(m_xContext, EVENT_ON_DOCUMENT_ADDED, lJobs);
     }
 
     // Add all jobs for "real" notified event too .-)
-    if (find(m_lEvents, aEvent.EventName) != m_lEvents.end())
+    if (std::find(m_lEvents.begin(), m_lEvents.end(), aEvent.EventName) != m_lEvents.end())
         JobData::appendEnabledJobsForEvent(m_xContext, aEvent.EventName, lJobs);
     } /* SAFE */
 
@@ -344,7 +344,7 @@ void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent
         OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
         if (!sEvent.isEmpty())
         {
-            OUStringList::iterator pEvent = find(m_lEvents, sEvent);
+            OUStringList::iterator pEvent = std::find(m_lEvents.begin(), m_lEvents.end(), sEvent);
             if (pEvent == m_lEvents.end())
                 m_lEvents.push_back(sEvent);
         }
@@ -359,7 +359,7 @@ void SAL_CALL JobExecutor::elementRemoved ( const css::container::ContainerEvent
         OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
         if (!sEvent.isEmpty())
         {
-            OUStringList::iterator pEvent = find(m_lEvents, sEvent);
+            OUStringList::iterator pEvent = std::find(m_lEvents.begin(), m_lEvents.end(), sEvent);
             if (pEvent != m_lEvents.end())
                 m_lEvents.erase(pEvent);
         }

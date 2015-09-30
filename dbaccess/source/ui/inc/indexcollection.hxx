@@ -80,9 +80,6 @@ namespace dbaui
         // detach from the container
         void detach();
 
-        // number of contained indexes
-        sal_Int32   size() const { return m_aIndexes.size(); }
-
         /// drop an index, and remove it from the collection
         bool    drop(const Indexes::iterator& _rPos);
         /// simply drop the index described by the name, but don't remove the descriptor from the collection

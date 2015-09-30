@@ -192,9 +192,6 @@ public:
                         { return (aStart == r.aStart) && (aEnd == r.aEnd); }
     bool            operator!=( const ScBigRange& r ) const
                         { return !operator==( r ); }
-
-    friend inline SvStream& WriteScBigRange( SvStream& rStream, const ScBigRange& rRange );
-    friend inline SvStream& ReadScBigRange( SvStream& rStream, ScBigRange& rRange );
 };
 
 inline bool ScBigRange::In( const ScBigAddress& rAddr ) const

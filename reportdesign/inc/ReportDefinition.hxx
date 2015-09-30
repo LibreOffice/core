@@ -400,8 +400,6 @@ namespace reportdesign
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const SAL_OVERRIDE;
         virtual bool isEnableSetModified() const SAL_OVERRIDE;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext() const;
-
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager2 > getUIConfigurationManager2(  ) throw (::com::sun::star::uno::RuntimeException);
       };
 

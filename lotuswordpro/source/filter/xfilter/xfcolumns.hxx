@@ -96,8 +96,6 @@ public:
      */
     void ToXml(IXFStream *pStrm);
 
-    friend bool operator==(XFColumn& c1, XFColumn& c2);
-    friend bool operator!=(XFColumn& c1, XFColumn& c2);
     friend class XFColumns;
 
 private:
@@ -123,8 +121,6 @@ public:
 
     void    ToXml(IXFStream *pStrm);
 
-    friend bool operator==(XFColumnSep& sep1, XFColumnSep& sep2);
-    friend bool operator!=(XFColumnSep& sep1, XFColumnSep& sep2);
     friend class XFColumns;
 private:
     sal_Int32   m_nRelHeight;

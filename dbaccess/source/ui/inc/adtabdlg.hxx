@@ -83,7 +83,6 @@ namespace dbaui
         virtual ~OAddTableDlg();
         virtual void dispose() SAL_OVERRIDE;
 
-        void DetermineAddTable() { m_pAddButton->Enable( impl_isAddAllowed() ); }
         void Update();
 
         static  OUString  getDialogTitleForContext(

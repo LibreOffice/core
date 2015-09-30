@@ -44,7 +44,6 @@ namespace dbaui
         virtual void dispose() SAL_OVERRIDE;
 
         void SetHelpText( const OUString& rText );
-        OUString GetHelpText() const { return m_sHelpText; }
 
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 

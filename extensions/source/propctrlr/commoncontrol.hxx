@@ -141,9 +141,6 @@ namespace pcr
         inline void activateNextControl() const { impl_activateNextControl_nothrow(); }
 
     public:
-        /// may be used to implement the default handling in PreNotify; returns sal_True if handled
-        bool handlePreNotify(NotifyEvent& _rNEvt);
-
         /// automatically size the window given in the ctor
         void    autoSizeWindow();
 

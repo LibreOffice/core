@@ -81,19 +81,6 @@ struct KeyEventEqualsFunc
 
 typedef ::std::vector< OUString > OUStringList;
 
-// search for given element
-template <class T>
-typename std::vector<T>::iterator find( std::vector<T>& vec, const T& sElement )
-{
-    return ::std::find(vec.begin(), vec.end(), sElement);
-}
-
-template <class T>
-typename std::vector<T>::const_iterator find( const std::vector<T>& vec, const T& sElement )
-{
-    return ::std::find(vec.begin(), vec.end(), sElement);
-}
-
 template <class T>
 void free(std::vector<T>& vec)
 {

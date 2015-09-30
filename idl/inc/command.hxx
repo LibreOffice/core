@@ -44,7 +44,6 @@ public:
 void Init();
 class SvIdlWorkingBase;
 bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand );
-void DeInit();
 
 #endif // INCLUDED_IDL_INC_COMMAND_HXX
 

@@ -70,11 +70,6 @@ OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj()
     return new OConnectionLineData();
 }
 
-OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
-{
-    return new OConnectionLineData( rConnLineData );
-}
-
 void OQueryTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     // same as in base class, use of (non-virtual) operator=

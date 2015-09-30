@@ -62,7 +62,6 @@ namespace dbaui
         bool checkColumns(bool _bNew)
             throw (css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception);      // check if we have double column names
-        OUString createUniqueName(const css::uno::Reference< css::container::XNameAccess>& _rxTables,const OUString& _rDefault);
         void appendColumns(css::uno::Reference< css::sdbcx::XColumnsSupplier>& _rxColSup, bool _bNew, bool _bKeyColumns = false);
         void appendPrimaryKey(css::uno::Reference< css::sdbcx::XKeysSupplier>& _rxSup, bool _bNew);
         void alterColumns();

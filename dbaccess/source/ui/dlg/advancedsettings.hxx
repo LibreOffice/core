@@ -91,7 +91,6 @@ namespace dbaui
 
     private:
         void    impl_initBooleanSettings();
-        DECL_LINK(ClickHdl, Button*);
     };
 
     // GeneratedValuesPage
@@ -127,9 +126,6 @@ namespace dbaui
 
         // <method>OGenericAdministrationPage::fillWindows</method>
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-
-    private:
-        DECL_LINK( OnCheckBoxClick, CheckBox * );
     };
 
 }

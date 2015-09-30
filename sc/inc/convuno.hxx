@@ -137,13 +137,6 @@ inline bool operator==(
         (rApiAddress1.Sheet == rApiAddress2.Sheet);
 }
 
-inline bool operator!=(
-        const ::com::sun::star::table::CellAddress& rApiAddress1,
-        const ::com::sun::star::table::CellAddress& rApiAddress2 )
-{
-    return !(rApiAddress1 == rApiAddress2);
-}
-
 inline bool operator==(
         const ::com::sun::star::table::CellRangeAddress& rApiRange1,
         const ::com::sun::star::table::CellRangeAddress& rApiRange2 )

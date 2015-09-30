@@ -25,14 +25,12 @@
 #include <stdio.h>
 
 extern "C" int WorkOnTokenSet( int, char* );
-extern "C" int Argument( char * );
 extern "C" int InitXrmExport( const char * );
 extern "C" int EndXrmExport();
 extern "C" int GetError();
 extern "C" int SetError();
 extern "C" bool GetOutputFile( int argc, char* argv[]);
 extern "C" FILE *GetXrmFile();
-extern "C" int isQuiet();
 extern "C" const char* getFilename();
 
 #endif

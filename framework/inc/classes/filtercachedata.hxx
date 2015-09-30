@@ -315,27 +315,6 @@ class SetNodeHash : public std::unordered_map< OUString                    ,
                                                OUStringHash                  ,
                                                std::equal_to< OUString > >
 {
-
-    // interface
-
-    public:
-
-        // The only way to free ALL memory really!
-
-        inline void free()
-        {
-            SetNodeHash().swap( *this ); // get rid of reserved capacity
-            framework::free(lAddedItems);
-            framework::free(lChangedItems);
-            framework::free(lRemovedItems);
-        }
-
-        // Append changed, added or removed items to special lists
-        // Necessary for saving changes
-
-        void appendChange( const OUString& sName  ,
-                                 EModifyState     eState );
-
     // member
 
     public:

@@ -196,11 +196,6 @@ OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj()
     return new OConnectionLineData();
 }
 
-OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
-{
-    return new OConnectionLineData( rConnLineData );
-}
-
 void ORelationTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     // retract to the (non-virtual) operator= like in the base class

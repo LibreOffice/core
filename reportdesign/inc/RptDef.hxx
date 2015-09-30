@@ -89,10 +89,6 @@ public:
         return lhs;
     }
 };
-/** returns the object type depending on the service name
-    @param  _xComponent the report component
-*/
-REPORTDESIGN_DLLPUBLIC sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
 typedef ::std::pair< OUString, std::shared_ptr<AnyConverter> > TPropertyConverter;
 typedef std::map<OUString, TPropertyConverter> TPropertyNamePair;
 /** returns the property name map for the given property id
@@ -109,12 +105,6 @@ template < typename T> T getStyleProperty(const ::com::sun::star::uno::Reference
     return nReturn;
 }
 
-template<typename T> void setStyleProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,const OUString& _sPropertyName,const T& _aValue)
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProp(getUsedStyle(_xReport),::com::sun::star::uno::UNO_QUERY);
-    if ( xProp.is() )
-        xProp->setPropertyValue(_sPropertyName,::com::sun::star::uno::makeAny(_aValue));
-}
 }
 
 #endif // INCLUDED_REPORTDESIGN_INC_RPTDEF_HXX

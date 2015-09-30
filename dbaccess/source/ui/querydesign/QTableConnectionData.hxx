@@ -39,7 +39,6 @@ namespace dbaui
     protected:
         // for creation and duplication of lines of own type
         virtual OConnectionLineDataRef CreateLineDataObj() SAL_OVERRIDE;
-        virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData ) SAL_OVERRIDE;
 
         OQueryTableConnectionData& operator=( const OQueryTableConnectionData& rConnData );
     public:
@@ -64,7 +63,6 @@ namespace dbaui
         sal_Int32       GetFieldIndex(EConnectionSide nWhich) const { return nWhich==JTCS_TO ? m_nDestEntryIndex : m_nFromEntryIndex; }
         void            SetFieldIndex(EConnectionSide nWhich, sal_Int32 nVal) { if (nWhich==JTCS_TO) m_nDestEntryIndex=nVal; else m_nFromEntryIndex=nVal; }
 
-        ETableFieldType GetFieldType(EConnectionSide nWhich) const { return nWhich==JTCS_TO ? m_eDestType : m_eFromType; }
         void            SetFieldType(EConnectionSide nWhich, ETableFieldType eType) { if (nWhich==JTCS_TO) m_eDestType=eType; else m_eFromType=eType; }
 
         void            InitFromDrag(const OTableFieldDescRef& rDragLeft, const OTableFieldDescRef& rDragRight);

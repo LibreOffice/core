@@ -70,8 +70,6 @@ namespace dbaui
 
         void SetControlText( sal_uInt16 nControlId, const OUString& rText )
                 { m_pGenPage->SetControlText(nControlId,rText); }
-        OUString GetControlText( sal_uInt16 nControlId )
-                { return m_pGenPage->GetControlText(nControlId); }
 
         // short GetFormatCategory(OFieldDescription* pFieldDescr) { return m_pGenPage ? m_pGenPage->GetFormatCategory(pFieldDescr) : -1; }
         // delivers a CAT_xxx (CAT_NUMBER, CAT_DATE ...) value to a Format set in the field

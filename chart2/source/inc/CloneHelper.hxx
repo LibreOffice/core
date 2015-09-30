@@ -77,27 +77,6 @@ template< class Interface >
                       CreateRefClone< Interface >());
 }
 
-template< typename  Key, class Interface >
-    void CloneRefPairVector(
-        const ::std::vector< ::std::pair< Key, Interface > > & rSource,
-        ::std::vector< ::std::pair< Key, Interface > > & rDestination )
-{
-    ::std::transform( rSource.begin(), rSource.end(),
-                      ::std::back_inserter( rDestination ),
-                      CreateRefWithKeyClone< Key, Interface >());
-}
-
-/// clones a map of elements with a UNO-Reference as value
-template< typename Key, class Interface >
-    void CloneRefMap(
-        const ::std::map< Key, Interface > & rSource,
-        ::std::map< Key, Interface > & rDestination )
-{
-    ::std::transform( rSource.begin(), rSource.end(),
-                      ::std::inserter( rDestination, rDestination.begin() ),
-                      CreateRefWithKeyClone< const Key, Interface >());
-}
-
 /// clones a UNO-sequence of UNO-References
 template< class Interface >
     void CloneRefSequence(

@@ -331,7 +331,6 @@ namespace dbaui
         Wizard_Button_Style GetPressedButton() const { return m_ePressed; }
         void                EnableButton(Wizard_Button_Style eStyle, bool bEnable);
         void                AddWizardPage(OWizardPage* pPage); // delete page from OCopyTableWizard
-        void                RemoveWizardPage(OWizardPage* pPage); // Page goes again to user
         void                CheckButtons(); // checks which button can be disabled, enabled
 
         // returns a vector where the position of a column and if the column is in the selection
@@ -370,7 +369,6 @@ namespace dbaui
         */
         OUString getPrimaryKeyName() const { return m_aKeyName; }
 
-        TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos)        const { return m_aTypeInfoIndex[_nPos]->second; }
         const OTypeInfoMap& getTypeInfo()                       const { return m_aTypeInfo; }
 
         TOTypeInfoSP        getDestTypeInfo(sal_Int32 _nPos)    const { return m_aDestTypeInfoIndex[_nPos]->second; }

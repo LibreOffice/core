@@ -344,15 +344,6 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
         Append( r );
 }
 
-void ScRangeList::Join( const ScRangeList& r )
-{
-    if (this == &r)
-        return;
-
-    for (auto const& it : r.maRanges)
-        Join( *it );
-}
-
 bool ScRangeList::operator==( const ScRangeList& r ) const
 {
     if ( this == &r )

@@ -102,14 +102,6 @@ namespace pcr
         inline bool empty() const { return UnoBase::getLength() == 0; }
 
         inline void resize( size_t _newSize ) { UnoBase::realloc( _newSize ); }
-
-        inline iterator erase( iterator _pos )
-        {
-            iterator loop = end();
-            while ( --loop != _pos )
-                *( loop - 1 ) = *loop;
-            resize( size() - 1 );
-        }
     };
 
 

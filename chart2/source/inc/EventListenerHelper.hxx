@@ -137,28 +137,6 @@ void addListenerToAllElements(
                          impl::addListenerFunctor< typename Container::value_type >( xListener ));
 }
 
-template< class Container >
-void addListenerToAllMapElements(
-    const Container & rContainer,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener > & xListener )
-{
-    if( xListener.is())
-        ::std::for_each( rContainer.begin(), rContainer.end(),
-                         impl::addListenerToMappedElementFunctor< typename Container::value_type >( xListener ));
-}
-
-template< typename T >
-void addListenerToAllSequenceElements(
-    const ::com::sun::star::uno::Sequence< T > & rSequence,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener > & xListener )
-{
-    if( xListener.is())
-        ::std::for_each( rSequence.getConstArray(), rSequence.getConstArray() + rSequence.getLength(),
-                         impl::addListenerFunctor< T >( xListener ));
-}
-
 template< class InterfaceRef >
 void removeListener(
     const InterfaceRef & xObject,
@@ -181,28 +159,6 @@ void removeListenerFromAllElements(
     if( xListener.is())
         ::std::for_each( rContainer.begin(), rContainer.end(),
                          impl::removeListenerFunctor< typename Container::value_type >( xListener ));
-}
-
-template< class Container >
-void removeListenerFromAllMapElements(
-    const Container & rContainer,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener > & xListener )
-{
-    if( xListener.is())
-        ::std::for_each( rContainer.begin(), rContainer.end(),
-                         impl::removeListenerFromMappedElementFunctor< typename Container::value_type >( xListener ));
-}
-
-template< typename T >
-void removeListenerFromAllSequenceElements(
-    const ::com::sun::star::uno::Sequence< T > & rSequence,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener > & xListener )
-{
-    if( xListener.is())
-        ::std::for_each( rSequence.getConstArray(), rSequence.getConstArray() + rSequence.getLength(),
-                         impl::removeListenerFunctor< T >( xListener ));
 }
 
 } //  namespace EventListenerHelper

@@ -65,8 +65,6 @@
 #include <rtl/ustring.hxx>
 #include <string>
 
-OUString   DateTimeToOUString(XFDateTime& dt);
-
 OUString   GetTableColName(sal_Int32 col);
 
 OUString   GetUnderlineName(enumXFUnderline type);
@@ -90,8 +88,6 @@ OUString   GetFrameYPos(enumXFFrameYPos pos);
 OUString   GetFrameYRel(enumXFFrameYRel rel);
 
 OUString   GetAlignName(enumXFAlignType align);
-
-OUString   GetDrawKind(enumXFDrawKind kind);
 
 OUString   GetPageUsageName(enumXFPageUsage usage);
 

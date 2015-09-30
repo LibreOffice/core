@@ -39,9 +39,27 @@ TODO deal with calls to superclass/member constructors from other constructors, 
 
 namespace {
 
+struct MyFuncInfo
+{
+    std::string returnType;
+    std::string nameAndParams;
+    std::string sourceLocation;
+
+    bool operator < (const MyFuncInfo &other) const
+    {
+        if (returnType < other.returnType)
+            return true;
+        else if (returnType == other.returnType)
+            return nameAndParams < other.nameAndParams;
+        else
+            return false;
+    }
+};
+
+
 // try to limit the voluminous output a little
-static std::set<std::string> callSet;
-static std::set<std::string> definitionSet;
+static std::set<MyFuncInfo> callSet;
+static std::set<MyFuncInfo> definitionSet;
 
 
 class UnusedMethods:
@@ -57,10 +75,10 @@ public:
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
         // writing to the same logfile
         std::string output;
-        for (const std::string & s : callSet)
-            output += "call:\t" + s + "\t\n";
-        for (const std::string & s : definitionSet)
-            output += "definition:\t" + s + "\t\n";
+        for (const MyFuncInfo & s : callSet)
+            output += "call:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
+        for (const MyFuncInfo & s : definitionSet)
+            output += "definition:\t" + s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocation + "\n";
         ofstream myfile;
         myfile.open( SRCDIR "/unusedmethods.log", ios::app | ios::out);
         myfile << output;
@@ -72,9 +90,12 @@ public:
     bool VisitDeclRefExpr( const DeclRefExpr* );
     bool VisitCXXConstructExpr( const CXXConstructExpr* );
     bool VisitVarDecl( const VarDecl* );
+private:
+    void logCallToRootMethods(const FunctionDecl* functionDecl);
+    MyFuncInfo niceName(const FunctionDecl* functionDecl);
 };
 
-static std::string niceName(const FunctionDecl* functionDecl)
+MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
 {
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
@@ -86,31 +107,36 @@ static std::string niceName(const FunctionDecl* functionDecl)
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 #endif
 
-    std::string s =
-        compat::getReturnType(*functionDecl).getCanonicalType().getAsString()
-        + " ";
+    MyFuncInfo aInfo;
+    aInfo.returnType = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
+
     if (isa<CXXMethodDecl>(functionDecl)) {
         const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
-        s += recordDecl->getQualifiedNameAsString();
-        s += "::";
+        aInfo.nameAndParams += recordDecl->getQualifiedNameAsString();
+        aInfo.nameAndParams += "::";
     }
-    s += functionDecl->getNameAsString() + "(";
+    aInfo.nameAndParams += functionDecl->getNameAsString() + "(";
     bool bFirst = true;
     for (const ParmVarDecl *pParmVarDecl : functionDecl->params()) {
         if (bFirst)
             bFirst = false;
         else
-            s += ",";
-        s += pParmVarDecl->getType().getCanonicalType().getAsString();
+            aInfo.nameAndParams += ",";
+        aInfo.nameAndParams += pParmVarDecl->getType().getCanonicalType().getAsString();
     }
-    s += ")";
+    aInfo.nameAndParams += ")";
     if (isa<CXXMethodDecl>(functionDecl) && dyn_cast<CXXMethodDecl>(functionDecl)->isConst()) {
-        s += " const";
+        aInfo.nameAndParams += " const";
     }
-    return s;
+
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocation() );
+    StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
+    aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
+
+    return aInfo;
 }
 
-static void logCallToRootMethods(const FunctionDecl* functionDecl)
+void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl)
 {
     functionDecl = functionDecl->getCanonicalDecl();
     bool bPrinted = false;
@@ -127,8 +153,7 @@ static void logCallToRootMethods(const FunctionDecl* functionDecl)
     }
     if (!bPrinted)
     {
-        std::string s = niceName(functionDecl);
-        callSet.insert(s);
+        callSet.insert(niceName(functionDecl));
     }
 }
 
@@ -170,8 +195,36 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 
     FunctionDecl* calleeFunctionDecl = expr->getDirectCallee();
     if (calleeFunctionDecl == nullptr) {
+        Expr* callee = expr->getCallee()->IgnoreParenImpCasts();
+        DeclRefExpr* dr = dyn_cast<DeclRefExpr>(callee);
+        if (dr) {
+            calleeFunctionDecl = dyn_cast<FunctionDecl>(dr->getDecl());
+            if (calleeFunctionDecl)
+                goto gotfunc;
+        }
+        /*
+        // ignore case where we can't determine the target of the call because we're inside a template
+        if (isa<CXXDependentScopeMemberExpr>(callee))
+            return true;
+        if (isa<UnresolvedLookupExpr>(callee))
+            return true;
+        if (isa<UnresolvedMemberExpr>(callee))
+            return true;
+        if (isa<DependentScopeDeclRefExpr>(callee))
+            return true;
+        // ignore this, doesn't really exist (side-effect of template expansion on scalar types)
+        if (isa<CXXPseudoDestructorExpr>(callee))
+            return true;
+        expr->dump();
+        std::string name = compiler.getSourceManager().getFilename(expansionLoc);
+        std::string sourceLocation = name + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
+        cout << sourceLocation << endl;
+        throw "Cant touch this";
+        */
         return true;
     }
+
+gotfunc:
     // if we see a call to a function, it may effectively create new code,
     // if the function is templated. However, if we are inside a template function,
     // calling another function on the same template, the same problem occurs.

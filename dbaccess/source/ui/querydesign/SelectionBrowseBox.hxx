@@ -201,7 +201,6 @@ namespace dbaui
         virtual void                CellModified() SAL_OVERRIDE;
         virtual bool                SaveModified() SAL_OVERRIDE;
         virtual void                Init() SAL_OVERRIDE;
-        sal_uInt32                  GetTotalCellWidth(long nRow, sal_uInt16 nColId) const;
         virtual void                ColumnResized( sal_uInt16 nColId ) SAL_OVERRIDE;
 
         virtual sal_uInt32          GetTotalCellWidth(long nRow, sal_uInt16 nColId) SAL_OVERRIDE;

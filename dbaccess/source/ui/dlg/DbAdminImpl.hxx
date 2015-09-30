@@ -92,8 +92,6 @@ namespace dbaui
 
         inline css::uno::Reference< css::uno::XComponentContext > getORB() const { return m_xContext; }
 
-        css::uno::Reference< css::sdb::XDatabaseContext > getDatabaseContext() const { return m_xDatabaseContext; }
-
         /** creates a new connection. The caller is responsible to dispose it !!!!
         */
         ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool>      createConnection();

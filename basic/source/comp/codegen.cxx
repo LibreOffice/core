@@ -468,11 +468,11 @@ class OffSetAccumulator : public PCodeVisitor< T >
 public:
 
     OffSetAccumulator() : m_nNumOp0(0), m_nNumSingleParams(0), m_nNumDoubleParams(0){}
-    virtual void start( sal_uInt8* /*pStart*/ ){}
-    virtual void processOpCode0( SbiOpcode /*eOp*/ ){ ++m_nNumOp0; }
-    virtual void processOpCode1( SbiOpcode /*eOp*/, T /*nOp1*/ ){  ++m_nNumSingleParams; }
-    virtual void processOpCode2( SbiOpcode /*eOp*/, T /*nOp1*/, T /*nOp2*/ ) { ++m_nNumDoubleParams; }
-    virtual void end(){}
+    virtual void start( sal_uInt8* /*pStart*/ ) SAL_OVERRIDE {}
+    virtual void processOpCode0( SbiOpcode /*eOp*/ ) SAL_OVERRIDE { ++m_nNumOp0; }
+    virtual void processOpCode1( SbiOpcode /*eOp*/, T /*nOp1*/ ) SAL_OVERRIDE {  ++m_nNumSingleParams; }
+    virtual void processOpCode2( SbiOpcode /*eOp*/, T /*nOp1*/, T /*nOp2*/ ) SAL_OVERRIDE { ++m_nNumDoubleParams; }
+    virtual void end() SAL_OVERRIDE {}
     S offset()
     {
         T result = 0 ;
@@ -480,25 +480,24 @@ public:
         result = m_nNumOp0 + ( ( sizeof(S) + 1 ) * m_nNumSingleParams ) + ( (( sizeof(S) * 2 )+ 1 )  * m_nNumDoubleParams );
         return std::min(static_cast<T>(max), result);
     }
-   virtual bool processParams(){ return false; }
+   virtual bool processParams() SAL_OVERRIDE { return false; }
 };
 
 
 
 template < class T, class S >
-
 class BufferTransformer : public PCodeVisitor< T >
 {
     sal_uInt8* m_pStart;
     SbiBuffer m_ConvertedBuf;
 public:
     BufferTransformer():m_pStart(NULL), m_ConvertedBuf( NULL, 1024 ) {}
-    virtual void start( sal_uInt8* pStart ){ m_pStart = pStart; }
-    virtual void processOpCode0( SbiOpcode eOp )
+    virtual void start( sal_uInt8* pStart ) SAL_OVERRIDE { m_pStart = pStart; }
+    virtual void processOpCode0( SbiOpcode eOp ) SAL_OVERRIDE
     {
         m_ConvertedBuf += (sal_uInt8)eOp;
     }
-    virtual void processOpCode1( SbiOpcode eOp, T nOp1 )
+    virtual void processOpCode1( SbiOpcode eOp, T nOp1 ) SAL_OVERRIDE
     {
         m_ConvertedBuf += (sal_uInt8)eOp;
         switch( eOp )
@@ -523,7 +522,7 @@ public:
         }
         m_ConvertedBuf += static_cast<S>(nOp1);
     }
-    virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 )
+    virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) SAL_OVERRIDE
     {
         m_ConvertedBuf += (sal_uInt8)eOp;
         if ( eOp == _CASEIS )
@@ -533,8 +532,8 @@ public:
         m_ConvertedBuf += static_cast<S>(nOp2);
 
     }
-    virtual bool processParams(){ return true; }
-    virtual void end() {}
+    virtual bool processParams() SAL_OVERRIDE { return true; }
+    virtual void end() SAL_OVERRIDE {}
     // yeuch, careful here, you can only call
     // GetBuffer on the returned SbiBuffer once, also
     // you (as the caller) get to own the memory

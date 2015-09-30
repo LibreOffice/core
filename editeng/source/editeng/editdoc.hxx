@@ -552,7 +552,6 @@ public:
 
     EditLine&   operator = ( const EditLine& rLine );
     friend bool operator == ( const EditLine& r1,  const EditLine& r2  );
-    friend bool operator != ( const EditLine& r1,  const EditLine& r2  );
 };
 
 

@@ -55,7 +55,6 @@ using namespace ::com::sun::star::accessibility;
 
 #define DEFAULT_QUERY_COLS  20
 #define DEFAULT_SIZE        GetTextWidth("0") * 30
-#define CHECKBOX_SIZE       10
 #define HANDLE_ID            0
 #define HANDLE_COLUMN_WITDH 70
 #define SORT_COLUMN_NONE    0xFFFFFFFF
@@ -2315,16 +2314,6 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
         ActivateCell(nCellIndex, nColId);
 
     static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
-}
-
-sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRow, sal_uInt16 nColId) const
-{
-
-    long nRowId = GetRealRow(nRow);
-    if (nRowId == BROW_VIS_ROW)
-        return CHECKBOX_SIZE;
-    else
-        return  GetDataWindow().GetTextWidth(GetCellText(nRowId, nColId));
 }
 
 void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)

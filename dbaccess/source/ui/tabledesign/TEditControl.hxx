@@ -118,8 +118,6 @@ namespace dbaui
         void SetPrimaryKey( bool bSet );
         bool IsPrimaryKey();
 
-        DECL_LINK(ControlPreNotifyHdl, NotifyEvent*);
-
     public:
         explicit OTableEditorCtrl(vcl::Window* pParentWin);
         virtual ~OTableEditorCtrl();
@@ -143,7 +141,6 @@ namespace dbaui
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const css::uno::Any& _rSaveData ) SAL_OVERRIDE;
         virtual css::uno::Any  GetCellData( long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
         virtual void SetControlText( long nRow, sal_uInt16 nColId, const OUString& rText ) SAL_OVERRIDE;
-        virtual OUString GetControlText( long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
 
         virtual OTableDesignView* GetView() const SAL_OVERRIDE;
 
@@ -175,7 +172,6 @@ namespace dbaui
         virtual void paste() SAL_OVERRIDE;
 
     private:
-        DECL_LINK( StartIndexing, void* );
         DECL_LINK_TYPED( DelayedCut, void*, void );
         DECL_LINK_TYPED( DelayedPaste, void*, void );
         DECL_LINK_TYPED( DelayedDelete, void*, void );

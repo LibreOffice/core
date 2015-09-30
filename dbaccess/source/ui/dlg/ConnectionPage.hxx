@@ -63,9 +63,6 @@ namespace dbaui
 
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
-        inline void enableConnectionURL() { m_pConnectionURL->SetReadOnly(false); }
-        inline void disableConnectionURL() { m_pConnectionURL->SetReadOnly(); }
-
         /** changes the connection URL.
             <p>The new URL must be of the type which is currently selected, only the parts which do not
             affect the type may be changed (compared to the previous URL).</p>

@@ -53,12 +53,6 @@ typedef struct
     int   x, y;
 } ZZPoint;
 
-inline void allocPoint(ZZPoint &target, ZZPoint &src)
-{
-     target.x = src.x;
-     target.y = src.y;
-}
-
 /**
  * @short Size
  */

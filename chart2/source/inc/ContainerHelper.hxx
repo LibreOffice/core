@@ -73,32 +73,6 @@ template< class Container >
     return aResult;
 }
 
-/** converts a UNO sequence into a standard container. For convenience see the
-    methods SequenceToVector, etc. below. (In contrast to
-    SequenceToSTLSequenceContainer this works for all standard containers)
-
-    input:  uno::Sequence
-    output: a standard container that has an insert( iterator, key ) method (all
-            standard containers)
-    note:   for containers implementing the Concept of a Sequence (vector, deque,
-            list, slist) use SequenceToSTLSequenceContainer for better speed
-
-    example:
-
-    Sequence< sal_Int32 > aSequence;
-    ::std::set< sal_Int32 > aVector(
-        ContainerToSequence::SequenceToSTLContainer< ::std::set< sal_Int32 > >( aSequence );
-*/
-template< class Container >
-    Container
-    SequenceToSTLContainer( const ::com::sun::star::uno::Sequence< typename Container::value_type > & rSeq )
-{
-    Container aResult;
-    ::std::copy( rSeq.begin(), rSeq.end(),
-                 ::std::inserter< Container >( aResult, aResult.begin()));
-    return aResult;
-}
-
 // concrete container methods for convenience
 
 /** converts a UNO sequence into a standard vector of same value type
@@ -113,20 +87,6 @@ template< typename T >
     SequenceToVector( const ::com::sun::star::uno::Sequence< T > & rSeq )
 {
     return SequenceToSTLSequenceContainer< ::std::vector< T > >( rSeq );
-}
-
-/** converts a UNO sequence into a standard set of same value type
-
-    example:
-
-    Sequence< sal_Int32 > aSequence;
-    ::std::set< sal_Int32 > aVector( ContainerHelper::SequenceToSet( aSequence ));
- */
-template< typename T >
-    ::std::set< T >
-    SequenceToSet( const ::com::sun::star::uno::Sequence< T > & rSeq )
-{
-    return SequenceToSTLContainer< ::std::set< T > >( rSeq );
 }
 
 /** converts the keys of a Pair Associative Container into a UNO sequence

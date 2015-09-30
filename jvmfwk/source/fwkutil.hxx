@@ -64,9 +64,6 @@ struct FwkMutex: public ::rtl::Static<osl::Mutex, FwkMutex> {};
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData);
 rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data);
 
-OUString getPlatform();
-
-
 OUString getDirFromFile(const OUString& usFilePath);
 
 enum FileStatus
@@ -94,7 +91,6 @@ FileStatus checkFileURL(const OUString & path);
 
 bool isAccessibilitySupportDesired();
 
-OUString retrieveClassPath( OUString const & macro );
 }
 #endif
 

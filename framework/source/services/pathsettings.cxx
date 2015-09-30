@@ -636,7 +636,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
 
     // avoid duplicates, by removing the writeable path from
     // the user defined path list if it happens to be there too
-    OUStringList::iterator aI = find(aPathVal.lUserPaths, aPathVal.sWritePath);
+    OUStringList::iterator aI = std::find(aPathVal.lUserPaths.begin(), aPathVal.lUserPaths.end(), aPathVal.sWritePath);
     if (aI != aPathVal.lUserPaths.end())
         aPathVal.lUserPaths.erase(aI);
 
@@ -724,8 +724,8 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
         else
         {
             if (
-                (  find(rPath.lInternalPaths, sOld) == rPath.lInternalPaths.end()) &&
-                (  find(rPath.lUserPaths, sOld)     == rPath.lUserPaths.end()    ) &&
+                (  std::find(rPath.lInternalPaths.begin(), rPath.lInternalPaths.end(), sOld) == rPath.lInternalPaths.end()) &&
+                (  std::find(rPath.lUserPaths.begin(), rPath.lUserPaths.end(), sOld)     == rPath.lUserPaths.end()    ) &&
                 (! rPath.sWritePath.equals(sOld)                                     )
                )
                rPath.lUserPaths.push_back(sOld);
@@ -1056,10 +1056,10 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
          ++pIt                                 )
     {
         const OUString& rItem = *pIt;
-        OUStringList::iterator pItem = find(lList, rItem);
+        OUStringList::iterator pItem = std::find(lList.begin(), lList.end(), rItem);
         if (pItem != lList.end())
             lList.erase(pItem);
-        pItem = find(rPath.lUserPaths, rItem);
+        pItem = std::find(rPath.lUserPaths.begin(), rPath.lUserPaths.end(), rItem);
         if (pItem != rPath.lUserPaths.end())
             rPath.lUserPaths.erase(pItem);
     }
@@ -1069,7 +1069,7 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
     while ( pIt != rPath.lUserPaths.end() )
     {
         const OUString& rItem = *pIt;
-        OUStringList::iterator pItem = find(lList, rItem);
+        OUStringList::iterator pItem = std::find(lList.begin(), lList.end(), rItem);
         if ( pItem == lList.end() )
         {
             rPath.lUserPaths.erase(pIt);
@@ -1087,13 +1087,13 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
          ++pIt                             )
     {
         const OUString& rItem = *pIt;
-        OUStringList::iterator pItem = find(lList, rItem);
+        OUStringList::iterator pItem = std::find(lList.begin(), lList.end(), rItem);
         if (pItem != lList.end())
             lList.erase(pItem);
     }
 
     // Erase the write path from lList
-    OUStringList::iterator pItem = find(lList, rPath.sWritePath);
+    OUStringList::iterator pItem = std::find(lList.begin(), lList.end(), rPath.sWritePath);
     if (pItem != lList.end())
         lList.erase(pItem);
 }

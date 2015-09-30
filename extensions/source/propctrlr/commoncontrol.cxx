@@ -117,24 +117,6 @@ namespace pcr
     }
 
 
-    bool ControlHelper::handlePreNotify(NotifyEvent& rNEvt)
-    {
-        if (MouseNotifyEvent::KEYINPUT == rNEvt.GetType())
-        {
-            const vcl::KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
-            sal_uInt16 nKey = aKeyCode.GetCode();
-
-            if (nKey == KEY_RETURN && !aKeyCode.IsShift())
-            {
-                notifyModifiedValue();
-                impl_activateNextControl_nothrow();
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     IMPL_LINK( ControlHelper, ModifiedHdl, vcl::Window*, /*_pWin*/ )
     {
         if ( m_pModifyListener )

@@ -117,38 +117,6 @@ bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
     return !operator==(r);
 }
 
-namespace {
-
-OUString StringConversionToString(ScCalcConfig::StringConversion eConv)
-{
-    switch (eConv)
-    {
-    case ScCalcConfig::StringConversion::ILLEGAL: return OUString("ILLEGAL");
-    case ScCalcConfig::StringConversion::ZERO: return OUString("ZERO");
-    case ScCalcConfig::StringConversion::UNAMBIGUOUS: return OUString("UNAMBIGUOUS");
-    case ScCalcConfig::StringConversion::LOCALE: return OUString("LOCALE");
-    default: return OUString::number((int) eConv);
-    }
-}
-
-} // anonymous namespace
-
-std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
-{
-    rStream << "{"
-        "StringRefAddressSyntax=" << rConfig.meStringRefAddressSyntax << ","
-        "StringConversion=" << StringConversionToString(rConfig.meStringConversion) << ","
-        "EmptyStringAsZero=" << (rConfig.mbEmptyStringAsZero?"Y":"N") << ","
-        "HasStringRefSyntax=" << (rConfig.mbHasStringRefSyntax?"Y":"N") << ","
-        "OpenCLSubsetOnly=" << (rConfig.mbOpenCLSubsetOnly?"Y":"N") << ","
-        "OpenCLAutoSelect=" << (rConfig.mbOpenCLAutoSelect?"Y":"N") << ","
-        "OpenCLDevice='" << rConfig.maOpenCLDevice << "',"
-        "OpenCLMinimumFormulaGroupSize=" << rConfig.mnOpenCLMinimumFormulaGroupSize << ","
-        "OpenCLSubsetOpCodes={" << ScOpCodeSetToSymbolicString(rConfig.mpOpenCLSubsetOpCodes) << "},"
-        "}";
-    return rStream;
-}
-
 OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
 {
     OUStringBuffer result;

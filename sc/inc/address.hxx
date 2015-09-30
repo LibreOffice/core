@@ -131,11 +131,6 @@ SAL_WARN_UNUSED_RESULT inline SCTAB SanitizeTab( SCTAB nTab )
     return nTab < 0 ? 0 : (nTab > MAXTAB ? MAXTAB : nTab);
 }
 
-SAL_WARN_UNUSED_RESULT inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
-{
-    return nTab < 0 ? 0 : (nTab > nMaxTab ? nMaxTab : nTab);
-}
-
 //  ScAddress
 // The old cell address is combined in one UINT32:
 // +---+---+-------+

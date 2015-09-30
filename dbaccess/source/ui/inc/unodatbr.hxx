@@ -429,11 +429,6 @@ namespace dbaui
 
         void transferChangedControlProperty(const OUString& _rProperty, const css::uno::Any& _rNewValue);
 
-        css::uno::Reference< css::sdbc::XConnection > connectWithStatus(
-            const OUString& _rDataSourceName,
-            void* _pTreeListUserData    // in reality a DBTreeListUserData*, but we do not know this class here...
-        );
-
         // checks whether the given tree entry denotes a data source
         bool impl_isDataSourceEntry( SvTreeListEntry* _pEntry ) const;
 

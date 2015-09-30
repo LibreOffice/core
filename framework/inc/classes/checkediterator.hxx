@@ -69,71 +69,6 @@ class CheckedIterator
         // interface methods
 
         /*-****************************************************************************************************
-            @short      initialize instance with valid container
-            @descr      Set new container at an instance of this class. The other member will set automatically!
-                        m_pPosition = first element in container
-                        m_eEndState = BEFOREEND
-            @param      "rContainer", must be a valid reference to an existing container.
-            @onerror    An assertion is thrown.
-        *//*-*****************************************************************************************************/
-
-        inline void initialize( const TContainer& rContainer )
-        {
-            // Check incoming parameter. We don't accept all!
-            SAL_WARN_IF( &rContainer==NULL, "fwk", "CheckedIterator::initialize(): Invalid parameter detected!" );
-            SAL_WARN_IF( m_eEndState!=E_UNKNOWN, "fwk", "CheckedIterator::initialize(): Instance already initialized! Don't do it again." );
-
-            if( m_eEndState == E_UNKNOWN )
-            {
-                // Set new container and update other member.
-                m_pContainer = &rContainer;
-                m_eEndState  = E_BEFOREEND;
-                m_pPosition  = m_pContainer->begin();
-            }
-        }
-
-        /*-****************************************************************************************************
-            @short      set internal states to E_END
-            @descr      Sometimes we need a "walking" check-iterator which is initialized with the END-state!
-                        We need it to return one default value if no other ones exist ...
-
-            @seealso    using in class FilterCache!
-        *//*-*****************************************************************************************************/
-
-        inline void setEnd()
-        {
-            m_pContainer = NULL;
-            m_eEndState  = E_END;
-        }
-
-        /*-****************************************************************************************************
-            @short      set internal states to E_AFTEREND
-            @descr      Sometimes we need a "walking" check-iterator which is initialized with AFTEREND-state!
-                        We need it if we don't have a container but must prevent us against further searching!
-
-            @seealso    using in class FilterCache!
-        *//*-*****************************************************************************************************/
-
-        inline void setAfterEnd()
-        {
-            m_pContainer = NULL;
-            m_eEndState  = E_AFTEREND;
-        }
-
-        /*-****************************************************************************************************
-            @short      reset this iterator
-            @descr      It must be called on an already initialized iterator.
-                        Means the member m_pContainer must be valid. Otherwise the reaction
-                        isn't defined.
-        *//*-*****************************************************************************************************/
-
-        inline void reset()
-        {
-            m_eEndState  = E_UNKNOWN;
-            m_pContainer = NULL;
-        }
-
-        /*-****************************************************************************************************
             @short      step to next element in container.
             @descr      If end of container is reached we change our internal "m_eEndState".
                         If end reached for first time; we set it to E_END;
@@ -166,22 +101,6 @@ class CheckedIterator
                                     break;
             }
             return *this;
-        }
-
-        /*-****************************************************************************************************
-            @short      support readonly access to container entry
-            @descr      Use it to get the value of current container item.
-            @return     A reference to value of container entry.
-        *//*-*****************************************************************************************************/
-
-        inline typename TContainer::const_iterator getEntry()
-        {
-            // Warn programmer if he forget to initialize these object ...
-            SAL_WARN_IF( m_pContainer==NULL, "fwk", "CheckedIterator::getEntry(): Object not initialized!" );
-            // or try to read a non existing element!
-            SAL_WARN_IF( m_eEndState!=E_BEFOREEND, "fwk", "CheckedIterator::getEntry(): Wrong using of class detected!" );
-
-            return m_pPosition;
         }
 
     //  private member

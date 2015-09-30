@@ -449,11 +449,6 @@ class ScChangeActionDelMoveEntry : public ScChangeActionLinkEntry
         ScChangeActionMove* pMove,
         short nFrom, short nTo );
 
-    ScChangeActionDelMoveEntry* GetNext()
-                            {
-                                return static_cast<ScChangeActionDelMoveEntry*>(
-                                    ScChangeActionLinkEntry::GetNext());
-                            }
     inline ScChangeActionMove* GetMove();
 
 public:
@@ -482,8 +477,6 @@ class ScChangeActionDel : public ScChangeAction
 
     ScChangeActionDel( const ScRange& rRange, SCsCOL nDx, SCsROW nDy, ScChangeTrack* );
     virtual ~ScChangeActionDel();
-
-    ScChangeActionIns*  GetCutOffInsert() { return pCutOff; }
 
     virtual void                AddContent( ScChangeActionContent* ) SAL_OVERRIDE;
     virtual void                DeleteCellEntries() SAL_OVERRIDE;

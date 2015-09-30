@@ -45,8 +45,6 @@ namespace dbaui
         // late Constructor, the base class CREATES Listbox on first call
         virtual bool         Init() SAL_OVERRIDE;
 
-        inline sal_Int32     GetAliasNum() const { return m_nAliasNum; }
-
         bool                 ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo);
         bool                 ExistsAVisitedConn() const;
 

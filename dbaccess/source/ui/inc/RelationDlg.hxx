@@ -63,19 +63,7 @@ namespace dbaui
         virtual ~ORelationDialog();
         virtual void dispose() SAL_OVERRIDE;
 
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }
-
         virtual short Execute() SAL_OVERRIDE;
-
-        /** getTableMap gives access to the table window map
-            @retrun the table window from the join view
-        */
-        OJoinTableView::OTableWindowMap* getTableMap() const { return m_pTableMap; }
-
-        /** getConnectionData returns the current connection data
-            @return the current connection data
-        */
-        virtual TTableConnectionData::value_type getConnectionData() const SAL_OVERRIDE;
 
         /** setValid set the valid inside, can be used for OK buttons
             @param  _bValid true when the using control allows an update

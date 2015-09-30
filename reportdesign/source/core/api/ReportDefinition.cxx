@@ -2672,11 +2672,6 @@ uno::Reference< document::XDocumentProperties > SAL_CALL OReportDefinition::getD
     return m_pImpl->m_xDocumentProperties;
 }
 
-uno::Reference< uno::XComponentContext > OReportDefinition::getContext() const
-{
-    return m_aProps->m_xContext;
-}
-
 uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFlavor& aFlavor ) throw (datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
 {
     uno::Any aResult;
