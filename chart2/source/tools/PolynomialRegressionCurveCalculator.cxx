@@ -238,6 +238,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     OUStringBuffer aBuf( "f(x) = ");
 
     sal_Int32 aLastIndex = mCoefficients.size() - 1;
+    bool bFindValue = false;
     for (sal_Int32 i = aLastIndex; i >= 0; i--)
     {
         double aValue = mCoefficients[i];
@@ -248,14 +249,17 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         else if (aValue < 0.0)
         {
             aBuf.append( " - " );
+            aValue = - aValue;
         }
         else
         {
-            if (i != aLastIndex)
+            if ( bFindValue )
                 aBuf.append( " + " );
         }
+        bFindValue = true;
 
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, std::abs( aValue ) ) );
+        if ( i == 0 || !rtl::math::approxEqual( aValue , 1.0 ) )
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, aValue ) );
 
         if(i > 0)
         {
