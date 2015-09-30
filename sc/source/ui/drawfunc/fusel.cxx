@@ -535,7 +535,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     //  not in UNO controls
                     //  #i32352# not in media objects
 
-                    else if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) && !pObj->ISA(SdrMediaObj) )
+                    else if ( dynamic_cast<const SdrTextObj*>( pObj) != nullptr && dynamic_cast<const SdrUnoObj*>( pObj) == nullptr && dynamic_cast<const SdrMediaObj*>( pObj) ==  nullptr )
                     {
                         OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                         bool bVertical = ( pOPO && pOPO->IsVertical() );

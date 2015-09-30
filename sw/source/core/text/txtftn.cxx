@@ -231,7 +231,7 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrm* pFrm, SwTwips nLower )
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 SwRect aRect( pAnchoredObj->GetObjRect() );
 
-                if ( !pAnchoredObj->ISA(SwFlyFrm) ||
+                if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) ==  nullptr ||
                      static_cast<SwFlyFrm*>(pAnchoredObj)->IsValid() )
                 {
                     const SwTwips nBottom = (aRect.*fnRect->fnGetBottom)();

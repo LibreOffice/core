@@ -4818,7 +4818,7 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllSt
             for ( const SfxStyleSheetBase* pStyle = aIter.First(); pStyle;
                                            pStyle = aIter.Next() )
             {
-                const ScStyleSheet* pScStyle = PTR_CAST( ScStyleSheet, pStyle );
+                const ScStyleSheet* pScStyle = dynamic_cast<const ScStyleSheet*>( pStyle  );
                 if ( pScStyle )
                     pScStyle->SetUsage( ScStyleSheet::NOTUSED );
             }

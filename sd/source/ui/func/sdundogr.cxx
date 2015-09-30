@@ -35,7 +35,7 @@ bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
 {
     bool bRet = false;
 
-    if( pNextAction && pNextAction->ISA( SdUndoAction ) )
+    if( pNextAction && dynamic_cast< const SdUndoAction *>( pNextAction ) !=  nullptr )
     {
         SdUndoAction* pClone = static_cast< SdUndoAction* >( pNextAction )->Clone();
 

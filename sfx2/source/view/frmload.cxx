@@ -331,7 +331,7 @@ namespace
 
         // On the other side some special slots return a boolean state,
         // which can be set to FALSE.
-        const SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, _pResult );
+        const SfxBoolItem *pItem = dynamic_cast<const SfxBoolItem*>( _pResult  );
         if ( pItem )
             bSuccess = pItem->GetValue();
 
@@ -402,7 +402,8 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 
 SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel2 >& i_rxDocument )
 {
-    for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, false ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, false ) )
+    for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( nullptr, false ); pDoc;
+                                    pDoc = SfxObjectShell::GetNext( *pDoc, nullptr, false ) )
     {
         if ( i_rxDocument == pDoc->GetModel() )
         {

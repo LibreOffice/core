@@ -111,7 +111,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     //Special case align by menu
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
     {
-        OSL_ENSURE(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem expected");
+        OSL_ENSURE(dynamic_cast<const SfxEnumItem*>( pItem),"SfxEnumItem expected" );
         nSlotId = nSlotId + static_cast<const SfxEnumItem*>(pItem)->GetValue();
         nSlotId++;
     }
@@ -217,7 +217,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                         const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                         SfxItemSet aSet( *aNewAttr.GetPool(), pRange );
-                        FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast<SwWebView*>(&GetView()));
+                        FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>(&GetView()) != nullptr );
                         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
 
                         aSet.Put( aNewAttr, false );

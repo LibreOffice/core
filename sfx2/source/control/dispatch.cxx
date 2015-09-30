@@ -1684,7 +1684,7 @@ bool SfxDispatcher::_FindServer(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
             SfxShell *pSh = GetShell(nShell);
             if ( pSh == NULL )
                 return false;
-            if ( pSh->ISA(SfxViewShell) )
+            if ( dynamic_cast< const SfxViewShell *>( pSh ) !=  nullptr )
             {
                 const SfxSlot* pSlot = pSh->GetVerbSlot_Impl(nSlot);
                 if ( pSlot )
@@ -1826,7 +1826,7 @@ bool SfxDispatcher::_FillState(const SfxSlotServer& rSvr, SfxItemSet& rState,
                   pItem;
                   pItem = aIter.NextItem() )
             {
-                if ( !IsInvalidItem(pItem) && !pItem->ISA(SfxVoidItem) )
+                if ( !IsInvalidItem(pItem) && dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
                 {
                     sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
                     SAL_INFO_IF(
@@ -2008,7 +2008,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, ::com::sun::star::uno::
         else
         {
             ::com::sun::star::uno::Any aState;
-            if ( !pItem->ISA(SfxVoidItem) )
+            if ( dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
             {
                 sal_uInt16 nSubId( 0 );
                 SfxItemPool& rPool = pShell->GetPool();
@@ -2032,7 +2032,7 @@ bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const
     if ( nShell < nShellCount )
     {
         SfxShell* pShell = *( xImp->aStack.rbegin() + nShell );
-        if( pShell->ISA( SfxModule ) || pShell->ISA( SfxApplication ) || pShell->ISA( SfxViewFrame ) )
+        if( dynamic_cast< const SfxModule *>( pShell ) != nullptr || dynamic_cast< const SfxApplication *>( pShell ) != nullptr || dynamic_cast< const SfxViewFrame *>( pShell ) !=  nullptr )
             return false;
         else
             return xImp->bReadOnly;
@@ -2117,7 +2117,7 @@ SfxModule* SfxDispatcher::GetModule() const
         SfxShell *pSh = GetShell(nShell);
         if ( pSh == NULL )
             return 0;
-        if ( pSh->ISA(SfxModule) )
+        if ( dynamic_cast< const SfxModule *>( pSh ) !=  nullptr )
             return static_cast<SfxModule*>(pSh);
     }
 }

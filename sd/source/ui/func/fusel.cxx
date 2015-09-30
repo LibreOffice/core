@@ -300,7 +300,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 bReturn = true;
             }
             else if(!rMEvt.IsMod2()
-                && mpViewShell->ISA(DrawViewShell)
+                && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
                 )
             {
                 if(mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER))
@@ -309,7 +309,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     if ( ! bSelectionOnly)
                         bReturn = AnimateObj(pObj, aMDPos);
 
-                    if (!bReturn && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dPolyScene)))
+                    if( !bReturn && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || dynamic_cast< const E3dPolyScene* >(pObj) !=  nullptr))
                     {
                         if(rMEvt.GetClicks() == 1)
                         {
@@ -1257,8 +1257,8 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 bAnimated = true;
             }
         }
-        else if (!mpDocSh->ISA(GraphicDocShell)        &&
-                 mpView->ISA(DrawView)                 &&
+        else if( dynamic_cast< const GraphicDocShell *>( mpDocSh ) ==  nullptr        &&
+                 dynamic_cast< const DrawView *>( mpView ) !=  nullptr                 &&
                  mpDoc->GetAnimationInfo(pObj))
         {
             /**********************************************************
@@ -1448,8 +1448,8 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
         }
 
         if (!bAnimated                               &&
-            mpView->ISA(DrawView)                 &&
-            !mpDocSh->ISA(GraphicDocShell)        &&
+            dynamic_cast< const DrawView *>( mpView ) !=  nullptr                 &&
+            dynamic_cast< const GraphicDocShell *>( mpDocSh ) ==  nullptr        &&
             SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) &&
             mpDoc->GetAnimationInfo(pObj))
         {

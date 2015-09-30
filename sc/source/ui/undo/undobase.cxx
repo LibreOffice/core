@@ -75,7 +75,7 @@ bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
     // AddUndoAction is only called with bTryMerg=sal_True
     // for automatic update.
 
-    if ( !pDetectiveUndo && pNextAction->ISA(ScUndoDraw) )
+    if ( !pDetectiveUndo && dynamic_cast<const ScUndoDraw*>( pNextAction) !=  nullptr )
     {
         // Take SdrUndoAction from ScUndoDraw Action,
         // ScUndoDraw is later deleted by the UndoManager

@@ -202,7 +202,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(rKEvt.GetKeyCode().IsMod1())
             {
-                if (mpViewShell->ISA(DrawViewShell))
+                if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
                 {
                     DrawViewShell* pDrawViewShell =
                         static_cast<DrawViewShell*>(mpViewShell);
@@ -217,7 +217,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         {
                             SdrObject* pObj = aIter.Next();
 
-                            if(pObj && pObj->ISA(SdrTextObj))
+                            if(pObj && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
                             {
                                 sal_uInt32 nInv(pObj->GetObjInventor());
                                 sal_uInt16 nKnd(pObj->GetObjIdentifier());
@@ -260,12 +260,12 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-                    if( pObj && pObj->ISA( SdrOle2Obj ) && !mpDocSh->IsUIActive() )
+                    if( pObj && dynamic_cast< const SdrOle2Obj* >( pObj ) !=  nullptr && !mpDocSh->IsUIActive() )
                     {
                         //HMHmpView->HideMarkHdl();
                         mpViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
                     }
-                    else if( pObj && pObj->IsEmptyPresObj() && pObj->ISA( SdrGrafObj ) )
+                    else if( pObj && pObj->IsEmptyPresObj() && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr )
                     {
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                     }
@@ -321,7 +321,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // increase zoom
                 mpViewShell->SetZoom(mpWindow->GetZoom() * 3 / 2);
 
-                if (mpViewShell->ISA(DrawViewShell))
+                if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
                     static_cast<DrawViewShell*>(mpViewShell)
                         ->SetZoomOnPage(false);
 
@@ -337,7 +337,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // decrease zoom
                 mpViewShell->SetZoom(mpWindow->GetZoom() * 2 / 3);
 
-                if (mpViewShell->ISA(DrawViewShell))
+                if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
                     static_cast<DrawViewShell*>(mpViewShell)
                         ->SetZoomOnPage(false);
 
@@ -399,7 +399,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         case KEY_HOME:
         {
             if (!mpView->IsTextEdit()
-                && mpViewShell->ISA(DrawViewShell)
+                && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
                 && !bSlideShow)
             {
                // jump to first page
@@ -412,7 +412,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         case KEY_END:
         {
             if (!mpView->IsTextEdit()
-                && mpViewShell->ISA(DrawViewShell)
+                && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
                 && !bSlideShow)
             {
                 // jump to last page
@@ -431,7 +431,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
                 break;
 
-            if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
+            if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bSlideShow)
             {
                 // The page-up key switches layers or pages depending on the
                 // modifier key.
@@ -478,7 +478,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
                 break;
-            if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
+            if(dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bSlideShow)
             {
                 // The page-down key switches layers or pages depending on the
                 // modifier key.
@@ -626,7 +626,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     bool bOldSuppress = false;
                     SdrEdgeObj* pEdgeObj = 0L;
 
-                    if(pHdl && pHdl->GetObj() && pHdl->GetObj()->ISA(SdrEdgeObj) && 0 == pHdl->GetPolyNum())
+                    if(pHdl && pHdl->GetObj() && 0 != dynamic_cast< const SdrEdgeObj *>( pHdl->GetObj() ) && 0 == pHdl->GetPolyNum())
                     {
                         pEdgeObj = static_cast<SdrEdgeObj*>(pHdl->GetObj());
 
@@ -811,7 +811,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
                 // #i118485# allow TextInput for OLEs, too
-                if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit())
+                if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr && pObj->HasTextEdit())
                 {
                     // use common IsSimpleCharInput from the EditEngine.
                     bool bPrintable(EditEngine::IsSimpleCharInput(rKEvt));
@@ -836,7 +836,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // test if there is a title object there. If yes, try to
                 // set it to edit mode and start typing...
-                if(mpViewShell->ISA(DrawViewShell)
+                if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
                     && EditEngine::IsSimpleCharInput(rKEvt))
                 {
                     DrawViewShell* pDrawViewShell =
@@ -852,7 +852,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         {
                             SdrObject* pObj = aIter.Next();
 
-                            if(pObj && pObj->ISA(SdrTextObj))
+                            if(pObj && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
                             {
                                 sal_uInt32 nInv(pObj->GetObjInventor());
                                 sal_uInt16 nKnd(pObj->GetObjIdentifier());
@@ -1044,7 +1044,7 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
         {
             const SfxPoolItem& rItem = pSet->Get( nSlotId );
 
-            if( rItem.ISA( SfxAllEnumItem ) )
+            if( dynamic_cast< const SfxAllEnumItem *>( &rItem ) !=  nullptr )
             {
                 nSlotValue = static_cast<const SfxAllEnumItem&>( rItem ).GetValue();
             }
@@ -1076,7 +1076,7 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
 
 void FuPoor::SwitchLayer (sal_Int32 nOffset)
 {
-    if(mpViewShell && mpViewShell->ISA(DrawViewShell))
+    if(mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
         DrawViewShell* pDrawViewShell =
             static_cast<DrawViewShell*>(mpViewShell);
@@ -1114,7 +1114,7 @@ void FuPoor::SwitchLayer (sal_Int32 nOffset)
 */
 bool FuPoor::cancel()
 {
-    if ( !this->ISA(FuSelection) )
+    if ( dynamic_cast< const FuSelection *>( this ) ==  nullptr )
     {
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         return true;

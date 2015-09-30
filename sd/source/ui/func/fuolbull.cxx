@@ -99,7 +99,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
                     std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
 
-                    if (mpView->ISA(OutlineView))
+                    if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
                     {
                         pOLV = static_cast<OutlineView*>(mpView)
                             ->GetViewByWindow(mpViewShell->GetActiveWindow());
@@ -236,7 +236,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
     std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
     {
-        if (mpView->ISA(OutlineView))
+        if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
         {
             pOLV = static_cast<OutlineView*>(mpView)
                 ->GetViewByWindow(mpViewShell->GetActiveWindow());

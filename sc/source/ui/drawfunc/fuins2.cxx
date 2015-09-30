@@ -551,9 +551,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
 
         if( pReqArgs->HasItem( FN_PARAM_4, &pItem ) )
         {
-            if ( pItem->ISA( SfxUInt16Item ) )
+            if ( dynamic_cast<const SfxUInt16Item*>( pItem) !=  nullptr )
                 nToTable = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-            else if ( pItem->ISA( SfxBoolItem ) )
+            else if ( dynamic_cast<const SfxBoolItem*>( pItem) !=  nullptr )
             {
                 //  in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
                 //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle

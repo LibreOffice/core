@@ -1106,7 +1106,7 @@ SbModule* StarBASIC::MakeModule32( const OUString& rName, const ModuleInfo& mInf
 
 void StarBASIC::Insert( SbxVariable* pVar )
 {
-    if( pVar->IsA( TYPE(SbModule) ) )
+    if( dynamic_cast<const SbModule*>(pVar) != nullptr)
     {
         pModules->Insert( pVar, pModules->Count() );
         pVar->SetParent( this );
@@ -1125,7 +1125,7 @@ void StarBASIC::Insert( SbxVariable* pVar )
 
 void StarBASIC::Remove( SbxVariable* pVar )
 {
-    if( pVar->IsA( TYPE(SbModule) ) )
+    if( dynamic_cast<const SbModule*>(pVar) != nullptr)
     {
         // #87540 Can be last reference!
         SbxVariableRef xVar = pVar;

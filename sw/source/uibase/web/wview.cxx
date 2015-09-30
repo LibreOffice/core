@@ -140,8 +140,8 @@ void SwWebView::SelectShell()
             for ( i = 0; true; ++i )
             {
                 pSfxShell = rDispatcher.GetShell( i );
-                if ( !( pSfxShell->ISA( SwBaseShell ) ||
-                    pSfxShell->ISA( SwDrawTextShell ) || pSfxShell->ISA( SwAnnotationShell ) ) )
+                if ( !( dynamic_cast< const SwBaseShell *>( pSfxShell ) !=  nullptr ||
+                    dynamic_cast< const SwDrawTextShell *>( pSfxShell ) || dynamic_cast< const SwAnnotationShell *>( pSfxShell ) !=  nullptr ) )
                     break;
             }
             if (i)
@@ -280,7 +280,7 @@ void SwWebView::SelectShell()
         GetEditWin().UpdatePointer(aPnt);
 
         if ( bInitFormShell && GetWrtShell().GetDrawView() )
-            GetFormShell()->SetView( PTR_CAST( FmFormView,
+            GetFormShell()->SetView( dynamic_cast< FmFormView* >(
                                                 GetWrtShell().GetDrawView()));
 
     }

@@ -24,6 +24,7 @@
 #include <sal/types.h>
 #include <svl/itemset.hxx>
 #include <svl/hint.hxx>
+#include <functional>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -39,8 +40,6 @@ class SfxViewFrame;
 struct SfxRequest_Impl;
 enum class SfxCallMode : sal_uInt16;
 
-
-
 class SFX2_DLLPUBLIC SfxRequest: public SfxHint
 {
 friend struct SfxRequest_Impl;
@@ -48,7 +47,6 @@ friend struct SfxRequest_Impl;
     sal_uInt16          nSlot;
     SfxAllItemSet*      pArgs;
     SfxRequest_Impl*    pImp;
-
 
 public:
     SAL_DLLPRIVATE void Record_Impl( SfxShell &rSh, const SfxSlot &rSlot,
@@ -82,8 +80,9 @@ public:
 
     static const SfxPoolItem* GetItem( const SfxItemSet*, sal_uInt16 nSlotId,
                                        bool bDeep = false,
-                                       TypeId aType = 0 );
-    const SfxPoolItem*  GetArg( sal_uInt16 nSlotId, bool bDeep = false, TypeId aType = 0 ) const;
+                                       std::function<bool ( const SfxPoolItem* )> isItemType = nullptr );
+    const SfxPoolItem*  GetArg( sal_uInt16 nSlotId, bool bDeep = false, std::function<bool ( const SfxPoolItem* )> isItemType = nullptr ) const;
+
     void                ReleaseArgs();
     void                SetReturnValue(const SfxPoolItem &);
     const SfxPoolItem*  GetReturnValue() const;
@@ -111,14 +110,17 @@ private:
     const SfxRequest&   operator=(const SfxRequest &) SAL_DELETED_FUNCTION;
 };
 
-
+template<class T> bool checkSfxPoolItem(const SfxPoolItem* pItem)
+{
+    return dynamic_cast<const T*>(pItem) != nullptr;
+}
 
 #define SFX_REQUEST_ARG(rReq, pItem, ItemType, nSlotId, bDeep) \
         const ItemType *pItem = static_cast<const ItemType*>( \
-                rReq.GetArg( nSlotId, bDeep, TYPE(ItemType) ) )
+                rReq.GetArg( nSlotId, bDeep, checkSfxPoolItem<ItemType> ) )
 #define SFX_ITEMSET_ARG(pArgs, pItem, ItemType, nSlotId, bDeep) \
     const ItemType *pItem = static_cast<const ItemType*>( \
-        SfxRequest::GetItem( pArgs, nSlotId, bDeep, TYPE(ItemType) ) )
+        SfxRequest::GetItem( pArgs, nSlotId, bDeep, checkSfxPoolItem<ItemType> ) )
 
 #endif
 

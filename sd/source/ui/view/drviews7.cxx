@@ -609,7 +609,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             // avoid clipboard initialization for
             // read-only presentation views (workaround for NT4.0
             // clipboard prob...)
-            if( !ISA(PresentationViewShell) )
+            if( dynamic_cast< const PresentationViewShell *>( this ) ==  nullptr )
             {
                 // create listener
                 mpClipEvtLstnr = new TransferableClipboardListener( LINK( this, DrawViewShell, ClipboardChanged ) );
@@ -1491,7 +1491,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                     if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
                     {
                         const SvxFieldData* pField = pFieldItem->GetField();
-                        if ( pField->ISA(SvxURLField) )
+                        if ( dynamic_cast< const SvxURLField *>( pField ) !=  nullptr )
                             bDisableEditHyperlink = false;
                     }
                 }
@@ -1499,7 +1499,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else
         {
-            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+            SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() );
 
             if ( pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor() )
             {

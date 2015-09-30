@@ -110,7 +110,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                             SdrMark*    pMark = rMarkList.GetMark(0);
                             SdrObject*  pObj = pMark->GetMarkedSdrObj();
 
-                            if( pObj->ISA( SdrGrafObj ) )
+                            if( dynamic_cast< SdrGrafObj *>( pObj ) !=  nullptr )
                             {
                                 pGrafObj = static_cast< SdrGrafObj* >( pObj );
 

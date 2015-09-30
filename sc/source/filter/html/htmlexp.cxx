@@ -1268,7 +1268,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                     if ( aSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET )
                     {
                         const SvxFieldData* pField = static_cast<const SvxFieldItem*>(pItem)->GetField();
-                        if ( pField && pField->ISA(SvxURLField) )
+                        if ( pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr )
                         {
                             bUrl = true;
                             const SvxURLField*  pURLField = static_cast<const SvxURLField*>(pField);

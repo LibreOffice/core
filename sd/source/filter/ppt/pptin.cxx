@@ -2395,7 +2395,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                     }
                     else if ( pTextObj->GetShapeType() == mso_sptPictureFrame )
                     {
-                        if ( !pTextObj->Count() && pObj->ISA( SdrGrafObj ) )
+                        if ( !pTextObj->Count() && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr )
                         {
                             bEmptyPresObj = false;
                             switch ( nPlaceholderId )
@@ -2576,7 +2576,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     if ( pObj )
     {
         // further setup placeholder objects
-        if( pObj->ISA(SdrPageObj) && pData )
+        if( dynamic_cast< const SdrPageObj *>( pObj ) !=  nullptr && pData )
         {
             const ProcessData* pProcessData=static_cast<const ProcessData*>(pData);
             if( pProcessData->pPage.page )
@@ -2623,7 +2623,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
 
                                         if( pTextObj && pTextObj->HasText() &&
-                                            !pObj->ISA( SdrObjGroup ) &&
+                                            dynamic_cast< SdrObjGroup *>( pObj ) ==  nullptr &&
                                             pAnimation->HasAnimateAssociatedShape() )
                                         {
                                             const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();

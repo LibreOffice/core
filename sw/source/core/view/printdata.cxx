@@ -120,8 +120,7 @@ void SwRenderData::MakeSwPrtOptions(
     SwPrintData & rOptions(*m_pPrtOptions);
 
     // get default print options
-    const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
-    bool bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
+    bool bWeb = dynamic_cast<const SwWebDocShell*>( pDocShell) !=  nullptr;
     ::sw::InitPrintOptionsFromApplication(rOptions, bWeb);
 
     // get print options to use from provided properties

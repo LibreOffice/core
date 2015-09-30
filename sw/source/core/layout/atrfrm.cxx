@@ -121,7 +121,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
         // It's suboptimal if the format is deleted beforehand.
         SwIterator<SwClient,SwFrameFormat> aIter(*pFormat);
         for(SwClient* pLast = aIter.First(); bDel && pLast; pLast = aIter.Next())
-            if(!pLast->IsA(TYPE(SwFrm)) || !SwXHeadFootText::IsXHeadFootText(pLast))
+            if(dynamic_cast<const SwFrm*>( pLast ) ==  nullptr || !SwXHeadFootText::IsXHeadFootText(pLast))
                 bDel = false;
     }
 
@@ -641,9 +641,9 @@ void SwFormatPageDesc::SwClientNotify( const SwModify& rModify, const SfxHint& r
         const SwModify* pMod = GetDefinedIn();
         if ( pMod )
         {
-            if( pMod->ISA( SwContentNode ) )
+            if( dynamic_cast<const SwContentNode*>( pMod) !=  nullptr )
                 const_cast<SwContentNode*>(static_cast<const SwContentNode*>(pMod))->SetAttr( aDfltDesc );
-            else if( pMod->ISA( SwFormat ))
+            else if( dynamic_cast<const SwFormat*>( pMod) !=  nullptr)
                 const_cast<SwFormat*>(static_cast<const SwFormat*>(pMod))->SetFormatAttr( aDfltDesc );
             else
             {
@@ -673,14 +673,14 @@ void SwFormatPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
         case RES_OBJECTDYING:
                 //The Pagedesc where I'm registered dies, therefore I unregister
                 //from that format. During this I get deleted!
-            if( IS_TYPE( SwFormat, pDefinedIn ))
+            if( typeid(SwFormat) == typeid( pDefinedIn ))
             {
                 bool const bResult =
                     static_cast<SwFormat*>(pDefinedIn)->ResetFormatAttr(RES_PAGEDESC);
                 OSL_ENSURE( bResult, "FormatPageDesc not deleted" );
                 (void) bResult; // unused in non-debug
             }
-            else if( IS_TYPE( SwContentNode, pDefinedIn ))
+            else if( typeid(SwContentNode) == typeid( pDefinedIn ))
             {
                 bool const bResult = static_cast<SwContentNode*>(pDefinedIn)
                         ->ResetAttr(RES_PAGEDESC);
@@ -2663,7 +2663,7 @@ SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
 {
     SwRect aRet;
     SwFrm *pFrm = 0;
-    if( ISA( SwSectionFormat ) )
+    if( dynamic_cast<const SwSectionFormat*>( this ) !=  nullptr )
     {
         // get the Frame using Node2Layout
         const SwSectionNode* pSectNd = static_cast<const SwSectionFormat*>(this)->GetSectionNode();
@@ -3003,7 +3003,7 @@ void SwFlyFrameFormat::MakeFrms()
                     // #i28701# - consider changed type of
                     // <SwSortedObjs> entries.
                     SwAnchoredObject* pObj = rObjs[i];
-                    if( pObj->ISA(SwFlyFrm) &&
+                    if( dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr &&
                         (&pObj->GetFrameFormat()) == this )
                     {
                         bAdd = false;

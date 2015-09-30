@@ -631,7 +631,7 @@ SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, const ::com::sun::star::u
 
 bool SfxUnoFrameItem::operator==( const SfxPoolItem& i_rItem ) const
 {
-    return i_rItem.ISA( SfxUnoFrameItem ) && static_cast< const SfxUnoFrameItem& >( i_rItem ).m_xFrame == m_xFrame;
+    return dynamic_cast< const SfxUnoFrameItem* >(&i_rItem)  !=  nullptr && static_cast< const SfxUnoFrameItem& >( i_rItem ).m_xFrame == m_xFrame;
 }
 
 SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const

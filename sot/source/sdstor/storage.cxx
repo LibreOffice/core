@@ -275,7 +275,7 @@ bool SotStorageStream::Commit()
 
 bool SotStorageStream::SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue )
 {
-    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pOwnStm );
+    UCBStorageStream* pStg =  dynamic_cast<UCBStorageStream*>( pOwnStm );
     if ( pStg )
     {
         return pStg->SetProperty( rName, rValue );
@@ -807,7 +807,7 @@ bool SotStorage::Validate()
 
 bool SotStorage::IsOLEStorage() const
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
+    UCBStorage* pStg =  dynamic_cast<UCBStorage*>( m_pOwnStg );
     return !pStg;
 }
 

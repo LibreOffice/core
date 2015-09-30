@@ -419,7 +419,7 @@ SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos )
         SectionType eT = pSectNd->GetSection().GetType();
         if( TOX_CONTENT_SECTION == eT )
         {
-            OSL_ENSURE( pSectNd->GetSection().ISA( SwTOXBaseSection ),
+            OSL_ENSURE( dynamic_cast< const SwTOXBaseSection *>( &pSectNd->GetSection()) !=  nullptr,
                     "no TOXBaseSection!" );
             SwTOXBaseSection& rTOXSect = static_cast<SwTOXBaseSection&>(
                                                 pSectNd->GetSection());
@@ -432,7 +432,7 @@ SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos )
 
 const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase)
 {
-    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( &rTOXBase) !=  nullptr, "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
     SwSectionFormat const * pFormat = rTOXSect.GetFormat();
     OSL_ENSURE( pFormat, "invalid TOXBaseSection!" );
@@ -491,7 +491,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 {
     // We only delete the TOX, not the Nodes
     bool bRet = false;
-    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( &rTOXBase) !=  nullptr, "no TOXBaseSection!" );
 
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
     SwSectionFormat const * pFormat = rTOXSect.GetFormat();
@@ -671,7 +671,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
 
 bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName)
 {
-    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ),
+    OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( &rTOXBase) !=  nullptr,
                     "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = const_cast<SwTOXBaseSection*>(static_cast<const SwTOXBaseSection*>(&rTOXBase));
 

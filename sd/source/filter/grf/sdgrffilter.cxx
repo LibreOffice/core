@@ -241,8 +241,7 @@ bool SdGRFFilter::Export()
     uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( xContext );
 
     SdPage* pPage = NULL;
-    sd::DrawViewShell*  pDrawViewShell = static_cast< ::sd::DrawViewShell* >
-        ( ( ( mrDocShell.GetViewShell() && mrDocShell.GetViewShell()->ISA(::sd::DrawViewShell ) ) ? mrDocShell.GetViewShell() : NULL ) );
+    sd::DrawViewShell*  pDrawViewShell = dynamic_cast<::sd::DrawViewShell* >(mrDocShell.GetViewShell() );
 
     PageKind ePageKind = PK_STANDARD;
     if( pDrawViewShell )

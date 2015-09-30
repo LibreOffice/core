@@ -97,14 +97,14 @@ sal_uInt16 SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
 
 bool SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase)
 {
-    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( &rTOXBase) !=  nullptr, "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
     return  rTOXSect.IsProtect();
 }
 
 void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, bool bReadonly)
 {
-    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( &rTOXBase) !=  nullptr, "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
     const_cast<SwTOXBase&>(rTOXBase).SetProtected(bReadonly);
     OSL_ENSURE( rTOXSect.SwSection::GetType() == TOX_CONTENT_SECTION, "not a TOXContentSection" );
@@ -158,7 +158,7 @@ bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 {
     bool bRet = false;
 
-    OSL_ENSURE( rTOX.ISA( SwTOXBaseSection ),  "no TOXBaseSection!" );
+    OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( &rTOX) !=  nullptr,  "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = const_cast<SwTOXBaseSection*>(static_cast<const SwTOXBaseSection*>(&rTOX));
     OSL_ENSURE(pTOX, "no current listing");
     if( pTOX && 0 != pTOX->GetFormat()->GetSectionNode() )
@@ -246,7 +246,7 @@ const SwTOXBase* SwEditShell::GetTOX( sal_uInt16 nPos ) const
             pSect->GetFormat()->GetSectionNode() &&
             nCnt++ == nPos )
         {
-            OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+            OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( pSect) !=  nullptr, "no TOXBaseSection!" );
             return static_cast<const SwTOXBaseSection*>(pSect);
         }
     }
