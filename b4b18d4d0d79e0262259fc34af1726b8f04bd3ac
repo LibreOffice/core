@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_37e71814",
+        "filename": "sw/source/core/text/txtfly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:10:01Z",
+      "side": 1,
+      "message": "cleverly",
+      "revId": "b4b18d4d0d79e0262259fc34af1726b8f04bd3ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
