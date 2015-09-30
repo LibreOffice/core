@@ -142,6 +142,9 @@ struct GLWindow
     GLWindow()
         :
 #if defined( _WIN32 )
+        hWnd(NULL),
+        hDC(NULL),
+        hRC(NULL),
 #elif defined( MACOSX )
 #elif defined( IOS )
 #elif defined( ANDROID )
