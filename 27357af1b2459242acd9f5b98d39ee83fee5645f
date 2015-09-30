@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_bac66d14",
+        "filename": "filter/qa/complex/filter/misc/FinalizedMandatoryTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-09-30T13:39:06Z",
+      "side": 1,
+      "message": "The second asterisk was intended, in both cases",
+      "revId": "27357af1b2459242acd9f5b98d39ee83fee5645f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_9acba91e",
+        "filename": "filter/source/config/cache/cacheitem.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-09-30T13:39:06Z",
+      "side": 1,
+      "message": "should also be \u0027exist\u0027",
+      "revId": "27357af1b2459242acd9f5b98d39ee83fee5645f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_fad0e5cb",
+        "filename": "filter/source/graphicfilter/eos2met/eos2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-09-30T13:39:06Z",
+      "side": 1,
+      "message": "should stay \u0027commenced\u0027",
+      "revId": "27357af1b2459242acd9f5b98d39ee83fee5645f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
