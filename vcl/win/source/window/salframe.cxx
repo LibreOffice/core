@@ -5510,7 +5510,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
     if ( WM_USER_SYSTEM_WINDOW_ACTIVATED == nMsg )
     {
-        ImplHideSplash();
         return 0;
     }
 
@@ -5693,7 +5692,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 {
                     pSVData->maAppData.mnModalMode++;
 
-                    ImplHideSplash();
                     if( pWin )
                     {
                         pWin->EnableInput( FALSE, TRUE, TRUE, NULL );

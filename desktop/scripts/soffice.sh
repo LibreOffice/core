@@ -171,5 +171,5 @@ if [ -n "$VALGRINDCHECK" -a -z "$VALGRIND" ] ; then
     exec > valgrind.log 2>&1
 fi
 
-# oosplash does the rest: forcing pages in, javaldx etc. are
-exec $RRCHECK $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash" "$@"
+# Run soffice.bin here, this can likely be reduced further, but keeping as is to minimize changes
+exec $RRCHECK $VALGRINDCHECK $STRACECHECK "$sd_prog/soffice.bin" "$@"

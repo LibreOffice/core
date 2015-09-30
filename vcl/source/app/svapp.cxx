@@ -227,10 +227,6 @@ void Application::Init()
 {
 }
 
-void Application::InitFinished()
-{
-}
-
 void Application::DeInit()
 {
 }

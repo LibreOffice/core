@@ -165,7 +165,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/dockwin \
     vcl/source/window/event \
     vcl/source/window/floatwin \
-    vcl/source/window/introwin \
     vcl/source/window/keycod \
     vcl/source/window/keyevent \
     vcl/source/window/layout \

@@ -115,7 +115,7 @@ SilentCommandEnv::SilentCommandEnv(
 
 SilentCommandEnv::~SilentCommandEnv()
 {
-    mpDesktop->SetSplashScreenText( OUString() );
+
 }
 
 
@@ -188,25 +188,13 @@ void SilentCommandEnv::push( uno::Any const & rStatus )
 {
     OUString sText;
     mnLevel += 1;
-
-    if ( rStatus.hasValue() && ( rStatus >>= sText) )
-    {
-        if ( mnLevel <= 3 )
-            mpDesktop->SetSplashScreenText( sText );
-        else
-            mpDesktop->SetSplashScreenProgress( ++mnProgress );
-    }
 }
 
 
 void SilentCommandEnv::update( uno::Any const & rStatus )
     throw (uno::RuntimeException, std::exception)
 {
-    OUString sText;
-    if ( rStatus.hasValue() && ( rStatus >>= sText) )
-    {
-        mpDesktop->SetSplashScreenText( sText );
-    }
+
 }
 
 

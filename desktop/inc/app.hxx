@@ -72,7 +72,6 @@ class Desktop : public Application
                                 virtual ~Desktop();
         virtual int             Main( ) SAL_OVERRIDE;
         virtual void            Init() SAL_OVERRIDE;
-        virtual void            InitFinished() SAL_OVERRIDE;
         virtual void            DeInit() SAL_OVERRIDE;
         virtual bool        QueryExit() SAL_OVERRIDE;
         virtual sal_uInt16      Exception(sal_uInt16 nError) SAL_OVERRIDE;

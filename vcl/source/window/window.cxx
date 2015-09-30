@@ -2477,20 +2477,6 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
             mpWindowImpl->mpBorderWindow->Show( true, nFlags );
         else if ( mpWindowImpl->mbFrame )
         {
-            // #106431#, hide SplashScreen
-            ImplSVData* pSVData = ImplGetSVData();
-            if ( !pSVData->mpIntroWindow )
-            {
-                // The right way would be just to call this (not even in the 'if')
-                GetpApp()->InitFinished();
-            }
-            else if ( !ImplIsWindowOrChild( pSVData->mpIntroWindow ) )
-            {
-                // ... but the VCL splash is broken, and it needs this
-                // (for ./soffice .uno:NewDoc)
-                pSVData->mpIntroWindow->Hide();
-            }
-
             //DBG_ASSERT( !mpWindowImpl->mbSuppressAccessibilityEvents, "Window::Show() - Frame reactivated");
             mpWindowImpl->mbSuppressAccessibilityEvents = false;
 
