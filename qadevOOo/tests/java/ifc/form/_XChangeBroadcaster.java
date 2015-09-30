@@ -163,7 +163,7 @@ public class _XChangeBroadcaster extends MultiMethodTest {
     /**
      * Changes the content of the component depending on whether
      * <code>XTextComponent</code> is supported or not. If yes
-     * then the text is chahged, if not the relation <code>change()</code>
+     * then the text is changed, if not the relation <code>change()</code>
      * method is used.
      */
     protected void changeContent() {
