@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_b77848fa",
+        "filename": "odk/examples/DevelopersGuide/OfficeBean/OOoBeanViewer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:40:18Z",
+      "side": 1,
+      "message": "Again, please keep the **",
+      "revId": "f1eca6f35a333abe511bb5044ee40609ceaab0ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_977d44ea",
+        "filename": "odk/examples/DevelopersGuide/OfficeDev/DesktopEnvironment/CustomizeView.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:40:18Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "f1eca6f35a333abe511bb5044ee40609ceaab0ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_f782c0c7",
+        "filename": "odk/examples/DevelopersGuide/OfficeDev/DesktopEnvironment/FunctionHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:40:18Z",
+      "side": 1,
+      "message": "Please don\u0027t change license headers",
+      "revId": "f1eca6f35a333abe511bb5044ee40609ceaab0ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_d787bcd5",
+        "filename": "odk/examples/DevelopersGuide/OfficeDev/DesktopEnvironment/Interceptor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:40:18Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "f1eca6f35a333abe511bb5044ee40609ceaab0ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
