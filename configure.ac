@@ -6336,6 +6336,9 @@ then
 fi
 AC_LANG_PUSH([C++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+    // A somewhat over-complicated way of checking for
+    // <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66460> "ICE using __func__
+    // in constexpr function":
     #include <cassert>
     template<typename T> inline constexpr T f(T x) { return x; }
     template<typename T> inline constexpr T g(T x) {
