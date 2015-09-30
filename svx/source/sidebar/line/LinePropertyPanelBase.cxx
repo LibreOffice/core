@@ -60,7 +60,7 @@ const char UNO_SELECTWIDTH[] = ".uno:SelectWidth";
 namespace
 {
 
-void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList)
+void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList, const Bitmap& rBitmapZero)
 {
     const sal_uInt32 nCount(rList.Count());
     const OUString sNone(SVX_RESSTR(RID_SVXSTR_NONE));
@@ -70,10 +70,6 @@ void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLin
 
     rListBoxStart.Clear();
     rListBoxEnd.Clear();
-
-    // add 'none' entries
-    rListBoxStart.InsertEntry(sNone);
-    rListBoxEnd.InsertEntry(sNone);
 
     for(sal_uInt32 i(0); i < nCount; i++)
     {
@@ -104,6 +100,28 @@ void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLin
             rListBoxStart.InsertEntry(pEntry->GetName());
             rListBoxEnd.InsertEntry(pEntry->GetName());
         }
+    }
+
+    // add 'none' entries
+    if (!rBitmapZero.IsEmpty())
+    {
+        const Image aImg = rListBoxStart.GetEntryImage(0);
+        const Size aImgSize = aImg.GetSizePixel();
+
+        // take solid line bitmap and crop it to the size of
+        // line cap entries
+        Bitmap aCopyZero( rBitmapZero );
+        const Rectangle aCropZero( Point(), aImgSize );
+        aCopyZero.Crop( aCropZero );
+
+        // make it 1st item in list
+        rListBoxStart.InsertEntry( sNone, Image(aCopyZero), 0);
+        rListBoxEnd.InsertEntry( sNone, Image(aCopyZero), 0);
+    }
+    else
+    {
+       rListBoxStart.InsertEntry(sNone);
+       rListBoxEnd.InsertEntry(sNone);
     }
 
     rListBoxStart.SetUpdateMode(true);
@@ -761,7 +779,12 @@ void  LinePropertyPanelBase::FillLineEndList()
 
         if (mxLineEndList.is())
         {
-            FillLineEndListBox(*mpLBStart, *mpLBEnd, *mxLineEndList);
+            Bitmap aZeroBitmap;
+
+            if (mxLineStyleList.is())
+                aZeroBitmap = mxLineStyleList->GetBitmapForUISolidLine();
+
+            FillLineEndListBox(*mpLBStart, *mpLBEnd, *mxLineEndList, aZeroBitmap);
         }
 
         mpLBStart->SelectEntryPos(0);
