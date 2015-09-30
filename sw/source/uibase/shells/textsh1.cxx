@@ -115,6 +115,7 @@
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
 #include <SwRewriter.hxx>
+#include <comcore.hrc>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
 #include <numrule.hxx>
@@ -305,7 +306,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 SwRewriter aRewriter;
                 aRewriter.AddRule( UndoArg1, aToggle.StringToReplace() );
-                aRewriter.AddRule( UndoArg2, "->" );
+                aRewriter.AddRule( UndoArg2, SW_RES(STR_YIELDS) );
                 aRewriter.AddRule( UndoArg3, sReplacement );
                 rWrtSh.StartUndo(UNDO_REPLACE, &aRewriter);
                 rWrtSh.GetCrsr()->Normalize(false);
