@@ -183,7 +183,7 @@ void
 Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort) const
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-        com::sun::star::configuration::theDefaultProvider::get( m_xContext ) );
+        css::configuration::theDefaultProvider::get( m_xContext ) );
 
     beans::PropertyValue aProperty;
     aProperty.Name  = "nodepath";

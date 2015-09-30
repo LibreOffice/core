@@ -695,17 +695,17 @@ bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
 BibGeneralPageFocusListener::BibGeneralPageFocusListener(BibGeneralPage *pBibGeneralPage): mpBibGeneralPage(pBibGeneralPage)
 {}
 
-void BibGeneralPageFocusListener::focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception )
+void BibGeneralPageFocusListener::focusGained( const css::awt::FocusEvent& e ) throw( css::uno::RuntimeException, std::exception )
 {
     mpBibGeneralPage->focusGained(e);
 }
 
-void BibGeneralPageFocusListener::focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception )
+void BibGeneralPageFocusListener::focusLost( const css::awt::FocusEvent& e ) throw( css::uno::RuntimeException, std::exception )
 {
     mpBibGeneralPage->focusLost(e);
 }
 
-void BibGeneralPageFocusListener::disposing( const ::com::sun::star::lang::EventObject& ) throw( com::sun::star::uno::RuntimeException, std::exception )
+void BibGeneralPageFocusListener::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

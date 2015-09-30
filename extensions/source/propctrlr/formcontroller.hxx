@@ -37,7 +37,7 @@ namespace pcr
     {
         OUString
             ( *GetImplementationName )( void );
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
             ( *GetSupportedServiceNames )( void );
     };
 
@@ -59,20 +59,20 @@ namespace pcr
     {
     private:
         ServiceDescriptor           m_aServiceDescriptor;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                                     m_xCurrentInspectee;
     public:
         FormController(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             ServiceDescriptor _aServiceDescriptor,
             bool _bUseFormFormComponentHandlers
         );
 
         // XServiceInfo - static versions
-        static OUString getImplementationName_static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-                        Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+        static OUString getImplementationName_static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+                        Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     protected:
         virtual ~FormController();
@@ -81,22 +81,22 @@ namespace pcr
         DECLARE_XTYPEPROVIDER()
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet and friends
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                ::com::sun::star::uno::Any & rConvertedValue, ::com::sun::star::uno::Any & rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue
-            )   throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+                css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue
+            )   throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue
-            ) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+                sal_Int32 nHandle, const css::uno::Any& rValue
+            ) throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL getFastPropertyValue(
-                ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle
+                css::uno::Any& rValue, sal_Int32 nHandle
             ) const SAL_OVERRIDE;
     private:
         using FormController_PropertyBase1::getFastPropertyValue;
@@ -111,10 +111,10 @@ namespace pcr
     {
     public:
         // XServiceInfo - static versions
-        static OUString getImplementationName_static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-                        Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+        static OUString getImplementationName_static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+                        Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     private:
         DialogController( const DialogController& ) SAL_DELETED_FUNCTION;

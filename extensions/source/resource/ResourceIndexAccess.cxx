@@ -37,7 +37,7 @@ namespace
         return std::shared_ptr<ResMgr>(ResMgr::CreateResMgr(sEncName.getStr()));
     }
 
-    class ResourceIndexAccessBase : public cppu::WeakImplHelper< ::com::sun::star::container::XIndexAccess>
+    class ResourceIndexAccessBase : public cppu::WeakImplHelper< css::container::XIndexAccess>
     {
         public:
             ResourceIndexAccessBase( std::shared_ptr<ResMgr> pResMgr)
@@ -47,10 +47,10 @@ namespace
             }
 
             // XIndexAccess
-            virtual ::sal_Int32 SAL_CALL getCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            virtual ::sal_Int32 SAL_CALL getCount(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
                 { return m_pResMgr.get() ? SAL_MAX_UINT16 : 0; };
             // XElementAccess
-            virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
                 { return static_cast<bool>(m_pResMgr.get()); };
 
         protected:
@@ -64,9 +64,9 @@ namespace
             ResourceStringIndexAccess( std::shared_ptr<ResMgr> pResMgr)
                 : ResourceIndexAccessBase(pResMgr) {}
             // XIndexAccess
-            virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XElementAccessBase
-            virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
                 { return ::cppu::UnoType<OUString>::get(); };
     };
 
@@ -76,9 +76,9 @@ namespace
             ResourceStringListIndexAccess( std::shared_ptr<ResMgr> pResMgr)
                 : ResourceIndexAccessBase(pResMgr) {}
             // XIndexAccess
-            virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XElementAccessBase
-            virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
                 { return cppu::UnoType<Sequence<PropertyValue>>::get(); };
     };
 }

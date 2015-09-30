@@ -64,7 +64,7 @@ namespace pcr
     //= PropertyHandler
 
     class OPropertyInfoService;
-    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::inspection::XPropertyHandler
+    typedef ::cppu::WeakComponentImplHelper    <   css::inspection::XPropertyHandler
                                                 >   PropertyHandler_Base;
     /** the base class for property handlers
     */
@@ -72,7 +72,7 @@ namespace pcr
     {
     private:
         /// cache for getSupportedProperties
-        mutable StlSyntaxSequence< ::com::sun::star::beans::Property >
+        mutable StlSyntaxSequence< css::beans::Property >
                                     m_aSupportedProperties;
         mutable bool                m_bSupportedPropertiesAreKnown;
 
@@ -81,49 +81,49 @@ namespace pcr
 
     private:
         /// the property listener which has been registered
-        PropertyChangeListeners                                                         m_aPropertyListeners;
+        PropertyChangeListeners                               m_aPropertyListeners;
 
     protected:
-        mutable ::osl::Mutex                                                            m_aMutex;
+        mutable ::osl::Mutex                                  m_aMutex;
         /// the context in which the instance was created
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
         /// the component we're inspecting
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xComponent;
+        css::uno::Reference< css::beans::XPropertySet >       m_xComponent;
         /// info about our component's properties
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xComponentPropertyInfo;
+        css::uno::Reference< css::beans::XPropertySetInfo >   m_xComponentPropertyInfo;
         /// type converter, needed on various occasions
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >    m_xTypeConverter;
+        css::uno::Reference< css::script::XTypeConverter >    m_xTypeConverter;
         /// access to property meta data
-        ::std::unique_ptr< OPropertyInfoService >                                       m_pInfoService;
+        ::std::unique_ptr< OPropertyInfoService >             m_pInfoService;
 
     protected:
         PropertyHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
         virtual ~PropertyHandler();
 
         // default implementations for XPropertyHandler
-        virtual void SAL_CALL inspect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIntrospectee ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::NullPointerException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getSupportedProperties() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupersededProperties( ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getActuatingProperties( ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rControlValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any SAL_CALL convertToControlValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rPropertyValue, const ::com::sun::star::uno::Type& _rControlValueType ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::beans::PropertyState  SAL_CALL getPropertyState( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::inspection::LineDescriptor SAL_CALL describePropertyLine( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isComposable( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::inspection::InteractiveSelectionResult SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, ::com::sun::star::uno::Any& _rData, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL suspend( sal_Bool _bSuspend ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) throw (css::uno::RuntimeException, css::lang::NullPointerException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::beans::Property > SAL_CALL getSupportedProperties() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupersededProperties( ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getActuatingProperties( ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rControlValue ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL convertToControlValue( const OUString& _rPropertyName, const css::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::beans::PropertyState  SAL_CALL getPropertyState( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::inspection::LineDescriptor SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isComposable( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::inspection::InteractiveSelectionResult SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL suspend( sal_Bool _bSuspend ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XComponent
         DECLARE_XCOMPONENT()
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // own overridables
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >
+        virtual css::uno::Sequence< css::beans::Property >
                     SAL_CALL doDescribeSupportedProperties() const = 0;
 
         /// called when XPropertyHandler::inspect has been called, and we thus have a new component to inspect
@@ -134,20 +134,20 @@ namespace pcr
             @see addPropertyChangeListener
         */
         void    firePropertyChange( const OUString& _rPropName, PropertyId _nPropId,
-                    const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Any& _rNewValue );
+                    const css::uno::Any& _rOldValue, const css::uno::Any& _rNewValue );
 
         /** retrieves a window which can be used as parent for dialogs
         */
         vcl::Window* impl_getDefaultDialogParent_nothrow() const;
 
         /** retrieves the property id for a given property name
-            @throw com::sun::star::beans::UnknownPropertyException
+            @throw css::beans::UnknownPropertyException
                 if the property name is not known to our ->m_pInfoService
         */
         PropertyId impl_getPropertyId_throwUnknownProperty( const OUString& _rPropertyName ) const;
 
         /** retrieves the property id for a given property name
-            @throw com::sun::star::uno::RuntimeException
+            @throw css::uno::RuntimeException
                 if the property name is not known to our ->m_pInfoService
         */
         PropertyId impl_getPropertyId_throwRuntime( const OUString& _rPropertyName ) const;
@@ -164,7 +164,7 @@ namespace pcr
             Most probably to be called from within getSupportedProperties
         */
         inline void addStringPropertyDescription(
-                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs = 0
                 ) const;
@@ -172,7 +172,7 @@ namespace pcr
         /** adds a description for the given int32 property to the given property vector
         */
         inline void addInt32PropertyDescription(
-                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs = 0
                 ) const;
@@ -180,7 +180,7 @@ namespace pcr
         /** adds a description for the given int16 property to the given property vector
         */
         inline void addInt16PropertyDescription(
-                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs = 0
                 ) const;
@@ -188,7 +188,7 @@ namespace pcr
         /** adds a description for the given double property to the given property vector
         */
         inline void addDoublePropertyDescription(
-                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs = 0
                 ) const;
@@ -196,7 +196,7 @@ namespace pcr
         /** adds a description for the given date property to the given property vector
         */
         inline void addDatePropertyDescription(
-                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs = 0
                 ) const;
@@ -204,7 +204,7 @@ namespace pcr
         /** adds a description for the given time property to the given property vector
         */
         inline void addTimePropertyDescription(
-                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs = 0
                 ) const;
@@ -212,16 +212,16 @@ namespace pcr
         /** adds a description for the given DateTime property to the given property vector
         */
         inline void addDateTimePropertyDescription(
-                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs = 0
                 ) const;
 
         /// adds a Property, given by name only, to a given vector of Properties
         void implAddPropertyDescription(
-                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
-                    const ::com::sun::star::uno::Type& _rType,
+                    const css::uno::Type& _rType,
                     sal_Int16 _nAttribs = 0
                 ) const;
 
@@ -237,7 +237,7 @@ namespace pcr
             @see doDescribeSupportedProperties
             @see impl_getPropertyFromId_throw
         */
-        const ::com::sun::star::beans::Property*
+        const css::beans::Property*
                     impl_getPropertyFromId_nothrow( PropertyId _nPropId ) const;
 
         /** retrieves a property given by handle
@@ -248,7 +248,7 @@ namespace pcr
             @seealso doDescribeSupportedProperties
             @see impl_getPropertyFromId_nothrow
         */
-        const ::com::sun::star::beans::Property&
+        const css::beans::Property&
                     impl_getPropertyFromId_throw( PropertyId _nPropId ) const;
 
         /** determines whether a given property id is part of our supported properties
@@ -267,7 +267,7 @@ namespace pcr
 
             @seealso doDescribeSupportedProperties
         */
-        const ::com::sun::star::beans::Property&
+        const css::beans::Property&
                     impl_getPropertyFromName_throw( const OUString& _rPropertyName ) const;
 
         /** get the name of a property given by handle
@@ -278,11 +278,11 @@ namespace pcr
         /** returns the value of the ContextDocument property in the ComponentContext which was used to create
             this handler.
         */
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        inline css::uno::Reference< css::frame::XModel >
                     impl_getContextDocument_nothrow() const
         {
-            return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >(
-                m_xContext->getValueByName( "ContextDocument" ), ::com::sun::star::uno::UNO_QUERY );
+            return css::uno::Reference< css::frame::XModel >(
+                m_xContext->getValueByName( "ContextDocument" ), css::uno::UNO_QUERY );
         }
 
         /** marks the context document as modified
@@ -304,51 +304,51 @@ namespace pcr
     };
 
 
-    inline void PropertyHandler::addStringPropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addStringPropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<OUString>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addInt32PropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addInt32PropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<sal_Int32>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addInt16PropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addInt16PropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<sal_Int16>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addDoublePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addDoublePropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<double>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addDatePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addDatePropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<com::sun::star::util::Date>::get(), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<css::util::Date>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addTimePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addTimePropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<com::sun::star::util::Time>::get(), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<css::util::Time>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addDateTimePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addDateTimePropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<com::sun::star::util::DateTime>::get(), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<css::util::DateTime>::get(), _nAttribs );
     }
 
     inline OUString PropertyHandler::impl_getPropertyNameFromId_nothrow( PropertyId _nPropId ) const
     {
-        const ::com::sun::star::beans::Property* pProp = impl_getPropertyFromId_nothrow( _nPropId );
+        const css::beans::Property* pProp = impl_getPropertyFromId_nothrow( _nPropId );
         return pProp ? pProp->Name : OUString();
     }
 
 
     //= PropertyHandlerComponent
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XServiceInfo
+    typedef ::cppu::ImplHelper1 <   css::lang::XServiceInfo
                                 >   PropertyHandlerComponent_Base;
     /** PropertyHandler implementation which additionally supports XServiceInfo
     */
@@ -357,16 +357,16 @@ namespace pcr
     {
     protected:
         PropertyHandlerComponent(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
     };
 
 
@@ -389,8 +389,8 @@ namespace pcr
         {
             ...
         public:
-            static OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
-            static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
+            static OUString SAL_CALL getImplementationName_static(  ) throw (css::uno::RuntimeException);
+            static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
         };
         </pre>
     */
@@ -398,16 +398,16 @@ namespace pcr
     class HandlerComponentBase : public PropertyHandlerComponent
     {
     protected:
-        HandlerComponentBase( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
+        HandlerComponentBase( const css::uno::Reference< css::uno::XComponentContext >& _rxContext )
             :PropertyHandlerComponent( _rxContext )
         {
         }
 
     protected:
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL Create( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
     public:
         /** registers the implementation of HANDLER at the <type>PcrModule</type>
@@ -417,14 +417,14 @@ namespace pcr
 
 
     template < class HANDLER >
-    OUString SAL_CALL HandlerComponentBase< HANDLER >::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    OUString SAL_CALL HandlerComponentBase< HANDLER >::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
     {
         return HANDLER::getImplementationName_static();
     }
 
 
     template < class HANDLER >
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL HandlerComponentBase< HANDLER >::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Sequence< OUString > SAL_CALL HandlerComponentBase< HANDLER >::getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception)
     {
         return HANDLER::getSupportedServiceNames_static();
     }
@@ -442,7 +442,7 @@ namespace pcr
 
 
     template < class HANDLER >
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL HandlerComponentBase< HANDLER >::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
+    css::uno::Reference< css::uno::XInterface > SAL_CALL HandlerComponentBase< HANDLER >::Create( const css::uno::Reference< css::uno::XComponentContext >& _rxContext )
     {
         return *( new HANDLER( _rxContext ) );
     }

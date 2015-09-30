@@ -60,15 +60,15 @@ class PluginModel : public BroadcasterHelperHolder,
                     public cppu::OPropertySetHelper,
                     public cppu::OPropertyArrayHelper,
                     public cppu::OWeakAggObject,
-                    public com::sun::star::lang::XComponent,
-                    public com::sun::star::io::XPersistObject,
-                    public com::sun::star::awt::XControlModel
+                    public css::lang::XComponent,
+                    public css::io::XPersistObject,
+                    public css::awt::XControlModel
 {
   private:
     OUString m_aCreationURL;
     OUString m_aMimeType;
 
-    std::list< Reference< com::sun::star::lang::XEventListener > >
+    std::list< Reference< css::lang::XEventListener > >
         m_aDisposeListeners;
   public:
     // these are here to force memory de/allocation to sal lib.
@@ -82,17 +82,17 @@ class PluginModel : public BroadcasterHelperHolder,
     virtual ~PluginModel();
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { return OWeakAggObject::queryInterface( rType ); }
     virtual void SAL_CALL acquire()  throw() SAL_OVERRIDE
     { OWeakAggObject::acquire(); }
     virtual void SAL_CALL release()  throw() SAL_OVERRIDE
     { OWeakAggObject::release(); }
 
-    virtual Any SAL_CALL queryAggregation( const Type& ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Any SAL_CALL queryAggregation( const Type& ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
-    // com::sun::star::lang::XTypeProvider
+    // css::lang::XTypeProvider
 
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static() throw(  );
     static OUString SAL_CALL getImplementationName_Static() throw(  )
@@ -109,23 +109,23 @@ class PluginModel : public BroadcasterHelperHolder,
                                                          const Any& rValue ) throw() SAL_OVERRIDE;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
                                                             const Any& rValue )
-        throw(::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw() SAL_OVERRIDE;
-    virtual Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(std::exception) SAL_OVERRIDE;
+    virtual Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(std::exception) SAL_OVERRIDE;
 
-    // com::sun::star::io::XPersistObject
+    // css::io::XPersistObject
     virtual OUString SAL_CALL getServiceName() throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL write(const Reference< com::sun::star::io::XObjectOutputStream > & OutStream) throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL read(const Reference< com::sun::star::io::XObjectInputStream > & InStream) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL write(const Reference< css::io::XObjectOutputStream > & OutStream) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL read(const Reference< css::io::XObjectInputStream > & InStream) throw(std::exception) SAL_OVERRIDE;
 
-    // com::sun::star::lang::XComponent
-    virtual void SAL_CALL addEventListener( const Reference< com::sun::star::lang::XEventListener > & l ) throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeEventListener( const Reference< com::sun::star::lang::XEventListener > & l ) throw(std::exception) SAL_OVERRIDE;
+    // css::lang::XComponent
+    virtual void SAL_CALL addEventListener( const Reference< css::lang::XEventListener > & l ) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeEventListener( const Reference< css::lang::XEventListener > & l ) throw(std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL dispose() throw(std::exception) SAL_OVERRIDE;
   private:
     using cppu::OPropertySetHelper::getFastPropertyValue;
 };
-Reference< XInterface >  SAL_CALL PluginModel_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
+Reference< XInterface >  SAL_CALL PluginModel_CreateInstance( const Reference< css::lang::XMultiServiceFactory >  & ) throw( Exception );
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_MODEL_HXX
 

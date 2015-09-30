@@ -45,15 +45,15 @@ class BibDataManager;
   * We need to split off the listener because both it and the vcl::Window baseclass are ref-counted
   */
 class BibGeneralPage;
-class BibGeneralPageFocusListener : public cppu::WeakAggImplHelper1 < ::com::sun::star::awt::XFocusListener >
+class BibGeneralPageFocusListener : public cppu::WeakAggImplHelper1 < css::awt::XFocusListener >
 {
 private:
     VclPtr<BibGeneralPage> mpBibGeneralPage;
 public:
     explicit BibGeneralPageFocusListener(BibGeneralPage *pBibGeneralPage);
-    virtual void SAL_CALL       focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL       focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL       focusGained( const css::awt::FocusEvent& e ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL       focusLost( const css::awt::FocusEvent& e ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 };
 
@@ -107,7 +107,7 @@ class BibGeneralPage: public BibTabPage
     VclPtr<FixedText>          aFixedTexts[ FIELD_COUNT ];
     sal_Int16           nFT2CtrlMap[ FIELD_COUNT ];
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
+    css::uno::Reference< css::awt::XWindow >
                         aControls[ FIELD_COUNT ];
 
     OUString            sErrorPrefix;
@@ -115,23 +115,23 @@ class BibGeneralPage: public BibTabPage
 
     OUString            sTypeColumnName;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+    css::uno::Reference< css::awt::XControlContainer >
                         xCtrlContnr;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >
+    css::uno::Reference< css::form::XBoundComponent >
                         xCurrentBoundComponent;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >
+    css::uno::Reference< css::form::XBoundComponent >
                         xLBModel;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >
+    css::uno::Reference< css::sdbc::XRowSetListener >
                         xPosListener;
 
     rtl::Reference<BibGeneralPageFocusListener> mxBibGeneralPageFocusListener;
 
     BibDataManager*     pDatMan;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+    css::uno::Reference< css::awt::XControlModel >
                                 AddXControl( const OUString& rName, FixedText& rLabel, const OString& sHelpId,
                                             sal_Int16& rIndex, std::vector<vcl::Window*>& rChildren );
 
@@ -149,9 +149,9 @@ public:
 
     inline const OUString&      GetErrorString() const;
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >&
+    inline const css::uno::Reference< css::form::XBoundComponent >&
                                 GetTypeListBoxModel() const;
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&
+    inline const css::uno::Reference< css::awt::XControlContainer >&
                                 GetControlContainer() const;
 
     inline BibDataManager*      GetDataManager();
@@ -177,13 +177,13 @@ inline const OUString& BibGeneralPage::GetErrorString() const
     return sTableErrorString;
 }
 
-inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >&
+inline const css::uno::Reference< css::form::XBoundComponent >&
     BibGeneralPage::GetTypeListBoxModel() const
 {
     return xLBModel;
 }
 
-inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&
+inline const css::uno::Reference< css::awt::XControlContainer >&
     BibGeneralPage::GetControlContainer() const
 {
     return xCtrlContnr;

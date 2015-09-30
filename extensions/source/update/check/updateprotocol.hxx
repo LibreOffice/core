@@ -30,37 +30,37 @@
 // Returns 'true' if successfully connected to the update server
 bool checkForUpdates(
     UpdateInfo& o_rUpdateInfo,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& rxInteractionHandler,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XUpdateInformationProvider >& rxProvider
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    const css::uno::Reference< css::task::XInteractionHandler >& rxInteractionHandler,
+    const css::uno::Reference< css::deployment::XUpdateInformationProvider >& rxProvider
 );
 
 // The same as above, that does not read the info from bootstrap
 SAL_DLLPUBLIC_EXPORT bool
 checkForUpdates(
     UpdateInfo& o_rUpdateInfo,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > & rxInteractionHandler,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XUpdateInformationProvider >& rUpdateInfoProvider,
+    const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+    const css::uno::Reference< css::task::XInteractionHandler > & rxInteractionHandler,
+    const css::uno::Reference< css::deployment::XUpdateInformationProvider >& rUpdateInfoProvider,
     const OUString &rOS,
     const OUString &rArch,
-    const ::com::sun::star::uno::Sequence< OUString > &rRepositoryList,
+    const css::uno::Sequence< OUString > &rRepositoryList,
     const OUString &rGitID,
     const OUString &rInstallID
 );
 
 // Returns 'true' if there are updates for any extension
 bool checkForExtensionUpdates(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext
 );
 
 bool checkForPendingUpdates(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext
 );
 
 bool storeExtensionUpdateInfos(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > &rUpdateInfos
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    const css::uno::Sequence< css::uno::Sequence< OUString > > &rUpdateInfos
 );
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX

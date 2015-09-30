@@ -44,8 +44,8 @@ namespace pcr
 
     //= types
 
-    typedef ::comphelper::OSimpleListenerContainer  <   ::com::sun::star::beans::XPropertyChangeListener
-                                                    ,   ::com::sun::star::beans::PropertyChangeEvent
+    typedef ::comphelper::OSimpleListenerContainer  <   css::beans::XPropertyChangeListener
+                                                    ,   css::beans::PropertyChangeEvent
                                                     >   PropertyChangeListeners;
 
 
@@ -75,10 +75,10 @@ namespace pcr
     //= StlSyntaxSequence
 
     template< class ELEMENT >
-    class StlSyntaxSequence : public ::com::sun::star::uno::Sequence< ELEMENT >
+    class StlSyntaxSequence : public css::uno::Sequence< ELEMENT >
     {
     private:
-        typedef ::com::sun::star::uno::Sequence< ELEMENT >  UnoBase;
+        typedef css::uno::Sequence< ELEMENT >  UnoBase;
 
     public:
         inline StlSyntaxSequence() : UnoBase() { }
@@ -116,20 +116,20 @@ namespace pcr
     //= UNO helpers
 
 #define DECLARE_XCOMPONENT() \
-    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 #define IMPLEMENT_FORWARD_XCOMPONENT( classname, baseclass ) \
-    void SAL_CALL classname::dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
+    void SAL_CALL classname::dispose(  ) throw (css::uno::RuntimeException, std::exception) \
     { \
     baseclass::WeakComponentImplHelperBase::dispose(); \
     } \
-    void SAL_CALL classname::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
+    void SAL_CALL classname::addEventListener( const css::uno::Reference< css::lang::XEventListener >& _Listener ) throw (css::uno::RuntimeException, std::exception) \
     { \
         baseclass::WeakComponentImplHelperBase::addEventListener( _Listener ); \
     } \
-    void SAL_CALL classname::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
+    void SAL_CALL classname::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& _Listener ) throw (css::uno::RuntimeException, std::exception) \
     { \
         baseclass::WeakComponentImplHelperBase::removeEventListener( _Listener ); \
     } \

@@ -31,14 +31,14 @@ namespace pcr
 
     //= PropertyEventTranslation
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener
                                     >   PropertyEventTranslation_Base;
 
     class PropertyEventTranslation : public PropertyEventTranslation_Base
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >
+        css::uno::Reference< css::beans::XPropertyChangeListener >
                 m_xDelegator;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                 m_xTranslatedEventSource;
 
     public:
@@ -47,18 +47,18 @@ namespace pcr
                 if <arg>_rxDelegator</arg> is <NULL/>
         */
         PropertyEventTranslation(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxDelegator,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxTranslatedEventSource
+            const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxDelegator,
+            const css::uno::Reference< css::uno::XInterface >& _rxTranslatedEventSource
         );
 
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >&
+        inline const css::uno::Reference< css::beans::XPropertyChangeListener >&
             getDelegator() const { return m_xDelegator; }
 
     protected:
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         PropertyEventTranslation( const PropertyEventTranslation& ) SAL_DELETED_FUNCTION;

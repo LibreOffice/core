@@ -29,13 +29,13 @@ using namespace com::sun::star::registry;
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL scn_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
-    Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
-    void*                                                pRet = 0;
+    Reference< css::lang::XSingleServiceFactory > xFactory;
+    void*                                         pRet = 0;
 
     if( OUString::createFromAscii( pImplName ) == ScannerManager::getImplementationName_Static() )
     {
-        xFactory = Reference< ::com::sun::star::lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
-                        static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ),
+        xFactory = Reference< css::lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
+                        static_cast< css::lang::XMultiServiceFactory* >( pServiceManager ),
                         ScannerManager::getImplementationName_Static(),
                         ScannerManager_CreateInstance,
                         ScannerManager::getSupportedServiceNames_Static() ) );

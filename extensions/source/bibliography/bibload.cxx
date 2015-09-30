@@ -133,8 +133,8 @@ public:
     // XLoader
     virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
-                                const Reference< XLoadEventListener > & aListener) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void            SAL_CALL cancel() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                const Reference< XLoadEventListener > & aListener) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void            SAL_CALL cancel() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 BibliographyLoader::BibliographyLoader() :
@@ -213,7 +213,7 @@ extern "C"
 
 }
 
-void BibliographyLoader::cancel() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void BibliographyLoader::cancel() throw (css::uno::RuntimeException, std::exception)
 {
     //!
     //!
@@ -221,7 +221,7 @@ void BibliographyLoader::cancel() throw (::com::sun::star::uno::RuntimeException
 
 void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< XLoadEventListener > & rListener) throw (::com::sun::star::uno::RuntimeException, std::exception)
+        const Reference< XLoadEventListener > & rListener) throw (css::uno::RuntimeException, std::exception)
 {
 
     SolarMutexGuard aGuard;
@@ -308,7 +308,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
 
     // attach menu bar
     Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< css::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
     {
         try

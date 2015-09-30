@@ -78,7 +78,7 @@ namespace dbp
         sal_Int32 nTopSpace = 0;
 
         // the shape of the groupbox
-        ::com::sun::star::awt::Size aControlShapeSize = _rContext.xObjectShape->getSize();
+        css::awt::Size aControlShapeSize = _rContext.xObjectShape->getSize();
         // maybe need to adjust the size if the control shapes
         sal_Int32 nMinShapeHeight = BUTTON_HEIGHT*(nRadioButtons+1) + BUTTON_HEIGHT + BUTTON_HEIGHT/4;
         if (aControlShapeSize.Height < nMinShapeHeight)
@@ -97,12 +97,12 @@ namespace dbp
 
         sal_Int32 nTempHeight = (aControlShapeSize.Height - BUTTON_HEIGHT/4) / (nRadioButtons + 1);
 
-        ::com::sun::star::awt::Point aShapePosition = _rContext.xObjectShape->getPosition();
+        css::awt::Point aShapePosition = _rContext.xObjectShape->getPosition();
 
-        ::com::sun::star::awt::Size aButtonSize(aControlShapeSize);
+        css::awt::Size aButtonSize(aControlShapeSize);
         aButtonSize.Width = aControlShapeSize.Width - OFFSET;
         aButtonSize.Height = HEIGHT;
-        ::com::sun::star::awt::Point aButtonPosition;
+        css::awt::Point aButtonPosition;
         aButtonPosition.X = aShapePosition.X + OFFSET;
 
         OUString sElementsName("RadioGroup");

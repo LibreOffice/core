@@ -34,16 +34,16 @@
 /* This helper class provides by name access to a sequence of named values */
 class NamedValueByNameAccess
 {
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& m_rValues;
+    const css::uno::Sequence< css::beans::NamedValue >& m_rValues;
 
 public:
     NamedValueByNameAccess(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rValues) :
+        const css::uno::Sequence< css::beans::NamedValue >& rValues) :
         m_rValues(rValues) {} ;
 
     ~NamedValueByNameAccess();
 
-    ::com::sun::star::uno::Any getValue(const sal_Char * pName);
+    css::uno::Any getValue(const sal_Char * pName);
 };
 
 
@@ -78,24 +78,24 @@ private:
  */
 
 class UpdateCheckConfig : public ::cppu::WeakImplHelper<
-    ::com::sun::star::container::XNameReplace,
-    ::com::sun::star::util::XChangesBatch,
-    ::com::sun::star::lang::XServiceInfo >
+    css::container::XNameReplace,
+    css::util::XChangesBatch,
+    css::lang::XServiceInfo >
 {
-    UpdateCheckConfig( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xContainer,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xAvailableUpdates,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xIgnoredUpdates,
+    UpdateCheckConfig( const css::uno::Reference< css::container::XNameContainer >& xContainer,
+                       const css::uno::Reference< css::container::XNameContainer >& xAvailableUpdates,
+                       const css::uno::Reference< css::container::XNameContainer >& xIgnoredUpdates,
                        const ::rtl::Reference< UpdateCheckConfigListener >& rListener );
 
     virtual ~UpdateCheckConfig();
 
 public:
 
-    static ::com::sun::star::uno::Sequence< OUString > getServiceNames();
+    static css::uno::Sequence< OUString > getServiceNames();
     static OUString getImplName();
 
     static ::rtl::Reference< UpdateCheckConfig > get(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const ::rtl::Reference< UpdateCheckConfigListener >& rListener = ::rtl::Reference< UpdateCheckConfigListener >());
 
     // Should really implement ROModel...
@@ -151,53 +151,53 @@ public:
                                 const OUString& rVersion );
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Type SAL_CALL getElementType(  )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+        throw (css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
+        throw (css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XChangesBatch
     virtual void SAL_CALL commitChanges(  )
-        throw (::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasPendingChanges(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::ElementChange > SAL_CALL getPendingChanges(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::util::ElementChange > SAL_CALL getPendingChanges(  )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
 
     static OUString getSubVersion( const OUString& rVersion, sal_Int32 *nIndex );
     static bool isVersionGreater( const OUString& rVersion1, const OUString& rVersion2 );
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xContainer;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xAvailableUpdates;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xIgnoredUpdates;
+    const css::uno::Reference< css::container::XNameContainer > m_xContainer;
+    const css::uno::Reference< css::container::XNameContainer > m_xAvailableUpdates;
+    const css::uno::Reference< css::container::XNameContainer > m_xIgnoredUpdates;
     const ::rtl::Reference< UpdateCheckConfigListener > m_rListener;
 };
 
@@ -205,8 +205,8 @@ private:
 
 
 template <typename T>
-T getValue( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rNamedValues, const sal_Char * pszName )
-    throw (::com::sun::star::uno::RuntimeException)
+T getValue( const css::uno::Sequence< css::beans::NamedValue >& rNamedValues, const sal_Char * pszName )
+    throw (css::uno::RuntimeException)
 {
     for( sal_Int32 n=0; n < rNamedValues.getLength(); n++ )
     {
@@ -215,13 +215,13 @@ T getValue( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Name
         {
             T value = T();
             if( ! (rNamedValues[n].Value >>= value) )
-                throw ::com::sun::star::uno::RuntimeException(
+                throw css::uno::RuntimeException(
                     OUString(
                         cppu_Any_extraction_failure_msg(
                             &rNamedValues[n].Value,
                             ::cppu::getTypeFavourUnsigned(&value).getTypeLibType() ),
                             SAL_NO_ACQUIRE ),
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
+                    css::uno::Reference< css::uno::XInterface >() );
 
             return value;
         }

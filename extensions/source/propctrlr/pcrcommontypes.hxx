@@ -30,7 +30,7 @@ namespace pcr
 {
 
 
-    typedef std::unordered_map< OUString, ::com::sun::star::beans::Property, OUStringHash >
+    typedef std::unordered_map< OUString, css::beans::Property, OUStringHash >
         PropertyMap;
 
 

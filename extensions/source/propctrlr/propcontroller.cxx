@@ -267,7 +267,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OPropertyBrowserController::inspect( const Sequence< Reference< XInterface > >& _rObjects ) throw (com::sun::star::util::VetoException, RuntimeException, std::exception)
+    void SAL_CALL OPropertyBrowserController::inspect( const Sequence< Reference< XInterface > >& _rObjects ) throw (css::util::VetoException, RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -528,7 +528,7 @@ namespace pcr
         stopInspection( false );
 
         // say our dispose listeners goodbye
-        ::com::sun::star::lang::EventObject aEvt;
+        css::lang::EventObject aEvt;
         aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
         m_aDisposeListeners.disposeAndClear(aEvt);
         m_aControlObservers.disposeAndClear(aEvt);
@@ -1103,9 +1103,9 @@ namespace pcr
     }
 
 
-    ::com::sun::star::awt::Size SAL_CALL OPropertyBrowserController::getMinimumSize() throw (::com::sun::star::uno::RuntimeException, std::exception)
+    css::awt::Size SAL_CALL OPropertyBrowserController::getMinimumSize() throw (css::uno::RuntimeException, std::exception)
     {
-        ::com::sun::star::awt::Size aSize;
+        css::awt::Size aSize;
         if( m_pView )
             return m_pView->getMinimumSize();
         else
@@ -1113,13 +1113,13 @@ namespace pcr
     }
 
 
-    ::com::sun::star::awt::Size SAL_CALL OPropertyBrowserController::getPreferredSize() throw (::com::sun::star::uno::RuntimeException, std::exception)
+    css::awt::Size SAL_CALL OPropertyBrowserController::getPreferredSize() throw (css::uno::RuntimeException, std::exception)
     {
         return getMinimumSize();
     }
 
 
-    ::com::sun::star::awt::Size SAL_CALL OPropertyBrowserController::calcAdjustedSize( const ::com::sun::star::awt::Size& _rNewSize ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    css::awt::Size SAL_CALL OPropertyBrowserController::calcAdjustedSize( const css::awt::Size& _rNewSize ) throw (css::uno::RuntimeException, std::exception)
     {
         awt::Size aMinSize = getMinimumSize( );
         awt::Size aAdjustedSize( _rNewSize );

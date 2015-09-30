@@ -38,9 +38,9 @@ namespace pcr
 {
 
 
-    struct TypeLess : ::std::binary_function< ::com::sun::star::uno::Type, ::com::sun::star::uno::Type, bool >
+    struct TypeLess : ::std::binary_function< css::uno::Type, css::uno::Type, bool >
     {
-        bool operator()( const ::com::sun::star::uno::Type& _rLHS, const ::com::sun::star::uno::Type& _rRHS ) const
+        bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
         {
             return _rLHS.getTypeName() < _rRHS.getTypeName();
         }
@@ -50,8 +50,8 @@ namespace pcr
 
     //= GenericPropertyHandler
 
-    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::inspection::XPropertyHandler
-                                                ,   ::com::sun::star::lang::XServiceInfo
+    typedef ::cppu::WeakComponentImplHelper    <   css::inspection::XPropertyHandler
+                                                ,  css::lang::XServiceInfo
                                                 >   GenericPropertyHandler_Base;
     class GenericPropertyHandler : public GenericPropertyHandler_Base
     {
@@ -60,20 +60,20 @@ namespace pcr
 
     private:
         /// the service factory for creating services
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         /// need this to keep alive as long as m_xComponent lives
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >   m_xComponentIntrospectionAccess;
+        css::uno::Reference< css::beans::XIntrospectionAccess >   m_xComponentIntrospectionAccess;
         /// the properties of the object we're handling
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xComponent;
+        css::uno::Reference< css::beans::XPropertySet >           m_xComponent;
         /// cached interface of ->m_xComponent
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >         m_xPropertyState;
+        css::uno::Reference< css::beans::XPropertyState >         m_xPropertyState;
         /// type converter, needed on various occasions
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >        m_xTypeConverter;
+        css::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
         /// cache of our supported properties
         PropertyMap                                                                         m_aProperties;
         /// property change listeners
         ::cppu::OInterfaceContainerHelper                                                   m_aPropertyListeners;
-        ::std::map< ::com::sun::star::uno::Type, ::rtl::Reference< IPropertyEnumRepresentation >, TypeLess >
+        ::std::map< css::uno::Type, ::rtl::Reference< IPropertyEnumRepresentation >, TypeLess >
                                                                                             m_aEnumConverters;
 
         /// has ->m_aProperties been initialized?
@@ -81,47 +81,47 @@ namespace pcr
 
     public:
         // XServiceInfo - static versions
-        static OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+        static OUString SAL_CALL getImplementationName_static(  ) throw (css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
+        static css::uno::Reference< css::uno::XInterface > Create( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
     protected:
         GenericPropertyHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
         virtual ~GenericPropertyHandler();
 
     protected:
         // XPropertyHandler overridables
-        virtual void                                                SAL_CALL inspect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIntrospectee ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any                          SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL setPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any                          SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rControlValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any                          SAL_CALL convertToControlValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rPropertyValue, const ::com::sun::star::uno::Type& _rControlValueType ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::beans::PropertyState              SAL_CALL getPropertyState( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >
-                                                                    SAL_CALL getSupportedProperties() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >
-                                                                    SAL_CALL getSupersededProperties() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getActuatingProperties() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::inspection::LineDescriptor        SAL_CALL describePropertyLine( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool                                          SAL_CALL isComposable( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::inspection::InteractiveSelectionResult
-                                                                    SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, ::com::sun::star::uno::Any& _rData, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                                                SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool                                            SAL_CALL suspend( sal_Bool _bSuspend ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                                SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any                                       SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                                SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any                                       SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rControlValue ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any                                       SAL_CALL convertToControlValue( const OUString& _rPropertyName, const css::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::beans::PropertyState                           SAL_CALL getPropertyState( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                                SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                                SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::beans::Property >
+                                                                    SAL_CALL getSupportedProperties() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString >
+                                                                    SAL_CALL getSupersededProperties() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString >                      SAL_CALL getActuatingProperties() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::inspection::LineDescriptor                     SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool                                            SAL_CALL isComposable( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::inspection::InteractiveSelectionResult
+                                                                    SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                                                SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool                                            SAL_CALL suspend( sal_Bool _bSuspend ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XComponent
         DECLARE_XCOMPONENT()
         virtual void                                                SAL_CALL disposing() SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         /** ensures that ->m_aProperties is initialized
@@ -133,7 +133,7 @@ namespace pcr
         /** retrieves the enum converter for the given ENUM type
         */
         ::rtl::Reference< IPropertyEnumRepresentation >
-                impl_getEnumConverter( const ::com::sun::star::uno::Type& _rEnumType );
+                impl_getEnumConverter( const css::uno::Type& _rEnumType );
 
     private:
         GenericPropertyHandler( const GenericPropertyHandler& ) SAL_DELETED_FUNCTION;

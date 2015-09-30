@@ -133,9 +133,9 @@ namespace pcr
     using com::sun::star::uri::XVndSunStarScriptUrlReference;
     using ::com::sun::star::lang::XEventListener;
 
-    namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
-    namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
-    namespace FormComponentType = ::com::sun::star::form::FormComponentType;
+    namespace PropertyControlType = css::inspection::PropertyControlType;
+    namespace PropertyAttribute = css::beans::PropertyAttribute;
+    namespace FormComponentType = css::form::FormComponentType;
 
     EventDescription::EventDescription( EventId _nId, const sal_Char* _pListenerNamespaceAscii, const sal_Char* _pListenerClassAsciiName,
             const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, const OString& _sHelpId, const OString& _sUniqueBrowseId )
@@ -319,7 +319,7 @@ namespace pcr
         }
     }
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::container::XNameReplace
+    typedef ::cppu::WeakImplHelper <   css::container::XNameReplace
                                     >   EventHolder_Base;
     /* An UNO component holding assigned event descriptions, for use with a SvxMacroAssignDlg */
     class EventHolder : public EventHolder_Base

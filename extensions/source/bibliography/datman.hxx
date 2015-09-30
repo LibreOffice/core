@@ -47,78 +47,78 @@ class BibToolBar;
 struct BibDBDescriptor;
 
 class BibInterceptorHelper
-    :public cppu::WeakImplHelper< ::com::sun::star::frame::XDispatchProviderInterceptor >
+    :public cppu::WeakImplHelper< css::frame::XDispatchProviderInterceptor >
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > xMasterDispatchProvider;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > xSlaveDispatchProvider;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xFormDispatch;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception > xInterception;
+    css::uno::Reference< css::frame::XDispatchProvider > xMasterDispatchProvider;
+    css::uno::Reference< css::frame::XDispatchProvider > xSlaveDispatchProvider;
+    css::uno::Reference< css::frame::XDispatch > xFormDispatch;
+    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterception;
 
 protected:
     virtual ~BibInterceptorHelper( );
 
 public:
-    BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch);
+    BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, css::uno::Reference< css::frame::XDispatch > xDispatch);
 
     void ReleaseInterceptor();
 
     // XDispatchProvider
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XDispatchProviderInterceptor
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-typedef cppu::WeakComponentImplHelper  <   ::com::sun::star::beans::XPropertyChangeListener
-                                        ,   ::com::sun::star::form::XLoadable
+typedef cppu::WeakComponentImplHelper  <   css::beans::XPropertyChangeListener
+                                        ,   css::form::XLoadable
                                         >   BibDataManager_Base;
 class BibDataManager
             :public ::comphelper::OMutexAndBroadcastHelper
             ,public BibDataManager_Base
 {
 private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                       m_xForm;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >                m_xGridModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xSourceProps;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xParser;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xFormCtrl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >      m_xFormDispatch;
-        BibInterceptorHelper* m_pInterceptorHelper;
+        css::uno::Reference< css::form::XForm >                       m_xForm;
+        css::uno::Reference< css::awt::XControlModel >                m_xGridModel;
+        css::uno::Reference< css::beans::XPropertySet >               m_xSourceProps;
+        css::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xParser;
+        css::uno::Reference< css::form::runtime::XFormController >    m_xFormCtrl;
+        css::uno::Reference< css::frame::XDispatch >                  m_xFormDispatch;
+        BibInterceptorHelper*         m_pInterceptorHelper;
 
         OUString                     aActiveDataTable;
         OUString                     aDataSourceURL;
         OUString                     aQuoteChar;
-        ::com::sun::star::uno::Any                      aUID;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >              xBibCursor;
+        css::uno::Any                aUID;
+        css::uno::Reference< css::sdbc::XResultSet >                  xBibCursor;
 
         ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
 
         VclPtr< ::bib::BibView>      pBibView;
-        VclPtr<BibToolBar>          pToolbar;
+        VclPtr<BibToolBar>           pToolbar;
 
-        OUString               sIdentifierMapping;
+        OUString                     sIdentifierMapping;
 protected:
 
-        void                        InsertFields(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
+        void                        InsertFields(const css::uno::Reference< css::form::XFormComponent > & xGrid);
         void                        SetMeAsUidListener();
         void                        RemoveMeAsUidListener();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
-                                    updateGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xDbForm);
-        static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+        css::uno::Reference< css::awt::XControlModel >
+                                    updateGridModel(const css::uno::Reference< css::form::XForm > & xDbForm);
+        static css::uno::Reference< css::awt::XControlModel >
                                     createGridModel( const OUString& rName );
 
         // XLoadable
-        virtual void SAL_CALL load(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL unload(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL reload(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isLoaded(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL addLoadListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeLoadListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL load(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL unload(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL reload(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isLoaded(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
@@ -127,18 +127,18 @@ public:
         BibDataManager();
         virtual ~BibDataManager();
 
-        virtual void                SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
-                                                                throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void                SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-                                                                throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void                SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt)
+                                                                throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void                SAL_CALL disposing( const css::lang::EventObject& Source )
+                                                                throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   createDatabaseForm( BibDBDescriptor&    aDesc);
+        css::uno::Reference< css::form::XForm >                   createDatabaseForm( BibDBDescriptor&    aDesc);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            updateGridModel();
+        css::uno::Reference< css::awt::XControlModel >            updateGridModel();
 
-        ::com::sun::star::uno::Sequence< OUString>           getDataSources();
+        css::uno::Sequence< OUString>           getDataSources();
 
         OUString                    getActiveDataSource() {return aDataSourceURL;}
         void                        setActiveDataSource(const OUString& rURL);
@@ -149,17 +149,17 @@ public:
         void                        setFilter(const OUString& rQuery);
         OUString                    getFilter();
 
-        ::com::sun::star::uno::Sequence< OUString>           getQueryFields();
+        css::uno::Sequence< OUString> getQueryFields();
         OUString                    getQueryField();
         void                        startQueryWith(const OUString& rQuery);
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >&    getParser() { return m_xParser; }
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >&                        getForm()   { return m_xForm; }
+        const css::uno::Reference< css::sdb::XSingleSelectQueryComposer >&    getParser() { return m_xParser; }
+        const css::uno::Reference< css::form::XForm >&                        getForm()   { return m_xForm; }
 
 
         static OUString             getControlName(sal_Int32 nFormatKey );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadControlModel(const OUString& rName,
+        css::uno::Reference< css::awt::XControlModel > loadControlModel(const OUString& rName,
                                                         bool bForceListBox = false);
 
         void                        CreateMappingDialog(vcl::Window* pParent);
@@ -175,7 +175,7 @@ public:
         const OUString&             GetIdentifierMapping();
         void                        ResetIdentifierMapping() {sIdentifierMapping.clear();}
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController();
+        css::uno::Reference< css::form::runtime::XFormController > GetFormController();
         void                        RegisterInterceptor( ::bib::BibBeamer* pBibBeamer);
 
         bool                        HasActiveConnection();

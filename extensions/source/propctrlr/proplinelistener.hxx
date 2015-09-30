@@ -32,7 +32,7 @@ namespace pcr
     {
     public:
         virtual void    Clicked(    const OUString& _rName, bool _bPrimary ) = 0;
-        virtual void    Commit(     const OUString& _rName, const ::com::sun::star::uno::Any& _rVal ) = 0;
+        virtual void    Commit(     const OUString& _rName, const css::uno::Any& _rVal ) = 0;
 
     protected:
         ~IPropertyLineListener() {}

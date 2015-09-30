@@ -827,7 +827,7 @@ void UpdateHandler::insertControlModel( uno::Reference< awt::XControlModel > con
 void UpdateHandler::setFullVersion( OUString& rString )
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-        com::sun::star::configuration::theDefaultProvider::get( mxContext ) );
+        css::configuration::theDefaultProvider::get( mxContext ) );
 
     beans::PropertyValue aProperty;
     aProperty.Name  = "nodepath";

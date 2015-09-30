@@ -328,7 +328,7 @@ UpdateInformationProvider::UpdateInformationProvider(
     , m_nCommandId(0)
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-        com::sun::star::configuration::theDefaultProvider::get(xContext));
+        css::configuration::theDefaultProvider::get(xContext));
 
     OUStringBuffer buf;
     buf.append(
@@ -648,7 +648,7 @@ UpdateInformationProvider::getUpdateInformation(
             catch( const lang::WrappedTargetException& e )
             {
                 // command aborted, return what we have got so far
-                if( e.TargetException.isExtractableTo( ::cppu::UnoType< ::com::sun::star::ucb::CommandAbortedException >::get() ) )
+                if( e.TargetException.isExtractableTo( ::cppu::UnoType< css::ucb::CommandAbortedException >::get() ) )
                 {
                     break;
                 }

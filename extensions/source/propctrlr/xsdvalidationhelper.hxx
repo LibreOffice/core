@@ -46,8 +46,8 @@ namespace pcr
     public:
         XSDValidationHelper(
             ::osl::Mutex& _rMutex,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
+            const css::uno::Reference< css::beans::XPropertySet >& _rxIntrospectee,
+            const css::uno::Reference< css::frame::XModel >& _rxContextDocument
         );
 
         /** retrieves the names of all XForms models in the document the control lives in
@@ -109,17 +109,17 @@ namespace pcr
     private:
         /** retrieves the data type repository associated with the current model
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XDataTypeRepository >
+        css::uno::Reference< css::xforms::XDataTypeRepository >
                 getDataTypeRepository() const;
 
         /** retrieves the data type repository associated with any model
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XDataTypeRepository >
+        css::uno::Reference< css::xforms::XDataTypeRepository >
                 getDataTypeRepository( const OUString& _rModelName ) const;
 
         /** retrieves the data type object for the given name
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType >
+        css::uno::Reference< css::xsd::XDataType >
             getDataType( const OUString& _rName ) const;
 
         /** retrieves the name of the basic data type which has the given class, in the given repository
@@ -127,7 +127,7 @@ namespace pcr
         static OUString
                 getBasicTypeNameForClass(
                     sal_Int16 _nClass,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XDataTypeRepository > _rxRepository
+                    css::uno::Reference< css::xforms::XDataTypeRepository > _rxRepository
                 );
     };
 

@@ -466,7 +466,7 @@ namespace pcr
     }
 
 
-    void EFormsHelper::setBinding( const Reference< ::com::sun::star::beans::XPropertySet >& _rxBinding )
+    void EFormsHelper::setBinding( const Reference< css::beans::XPropertySet >& _rxBinding )
     {
         if ( !m_xBindableControl.is() )
             return;

@@ -31,7 +31,7 @@
 
 namespace extensions { namespace resource
 {
-    typedef ::std::pair< OUString, ::com::sun::star::lang::Locale> ResourceBundleDescriptor;
+    typedef ::std::pair< OUString, css::lang::Locale> ResourceBundleDescriptor;
 
     struct ResourceBundleDescriptorLess : public ::std::binary_function<ResourceBundleDescriptor, ResourceBundleDescriptor, bool>
     {
@@ -49,23 +49,23 @@ namespace extensions { namespace resource
         }
     };
 
-    class OpenOfficeResourceLoader : public ::cppu::WeakImplHelper< ::com::sun::star::resource::XResourceBundleLoader>
+    class OpenOfficeResourceLoader : public ::cppu::WeakImplHelper< css::resource::XResourceBundleLoader>
     {
     public:
         typedef ::std::map<
             ResourceBundleDescriptor,
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::resource::XResourceBundle>,
+            css::uno::WeakReference< css::resource::XResourceBundle>,
             ResourceBundleDescriptorLess> ResourceBundleCache;
 
-        OpenOfficeResourceLoader(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const&);
+        OpenOfficeResourceLoader(css::uno::Reference< css::uno::XComponentContext> const&);
         // XResourceBundleLoader
-        virtual  ::com::sun::star::uno::Reference< ::com::sun::star::resource::XResourceBundle> SAL_CALL loadBundle_Default( const OUString& aBaseName ) throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual  ::com::sun::star::uno::Reference<  ::com::sun::star::resource::XResourceBundle> SAL_CALL loadBundle( const OUString& abaseName, const ::com::sun::star::lang::Locale& aLocale ) throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual  css::uno::Reference< css::resource::XResourceBundle> SAL_CALL loadBundle_Default( const OUString& aBaseName ) throw (css::resource::MissingResourceException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual  css::uno::Reference<  css::resource::XResourceBundle> SAL_CALL loadBundle( const OUString& abaseName, const css::lang::Locale& aLocale ) throw (css::resource::MissingResourceException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         OpenOfficeResourceLoader( const OpenOfficeResourceLoader& ) SAL_DELETED_FUNCTION;
         OpenOfficeResourceLoader& operator=( const OpenOfficeResourceLoader& ) SAL_DELETED_FUNCTION;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
+        css::uno::Reference< css::uno::XComponentContext> m_xContext;
         ::osl::Mutex m_aMutex;
         ResourceBundleCache m_aBundleCache;
     };

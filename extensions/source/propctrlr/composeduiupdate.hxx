@@ -39,7 +39,7 @@ namespace pcr
     class SAL_NO_VTABLE IPropertyExistenceCheck
     {
     public:
-        virtual bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (css::uno::RuntimeException) = 0;
 
     protected:
         ~IPropertyExistenceCheck() {}
@@ -62,7 +62,7 @@ namespace pcr
     {
     private:
         ::std::unique_ptr< MapHandlerToUI >     m_pCollectedUIs;
-        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >
+        css::uno::Reference< css::inspection::XObjectInspectorUI >
                                                 m_xDelegatorUI;
         oslInterlockedCount                     m_nSuspendCounter;
         IPropertyExistenceCheck*                m_pPropertyCheck;
@@ -78,18 +78,18 @@ namespace pcr
                 name.<br/>
                 Beware of lifetime issues. The instance pointed to by <arg>_pPropertyCheck</arg> must
                 live at least as long as the ->ComposedPropertyUIUpdate instance you're going to create.
-            @throws ::com::sun::star::lang::NullPointerException
+            @throws css::lang::NullPointerException
                 if ->_rxDelegatorUI is <NULL/>
         */
         ComposedPropertyUIUpdate(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxDelegatorUI,
+            const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxDelegatorUI,
             IPropertyExistenceCheck* _pPropertyCheck );
         ~ComposedPropertyUIUpdate();
 
         /** returns the delegator UI
-            @throw ::com::sun::star::lang::DisposedException
+            @throw css::lang::DisposedException
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI > getDelegatorUI() const;
+        css::uno::Reference< css::inspection::XObjectInspectorUI > getDelegatorUI() const;
 
         /** returns a ->XObjectInspectorUI instance belonging to a given property handler
 
@@ -98,8 +98,8 @@ namespace pcr
             to it, and ->ComposedPropertyUIUpdate::fire will use the combination of all
             cached UI states of all handlers to update the delegator UI.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >
-            getUIForPropertyHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxHandler );
+        css::uno::Reference< css::inspection::XObjectInspectorUI >
+            getUIForPropertyHandler( const css::uno::Reference< css::inspection::XPropertyHandler >& _rxHandler );
 
         /** Suspends automatic firing of UI changes
 

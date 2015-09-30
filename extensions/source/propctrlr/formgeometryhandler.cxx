@@ -91,10 +91,10 @@ namespace pcr
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::form::XGridColumnFactory;
 
-    namespace MeasureUnit = ::com::sun::star::util::MeasureUnit;
+    namespace MeasureUnit = css::util::MeasureUnit;
 
-    typedef ::com::sun::star::awt::Point    AwtPoint;
-    typedef ::com::sun::star::awt::Size     AwtSize;
+    typedef css::awt::Point    AwtPoint;
+    typedef css::awt::Size     AwtSize;
 
     #define ANCHOR_TO_SHEET 0
     #define ANCHOR_TO_CELL  1
@@ -124,7 +124,7 @@ namespace pcr
         in the XShape implementation, which broadcasts way too generous and unspecified
     */
     typedef ::comphelper::ComponentBase ShapeGeometryChangeNotifier_CBase;
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener
                                     >   ShapeGeometryChangeNotifier_IBase;
 
     class ShapeGeometryChangeNotifier   :public BroadcastHelperBase
@@ -225,10 +225,10 @@ namespace pcr
         // XPropertyHandler overriables
         virtual Any                         SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void                        SAL_CALL setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual LineDescriptor              SAL_CALL describePropertyLine( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                        SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void                        SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Sequence< OUString > SAL_CALL getActuatingProperties( ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual LineDescriptor              SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                        SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                        SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Sequence< OUString >        SAL_CALL getActuatingProperties( ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void                        SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException, std::exception) SAL_OVERRIDE;
 
         // OComponentHandler overridables

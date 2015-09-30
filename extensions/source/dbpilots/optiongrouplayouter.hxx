@@ -37,12 +37,12 @@ namespace dbp
 
     class OOptionGroupLayouter
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                     mxContext;
 
     public:
         explicit OOptionGroupLayouter(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
             );
 
     public:
@@ -53,7 +53,7 @@ namespace dbp
 
     protected:
         static void    implAnchorShape(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxShapeProps
+            const css::uno::Reference< css::beans::XPropertySet >& _rxShapeProps
             );
     };
 

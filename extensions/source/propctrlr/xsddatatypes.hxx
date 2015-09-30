@@ -44,38 +44,37 @@ namespace pcr
     class XSDDataType : public salhelper::SimpleReferenceObject
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType >
+        css::uno::Reference< css::xsd::XDataType >
                             m_xDataType;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+        css::uno::Reference< css::beans::XPropertySetInfo >
                             m_xFacetInfo;
 
     public:
         XSDDataType(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType >& _rxDataType
+            const css::uno::Reference< css::xsd::XDataType >& _rxDataType
         );
 
         /// retrieves the underlying UNO component
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType >&
+        inline const css::uno::Reference< css::xsd::XDataType >&
                 getUnoDataType() const { return m_xDataType; }
 
         /// classifies the data typ
-        sal_Int16 classify() const;
+        sal_Int16           classify() const;
 
         // attribute access
-        OUString     getName() const;
+        OUString            getName() const;
         bool                isBasicType() const;
 
         /// determines whether a given facet exists at the type
         bool                hasFacet( const OUString& _rFacetName ) const;
         /// retrieves a facet value
-        ::com::sun::star::uno::Any
-                            getFacet( const OUString& _rFacetName );
+        css::uno::Any       getFacet( const OUString& _rFacetName );
         /// sets a facet value
-        void                setFacet( const OUString& _rFacetName, const ::com::sun::star::uno::Any& _rFacetValue );
+        void                setFacet( const OUString& _rFacetName, const css::uno::Any& _rFacetValue );
 
-       /** copies as much facets (values, respectively) from a give data type instance
-       */
-       void             copyFacetsFrom( const ::rtl::Reference< XSDDataType >& _pSourceType );
+        /** copies as much facets (values, respectively) from a give data type instance
+        */
+        void                copyFacetsFrom( const ::rtl::Reference< XSDDataType >& _pSourceType );
 
     protected:
         virtual ~XSDDataType();

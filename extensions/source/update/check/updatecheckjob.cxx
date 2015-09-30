@@ -91,8 +91,8 @@ public:
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTerminateListener
     virtual void SAL_CALL queryTermination( lang::EventObject const & evt )

@@ -33,7 +33,7 @@ namespace abp
     class OAddessBookSourcePilot : public OAddessBookSourcePilot_Base
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                                 m_xORB;
         AddressSettings         m_aSettings;
 
@@ -44,10 +44,10 @@ namespace abp
         /// ctor
         OAddessBookSourcePilot(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
         /// get the service factory which was used to create the dialog
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+        const css::uno::Reference< css::uno::XComponentContext >&
                                 getORB() { return m_xORB; }
         AddressSettings&        getSettings() { return m_aSettings; }
         const AddressSettings&  getSettings() const { return m_aSettings; }
