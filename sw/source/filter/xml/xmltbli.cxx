@@ -58,7 +58,8 @@
 #include <osl/mutex.hxx>
 #include "ndtxt.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 #include <limits.h>
 
@@ -293,8 +294,7 @@ class SwXMLTableRow_Impl
     OUString   aStyleName;
     OUString   aDfltCellStyleName;
     OUString   mXmlId;
-    boost::ptr_vector<SwXMLTableCell_Impl>
-               aCells;
+    std::vector<std::unique_ptr<SwXMLTableCell_Impl>> m_Cells;
     bool       bSplitable;
 
 public:
@@ -338,7 +338,7 @@ SwXMLTableRow_Impl::SwXMLTableRow_Impl( const OUString& rStyleName,
 
     for( sal_uInt32 i=0U; i<nCells; ++i )
     {
-        aCells.push_back( new SwXMLTableCell_Impl );
+        m_Cells.push_back(std::unique_ptr<SwXMLTableCell_Impl>(new SwXMLTableCell_Impl));
     }
 }
 
@@ -347,9 +347,9 @@ inline SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol )
     OSL_ENSURE( nCol < USHRT_MAX,
             "SwXMLTableRow_Impl::GetCell: column number is to big" );
     // #i95726# - some fault tolerance
-    OSL_ENSURE( nCol < aCells.size(),
+    OSL_ENSURE( nCol < m_Cells.size(),
             "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
-    return nCol < aCells.size() ? &aCells[nCol] : 0;
+    return nCol < m_Cells.size() ? m_Cells[nCol].get() : nullptr;
 }
 
 void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, bool bOneCell )
@@ -359,15 +359,15 @@ void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, bool bOneCell )
     if( nCells > USHRT_MAX )
         nCells = USHRT_MAX;
 
-    sal_uInt32 nColSpan = nCells - aCells.size();
-    for( size_t i=aCells.size(); i<nCells; ++i )
+    sal_uInt32 nColSpan = nCells - m_Cells.size();
+    for (size_t i = m_Cells.size(); i < nCells; ++i)
     {
-        aCells.push_back( new SwXMLTableCell_Impl( 1UL,
-                                                bOneCell ? nColSpan : 1UL ) );
+        m_Cells.push_back(std::unique_ptr<SwXMLTableCell_Impl>(
+                new SwXMLTableCell_Impl(1UL, (bOneCell) ? nColSpan : 1UL)));
         nColSpan--;
     }
 
-    OSL_ENSURE( nCells<=aCells.size(),
+    OSL_ENSURE( nCells <= m_Cells.size(),
             "SwXMLTableRow_Impl::Expand: wrong number of cells" );
 }
 
@@ -382,8 +382,10 @@ inline void SwXMLTableRow_Impl::Set( const OUString& rStyleName,
 
 void SwXMLTableRow_Impl::Dispose()
 {
-    for( size_t i=0; i < aCells.size(); ++i )
-        aCells[i].Dispose();
+    for (auto & pCell : m_Cells)
+    {
+        pCell->Dispose();
+    }
 }
 
 class SwXMLTableCellContext_Impl : public SvXMLImportContext
