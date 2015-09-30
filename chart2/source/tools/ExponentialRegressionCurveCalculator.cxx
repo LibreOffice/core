@@ -157,15 +157,17 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     ::sal_Int32 nNumberFormatKey ) const
 {
     double fIntercept = m_fSign * exp(m_fLogIntercept);
-    double fSlope = exp(m_fLogSlope);
-    bool bHasSlope = !rtl::math::approxEqual( fSlope, 1.0 );
-    bool bHasIntercept = !rtl::math::approxEqual( fIntercept, 1.0 );
+    bool bHasSlope = !rtl::math::approxEqual( exp(m_fLogSlope), 1.0 );
+    bool bIsLogSlope1 = rtl::math::approxEqual( fabs(m_fLogSlope), 1.0 );
+    bool bHasIntercept = !rtl::math::approxEqual( m_fSign*fIntercept, 1.0 );
 
     OUStringBuffer aBuf( "f(x) = ");
 
     if ( fIntercept == 0.0)
     {
         // underflow, a true zero is impossible
+        if ( m_fSign < 0.0 )
+            aBuf.append( "- " );
         aBuf.append( "exp( ");
         aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
         aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
@@ -178,23 +180,37 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
         {
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept) );
             aBuf.append( " exp( ");
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogSlope) );
+            if ( m_fLogSlope < 0.0 )
+                aBuf.append( "-");
+            if ( !bIsLogSlope1 )
+                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope) ) );
             aBuf.append( " x )");
         }
         else
         {
             // show logarithmic output, if intercept and slope both are near one
             // otherwise drop output of intercept, which is 1 here
+            if ( m_fSign < 0.0 )
+                aBuf.append( "- " );
             aBuf.append( " exp( ");
             if (!bHasSlope)
             {
-                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
-                aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
-                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
+                if ( m_fLogIntercept != 0.0 )
+                {
+                    aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
+                    aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
+                }
+                else if ( m_fLogSlope < 0.0 )
+                        aBuf.append( " - " );
+                if ( !bIsLogSlope1 )
+                    aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
             }
             else
             {
-                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogSlope) );
+                if ( m_fLogSlope < 0.0 )
+                    aBuf.append( "-");
+                if ( !bIsLogSlope1 )
+                    aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope) ) );
             }
             aBuf.append( " x )");
         }
