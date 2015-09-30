@@ -20,9 +20,8 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_TBLRWCL_HXX
 
 #include <cstddef>
+#include <memory>
 #include <vector>
-
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <swtypes.hxx>
 #include <tblsel.hxx>
@@ -174,11 +173,10 @@ public:
     bool RemoveFormat( const SwFrameFormat& rFormat );
 };
 
-typedef boost::ptr_vector<SwShareBoxFormat> _SwShareBoxFormats;
-
 class SwShareBoxFormats
 {
-    _SwShareBoxFormats aShareArr;
+    std::vector<std::unique_ptr<SwShareBoxFormat>> m_ShareArr;
+
     bool Seek_Entry( const SwFrameFormat& rFormat, sal_uInt16* pPos ) const;
 
     void ChangeFrameFormat( SwTableBox* pBox, SwTableLine* pLn, SwFrameFormat& rFormat );

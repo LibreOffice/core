@@ -63,6 +63,9 @@
 #include <comcore.hrc>
 #include <unochart.hxx>
 #include <calbck.hxx>
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <memory>
 #include <vector>
 

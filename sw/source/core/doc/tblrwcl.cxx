@@ -4411,16 +4411,16 @@ SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat, long 
 {
     sal_uInt16 nPos;
     return Seek_Entry( rFormat, &nPos )
-                    ? aShareArr[ nPos ].GetFormat( nWidth )
-                    : 0;
+                    ? m_ShareArr[ nPos ]->GetFormat(nWidth)
+                    : nullptr;
 }
 SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat,
                                      const SfxPoolItem& rItem ) const
 {
     sal_uInt16 nPos;
     return Seek_Entry( rFormat, &nPos )
-                    ? aShareArr[ nPos ].GetFormat( rItem )
-                    : 0;
+                    ? m_ShareArr[ nPos ]->GetFormat(rItem)
+                    : nullptr;
 }
 
 void SwShareBoxFormats::AddFormat( const SwFrameFormat& rOld, SwFrameFormat& rNew )
@@ -4431,10 +4431,10 @@ void SwShareBoxFormats::AddFormat( const SwFrameFormat& rOld, SwFrameFormat& rNe
         if( !Seek_Entry( rOld, &nPos ))
         {
             pEntry = new SwShareBoxFormat( rOld );
-            aShareArr.insert( aShareArr.begin() + nPos, pEntry );
+            m_ShareArr.insert(m_ShareArr.begin() + nPos, std::unique_ptr<SwShareBoxFormat>(pEntry));
         }
         else
-            pEntry = &aShareArr[ nPos ];
+            pEntry = m_ShareArr[ nPos ].get();
 
         pEntry->AddFormat( rNew );
     }
@@ -4508,22 +4508,27 @@ void SwShareBoxFormats::SetAttr( SwTableLine& rLine, const SfxPoolItem& rItem )
 
 void SwShareBoxFormats::RemoveFormat( const SwFrameFormat& rFormat )
 {
-    for( auto i = aShareArr.size(); i; )
-        if( aShareArr[ --i ].RemoveFormat( rFormat ))
-            aShareArr.erase( aShareArr.begin() + i );
+    for (auto i = m_ShareArr.size(); i; )
+    {
+        if (m_ShareArr[ --i ]->RemoveFormat(rFormat))
+        {
+            m_ShareArr.erase( m_ShareArr.begin() + i );
+        }
+    }
 }
 
 bool SwShareBoxFormats::Seek_Entry( const SwFrameFormat& rFormat, sal_uInt16* pPos ) const
 {
     sal_uLong nIdx = reinterpret_cast<sal_uLong>(&rFormat);
-    _SwShareBoxFormats::size_type nO = aShareArr.size(), nU = 0;
+    auto nO = m_ShareArr.size();
+    decltype(nO) nU = 0;
     if( nO > 0 )
     {
         nO--;
         while( nU <= nO )
         {
             const auto nM = nU + ( nO - nU ) / 2;
-            sal_uLong nFormat = reinterpret_cast<sal_uLong>(&aShareArr[ nM ].GetOldFormat());
+            sal_uLong nFormat = reinterpret_cast<sal_uLong>(&m_ShareArr[ nM ]->GetOldFormat());
             if( nFormat == nIdx )
             {
                 if( pPos )
