@@ -6356,22 +6356,27 @@ if test "$cxx14_constexpr" = yes; then
 fi
 
 AC_MSG_CHECKING([whether $CXX supports C++14 sized deallocation])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_LANG_PUSH([C++])
-AC_RUN_IFELSE([AC_LANG_PROGRAM([[
-    #include <cstddef>
-    #include <cstdlib>
-    void operator delete(void *) throw () { std::exit(1); }
-    void operator delete(void *, std::size_t) throw () { std::exit(0); }
-    struct S { S() { throw 0; } };
-    ]],[[
-    try { new S; } catch (...) {}
-    return 1;
-    ]])], [cxx14_sized_deallocation=yes], [cxx14_sized_deallocation=no])
-AC_LANG_POP([C++])
-CXXFLAGS=$save_CXXFLAGS
-AC_MSG_RESULT([$cxx14_sized_deallocation])
+if test "$CROSS_COMPILING" = TRUE; then
+    cxx14_sized_deallocation=no
+    AC_MSG_RESULT([$cxx14_sized_deallocation (assumed; cross compiling)])
+else
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+    AC_LANG_PUSH([C++])
+    AC_RUN_IFELSE([AC_LANG_PROGRAM([[
+        #include <cstddef>
+        #include <cstdlib>
+        void operator delete(void *) throw () { std::exit(1); }
+        void operator delete(void *, std::size_t) throw () { std::exit(0); }
+        struct S { S() { throw 0; } };
+        ]],[[
+        try { new S; } catch (...) {}
+        return 1;
+        ]])], [cxx14_sized_deallocation=yes], [cxx14_sized_deallocation=no])
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_MSG_RESULT([$cxx14_sized_deallocation])
+fi
 if test "$cxx14_sized_deallocation" = yes; then
     AC_DEFINE([HAVE_CXX14_SIZED_DEALLOCATION])
 fi
