@@ -675,7 +675,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 //TODO: differentiate, if split into categories
         OUString aString;
 
-        ScSingleRefData aSRef;  // data for Referece formula cells
+        ScSingleRefData aSRef;  // data for Reference formula cells
         aSRef.InitFlags();      // this reference is absolute at all times
         aSRef.SetFlag3D(true);
 

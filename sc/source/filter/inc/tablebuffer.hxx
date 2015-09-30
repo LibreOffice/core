@@ -85,7 +85,7 @@ private:
     TableModel          maModel;
     AutoFilterBuffer    maAutoFilters;      /// Filter settings for this table.
     TableColumnsBuffer  maTableColumns;     /// Column names of this table.
-    OUString     maDBRangeName;      /// Name of the databae range in the Calc document.
+    OUString            maDBRangeName;      /// Name of the database range in the Calc document.
     ::com::sun::star::table::CellRangeAddress
                         maDestRange;        /// Validated range of the table in the worksheet.
     sal_Int32           mnTokenIndex;       /// Token index used in API token array.

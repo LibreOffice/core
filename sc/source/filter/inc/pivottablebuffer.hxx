@@ -79,7 +79,7 @@ struct PTFieldModel
     bool                mbInsertPageBreak;  /// True = insert page breaks after items.
     bool                mbAutoShow;         /// True = auto show (top 10) filter enabled.
     bool                mbTopAutoShow;      /// True = auto show filter shows top entries, false = bottom.
-    bool                mbMultiPageItems;   /// True = multiple items selectable in page diemsion.
+    bool                mbMultiPageItems;   /// True = multiple items selectable in page dimension.
 
     explicit            PTFieldModel();
 

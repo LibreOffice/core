@@ -182,7 +182,7 @@ namespace
                     return pTR;
                 if (p->GetRef() > 1)
                     // Reference handled in RPN, but do not return nullptr so
-                    // loops will process ocTableRef via pp instead of issueing
+                    // loops will process ocTableRef via pp instead of issuing
                     // a continue.
                     return pTR;
             }

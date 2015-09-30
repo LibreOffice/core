@@ -44,7 +44,7 @@ struct SheetSettingsModel
 struct SheetProtectionModel
 {
     sal_uInt16          mnPasswordHash;         /// Hash value from sheet protection password.
-    bool                mbSheet;                /// True = sheet protection enabled, locked cells are protcted.
+    bool                mbSheet;                /// True = sheet protection enabled, locked cells are protected.
     bool                mbObjects;              /// True = objects locked.
     bool                mbScenarios;            /// True = scenarios locked.
     bool                mbFormatCells;          /// True = format cells locked.
