@@ -57,7 +57,7 @@ namespace sd { namespace framework {
 
     2. The ModuleController reads on its creation
     org.openoffice.Office.Impress/MultiPaneGUI/Framework/StartupServices
-    configuration data and instantiates all listed services.  These servces
+    configuration data and instantiates all listed services.  These services
     can then register as listeners at the ConfigurationController or do
     whatever they like.
 */

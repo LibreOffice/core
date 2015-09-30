@@ -105,7 +105,7 @@ private:
 
     /** Return the image of the expansion indicator.
         @return
-            When there is no expansion indictor for this TitleBar object,
+            When there is no expansion indicator for this TitleBar object,
             then an empty Image is returned.  You better call
             HasExpansionIndicator() to prevent this.
     */

@@ -207,7 +207,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         /* Here, we only exchange masterpages, therefore the current page
            remains the current page. To prevent calling PageOrderChangedHint
            during insertion and extraction of the masterpages, we block. */
-        /* That isn't quitely right. If the masterpageview is active and you are
+        /* That isn't quite right. If the masterpageview is active and you are
            removing a masterpage, it's possible that you are removing the
            current masterpage. So you have to call ResetActualPage ! */
         if( mpViewShell->ISA(DrawViewShell) && !bCheckMasters )
