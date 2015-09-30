@@ -1560,7 +1560,7 @@ static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         if (!pPage->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(pSdrObj->GetLayer()))
             continue;
 
-        if (!pAnchoredObj->ISA(SwFlyFrm))
+        if (dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) ==  nullptr)
             continue;
 
         const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
@@ -4023,11 +4023,11 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
     {
         //The paint may be prevented by the superior Flys.
         SwFrm *pAnch = 0;
-        if ( pObj->ISA(SwFlyDrawObj) ) // i#117962#
+        if ( dynamic_cast< const SwFlyDrawObj *>( pObj ) !=  nullptr ) // i#117962#
         {
             bPaint = false;
         }
-        if ( pObj->ISA(SwVirtFlyDrawObj) )
+        if ( dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr )
         {
             SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
             if ( gProp.pSFlyOnlyDraw && gProp.pSFlyOnlyDraw == pFly )
@@ -4070,7 +4070,7 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
             else
             {
                 // OD 02.07.2003 #108784# - debug assert
-                if ( !pObj->ISA(SdrObjGroup) )
+                if ( dynamic_cast< const SdrObjGroup *>( pObj ) ==  nullptr )
                 {
                     OSL_FAIL( "<SwFlyFrm::IsPaint(..)> - paint of drawing object without anchor frame!?" );
                 }
@@ -6765,7 +6765,7 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
                     const SwAnchoredObject* pAnchoredObj = rObjs[i];
                     if ( pPage->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
                                     pAnchoredObj->GetDrawObj()->GetLayer() ) &&
-                         pAnchoredObj->ISA(SwFlyFrm) )
+                         dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                     {
                         const SwFlyFrm *pFly =
                                     static_cast<const SwFlyFrm*>(pAnchoredObj);
@@ -7245,7 +7245,7 @@ void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
             for ( size_t i = 0; i < GetSortedObjs()->size(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                 {
                     const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                     if ( pFly->Frm().Top() <= aRect.Bottom() &&
@@ -7280,7 +7280,7 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
             for ( size_t i = 0; i < pCnt->GetDrawObjs()->size(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = (*pCnt->GetDrawObjs())[i];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                 {
                     const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                     if ( pFly->IsFlyInCntFrm() &&

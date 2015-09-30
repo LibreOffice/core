@@ -323,12 +323,12 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
         SfxStringItem aFlags( SID_OPTIONS, OUString("T") );
         SfxBoolItem aHidden( SID_HIDDEN, true );
         const SfxPoolItem *pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, &aName, &aHidden, &aReferer, &aFlags, 0L );
-        const SfxObjectItem *pObj = PTR_CAST( SfxObjectItem, pRet );
+        const SfxObjectItem *pObj = dynamic_cast<const SfxObjectItem*>( pRet  );
         if ( pObj )
-            xDoc = PTR_CAST( SfxObjectShell, pObj->GetShell() );
+            xDoc = dynamic_cast<SfxObjectShell*>( pObj->GetShell()  );
         else
         {
-            const SfxViewFrameItem *pView = PTR_CAST( SfxViewFrameItem, pRet );
+            const SfxViewFrameItem *pView = dynamic_cast<const SfxViewFrameItem*>( pRet  );
             if ( pView )
             {
                 SfxViewFrame *pFrame = pView->GetFrame();
@@ -437,7 +437,7 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
         aReq.AppendItem( *pDefaultNameItem );
 
     SfxGetpApp()->ExecuteSlot( aReq );
-    const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
+    const SfxViewFrameItem* pItem = dynamic_cast<const SfxViewFrameItem*>( aReq.GetReturnValue()  );
     if ( pItem )
         rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
 }
@@ -1094,7 +1094,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         // try to find the SfxFrame for the controller
         SfxFrame* pCntrFrame = NULL;
-        for ( SfxViewShell* pShell = SfxViewShell::GetFirst( 0, false ); pShell; pShell = SfxViewShell::GetNext( *pShell, 0, false ) )
+        for ( SfxViewShell* pShell = SfxViewShell::GetFirst( false ); pShell; pShell = SfxViewShell::GetNext( *pShell, false ) )
         {
             if ( pShell->GetController() == xController )
             {

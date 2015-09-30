@@ -195,13 +195,13 @@ std::map<SwFrameFormat*, SwFrameFormat*> SwTextBoxHelper::findShapes(const SwDoc
 /// If the passed SdrObject is in fact a TextFrame, that is used as a TextBox.
 bool lcl_isTextBox(SdrObject* pSdrObject, std::set<const SwFrameFormat*>& rTextBoxes)
 {
-    SwVirtFlyDrawObj* pObject = PTR_CAST(SwVirtFlyDrawObj, pSdrObject);
+    SwVirtFlyDrawObj* pObject = dynamic_cast<SwVirtFlyDrawObj*>( pSdrObject );
     return pObject && rTextBoxes.find(pObject->GetFormat()) != rTextBoxes.end();
 }
 
 bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)
 {
-    const SwVirtFlyDrawObj* pVirtFlyDrawObj = PTR_CAST(SwVirtFlyDrawObj, pObject);
+    const SwVirtFlyDrawObj* pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>( pObject );
     if (!pVirtFlyDrawObj)
         return false;
     std::set<const SwFrameFormat*> aTextBoxes = findTextBoxes(pVirtFlyDrawObj->GetFormat()->GetDoc());

@@ -277,7 +277,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     {
         OSL_ASSERT (mpViewSh->GetViewShell()!=NULL);
         SfxInPlaceClient* pIpClient = mpViewSh->GetViewShell()->GetIPClient();
-        if( mpViewSh->ISA(::sd::slidesorter::SlideSorterViewShell)
+        if( dynamic_cast< ::sd::slidesorter::SlideSorterViewShell *>( mpViewSh ) !=  nullptr
             || (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive()))
         nPasteOptions |= SdrInsertFlags::DONTMARK;
     }
@@ -360,7 +360,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     {
         const View* pSourceView = pOwnData->GetView();
 
-        if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && ISA( View ) )
+        if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && dynamic_cast< View *>( this) !=  nullptr )
         {
             mpClipboard->HandlePageDrop (*pOwnData);
             bReturn = true;
@@ -487,7 +487,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                         pRem->pClone = pObj;
                                         aConnectorContainer.push_back(pRem);
 
-                                        if(pObj->ISA(SdrEdgeObj))
+                                        if(dynamic_cast< SdrEdgeObj *>( pObj ) !=  nullptr)
                                             nConnectorCount++;
                                     }
                                 }
@@ -499,7 +499,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                     {
                                         ImpRememberOrigAndClone* pRem = aConnectorContainer[a];
 
-                                        if(pRem->pClone->ISA(SdrEdgeObj))
+                                        if(dynamic_cast< const SdrEdgeObj *>( pRem->pClone ) !=  nullptr)
                                         {
                                             SdrEdgeObj* pOrigEdge = static_cast<SdrEdgeObj*>(pRem->pOrig);
                                             SdrEdgeObj* pCloneEdge = static_cast<SdrEdgeObj*>(pRem->pClone);
@@ -737,7 +737,9 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             bChanged = true;
                             mnAction = DND_ACTION_COPY;
                         }
-                        else if( ( mnAction & DND_ACTION_LINK ) && pPickObj && pObj && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) )
+                        else if( ( mnAction & DND_ACTION_LINK ) && pPickObj && pObj &&
+                            dynamic_cast< const SdrGrafObj *>( pPickObj ) ==  nullptr &&
+                                dynamic_cast< const SdrOle2Obj *>( pPickObj ) ==  nullptr )
                         {
                             SfxItemSet aSet( mrDoc.GetPool() );
 
@@ -769,7 +771,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                             pPickObj->SetMergedItemSetAndBroadcast( aSet );
 
-                            if( pPickObj->ISA( E3dObject ) && pObj->ISA( E3dObject ) )
+                            if( dynamic_cast< E3dObject *>( pPickObj ) !=  nullptr && dynamic_cast< E3dObject *>( pObj ) !=  nullptr )
                             {
                                 // handle 3D attribute in addition
                                 SfxItemSet aNewSet( mrDoc.GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );

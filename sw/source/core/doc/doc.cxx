@@ -1629,7 +1629,7 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 
     rTOX = rNew;
 
-    if (rTOX.ISA(SwTOXBaseSection))
+    if (dynamic_cast<const SwTOXBaseSection*>( &rTOX) !=  nullptr)
     {
         static_cast<SwTOXBaseSection &>(rTOX).Update();
         static_cast<SwTOXBaseSection &>(rTOX).UpdatePageNum();

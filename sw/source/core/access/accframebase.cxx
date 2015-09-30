@@ -50,7 +50,7 @@ bool SwAccessibleFrameBase::IsSelected()
     assert(GetMap());
     const SwViewShell *pVSh = GetMap()->GetShell();
     assert(pVSh);
-    if( pVSh->ISA( SwFEShell ) )
+    if( dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr )
     {
         const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
         const SwFrm *pFlyFrm = pFESh->GetSelectedFlyFrm();
@@ -68,7 +68,7 @@ void SwAccessibleFrameBase::GetStates(
 
     const SwViewShell *pVSh = GetMap()->GetShell();
     assert(pVSh);
-    bool bSelectable =  pVSh->ISA( SwFEShell );
+    bool bSelectable =  dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr;
 
     // SELECTABLE
     if( bSelectable )
@@ -280,7 +280,7 @@ SwPaM* SwAccessibleFrameBase::GetCrsr()
     SwCrsrShell* pCrsrShell = GetCrsrShell();
     if( pCrsrShell != NULL && !pCrsrShell->IsTableMode() )
     {
-        SwFEShell *pFESh = pCrsrShell->ISA( SwFEShell )
+        SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pCrsrShell) !=  nullptr
                             ? static_cast< SwFEShell * >( pCrsrShell ) : 0;
         if( !pFESh ||
             !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )

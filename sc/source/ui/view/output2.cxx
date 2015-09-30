@@ -821,7 +821,7 @@ double ScOutputData::GetStretch()
 
 static void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScRefCellValue& rCell )
 {
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
 
     OUString aCellText;
     OUString aURL;
@@ -1433,7 +1433,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                 mpDev->GetMapMode().GetMapUnit() == mpRefDevice->GetMapMode().GetMapUnit(),
                 "LayoutStrings: different MapUnits ?!?!" );
 
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, mpDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >(mpDev->GetExtOutDevData() );
 
     sc::IdleSwitch aIdleSwitch(*mpDoc, false);
     ScDrawStringsVars aVars( this, bPixelToLogic );
@@ -2711,7 +2711,7 @@ void ScOutputData::DrawEditParam::adjustForRTL()
 void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, OutputDevice* pDev)
 {
     // PDF: whole-cell hyperlink from formula?
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast<vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
     bool bHasURL = pPDFData && isHyperlinkCell();
     if (!bHasURL)
         return;

@@ -80,7 +80,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
             aHLinkItem.SetURL( pInfo->GetHlink() );
             aHLinkItem.SetInsertMode(HLINK_FIELD);
         }
-        SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
+        SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObj );
         if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
         {
             uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
@@ -166,7 +166,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                         if ( rMarkList.GetMarkCount() == 1 )
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj );
+                            SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObj  );
                             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                             {
                                 uno::Reference<awt::XControlModel> xControlModel =

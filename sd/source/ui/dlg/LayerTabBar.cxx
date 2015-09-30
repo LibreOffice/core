@@ -234,7 +234,7 @@ void LayerTabBar::EndRenaming()
     if( !IsEditModeCanceled() )
     {
         ::sd::View* pView = pDrViewSh->GetView();
-        DrawView* pDrView = PTR_CAST( DrawView, pView );
+        DrawView* pDrView = dynamic_cast<DrawView*>( pView  );
 
         SdDrawDocument& rDoc = pView->GetDoc();
         OUString aLayerName = pView->GetActiveLayer();

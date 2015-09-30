@@ -98,7 +98,7 @@ void SfxViewFrame::UpdateTitle()
 
     void SwDocShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
-        if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+        if ( dynamic_cast<const SfxSimpleHint *>(&rHint) != nullptr )
         {
             switch( ( (SfxSimpleHint&) rHint ).GetId() )
             {
@@ -225,7 +225,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, &GetFrame() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString( "_blank" ) ) );
             SfxGetpApp()->ExecuteSlot( aReq );
-            const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
+            const SfxViewFrameItem* pItem = dynamic_cast<const SfxViewFrameItem*>( aReq.GetReturnValue()  );
             if ( pItem )
                 rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
             break;

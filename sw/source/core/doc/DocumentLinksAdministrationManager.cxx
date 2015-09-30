@@ -70,7 +70,7 @@ namespace
             if( pLnk &&
                 ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
                   OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
-                pLnk->ISA( SwBaseLink ) )
+                  dynamic_cast<const SwBaseLink*>( pLnk) !=  nullptr )
             {
                     ::sfx2::SvBaseLinkRef xLink = pLnk;
 

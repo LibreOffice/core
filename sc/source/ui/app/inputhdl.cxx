@@ -1676,7 +1676,7 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh) // Executed synchron
         UpdateAutoCorrFlag();
     }
 
-    pActiveViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    pActiveViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
 
     if ( pActiveViewSh && pActiveViewSh == pViewSh )
     {
@@ -2226,7 +2226,7 @@ void ScInputHandler::ShowRefFrame()
     // Modifying pActiveViewSh here would interfere with the bInEnterHandler / bRepeat
     // checks in NotifyChange, and lead to keeping the wrong value in pActiveViewSh.
     // A local variable is used instead.
-    ScTabViewShell* pVisibleSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    ScTabViewShell* pVisibleSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
     if ( pRefViewSh && pRefViewSh != pVisibleSh )
     {
         bool bFound = false;
@@ -3395,7 +3395,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     if ( pSourceSh )
         pActiveViewSh = pSourceSh;
     else
-        pActiveViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+        pActiveViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
 
     ImplCreateEditEngine();
 

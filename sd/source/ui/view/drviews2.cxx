@@ -37,6 +37,7 @@
 #include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/editeng.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -808,7 +809,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 ::Outliner* pOutl = mpDrawView->GetTextEditOutliner();
                 if (pOutl)
                 {
-                    pOutl->RemoveFields(true, SvxURLField::StaticType());
+                    pOutl->RemoveFields(true, checkSvxFieldData<SvxURLField>);
                 }
 
                 pSet.reset(new SfxItemSet( GetPool(), EE_ITEMS_START, EE_ITEMS_END ));
@@ -953,7 +954,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
                 {
                     GraphicObject aGraphicObject( static_cast<SdrGrafObj*>( pObj )->GetGraphicObject() );
                     {
@@ -972,7 +973,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
                 {
                     GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
                     m_ExternalEdits.push_back(
@@ -993,7 +994,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-                if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
                 {
                     SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
                     ScopedVclPtrInstance< CompressGraphicsDialog > dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );
@@ -1700,7 +1701,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if ( pFieldItem )
                 {
                     const SvxFieldData* pField = pFieldItem->GetField();
-                    if( pField && pField->ISA( SvxURLField ) )
+                    if( pField && dynamic_cast< const SvxURLField *>( pField ) !=  nullptr )
                     {
                         const SvxURLField* pURLField = static_cast< const SvxURLField* >( pField );
 
@@ -1905,13 +1906,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 const SvxFieldItem* pOldFldItem = pOLV->GetFieldAtSelection();
 
-                if( pOldFldItem && ( pOldFldItem->GetField()->ISA( SvxURLField ) ||
-                                    pOldFldItem->GetField()->ISA( SvxDateField ) ||
-                                    pOldFldItem->GetField()->ISA( SvxTimeField ) ||
-                                    pOldFldItem->GetField()->ISA( SvxExtTimeField ) ||
-                                    pOldFldItem->GetField()->ISA( SvxExtFileField ) ||
-                                    pOldFldItem->GetField()->ISA( SvxAuthorField ) ||
-                                    pOldFldItem->GetField()->ISA( SvxPageField ) ) )
+                if( pOldFldItem && ( 0 != dynamic_cast< const SvxURLField *>( pOldFldItem->GetField() ) ||
+                                    0 != dynamic_cast< const SvxDateField *>( pOldFldItem->GetField() ) ||
+                                    0 != dynamic_cast< const SvxTimeField *>( pOldFldItem->GetField() ) ||
+                                    0 != dynamic_cast< const SvxExtTimeField *>( pOldFldItem->GetField() ) ||
+                                    0 != dynamic_cast< const SvxExtFileField *>( pOldFldItem->GetField() ) ||
+                                    0 != dynamic_cast< const SvxAuthorField *>( pOldFldItem->GetField() ) ||
+                                    0 != dynamic_cast< const SvxPageField *>( pOldFldItem->GetField() ) ) )
                 {
                     // select field, then it will be deleted when inserting
                     ESelection aSel = pOLV->GetSelection();
@@ -1970,10 +1971,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 const SvxFieldItem* pFldItem = pOLV->GetFieldAtSelection();
 
-                if( pFldItem && (pFldItem->GetField()->ISA( SvxDateField ) ||
-                                 pFldItem->GetField()->ISA( SvxAuthorField ) ||
-                                 pFldItem->GetField()->ISA( SvxExtFileField ) ||
-                                 pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
+                if( pFldItem && (0 != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
+                                 0 != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
+                                 0 != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
+                                 0 != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) )
                 {
                     // Dialog...
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
@@ -2335,8 +2336,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     SdrMark*     pM=rMarkList.GetMark(nm);
                     SdrObject*   pObj=pM->GetMarkedSdrObj();
-                    SdrGrafObj*  pGraf=PTR_CAST(SdrGrafObj,pObj);
-                    SdrOle2Obj*  pOle2=PTR_CAST(SdrOle2Obj,pObj);
+                    SdrGrafObj*  pGraf= dynamic_cast< SdrGrafObj *>( pObj );
+                    SdrOle2Obj*  pOle2= dynamic_cast< SdrOle2Obj *>( pObj );
 
                     if(pGraf)
                     {

@@ -559,7 +559,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
             SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
 
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
+            FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rSh.GetView()) != nullptr );
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             std::unique_ptr<SwTableRep> pTableRep(::lcl_TableParamToItemSet( aCoreSet, rSh ));
 
@@ -616,7 +616,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SwView* pView = GetActiveView();
             if(pView)
             {
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
+                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
                 SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
                 SfxItemSet aCoreSet( GetPool(),

@@ -102,7 +102,7 @@ SwCrsrShell* SwAccessibleContext::GetCrsrShell()
     SwCrsrShell* pCrsrShell;
     SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
     OSL_ENSURE( pViewShell, "no view shell" );
-    if( pViewShell && pViewShell->ISA( SwCrsrShell ) )
+    if( pViewShell && dynamic_cast<const SwCrsrShell*>( pViewShell) !=  nullptr )
         pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
     else
         pCrsrShell = NULL;
@@ -116,7 +116,7 @@ const SwCrsrShell* SwAccessibleContext::GetCrsrShell() const
     const SwCrsrShell* pCrsrShell;
     const SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
     OSL_ENSURE( pViewShell, "no view shell" );
-    if( pViewShell && pViewShell->ISA( SwCrsrShell ) )
+    if( pViewShell && dynamic_cast<const SwCrsrShell*>( pViewShell) !=  nullptr )
         pCrsrShell = static_cast<const SwCrsrShell*>( pViewShell );
     else
         pCrsrShell = NULL;
@@ -1334,14 +1334,14 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
     if( !pCrsrShell )
         return false;
 
-    SwFEShell* pFEShell = pCrsrShell->ISA( SwFEShell )
+    SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCrsrShell) !=  nullptr
                                 ? static_cast<SwFEShell*>( pCrsrShell )
                                 : 0;
     // Get rid of activated OLE object
     if( pFEShell )
         pFEShell->FinishOLEObj();
 
-    SwWrtShell* pWrtShell = pCrsrShell->ISA( SwWrtShell )
+    SwWrtShell* pWrtShell = dynamic_cast<const SwWrtShell*>( pCrsrShell) !=  nullptr
                                 ? static_cast<SwWrtShell*>( pCrsrShell )
                                 : 0;
 

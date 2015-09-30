@@ -1421,7 +1421,7 @@ private:
             rOutliner.SetControlWord( nCntrl );
 
             // When in outline view then apply all pending changes to the model.
-            if (pShell->ISA(OutlineViewShell))
+            if( dynamic_cast< OutlineViewShell *>( pShell ) !=  nullptr)
                 static_cast<OutlineViewShell*>(pShell)->PrepareClose (false);
 
             // Collect some frequently used data.

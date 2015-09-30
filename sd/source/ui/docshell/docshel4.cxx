@@ -187,7 +187,7 @@ void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
             return;
     }
 
-    //  if (mpPrinter->IsA(SfxPrinter))
+    //  if 0 != dynamic_cast< SfxPrinter *>( (mpPrinter ))
     {
         // Since we do not have RTTI we use a hard cast (...)
         SetPrinter(static_cast<SfxPrinter*>(pNewPrinter));
@@ -635,7 +635,7 @@ bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com:
 
         if( mpViewShell )
         {
-            if( mpViewShell->ISA( OutlineViewShell ) )
+            if( dynamic_cast< OutlineViewShell *>( mpViewShell ) !=  nullptr )
                 static_cast<OutlineView*>(mpViewShell->GetView())
                     ->GetOutliner().ClearModifyFlag();
 
@@ -671,7 +671,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
 {
     bool bFound = false;
 
-    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    if (mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
         DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
         ViewShellBase& rBase (mpViewShell->GetViewShellBase());
@@ -837,7 +837,7 @@ bool DrawDocShell::IsMarked( SdrObject* pObject )
 {
     bool bisMarked =false;
 
-    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    if (mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
         DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpViewShell );
         if (pObject )
@@ -855,7 +855,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
         OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
     bool bUnMark = false;
 
-    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    if (mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
         DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpViewShell );
 
@@ -936,7 +936,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
         OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
     bool bFound = false;
 
-    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    if (mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
         DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpViewShell );
 
@@ -1133,7 +1133,7 @@ void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
 VclPtr<SfxDocumentInfoDialog> DrawDocShell::CreateDocumentInfoDialog( vcl::Window *pParent, const SfxItemSet &rSet )
 {
     VclPtr<SfxDocumentInfoDialog> pDlg   = VclPtr<SfxDocumentInfoDialog>::Create( pParent, rSet );
-    DrawDocShell*          pDocSh = PTR_CAST(DrawDocShell,SfxObjectShell::Current());
+    DrawDocShell*          pDocSh = dynamic_cast< DrawDocShell *>( SfxObjectShell::Current() );
 
     if( pDocSh == this )
     {

@@ -55,8 +55,7 @@ void SdLayerModifyUndoAction::Undo()
     ::sd::DrawDocShell* mpDocSh = mpDoc->GetDocSh();
     if( mpDocSh )
     {
-        ::sd::DrawViewShell* pDrViewSh =
-              PTR_CAST(::sd::DrawViewShell, mpDocSh->GetViewShell() );
+        ::sd::DrawViewShell* pDrViewSh = dynamic_cast< ::sd::DrawViewShell*> ( mpDocSh->GetViewShell() );
         if( pDrViewSh )
         {
             pDrViewSh->ModifyLayer( mpLayer, maOldLayerName, maOldLayerTitle, maOldLayerDesc, mbOldIsVisible, mbOldIsLocked, mbOldIsPrintable );
@@ -69,8 +68,7 @@ void SdLayerModifyUndoAction::Redo()
     ::sd::DrawDocShell* mpDocSh = mpDoc->GetDocSh();
     if( mpDocSh )
     {
-        ::sd::DrawViewShell* pDrViewSh =
-              PTR_CAST(::sd::DrawViewShell, mpDocSh->GetViewShell() );
+        ::sd::DrawViewShell* pDrViewSh = dynamic_cast< ::sd::DrawViewShell* >( mpDocSh->GetViewShell() );
         if( pDrViewSh )
         {
             pDrViewSh->ModifyLayer( mpLayer, maNewLayerName, maNewLayerTitle, maNewLayerDesc, mbNewIsVisible, mbNewIsLocked, mbNewIsPrintable );

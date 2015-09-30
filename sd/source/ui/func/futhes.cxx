@@ -70,7 +70,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
     SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, OUString(),
                              mpWindow, RID_SVXERRCTX, &DIALOG_MGR() );
 
-    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    if (mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
         SdrTextObj* pTextObj = NULL;
 
@@ -83,7 +83,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                if ( pObj->ISA(SdrTextObj) )
+                if ( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr )
                 {
                     pTextObj = static_cast<SdrTextObj*>(pObj);
                 }
@@ -117,7 +117,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
             }
         }
     }
-    else if (mpViewShell && mpViewShell->ISA(OutlineViewShell))
+    else if (mpViewShell && dynamic_cast< OutlineViewShell *>( mpViewShell ) !=  nullptr)
     {
         Outliner* pOutliner = mpDoc->GetOutliner();
         OutlinerView* pOutlView = pOutliner->GetView(0);

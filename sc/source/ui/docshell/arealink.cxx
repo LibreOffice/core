@@ -72,7 +72,7 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
     bInCreate       (false),
     bDoInsert       (true)
 {
-    OSL_ENSURE(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
+    OSL_ENSURE(dynamic_cast< const ScDocShell *>( pShell ) !=  nullptr, "ScAreaLink mit falscher ObjectShell");
     pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
     SetRefreshHandler( LINK( this, ScAreaLink, RefreshHdl ) );
     SetRefreshControl( &pImpl->m_pDocSh->GetDocument().GetRefreshTimerControlAddress() );
