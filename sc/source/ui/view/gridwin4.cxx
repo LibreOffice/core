@@ -1186,7 +1186,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 rRenderContext.DrawRect( Rectangle( Point(aStart.X(),aEnd.Y()-2), aEnd ) );
                 rRenderContext.DrawRect( Rectangle( Point(aEnd.X()-2,aStart.Y()), aEnd ) );
 
-                // Page breakes
+                // Page breaks
                 //! Display differently (dashed ????)
 
                 size_t nColBreaks = rData.GetPagesX();
@@ -1621,7 +1621,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     for (SCROW nY=nY1; nY<=nY2; nY++)
     {
         bool bFirstRow = ( nY == nPosY );                       // first visible row?
-        bool bDoHidden = false;                                 // repete hidden ?
+        bool bDoHidden = false;                                 // repeat hidden ?
         sal_uInt16 nHeightTwips = pDoc->GetRowHeight( nY,nTab );
         bool bDoRow = ( nHeightTwips != 0 );
         if (bDoRow)

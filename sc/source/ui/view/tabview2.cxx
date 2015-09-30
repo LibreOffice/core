@@ -337,7 +337,7 @@ void ScTabView::InitOwnBlockMode()
 {
     if (!IsBlockMode())
     {
-        // when there is no (old) selection anynmore, delete anchor in SelectionEngine:
+        // when there is no (old) selection anymore, delete anchor in SelectionEngine:
         ScMarkData& rMark = aViewData.GetMarkData();
         if (!rMark.IsMarked() && !rMark.IsMultiMarked())
             GetSelEngine()->CursorPosChanging( false, false );

@@ -334,7 +334,7 @@ void ScDrawView::RecalcScale()
             for ( size_t i = 0; i < nCount; ++i )
             {
                 SdrObject* pObj = pPage->GetObj( i );
-                // Align objects to nearset grid position
+                // Align objects to nearest grid position
                 SyncForGrid( pObj );
             }
         }

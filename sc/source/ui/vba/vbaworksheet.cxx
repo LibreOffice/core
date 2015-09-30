@@ -989,7 +989,7 @@ uno::Any
 ScVbaWorksheet::getControlShape( const OUString& sName )
 {
     // ideally we would get an XControl object but it appears an XControl
-    // implementation only exists for a Control implementation optained from the
+    // implementation only exists for a Control implementation obtained from the
     // view ( e.g. in basic you would get this from
     // thiscomponent.currentcontroller.getControl( controlModel ) )
     // and the thing to realise is that it is only possible to get an XControl

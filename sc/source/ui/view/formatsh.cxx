@@ -591,7 +591,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             if ( pStyleSheet )
                             {
                                 // style pointer to names before erase,
-                                // otherwise cells will get ivalid pointer
+                                // otherwise cells will get invalid pointer
                                 //!!! As it happens, a method that does it for a particular style
                                 rDoc.StylesToNames();
                                 bConvertBack = true;
@@ -945,7 +945,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         pStylePool->Remove( pStyleSheet );
                     else
                     {
-                        // If in the mean time something was paited with the
+                        // If in the mean time something was painted with the
                         // temporary changed item set
                         pDocSh->PostPaintGridAll();
                     }
@@ -2520,7 +2520,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                             aFormatCode = 9;
                             break;
                         default:
-                            aFormatCode = -1;   //for more roburst
+                            aFormatCode = -1;   //for more robust
                         }
                         if( aFormatCode == -1 )
                             rSet.InvalidateItem( nWhich );

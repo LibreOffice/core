@@ -2063,7 +2063,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             GetEditUrl(rMEvt.GetPosPixel()) )           // click on link: do not move cursor
     {
         SetPointer( Pointer( PointerStyle::RefHand ) );
-        nMouseStatus = SC_GM_URLDOWN;                   // also only esecute when ButtonUp
+        nMouseStatus = SC_GM_URLDOWN;                   // also only execute when ButtonUp
         return;
     }
 
@@ -2546,7 +2546,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     aAddr = aAddr + ":" + aAddr;
                 }
 
-                //! SID_MARKAREA does not exixst anymore ???
+                //! SID_MARKAREA does not exist anymore ???
                 //! What happens when selecting with the cursor ???
             }
             else                                        // only move cursor
@@ -3138,7 +3138,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 // Edit cell with spelling errors ?
             if (bMouse && (GetEditUrl(aPosPixel) || bSpellError))
             {
-                //  GetEditUrlOrError has alreasy moved the Cursor
+                //  GetEditUrlOrError has already moved the Cursor
 
                 pScMod->SetInputMode( SC_INPUT_TABLE );
                 bEdit = pViewData->HasEditView(eWhich);     // Did it work?
@@ -3579,7 +3579,7 @@ bool ScGridWindow::DropScroll( const Point& rMousePos )
 
 static bool lcl_TestScenarioRedliningDrop( ScDocument* pDoc, const ScRange& aDragRange)
 {
-    //  Test, if a senario is affected by a drop when turing on RedLining,
+    //  Test, if a scenario is affected by a drop when turing on RedLining,
     bool bReturn = false;
     SCTAB nTab = aDragRange.aStart.Tab();
     SCTAB nTabCount = pDoc->GetTableCount();

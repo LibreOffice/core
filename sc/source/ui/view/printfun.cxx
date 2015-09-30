@@ -945,7 +945,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     if (!bPrintEntireSheet && !nPrintRangeCount)
         mbHasPrintRange = false;
 
-    if ( pUserArea )                // UserArea (selection) has prority
+    if ( pUserArea )                // UserArea (selection) has priority
     {
         bPrintCurrentTable    =
         aAreaParam.bPrintArea = true;                   // Selection
@@ -1690,7 +1690,7 @@ void ScPrintFunc::MakeEditEngine()
         pEditDefaults->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
         pEditDefaults->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
         pEditDefaults->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
-        //  dont use font color, because background color is not used
+        //  don't use font color, because background color is not used
         //! there's no way to set the background for note pages
         pEditDefaults->ClearItem( EE_CHAR_COLOR );
         if (ScGlobal::IsSystemRTL())
