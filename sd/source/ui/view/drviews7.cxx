@@ -1620,7 +1620,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
 void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
 {
-    //draview
+    //DrawView
     rSet.Put(SfxBoolItem(SID_DIAMODE, false));
     rSet.Put(SfxBoolItem(SID_OUTLINEMODE, false));
     if (mePageKind == PK_NOTES)

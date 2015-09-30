@@ -559,7 +559,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         aSaveOptions.SetAutoSave( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
     }
 
-    // AutoSave-Propt
+    // AutoSave-Prompt
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVEPROMPT), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");

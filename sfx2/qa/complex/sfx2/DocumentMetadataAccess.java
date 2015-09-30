@@ -227,7 +227,7 @@ public class DocumentMetadataAccess
 
             System.out.println("Checking some invalid args...");
 
-            String content = "behold, for i am the content.";
+            String content = "behold, for I am the content.";
             new TestRange(content);
 
             try {
