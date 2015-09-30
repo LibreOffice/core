@@ -202,7 +202,7 @@ FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocumen
         return eERR_NI;
 
     // check the passed Calc document
-    OSL_ENSURE( pDocument, "::ScImportExcel - no document" );
+    OSL_ENSURE( pDocument, "::ScExportExcel5 - no document" );
     if( !pDocument ) return eERR_INTERN;        // should not happen
 
     // check the output stream from medium
