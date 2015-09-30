@@ -1,0 +1,78 @@
+--- old/beanshell/engine/src/bsh/engine/BshScriptEngine.java
++++ new/beanshell/engine/src/bsh/engine/BshScriptEngine.java
+@@ -229,6 +229,12 @@
+ 		}
+ 	}
+ 
++	public Object invoke( Object thiz, String name, Object... args )
++	throws ScriptException, NoSuchMethodException
++	{
++		return invokeMethod( thiz, name, args );
++	}
++
+ 	/**
+ 	 * Same as invoke(Object, String, Object...) with <code>null</code> as the
+ 	 * first argument.  Used to call top-level procedures defined in scripts.
+@@ -249,6 +255,12 @@
+ 		return invokeMethod( getGlobal(), name, args );
+ 	}
+ 
++	public Object invoke( String name, Object... args )
++		throws ScriptException, NoSuchMethodException
++	{
++		return invokeFunction( name, args );
++	}
++
+     /**
+ 	 * Returns an implementation of an interface using procedures compiled in the
+ 	 * interpreter. The methods of the interface may be implemented using the
+--- old/beanshell/engine/src/TestBshScriptEngine.java
++++ new/beanshell/engine/src/TestBshScriptEngine.java
+@@ -2,11 +2,12 @@
+ import java.io.*;
+ import javax.script.*;
+ import static javax.script.ScriptContext.*;
++import java.lang.reflect.*;
+ 
+ public class TestBshScriptEngine
+ {
+ 	public static void main( String [] args )
+-		throws ScriptException, NoSuchMethodException, IOException
++		throws ScriptException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException
+ 	{
+ 		ScriptEngineManager manager =
+ 			new ScriptEngineManager( bsh.Interpreter.class.getClassLoader() );
+@@ -39,11 +40,23 @@
+ 		assertTrue( engine.get("bar").equals("gee") );
+ 		assertTrue( engine.eval("bar").equals("gee") );
+ 
++		// use reflection to pick available method
++		Method invokeMe = null;
++		try {
++			invokeMe = Invocable.class.getMethod( "invokeFunction", String.class, Object[].class );
++		} catch ( Exception e ) { }
++		if (invokeMe == null)
++		{
++			try {
++				invokeMe = Invocable.class.getMethod( "invoke", String.class, Object[].class );
++			} catch ( Exception e ) { }
++		}
++
+ 		// install and invoke a method
+ 		engine.eval("foo() { return foo+1; }");
+ 		// invoke a method
+ 		Invocable invocable = (Invocable) engine;
+-		int foo = (Integer)invocable.invokeFunction( "foo" );
++		int foo = (Integer)invokeMe.invoke( invocable, "foo", (Object) new Object[]{} );
+ 		assertTrue( foo == 43 );
+ 
+ 		// get interface
+@@ -58,7 +71,7 @@
+ 		engine.eval(
+ 			"flag2=false; myObj() { run() { flag2=true; } return this; }");
+ 		assertTrue( (Boolean)engine.get("flag2") == false );
+-		Object scriptedObject = invocable.invokeFunction("myObj");
++		Object scriptedObject = invokeMe.invoke( invocable, "myObj", (Object) new Object[]{} );
+ 		assertTrue( scriptedObject instanceof bsh.This );
+ 		runnable =
+ 			(Runnable)invocable.getInterface( scriptedObject, Runnable.class );
