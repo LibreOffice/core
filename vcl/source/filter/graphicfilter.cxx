@@ -1533,18 +1533,18 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
 
                     if (!rIStream.GetError() && nMemoryLength >= 0)
                     {
-                        SvgDataArray aNewData(new sal_uInt8[nMemoryLength]);
+                        SvgDataArray aNewData(nMemoryLength);
                         aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
-                        aMemStream.Read(aNewData.get(), nMemoryLength);
+                        aMemStream.Read(aNewData.begin(), nMemoryLength);
 
                         // Make a uncompressed copy for GfxLink
                         nGraphicContentSize = nMemoryLength;
                         pGraphicContent = new sal_uInt8[nGraphicContentSize];
-                        std::copy(aNewData.get(), aNewData.get() + nMemoryLength, pGraphicContent);
+                        std::copy(aNewData.begin(), aNewData.end(), pGraphicContent);
 
                         if(!aMemStream.GetError() )
                         {
-                            SvgDataPtr aSvgDataPtr(new SvgData(aNewData, nMemoryLength, rPath));
+                            SvgDataPtr aSvgDataPtr(new SvgData(aNewData, rPath));
                             rGraphic = Graphic(aSvgDataPtr);
                             bOkay = true;
                         }
@@ -1552,20 +1552,20 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 }
                 else
                 {
-                    SvgDataArray aNewData(new sal_uInt8[nStreamLength]);
+                    SvgDataArray aNewData(nStreamLength);
                     rIStream.Seek(nStreamPosition);
-                    rIStream.Read(aNewData.get(), nStreamLength);
+                    rIStream.Read(aNewData.begin(), nStreamLength);
 
                     if(!rIStream.GetError())
                     {
-                        SvgDataPtr aSvgDataPtr(new SvgData(aNewData, nStreamLength, rPath));
+                        SvgDataPtr aSvgDataPtr(new SvgData(aNewData, rPath));
                         rGraphic = Graphic(aSvgDataPtr);
                         bOkay = true;
                     }
                 }
             }
 
-            if(bOkay)
+            if (bOkay)
             {
                 eLinkType = GFX_LINK_TYPE_NATIVE_SVG;
             }

@@ -1542,23 +1542,21 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                         }
                         else
                         {
-                            sal_uInt32 mnSvgDataArrayLength(0);
-                            rIStm.ReadUInt32( mnSvgDataArrayLength );
+                            sal_uInt32 nSvgDataArrayLength(0);
+                            rIStm.ReadUInt32(nSvgDataArrayLength);
 
-                            if(mnSvgDataArrayLength)
+                            if (nSvgDataArrayLength)
                             {
-                                SvgDataArray aNewData(new sal_uInt8[mnSvgDataArrayLength]);
-                                OUString aPath;
+                                SvgDataArray aNewData(nSvgDataArrayLength);
 
-                                rIStm.Read(aNewData.get(), mnSvgDataArrayLength);
-                                aPath = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
+                                rIStm.Read(aNewData.begin(), nSvgDataArrayLength);
+                                OUString aPath = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
 
-                                if(!rIStm.GetError())
+                                if (!rIStm.GetError())
                                 {
                                     SvgDataPtr aSvgDataPtr(
                                         new SvgData(
                                             aNewData,
-                                            mnSvgDataArrayLength,
                                             OUString(aPath)));
 
                                     rImpGraphic = aSvgDataPtr;

@@ -99,14 +99,13 @@ void SvgData::ensureReplacement()
 
 void SvgData::ensureSequenceAndRange()
 {
-    if(!maSequence.hasElements() && mnSvgDataArrayLength)
+    if(!maSequence.hasElements() && maSvgDataArray.hasElements())
     {
         // import SVG to maSequence, also set maRange
         maRange.reset();
 
         // create stream
-        const uno::Sequence< sal_Int8 > aPostData(reinterpret_cast<sal_Int8*>(maSvgDataArray.get()), mnSvgDataArrayLength);
-        const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(aPostData));
+        const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maSvgDataArray));
 
         if(myInputStream.is())
         {
@@ -152,9 +151,8 @@ void SvgData::ensureSequenceAndRange()
     }
 }
 
-SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLength, const OUString& rPath)
+SvgData::SvgData(const SvgDataArray& rSvgDataArray, const OUString& rPath)
 :   maSvgDataArray(rSvgDataArray),
-    mnSvgDataArrayLength(nSvgDataArrayLength),
     maPath(rPath),
     maRange(),
     maSequence(),
@@ -164,7 +162,6 @@ SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLeng
 
 SvgData::SvgData(const OUString& rPath):
     maSvgDataArray(),
-    mnSvgDataArrayLength(0),
     maPath(rPath),
     maRange(),
     maSequence(),
@@ -174,15 +171,14 @@ SvgData::SvgData(const OUString& rPath):
     if(rIStm.GetError())
         return;
     const sal_uInt32 nStmLen(rIStm.remainingSize());
-    if(nStmLen)
+    if (nStmLen)
     {
-        SvgDataArray aNewData(new sal_uInt8[nStmLen]);
-        rIStm.Read(aNewData.get(), nStmLen);
+        maSvgDataArray.realloc(nStmLen);
+        rIStm.Read(maSvgDataArray.begin(), nStmLen);
 
-        if(!rIStm.GetError())
+        if (rIStm.GetError())
         {
-            maSvgDataArray = aNewData;
-            mnSvgDataArrayLength = nStmLen;
+            maSvgDataArray = SvgDataArray();
         }
     }
 }

@@ -21,13 +21,12 @@
 #define INCLUDED_VCL_SVGDATA_HXX
 
 #include <basegfx/range/b2drange.hxx>
-#include <boost/shared_array.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <vcl/bitmapex.hxx>
 #include <rtl/ustring.hxx>
 
 
-typedef boost::shared_array< sal_uInt8 > SvgDataArray;
+typedef css::uno::Sequence<sal_Int8> SvgDataArray;
 
 
 // helper to convert any Primitive2DSequence to a good quality BitmapEx,
@@ -44,7 +43,6 @@ class VCL_DLLPUBLIC SvgData
 private:
     // the file and length
     SvgDataArray            maSvgDataArray;
-    sal_uInt32              mnSvgDataArrayLength;
 
     // The absolute Path if available
     OUString           maPath;
@@ -63,12 +61,12 @@ private:
     SvgData& operator=(const SvgData&) SAL_DELETED_FUNCTION;
 
 public:
-    SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLength, const OUString& rPath);
+    SvgData(const SvgDataArray& rSvgDataArray, const OUString& rPath);
     SvgData(const OUString& rPath);
 
     /// data read
     const SvgDataArray& getSvgDataArray() const { return maSvgDataArray; }
-    sal_uInt32 getSvgDataArrayLength() const { return mnSvgDataArrayLength; }
+    sal_uInt32 getSvgDataArrayLength() const { return maSvgDataArray.getLength(); }
     const OUString& getPath() const { return maPath; }
 
     /// data read and evtl. on demand creation
