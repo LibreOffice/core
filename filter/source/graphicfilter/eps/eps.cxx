@@ -159,7 +159,7 @@ private:
     sal_uInt32          nOffset;
     sal_uInt32          dwShift;
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplWriteProlog( const Graphic* pPreviewEPSI = NULL );
     void                ImplWriteEpilog();
@@ -2497,17 +2497,17 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
     }
     switch(rLineInfo.GetLineCap())
     {
-        default: /* com::sun::star::drawing::LineCap_BUTT */
+        default: /* css::drawing::LineCap_BUTT */
         {
             aCapType = SvtGraphicStroke::capButt;
             break;
         }
-        case com::sun::star::drawing::LineCap_ROUND:
+        case css::drawing::LineCap_ROUND:
         {
             aCapType = SvtGraphicStroke::capRound;
             break;
         }
-        case com::sun::star::drawing::LineCap_SQUARE:
+        case css::drawing::LineCap_SQUARE:
         {
             aCapType = SvtGraphicStroke::capSquare;
             break;

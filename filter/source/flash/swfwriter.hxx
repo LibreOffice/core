@@ -267,7 +267,7 @@ public:
     Writer( sal_Int32 nDocWidthInput, sal_Int32 nDocHeightInput, sal_Int32 nDocWidth, sal_Int32 nDocHeight, sal_Int32 nJPEGcompressMode = -1 );
     ~Writer();
 
-    void storeTo( com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutStream );
+    void storeTo( css::uno::Reference< css::io::XOutputStream > &xOutStream );
 
     // geometry
     void setClipping( const tools::PolyPolygon* pClipPolyPolygon );
@@ -375,10 +375,10 @@ private:
                                    const double P3x, const double P3y,
                                    const double P4x, const double P4y );
 
-    com::sun::star::uno::Reference < com::sun::star::i18n::XBreakIterator > Impl_GetBreakIterator();
+    css::uno::Reference < css::i18n::XBreakIterator > Impl_GetBreakIterator();
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > mxBreakIterator;
+    css::uno::Reference< css::i18n::XBreakIterator > mxBreakIterator;
 
     FontMap                 maFonts;
 
@@ -410,7 +410,7 @@ private:
     sal_uInt16 mnNextId;
     sal_uInt32  mnFrames;
 
-//  com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > mxOutStream;
+//  css::uno::Reference< css::io::XOutputStream > mxOutStream;
     oslFileHandle mxOutStream;
 
     utl::TempFile maMovieTempFile;

@@ -185,7 +185,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                         if( !pFilter->maImportXSLT.isEmpty() )
                             addFile( xFilterRoot, xFactory, pFilter->maImportXSLT );
                     }
-                    catch(const com::sun::star::container::ElementExistException&)
+                    catch(const css::container::ElementExistException&)
                     {
                     // in case of same named import / export XSLT the latter
                     // is ignored

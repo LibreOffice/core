@@ -28,47 +28,47 @@
 #include <cppuhelper/implbase.hxx>
 
 class PlainTextFilterDetect : public cppu::WeakImplHelper<
-    com::sun::star::document::XExtendedFilterDetection,
-    com::sun::star::lang::XInitialization,
-    com::sun::star::lang::XServiceInfo>
+    css::document::XExtendedFilterDetection,
+    css::lang::XInitialization,
+    css::lang::XServiceInfo>
 {
-    com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> mxCxt;
+    css::uno::Reference<css::uno::XComponentContext> mxCxt;
 
 public:
 
-    PlainTextFilterDetect (const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xCxt);
+    PlainTextFilterDetect (const css::uno::Reference<css::uno::XComponentContext>& xCxt);
     virtual ~PlainTextFilterDetect();
 
     // XExtendedFilterDetection
 
-    virtual OUString SAL_CALL detect(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& lDescriptor)
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL detect(css::uno::Sequence<css::beans::PropertyValue>& lDescriptor)
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XInitialization
 
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArguments)
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments)
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 OUString PlainTextFilterDetect_getImplementationName();
 
 bool PlainTextFilterDetect_supportsService(const OUString& ServiceName);
 
-com::sun::star::uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames();
+css::uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames();
 
-com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
-PlainTextFilterDetect_createInstance(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& rCxt);
+css::uno::Reference<css::uno::XInterface>
+PlainTextFilterDetect_createInstance(const css::uno::Reference<css::uno::XComponentContext>& rCxt);
 
 #endif
 

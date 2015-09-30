@@ -123,7 +123,7 @@ namespace T602ImportFilter {
 
 inistruct ini;
 
-T602ImportFilter::T602ImportFilter(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r )
+T602ImportFilter::T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r )
     : mxMSF(r)
     , mpAttrList(NULL)
     , node(START)
@@ -149,7 +149,7 @@ OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
     if (!mxInputStream.is())
         return OUString();
 
-    ::com::sun::star::uno::Sequence< sal_Int8 > aData;
+    css::uno::Sequence< sal_Int8 > aData;
     const size_t numBytes = 4;
     size_t numBytesRead = 0;
 
@@ -163,15 +163,15 @@ OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
 }
 
 // XFilter
-sal_Bool SAL_CALL T602ImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL T602ImportFilter::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException, std::exception)
 {
     return importImpl ( aDescriptor );
 }
 
 // XImporter
-void SAL_CALL T602ImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL T602ImportFilter::setTargetDocument( const Reference< css::lang::XComponent >& xDoc )
+    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
@@ -230,7 +230,7 @@ void T602ImportFilter::inschr(unsigned char ch)
     inschrdef(ch);
 }
 
-bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
     Reset602();
@@ -880,7 +880,7 @@ Reference< XInterface > SAL_CALL T602ImportFilter_createInstance( const Referenc
     return static_cast<cppu::OWeakObject*>(new T602ImportFilter( rSMgr ));
 }
 
-T602ImportFilterDialog::T602ImportFilterDialog(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r ) :
+T602ImportFilterDialog::T602ImportFilterDialog(const css::uno::Reference<css::lang::XMultiServiceFactory > &r ) :
     mxMSF( r ), mpResMgr( NULL ) {}
 
 T602ImportFilterDialog::~T602ImportFilterDialog()
@@ -891,14 +891,14 @@ T602ImportFilterDialog::~T602ImportFilterDialog()
 // XLocalizable
 
 void SAL_CALL T602ImportFilterDialog::setLocale( const Locale& eLocale )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     meLocale = eLocale;
     initLocale();
 }
 
 Locale SAL_CALL T602ImportFilterDialog::getLocale()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return meLocale;
 }
@@ -1097,17 +1097,17 @@ ResMgr* T602ImportFilterDialog::getResMgr()
 }
 
 void SAL_CALL T602ImportFilterDialog::setTitle( const OUString& )
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 sal_Int16 SAL_CALL T602ImportFilterDialog::execute()
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (css::uno::RuntimeException, std::exception)
 {
     if (OptionsDlg())
-        return com::sun::star::ui::dialogs::ExecutableDialogResults::OK;
+        return css::ui::dialogs::ExecutableDialogResults::OK;
     else
-        return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
+        return css::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
 OUString T602ImportFilterDialog::getResStr( sal_Int16 resid )

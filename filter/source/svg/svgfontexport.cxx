@@ -138,12 +138,12 @@ void SVGFontExport::implCollectGlyphs()
                 if( !aText.isEmpty() )
                 {
                     GlyphSet& rGlyphSet = implGetGlyphSet( pVDev->GetFont() );
-                    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI(
+                    css::uno::Reference< css::i18n::XBreakIterator > xBI(
                         vcl::unohelper::CreateBreakIterator() );
 
                     if( xBI.is() )
                     {
-                        const ::com::sun::star::lang::Locale&   rLocale = Application::GetSettings().GetLanguageTag().getLocale();
+                        const css::lang::Locale&   rLocale = Application::GetSettings().GetLanguageTag().getLocale();
                         sal_Int32                               nCurPos = 0, nLastPos = -1;
 
                         while( ( nCurPos < aText.getLength() ) && ( nCurPos > nLastPos ) )
@@ -152,7 +152,7 @@ void SVGFontExport::implCollectGlyphs()
 
                             nLastPos = nCurPos;
                             nCurPos = xBI->nextCharacters( aText, nCurPos, rLocale,
-                                                           ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL,
+                                                           css::i18n::CharacterIteratorMode::SKIPCELL,
                                                            nCount2, nCount2 );
 
                             rGlyphSet.insert( aText.copy( nLastPos, nCurPos - nLastPos ) );

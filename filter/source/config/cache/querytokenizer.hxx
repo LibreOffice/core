@@ -29,16 +29,16 @@ namespace filter{
 
 
 /** @short      It can be used to split any query string (which can be used at the
-                related interface <type scope="com::sun::star::container">XContainerQuery</type>)
+                related interface <type scope="css::container">XContainerQuery</type>)
                 into its different tokens using a fix schema.
 
     @descr      All queries implemented of the services
                 <ul>
-                    <li><type scope="com::sun::star::document">TypeDetection</type></li>
-                    <li><type scope="com::sun::star::document">FilterFactory</type></li>
-                    <li><type scope="com::sun::star::document">ExtendedTypeDetectionFactory</type></li>
-                    <li><type scope="com::sun::star::frame">FrameLoaderFactory</type></li>
-                    <li><type scope="com::sun::star::frame">ContentHandlerFactory</type></li>
+                    <li><type scope="css::document">TypeDetection</type></li>
+                    <li><type scope="css::document">FilterFactory</type></li>
+                    <li><type scope="css::document">ExtendedTypeDetectionFactory</type></li>
+                    <li><type scope="css::frame">FrameLoaderFactory</type></li>
+                    <li><type scope="css::frame">ContentHandlerFactory</type></li>
                 </ul>
                 uses this schema.
 

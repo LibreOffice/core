@@ -34,7 +34,7 @@ class XMLFilterTabPageXSLT;
 class XMLFilterTabDialog: public TabDialog
 {
 public:
-    XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
+    XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr, const css::uno::Reference< css::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
     virtual ~XMLFilterTabDialog();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -43,7 +43,7 @@ public:
     filter_info_impl* getNewFilterInfo() const { return mpNewInfo;}
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
     DECL_STATIC_LINK_TYPED( XMLFilterTabDialog, ActivatePageHdl, TabControl*, void );
     DECL_LINK_TYPED(OkHdl, Button*, void);

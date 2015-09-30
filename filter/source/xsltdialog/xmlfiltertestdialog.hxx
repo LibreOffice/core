@@ -35,13 +35,13 @@ class XMLFilterTestDialog : public ModalDialog
 {
 public:
     XMLFilterTestDialog(vcl::Window* pParent,
-        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext);
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext);
     virtual ~XMLFilterTestDialog();
     virtual void dispose() SAL_OVERRIDE;
 
     void test( const filter_info_impl& rFilterInfo );
 
-    void updateCurrentDocumentButtonState( com::sun::star::uno::Reference< com::sun::star::lang::XComponent > * pRef = NULL );
+    void updateCurrentDocumentButtonState( css::uno::Reference< css::lang::XComponent > * pRef = NULL );
 
 private:
     DECL_LINK_TYPED(ClickHdl_Impl, Button *, void );
@@ -52,16 +52,16 @@ private:
     void onImportRecentDocument();
     void initDialog();
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XComponent > getFrontMostDocument( const OUString& rServiceName );
+    css::uno::Reference< css::lang::XComponent > getFrontMostDocument( const OUString& rServiceName );
     void import( const OUString& rURL );
     static void displayXMLFile( const OUString& rURL );
-    void doExport( com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp );
+    void doExport( css::uno::Reference< css::lang::XComponent > xComp );
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
-    com::sun::star::uno::Reference< com::sun::star::document::XDocumentEventBroadcaster > mxGlobalBroadcaster;
-    com::sun::star::uno::Reference< com::sun::star::document::XDocumentEventListener > mxGlobalEventListener;
-    com::sun::star::uno::WeakReference< com::sun::star::lang::XComponent > mxLastFocusModel;
+    css::uno::Reference< css::uno::XComponentContext >              mxContext;
+    css::uno::Reference< css::document::XDocumentEventBroadcaster > mxGlobalBroadcaster;
+    css::uno::Reference< css::document::XDocumentEventListener >    mxGlobalEventListener;
+    css::uno::WeakReference< css::lang::XComponent >                mxLastFocusModel;
 
     OUString m_sImportRecentFile;
     OUString m_sExportRecentFile;

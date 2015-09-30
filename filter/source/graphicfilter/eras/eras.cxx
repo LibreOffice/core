@@ -40,7 +40,7 @@ private:
     sal_uLong               mnRepCount;
     sal_uInt8               mnRepVal;
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplCallback( sal_uLong nCurrentYPos );
     bool                ImplWriteHeader();

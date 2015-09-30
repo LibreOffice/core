@@ -233,9 +233,9 @@ uno::Sequence<OUString> SAL_CALL PlainTextFilterDetect::getSupportedServiceNames
     return PlainTextFilterDetect_getSupportedServiceNames();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation(::com::sun::star::uno::XComponentContext* component,
-                                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation(css::uno::XComponentContext* component,
+                                                                           css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new PlainTextFilterDetect(component));
 }

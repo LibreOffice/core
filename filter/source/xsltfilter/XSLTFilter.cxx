@@ -365,11 +365,11 @@ namespace XSLT
                         while (osl::Condition::result_timeout == result) {
                                 if (xInterActionHandler.is()) {
                                         Sequence<Any> excArgs(0);
-                                        ::com::sun::star::ucb::InteractiveAugmentedIOException exc(
+                                        css::ucb::InteractiveAugmentedIOException exc(
                                                 OUString("Timeout!"),
                                                 static_cast< OWeakObject * >( this ),
                                                 InteractionClassification_ERROR,
-                                                ::com::sun::star::ucb::IOErrorCode_GENERAL,
+                                                css::ucb::IOErrorCode_GENERAL,
                                                  excArgs);
                                         Any r;
                                         r <<= exc;

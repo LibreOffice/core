@@ -67,10 +67,10 @@ public:
 private:
 
     bool impl_getPreselectionForType(
-        const OUString& sPreSelType, const com::sun::star::util::URL& aParsedURL, FlatDetection& rFlatTypes, bool bDocService);
+        const OUString& sPreSelType, const css::util::URL& aParsedURL, FlatDetection& rFlatTypes, bool bDocService);
 
     bool impl_getPreselectionForDocumentService(
-        const OUString& sPreSelDocumentService, const com::sun::star::util::URL& aParsedURL, FlatDetection& rFlatTypes);
+        const OUString& sPreSelDocumentService, const css::util::URL& aParsedURL, FlatDetection& rFlatTypes);
 
     OUString impl_getTypeFromFilter(const OUString& rFilterName);
 
@@ -78,7 +78,7 @@ private:
      * Get all format types that we handle.
      */
     void impl_getAllFormatTypes(
-        const com::sun::star::util::URL& aParsedURL, utl::MediaDescriptor& rDescriptor,
+        const css::util::URL& aParsedURL, utl::MediaDescriptor& rDescriptor,
         FlatDetection& rFlatTypes);
 
 

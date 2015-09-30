@@ -63,7 +63,7 @@ class GIFWriter
     void                WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint, bool bExtended,
                                        long nTimer = 0, Disposal eDisposal = DISPOSE_NOT );
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
 public:
 

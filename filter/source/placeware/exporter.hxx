@@ -32,21 +32,21 @@ class PageEntry;
 class PlaceWareExporter
 {
 public:
-    PlaceWareExporter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    PlaceWareExporter( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     ~PlaceWareExporter();
 
-    bool doExport( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc,
-                        ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOutputStream,
-                            const OUString& rURL,
-                                ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > xHandler,
-                                ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator >& rxStatusIndicator );
+    bool doExport( css::uno::Reference< css::lang::XComponent > xDoc,
+                   css::uno::Reference < css::io::XOutputStream > xOutputStream,
+                   const OUString& rURL,
+                   css::uno::Reference < css::uno::XInterface > xHandler,
+                   css::uno::Reference < css::task::XStatusIndicator >& rxStatusIndicator );
 
 private:
-    PageEntry* exportPage( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >&xDrawPage );
+    PageEntry* exportPage( css::uno::Reference< css::drawing::XDrawPage >&xDrawPage );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XGraphicExportFilter > mxGraphicExporter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > mxInteractionHandler;
+    css::uno::Reference< css::uno::XComponentContext >        mxContext;
+    css::uno::Reference< css::drawing::XGraphicExportFilter > mxGraphicExporter;
+    css::uno::Reference< css::task::XInteractionHandler >     mxInteractionHandler;
 };
 
 #endif

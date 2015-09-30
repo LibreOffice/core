@@ -36,7 +36,7 @@ private:
     sal_uLong           mnWidth, mnHeight;  // size in Pixel
     sal_uInt16          mnColors;
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplCallback( sal_uInt16 nPercent );
     bool            ImplWriteHeader();

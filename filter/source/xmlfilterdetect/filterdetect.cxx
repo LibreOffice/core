@@ -51,13 +51,13 @@ OUString supportedByType( const OUString& clipBoardFormat,  const OUString& resu
 
 }
 
-OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException, std::exception )
+OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::PropertyValue >& aArguments ) throw( css::uno::RuntimeException, std::exception )
 {
     OUString sTypeName;
     OUString sUrl;
     Sequence<PropertyValue > lProps ;
 
-    com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInStream;
+    css::uno::Reference< css::io::XInputStream > xInStream;
     const PropertyValue * pValue = aArguments.getConstArray();
     sal_Int32 nLength;
     OUString resultString;
@@ -84,7 +84,7 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
         if (!xInStream.is())
         {
             ::ucbhelper::Content aContent(
-                sUrl, Reference< com::sun::star::ucb::XCommandEnvironment >(),
+                sUrl, Reference< css::ucb::XCommandEnvironment >(),
                 mxCtx);
             xInStream = aContent.openStream();
             if (!xInStream.is())

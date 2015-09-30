@@ -1897,19 +1897,19 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs,
     // support for LineCap
     switch(rAttrs.GetLineCap())
     {
-        default: /* com::sun::star::drawing::LineCap_BUTT */
+        default: /* css::drawing::LineCap_BUTT */
         {
             // butt is Svg default, so no need to write until the exporter might write styles.
             // If this happens, activate here
             // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "butt");
             break;
         }
-        case com::sun::star::drawing::LineCap_ROUND:
+        case css::drawing::LineCap_ROUND:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "round");
             break;
         }
-        case com::sun::star::drawing::LineCap_SQUARE:
+        case css::drawing::LineCap_SQUARE:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "square");
             break;
@@ -1988,19 +1988,19 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, bool bAp
     // support for LineCap
     switch(rShape.maLineCap)
     {
-        default: /* com::sun::star::drawing::LineCap_BUTT */
+        default: /* css::drawing::LineCap_BUTT */
         {
             // butt is Svg default, so no need to write until the exporter might write styles.
             // If this happens, activate here
             // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "butt");
             break;
         }
-        case com::sun::star::drawing::LineCap_ROUND:
+        case css::drawing::LineCap_ROUND:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "round");
             break;
         }
-        case com::sun::star::drawing::LineCap_SQUARE:
+        case css::drawing::LineCap_SQUARE:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "square");
             break;
@@ -2496,8 +2496,8 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
             }
             else
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI( vcl::unohelper::CreateBreakIterator() );
-                const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
+                css::uno::Reference< css::i18n::XBreakIterator > xBI( vcl::unohelper::CreateBreakIterator() );
+                const css::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
                 sal_Int32 nCurPos = 0, nLastPos = 0, nX = aPos.X();
 
                 // write single glyphs at absolute text positions
@@ -2507,7 +2507,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
                     nLastPos = nCurPos;
                     nCurPos = xBI->nextCharacters( rText, nCurPos, rLocale,
-                                                ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL,
+                                                css::i18n::CharacterIteratorMode::SKIPCELL,
                                                 nCount, nCount );
 
                     nCount = nCurPos - nLastPos;
@@ -3145,17 +3145,17 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         default: /* SvtGraphicStroke::capButt */
                         {
-                            mapCurShape->maLineCap = com::sun::star::drawing::LineCap_BUTT;
+                            mapCurShape->maLineCap = css::drawing::LineCap_BUTT;
                             break;
                         }
                         case SvtGraphicStroke::capRound:
                         {
-                            mapCurShape->maLineCap = com::sun::star::drawing::LineCap_ROUND;
+                            mapCurShape->maLineCap = css::drawing::LineCap_ROUND;
                             break;
                         }
                         case SvtGraphicStroke::capSquare:
                         {
-                            mapCurShape->maLineCap = com::sun::star::drawing::LineCap_SQUARE;
+                            mapCurShape->maLineCap = css::drawing::LineCap_SQUARE;
                             break;
                         }
                     }
@@ -3169,7 +3169,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         mapCurShape->mnStrokeWidth = 0;
                         mapCurShape->maDashArray.clear();
                         mapCurShape->maLineJoin = basegfx::B2DLineJoin::Miter;
-                        mapCurShape->maLineCap = com::sun::star::drawing::LineCap_BUTT;
+                        mapCurShape->maLineCap = css::drawing::LineCap_BUTT;
 
                         if(aStartArrow.Count())
                         {

@@ -34,12 +34,12 @@
 #include <chart.hxx>
 #include <tools/poly.hxx>
 
-typedef struct NodeFrameSet
+struct NodeFrameSet
 {
-    Point       nTopLeft;
-    Point       nBottomRight;
-    ::com::sun::star::awt::Size     nSize;
-} NodeFrameSet;
+    Point          nTopLeft;
+    Point          nBottomRight;
+    css::awt::Size nSize;
+};
 
 class CGM;
 class CGMBitmapDescriptor;
@@ -86,32 +86,32 @@ public:
     virtual void                DrawPolyLine( tools::Polygon& ) {} ;
     virtual void                DrawPolybezier( tools::Polygon& ) {} ;
     virtual void                DrawPolyPolygon( tools::PolyPolygon& ) {} ;
-    virtual void                DrawText( ::com::sun::star::awt::Point&, ::com::sun::star::awt::Size&, char*, sal_uInt32, FinalFlag ) {} ;
+    virtual void                DrawText( css::awt::Point&, css::awt::Size&, char*, sal_uInt32, FinalFlag ) {} ;
     virtual void                AppendText( char*, sal_uInt32, FinalFlag ) {} ;
     virtual void                DrawChart(){} ;
 };
 
 class CGMImpressOutAct : public CGMOutAct
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPages >               maXDrawPages;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >                maXDrawPage;
+    css::uno::Reference< css::drawing::XDrawPages >               maXDrawPages;
+    css::uno::Reference< css::drawing::XDrawPage >                maXDrawPage;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        maXMultiServiceFactory;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >                   maXShape;
-    bool                        ImplCreateShape( const OUString& rType );
+    css::uno::Reference< css::lang::XMultiServiceFactory >        maXMultiServiceFactory;
+    css::uno::Reference< css::drawing::XShape >                   maXShape;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           maXPropSet;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >                  maXShapes;
+    css::uno::Reference< css::beans::XPropertySet >               maXPropSet;
+    css::uno::Reference< css::drawing::XShapes >                  maXShapes;
 
     sal_uInt32                      nFinalTextCount;
 
+    bool                        ImplCreateShape( const OUString& rType );
     bool                        ImplInitPage();
     void                        ImplSetOrientation( FloatPoint& RefPoint, double& Orientation ) ;
     void                        ImplSetLineBundle() ;
     void                        ImplSetFillBundle() ;
-    void                        ImplSetTextBundle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & ) ;
+    void                        ImplSetTextBundle( const css::uno::Reference< css::beans::XPropertySet > & ) ;
 public:
-                                CGMImpressOutAct( CGM&, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & ) ;
+                                CGMImpressOutAct( CGM&, const css::uno::Reference< css::frame::XModel > & ) ;
                                 virtual ~CGMImpressOutAct() {} ;
     virtual void                InsertPage() SAL_OVERRIDE ;
     virtual void                BeginGroup() SAL_OVERRIDE ;
@@ -126,7 +126,7 @@ public:
     virtual void                DrawPolyLine( tools::Polygon& ) SAL_OVERRIDE ;
     virtual void                DrawPolybezier( tools::Polygon& ) SAL_OVERRIDE ;
     virtual void                DrawPolyPolygon( tools::PolyPolygon& ) SAL_OVERRIDE ;
-    virtual void                DrawText( ::com::sun::star::awt::Point& TextRectPos, ::com::sun::star::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;
+    virtual void                DrawText( css::awt::Point& TextRectPos, css::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;
     virtual void                AppendText( char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;
     virtual void                DrawChart() SAL_OVERRIDE;
 };

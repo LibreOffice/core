@@ -186,7 +186,7 @@ void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc 
 
 
 
-void SAL_CALL PDFFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
+void SAL_CALL PDFFilter::initialize( const css::uno::Sequence< css::uno::Any >& )
     throw (Exception, RuntimeException, std::exception)
 {
 }
@@ -228,7 +228,7 @@ sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
 
 
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return PDFFilter_getSupportedServiceNames();
 }

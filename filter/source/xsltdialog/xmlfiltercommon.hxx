@@ -33,7 +33,7 @@
 extern OUString string_encode( const OUString & rText );
 extern OUString string_decode( const OUString & rText );
 
-bool copyStreams( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xIS, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOS );
+bool copyStreams( css::uno::Reference< css::io::XInputStream > xIS, css::uno::Reference< css::io::XOutputStream > xOS );
 bool createDirectory( OUString& rURL );
 
 
@@ -67,7 +67,7 @@ public:
     filter_info_impl( const filter_info_impl& rInfo );
     bool operator==( const filter_info_impl& ) const;
 
-    com::sun::star::uno::Sequence< OUString > getFilterUserData() const;
+    css::uno::Sequence< OUString > getFilterUserData() const;
 };
 
 

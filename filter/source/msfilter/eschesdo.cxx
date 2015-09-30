@@ -236,8 +236,8 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             rObj.SetType("drawing.dontknow");
         }
 
-        const ::com::sun::star::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
-        const ::com::sun::star::awt::Point  aPoint100thmm( rObj.GetShapeRef()->getPosition() );
+        const css::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
+        const css::awt::Point  aPoint100thmm( rObj.GetShapeRef()->getPosition() );
         Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPictureStream();
@@ -401,7 +401,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 }
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-                ::com::sun::star::awt::Rectangle aNewRect;
+                css::awt::Rectangle aNewRect;
                 switch ( ePolyKind )
                 {
                     case POLY_PIE :
@@ -435,7 +435,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         else if ( rObj.GetType() == "drawing.Connector" )
         {
             sal_uInt16 nSpType, nSpFlags;
-            ::com::sun::star::awt::Rectangle aNewRect;
+            css::awt::Rectangle aNewRect;
             if ( ! aPropOpt.CreateConnectorProperties( rObj.GetShapeRef(),
                             rSolverContainer, aNewRect, nSpType, nSpFlags ) )
                 break;
@@ -451,7 +451,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType() == "drawing.Line" )
         {
-            ::com::sun::star::awt::Rectangle aNewRect;
+            css::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, false, aNewRect, NULL );
             //i27942: Poly/Lines/Bezier do not support text.
 
@@ -476,7 +476,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            ::com::sun::star::awt::Rectangle aNewRect;
+            css::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect, NULL );
             aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
             rObj.SetAngle( 0 );
@@ -487,7 +487,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            ::com::sun::star::awt::Rectangle aNewRect;
+            css::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect, NULL );
             aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
             rObj.SetAngle( 0 );
@@ -498,7 +498,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            ::com::sun::star::awt::Rectangle aNewRect;
+            css::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, true, aNewRect, NULL );
             aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
             rObj.SetAngle( 0 );
@@ -512,7 +512,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            ::com::sun::star::awt::Rectangle aNewRect;
+            css::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, true, aNewRect, NULL );
             aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
             rObj.SetAngle( 0 );
@@ -714,8 +714,8 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         if ( mpHostAppData && mpHostAppData->DontWriteShape() )
             break;
 
-        const ::com::sun::star::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
-        const ::com::sun::star::awt::Point  aPoint100thmm( rObj.GetShapeRef()->getPosition() );
+        const css::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
+        const css::awt::Point  aPoint100thmm( rObj.GetShapeRef()->getPosition() );
         Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPictureStream();
@@ -1155,7 +1155,7 @@ basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& rxShape
             }
         }
     }
-    catch(::com::sun::star::uno::Exception&)
+    catch(css::uno::Exception&)
     {
     }
 
@@ -1211,7 +1211,7 @@ bool ImplEESdrObject::ImplGetPropertyValue( const sal_Unicode* rString )
             if( mAny.hasValue() )
                 bRetValue = true;
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
             bRetValue = false;
         }

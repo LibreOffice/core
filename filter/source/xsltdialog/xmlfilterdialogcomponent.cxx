@@ -62,7 +62,7 @@ protected:
 
 class XMLFilterDialogComponent :    public XMLFilterDialogComponentBase,
                                     public OComponentHelper,
-                                    public ::com::sun::star::ui::dialogs::XExecutableDialog,
+                                    public css::ui::dialogs::XExecutableDialog,
                                     public XServiceInfo,
                                     public XInitialization,
                                     public XTerminateListener
@@ -83,7 +83,7 @@ protected:
     virtual Sequence< Type > SAL_CALL getTypes() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -104,10 +104,10 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 private:
-    com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxParent;  /// parent window
-    com::sun::star::uno::Reference< XComponentContext > mxContext;
+    css::uno::Reference<css::awt::XWindow>   mxParent;  /// parent window
+    css::uno::Reference< XComponentContext > mxContext;
 
-    VclPtr<XMLFilterSettingsDialog> mpDialog;
+    VclPtr<XMLFilterSettingsDialog>          mpDialog;
 };
 
 
@@ -122,7 +122,7 @@ ResMgr* getXSLTDialogResMgr()
     return pXSLTResMgr;
 }
 
-XMLFilterDialogComponent::XMLFilterDialogComponent( const com::sun::star::uno::Reference< XComponentContext >& rxContext ) :
+XMLFilterDialogComponent::XMLFilterDialogComponent( const css::uno::Reference< XComponentContext >& rxContext ) :
     OComponentHelper( maMutex ),
     mxContext( rxContext ),
     mpDialog( NULL )
@@ -150,9 +150,9 @@ Any SAL_CALL XMLFilterDialogComponent::queryInterface( const Type& aType ) throw
 
 Any SAL_CALL XMLFilterDialogComponent::queryAggregation( Type const & rType ) throw (RuntimeException, std::exception)
 {
-    if (rType == cppu::UnoType<com::sun::star::ui::dialogs::XExecutableDialog>::get())
+    if (rType == cppu::UnoType<css::ui::dialogs::XExecutableDialog>::get())
     {
-        void * p = static_cast< ::com::sun::star::ui::dialogs::XExecutableDialog * >( this );
+        void * p = static_cast< css::ui::dialogs::XExecutableDialog * >( this );
         return Any( &p, rType );
     }
     else if (rType == cppu::UnoType<XServiceInfo>::get())
@@ -206,7 +206,7 @@ Reference< XInterface > SAL_CALL XMLFilterDialogComponent_createInstance( const 
     return static_cast<OWeakObject*>(new XMLFilterDialogComponent( comphelper::getComponentContext(rSMgr) ));
 }
 
-OUString SAL_CALL XMLFilterDialogComponent::getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL XMLFilterDialogComponent::getImplementationName() throw(css::uno::RuntimeException, std::exception)
 {
     return XMLFilterDialogComponent_getImplementationName();
 }
@@ -236,7 +236,7 @@ namespace
                 cppu::UnoType<XServiceInfo>::get(),
                 cppu::UnoType<XInitialization>::get(),
                 cppu::UnoType<XTerminateListener>::get(),
-                cppu::UnoType<com::sun::star::ui::dialogs::XExecutableDialog>::get())
+                cppu::UnoType<css::ui::dialogs::XExecutableDialog>::get())
         {
         }
         OTypeCollection& getTypeCollection() { return m_aTypes; }
@@ -250,7 +250,7 @@ Sequence< Type > XMLFilterDialogComponent::getTypes() throw (RuntimeException, s
     return theDialogComponentTypes::get().getTypeCollection().getTypes();
 }
 
-Sequence< OUString > SAL_CALL XMLFilterDialogComponent::getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL XMLFilterDialogComponent::getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception)
 {
     return XMLFilterDialogComponent_getSupportedServiceNames();
 }

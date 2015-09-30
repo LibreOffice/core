@@ -159,7 +159,7 @@ private:
     ScopedVclPtr<VirtualDevice>  apDummyVDev;
     VclPtr<OutputDevice>         pCompDev;
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     void MayCallback();
         // calculates a percentage based on the 5 parameters above and then does a

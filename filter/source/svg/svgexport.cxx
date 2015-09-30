@@ -317,7 +317,7 @@ bool operator==( const TextField & aLhsTextField, const TextField & aRhsTextFiel
 
 
 SVGExport::SVGExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+    const css::uno::Reference< css::uno::XComponentContext >& rContext,
     const Reference< XDocumentHandler >& rxHandler,
     const Sequence< PropertyValue >& rFilterData )
     : SvXMLExport( util::MeasureUnit::MM_100TH,
@@ -573,7 +573,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
                 // xSVGExport is set up only to manage the life-time of the object pointed by mpSVGExport,
                 // and in order to prevent that it is destroyed when passed to AnimationExporter.
-                Reference< XInterface > xSVGExport = static_cast< ::com::sun::star::document::XFilter* >( mpSVGExport );
+                Reference< XInterface > xSVGExport = static_cast< css::document::XFilter* >( mpSVGExport );
 
                 // create an id for each draw page
                 for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
@@ -1307,7 +1307,7 @@ bool SVGFilter::implExportTextEmbeddedBitmaps()
 
                 const Reference< XInterface >& rxShape = it->GetObject();
                 Reference< XPropertySet > xShapePropSet( rxShape, UNO_QUERY );
-                ::com::sun::star::awt::Rectangle    aBoundRect;
+                css::awt::Rectangle    aBoundRect;
                 if( xShapePropSet.is() && ( xShapePropSet->getPropertyValue( "BoundRect" ) >>= aBoundRect ) )
                 {
                     // Origin of the coordinate device must be (0,0).
@@ -1708,8 +1708,8 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
 
             if( !bRet && mpObjects->find( rxShape ) !=  mpObjects->end() )
             {
-                ::com::sun::star::awt::Rectangle    aBoundRect;
-                const GDIMetaFile&                  rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
+                css::awt::Rectangle    aBoundRect;
+                const GDIMetaFile&     rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
 
                 xShapePropSet->getPropertyValue( "BoundRect" ) >>= aBoundRect;
 

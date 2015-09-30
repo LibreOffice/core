@@ -28,15 +28,15 @@
 class TypeDetectionExporter
 {
 public:
-    TypeDetectionExporter( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& mxContext );
+    TypeDetectionExporter( css::uno::Reference< css::uno::XComponentContext >& mxContext );
 
-    void doExport(com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xOS,  const XMLFilterVector& rFilters );
+    void doExport(css::uno::Reference < css::io::XOutputStream > xOS,  const XMLFilterVector& rFilters );
 
 private:
-    static void addProperty( com::sun::star::uno::Reference< com::sun::star::xml::sax::XWriter > xWriter, const OUString& rName, const OUString& rValue );
-    static void addLocaleProperty( com::sun::star::uno::Reference< com::sun::star::xml::sax::XWriter > xWriter, const OUString& rName, const OUString& rValue );
+    static void addProperty( css::uno::Reference< css::xml::sax::XWriter > xWriter, const OUString& rName, const OUString& rValue );
+    static void addLocaleProperty( css::uno::Reference< css::xml::sax::XWriter > xWriter, const OUString& rName, const OUString& rValue );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
 };
 
 #endif

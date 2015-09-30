@@ -225,9 +225,9 @@ odfflatxml_component_getFactory( const sal_Char* pImplementationName,
     if ((!pImplementationName) || (!pServiceManager))
         return NULL;
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-        xSMGR = static_cast< com::sun::star::lang::XMultiServiceFactory* >(pServiceManager);
-    com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory >
+        xSMGR = static_cast< css::lang::XMultiServiceFactory* >(pServiceManager);
+    css::uno::Reference< css::lang::XSingleServiceFactory > xFactory;
     OUString sImplName = OUString::createFromAscii(pImplementationName);
 
     if (OdfFlatXml::impl_getImplementationName() == sImplName)

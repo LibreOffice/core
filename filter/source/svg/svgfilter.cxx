@@ -304,7 +304,7 @@ void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc 
 }
 
 void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
+    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDstDoc = xDoc;
 }

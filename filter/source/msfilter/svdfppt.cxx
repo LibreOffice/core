@@ -1664,8 +1664,7 @@ SdrPowerPointImport::~SdrPowerPointImport()
 }
 
 bool PPTConvertOCXControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc,
-        com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > *pShapeRef,
+        css::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl )
 {
     bool bRes = false;
@@ -1674,7 +1673,7 @@ bool PPTConvertOCXControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc,
     {
         if ( xFComp.is() )
         {
-            com::sun::star::awt::Size aSz;  // not used in import
+            css::awt::Size aSz;  // not used in import
             bRes = InsertControl( xFComp, aSz,pShapeRef,bFloatingCtrl);
         }
     }
@@ -1682,42 +1681,40 @@ bool PPTConvertOCXControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc,
 }
 
 bool PPTConvertOCXControls::InsertControl(
-        const com::sun::star::uno::Reference<
-        com::sun::star::form::XFormComponent > &rFComp,
-        const com::sun::star::awt::Size& rSize,
-        com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > *pShape,
+        const css::uno::Reference< css::form::XFormComponent > &rFComp,
+        const css::awt::Size& rSize,
+        css::uno::Reference< css::drawing::XShape > *pShape,
         bool /*bFloatingCtrl*/)
 {
     bool bRetValue = false;
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  xShape;
+        css::uno::Reference< css::drawing::XShape >  xShape;
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > & rFormComps =
+        const css::uno::Reference< css::container::XIndexContainer > & rFormComps =
             GetFormComps();
 
-        ::com::sun::star::uno::Any aTmp( &rFComp, cppu::UnoType<com::sun::star::form::XFormComponent>::get() );
+        css::uno::Any aTmp( &rFComp, cppu::UnoType<css::form::XFormComponent>::get() );
 
         rFormComps->insertByIndex( rFormComps->getCount(), aTmp );
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceFactory =
+        const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceFactory =
             GetServiceFactory();
         if( rServiceFactory.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xCreate = rServiceFactory
+            css::uno::Reference< css::uno::XInterface >  xCreate = rServiceFactory
                 ->createInstance( "com.sun.star.drawing.ControlShape" );
             if( xCreate.is() )
             {
-                xShape = ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >(xCreate, ::com::sun::star::uno::UNO_QUERY);
+                xShape = css::uno::Reference< css::drawing::XShape >(xCreate, css::uno::UNO_QUERY);
                 if ( xShape.is() )
                 {
                     xShape->setSize(rSize);
                     // set the Control-Model at the Control-Shape
-                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XControlShape >  xControlShape( xShape,
-                        ::com::sun::star::uno::UNO_QUERY );
-                    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xControlModel( rFComp,
-                        ::com::sun::star::uno::UNO_QUERY );
+                    css::uno::Reference< css::drawing::XControlShape >  xControlShape( xShape,
+                        css::uno::UNO_QUERY );
+                    css::uno::Reference< css::awt::XControlModel >  xControlModel( rFComp,
+                        css::uno::UNO_QUERY );
                     if ( xControlShape.is() && xControlModel.is() )
                     {
                         xControlShape->setControl( xControlModel );
@@ -1735,18 +1732,18 @@ bool PPTConvertOCXControls::InsertControl(
     }
     return bRetValue;
 };
-const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& PPTConvertOCXControls::GetDrawPage()
+const css::uno::Reference< css::drawing::XDrawPage >& PPTConvertOCXControls::GetDrawPage()
 {
     if( !xDrawPage.is() && mxModel.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPages > xDrawPages;
+        css::uno::Reference< css::drawing::XDrawPages > xDrawPages;
         switch( ePageKind )
         {
             case PPT_SLIDEPAGE :
             case PPT_NOTEPAGE :
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPagesSupplier >
-                        xDrawPagesSupplier( mxModel, ::com::sun::star::uno::UNO_QUERY);
+                css::uno::Reference< css::drawing::XDrawPagesSupplier >
+                        xDrawPagesSupplier( mxModel, css::uno::UNO_QUERY);
                 if ( xDrawPagesSupplier.is() )
                     xDrawPages = xDrawPagesSupplier->getDrawPages();
             }
@@ -1754,8 +1751,8 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& 
 
             case PPT_MASTERPAGE :
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XMasterPagesSupplier >
-                        xMasterPagesSupplier( mxModel, ::com::sun::star::uno::UNO_QUERY);
+                css::uno::Reference< css::drawing::XMasterPagesSupplier >
+                        xMasterPagesSupplier( mxModel, css::uno::UNO_QUERY);
                 if ( xMasterPagesSupplier.is() )
                     xDrawPages = xMasterPagesSupplier->getMasterPages();
             }
@@ -1764,7 +1761,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& 
         if ( xDrawPages.is() && xDrawPages->getCount() )
         {
             xDrawPages->getCount();
-            ::com::sun::star::uno::Any aAny( xDrawPages->getByIndex( xDrawPages->getCount() - 1 ) );
+            css::uno::Any aAny( xDrawPages->getByIndex( xDrawPages->getCount() - 1 ) );
             aAny >>= xDrawPage;
         }
     }
@@ -1896,7 +1893,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                     uno::Reference< io::XInputStream > xIStrm = new utl::OSeekableInputStreamWrapper(*pDest );
                                     uno::Reference< frame::XModel > xModel( pOe->pShell->GetModel() );
                                     PPTConvertOCXControls aPPTConvertOCXControls( this, xIStrm, xModel, eAktPageKind );
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
+                                    css::uno::Reference< css::drawing::XShape > xShape;
                                     if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape ) )
                                         pRet = GetSdrObjectFromXShape( xShape );
 
@@ -7355,17 +7352,17 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         xPropSet->setPropertyValue(  sHorizontalAdjust , Any( eHA ) );
         if ( eDirection == FRMDIR_VERT_TOP_RIGHT )
         {//vertical writing
-            xPropSet->setPropertyValue(  sWritingMode , Any( ::com::sun::star::text::WritingMode_TB_RL ) );
+            xPropSet->setPropertyValue(  sWritingMode , Any( css::text::WritingMode_TB_RL ) );
         }
         SfxItemSet aSet( pObj->GetMergedItemSet() );
         drawing::FillStyle eFillStyle(static_cast<const XFillStyleItem&>(pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
-        ::com::sun::star::drawing::FillStyle eFS( com::sun::star::drawing::FillStyle_NONE );
+        css::drawing::FillStyle eFS( css::drawing::FillStyle_NONE );
         switch( eFillStyle )
         {
             case drawing::FillStyle_SOLID :
                 {
                     static const char sFillColor[] = "FillColor";
-                    eFS = com::sun::star::drawing::FillStyle_SOLID;
+                    eFS = css::drawing::FillStyle_SOLID;
                     Color aFillColor( static_cast<const XFillColorItem&>(pObj->GetMergedItem( XATTR_FILLCOLOR )).GetColorValue() );
                     sal_Int32 nFillColor( aFillColor.GetColor() );
                     xPropSet->setPropertyValue( sFillColor, Any( nFillColor ) );
@@ -7373,10 +7370,10 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                 break;
             case drawing::FillStyle_GRADIENT :
                 {
-                    eFS = com::sun::star::drawing::FillStyle_GRADIENT;
+                    eFS = css::drawing::FillStyle_GRADIENT;
                     XGradient aXGradient(static_cast<const XFillGradientItem&>(pObj->GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
 
-                    com::sun::star::awt::Gradient aGradient;
+                    css::awt::Gradient aGradient;
                     aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
                     aGradient.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
                     aGradient.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
@@ -7393,11 +7390,11 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                 }
                 break;
             case drawing::FillStyle_HATCH :
-                eFS = com::sun::star::drawing::FillStyle_HATCH;
+                eFS = css::drawing::FillStyle_HATCH;
             break;
             case drawing::FillStyle_BITMAP :
                 {
-                    eFS = com::sun::star::drawing::FillStyle_BITMAP;
+                    eFS = css::drawing::FillStyle_BITMAP;
 
                     const XFillBitmapItem aXFillBitmapItem(static_cast<const XFillBitmapItem&>(pObj->GetMergedItem( XATTR_FILLBITMAP )));
                     OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
@@ -7410,16 +7407,16 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     const XFillBmpStretchItem aStretchItem(static_cast<const XFillBmpStretchItem&>(pObj->GetMergedItem( XATTR_FILLBMP_STRETCH )));
                     const XFillBmpTileItem aTileItem(static_cast<const XFillBmpTileItem&>(pObj->GetMergedItem( XATTR_FILLBMP_TILE )));
                     if( aTileItem.GetValue() )
-                        xPropSet->setPropertyValue( "FillBitmapMode", Any( com::sun::star::drawing::BitmapMode_REPEAT ) );
+                        xPropSet->setPropertyValue( "FillBitmapMode", Any( css::drawing::BitmapMode_REPEAT ) );
                     else if( aStretchItem.GetValue() )
-                        xPropSet->setPropertyValue( "FillBitmapMode", Any( com::sun::star::drawing::BitmapMode_STRETCH ) );
+                        xPropSet->setPropertyValue( "FillBitmapMode", Any( css::drawing::BitmapMode_STRETCH ) );
                     else
-                        xPropSet->setPropertyValue( "FillBitmapMode", Any( com::sun::star::drawing::BitmapMode_NO_REPEAT ) );
+                        xPropSet->setPropertyValue( "FillBitmapMode", Any( css::drawing::BitmapMode_NO_REPEAT ) );
                 }
             break;
             default:
             case drawing::FillStyle_NONE :
-                eFS = com::sun::star::drawing::FillStyle_NONE;
+                eFS = css::drawing::FillStyle_NONE;
             break;
 
         }
@@ -7443,7 +7440,7 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
     {
         SfxItemSet aSet( pLine->GetMergedItemSet() );
         drawing::LineStyle eLineStyle(static_cast<const XLineStyleItem&>(pLine->GetMergedItem( XATTR_LINESTYLE )).GetValue());
-        com::sun::star::table::BorderLine2 aBorderLine;
+        css::table::BorderLine2 aBorderLine;
         switch( eLineStyle )
         {
             case drawing::LineStyle_DASH :

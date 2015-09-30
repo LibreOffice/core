@@ -43,7 +43,7 @@ private:
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
 public:
                         PPMWriter(SvStream &rStrm);

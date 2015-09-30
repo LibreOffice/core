@@ -32,18 +32,18 @@ typedef std::vector< filter_info_impl* > XMLFilterVector;
 class XMLFilterJarHelper
 {
 public:
-    XMLFilterJarHelper( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    XMLFilterJarHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     bool savePackage( const OUString& rPackageURL, const XMLFilterVector& rFilters );
     void openPackage( const OUString& rPackageURL, XMLFilterVector& rFilters );
 
 private:
-    void addFile( com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xRootFolder, com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( com::sun::star::uno::Exception );
+    void addFile( css::uno::Reference< css::uno::XInterface > xRootFolder, css::uno::Reference< css::lang::XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( css::uno::Exception );
 
-    bool copyFile( com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xIfc, OUString& rURL, const OUString& rTargetURL );
-    bool copyFiles( com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xIfc, filter_info_impl* pFilter );
+    bool copyFile( css::uno::Reference< css::container::XHierarchicalNameAccess > xIfc, OUString& rURL, const OUString& rTargetURL );
+    bool copyFiles( css::uno::Reference< css::container::XHierarchicalNameAccess > xIfc, filter_info_impl* pFilter );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
     OUString sVndSunStarPackage;
     OUString sXSLTPath;
