@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_da87e1d5",
+        "filename": "forms/qa/integration/forms/FormPropertyBags.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-09-30T13:02:11Z",
+      "side": 1,
+      "message": "survive",
+      "revId": "e1f397339b2c0d09d2bdc24c2e9f3a75da3a64e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
