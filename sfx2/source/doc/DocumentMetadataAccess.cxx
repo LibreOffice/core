@@ -49,7 +49,6 @@
 #include <libxml/tree.h>
 
 #include <boost/bind.hpp>
-#include <boost/shared_array.hpp>
 #include <boost/tuple/tuple.hpp>
 
 #include <vector>
