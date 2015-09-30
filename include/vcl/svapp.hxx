@@ -270,22 +270,16 @@ public:
      @attention Note that the global data structures and platform specific
         initialization is done in the constructor.
 
-     @see InitFinished, DeInit
+     @see DeInit
     */
     virtual void                Init();
-
-    /** Finish initialization of the application.
-
-     @see Init, DeInit
-    */
-    virtual void                InitFinished();
 
     /** Deinitialized the application itself.
 
      @attention Note that the global data structures and platform specific
          deinitialization is done in the destructor.
 
-     @see Init, InitFinished
+     @see Init
     */
     virtual void                DeInit();
 

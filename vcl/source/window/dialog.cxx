@@ -112,14 +112,6 @@ static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
     return false;
 }
 
-// Called by native error dialog popup implementations
-void ImplHideSplash()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->mpIntroWindow )
-            pSVData->mpIntroWindow->Hide();
-}
-
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 vcl::Window * nextLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChild)

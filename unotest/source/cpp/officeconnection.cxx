@@ -56,9 +56,6 @@ void OfficeConnection::setUp() {
         desc = "pipe,name=" + uniquePipeName(OUString("oootest"));
         OUString noquickArg("--quickstart=no");
         OUString norestoreArg("--norestore");
-        OUString nologoArg("--nologo");
-            // disable use of the unix standalone splash screen app for the
-            // tests (probably not needed in combination with --headless?)
         OUString headlessArg("--headless");
         OUString acceptArg("--accept=" + desc + ";urp");
         OUString argUser;
@@ -70,7 +67,7 @@ void OfficeConnection::setUp() {
         OUString classpathArg("-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
         rtl_uString * args[] = {
             noquickArg.pData, norestoreArg.pData,
-            nologoArg.pData, headlessArg.pData, acceptArg.pData, userArg.pData,
+            headlessArg.pData, acceptArg.pData, userArg.pData,
             jreArg.pData, classpathArg.pData };
         rtl_uString ** envs = 0;
         OUString argEnv;

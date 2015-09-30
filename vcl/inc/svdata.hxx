@@ -339,7 +339,6 @@ struct ImplSVData
     ImplSVHelpData          maHelpData;                     // indepen data for Help classes
     ImplSVNWFData           maNWFData;
     UnoWrapperBase*         mpUnoWrapper;
-    VclPtr<vcl::Window>     mpIntroWindow;                  // the splash screen
     DockingManager*         mpDockingManager;
     BlendFrameCache*        mpBlendFrameCache;
     bool                    mbIsTestTool;
@@ -372,7 +371,6 @@ void        ImplFreeEventHookData();
 bool        ImplCallPreNotify( NotifyEvent& rEvt );
 
 VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData();
-VCL_PLUGIN_PUBLIC void ImplHideSplash();
 
 bool ImplInitAccessBridge();
 

@@ -64,7 +64,6 @@ class CommandLineArgs: private boost::noncopyable
         bool                IsQuickstart() const { return m_quickstart;}
         bool                IsNoQuickstart() const { return m_noquickstart;}
         bool                IsTerminateAfterInit() const { return m_terminateafterinit;}
-        bool                IsNoLogo() const { return m_nologo;}
         bool                IsNoLockcheck() const { return m_nolockcheck;}
         bool                IsHelp() const { return m_help;}
         bool                IsHelpWriter() const { return m_helpwriter;}
@@ -90,7 +89,6 @@ class CommandLineArgs: private boost::noncopyable
         OUString            GetUnknown() const { return m_unknown;}
 
         // Access to string parameters
-        bool                    HasSplashPipe() const { return m_splashpipe;}
         std::vector< OUString > const & GetAccept() const { return m_accept;}
         std::vector< OUString > const & GetUnaccept() const { return m_unaccept;}
         std::vector< OUString > GetOpenList() const;
@@ -126,7 +124,6 @@ class CommandLineArgs: private boost::noncopyable
         bool m_quickstart;
         bool m_noquickstart;
         bool m_terminateafterinit;
-        bool m_nologo;
         bool m_nolockcheck;
         bool m_nodefault;
         bool m_help;
@@ -146,7 +143,6 @@ class CommandLineArgs: private boost::noncopyable
         bool m_helpimpress;
         bool m_helpbase;
         bool m_version;
-        bool m_splashpipe;
         bool m_textcat;
 
         OUString m_unknown;

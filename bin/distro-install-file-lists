@@ -323,7 +323,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             program/configimport.bin \
             program/javaldx \
             program/msfontextract \
-            program/oosplash.bin \
             program/pagein \
             program/pagein-calc \
             program/pagein-common \

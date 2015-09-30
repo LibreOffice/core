@@ -214,7 +214,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( oArg == "nologo" )
             {
-                m_nologo = true;
+                // Do nothing, accept only for backward compatibility
             }
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
             else if ( oArg == "nolockcheck" )
@@ -269,10 +269,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             else if ( oArg == "version" )
             {
                 m_version = true;
-            }
-            else if ( oArg.startsWith("splash-pipe=") )
-            {
-                m_splashpipe = true;
             }
 #ifdef MACOSX
             /* #i84053# ignore -psn on Mac
@@ -601,7 +597,6 @@ void CommandLineArgs::InitParamValues()
     m_quickstart = false;
     m_noquickstart = false;
     m_terminateafterinit = false;
-    m_nologo = false;
     m_nolockcheck = false;
     m_nodefault = false;
     m_help = false;
@@ -621,7 +616,6 @@ void CommandLineArgs::InitParamValues()
     m_helpimpress = false;
     m_helpbase = false;
     m_version = false;
-    m_splashpipe = false;
     m_bEmpty = true;
     m_bDocumentArgs  = false;
     m_textcat = false;
