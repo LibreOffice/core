@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_171db40f",
+        "filename": "unotest/source/java/org/openoffice/test/FileHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:07:23Z",
+      "side": 0,
+      "message": "Please keep these double **.\nThey begin a doxygen comment.",
+      "revId": "7966f170b335f4bcd71834ca448fc2a11f43cf62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
