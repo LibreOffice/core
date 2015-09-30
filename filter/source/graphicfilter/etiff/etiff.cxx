@@ -92,7 +92,7 @@ private:
     sal_uInt32              nOffset;
     sal_uInt32              dwShift;
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplCallback( sal_uInt32 nPercent );
     bool            ImplWriteHeader( bool bMultiPage );

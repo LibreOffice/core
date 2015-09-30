@@ -592,7 +592,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 const OUString sPath( "Path" );
                                 const OUString sGluePointType( "GluePointType" );
                                 sal_Int16 nGluePointType = EnhancedCustomShapeGluePointType::SEGMENTS;
-                                com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePointType );
+                                css::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePointType );
                                 if ( pAny )
                                     *pAny >>= nGluePointType;
                                 else
@@ -649,7 +649,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     const OUString sCoordinates( "Coordinates" );
 
                                     sal_uInt32 k, nPt = nC;
-                                    com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
+                                    css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
                                     pAny = aGeometryItem.GetPropertyValueByName( sPath, sSegments );
                                     if ( pAny )
                                     {
@@ -709,17 +709,17 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     pAny = aGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
                                     if ( pAny )
                                     {
-                                        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+                                        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
                                         *pAny >>= aCoordinates;
                                         if ( nPt < (sal_uInt32)aCoordinates.getLength() )
                                         {
                                             nId = 4;
-                                            com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates[ nPt ];
+                                            css::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates[ nPt ];
                                             sal_Int32 nX = 0, nY = 0;
                                             if ( ( rPara.First.Value >>= nX ) && ( rPara.Second.Value >>= nY ) )
                                             {
                                                 const OUString sGluePoints( "GluePoints" );
-                                                com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
+                                                css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
                                                 pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
                                                 if ( pAny )
                                                     *pAny >>= aGluePoints;
@@ -919,17 +919,17 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
             default: /* case mso_lineEndCapFlat */
             {
                 // no need to set, it is the default. If this changes, this needs to be activated
-                // rSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_BUTT));
+                // rSet.Put(XLineCapItem(css::drawing::LineCap_BUTT));
                 break;
             }
             case mso_lineEndCapRound:
             {
-                rSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_ROUND));
+                rSet.Put(XLineCapItem(css::drawing::LineCap_ROUND));
                 break;
             }
             case mso_lineEndCapSquare:
             {
-                rSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_SQUARE));
+                rSet.Put(XLineCapItem(css::drawing::LineCap_SQUARE));
                 break;
             }
         }
@@ -1015,11 +1015,11 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         if ( eShapeType == mso_sptMin )
             eLineJointDefault = mso_lineJoinRound;
         MSO_LineJoin eLineJoint = (MSO_LineJoin)GetPropertyValue( DFF_Prop_lineJoinStyle, eLineJointDefault );
-        com::sun::star::drawing::LineJoint eXLineJoint( com::sun::star::drawing::LineJoint_MITER );
+        css::drawing::LineJoint eXLineJoint( css::drawing::LineJoint_MITER );
         if ( eLineJoint == mso_lineJoinBevel )
-            eXLineJoint = com::sun::star::drawing::LineJoint_BEVEL;
+            eXLineJoint = css::drawing::LineJoint_BEVEL;
         else if ( eLineJoint == mso_lineJoinRound )
-            eXLineJoint = com::sun::star::drawing::LineJoint_ROUND;
+            eXLineJoint = css::drawing::LineJoint_ROUND;
         rSet.Put( XLineJointItem( eXLineJoint ) );
 
         if ( nLineFlags & 0x10 )
@@ -1561,7 +1561,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     sal_Int32 nCoordHeight= 21600;
     if ( IsProperty( DFF_Prop_geoLeft ) || IsProperty( DFF_Prop_geoTop ) || IsProperty( DFF_Prop_geoRight ) || IsProperty( DFF_Prop_geoBottom ) )
     {
-        com::sun::star::awt::Rectangle aViewBox;
+        css::awt::Rectangle aViewBox;
         const OUString sViewBox( "ViewBox" );
         aViewBox.X = GetPropertyValue( DFF_Prop_geoLeft, 0 );
         aViewBox.Y = GetPropertyValue( DFF_Prop_geoTop, 0 );
@@ -1710,7 +1710,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             double fLightX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyX, 50000 ));
             double fLightY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyY, 0 ));
             double fLightZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyZ, 10000 ));
-            ::com::sun::star::drawing::Direction3D aExtrusionFirstLightDirection( fLightX, fLightY, fLightZ );
+            css::drawing::Direction3D aExtrusionFirstLightDirection( fLightX, fLightY, fLightZ );
             const OUString sExtrusionFirstLightDirection( "FirstLightDirection" );
             aProp.Name = sExtrusionFirstLightDirection;
             aProp.Value <<= aExtrusionFirstLightDirection;
@@ -1722,7 +1722,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             double fLight2X = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillX, (sal_uInt32)-50000 ));
             double fLight2Y = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillY, 0 ));
             double fLight2Z = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillZ, 10000 ));
-            ::com::sun::star::drawing::Direction3D aExtrusionSecondLightDirection( fLight2X, fLight2Y, fLight2Z );
+            css::drawing::Direction3D aExtrusionSecondLightDirection( fLight2X, fLight2Y, fLight2Z );
             const OUString sExtrusionSecondLightDirection( "SecondLightDirection" );
             aProp.Name = sExtrusionSecondLightDirection;
             aProp.Value <<= aExtrusionSecondLightDirection;
@@ -1740,9 +1740,9 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         {
             const OUString sExtrusionShadeMode( "ShadeMode" );
             sal_uInt32 nExtrusionRenderMode = GetPropertyValue( DFF_Prop_c3DRenderMode, 0 );
-            com::sun::star::drawing::ShadeMode eExtrusionShadeMode( com::sun::star::drawing::ShadeMode_FLAT );
+            css::drawing::ShadeMode eExtrusionShadeMode( css::drawing::ShadeMode_FLAT );
             if ( nExtrusionRenderMode == mso_Wireframe )
-                eExtrusionShadeMode = com::sun::star::drawing::ShadeMode_DRAFT;
+                eExtrusionShadeMode = css::drawing::ShadeMode_DRAFT;
 
             aProp.Name = sExtrusionShadeMode;
             aProp.Value <<= eExtrusionShadeMode;
@@ -1770,7 +1770,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             // "RotationCenter"
             if ( IsProperty( DFF_Prop_c3DRotationCenterX ) || IsProperty( DFF_Prop_c3DRotationCenterY ) || IsProperty( DFF_Prop_c3DRotationCenterZ ) )
             {
-                ::com::sun::star::drawing::Direction3D aRotationCenter(
+                css::drawing::Direction3D aRotationCenter(
                     (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterX, 0 )) / 360.0,
                     (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 )) / 360.0,
                     (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterZ, 0 )) / 360.0 );
@@ -1830,7 +1830,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             double fViewX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DXViewpoint, 1250000 )) / 360.0;
             double fViewY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DYViewpoint, (sal_uInt32)-1250000 ))/ 360.0;
             double fViewZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DZViewpoint, 9000000 )) / 360.0;
-            ::com::sun::star::drawing::Position3D aExtrusionViewPoint( fViewX, fViewY, fViewZ );
+            css::drawing::Position3D aExtrusionViewPoint( fViewX, fViewY, fViewZ );
             const OUString sExtrusionViewPoint( "ViewPoint" );
             aProp.Name = sExtrusionViewPoint;
             aProp.Value <<= aExtrusionViewPoint;
@@ -2159,7 +2159,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // Path/Coordinates
         if ( IsProperty( DFF_Prop_pVertices ) )
         {
-            com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+            css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
             sal_uInt16 nNumElemVert = 0;
             sal_uInt16 nElemSizeVert = 8;
 
@@ -2205,7 +2205,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // Path/Segments
         if ( IsProperty( DFF_Prop_pSegmentInfo ) )
         {
-            com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
+            css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
 
             sal_uInt16 i, nTmp;
             sal_uInt16 nNumElemSeg = 0;
@@ -2357,7 +2357,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             }
             if (bImport)
             {
-                com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
+                css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
                 for (sal_uInt16 i = 0; i < nNumElem; ++i)
                 {
                     sal_Int32 nLeft(0), nTop(0), nRight(0), nBottom(0);
@@ -2381,7 +2381,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         //Path/GluePoints
         if ( IsProperty( DFF_Prop_connectorPoints ) )
         {
-            com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
+            css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
             sal_uInt16 nNumElemVert = 0;
             sal_uInt16 nNumElemMemVert = 0;
             sal_uInt16 nElemSizeVert = 8;
@@ -2528,7 +2528,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     sal_Int32 nAdjustmentValues = ( i - DFF_Prop_adjustValue ) + 1;
     if ( nAdjustmentValues )
     {
-        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq( nAdjustmentValues );
+        uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq( nAdjustmentValues );
         while( --nAdjustmentValues >= 0 )
         {
             sal_Int32 nValue = 0;
@@ -2712,31 +2712,31 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
             sal_uInt32 nLen = rManager.pSecPropSet->GetPropertyValue( DFF_Prop_metroBlob, 0 );
             if ( nLen )
             {
-                ::com::sun::star::uno::Sequence< sal_Int8 > aXMLDataSeq( nLen );
+                css::uno::Sequence< sal_Int8 > aXMLDataSeq( nLen );
                 rIn.Read( aXMLDataSeq.getArray(), nLen );
-                ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream
+                css::uno::Reference< css::io::XInputStream > xInputStream
                     ( new ::comphelper::SequenceInputStream( aXMLDataSeq ) );
                 try
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                    ::com::sun::star::uno::Reference< com::sun::star::embed::XStorage > xStorage
+                    css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    css::uno::Reference< css::embed::XStorage > xStorage
                         ( ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
                             OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, true ) );
                     if ( xStorage.is() )
                     {
                         const OUString sDRS( "drs" );
-                        ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-                            xStorageDRS( xStorage->openStorageElement( sDRS, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
+                        css::uno::Reference< css::embed::XStorage >
+                            xStorageDRS( xStorage->openStorageElement( sDRS, css::embed::ElementModes::SEEKABLEREAD ) );
                         if ( xStorageDRS.is() )
                         {
                             const OUString sShapeXML( "shapexml.xml" );
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( sShapeXML, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
+                            css::uno::Reference< css::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( sShapeXML, css::embed::ElementModes::SEEKABLEREAD ) );
                             if ( xShapeXMLStream.is() )
                             {
-                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xShapeXMLInputStream( xShapeXMLStream->getInputStream() );
+                                css::uno::Reference< css::io::XInputStream > xShapeXMLInputStream( xShapeXMLStream->getInputStream() );
                                 if ( xShapeXMLInputStream.is() )
                                 {
-                                    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+                                    css::uno::Sequence< sal_Int8 > aSeq;
                                     sal_Int32 nBytesRead = xShapeXMLInputStream->readBytes( aSeq, 0x7fffffff );
                                     if ( nBytesRead )
                                     {    // for only one property I spare to use a XML parser at this point, this
@@ -2763,7 +2763,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
                         }
                     }
                 }
-                catch( com::sun::star::uno::Exception& )
+                catch( css::uno::Exception& )
                 {
                 }
             }
@@ -2771,7 +2771,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
     }
     if ( !bRotateTextWithShape )
     {
-        const com::sun::star::uno::Any* pAny;
+        const css::uno::Any* pAny;
         SdrCustomShapeGeometryItem aGeometryItem(static_cast<const SdrCustomShapeGeometryItem&>(rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
         const OUString sTextRotateAngle( "TextRotateAngle" );
         pAny = aGeometryItem.GetPropertyValueByName( sTextRotateAngle );
@@ -2784,7 +2784,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
         if ( rObjData.nSpFlags & SP_FFLIPV )
             fExtraTextRotateAngle -= 180.0;
 
-        com::sun::star::beans::PropertyValue aTextRotateAngle;
+        css::beans::PropertyValue aTextRotateAngle;
         aTextRotateAngle.Name = sTextRotateAngle;
         aTextRotateAngle.Value <<= fExtraTextRotateAngle;
         aGeometryItem.SetPropertyValue( aTextRotateAngle );
@@ -4477,8 +4477,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         const OUString sPath( "Path" );
                         const OUString sTextFrames( "TextFrames" );
                         SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(static_cast<SdrObjCustomShape*>(pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
-                        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
-                        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
+                        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
+                        css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
 
                         // before clearing the GeometryItem we have to store the current Coordinates
                         const uno::Any* pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sCoordinates );
@@ -4520,7 +4520,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( pAny && ( *pAny >>= seqAdjustmentValues ) && seqAdjustmentValues.getLength() > 1 )
                         {
                             double fNumber;
-                            if ( seqAdjustmentValues[ 0 ].State == com::sun::star::beans::PropertyState_DIRECT_VALUE )
+                            if ( seqAdjustmentValues[ 0 ].State == css::beans::PropertyState_DIRECT_VALUE )
                             {
                                 seqAdjustmentValues[ 0 ].Value >>= fNumber;
                                 nEndAngle = NormAngle360( - (sal_Int32)fNumber * 100 );
@@ -4541,10 +4541,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 }
                                 nEndAngle = NormAngle360( - (sal_Int32)fNumber * 100 );
                                 seqAdjustmentValues[ 0 ].Value <<= fNumber;
-                                seqAdjustmentValues[ 0 ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;     // so this value will properly be stored
+                                seqAdjustmentValues[ 0 ].State = css::beans::PropertyState_DIRECT_VALUE;     // so this value will properly be stored
                             }
 
-                            if ( seqAdjustmentValues[ 1 ].State == com::sun::star::beans::PropertyState_DIRECT_VALUE )
+                            if ( seqAdjustmentValues[ 1 ].State == css::beans::PropertyState_DIRECT_VALUE )
                             {
                                 seqAdjustmentValues[ 1 ].Value >>= fNumber;
                                 nStartAngle = NormAngle360( - (sal_Int32)fNumber * 100 );
@@ -4553,7 +4553,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             {
                                 fNumber = 0.0;
                                 seqAdjustmentValues[ 1 ].Value <<= fNumber;
-                                seqAdjustmentValues[ 1 ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+                                seqAdjustmentValues[ 1 ].State = css::beans::PropertyState_DIRECT_VALUE;
                             }
 
                             PropertyValue aPropVal;
@@ -4616,7 +4616,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             sal_Int32 nTop   = (sal_Int32)(( aPolyPieRect.Top()   - aPolyBoundRect.Top() )  * fTextFrameScaleY );
                             sal_Int32 nRight = (sal_Int32)(( aPolyPieRect.Right() - aPolyBoundRect.Left() ) * fTextFrameScaleX );
                             sal_Int32 nBottom= (sal_Int32)(( aPolyPieRect.Bottom()- aPolyBoundRect.Top() )  * fTextFrameScaleY );
-                            com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrame( 1 );
+                            css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrame( 1 );
                             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.First,     nLeft );
                             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.Second,    nTop );
                             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].BottomRight.First, nRight );
@@ -6872,7 +6872,7 @@ OUString GetFilterNameFromClassID_Impl( const SvGlobalName& aGlobName )
     return OUString();
 }
 
-com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMSDffManager::CheckForConvertToSOObj( sal_uInt32 nConvertFlags,
+css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForConvertToSOObj( sal_uInt32 nConvertFlags,
                         SotStorage& rSrcStg, const uno::Reference < embed::XStorage >& rDestStorage,
                         const Graphic& rGrf,
                         const Rectangle& rVisArea )
@@ -7236,7 +7236,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
     return pRet;
 }
 
-bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Reference< css::beans::XPropertySet > & rXPropSet,
             const OUString& rPropName, bool bTestPropertyAvailability )
 {
     bool bRetValue = true;

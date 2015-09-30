@@ -68,16 +68,16 @@ using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 
 
-class GlobalEventListenerImpl : public ::cppu::WeakImplHelper< com::sun::star::document::XDocumentEventListener >
+class GlobalEventListenerImpl : public ::cppu::WeakImplHelper< css::document::XDocumentEventListener >
 {
 public:
     GlobalEventListenerImpl( XMLFilterTestDialog* pDialog );
 
     // XDocumentEventListener
-    virtual void SAL_CALL documentEventOccured( const com::sun::star::document::DocumentEvent& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // lang::XEventListener
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 private:
     VclPtr<XMLFilterTestDialog> mpDialog;
 };
@@ -87,7 +87,7 @@ GlobalEventListenerImpl::GlobalEventListenerImpl( XMLFilterTestDialog* pDialog )
 {
 }
 
-void SAL_CALL GlobalEventListenerImpl::documentEventOccured( const com::sun::star::document::DocumentEvent& Event ) throw (RuntimeException, std::exception)
+void SAL_CALL GlobalEventListenerImpl::documentEventOccured( const css::document::DocumentEvent& Event ) throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     if( Event.EventName == "OnFocus" || Event.EventName == "OnUnload" )
@@ -97,7 +97,7 @@ void SAL_CALL GlobalEventListenerImpl::documentEventOccured( const com::sun::sta
     }
 }
 
-void SAL_CALL GlobalEventListenerImpl::disposing( const com::sun::star::lang::EventObject& /* Source */ ) throw (RuntimeException, std::exception)
+void SAL_CALL GlobalEventListenerImpl::disposing( const css::lang::EventObject& /* Source */ ) throw (RuntimeException, std::exception)
 {
 }
 
@@ -312,7 +312,7 @@ void XMLFilterTestDialog::onExportBrowse()
     {
         // Open Fileopen-Dialog
            ::sfx2::FileDialogHelper aDlg(
-            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
 
         Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", mxContext ), UNO_QUERY );
@@ -547,7 +547,7 @@ void XMLFilterTestDialog::onImportBrowse()
 {
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
-        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
     OUString aFilterName( m_pFilterInfo->maInterfaceName );
     OUString aExtensions;
 

@@ -43,10 +43,10 @@ namespace pwp {
 
 class PlaceWareExportFilter : public cppu::WeakImplHelper
 <
-    com::sun::star::document::XFilter,
-    com::sun::star::document::XExporter,
-    com::sun::star::lang::XInitialization,
-    com::sun::star::lang::XServiceInfo
+    css::document::XFilter,
+    css::document::XExporter,
+    css::lang::XInitialization,
+    css::lang::XServiceInfo
 >
 {
     Reference< XComponent > mxDoc;
@@ -80,7 +80,7 @@ PlaceWareExportFilter::PlaceWareExportFilter(const Reference< XComponentContext 
 
 
 
-sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL PlaceWareExportFilter::filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException, std::exception)
 {
     sal_Int32 nLength = aDescriptor.getLength();
@@ -128,8 +128,8 @@ void SAL_CALL PlaceWareExportFilter::cancel(  )
 
 
 // XExporter
-void SAL_CALL PlaceWareExportFilter::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL PlaceWareExportFilter::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
+    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
@@ -137,7 +137,7 @@ void SAL_CALL PlaceWareExportFilter::setSourceDocument( const ::com::sun::star::
 
 
 // XInitialization
-void SAL_CALL PlaceWareExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ )
+void SAL_CALL PlaceWareExportFilter::initialize( const css::uno::Sequence< css::uno::Any >& /* aArguments */ )
     throw (Exception, RuntimeException, std::exception)
 {
 }
@@ -176,7 +176,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::supportsService( const OUString& rServi
     return cppu::supportsService( this, rServiceName );
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL PlaceWareExportFilter::getSupportedServiceNames(  )
+css::uno::Sequence< OUString > SAL_CALL PlaceWareExportFilter::getSupportedServiceNames(  )
     throw (RuntimeException, std::exception)
 {
     return PlaceWareExportFilter_getSupportedServiceNames();

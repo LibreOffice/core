@@ -112,7 +112,7 @@ bool UseOldMSExport()
     return false;
 }
 
-void SvxMSExportOLEObjects::ExportOLEObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg )
+void SvxMSExportOLEObjects::ExportOLEObject( const css::uno::Reference < css::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg )
 {
     svt::EmbeddedObjectRef aObj( rObj, embed::Aspects::MSOLE_CONTENT );
     ExportOLEObject( aObj, rDestStg );

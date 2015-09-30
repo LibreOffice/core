@@ -58,28 +58,22 @@ namespace XSLT
     class OleHandler
     {
     public:
-        OleHandler(const com::sun::star::uno::Reference<XComponentContext>& rxContext){
+        OleHandler(const css::uno::Reference<XComponentContext>& rxContext){
             m_xContext = rxContext;
         }
-        void SAL_CALL
-        insertByName(const OUString& streamName, const OString& content);
-        const OString SAL_CALL
-        getByName(const OUString& streamName);
+        void SAL_CALL          insertByName(const OUString& streamName, const OString& content);
+        const OString SAL_CALL getByName(const OUString& streamName);
 
     private:
-        com::sun::star::uno::Reference<XComponentContext> m_xContext;
-        com::sun::star::uno::Reference<XNameContainer> m_storage;
-        com::sun::star::uno::Reference<XStream> m_rootStream;
-        void SAL_CALL
-        ensureCreateRootStorage();
-        OString SAL_CALL
-        encodeSubStorage(const OUString& streamName);
-        void SAL_CALL
-        insertSubStorage(const OUString& streamName, const OString& content);
-        void SAL_CALL
-        initRootStorageFromBase64(const OString& content);
-        com::sun::star::uno::Reference<XStream> SAL_CALL
-        createTempFile();
+        css::uno::Reference<XComponentContext> m_xContext;
+        css::uno::Reference<XNameContainer> m_storage;
+        css::uno::Reference<XStream> m_rootStream;
+
+        void SAL_CALL    ensureCreateRootStorage();
+        OString SAL_CALL encodeSubStorage(const OUString& streamName);
+        void SAL_CALL    insertSubStorage(const OUString& streamName, const OString& content);
+        void SAL_CALL    initRootStorageFromBase64(const OString& content);
+        css::uno::Reference<XStream> SAL_CALL createTempFile();
     };
 }
 

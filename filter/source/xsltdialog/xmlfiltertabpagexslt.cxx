@@ -172,7 +172,7 @@ IMPL_LINK_TYPED ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, Button *, pButton, 
 
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
-        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     aDlg.SetDisplayDirectory( GetURL( pURLBox ) );
 

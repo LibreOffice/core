@@ -21,14 +21,14 @@ namespace svgi
 
 class SVGReader
 {
-    const ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        m_xContext;
-    const ::com::sun::star::uno::Reference< com::sun::star::io::XInputStream >              m_xInputStream;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >  m_xDocumentHandler;
+    const css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    const css::uno::Reference< css::io::XInputStream >              m_xInputStream;
+    const css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xDocumentHandler;
 
 public:
-    FILTER_DLLPUBLIC SVGReader( const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>&  xContext,
-               const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >&               xInputStream,
-               const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
+    FILTER_DLLPUBLIC SVGReader( const css::uno::Reference<css::uno::XComponentContext>&  xContext,
+               const css::uno::Reference< css::io::XInputStream >&               xInputStream,
+               const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler );
 
     FILTER_DLLPUBLIC bool parseAndConvert();
 };

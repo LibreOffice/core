@@ -32,25 +32,25 @@ class ImplEscherExSdr;
 
 class ImplEESdrObject
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >           mXShape;
+    css::uno::Reference< css::drawing::XShape >           mXShape;
 //  XTextRef            mXText; // TextRef des globalen Text
-    ::com::sun::star::uno::Any              mAny;
+    css::uno::Any       mAny;
     Rectangle           maRect;
     OUString            mType;
-    sal_uInt32              mnShapeId;
-    sal_uInt32              mnTextSize;
-    sal_Int32               mnAngle;
+    sal_uInt32          mnShapeId;
+    sal_uInt32          mnTextSize;
+    sal_Int32           mnAngle;
     bool                mbValid : 1;
     bool                mbPresObj : 1;
     bool                mbEmptyPresObj : 1;
-    bool mbOOXML;
+    bool                mbOOXML;
 
     void Init( ImplEESdrWriter& rEx );
 public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   mXPropSet;
+    css::uno::Reference< css::beans::XPropertySet >   mXPropSet;
 
     ImplEESdrObject( ImplEscherExSdr& rEx, const SdrObject& rObj, bool bOOXML = false );
-    ImplEESdrObject( ImplEESdrWriter& rEx, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rShape );
+    ImplEESdrObject( ImplEESdrWriter& rEx, const css::uno::Reference< css::drawing::XShape >& rShape );
     ~ImplEESdrObject();
 
     bool ImplGetPropertyValue( const sal_Unicode* pString );
@@ -61,8 +61,8 @@ public:
     sal_Int32 ImplGetInt32PropertyValue( const OUString& rStr, sal_uInt32 nDef = 0 )
     { return ImplGetInt32PropertyValue(rStr.getStr(), nDef); }
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
-    const ::com::sun::star::uno::Any&       GetUsrAny() const       { return mAny; }
+    const css::uno::Reference< css::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
+    const css::uno::Any&       GetUsrAny() const       { return mAny; }
     const OUString&     GetType() const         { return mType; }
     void                SetType( const OUString& rS ) { mType = rS; }
 
@@ -84,8 +84,8 @@ public:
 
     sal_uInt32          ImplGetText();
     bool                ImplHasText() const;
-    bool GetOOXML() const { return mbOOXML;}
-    void SetOOXML(bool bOOXML);
+    bool                GetOOXML() const { return mbOOXML;}
+    void                SetOOXML(bool bOOXML);
 };
 
 
@@ -112,9 +112,9 @@ protected:
         MapMode             maMapModeSrc;
         MapMode             maMapModeDest;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >    mXStatusIndicator;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >        mXDrawPage;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >          mXShapes;
+        css::uno::Reference< css::task::XStatusIndicator >    mXStatusIndicator;
+        css::uno::Reference< css::drawing::XDrawPage >        mXDrawPage;
+        css::uno::Reference< css::drawing::XShapes >          mXShapes;
 
         SvStream*           mpPicStrm;
 
@@ -135,9 +135,9 @@ protected:
 
         sal_uInt16              mnEffectCount;
 
-        bool                mbIsTitlePossible;
-        bool                mbStatusIndicator;
-        bool                mbStatus;
+        bool                    mbIsTitlePossible;
+        bool                    mbStatusIndicator;
+        bool                    mbStatus;
 
 
                                 ImplEESdrWriter( EscherEx& rEx );
@@ -158,7 +158,7 @@ protected:
                                                 ImplEESdrObject& rObj,
                                                 const Point& rTextRefPoint );
             sal_uInt32          ImplEnterAdditionalTextGroup(
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rShape,
+                                        const css::uno::Reference< css::drawing::XShape >& rShape,
                                         const Rectangle* pBoundRect = NULL );
 
 
@@ -185,7 +185,7 @@ public:
     virtual                     ~ImplEscherExSdr();
 
             bool                ImplInitPage( const SdrPage& rPage );
-            bool                ImplInitUnoShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+            bool                ImplInitUnoShapes( const css::uno::Reference< css::drawing::XShapes >& rxShapes );
             void                ImplWriteCurrentPage();
 
             sal_uInt32              ImplWriteTheShape( ImplEESdrObject& rObj, bool ooxmlExport = false );

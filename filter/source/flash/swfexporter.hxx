@@ -64,32 +64,32 @@ public:
     sal_Int32       mnWidth;
     sal_Int32       mnHeight;
 
-    ::com::sun::star::presentation::AnimationEffect meEffect;
-    ::com::sun::star::presentation::AnimationEffect meTextEffect;
-    ::com::sun::star::presentation::AnimationSpeed  meEffectSpeed;
+    css::presentation::AnimationEffect meEffect;
+    css::presentation::AnimationEffect meTextEffect;
+    css::presentation::AnimationSpeed  meEffectSpeed;
 
     sal_Int32       mnPresOrder;
 
-    ::com::sun::star::presentation::ClickAction     meClickAction;
+    css::presentation::ClickAction     meClickAction;
     OUString maBookmark;
 
     sal_Int32       mnDimColor;
-    bool        mbDimHide;
-    bool        mbDimPrev;
+    bool            mbDimHide;
+    bool            mbDimPrev;
 
-    bool        mbSoundOn;
-    bool        mbPlayFull;
-    OUString maSoundURL;
+    bool            mbSoundOn;
+    bool            mbPlayFull;
+    OUString        maSoundURL;
 
     sal_Int32       mnBlueScreenColor;
 
     ShapeInfo() :
         mnID(0), mnX(0), mnY(0), mnWidth(0), mnHeight(0),
-        meEffect( ::com::sun::star::presentation::AnimationEffect_NONE ),
-        meTextEffect( ::com::sun::star::presentation::AnimationEffect_NONE ),
-        meEffectSpeed( ::com::sun::star::presentation::AnimationSpeed_MEDIUM ),
+        meEffect( css::presentation::AnimationEffect_NONE ),
+        meTextEffect( css::presentation::AnimationEffect_NONE ),
+        meEffectSpeed( css::presentation::AnimationSpeed_MEDIUM ),
         mnPresOrder( 0 ),
-        meClickAction( ::com::sun::star::presentation::ClickAction_NONE ),
+        meClickAction( css::presentation::ClickAction_NONE ),
         mnDimColor( 0 ),
         mbDimHide( false ),
         mbDimPrev( false ),
@@ -139,11 +139,11 @@ class FlashExporter
 {
 public:
     FlashExporter(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
 
         // #i56084# variables for selection export
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxSelectedShapes,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxSelectedDrawPage,
+        const css::uno::Reference< css::drawing::XShapes >& rxSelectedShapes,
+        const css::uno::Reference< css::drawing::XDrawPage >& rxSelectedDrawPage,
 
         sal_Int32 nJPEGCompressMode = -1,
         bool bExportOLEAsJPEG = false);
@@ -151,10 +151,10 @@ public:
 
     void Flush();
 
-    bool exportAll( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream,    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator> &xStatusIndicator );
-    bool exportSlides( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, sal_uInt16 nPage);
-    sal_uInt16 exportBackgrounds( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, sal_uInt16 nPage, bool bExportObjects );
-    sal_uInt16 exportBackgrounds( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, sal_uInt16 nPage, bool bExportObjects );
+    bool exportAll( css::uno::Reference< css::lang::XComponent > xDoc, css::uno::Reference< css::io::XOutputStream > &xOutputStream,    css::uno::Reference< css::task::XStatusIndicator> &xStatusIndicator );
+    bool exportSlides( css::uno::Reference< css::drawing::XDrawPage > xDrawPage, css::uno::Reference< css::io::XOutputStream > &xOutputStream, sal_uInt16 nPage);
+    sal_uInt16 exportBackgrounds( css::uno::Reference< css::drawing::XDrawPage > xDrawPage, css::uno::Reference< css::io::XOutputStream > &xOutputStream, sal_uInt16 nPage, bool bExportObjects );
+    sal_uInt16 exportBackgrounds( css::uno::Reference< css::drawing::XDrawPage > xDrawPage, sal_uInt16 nPage, bool bExportObjects );
 
     ChecksumCache gMasterCache;
     ChecksumCache gPrivateCache;
@@ -162,28 +162,28 @@ public:
     ChecksumCache gMetafileCache;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
     // #i56084# variables for selection export
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxSelectedShapes;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > mxSelectedDrawPage;
+    const css::uno::Reference< css::drawing::XShapes > mxSelectedShapes;
+    const css::uno::Reference< css::drawing::XDrawPage > mxSelectedDrawPage;
     bool mbExportSelection;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XGraphicExportFilter > mxGraphicExporter;
+    css::uno::Reference< css::drawing::XGraphicExportFilter > mxGraphicExporter;
 
     ::std::map<sal_uInt32, PageInfo> maPagesMap;
 
-    sal_uInt16 exportDrawPageBackground(sal_uInt16 nPage, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage);
-    sal_uInt16 exportMasterPageObjects(sal_uInt16 nPage, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xMasterPage);
+    sal_uInt16 exportDrawPageBackground(sal_uInt16 nPage, css::uno::Reference< css::drawing::XDrawPage >& xPage);
+    sal_uInt16 exportMasterPageObjects(sal_uInt16 nPage, css::uno::Reference< css::drawing::XDrawPage >& xMasterPage);
 
-    void exportDrawPageContents( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage, bool bStream, bool bMaster  );
-    void exportShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes, bool bStream, bool bMaster );
-    void exportShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, bool bMaster);
+    void exportDrawPageContents( const css::uno::Reference< css::drawing::XDrawPage >& xPage, bool bStream, bool bMaster  );
+    void exportShapes( const css::uno::Reference< css::drawing::XShapes >& xShapes, bool bStream, bool bMaster );
+    void exportShape( const css::uno::Reference< css::drawing::XShape >& xShape, bool bMaster);
 
-    BitmapChecksum ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape);
-    BitmapChecksum ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes);
+    BitmapChecksum ActionSummer(css::uno::Reference< css::drawing::XShape >& xShape);
+    BitmapChecksum ActionSummer(css::uno::Reference< css::drawing::XShapes >& xShapes);
 
-    bool getMetaFile( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >&xComponent, GDIMetaFile& rMtf, bool bOnlyBackground = false, bool bExportAsJPEG = false );
+    bool getMetaFile( css::uno::Reference< css::lang::XComponent >&xComponent, GDIMetaFile& rMtf, bool bOnlyBackground = false, bool bExportAsJPEG = false );
 
     Writer* mpWriter;
 

@@ -86,7 +86,7 @@ class XMLFilterSettingsDialog : public ModelessDialog
 {
 public:
     XMLFilterSettingsDialog(vcl::Window* pParent,
-        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         Dialog::InitFlag eFlag = Dialog::InitFlag::Default);
     virtual ~XMLFilterSettingsDialog();
     virtual void dispose() SAL_OVERRIDE;
@@ -123,10 +123,10 @@ private:
 
 private:
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxFilterContainer;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxTypeDetection;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxExtendedTypeDetection;
+    css::uno::Reference< css::uno::XComponentContext >    mxContext;
+    css::uno::Reference< css::container::XNameContainer > mxFilterContainer;
+    css::uno::Reference< css::container::XNameContainer > mxTypeDetection;
+    css::uno::Reference< css::container::XNameContainer > mxExtendedTypeDetection;
 
     std::vector< filter_info_impl* > maFilterVector;
 

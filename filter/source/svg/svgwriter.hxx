@@ -98,10 +98,10 @@ private:
     SvXMLElementExport*        mpElemFont;
     SvXMLElementExport*        mpElemPaint;
 
-    basegfx::B2DLineJoin maLineJoin;
-    com::sun::star::drawing::LineCap maLineCap;
+    basegfx::B2DLineJoin       maLineJoin;
+    css::drawing::LineCap      maLineCap;
 
-                            SVGAttributeWriter();
+                             SVGAttributeWriter();
 
     static double            ImplRound( double fVal, sal_Int32 nDecs = 3 );
 
@@ -131,10 +131,10 @@ struct SVGShapeDescriptor
     sal_Int32                   mnStrokeWidth;
     SvtGraphicStroke::DashArray maDashArray;
     ::std::unique_ptr< Gradient > mapShapeGradient;
-    OUString             maId;
+    OUString                    maId;
 
-    basegfx::B2DLineJoin                maLineJoin;
-    com::sun::star::drawing::LineCap    maLineCap;
+    basegfx::B2DLineJoin        maLineJoin;
+    css::drawing::LineCap       maLineCap;
 
 
 
@@ -143,7 +143,7 @@ struct SVGShapeDescriptor
         maShapeLineColor( Color( COL_TRANSPARENT ) ),
         mnStrokeWidth( 0 ),
         maLineJoin(basegfx::B2DLineJoin::Miter), // miter is Svg 'stroke-linejoin' default
-        maLineCap(com::sun::star::drawing::LineCap_BUTT) // butt is Svg 'stroke-linecap' default
+        maLineCap(css::drawing::LineCap_BUTT) // butt is Svg 'stroke-linecap' default
     {
     }
 };
@@ -377,7 +377,7 @@ class SVGWriter : public cppu::WeakImplHelper< XSVGWriter >
 {
 private:
     Reference< XComponentContext >                      mxContext;
-    Sequence< com::sun::star::beans::PropertyValue >    maFilterData;
+    Sequence< css::beans::PropertyValue >    maFilterData;
     SVGWriter();
 
 public:

@@ -31,7 +31,7 @@ namespace svgi
 {
 
 typedef ::cppu::WeakComponentImplHelper<
-    com::sun::star::xml::sax::XDocumentHandler> ODFSerializerBase;
+    css::xml::sax::XDocumentHandler> ODFSerializerBase;
 
 class ODFSerializer : private cppu::BaseMutex,
                 public ODFSerializerBase,

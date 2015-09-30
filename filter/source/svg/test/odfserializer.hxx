@@ -27,8 +27,8 @@
 namespace svgi
 {
     /// Creates a XDocumentHandler that serializes directly to an XOutputStream
-    ::com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler>
-        createSerializer(const ::com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>& );
+    css::uno::Reference< css::xml::sax::XDocumentHandler>
+        createSerializer(const css::uno::Reference<css::io::XOutputStream>& );
 }
 
 #endif // INCLUDED_FILTER_SOURCE_SVG_TEST_ODFSERIALIZER_HXX

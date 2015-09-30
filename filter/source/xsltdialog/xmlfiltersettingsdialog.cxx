@@ -877,7 +877,7 @@ void XMLFilterSettingsDialog::onSave()
 
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
-        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
+        css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
         0 );
 
     OUString aExtensions( "*.jar" );
@@ -920,7 +920,7 @@ void XMLFilterSettingsDialog::onOpen()
 
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
-        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     OUString aExtensions( "*.jar" );
     OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
@@ -1171,7 +1171,7 @@ void XMLFilterSettingsDialog::initFilterList()
                             }
                         }
                     }
-                    catch( const ::com::sun::star::container::NoSuchElementException& )
+                    catch( const css::container::NoSuchElementException& )
                     {
                         OSL_FAIL( "Type not found, user error?" ); // TODO: error?
                     }

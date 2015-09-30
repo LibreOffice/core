@@ -62,7 +62,7 @@ using ::com::sun::star::frame::XModel;
 
 namespace swf {
 
-class OslOutputStreamWrapper : public ::cppu::WeakImplHelper<com::sun::star::io::XOutputStream>
+class OslOutputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XOutputStream>
 {
     osl::File   mrFile;
 
@@ -74,12 +74,12 @@ public:
     }
 
     // css::io::XOutputStream
-    virtual void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL flush(  ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput(  ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL flush(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL closeOutput(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-void SAL_CALL OslOutputStreamWrapper::writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OslOutputStreamWrapper::writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     sal_uInt64 uBytesToWrite = aData.getLength();
     sal_uInt64 uBytesWritten = 0;
@@ -104,7 +104,7 @@ void SAL_CALL OslOutputStreamWrapper::writeBytes( const ::com::sun::star::uno::S
         case osl::File::E_NOLINK:    // Link has been severed
         case osl::File::E_NOSPC:    // No space left on device
         case osl::File::E_NXIO:        // No such device or address
-            throw com::sun::star::io::IOException();    // TODO: Better error handling
+            throw css::io::IOException();    // TODO: Better error handling
         default: break;
         }
 
@@ -113,11 +113,11 @@ void SAL_CALL OslOutputStreamWrapper::writeBytes( const ::com::sun::star::uno::S
     }
 }
 
-void SAL_CALL OslOutputStreamWrapper::flush(  ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OslOutputStreamWrapper::flush(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     osl::File::RC eRC = mrFile.close();
 
@@ -130,7 +130,7 @@ void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (::com::sun::star::i
     case osl::File::E_NOLINK:    // Link has been severed
     case osl::File::E_NOSPC:    // No space left on device
     case osl::File::E_IO:        // I/O error
-        throw com::sun::star::io::IOException();    // TODO: Better error handling
+        throw css::io::IOException();    // TODO: Better error handling
     default: break;
     }
 }
@@ -139,10 +139,10 @@ void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (::com::sun::star::i
 
 class FlashExportFilter : public cppu::WeakImplHelper
 <
-    com::sun::star::document::XFilter,
-    com::sun::star::document::XExporter,
-    com::sun::star::lang::XInitialization,
-    com::sun::star::lang::XServiceInfo
+    css::document::XFilter,
+    css::document::XExporter,
+    css::lang::XInitialization,
+    css::lang::XServiceInfo
 >
 {
     Reference< XComponent > mxDoc;
@@ -230,7 +230,7 @@ TYPE findPropertyValue(const Sequence< PropertyValue >& aPropertySequence, const
     return def;
 }
 
-sal_Bool SAL_CALL FlashExportFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL FlashExportFilter::filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException, std::exception)
 {
     mxStatusIndicator = findPropertyValue<Reference<XStatusIndicator> >(aDescriptor, "StatusIndicator", mxStatusIndicator);
@@ -483,8 +483,8 @@ void SAL_CALL FlashExportFilter::cancel(  )
 
 
 // XExporter
-void SAL_CALL FlashExportFilter::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL FlashExportFilter::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
+    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
@@ -492,7 +492,7 @@ void SAL_CALL FlashExportFilter::setSourceDocument( const ::com::sun::star::uno:
 
 
 // XInitialization
-void SAL_CALL FlashExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ )
+void SAL_CALL FlashExportFilter::initialize( const css::uno::Sequence< css::uno::Any >& /* aArguments */ )
     throw (Exception, RuntimeException, std::exception)
 {
 }
@@ -531,7 +531,7 @@ sal_Bool SAL_CALL FlashExportFilter::supportsService( const OUString& rServiceNa
     return cppu::supportsService( this, rServiceName );
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL FlashExportFilter::getSupportedServiceNames(  )
+css::uno::Sequence< OUString > SAL_CALL FlashExportFilter::getSupportedServiceNames(  )
     throw (RuntimeException, std::exception)
 {
     return FlashExportFilter_getSupportedServiceNames();

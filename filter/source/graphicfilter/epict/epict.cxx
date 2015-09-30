@@ -67,7 +67,7 @@ private:
 
     bool bStatus;
     sal_uLong nLastPercent; // with which number pCallback has been called the last time
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     SvStream * pPict;
 

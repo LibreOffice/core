@@ -65,11 +65,11 @@ private:
 public:
 
     ImpSVGDialog( vcl::Window* pParent, /*ResMgr& rResMgr,*/
-                  com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rFilterData );
+                  css::uno::Sequence< css::beans::PropertyValue >& rFilterData );
     virtual ~ImpSVGDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > GetFilterData();
+    css::uno::Sequence< css::beans::PropertyValue > GetFilterData();
 };
 
 #endif // INCLUDED_FILTER_SOURCE_SVG_IMPSVGDIALOG_HXX

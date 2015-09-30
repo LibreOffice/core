@@ -156,7 +156,7 @@ PDFExport::~PDFExport()
 
 
 bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
-    Reference< com::sun::star::view::XRenderable >& rRenderable,
+    Reference< css::view::XRenderable >& rRenderable,
     const Any& rSelection,
     const StringRangeEnumerator& rRangeEnum,
     Sequence< PropertyValue >& rRenderOptions,
@@ -278,7 +278,7 @@ PDFExportStreamDoc::~PDFExportStreamDoc()
 
 void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
 {
-    Reference< com::sun::star::frame::XStorable > xStore( m_xSrcDoc, UNO_QUERY );
+    Reference< css::frame::XStorable > xStore( m_xSrcDoc, UNO_QUERY );
     if( xStore.is() )
     {
         Sequence< beans::PropertyValue > aArgs( 2 + ((m_aPreparedPassword.getLength() > 0) ? 1 : 0) );
@@ -308,7 +308,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
     try
     {
         // get document service name
-        Reference< com::sun::star::frame::XStorable > xStore( xDoc, UNO_QUERY );
+        Reference< css::frame::XStorable > xStore( xDoc, UNO_QUERY );
         Reference< frame::XModuleManager2 > xModuleManager = frame::ModuleManager::create(xContext);
         if( xStore.is() )
         {
@@ -918,7 +918,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     mxStatusIndicator->end();
 
                 // if during the export the doc locale was set copy it to PDF writer
-                const com::sun::star::lang::Locale& rLoc( pPDFExtOutDevData->GetDocumentLocale() );
+                const css::lang::Locale& rLoc( pPDFExtOutDevData->GetDocumentLocale() );
                 if( !rLoc.Language.isEmpty() )
                     pPDFWriter->SetDocumentLocale( rLoc );
 

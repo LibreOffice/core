@@ -120,7 +120,7 @@ public:
                             ~PDFExport();
 
     bool                ExportSelection( vcl::PDFWriter& rPDFWriter,
-                                Reference< com::sun::star::view::XRenderable >& rRenderable,
+                                Reference< css::view::XRenderable >& rRenderable,
                                 const Any& rSelection,
                                 const StringRangeEnumerator& rRangeEnum,
                                 Sequence< PropertyValue >& rRenderOptions,

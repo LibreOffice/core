@@ -64,7 +64,7 @@ using namespace com::sun::star::xml::sax;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
-bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
     OUString udConvertClass=msUserData[0];
@@ -139,7 +139,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::be
         Reference< XStyleFamiliesSupplier > xstylefamiliessupplier(mxDoc, UNO_QUERY);
         Reference< XStyleLoader > xstyleLoader (xstylefamiliessupplier->getStyleFamilies(), UNO_QUERY);
         if(xstyleLoader.is()){
-            Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
+            Sequence<css::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
             //Load the Styles from the Template URL Supplied in the TypeDetection file
             if(!comphelper::isFileUrl(msTemplateName))
@@ -184,7 +184,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::be
     return true;
 }
 
-bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
 
@@ -202,7 +202,7 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star::be
        xStatusIndicator->start(OUString( "Saving :" ),nProgressRange);
 
     // Set up converter bridge.
-    Reference< com::sun::star::xml::XExportFilter > xConverter(mxContext->getServiceManager()->createInstanceWithContext( udConvertClass, mxContext ), UNO_QUERY);
+    Reference< css::xml::XExportFilter > xConverter(mxContext->getServiceManager()->createInstanceWithContext( udConvertClass, mxContext ), UNO_QUERY);
     if(! xConverter.is()){
       OSL_FAIL( "xml export sub service missing" );
       return false;
@@ -301,7 +301,7 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star::be
     return true;
 }
 
-sal_Bool SAL_CALL XmlFilterAdaptor::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL XmlFilterAdaptor::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
   throw (RuntimeException, std::exception)
 {
     return meType == FILTER_EXPORT ? exportImpl ( aDescriptor ) : importImpl ( aDescriptor );
@@ -311,16 +311,16 @@ void SAL_CALL XmlFilterAdaptor::cancel(  )
 {
 }
 // XExporter
-void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< css::lang::XComponent >& xDoc )
+    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     meType = FILTER_EXPORT;
     mxDoc = xDoc;
 }
 
 // XImporter
-void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< css::lang::XComponent >& xDoc )
+    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     meType = FILTER_IMPORT;
     mxDoc = xDoc;

@@ -74,7 +74,7 @@ class ImpPDFTabLinksPage;
 class ImpPDFTabDialog : public SfxTabDialog
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext> mxContext;
+    css::uno::Reference< css::uno::XComponentContext> mxContext;
     FilterConfigItem            maConfigItem;
     FilterConfigItem            maConfigI18N;
 
@@ -96,23 +96,23 @@ protected:
     bool                    mbSelectionPresent;
     bool                    mbUseCTLFont;
     bool                    mbUseLosslessCompression;
-    sal_Int32                   mnQuality;
+    sal_Int32               mnQuality;
     bool                    mbReduceImageResolution;
-    sal_Int32                   mnMaxImageResolution;
+    sal_Int32               mnMaxImageResolution;
     bool                    mbUseTaggedPDF;
-    sal_Int32                   mnPDFTypeSelection;
+    sal_Int32               mnPDFTypeSelection;
     bool                    mbExportNotes;
     bool                    mbViewPDF;
     bool                    mbExportNotesPages;
     bool                    mbUseTransitionEffects;
     bool                    mbIsSkipEmptyPages;
     bool                    mbAddStream;
-    sal_Int32                   mnFormsType;
+    sal_Int32               mnFormsType;
     bool                    mbExportFormFields;
     bool                    mbAllowDuplicateFieldNames;
     bool                    mbExportBookmarks;
     bool                    mbExportHiddenSlides;
-    sal_Int32                   mnOpenBookmarkLevels;
+    sal_Int32               mnOpenBookmarkLevels;
 
     bool                    mbHideViewerToolbar;
     bool                    mbHideViewerMenubar;
@@ -121,42 +121,42 @@ protected:
     bool                    mbCenterWindow;
     bool                    mbOpenInFullScreenMode;
     bool                    mbDisplayPDFDocumentTitle;
-    sal_Int32                   mnMagnification;
-    sal_Int32                   mnInitialView;
-    sal_Int32                   mnZoom;
-    sal_Int32                   mnInitialPage;
+    sal_Int32               mnMagnification;
+    sal_Int32               mnInitialView;
+    sal_Int32               mnZoom;
+    sal_Int32               mnInitialPage;
 
-    sal_Int32                   mnPageLayout;
+    sal_Int32               mnPageLayout;
     bool                    mbFirstPageLeft;
 
     bool                    mbEncrypt;
 
     bool                    mbRestrictPermissions;
-    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > maPreparedOwnerPassword;
-    sal_Int32                   mnPrint;
-    sal_Int32                   mnChangesAllowed;
+    css::uno::Sequence< css::beans::NamedValue > maPreparedOwnerPassword;
+    sal_Int32               mnPrint;
+    sal_Int32               mnChangesAllowed;
     bool                    mbCanCopyOrExtract;
     bool                    mbCanExtractForAccessibility;
-    com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
+    css::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
 
     bool                    mbIsRangeChecked;
-    OUString               msPageRange;
+    OUString                msPageRange;
     bool                    mbSelectionIsChecked;
 
     bool                    mbExportRelativeFsysLinks;
-    sal_Int32                   mnViewPDFMode;
+    sal_Int32               mnViewPDFMode;
     bool                    mbConvertOOoTargets;
     bool                    mbExportBmkToPDFDestination;
 
     bool                    mbSignPDF;
-    OUString             msSignPassword;
-    OUString             msSignLocation;
-    OUString             msSignContact;
-    OUString             msSignReason;
-    com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
-    OUString             msSignTSA;
+    OUString                msSignPassword;
+    OUString                msSignLocation;
+    OUString                msSignContact;
+    OUString                msSignReason;
+    css::uno::Reference< css::security::XCertificate > maSignCertificate;
+    OUString                msSignTSA;
 
-    OUString             maWatermarkText;
+    OUString                maWatermarkText;
 
 public:
 
@@ -363,10 +363,10 @@ class ImpPDFTabSecurityPage : public SfxTabPage
 
     bool                        mbHaveOwnerPassword;
     bool                        mbHaveUserPassword;
-    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > maPreparedOwnerPassword;
+    css::uno::Sequence< css::beans::NamedValue > maPreparedOwnerPassword;
     OUString                    msOwnerPwdTitle;
 
-    com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
+    css::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
 
     DECL_LINK_TYPED( ClickmaPbSetPwdHdl, Button*, void );
 
@@ -430,7 +430,7 @@ class ImpPDFTabSigningPage : public SfxTabPage
     VclPtr<Edit>                       mpEdSignContactInfo;
     VclPtr<Edit>                       mpEdSignReason;
     VclPtr<ListBox>                    mpLBSignTSA;
-    com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
+    css::uno::Reference< css::security::XCertificate > maSignCertificate;
 
     DECL_LINK_TYPED( ClickmaPbSignCertSelect, Button*, void );
     DECL_LINK_TYPED( ClickmaPbSignCertClear, Button*, void );

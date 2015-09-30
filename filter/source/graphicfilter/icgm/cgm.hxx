@@ -137,9 +137,9 @@ class CGM
 
                             ~CGM();
 
-                            CGM( sal_uInt32 nMode, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > const & rModel );
+                            CGM( sal_uInt32 nMode, css::uno::Reference< css::frame::XModel > const & rModel );
         GDIMetaFile*        mpGDIMetaFile;
-        sal_uInt32              GetBackGroundColor();
+        sal_uInt32          GetBackGroundColor();
         bool                IsValid() const { return mbStatus; };
         bool                IsFinished() const { return mbIsFinished; };
         bool                Write( SvStream& rIStm );

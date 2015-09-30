@@ -127,21 +127,21 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
         static css::uno::Reference< css::uno::XInterface > impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 
       // Overrides to resolve ambiguity
-      virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+      virtual css::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::getByName(aName); }
-      virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+      virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::getElementNames(); }
-      virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+      virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::hasByName(aName); }
 
-      virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+      virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::getElementType(); }
-      virtual sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+      virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::hasElements(); }
 
-      virtual ::com::sun::star::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery( const ::rtl::OUString& Query ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+      virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery( const ::rtl::OUString& Query ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::createSubSetEnumerationByQuery(Query); }
-      virtual ::com::sun::star::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties( const ::com::sun::star::uno::Sequence< css::beans::NamedValue >& Properties ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+      virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties( const css::uno::Sequence< css::beans::NamedValue >& Properties ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::createSubSetEnumerationByProperties(Properties); }
 
 };

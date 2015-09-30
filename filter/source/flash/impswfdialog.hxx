@@ -56,11 +56,11 @@ private:
 
 public:
     ImpSWFDialog( vcl::Window* pParent,
-                  com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rFilterData );
+                  css::uno::Sequence< css::beans::PropertyValue >& rFilterData );
     virtual ~ImpSWFDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > GetFilterData();
+    css::uno::Sequence< css::beans::PropertyValue > GetFilterData();
 };
 
 #endif // INCLUDED_FILTER_SOURCE_FLASH_IMPSWFDIALOG_HXX

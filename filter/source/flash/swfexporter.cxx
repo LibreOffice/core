@@ -591,7 +591,7 @@ void FlashExporter::exportShape( const Reference< XShape >& xShape, bool bMaster
 
     try
     {
-            com::sun::star::awt::Rectangle aBoundRect;
+            css::awt::Rectangle aBoundRect;
             xPropSet->getPropertyValue( "BoundRect" ) >>= aBoundRect;
 
             std::unique_ptr<ShapeInfo> pShapeInfo(new ShapeInfo());

@@ -20,7 +20,7 @@
 namespace msfilter {
 namespace util {
 
-rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::sun::star::lang::Locale &rLocale)
+rtl_TextEncoding getBestTextEncodingFromLocale(const css::lang::Locale &rLocale)
 {
     // Obviously not comprehensive, feel free to expand these, they're for ultimate fallbacks
     // in last-ditch broken-file-format cases to guess the right 8bit encodings
@@ -350,7 +350,7 @@ static const ApiPaperSize spPaperSizeTable[] =
     { MM2MM100( 322 ),       MM2MM100( 445 )     }           // 68 - A3 extra transverse paper
 };
 
-sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const com::sun::star::awt::Size& rSize )
+sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const css::awt::Size& rSize )
 {
     sal_Int32 nElems = SAL_N_ELEMENTS( spPaperSizeTable );
     // Need to find the best match for current size

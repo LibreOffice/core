@@ -28,44 +28,44 @@
 #include <cppuhelper/implbase.hxx>
 
 class StorageFilterDetect : public cppu::WeakImplHelper<
-    com::sun::star::document::XExtendedFilterDetection,
-    com::sun::star::lang::XInitialization,
-    com::sun::star::lang::XServiceInfo>
+    css::document::XExtendedFilterDetection,
+    css::lang::XInitialization,
+    css::lang::XServiceInfo>
 {
-    com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> mxCxt;
+    css::uno::Reference<css::uno::XComponentContext> mxCxt;
 
 public:
 
-    StorageFilterDetect (const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xCxt);
+    StorageFilterDetect (const css::uno::Reference<css::uno::XComponentContext>& xCxt);
     virtual ~StorageFilterDetect();
 
     // XExtendedFilterDetection
-    virtual OUString SAL_CALL detect(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rDescriptor)
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL detect(css::uno::Sequence<css::beans::PropertyValue>& rDescriptor)
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArguments)
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments)
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 OUString StorageFilterDetect_getImplementationName();
 
 bool StorageFilterDetect_supportsService(const OUString& ServiceName);
 
-com::sun::star::uno::Sequence<OUString> StorageFilterDetect_getSupportedServiceNames();
+css::uno::Sequence<OUString> StorageFilterDetect_getSupportedServiceNames();
 
-com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
-StorageFilterDetect_createInstance(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& rCxt);
+css::uno::Reference<css::uno::XInterface>
+StorageFilterDetect_createInstance(const css::uno::Reference<css::uno::XComponentContext>& rCxt);
 
 #endif
 

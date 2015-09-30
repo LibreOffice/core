@@ -63,7 +63,7 @@ namespace XSLT
      *
      * See Reader below.
      */
-    class LibXSLTTransformer : public WeakImplHelper<com::sun::star::xml::xslt::XXSLTTransformer>
+    class LibXSLTTransformer : public WeakImplHelper<css::xml::xslt::XXSLTTransformer>
     {
     private:
         static const char* const PARAM_SOURCE_URL;
@@ -73,13 +73,13 @@ namespace XSLT
         static const char* const PARAM_DOCTYPE_PUBLIC;
 
         // the UNO ServiceFactory
-        com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_xContext;
+        css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
-        com::sun::star::uno::Reference<XInputStream> m_rInputStream;
+        css::uno::Reference<XInputStream> m_rInputStream;
 
-        com::sun::star::uno::Reference<XOutputStream> m_rOutputStream;
+        css::uno::Reference<XOutputStream> m_rOutputStream;
 
-        typedef ::std::list<com::sun::star::uno::Reference<XStreamListener> > ListenerList;
+        typedef ::std::list<css::uno::Reference<XStreamListener> > ListenerList;
 
         ListenerList m_listeners;
 
@@ -100,26 +100,26 @@ namespace XSLT
     public:
 
         // ctor...
-        LibXSLTTransformer(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> &r);
+        LibXSLTTransformer(const css::uno::Reference<css::uno::XComponentContext> &r);
 
         // XActiveDataSink
         virtual void SAL_CALL
-        setInputStream(const com::sun::star::uno::Reference<XInputStream>& inputStream)
+        setInputStream(const css::uno::Reference<XInputStream>& inputStream)
                 throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual com::sun::star::uno::Reference<XInputStream> SAL_CALL
+        virtual css::uno::Reference<XInputStream> SAL_CALL
         getInputStream() throw (RuntimeException, std::exception) SAL_OVERRIDE;
         // XActiveDataSource
         virtual void SAL_CALL
-        setOutputStream(const com::sun::star::uno::Reference<XOutputStream>& outputStream)
+        setOutputStream(const css::uno::Reference<XOutputStream>& outputStream)
                 throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual com::sun::star::uno::Reference<XOutputStream> SAL_CALL
+        virtual css::uno::Reference<XOutputStream> SAL_CALL
         getOutputStream() throw (RuntimeException, std::exception) SAL_OVERRIDE;
         // XActiveDataControl
         virtual void SAL_CALL
-        addListener(const com::sun::star::uno::Reference<XStreamListener>& listener)
+        addListener(const css::uno::Reference<XStreamListener>& listener)
                 throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL
-        removeListener(const com::sun::star::uno::Reference<XStreamListener>& listener)
+        removeListener(const css::uno::Reference<XStreamListener>& listener)
                 throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL
         start() throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -140,7 +140,7 @@ namespace XSLT
         ::std::map<const char*, OString> SAL_CALL
         getParameters() { return m_parameters; }
 
-        com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> SAL_CALL
+        css::uno::Reference<css::uno::XComponentContext> SAL_CALL
         getComponentContext() {
             return m_xContext;
         }
