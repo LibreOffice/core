@@ -354,7 +354,7 @@ void ScDocShell::UpdateLinks()
     {
         --k;
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[k];
-        if (pBase->ISA(ScTableLink))
+        if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
         {
             ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
             if (pTabLink->IsUsed())
@@ -418,7 +418,7 @@ bool ScDocShell::ReloadTabLinks()
     for (size_t i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
-        if (pBase->ISA(ScTableLink))
+        if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
         {
             ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
 //			pTabLink->SetAddUndo(sal_False);		//! Undo's zusammenfassen

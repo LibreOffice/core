@@ -2501,7 +2501,7 @@ bool ScDocShell::PrepareClose( bool bUI )
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();
-            ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
+            ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
             if(pViewSh!=NULL)
             {
                 vcl::Window *pWin=pViewSh->GetWindow();
@@ -2887,7 +2887,7 @@ VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(
                                          vcl::Window *pParent, const SfxItemSet &rSet )
 {
     VclPtr<SfxDocumentInfoDialog> pDlg   = VclPtr<SfxDocumentInfoDialog>::Create( pParent, rSet );
-    ScDocShell*            pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
+    ScDocShell*            pDocSh = dynamic_cast< ScDocShell *>( SfxObjectShell::Current() );
 
     // Only for statistics, if this Doc is shown; not from the Doc Manager
     if( pDocSh == this )

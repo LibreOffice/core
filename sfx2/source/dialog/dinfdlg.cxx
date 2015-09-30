@@ -1183,7 +1183,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
     }
     else
     {
-        DBG_ASSERT( pItem->IsA( TYPE( SfxStringItem ) ),
+        DBG_ASSERT( dynamic_cast<const SfxStringItem *>(pItem) != nullptr,
                     "SfxDocumentInfoDialog:<SfxStringItem> expected" );
         aTitle += static_cast<const SfxStringItem*>(pItem)->GetValue();
     }

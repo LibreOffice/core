@@ -329,7 +329,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
 
     if(pObj)
     {
-        if(pObj->ISA(SdrPathObj))
+        if( dynamic_cast< const SdrPathObj *>( pObj ) !=  nullptr)
         {
             basegfx::B2DPolyPolygon aPoly;
 

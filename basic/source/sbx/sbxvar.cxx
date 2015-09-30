@@ -590,7 +590,7 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
 {
     rStrm.WriteUChar( 0xFF );      // Marker
     bool bValStore;
-    if( this->IsA( TYPE(SbxMethod) ) )
+    if( dynamic_cast<const SbxMethod *>(this) != nullptr )
     {
         // #50200 Avoid that objects , which during the runtime
         // as return-value are saved in the method as a value were saved

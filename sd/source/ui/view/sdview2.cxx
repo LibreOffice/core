@@ -126,7 +126,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     {
         SdrObject* pObj = GetMarkedObjectByIndex(0);
 
-        if( pObj && pObj->ISA(SdrOle2Obj) && static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
+        if( pObj && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr && static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
         {
             // If object has no persistence it must be copied as part of the document
             try
@@ -172,7 +172,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     {
         SdrObject* pObj = GetMarkedObjectByIndex( 0 );
 
-        if( pObj && pObj->ISA( SdrOle2Obj ) && static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
+        if( pObj && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr && static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
         {
             // If object has no persistence it must be copied as part of the document
             try
@@ -369,7 +369,7 @@ void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
         {
             rtl::Reference<FuPoor> xFunction( pDrawViewShell->GetCurrentFunction() );
 
-            if( xFunction.is() && xFunction->ISA( FuDraw ) )
+            if( xFunction.is() && 0 != dynamic_cast< const FuDraw *>( xFunction.get() ) )
                 static_cast<FuDraw*>(xFunction.get())->ForcePointer( NULL );
         }
 
@@ -792,7 +792,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 nRet = nDropAction;
                             }
                         }
-                        else if( mpViewSh->ISA( DrawViewShell ) )
+                        else if( dynamic_cast< const DrawViewShell *>( mpViewSh ) !=  nullptr )
                         {
                             // insert as normal URL button
                             static_cast<DrawViewShell*>( mpViewSh )->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), OUString(), &aPos );
@@ -928,7 +928,7 @@ typedef std::vector< SdrObject* > SdrObjectVector;
 void ImplProcessObjectList(SdrObject* pObj, SdrObjectVector& rVector )
 {
     bool bIsGroup(pObj->IsGroupObject());
-    if(bIsGroup && pObj->ISA(E3dObject) && !pObj->ISA(E3dScene))
+    if(bIsGroup && dynamic_cast< const E3dObject *>( pObj ) != nullptr && dynamic_cast< const E3dScene *>( pObj ) ==  nullptr)
         bIsGroup = false;
 
     rVector.push_back( pObj );

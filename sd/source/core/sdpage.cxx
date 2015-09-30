@@ -407,7 +407,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
 
         InsertObject(pSdrObj);
 
-        if ( pSdrObj->ISA(SdrTextObj) )
+        if ( dynamic_cast< const SdrTextObj *>( pSdrObj ) !=  nullptr )
         {
             // Tell the object EARLY that it is vertical to have the
             // defaults for AutoGrowWidth/Height reversed
@@ -454,7 +454,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
         }
 
         OUString aString = GetPresObjText(eObjKind);
-        if( (!aString.isEmpty() || bForceText) && pSdrObj->ISA(SdrTextObj) )
+        if( (!aString.isEmpty() || bForceText) && dynamic_cast< const SdrTextObj *>( pSdrObj ) !=  nullptr )
         {
             SdrOutliner* pOutliner = static_cast<SdDrawDocument*>( GetModel() )->GetInternalOutliner();
 
@@ -2023,7 +2023,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                     }
                     else if ( eObjKind != OBJ_TITLETEXT   &&
                               eObjKind != OBJ_OUTLINETEXT &&
-                              pObj->ISA(SdrTextObj)       &&
+                              dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr       &&
                               pObj->GetOutlinerParaObject() )
                     {
                         /******************************************************
@@ -2316,7 +2316,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
         }
     }
 
-    if ( pObj && (pObj->GetUserCall() || bInit) && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
+    if ( pObj && (pObj->GetUserCall() || bInit) && ( pObj->IsEmptyPresObj() || dynamic_cast< const SdrGrafObj *>( pObj ) ==  nullptr ) )
         pObj->AdjustToMaxRect(rRect);
 
     return pObj;
@@ -2380,7 +2380,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
 {
     if ( pObj )
     {
-        DBG_ASSERT( pObj->ISA(SdrTextObj), "SetObjText: No SdrTextObj!" );
+        DBG_ASSERT( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr, "SetObjText: No SdrTextObj!" );
         ::Outliner* pOutl = pOutliner;
 
         if (!pOutliner)

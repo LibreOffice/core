@@ -468,7 +468,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
         return ;
 
     // The shell could be 0 also!!!!!
-    if ( !rVSh.ISA(SwCrsrShell) )
+    if ( dynamic_cast<const SwCrsrShell*>( &rVSh) ==  nullptr )
         return;
 
     // We are doing tiledRendering, let the client handles the URL loading.

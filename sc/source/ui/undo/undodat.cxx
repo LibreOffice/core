@@ -221,7 +221,7 @@ void ScUndoMakeOutline::Redo()
 
 void ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
@@ -234,7 +234,7 @@ void ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoMakeOutline::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoOutlineLevel::ScUndoOutlineLevel( ScDocShell* pNewDocShell,
@@ -314,13 +314,13 @@ void ScUndoOutlineLevel::Redo()
 
 void ScUndoOutlineLevel::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->SelectLevel( bColumns, nLevel, true );
 }
 
 bool ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 /** show/hide outline over block marks */
@@ -410,7 +410,7 @@ void ScUndoOutlineBlock::Redo()
 
 void ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
@@ -423,7 +423,7 @@ void ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoOutlineBlock::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoRemoveAllOutlines::ScUndoRemoveAllOutlines( ScDocShell* pNewDocShell,
@@ -502,13 +502,13 @@ void ScUndoRemoveAllOutlines::Redo()
 
 void ScUndoRemoveAllOutlines::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RemoveAllOutlines();
 }
 
 bool ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoAutoOutline::ScUndoAutoOutline( ScDocShell* pNewDocShell,
@@ -605,13 +605,13 @@ void ScUndoAutoOutline::Redo()
 
 void ScUndoAutoOutline::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->AutoOutline();
 }
 
 bool ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoSubTotals::ScUndoSubTotals( ScDocShell* pNewDocShell, SCTAB nNewTab,
@@ -1239,7 +1239,7 @@ void ScUndoImportData::Redo()
 
 void ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
@@ -1257,7 +1257,7 @@ bool ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
     //  Repeat only for import using a database range, then pUndoDBData is set
 
     if (pUndoDBData)
-        return rTarget.ISA(ScTabViewTarget);
+        return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
     else
         return false;       // Address book
 }
@@ -1416,13 +1416,13 @@ void ScUndoRepeatDB::Redo()
 
 void ScUndoRepeatDB::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RepeatDB();
 }
 
 bool ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoDataPilot::ScUndoDataPilot( ScDocShell* pNewDocShell,
@@ -1877,7 +1877,7 @@ void ScUndoDataForm::Repeat(SfxRepeatTarget& /*rTarget*/)
 
 bool ScUndoDataForm::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-        return (rTarget.ISA(ScTabViewTarget));
+        return (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr);
 }
 
 void ScUndoDataForm::DoChange( const bool bUndo )

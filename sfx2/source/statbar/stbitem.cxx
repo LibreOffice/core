@@ -444,12 +444,12 @@ void SfxStatusBarControl::StateChanged
 {
     DBG_ASSERT( pBar != nullptr, "setting state to dangling StatusBar" );
 
-    const SfxStringItem* pStr = PTR_CAST( SfxStringItem, pState );
+    const SfxStringItem* pStr = dynamic_cast<const SfxStringItem*>( pState  );
     if ( eState == SfxItemState::DEFAULT && pStr )
         pBar->SetItemText( nSID, pStr->GetValue() );
     else
     {
-        DBG_ASSERT( eState != SfxItemState::DEFAULT || pState->ISA(SfxVoidItem),
+        DBG_ASSERT( eState != SfxItemState::DEFAULT || dynamic_cast< const SfxVoidItem *>( pState ) !=  nullptr,
                     "wrong SfxPoolItem subclass in SfxStatusBarControl" );
         pBar->SetItemText( nSID, OUString() );
     }

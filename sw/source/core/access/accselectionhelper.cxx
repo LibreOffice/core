@@ -60,11 +60,7 @@ SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
     OSL_ENSURE( pViewShell != NULL,
                 "No view shell? Then what are you looking at?" );
 
-    SwFEShell* pFEShell = NULL;
-    if( pViewShell->ISA( SwFEShell ) )
-    {
-        pFEShell = static_cast<SwFEShell*>( pViewShell );
-    }
+    SwFEShell* pFEShell = dynamic_cast<SwFEShell*>( pViewShell );
 
     return pFEShell;
 }

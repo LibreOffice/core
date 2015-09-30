@@ -5,7 +5,6 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
  * This file incorporates work covered by the following license notice:
  *
  *   Licensed to the Apache Software Foundation (ASF) under one or more
@@ -182,7 +181,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
     // to adjust the positioning attributes - see <SwDrawContact::_Changed(..)>.
     {
         const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( &_rSdrObj );
-        if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+        if ( dynamic_cast<const SwAnchoredDrawObject*>( pAnchoredObj) !=  nullptr )
         {
             const SwAnchoredDrawObject* pAnchoredDrawObj =
                             static_cast<const SwAnchoredDrawObject*>(pAnchoredObj);
@@ -322,7 +321,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
             for ( size_t i = 0; i < nMarkCount; ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-                if ( pObj->IsA( TYPE(SdrObjGroup) ) )
+                if ( dynamic_cast<const SdrObjGroup*>(pObj) !=  nullptr )
                 {
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
                     SwFormatAnchor aAnch( pContact->GetFormat()->GetAnchor() );
@@ -397,7 +396,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
         if( 1 == rMrkList.GetMarkCount() )
         {
             SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-            if( pObj->ISA(SwVirtFlyDrawObj) )
+            if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
             {
                 SwFlyFrameFormat* pFrameFormat =
                     static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetFormat();
@@ -412,7 +411,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
         for( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            if( !pObj->ISA(SwVirtFlyDrawObj) )
+            if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
             {
                 SwDrawContact *pC = static_cast<SwDrawContact*>(GetUserCall(pObj));
                 SwDrawFrameFormat *pFrameFormat = static_cast<SwDrawFrameFormat*>(pC->GetFormat());
@@ -449,7 +448,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                         // <SwDrawVirtObj>-objects have to be replaced by its
                         // reference objects.  Thus, assert, if a
                         // <SwDrawVirt>-object is found in the mark list.
-                        if ( pObj->ISA(SwDrawVirtObj) )
+                        if ( dynamic_cast<const SwDrawVirtObj*>( pObj) !=  nullptr )
                         {
                             OSL_FAIL( "<SwDrawVirtObj> is still marked for delete. application will crash!" );
                         }
@@ -530,14 +529,14 @@ IMPL_LINK_TYPED(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     const SvxFieldItem& rField = pInfo->GetField();
     const SvxFieldData* pField = rField.GetField();
 
-    if (pField && pField->ISA(SvxDateField))
+    if (pField && dynamic_cast<const SvxDateField*>( pField) !=  nullptr)
     {
         // Date field
         pInfo->SetRepresentation(
             static_cast<const SvxDateField*>( pField)->GetFormatted(
                     *GetNumberFormatter(), LANGUAGE_SYSTEM) );
     }
-    else if (pField && pField->ISA(SvxURLField))
+    else if (pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr)
     {
         // URL field
         switch ( static_cast<const SvxURLField*>( pField)->GetFormat() )
@@ -573,12 +572,12 @@ IMPL_LINK_TYPED(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
         pInfo->SetTextColor(aColor);
     }
-    else if (pField && pField->ISA(SdrMeasureField))
+    else if (pField && dynamic_cast<const SdrMeasureField*>( pField) !=  nullptr)
     {
         // Measure field
         pInfo->ClearFieldColor();
     }
-    else if ( pField && pField->ISA(SvxExtTimeField))
+    else if ( pField && dynamic_cast<const SvxExtTimeField*>( pField) !=  nullptr)
     {
         // Time field
         pInfo->SetRepresentation(

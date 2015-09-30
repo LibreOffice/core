@@ -163,12 +163,12 @@ void SwTextFrm::MoveFlyInCnt( SwTextFrm *pNew, sal_Int32 nStart, sal_Int32 nEnd 
                 const sal_Int32 nIdx = pPos->nContent.GetIndex();
                 if ( nIdx >= nStart && nEnd > nIdx )
                 {
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                     {
                         RemoveFly( static_cast<SwFlyFrm*>(pAnchoredObj) );
                         pNew->AppendFly( static_cast<SwFlyFrm*>(pAnchoredObj) );
                     }
-                    else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+                    else if ( dynamic_cast< const SwAnchoredDrawObject *>( pAnchoredObj ) !=  nullptr )
                     {
                         RemoveDrawObj( *pAnchoredObj );
                         pNew->AppendDrawObj( *pAnchoredObj );

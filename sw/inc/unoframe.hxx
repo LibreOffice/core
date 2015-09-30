@@ -141,11 +141,11 @@ public:
 
     const SwFrameFormat* GetFrameFormat() const
     {
-        return PTR_CAST ( SwFrameFormat, GetRegisteredIn() );
+        return dynamic_cast<const SwFrameFormat*>( GetRegisteredIn()  );
     }
     SwFrameFormat* GetFrameFormat()
     {
-        return PTR_CAST ( SwFrameFormat, GetRegisteredIn() );
+        return dynamic_cast< SwFrameFormat*>( GetRegisteredIn() );
     }
     FlyCntType      GetFlyCntType()const {return eType;}
 

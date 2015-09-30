@@ -401,17 +401,17 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                             pNewDBField->SetLogicRect(aNewObjectRectangle);
 
                             // controls must be on control layer, groups on front layer
-                            if ( pNewDBField->ISA(SdrUnoObj) )
+                            if ( dynamic_cast<const SdrUnoObj*>( pNewDBField) !=  nullptr )
                                 pNewDBField->NbcSetLayer(SC_LAYER_CONTROLS);
                             else
                                 pNewDBField->NbcSetLayer(SC_LAYER_FRONT);
-                            if (pNewDBField->ISA(SdrObjGroup))
+                            if (dynamic_cast<const SdrObjGroup*>( pNewDBField) !=  nullptr)
                             {
                                 SdrObjListIter aIter( *pNewDBField, IM_DEEPWITHGROUPS );
                                 SdrObject* pSubObj = aIter.Next();
                                 while (pSubObj)
                                 {
-                                    if ( pSubObj->ISA(SdrUnoObj) )
+                                    if ( dynamic_cast<const SdrUnoObj*>( pSubObj) !=  nullptr )
                                         pSubObj->NbcSetLayer(SC_LAYER_CONTROLS);
                                     else
                                         pSubObj->NbcSetLayer(SC_LAYER_FRONT);

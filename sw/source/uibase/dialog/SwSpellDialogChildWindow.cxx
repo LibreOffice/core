@@ -644,7 +644,7 @@ SwWrtShell* SwSpellDialogChildWindow::GetWrtShell_Impl()
         sal_uInt16 nShellIdx = 0;
         SfxShell* pShell;
         while(0 != (pShell = pDispatch->GetShell(nShellIdx++)))
-            if(pShell->ISA(SwView))
+            if(dynamic_cast< const SwView *>( pShell ) !=  nullptr)
             {
                 pView = static_cast<SwView* >(pShell);
                 break;
@@ -736,7 +736,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
     if ( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if( pObj && pObj->ISA(SdrTextObj) )
+        if( pObj && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr )
             pCurrentTextObj = static_cast<SdrTextObj*>(pObj);
     }
     // at first fill the list of drawing objects

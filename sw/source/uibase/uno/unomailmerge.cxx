@@ -596,7 +596,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     }
 
     SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, false);
-    SwView *pView = pFrame ? PTR_CAST( SwView, pFrame->GetViewShell() ) : NULL;
+    SwView *pView = pFrame ? dynamic_cast<SwView*>( pFrame->GetViewShell()  ) : NULL;
     if (!pView)
         throw RuntimeException();
     SwWrtShell &rSh = *pView->GetWrtShellPtr();
