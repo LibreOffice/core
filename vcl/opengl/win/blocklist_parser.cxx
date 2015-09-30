@@ -10,9 +10,10 @@
 #include "blocklist_parser.hxx"
 
 WinBlocklistParser::WinBlocklistParser(const OUString& rURL,
-        std::vector<wgl::DriverInfo>& rDriverList):
-    maURL(rURL),
-    mrDriverList(rDriverList)
+        std::vector<wgl::DriverInfo>& rDriverList)
+    : maURL(rURL)
+    , mrDriverList(rDriverList)
+    , meBlockType(BlockType::UNKNOWN)
 {
 }
 
