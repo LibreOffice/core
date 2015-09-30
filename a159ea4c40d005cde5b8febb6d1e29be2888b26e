@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_97cb841e",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:54:48Z",
+      "side": 1,
+      "message": "deferral was right",
+      "revId": "a159ea4c40d005cde5b8febb6d1e29be2888b26e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
