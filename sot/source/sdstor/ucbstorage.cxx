@@ -487,7 +487,7 @@ public:
     bool                        m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
                                                 // this means that the root storage does an autocommit when its external
                                                 // reference is destroyed
-    bool                        m_bIsRoot;      // marks this storage as root storages that manages all oommits and reverts
+    bool                        m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
     bool                        m_bDirty;       // ???
     bool                        m_bIsLinked;
     bool                        m_bListCreated;

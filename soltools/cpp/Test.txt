@@ -21,7 +21,7 @@
 
 ABC
 
-/* Standards --------------------------------------------------------------- */
+/* Standards */
 
 #define NOTHING
 NOTHING
@@ -50,7 +50,7 @@ MAC(A,B);
 MAC(X,Y)
 #endif // MAC
 
-/* Recursions -------------------------------------------------------------- */
+/* Recursions */
 
 #define y x
 #define x y
@@ -73,7 +73,7 @@ args(t1, (args(t2, (x, y))))    // t1 (t2 (x, y))
 #define __ ARGS
 int foo __((int x));            // int foo (int x);
 
-/* Concatinations ---------------------------------------------------------- */
+/* Concatinations */
 
 #define tail _Test
 // Txt_##tail                      // Txt_##_Test
@@ -91,14 +91,14 @@ CAT3( a, b )                    // ab::ab
 #define CAT2( var ) fix##var::fix##var
 CAT2( a )                       // fixa::fixa
 
-/* Extrems ----------------------------------------------------------------- */
+/* Extremes */
 
 #define MAKE_X( name )  name##_Test
 #define MAKE_Y( name )  MAKE_X( name##_Sym )
 MAKE_Y( Txt );                  // Txt_Sym_Test;
 
 
-/* Extensions -------------------------------------------------------------- */
+/* Extensions */
 
 /*
 #ident "(c)# Test.txt"
@@ -109,10 +109,8 @@ MAKE_Y( Txt );                  // Txt_Sym_Test;
 char machine[6];
 */
 
-/* Last bug ----------------------------------------------------------------- */
+/* Last bug */
 #define Cfstrcpy		Cstrcpy
 #define Cstrcpy( s1, s2 )	strcpy( s1, s2 )
 
 Cfstrcpy(Par1,Par2 )   		// blub( Par1, Par2 )
-
-/* ---------------------------------------------------------------------- */

@@ -774,7 +774,7 @@ static inline void print_fullpaths(char* line)
     int boost_count = 0;
     int token_len;
     const char * unpacked_end = 0; /* end of UnpackedTarget match (if any) */
-    /* for UnpackedTarget the target is GenC{,xx}Object, dont mangle! */
+    /* for UnpackedTarget the target is GenC{,xx}Object, don't mangle! */
     int target_seen = 0;
 
     token = line;

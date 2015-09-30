@@ -333,7 +333,7 @@ private:
  * As the placement of caret positions depends very much on the context within which a node
  * appears it is not trivial to find all caret positions and determine which follows which.
  * In OpenOffice Math this is done by the SmCaretPosGraphBuildingVisitor. This visitor builds
- * graph (an instnce of SmCaretPosGraph) over the caret positions. For details on how this
+ * graph (an instance of SmCaretPosGraph) over the caret positions. For details on how this
  * graph is build, and how new methods should be implemented see SmCaretPosGraphBuildingVisitor.
  *
  * The result of the SmCaretPosGraphBuildingVisitor is a graph over the caret positions in a

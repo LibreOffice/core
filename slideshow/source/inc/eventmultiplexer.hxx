@@ -718,7 +718,7 @@ public:
     */
     bool notifyCommandStopAudio( const boost::shared_ptr<AnimationNode>& rNode );
 
-    /** Botifies that a hyperlink has been clicked.
+    /** Notifies that a hyperlink has been clicked.
 
         @return true, if this event was processed by
         anybody. If false is returned, no handler processed
