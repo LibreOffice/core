@@ -21,10 +21,14 @@
 
 #include "optutil.hxx"
 #include "global.hxx"
+#include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 
 bool ScOptionsUtil::IsMetricSystem()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return true;
+
     //TODO: which language should be used here - system language or installed office language?
 
     MeasurementSystem eSys = ScGlobal::pLocaleData->getMeasurementSystemEnum();

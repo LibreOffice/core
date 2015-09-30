@@ -40,6 +40,7 @@
 #include "imp_op.hxx"
 #include "excimp8.hxx"
 #include "exp_op.hxx"
+#include "scdll.hxx"
 
 #include <memory>
 
@@ -215,6 +216,16 @@ FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocumen
         eRet = lcl_ExportExcelBiff( rMedium, pDocument, pMedStrm, eFormat == ExpBiff8, eNach );
 
     return eRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(const OUString &rURL)
+{
+    ScDLL::Init();
+    SfxMedium aMedium(rURL, StreamMode::READ);
+    ScDocument aDocument;
+    aDocument.MakeTable(0);
+    FltError eError = ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO);
+    return eError == eERR_OK;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

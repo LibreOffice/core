@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 using namespace ::com::sun::star;
@@ -43,6 +44,9 @@ using namespace ::com::sun::star::ucb;
 
 void ScGlobal::InitAddIns()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
+
     // multi paths separated by semicolons
     SvtPathOptions aPathOpt;
     OUString aMultiPath = aPathOpt.GetAddinPath();
