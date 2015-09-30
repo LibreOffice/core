@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_772070f8",
+        "filename": "qadevOOo/runner/lib/TestResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:37:19Z",
+      "side": 1,
+      "message": "refers",
+      "revId": "0c716945152d9560722edefb79660b6dcb6ca948",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

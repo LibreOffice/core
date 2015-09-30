@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_1723f406",
+        "filename": "qadevOOo/runner/helper/ProcessHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:37:19Z",
+      "side": 0,
+      "message": "Please don\u0027t remove the double **.\nIt\u0027s a doxygen comment.",
+      "revId": "79482ea253c2c6418908d072f083c26cc44e1994",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
