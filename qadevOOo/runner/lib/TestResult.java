@@ -35,7 +35,7 @@ public class TestResult {
      * and makes the state of the method completed. It's equal to
      * tested(method, Status(result)) call.
      *
-     * @param method reffers to the method which was tested
+     * @param method refers to the method which was tested
      * @param result the result of testing the method
      *
      * @return the result value

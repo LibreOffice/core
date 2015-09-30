@@ -30,7 +30,7 @@ import util.utils;
 
 /**
  * Class collect information from input stream in
- * background (sparate thread) and outputs it to
+ * background (separate thread) and outputs it to
  * some log stream. I helps to avoid buffer overflow
  * when output stream has small buffer size (e.g.
  * in case when handling stdout from external

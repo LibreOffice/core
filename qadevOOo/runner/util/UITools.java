@@ -151,7 +151,7 @@ public class UITools {
             } else {
 
                 XAccessible xListBoxAccess = UnoRuntime.queryInterface(XAccessible.class, xListBox);
-                // if a List is not pulled to be open all entries are not visiblle, therefore the
+                // if a List is not pulled to be open all entries are not visible, therefore the
                 // boolean argument
                 xList =AccessibilityTools.getAccessibleObjectForRole(
                                               xListBoxAccess, AccessibleRole.LIST, true);

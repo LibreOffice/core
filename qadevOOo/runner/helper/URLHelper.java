@@ -28,7 +28,7 @@ import java.util.Iterator;
 
 
 /**
- * It collects some static helper functons to handle URLs.
+ * It collects some static helper functions to handle URLs.
  * Sometimes it's necessary to convert URL from/to system paths.
  * Or from string to strutural notations (e.g. com.sun.star.util.URL).
  * And sometimes java had another notation then the office it has.

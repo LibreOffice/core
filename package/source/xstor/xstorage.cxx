@@ -749,8 +749,8 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
         // uno::Reference< io::XInputStream > xRelInfoStream = GetRelInfoStreamForName( OUString() ); // own stream
         // if ( xRelInfoStream.is() )
         // {
-        //  // Relations info stream is a writeonly property, introduced only to optimyze copying
-        //  // Should be used carefuly since no check for stream consistency is done, and the stream must not stay locked
+        //  // Relations info stream is a writeonly property, introduced only to optimize copying
+        //  // Should be used carefully since no check for stream consistency is done, and the stream must not stay locked
 
         //  OUString aRelInfoString = "RelationsInfoStream";
         //  xPropSet->setPropertyValue( aRelInfoString, uno::makeAny( GetSeekableTempCopy( xRelInfoStream, m_xFactory ) ) );

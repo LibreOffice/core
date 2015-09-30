@@ -56,7 +56,7 @@ public class Status extends SimpleStatus {
 
     /**
      * This is a factory method for creating a Status representing normal
-     * actibity termination.
+     * activity termination.
      *
      * @param state describes a test state (OK if state == true, FAILED
      * otherwise).
