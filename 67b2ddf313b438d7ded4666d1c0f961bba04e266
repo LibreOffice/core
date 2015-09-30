@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_7777d002",
+        "filename": "lotuswordpro/source/filter/lwptablelayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:49:50Z",
+      "side": 1,
+      "message": "heading",
+      "revId": "67b2ddf313b438d7ded4666d1c0f961bba04e266",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_57744cfc",
+        "filename": "lotuswordpro/source/filter/xfilter/xfdrawpolygon.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:49:50Z",
+      "side": 1,
+      "message": "License header",
+      "revId": "67b2ddf313b438d7ded4666d1c0f961bba04e266",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
