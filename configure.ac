@@ -6329,17 +6329,21 @@ fi
 AC_MSG_CHECKING([whether $CXX supports C++14 constexpr])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+if test "$ENABLE_DEBUG" != TRUE -a "$ENABLE_DBGUTIL" != TRUE \
+    -a "$ASSERT_ALWAYS_ABORT" != TRUE
+then
+    CXXFLAGS="$CXXFLAGS -DNDEBUG"
+fi
 AC_LANG_PUSH([C++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-    struct S {
-        int n_;
-        constexpr bool f() {
-            int n = n_;
-            int i = 0;
-            while (n > 0) { --n; ++i; }
-            return i == 0;
-        }
-    };
+    #include <cassert>
+    template<typename T> inline constexpr T f(T x) { return x; }
+    template<typename T> inline constexpr T g(T x) {
+        assert(f(static_cast<int>(x)));
+        return x;
+    }
+    enum E { e };
+    auto v = g(E::e);
     ]])], [cxx14_constexpr=yes], [cxx14_constexpr=no])
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
