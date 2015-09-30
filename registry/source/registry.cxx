@@ -446,95 +446,12 @@ Registry_Api* REGISTRY_CALLTYPE initRegistry_Api()
 }
 
 
-//  reg_loadRegKey
-
-RegError REGISTRY_CALLTYPE reg_loadKey(RegKeyHandle hKey,
-                                       rtl_uString* keyName,
-                                       rtl_uString* regFileName)
-{
-    ORegKey *pKey;
-
-    if (hKey)
-        pKey = static_cast<ORegKey*>(hKey);
-    else
-        return RegError::INVALID_KEY;
-
-    return loadKey(pKey->getRegistry(), hKey, keyName, regFileName);
-}
-
-
-//  reg_saveKey
-
-RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
-                                       rtl_uString* keyName,
-                                       rtl_uString* regFileName)
-{
-    ORegKey *pKey;
-
-    if (hKey)
-        pKey = static_cast<ORegKey*>(hKey);
-    else
-        return RegError::INVALID_KEY;
-
-    return saveKey(pKey->getRegistry(), hKey, keyName, regFileName);
-}
-
-
-//  reg_mergeKey
-
-RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
-                                        rtl_uString* keyName,
-                                        rtl_uString* regFileName,
-                                        bool bWarnings,
-                                        bool bReport)
-{
-    ORegKey *pKey;
-
-    if (hKey)
-        pKey = static_cast<ORegKey*>(hKey);
-    else
-        return RegError::INVALID_KEY;
-
-    return mergeKey(pKey->getRegistry(), hKey, keyName, regFileName, bWarnings, bReport);
-}
-
-
-//  reg_createRegistry
-
-RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registryName,
-                                              RegHandle* phRegistry)
-{
-    RegError ret;
-
-    ORegistry* pReg = new ORegistry();
-    if ((ret = pReg->initRegistry(registryName, RegAccessMode::READWRITE, true/*bCreate*/)) != RegError::NO_ERROR)
-    {
-        delete pReg;
-        *phRegistry = NULL;
-        return ret;
-    }
-
-    *phRegistry = pReg;
-
-    return RegError::NO_ERROR;
-}
-
-
 //  reg_openRootKey
 
 RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
                                           RegKeyHandle* phRootKey)
 {
     return openRootKey(hRegistry, phRootKey);
-}
-
-
-
-//  reg_getName
-
-RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
-{
-    return getName(hRegistry, pName);
 }
 
 
@@ -574,16 +491,6 @@ RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
     {
         return RegError::REGISTRY_NOT_OPEN;
     }
-}
-
-
-
-//  reg_destroyRegistry
-
-RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry,
-                                               rtl_uString* registryName)
-{
-    return destroyRegistry(hRegistry, registryName);
 }
 
 

@@ -337,9 +337,6 @@ OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
     ,m_nCommandType( CommandType::QUERY )
     ,m_bGraphicalDesign(false)
     ,m_bDistinct(false)
-    ,m_bViewAlias(false)
-    ,m_bViewTable(false)
-    ,m_bViewFunction(false)
     ,m_bEscapeProcessing(true)
 {
     InvalidateAll();

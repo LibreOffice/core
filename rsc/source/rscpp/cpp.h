@@ -286,19 +286,15 @@ int hasdirectory( char*, char*, int );
 int openfile( char* );
 
 /* cpp3.c */
-int openfiles( char* filename );
 void addfile( FILE* fp, char* filename );
 void setincdirs( void );
 int AddInclude( char* pIncStr );
-int getredirection( int argc, char** argv );
-void zap_uc( char* ap );
 
 void initdefines( void );
 int dooptions( int argc, char* argv[] );
 int readoptions( char* filename, char*** pfargv );
 
 /* cpp4.c */
-void dodefines( void );
 void checkparm( int c, DEFBUF* dp );
 int expcollect( void );
 void expstuff( DEFBUF* dp );
@@ -337,8 +333,6 @@ FILEINFO* getfile( size_t bufsize, char* name );
 char *getmem( size_t size );
 DEFBUF* lookid( int c );
 DEFBUF* defendel( char* name, int delete );
-void dunpdef( char* why );
-void dumpadef( char* why, DEFBUF* dp );
 int get( void );
 int cget( void );
 void unget( void );

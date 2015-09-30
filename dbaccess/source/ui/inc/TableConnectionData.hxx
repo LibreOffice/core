@@ -47,7 +47,6 @@ namespace dbaui
         void    Init();
 
         virtual OConnectionLineDataRef CreateLineDataObj();
-        virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
 
         OTableConnectionData& operator=( const OTableConnectionData& rConnData );
     public:
@@ -95,7 +94,6 @@ namespace dbaui
 
         OUString GetConnName() const { return m_aConnName; }
 
-        void SetConnName( const OUString& rConnName ){ m_aConnName = rConnName; }
         /** Update create a new connection
 
             @return true if successful

@@ -63,7 +63,6 @@ namespace dbaui
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
-        DECL_LINK_TYPED( SplitHdl, Splitter*, void );
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_JOINDESIGNVIEW_HXX

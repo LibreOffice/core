@@ -54,8 +54,6 @@ namespace dbaui
         const_iterator  begin() const;
         /// get access to the (last + 1st) element of the charset collection
         const_iterator  end() const;
-        // size of the map
-        sal_Int32   size() const { return OCharsetDisplay_Base::size(); }
 
     protected:
         virtual bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const SAL_OVERRIDE;
@@ -75,7 +73,6 @@ namespace dbaui
     public:
         CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource);
 
-        rtl_TextEncoding    getEncoding() const         { return CharsetDisplayDerefHelper_Base::getEncoding(); }
         OUString     getIanaName() const         { return CharsetDisplayDerefHelper_Base::getIanaName(); }
         OUString     getDisplayName() const      { return m_sDisplayName; }
 

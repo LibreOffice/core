@@ -51,7 +51,6 @@ namespace dbaui
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const css::uno::Any& _rNewData ) = 0;
         virtual css::uno::Any          GetCellData( long nRow, sal_uInt16 nColId ) = 0;
         virtual void SetControlText( long nRow, sal_uInt16 nColId, const OUString& rText ) = 0;
-        virtual OUString GetControlText( long nRow, sal_uInt16 nColId ) = 0;
 
         virtual OTableDesignView* GetView() const = 0;
 

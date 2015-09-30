@@ -144,7 +144,6 @@ sal_Int32 produceFile(const OString& filenameBase,
     // filenameBase is filename without ".idl"
 void removeIfExists(const OString& pathname);
 
-OString makeTempName(const OString& prefix, const OString& postfix);
 bool copyFile(const OString* source, const OString& target);
     // a null source means stdin
 

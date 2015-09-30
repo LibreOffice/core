@@ -82,13 +82,4 @@ void str2hstr(const char *c, hchar * i)
 }
 
 
-int hstrlen(const hchar * s)
-{
-    int n = 0;
-
-    while (*s++)
-        n++;
-    return n;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

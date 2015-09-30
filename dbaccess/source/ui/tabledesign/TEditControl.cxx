@@ -877,25 +877,6 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     InvalidateFeatures();
 }
 
-OUString OTableEditorCtrl::GetControlText( long nRow, sal_uInt16 nColId )
-{
-    // Read the Browser Controls
-    if( nColId < FIELD_FIRST_VIRTUAL_COLUMN )
-    {
-        GoToRow( nRow );
-        GoToColumnId( nColId );
-        CellControllerRef xController = Controller();
-        if(xController.Is())
-            return xController->GetWindow().GetText();
-        else
-            return GetCellText(nRow,nColId);
-    }
-
-    // Read the Controls on the Tabpage
-    else
-        return pDescrWin->GetControlText( nColId );
-}
-
 void OTableEditorCtrl::SetControlText( long nRow, sal_uInt16 nColId, const OUString& rText )
 {
     // Set the Browser Controls

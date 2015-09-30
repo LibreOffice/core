@@ -60,16 +60,6 @@ namespace dbaui
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
-        inline void enableConnectionURL() { m_pConnectionURL->SetReadOnly(false); }
-        inline void disableConnectionURL() { m_pConnectionURL->SetReadOnly(); }
-
-        /** changes the connection URL.
-            <p>The new URL must be of the type which is currently selected, only the parts which do not
-            affect the type may be changed (compared to the previous URL).</p>
-        */
-        void     changeConnectionURL( const OUString& _rNewDSN );
-        OUString getConnectionURL( ) const;
-
     protected:
         OConnectionTabPageSetup(vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
         virtual bool checkTestConnection() SAL_OVERRIDE;

@@ -60,13 +60,6 @@ protected:
         return findItem( rName ) != maItems.end();
     }
 
-    T getItem( const OUString& rName )
-    {
-        OSL_ENSURE( hasItem( rName ), "can't get non-existent item" );
-        return maItems[ rName ];
-    }
-
-
     void replace( const OUString& rName,
                   const T& aElement )
     {

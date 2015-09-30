@@ -81,18 +81,8 @@ inline UtWord UtGetIntelWord(UtByte * pData)
 inline UtDWord UtGetIntelDWord(UtByte * pData)
 { return pData[0] | pData[1] << 8 | pData[2] << 16 | pData[3] << 24; }
 
-inline void UtPutIntelWord(UtByte * pData, UtWord Val)
-{ pData[0] = Val; pData[1] = Val >> 8; }
-
-inline void UtPutIntelDWord(UtByte * pData, UtDWord Val)
-{ pData[0] = Val; pData[1] = Val >> 8; pData[2] = Val >> 16; pData[3] = Val >> 24; }
-
 inline UtByte UtGetIntelByte(UtByte * pData)
 { return * pData; }
-
-inline void UtPutIntelByte(UtByte * pData, UtByte Val)
-
-{ * pData = Val; }
 
 }
 #endif

@@ -63,15 +63,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sstream>
 
-OUString   DateTimeToOUString(XFDateTime& dt)
-{
-    OUString aResult = OUString::number(dt.nYear) + "-" + OUString::number(dt.nMonth) + "-" + OUString::number(dt.nDay) +
-        "T" + OUString::number(dt.nHour) + ":" + OUString::number(dt.nMinute) + ":" + OUString::number(dt.nSecond) + "." +
-        OUString::number(dt.nMillSecond);
-
-    return aResult;
-}
-
 OUString   GetTableColName(sal_Int32 col)
 {
     int     remain = 0;
@@ -415,18 +406,6 @@ OUString   GetAlignName(enumXFAlignType align)
         return OUString("margins");
 
     return OUString("");
-}
-
-OUString   GetDrawKind(enumXFDrawKind kind)
-{
-    if( kind == enumXFDrawKindFull )
-        return OUString("full");
-    else if( kind == enumXFDrawKindSection )
-        return OUString("section");
-    else if( kind == enumXFDrawKindCut )
-        return OUString("cut");
-    else    //( kind == enumXFDrawKindArc )
-        return OUString("arc");
 }
 
 OUString   GetPageUsageName(enumXFPageUsage usage)

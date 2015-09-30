@@ -92,15 +92,6 @@ namespace dbaui
         virtual css::accessibility::AccessibleRelation SAL_CALL getRelation( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL containsRelation( sal_Int16 aRelationType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual css::accessibility::AccessibleRelation SAL_CALL getRelationByType( sal_Int16 aRelationType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-        void notifyAccessibleEvent(
-                    const sal_Int16 _nEventId,
-                    const css::uno::Any& _rOldValue,
-                    const css::uno::Any& _rNewValue
-                )
-        {
-            NotifyAccessibleEvent(_nEventId,_rOldValue,_rNewValue);
-        }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWACCESS_HXX

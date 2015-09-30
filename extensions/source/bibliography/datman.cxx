@@ -1624,19 +1624,6 @@ void BibDataManager::RegisterInterceptor( ::bib::BibBeamer* pBibBeamer)
 }
 
 
-bool BibDataManager::HasActiveConnection()const
-{
-    bool bRet = false;
-    Reference< XPropertySet >   xPrSet( m_xForm, UNO_QUERY );
-    if( xPrSet.is() )
-    {
-        Reference< XComponent >  xConnection;
-        xPrSet->getPropertyValue("ActiveConnection") >>= xConnection;
-        bRet = xConnection.is();
-    }
-    return bRet;
-}
-
 bool BibDataManager::HasActiveConnection()
 {
     return getConnection( m_xForm ).is();

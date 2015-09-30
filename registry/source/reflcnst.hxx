@@ -178,20 +178,6 @@ inline sal_uInt32 readUINT32(const sal_uInt8* buffer, sal_uInt32& v)
     return sizeof(sal_uInt32);
 }
 
-inline sal_uInt32 writeINT64(sal_uInt8* buffer, sal_Int64 v)
-{
-    buffer[0] = (sal_uInt8)((v >> 56) & 0xFF);
-    buffer[1] = (sal_uInt8)((v >> 48) & 0xFF);
-    buffer[2] = (sal_uInt8)((v >> 40) & 0xFF);
-    buffer[3] = (sal_uInt8)((v >> 32) & 0xFF);
-    buffer[4] = (sal_uInt8)((v >> 24) & 0xFF);
-    buffer[5] = (sal_uInt8)((v >> 16) & 0xFF);
-    buffer[6] = (sal_uInt8)((v >> 8) & 0xFF);
-    buffer[7] = (sal_uInt8)((v >> 0) & 0xFF);
-
-    return sizeof(sal_Int64);
-}
-
 inline sal_uInt32 writeUINT64(sal_uInt8* buffer, sal_uInt64 v)
 {
     buffer[0] = (sal_uInt8)((v >> 56) & 0xFF);

@@ -40,19 +40,15 @@ namespace dbaui
         // execute a feature
         virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
-        ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>( getView() ); }
         void loadData();
         TTableWindowData::value_type existsTable(const OUString& _rComposedTableName,bool _bCase) const;
 
         // load the window positions out of the datasource
         void loadLayoutInformation();
-        void loadTableData(const css::uno::Any& _aTable);
     public:
         ORelationController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
         virtual ~ORelationController();
-        // temp
-        void SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
 
         void mergeData(const TTableConnectionData& _aConnectionData);
 

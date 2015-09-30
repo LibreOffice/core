@@ -72,17 +72,10 @@ namespace dbaui
         virtual void dispose() SAL_OVERRIDE;
         EJoinType GetJoinType() const { return eJoinType; };
 
-        /** getConnectionData returns the current connection data
-            @return the current connectiondata
-        */
-        virtual TTableConnectionData::value_type getConnectionData() const SAL_OVERRIDE;
-
         /** setValid set the valid inside, can be used for OK buttons
             @param  _bValid true when the using control allows an update
         */
         virtual void setValid(bool _bValid) SAL_OVERRIDE;
-
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }
 
         /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
             @param  _pConnectionData    the connection which exists between the new tables

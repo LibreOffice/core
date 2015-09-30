@@ -37,10 +37,6 @@ namespace dbaui
         {
         }
 
-        void setUpperCase(bool _bUpper=true)
-        {
-            m_bOnlyUpperCase = _bUpper;
-        }
         void setAllowedChars(const OUString& _rAllowedChars)
         {
             m_sAllowedChars = _rAllowedChars;

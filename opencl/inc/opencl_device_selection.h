@@ -640,21 +640,6 @@ cleanup:
     return DS_SUCCESS;
 }
 
-inline ds_status getNumDeviceWithEmptyScore(ds_profile* profile, unsigned int* num)
-{
-    unsigned int i;
-    if (profile == NULL || num == NULL) return DS_MEMORY_ERROR;
-    *num = 0;
-    for (i = 0; i < profile->numDevices; i++)
-    {
-        if (profile->devices[i].score == NULL)
-        {
-            (*num)++;
-        }
-    }
-    return DS_SUCCESS;
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

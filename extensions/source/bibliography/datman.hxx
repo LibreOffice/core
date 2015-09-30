@@ -166,7 +166,6 @@ public:
         OUString                    CreateDBChangeDialog(vcl::Window* pParent);
 
         void                        DispatchDBChangeDialog();
-        bool                        HasActiveConnection() const;
 
         void                        SetView( ::bib::BibView* pView ) { pBibView = pView; }
 

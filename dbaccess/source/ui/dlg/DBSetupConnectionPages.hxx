@@ -218,7 +218,6 @@ namespace dbaui
         static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
         ConnectionType      getMySQLMode();
         void                SetClickHdl( const Link<OMySQLIntroPageSetup *, void>& rLink ) { maClickHdl = rLink; }
-        DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
 
     protected:
         virtual bool FillItemSet(SfxItemSet* _rSet) SAL_OVERRIDE;

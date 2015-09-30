@@ -55,7 +55,6 @@ void xforms_indexFunction(xmlXPathParserContextPtr ctxt, int nargs);
 
 // String Functions
 void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs);
-void xforms_versionFunction(xmlXPathParserContextPtr ctxt, int nargs);
 
 // Date and Time Functions
 void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int nargs);

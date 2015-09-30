@@ -43,7 +43,6 @@ public:
     OTableIndex( const OTableIndex& _rSource) : aIndexFileName(_rSource.aIndexFileName) { }
     explicit OTableIndex( const OUString& rFileName ) : aIndexFileName( rFileName ) { }
 
-    void SetIndexFileName( const OUString& rFileName ) { aIndexFileName = rFileName; }
     OUString GetIndexFileName() const { return aIndexFileName; }
 };
 

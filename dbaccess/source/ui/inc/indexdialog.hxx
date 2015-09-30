@@ -168,10 +168,6 @@ namespace dbaui
         bool implDropIndex(SvTreeListEntry* _pEntry, bool _bRemoveFromCollection);
 
         bool implCheckPlausibility(const Indexes::const_iterator& _rPos);
-
-        /** checks if the controls have to be replaced and moved.
-        */
-        void checkControls();
     };
 
 }   // namespace dbaui

@@ -56,7 +56,6 @@ protected:
 
     // methods
     DECL_LINK( ListDblClickHdl, ListBox * );
-    DECL_LINK( CloseHdl,        PushButton * );
     DECL_LINK_TYPED( UserHdl,   Button *, void );
 
     void        FillUserNames();

@@ -70,10 +70,10 @@ namespace dbaui
         /// if we're editing an existing view, this is non-NULL
         css::uno::Reference< css::sdbcx::XAlterView >         m_xAlterView;
 
-        OUString m_sStatement;           // contains the current sql statement
-        OUString m_sUpdateCatalogName;   // catalog for update data
-        OUString m_sUpdateSchemaName;    // schema for update data
-        OUString m_sUpdateTableName;     // table for update data
+        OUString        m_sStatement;           // contains the current sql statement
+        OUString        m_sUpdateCatalogName;   // catalog for update data
+        OUString        m_sUpdateSchemaName;    // schema for update data
+        OUString        m_sUpdateTableName;     // table for update data
         mutable OUString
                         m_sName;                // name of the query
 
@@ -82,12 +82,9 @@ namespace dbaui
         sal_Int32       m_nVisibleRows;     // which rows the selection browse should show
         sal_Int32       m_nSplitPos;        // the position of the splitter
         sal_Int32       m_nCommandType;     // the type of the object we're designing
-        bool        m_bGraphicalDesign; // are we in the graphical design mode (sal_True) or in the text design (sal_False)?
-        bool        m_bDistinct;        // true when you want "select distinct" otherwise false
-        bool        m_bViewAlias;       // show the alias row in the design view
-        bool        m_bViewTable;       // show the table row in the design view
-        bool        m_bViewFunction;    // show the function row in the design view
-        bool        m_bEscapeProcessing;// is true when we shouldn't parse the statement
+        bool            m_bGraphicalDesign; // are we in the graphical design mode (sal_True) or in the text design (sal_False)?
+        bool            m_bDistinct;        // true when you want "select distinct" otherwise false
+        bool            m_bEscapeProcessing;// is true when we shouldn't parse the statement
 
 
         /** returns the container of queries, views, or command definitions, depending on what object type
@@ -113,8 +110,6 @@ namespace dbaui
         void saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includingCriteria ) const;
         void loadViewSettings( const ::comphelper::NamedValueCollection& o_rViewSettings );
         OUString translateStatement( bool _bFireStatementChange = true );
-
-        OUString getDefaultName() const;
 
         void execute_QueryPropDlg();
 

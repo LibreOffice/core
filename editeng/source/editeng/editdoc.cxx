@@ -1050,11 +1050,6 @@ EditLine& EditLine::operator = ( const EditLine& r )
 }
 
 
-bool operator != ( const EditLine& r1,  const EditLine& r2  )
-{
-    return !( r1 == r2 );
-}
-
 void EditLine::SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH, sal_uInt16 nCrsrH )
 {
     nHeight = nH;

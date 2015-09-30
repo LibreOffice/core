@@ -92,8 +92,6 @@ namespace dbaui
     protected:
         void Construct();
 
-        ::connectivity::OSQLParseNode* implPredicateTree(OUString& _rErrorMessage, const OUString& _rStatement, const css::uno::Reference< css::beans::XPropertySet > & _rxField);
-
     private:
         DECL_LINK_TYPED(OnVisitedTimeout, Timer*, void);
         DECL_LINK(OnValueModified, Control*);

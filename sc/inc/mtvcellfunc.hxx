@@ -42,24 +42,6 @@ ProcessFormula(
 }
 
 template<typename _Func>
-typename CellStoreType::iterator
-ProcessFormulaNumeric(
-    const CellStoreType::iterator& itPos, CellStoreType& rStore, SCROW nRow1, SCROW nRow2, _Func& rFunc)
-{
-    FuncElseNoOp<size_t> aElse;
-    return ProcessElements2<
-        CellStoreType, numeric_block, formula_block, _Func, FuncElseNoOp<size_t> >(
-            itPos, rStore, nRow1, nRow2, rFunc, aElse);
-}
-
-template<typename _Func>
-void ProcessEditText(CellStoreType& rStore, _Func& rFunc)
-{
-    FuncElseNoOp<size_t> aElse;
-    ProcessElements1<CellStoreType, edittext_block, _Func, FuncElseNoOp<size_t> >(rStore, rFunc, aElse);
-}
-
-template<typename _Func>
 CellStoreType::iterator
 ProcessEditText(const CellStoreType::iterator& itPos, CellStoreType& rStore, SCROW nRow1, SCROW nRow2, _Func& rFunc)
 {
@@ -110,18 +92,6 @@ ParseAllNonEmpty(
         numeric_block, string_block, edittext_block, formula_block,
         _Func, FuncElseNoOp<size_t> >(
             itPos, rCells, nRow1, nRow2, rFunc, aElse);
-}
-
-template<typename _FuncElem, typename _FuncElse>
-typename CellStoreType::const_iterator
-ParseAllNonEmpty(
-    const typename CellStoreType::const_iterator& itPos, const CellStoreType& rCells,
-    SCROW nRow1, SCROW nRow2, _FuncElem& rFuncElem, _FuncElse& rFuncElse)
-{
-    return ParseElements4<CellStoreType,
-        numeric_block, string_block, edittext_block, formula_block,
-        _FuncElem, _FuncElse>(
-            itPos, rCells, nRow1, nRow2, rFuncElem, rFuncElse);
 }
 
 template<typename _Func>

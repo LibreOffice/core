@@ -109,9 +109,6 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
     :svt::RoadmapWizard( _pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP )
 
     , m_pOutSet(NULL)
-    , m_bResetting(false)
-    , m_bApplied(false)
-    , m_bUIEnabled( true )
     , m_bIsConnectable( false)
     , m_sRM_IntroText( ModuleRes( STR_PAGETITLE_INTROPAGE ) )
     , m_sRM_dBaseText( ModuleRes( STR_PAGETITLE_DBASE ) )

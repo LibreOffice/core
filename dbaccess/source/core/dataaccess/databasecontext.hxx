@@ -57,9 +57,6 @@ namespace com { namespace sun { namespace star {
 namespace dbaccess
 {
 class DatabaseDocumentLoader;
-// ODatabaseContext
-css::uno::Reference< css::uno::XInterface >
-    ODatabaseContext_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
 typedef ::cppu::WeakComponentImplHelper<   css::lang::XServiceInfo
                                        ,   css::sdb::XDatabaseContext

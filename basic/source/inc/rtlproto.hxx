@@ -138,11 +138,6 @@ extern RTLFUNC(CLEAR_ALLTABS);
 extern RTLFUNC(CLEAR_TAB);
 extern RTLFUNC(SET_TAB);
 
-extern RTLFUNC(LINEPROP);
-extern RTLFUNC(LINE_1);
-extern RTLFUNC(LINE_15);
-extern RTLFUNC(LINE_2);
-
 // Methoden
 
 extern RTLFUNC(CreateObject);

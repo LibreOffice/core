@@ -48,7 +48,6 @@ void        ImpPutUInt64( SbxValues*, sal_uInt64 );
 
 sal_Int64   ImpDoubleToSalInt64 ( double d );
 sal_uInt64  ImpDoubleToSalUInt64( double d );
-double      ImpSalInt64ToDouble ( sal_Int64 n );
 double      ImpSalUInt64ToDouble( sal_uInt64 n );
 
 // SBXLNG.CXX

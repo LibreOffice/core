@@ -29,10 +29,6 @@ void    num2roman(int num, char *buf);
  * Transfer 8bit string to 16bit string used internally in hwp
  */
 void    str2hstr(const char *c, hchar *i);
-/**
- * @returns Length of 16bit hwp string
- */
-int hstrlen(const hchar *s);
 
 #endif                                            /* UTIL_H_*/
 

@@ -80,12 +80,6 @@ template< class Container >
     ::std::for_each( rContainer.begin(), rContainer.end(), DisposeFunctor< typename Container::value_type >());
 }
 
-template< class Map >
-    void DisposeAllMapElements( Map & rContainer )
-{
-    ::std::for_each( rContainer.begin(), rContainer.end(), DisposeSecondOfPairFunctor< typename Map::value_type >());
-}
-
 } //  namespace DisposeHelper
 } //  namespace chart
 

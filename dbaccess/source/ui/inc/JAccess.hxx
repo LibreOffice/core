@@ -57,8 +57,6 @@ namespace dbaui
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException,css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        OJoinTableView* getTableView() const { return m_pTableView; }
-
         void notifyAccessibleEvent(
                     const sal_Int16 _nEventId,
                     const css::uno::Any& _rOldValue,

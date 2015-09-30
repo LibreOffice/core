@@ -116,8 +116,6 @@ namespace rptui
         */
         void    setMarked(bool _bMark);
 
-        OViewsWindow* getViewsWindow() const { return m_pParent; }
-
         /** zoom the ruler and view windows
         */
         void zoom(const Fraction& _aZoom);
