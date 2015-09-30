@@ -253,7 +253,7 @@ private:
     void                setDdeOleTargetUrl( const OUString& rClassName, const OUString& rTargetUrl, ExternalLinkType eLinkType );
     void                parseExternalReference( const ::oox::core::Relations& rRelations, const OUString& rRelId );
 
-    /** Creates an external locument link and the sheet cache for the passed sheet name. */
+    /** Creates an external document link and the sheet cache for the passed sheet name. */
     void                insertExternalSheet( const OUString& rSheetName );
 
     ExternalNameRef     createExternalName();

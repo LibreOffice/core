@@ -653,7 +653,7 @@ const TokenId TokenPool::Store( const OUString& rString )
 
     if (ppP_Str[ nP_StrAkt ])
     {
-        /* attention trucate to 16 bits */
+        /* attention truncate to 16 bits */
         pSize[ nElementAkt ] = ( sal_uInt16 ) ppP_Str[ nP_StrAkt ]->getLength();
     }
 

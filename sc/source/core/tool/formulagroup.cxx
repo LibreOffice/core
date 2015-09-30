@@ -424,7 +424,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 
                     if (p2->IsStartFixed() && p2->IsEndFixed())
                     {
-                        // Cached the converted token for absolute range referene.
+                        // Cached the converted token for absolute range reference.
                         ScComplexRefData aRef;
                         ScRange aRefRange = rTopPos;
                         aRefRange.aEnd.SetRow(rTopPos.Row() + nRowEnd);
