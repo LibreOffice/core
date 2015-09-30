@@ -156,16 +156,18 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
     }
     else
     {
-        if( ! rtl::math::approxEqual( m_fIntercept, 1.0 ) )
+        if( ! rtl::math::approxEqual( std::abs(m_fIntercept), 1.0 ) )
         {
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
             aBuf.append( ' ');
         }
-        if( m_fSlope != 0.0 )
+        else // skip intercept if its value is 1 (or near 1)
         {
-            aBuf.append( "x^" );
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
+            if ( m_fIntercept < 0.0 )
+                aBuf.append( "- " );
         }
+        aBuf.append( "x^" );
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
     }
 
     return aBuf.makeStringAndClear();
