@@ -778,11 +778,11 @@ void SwTransferable::DeleteSelection()
         return;
     // ask for type of selection before action-bracketing
     const int nSelection = pWrtShell->GetSelectionType();
-    pWrtShell->StartUndo( UNDO_DELETE );
+    pWrtShell->StartUndo( UNDO_START );
     if( ( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL ) & nSelection )
         pWrtShell->IntelligentCut( nSelection );
     pWrtShell->DelRight();
-    pWrtShell->EndUndo( UNDO_DELETE );
+    pWrtShell->EndUndo( UNDO_END );
 }
 
 int SwTransferable::PrepareForCopy( bool bIsCut )
