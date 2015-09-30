@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_d7105cab",
+        "filename": "qadevOOo/tests/java/ifc/frame/_XModuleManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T07:10:10Z",
+      "side": 1,
+      "message": "sequence",
+      "revId": "e678b84f623148c6ed21361897f85dd49d3930a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
