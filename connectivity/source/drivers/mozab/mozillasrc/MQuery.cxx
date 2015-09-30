@@ -102,7 +102,7 @@ void MQuery::construct()
 {
      // Set default values. (For now just as a reminder).
     m_aError.reset();
-    m_bQuerySubDirs   = sal_True;       // LDAP Queryies require this to be set!
+    m_bQuerySubDirs   = sal_True;       // LDAP Queries require this to be set!
     m_nMaxNrOfReturns = -1; // Unlimited number of returns.
 
     m_aQueryDirectory = new MQueryDirectory();
