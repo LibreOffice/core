@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_77f190cd",
+        "filename": "sw/source/core/access/acccontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T06:11:30Z",
+      "side": 1,
+      "message": "dispose",
+      "revId": "f7dec90378f096cfd752bc9d7e2ea8b19a15594d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
