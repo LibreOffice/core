@@ -620,7 +620,6 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
             // reorder objects in drawing page
             GetModel()->GetPage(0)->SetObjectOrdNum( nOldTabIndex + 1, nNewTabIndex + 1 );
 
-            // #110559#
             pForm->UpdateTabOrderAndGroups();
         }
 
@@ -897,7 +896,6 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
             aCtrl <<= xCtrl;
             xCont->insertByName( aOUniqueName , aCtrl );
 
-            // #110559#
             pDlgEdForm->UpdateTabOrderAndGroups();
         }
     }
@@ -1043,7 +1041,6 @@ void DlgEdObj::SetDefaults()
                     &GetDialogEditor(), aAny, aOUniqueName
                 );
 
-                // #110559#
                 pDlgEdForm->UpdateTabOrderAndGroups();
             }
         }
@@ -1478,7 +1475,6 @@ void DlgEdForm::UpdateTabIndices()
             }
         }
 
-        // #110559#
         UpdateTabOrderAndGroups();
     }
 
@@ -1491,7 +1487,6 @@ void DlgEdForm::UpdateTabIndices()
 
 void DlgEdForm::UpdateTabOrder()
 {
-    // #110559#
     // When the tabindex of a control model changes, the dialog control is
     // notified about those changes. Due to #109067# (bad performance of
     // dialog editor) the dialog control doesn't activate the tab order
@@ -1511,7 +1506,6 @@ void DlgEdForm::UpdateTabOrder()
 
 void DlgEdForm::UpdateGroups()
 {
-    // #110559#
     // The grouping of radio buttons in a dialog is done by vcl.
     // In the dialog editor we have two views (=controls) for one
     // radio button model. One control is owned by the dialog control,

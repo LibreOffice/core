@@ -123,7 +123,6 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFootnoteForSectio
     //a SectionFrm or a TabFrm.
 
     const SwLayoutFrm *pLayLeaf = this;
-    // #130797#
     const bool bNoFootnote = IsSctFrm() && !_bInvestigateFootnoteForSections;
     do
     {
@@ -358,7 +357,6 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 const SwContentFrm* SwContentFrm::ImplGetNextContentFrm( bool bFwd ) const
 {
     const SwFrm *pFrm = this;
-    // #100926#
     const SwContentFrm *pContentFrm = 0;
     bool bGoingUp = false;
     do {
@@ -1001,7 +999,6 @@ SwContentFrm* SwFrm::_FindPrevCnt( const bool _bInSameFootnote )
                             SwFootnoteFrm* pMasterFootnoteFrmOfCurr(
                                         const_cast<SwFootnoteFrm*>(pFootnoteFrmOfCurr) );
                             pPrevContentFrm = 0L;
-                            // #146872#
                             // correct wrong loop-condition
                             do {
                                 pMasterFootnoteFrmOfCurr = pMasterFootnoteFrmOfCurr->GetMaster();

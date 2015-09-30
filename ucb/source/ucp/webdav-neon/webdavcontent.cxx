@@ -1954,7 +1954,6 @@ uno::Any Content::open(
             OUStringBuffer aMsg;
             if ( getResourceType( xEnv ) == FTP )
             {
-                // #114653#
                 aMsg.append( "FTP over HTTP proxy: resource cannot "
                                   "be opened as folder! Wrong Open Mode!" );
             }

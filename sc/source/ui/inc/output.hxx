@@ -172,7 +172,6 @@ private:
 
     ScTabViewShell* pViewShell; // for connect from visible plug-ins
 
-    // #114135#
     FmFormView* pDrawView;      // SdrView to paint to
 
     bool bEditMode;             // InPlace edited cell - do not output
@@ -276,7 +275,6 @@ public:
     void    SetEditObject( SdrObject* pObj )    { pEditObj = pObj; }
     void    SetViewShell( ScTabViewShell* pSh ) { pViewShell = pSh; }
 
-    // #114135#
     void    SetDrawView( FmFormView* pNew )     { pDrawView = pNew; }
 
     void    SetSolidBackground( bool bSet )     { bSolidBackground = bSet; }

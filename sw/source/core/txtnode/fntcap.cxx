@@ -480,7 +480,6 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     sal_Int32 nOldPos = nPos;
     nMaxPos = nMaxPos + nPos;
 
-    // #107816#
     // Look if the length of the original text and the ToUpper-converted
     // text is different. If yes, do special handling.
     OUString aNewText;

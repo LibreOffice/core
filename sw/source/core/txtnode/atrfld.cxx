@@ -155,7 +155,6 @@ void SwFormatField::RegisterToFieldType( SwFieldType& rType )
     rType.Add(this);
 }
 
-// #111840#
 void SwFormatField::SetField(SwField * _pField)
 {
     delete mpField;

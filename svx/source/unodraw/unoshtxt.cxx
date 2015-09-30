@@ -525,7 +525,6 @@ void SvxTextEditSourceImpl::dispose()
 
 void SvxTextEditSourceImpl::SetupOutliner()
 {
-    // #101029#
     // only for UAA edit source: setup outliner equivalently as in
     // SdrTextObj::Paint(), such that formatting equals screen
     // layout
@@ -548,7 +547,6 @@ void SvxTextEditSourceImpl::SetupOutliner()
 
 void SvxTextEditSourceImpl::UpdateOutliner()
 {
-    // #104157#
     // only for UAA edit source: update outliner equivalently as in
     // SdrTextObj::Paint(), such that formatting equals screen
     // layout
@@ -970,7 +968,6 @@ Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& r
     }
     else if( IsValid() && mpModel )
     {
-        // #101029#
         Point aPoint1( rPoint );
         aPoint1.X() += maTextOffset.X();
         aPoint1.Y() += maTextOffset.Y();
@@ -1008,7 +1005,6 @@ Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& r
         Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
                                                    MapMode(mpModel->GetScaleUnit()),
                                                    rMapMode ) );
-        // #101029#
         aPoint2.X() -= maTextOffset.X();
         aPoint2.Y() -= maTextOffset.Y();
 

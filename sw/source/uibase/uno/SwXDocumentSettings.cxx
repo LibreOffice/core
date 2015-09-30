@@ -87,7 +87,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_IS_LABEL_DOC,
     HANDLE_IS_ADD_FLY_OFFSET,
     HANDLE_IS_ADD_EXTERNAL_LEADING,
-    HANDLE_OLD_NUMBERING, // #111955#
+    HANDLE_OLD_NUMBERING,
     HANDLE_OUTLINELEVEL_YIELDS_NUMBERING,
     /* Stampit It disable the print cancel button of the shown progress dialog. */
     HANDLE_ALLOW_PRINTJOB_CANCEL,
@@ -111,7 +111,6 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_TABS_RELATIVE_TO_INDENT,
     HANDLE_RSID,
     HANDLE_RSID_ROOT,
-    // #i89181#
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
     HANDLE_MODIFYPASSWORDINFO,
     HANDLE_MATH_BASELINE_ALIGNMENT,
@@ -161,7 +160,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    cppu::UnoType<bool>::get(),           0,   0},
         { OUString("AddFrameOffsets"),            HANDLE_IS_ADD_FLY_OFFSET,               cppu::UnoType<bool>::get(),           0,   0},
         { OUString("AddExternalLeading"),         HANDLE_IS_ADD_EXTERNAL_LEADING,         cppu::UnoType<bool>::get(),           0,   0},
-        { OUString("UseOldNumbering"),            HANDLE_OLD_NUMBERING,                   cppu::UnoType<bool>::get(),           0,   0}, // #111955#
+        { OUString("UseOldNumbering"),            HANDLE_OLD_NUMBERING,                   cppu::UnoType<bool>::get(),           0,   0},
         { OUString("OutlineLevelYieldsNumbering"), HANDLE_OUTLINELEVEL_YIELDS_NUMBERING, cppu::UnoType<bool>::get(),           0,   0},
         /* Stampit It disable the print cancel button of the shown progress dialog. */
         { OUString("AllowPrintJobCancel"),        HANDLE_ALLOW_PRINTJOB_CANCEL,           cppu::UnoType<bool>::get(),           0,   0},
@@ -185,7 +184,6 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("Rsid"), HANDLE_RSID, cppu::UnoType<sal_Int32>::get(), 0, 0},
         { OUString("RsidRoot"), HANDLE_RSID_ROOT, cppu::UnoType<sal_Int32>::get(), 0, 0},
         { OUString("ProtectForm"), HANDLE_PROTECT_FORM, cppu::UnoType<bool>::get(), 0, 0},
-        // #i89181#
         { OUString("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, cppu::UnoType<bool>::get(), 0, 0},
         { OUString("ModifyPasswordInfo"), HANDLE_MODIFYPASSWORDINFO, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), 0,   0},
         { OUString("MathBaselineAlignment"), HANDLE_MATH_BASELINE_ALIGNMENT, cppu::UnoType<bool>::get(), 0, 0},
@@ -561,7 +559,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::ADD_EXT_LEADING, bTmp);
         }
         break;
-        case HANDLE_OLD_NUMBERING: // #111955#
+        case HANDLE_OLD_NUMBERING:
         {
             bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::OLD_NUMBERING, bTmp);
@@ -708,7 +706,6 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_FORM, bTmp);
         }
         break;
-        // #i89181#
         case HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
         {
             bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
@@ -1029,12 +1026,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING);
         }
         break;
-        case HANDLE_OLD_NUMBERING: // #111955#
+        case HANDLE_OLD_NUMBERING:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::OLD_NUMBERING);
         }
         break;
-        case HANDLE_OUTLINELEVEL_YIELDS_NUMBERING: // #111955#
+        case HANDLE_OUTLINELEVEL_YIELDS_NUMBERING:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE);
         }
@@ -1144,7 +1141,6 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM);
         }
         break;
-        // #i89181#
         case HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);

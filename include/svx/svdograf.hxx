@@ -98,7 +98,6 @@ private:
     SdrGraphicLink* pGraphicLink; // And here a pointer for linked graphics
     bool bMirrored:1; // True: the graphic is horizontal, which means it's mirrored along the y-axis
 
-    // #111096#
     // Flag for allowing text animation. Default is true.
     bool mbGrafAnimationAllowed:1;
 
@@ -135,7 +134,6 @@ public:
 
     GraphicType             GetGraphicType() const;
 
-    // #111096#
     // Keep ATM for SD.
     bool IsAnimated() const;
     bool IsEPS() const;
@@ -202,7 +200,6 @@ public:
     bool IsMirrored() const { return bMirrored;}
     void SetMirrored( bool _bMirrored );
 
-    // #111096#
     // Access to GrafAnimationAllowed flag
     void SetGrafAnimationAllowed(bool bNew);
 

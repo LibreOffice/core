@@ -175,7 +175,6 @@ void SwFlyInCntFrm::MakeObjPos()
     }
 }
 
-// #115759#
 void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 {
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )

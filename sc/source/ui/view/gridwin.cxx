@@ -542,7 +542,6 @@ ScGridWindow::~ScGridWindow()
 
 void ScGridWindow::dispose()
 {
-    // #114409#
     ImpDestroyOverlayObjects();
 
     mpFilterBox.disposeAndClear();
@@ -5573,7 +5572,6 @@ bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
     return false;
 }
 
-// #114409#
 void ScGridWindow::DrawLayerCreated()
 {
     SetMapMode( GetDrawMapMode() );
@@ -5780,7 +5778,6 @@ bool ScGridWindow::InsideVisibleRange( SCCOL nPosX, SCROW nPosY )
     return maVisibleRange.isInside(nPosX, nPosY);
 }
 
-// #114409#
 void ScGridWindow::CursorChanged()
 {
     // here the created OverlayObjects may be transformed in later versions. For
@@ -5789,7 +5786,6 @@ void ScGridWindow::CursorChanged()
     UpdateCursorOverlay();
 }
 
-// #114409#
 void ScGridWindow::ImpCreateOverlayObjects()
 {
     UpdateCursorOverlay();
@@ -5801,7 +5797,6 @@ void ScGridWindow::ImpCreateOverlayObjects()
     UpdateShrinkOverlay();
 }
 
-// #114409#
 void ScGridWindow::ImpDestroyOverlayObjects()
 {
     DeleteCursorOverlay();

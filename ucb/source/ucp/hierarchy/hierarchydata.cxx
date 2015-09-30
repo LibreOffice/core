@@ -1035,7 +1035,7 @@ HierarchyEntry::getRootReadAccess()
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if ( !m_xRootReadAccess.is() )
         {
-            if ( m_bTriedToGetRootReadAccess ) // #82494#
+            if ( m_bTriedToGetRootReadAccess )
             {
                 OSL_FAIL( "HierarchyEntry::getRootReadAccess - "
                             "Unable to read any config data! -> #82494#" );

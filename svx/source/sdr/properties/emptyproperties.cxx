@@ -48,7 +48,6 @@ namespace sdr
         :   BaseProperties(rProps, rObj),
             mpEmptyItemSet(0L)
         {
-            // #115593#
             // do not gererate an assert, else derivations like PageProperties will generate an assert
             // using the Clone() operator path.
         }

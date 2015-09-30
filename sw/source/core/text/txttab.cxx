@@ -254,7 +254,6 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
     if ( bAuto )
     {
         if ( SVX_TAB_ADJUST_DECIMAL == eAdj &&
-             // #127428#
              1 == aLineInf.NumberOfTabStops() )
             pTabPor = new SwAutoTabDecimalPortion( nNewTabPos, cDec, cFill );
     }

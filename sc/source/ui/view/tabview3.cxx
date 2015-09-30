@@ -172,7 +172,6 @@ void ScTabView::ShowAllCursors()
             {
                 pGridWin[i]->ShowCursor();
 
-                // #114409#
                 pGridWin[i]->CursorChanged();
             }
 }
@@ -181,7 +180,6 @@ void ScTabView::ShowCursor()
 {
     pGridWin[aViewData.GetActivePart()]->ShowCursor();
 
-    // #114409#
     pGridWin[aViewData.GetActivePart()]->CursorChanged();
 }
 

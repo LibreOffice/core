@@ -39,7 +39,6 @@ using namespace ::com::sun::star;
 
 const char XMLN_VERSIONSLIST[] = "VersionList.xml";
 
-// #110897#
 XMLVersionListExport::XMLVersionListExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
     const com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions,

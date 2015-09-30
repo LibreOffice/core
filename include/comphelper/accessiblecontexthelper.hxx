@@ -322,7 +322,6 @@ namespace comphelper
         :OMutexGuard( _pContext->getExternalLock( OAccessibleContextHelper::OAccessControl() ) )
         ,OContextEntryGuard( _pContext )
     {
-        // #102438#
         // Only lock the external mutex,
         // release the ::osl::Mutex of the OAccessibleContextHelper instance.
         // If you call into another UNO object with locked ::osl::Mutex,

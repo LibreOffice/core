@@ -1743,7 +1743,6 @@ namespace svxform
                    ++it;
                 // In case there is no shape for the current entry, we keep the entry in m_arrCurrentSelection,
                 // since then we can definitely remove it.
-                // #103597#
             }
             else
                 ++it;

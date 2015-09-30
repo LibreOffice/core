@@ -1778,7 +1778,6 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
     // table rows.
     bool bTryToSplit = true;
 
-    // #131283#
     // Indicates that two individual rows may keep together, based on the keep
     // attribute set at the first paragraph in the first cell.
     const bool bTableRowKeep = !bDontSplit && GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP);
@@ -2337,7 +2336,6 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
                             RemoveFollowFlowLine();
                     }
 
-                    // #119477#
                     // If splitting the table was successful or not,
                     // we do not want to have 'empty' follow tables.
                     if ( GetFollow() && !GetFollow()->GetFirstNonHeadlineRow() )
@@ -3338,7 +3336,6 @@ bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool &rReformat )
             }
             SwTwips nTmpHeight = CalcHeightOfFirstContentLine();
 
-            // #118840#
             // For some mysterious reason, I changed the good old
             // 'return nHeight <= nSpace' to 'return nTmpHeight < nSpace'.
             // This obviously results in problems with table frames in
@@ -4553,7 +4550,6 @@ static bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, bool bInva )
                         // a follow table and table frame isn't in its
                         // rebuild of last line.
                         const SwTabFrm* pTabFrm = pLay->FindTabFrm();
-                        // #115759#
                         // - save: check, if table frame is found.
                         if ( pTabFrm &&
                              !( pTabFrm->IsFollow() &&
@@ -5337,7 +5333,6 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
             }
         }
 
-        // #118411#
         // Optimization: lcl_CalcHeightOfFirstContentLine actually can trigger
         // a formatting of the row frame (via the GetFormatted()). We don't
         // want this formatting if the row does not have a height.

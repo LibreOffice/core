@@ -34,7 +34,6 @@ namespace com { namespace sun { namespace star {
 class SvxXMLXTableExportComponent : public SvXMLExport
 {
 public:
-    // #110680#
     SvxXMLXTableExportComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const OUString& rFileName,

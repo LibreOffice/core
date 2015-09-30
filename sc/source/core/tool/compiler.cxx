@@ -2950,7 +2950,7 @@ bool ScCompiler::IsReference( const OUString& rName )
                 return false;
             if ( cDecSep == '.' && (ch2 == 'E' || ch2 == 'e')   // E + - digit
                     && (GetCharTableFlags( pTabSep[2], pTabSep[1] ) & SC_COMPILER_C_VALUE_EXP) )
-            {   // #91053#
+            {
                 // If it is an 1.E2 expression check if "1" is an existent sheet
                 // name. If so, a desired value 1.E2 would have to be entered as
                 // 1E2 or 1.0E2 or 1.E+2, sorry. Another possibility would be to

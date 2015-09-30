@@ -226,7 +226,7 @@ public:
     void    GetAttr( SfxItemSet& rSet );
 
     void UpdatePreview(); // nach oben (private)
-    void DocumentReload(); // #83951#
+    void DocumentReload();
 };
 
 /*************************************************************************

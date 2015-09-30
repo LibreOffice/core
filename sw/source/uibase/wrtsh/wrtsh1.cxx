@@ -207,7 +207,6 @@ void SwWrtShell::Insert( const OUString &rStr )
             // insert is already in parentheses at Editshell.
         StartAllAction();
 
-        // #111827#
         SwRewriter aRewriter;
 
         aRewriter.AddRule(UndoArg1, GetCrsrDescr());

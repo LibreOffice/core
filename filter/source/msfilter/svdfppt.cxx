@@ -833,7 +833,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 sal_Int32 nFontDirection = GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 );
                 nTextRotationAngle -= nFontDirection * 9000;
-                if ( ( nFontDirection == 1 ) || ( nFontDirection == 3 ) )       // #104546#
+                if ( ( nFontDirection == 1 ) || ( nFontDirection == 3 ) )
                 {
                     bVerticalText = !bVerticalText;
                 }
@@ -3997,7 +3997,7 @@ bool PPTParaSheet::Read( SdrPowerPointImport&
                 rIn.ReadUInt32( nVal32 );      // reading the tabulators
         }
         if ( nPMask & 0x200000 )
-            rIn.ReadUInt16( maParaLevel[ nLevel ].mnBiDi );        // #88602#
+            rIn.ReadUInt16( maParaLevel[ nLevel ].mnBiDi );
     }
 
     nPMask >>= 22;

@@ -24,7 +24,6 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/form/XForm.hpp>
-// #100312# -----------------
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <vcl/splitwin.hxx>
 #include "toolbar.hxx"
@@ -65,7 +64,6 @@ namespace bib
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                     getControlContainer() SAL_OVERRIDE;
         public:
-            // #100312# -------------------
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception >
                     getDispatchProviderInterception();
 

@@ -224,7 +224,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
     {
         if ( !( (*it).second.xRootReadAccess.is() ) )
         {
-            if ( (*it).second.bTriedToGetRootReadAccess ) // #82494#
+            if ( (*it).second.bTriedToGetRootReadAccess )
             {
                 OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "Unable to read any config data! -> #82494#" );

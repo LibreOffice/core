@@ -706,7 +706,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getMouseMotionListeners().getLength() && !pMouseEvt->IsEnterWindow() && !pMouseEvt->IsLeaveWindow() )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
-                aEvent.ClickCount = 0;  // #92138#
+                aEvent.ClickCount = 0;
                 if ( pMouseEvt->GetMode() & MouseEventModifiers::SIMPLEMOVE )
                     mpImpl->getMouseMotionListeners().mouseMoved( aEvent );
                 else

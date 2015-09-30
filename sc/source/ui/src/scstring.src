@@ -474,7 +474,6 @@ String SCSTR_UNDO_GRAFFILTER
     Text [ en-US ] = "Image Filter" ;
 };
 
-// #98185#
 String STR_CAPTION_DEFAULT_TEXT
 {
     Text [ en-US ] = "Text" ;

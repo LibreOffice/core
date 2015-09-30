@@ -337,7 +337,6 @@ short SwOutlineTabDialog::Ok()
     // set levels for all created templates; has to be done in order to
     // delete possibly cancelled assignments again.
 
-    // #130443#
     // encapsulate changes into a action to avoid effects on the current cursor
     // position during the changes.
     rWrtSh.StartAction();
@@ -1007,7 +1006,6 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
                     pVDev->SetFont(aStdFont);
                     if(pActNum->IsContinusNum())
                         aNumVector[nLevel] = nPreNum;
-                    // #128041#
                     OUString aText(pActNum->MakeNumString( aNumVector ));
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     nBulletWidth = pVDev->GetTextWidth(aText);
@@ -1100,7 +1098,6 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
                     pVDev->SetFont(aStdFont);
                     if (pActNum->IsContinusNum())
                         aNumVector[nLevel] = nPreNum;
-                    // #128041#
                     OUString aText(pActNum->MakeNumString( aNumVector ));
                     pVDev->DrawText( Point(nXStart, nYStart), aText );
                     nTextOffset = pVDev->GetTextWidth(aText) + nXStep;

@@ -196,7 +196,6 @@ SvxLineTabPage::SvxLineTabPage
     m_pTsbCenterStart->SetClickHdl( LINK( this, SvxLineTabPage, ChangeStartClickHdl_Impl ) );
     m_pTsbCenterEnd->SetClickHdl( LINK( this, SvxLineTabPage, ChangeEndClickHdl_Impl ) );
 
-    // #116827#
     Link<> aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
     m_pLBEdgeStyle->SetSelectHdl( aEdgeStyle );
 
@@ -682,7 +681,6 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
               m_nDlgType == 1101 )
     {
         m_pFlLineEnds->Hide();
-        // #116827#
         m_pFLEdgeStyle->Hide();
     }
 }
@@ -874,7 +872,6 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
     }
 
-    // #116827#
     nPos = m_pLBEdgeStyle->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND != nPos && m_pLBEdgeStyle->IsValueChangedFromSaved() )
     {
@@ -1038,7 +1035,6 @@ bool SvxLineTabPage::FillXLSet_Impl()
                         m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
 
-    // #116827#
     nPos = m_pLBEdgeStyle->GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
@@ -1112,7 +1108,6 @@ bool SvxLineTabPage::FillXLSet_Impl()
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
     m_rXLSet.Put( XLineTransparenceItem( nVal ) );
 
-    // #116827#
     m_pCtlPreview->SetLineAttributes(m_aXLineAttr.GetItemSet());
 
     return true;
@@ -1452,7 +1447,6 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     OUString aStr = GetUserData();
     m_pCbxSynchronize->Check( aStr.toInt32() != 0 );
 
-    // #116827#
     if(m_bObjSelected && SfxItemState::DEFAULT == rAttrs->GetItemState(XATTR_LINEJOINT))
     {
 //         maFTEdgeStyle.Disable();
@@ -1511,7 +1505,6 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     m_pTsbCenterEnd->SaveValue();
     m_pMtrTransparent->SaveValue();
 
-    // #116827#
     m_pLBEdgeStyle->SaveValue();
 
     // LineCaps
@@ -1617,7 +1610,6 @@ IMPL_LINK( SvxLineTabPage, ChangeStartHdl_Impl, void *, p )
 }
 
 
-// #116827#
 
 IMPL_LINK_NOARG(SvxLineTabPage, ChangeEdgeStyleHdl_Impl)
 {
@@ -1652,7 +1644,6 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
             m_pBoxArrowStyles->Disable();
 
 
-            // #116827#
             m_pGridEdgeCaps->Disable();
         }
     }
@@ -1664,7 +1655,6 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
         if( m_pFlLineEnds->IsEnabled() )
         {
             m_pBoxArrowStyles->Enable();
-            // #116827#
             m_pGridEdgeCaps->Enable();
         }
     }
@@ -1705,7 +1695,6 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl)
 
     m_rXLSet.Put( XLineTransparenceItem( aItem ) );
 
-    // #116827#
     FillXLSet_Impl();
 
     m_pCtlPreview->Invalidate();

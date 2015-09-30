@@ -1492,7 +1492,6 @@ void SdrObjCustomShape::NbcSetSnapRect( const Rectangle& rRect )
     ImpJustifyRect(maRect);
     InvalidateRenderGeometry();
 
-    // #115391#
     AdaptTextMinSize();
 
     ImpCheckShear();
@@ -1516,7 +1515,6 @@ void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
     ImpJustifyRect(maRect);
     InvalidateRenderGeometry();
 
-    // #115391#
     AdaptTextMinSize();
 
     SetRectsDirty();
@@ -2223,7 +2221,6 @@ bool SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     DragCreateObject( rStat );
 
-    // #115391#
     AdaptTextMinSize();
 
     SetRectsDirty();

@@ -146,7 +146,6 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOf
         }
     }
 
-    // #109985#
     if(bHideAllDrawingLayer || (!mpDoc->GetDrawLayer()))
     {
         return;
@@ -159,7 +158,6 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOf
         mpDev->SetMapMode( MapMode( MAP_100TH_MM, rMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
     }
 
-    // #109985#
     DrawSelectiveObjects( nLayer );
 
     if (!bMetaFile)
@@ -168,7 +166,6 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOf
     }
 }
 
-// #109985#
 void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 {
     ScDrawLayer* pModel = mpDoc->GetDrawLayer();
@@ -196,7 +193,6 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
                             DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
     }
 
-    // #109985#
     if(pViewShell || pDrawView)
     {
         SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
@@ -217,7 +213,6 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 
 // parts only for the screen
 
-// #109985#
 void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
 {
     bool    bHad    = false;

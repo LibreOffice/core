@@ -185,12 +185,10 @@ protected:
     bool                        mbVisualizeEnteredGroup : 1;
     bool                        mbAnimationPause : 1;
 
-    // #114898#
     // Flag which decides if buffered output for this view is allowed. When
     // set, PreRendering for PageView rendering will be used. Default is sal_False
     bool                        mbBufferedOutputAllowed : 1;
 
-    // #114898#
     // Flag which decides if buffered overlay for this view is allowed. When
     // set, the output will be buffered in an overlay vdev. When not, overlay is
     // directly painted to OutDev. Default is sal_False.
@@ -209,7 +207,6 @@ protected:
     bool                        mbHideFormControl : 1;      // hide form controls only
 
 public:
-    // #114898#
     // Interface for PagePaintingAllowed flag
     bool IsBufferedOutputAllowed() const;
     void SetBufferedOutputAllowed(bool bNew);
@@ -420,7 +417,7 @@ public:
     void setHideFormControl(bool bNew) { if(bNew != (bool)mbHideFormControl) mbHideFormControl = bNew; }
 
     void SetGridCoarse(const Size& rSiz) { maGridBig=rSiz; }
-    void SetGridFine(const Size& rSiz) { maGridFin=rSiz; if (maGridFin.Height()==0) maGridFin.Height()=maGridFin.Width(); if (mbGridVisible) InvalidateAllWin(); } // #40479#
+    void SetGridFine(const Size& rSiz) { maGridFin=rSiz; if (maGridFin.Height()==0) maGridFin.Height()=maGridFin.Width(); if (mbGridVisible) InvalidateAllWin(); }
     const Size& GetGridCoarse() const { return maGridBig; }
     const Size& GetGridFine() const { return maGridFin; }
 

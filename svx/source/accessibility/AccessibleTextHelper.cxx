@@ -1395,7 +1395,6 @@ namespace accessibility
 
                         if( maEventOpenFrames == 0 )
                         {
-                            // #103483#
                             /* All information should have arrived
                              * now, process queue. As stated in the
                              * above bug, we can often avoid throwing

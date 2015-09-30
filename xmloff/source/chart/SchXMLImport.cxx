@@ -502,7 +502,6 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
     return xResult;
 }
 
-// #110680#
 SchXMLImport::SchXMLImport(
     const Reference< uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags ) :
@@ -671,7 +670,6 @@ OUString SAL_CALL SchXMLImport_getImplementationName() throw()
 
 Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    // #110680#
     return static_cast<cppu::OWeakObject*>(new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_getImplementationName(), SvXMLImportFlags::ALL));
 }
 
@@ -691,7 +689,6 @@ OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw()
 
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    // #110680#
     return static_cast<cppu::OWeakObject*>(new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Styles_getImplementationName(), SvXMLImportFlags::STYLES ));
 }
 
@@ -709,7 +706,6 @@ OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw()
 
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    // #110680#
     return static_cast<cppu::OWeakObject*>(new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Content_getImplementationName(), SvXMLImportFlags::CONTENT | SvXMLImportFlags::AUTOSTYLES | SvXMLImportFlags::FONTDECLS ));
 }
 
@@ -727,7 +723,6 @@ OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()
 
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    // #110680#
     return static_cast<cppu::OWeakObject*>(new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Meta_getImplementationName(), SvXMLImportFlags::META ));
 }
 

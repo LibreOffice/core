@@ -104,7 +104,6 @@ namespace pcr
         m_pPropBox->SetSizePixel(aSize);
     }
 
-    // #95343# ---------------------------------------------------------------
     ::com::sun::star::awt::Size OPropertyBrowserView::getMinimumSize()
     {
         Size aSize = GetOutputSizePixel();

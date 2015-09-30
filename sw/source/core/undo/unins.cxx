@@ -106,7 +106,6 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
     bCacheComment = false;
 }
 
-// #111827#
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
             sal_Int32 nL,
             const SwInsertFlags nInsertFlags,
@@ -120,7 +119,6 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
     Init(rNd);
 }
 
-// #111827#
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
     : SwUndo(UNDO_SPLITNODE), pText( 0 ),
         pRedlData( 0 ), nNode( rNd.GetIndex() ), nContent(0), nLen(1),
@@ -452,7 +450,6 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-// #111827#
 SwRewriter SwUndoInsert::GetRewriter() const
 {
     SwRewriter aResult;
@@ -580,7 +577,6 @@ MakeUndoReplaceRewriter(sal_uLong const occurrences,
     return aResult;
 }
 
-// #111827#
 SwRewriter SwUndoReplace::GetRewriter() const
 {
     return MakeUndoReplaceRewriter(1, m_pImpl->GetOld(), m_pImpl->GetIns());
@@ -1012,7 +1008,6 @@ void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-// #111827#
 SwRewriter SwUndoInsertLabel::GetRewriter() const
 {
     return CreateRewriter(sText);

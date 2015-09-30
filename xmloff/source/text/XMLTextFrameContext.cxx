@@ -770,7 +770,6 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
         }
     }
 
-    // #107848#
     // Make adding the shape to Z-Ordering dependent from if we are
     // inside a inside_deleted_section (redlining). That is necessary
     // since the shape will be removed again later. It would lead to

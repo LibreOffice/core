@@ -176,7 +176,6 @@ void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::v
         _rFilters.push_back( WildCard(OUString("*")) );
     }
 }
-// class ViewTabListBox_Impl ---------------------------------------------
 
 class ViewTabListBox_Impl : public SvHeaderTabListBox
 {
@@ -229,7 +228,6 @@ public:
     virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) SAL_OVERRIDE;
 };
 
-// class NameTranslationList -----------------------------------------
 // provides a list of _unique_ Entries
 class NameTranslationList
 {   // contains a list of substitutes of strings for a given folder (as URL)
@@ -308,8 +306,6 @@ const OUString* NameTranslationList::Translate( const OUString& rName ) const
     auto const iter(m_Translation.find(rName));
     return (iter != m_Translation.end()) ? &iter->second : nullptr;
 }
-
-// class NameTranslator_Impl ------------------------------------------
 
 // enables the user to get string substitutions (translations for the content) for a given folder
 // see more explanations above in the description for NameTranslationList
@@ -393,7 +389,6 @@ public:
     void                    CancelRunningAsyncAction();
 
     void                    OpenFolder_Impl();
-    // #83004# -------
     static void             ReplaceTabWithString( OUString& aValue );
     void                    CreateDisplayText_Impl();
     void                    SortFolderContent_Impl();
@@ -490,9 +485,6 @@ OUString CreateExactSizeText( sal_Int64 nSize )
 
     return aSizeStr;
 }
-
-
-// class ViewTabListBox_Impl ---------------------------------------------
 
 
 ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
@@ -1000,7 +992,6 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
     return bRet;
 }
 
-// class SvtFileView -----------------------------------------------------
 SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
                           bool bOnlyFolder, bool bMultiSelection, bool bShowType ) :
 
@@ -1927,7 +1918,6 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
     {
         // title, type, size, date
         aValue = (*aIt)->GetTitle();
-        // #83004# --------------------
         ReplaceTabWithString( aValue );
         aValue += aTab;
         aValue += (*aIt)->maType;

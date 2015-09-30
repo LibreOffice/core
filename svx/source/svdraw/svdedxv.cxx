@@ -332,7 +332,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     const SdrTextObj* pText = PTR_CAST(SdrTextObj,GetTextEditObject());
     bool bTextFrame(pText && pText->IsTextFrame());
     bool bFitToSize(pTextEditOutliner->GetControlWord() & EEControlBits::STRETCHING);
-    bool bModifyMerk(pTextEditOutliner->IsModified()); // #43095#
+    bool bModifyMerk(pTextEditOutliner->IsModified());
     Rectangle aBlankRect(rOutlView.GetOutputArea());
     aBlankRect.Union(aMinTextEditArea);
     Rectangle aPixRect(rTargetDevice.LogicToPixel(aBlankRect));
@@ -350,7 +350,6 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
 
     if(!bModifyMerk)
     {
-        // #43095#
         pTextEditOutliner->ClearModifyFlag();
     }
 
@@ -782,7 +781,6 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             maHdlList.SetMoveOutside(true);
 
-            // #i72757#
             // Since IsMarkHdlWhenTextEdit() is ignored, it is necessary
             // to call AdjustMarkHdl() always.
             AdjustMarkHdl();
@@ -1096,7 +1094,6 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 pTEObj->SetTextAnimationAllowed(true);
             }
 
-            // #i72757#
             // Since IsMarkHdlWhenTextEdit() is ignored, it is necessary
             // to call AdjustMarkHdl() always.
             AdjustMarkHdl();
@@ -1672,7 +1669,6 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                     BegUndo(aStr);
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
 
-                    // #i43537#
                     // If this is a text object also rescue the OutlinerParaObject since
                     // applying attributes to the object may change text layout when
                     // multiple portions exist with multiple formats. If a OutlinerParaObject

@@ -91,7 +91,7 @@ class HierarchyEntry
     ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XOfficeInstallationDirectories >
                                                            m_xOfficeInstDirs;
-    bool m_bTriedToGetRootReadAccess;  // #82494#
+    bool m_bTriedToGetRootReadAccess;
 
 private:
     static OUString createPathFromHierarchyURL( const HierarchyUri & rURI );

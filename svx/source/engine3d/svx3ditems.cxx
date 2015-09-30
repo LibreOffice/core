@@ -89,7 +89,6 @@ Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)
 {}
 
 
-// #107245#
 
 Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal)
@@ -118,7 +117,6 @@ SfxPoolItem * Svx3DSmoothNormalsItem::Clone(SfxItemPool *) const
     return new Svx3DSmoothNormalsItem(*this);
 }
 
-// #107245#
 
 Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal)
@@ -147,7 +145,6 @@ SfxPoolItem * Svx3DSmoothLidsItem::Clone(SfxItemPool *) const
     return new Svx3DSmoothLidsItem(*this);
 }
 
-// #107245#
 
 Svx3DCharacterModeItem::Svx3DCharacterModeItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal)
@@ -176,7 +173,6 @@ SfxPoolItem * Svx3DCharacterModeItem::Clone(SfxItemPool *) const
     return new Svx3DCharacterModeItem(*this);
 }
 
-// #107245#
 
 Svx3DCloseFrontItem::Svx3DCloseFrontItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal)
@@ -205,7 +201,6 @@ SfxPoolItem * Svx3DCloseFrontItem::Clone(SfxItemPool *) const
     return new Svx3DCloseFrontItem(*this);
 }
 
-// #107245#
 
 Svx3DCloseBackItem::Svx3DCloseBackItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal)

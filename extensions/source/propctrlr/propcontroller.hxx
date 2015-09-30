@@ -70,7 +70,6 @@ namespace pcr
     class OPropertyEditor;
     struct OLineDescriptor;
 
-    // #95343#------------------------------------------------------------------------------------
     typedef ::cppu::WeakImplHelper <   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::awt::XFocusListener
                                     ,   ::com::sun::star::awt::XLayoutConstrains
@@ -170,7 +169,7 @@ namespace pcr
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // XLayoutConstrains #95343# ----------------
+        // XLayoutConstrains
         virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

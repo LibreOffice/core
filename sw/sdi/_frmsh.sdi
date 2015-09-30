@@ -288,7 +288,7 @@ interface BaseTextFrame
     [
         ExecMethod = ExecFrameStyle ;
         StateMethod = GetLineStyleState ;
-        Export = FALSE; //#44439#
+        Export = FALSE;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 

@@ -33,7 +33,6 @@ private:
         ::com::sun::star::document::XDocumentProperties> mxDocProps;
 
 public:
-    // #110680#
     // XMLMetaImportComponent() throw();
     XMLMetaImportComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext

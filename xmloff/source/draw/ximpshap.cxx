@@ -449,7 +449,6 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
             OSL_FAIL( "SdXMLShapeContext::AddShape(), exception caught!" );
         }
 
-        // #107848#
         if(!mbTemporaryShape && (!GetImport().HasTextImport()
             || !GetImport().GetTextImport()->IsInsideDeleteContext()))
         {
@@ -2001,7 +2000,6 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
 
 void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // #107928#
     // For security reasons, do not add empty connectors. There may have been an error in EA2
     // that created empty, far set off connectors (e.g. 63 meters below top of document). This
     // is not guaranteed, but it's definitely safe to not add empty connectors.
@@ -2818,7 +2816,6 @@ void SdXMLObjectShapeContext::EndElement()
         }
     }
 
-    // #100592#
     if( mxBase64Stream.is() )
     {
         OUString aPersistName( GetImport().ResolveEmbeddedObjectURLFromBase64() );
@@ -2862,7 +2859,6 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    // #100592#
     SvXMLImportContext* pContext = NULL;
 
     if((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_BINARY_DATA))

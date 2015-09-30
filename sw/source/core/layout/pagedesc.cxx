@@ -119,7 +119,7 @@ void SwPageDesc::Mirror()
     aSet.Put( m_Master.makeBackgroundBrushItem() );
     aSet.Put( m_Master.GetShadow() );
     aSet.Put( m_Master.GetCol() );
-    aSet.Put( m_Master.GetFrmDir() );    // #112217#
+    aSet.Put( m_Master.GetFrmDir() );
     m_Left.SetFormatAttr( aSet );
 }
 

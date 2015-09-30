@@ -131,7 +131,6 @@ public:
     static void                     LockBroadcast();
     static void                     UnlockBroadcast();
 
-    // #100822#
     DECL_LINK_TYPED( DataChangedEventListener, VclSimpleEvent&, void );
 };
 
@@ -209,14 +208,12 @@ ExtendedColorConfig_Impl::ExtendedColorConfig_Impl(bool bEditMode) :
     }
     Load(OUString());
 
-    // #100822#
     ::Application::AddEventListener( LINK(this, ExtendedColorConfig_Impl, DataChangedEventListener) );
 
 }
 
 ExtendedColorConfig_Impl::~ExtendedColorConfig_Impl()
 {
-    // #100822#
     ::Application::RemoveEventListener( LINK(this, ExtendedColorConfig_Impl, DataChangedEventListener) );
 }
 

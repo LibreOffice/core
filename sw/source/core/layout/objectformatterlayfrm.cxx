@@ -22,7 +22,6 @@
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
 
-// #124218#
 #include <layact.hxx>
 
 SwObjectFormatterLayFrm::SwObjectFormatterLayFrm( SwLayoutFrm& _rAnchorLayFrm,

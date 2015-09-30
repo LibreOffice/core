@@ -285,7 +285,6 @@ void SwUndoNumUpDown::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().NumUpDown(rContext.GetRepeatPaM(), 1 == nOffset);
 }
 
-// #115901#
 SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, bool bOldNum,
                                     bool bNewNum)
     : SwUndo( UNDO_NUMORNONUM ), nIdx( rIdx.GetIndex() ), mbNewNum(bNewNum),
@@ -317,7 +316,6 @@ void SwUndoNumOrNoNum::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 }
 
-// #115901#
 void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();

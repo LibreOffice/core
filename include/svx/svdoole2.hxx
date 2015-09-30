@@ -150,7 +150,6 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getXModel() const;
 
-    // #109985#
     bool IsChart() const;
     bool IsReal3DChart() const;
     bool IsCalc() const;

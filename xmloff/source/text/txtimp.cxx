@@ -563,7 +563,6 @@ struct XMLTextImportHelper::Impl
     bool m_bOrganizerMode : 1;
     bool m_bBodyContentStarted : 1;
 
-    // #107848#
     /// Are we inside a <text:deletion> element (deleted redline section)
     bool m_bInsideDeleteContext : 1;
 

@@ -713,7 +713,6 @@ public:
     /// reset the last open redline ID
     void ResetOpenRedlineId();
 
-    // #107848#
     /** redlining : Setter to remember the fact we are inside/outside
      * a <text:deletion> element (deleted redline section) */
     void SetInsideDeleteContext(bool const bNew);

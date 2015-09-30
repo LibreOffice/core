@@ -299,7 +299,6 @@ public:
     void enableLayerExport( bool bEnable = true ) { mbExportLayer = bEnable; }
     bool IsLayerExportEnabled() const { return mbExportLayer; }
 
-    // #88546#
     /** defines if the export should increment the progress bar or not */
     void enableHandleProgressBar( bool bEnable = true ) { mbHandleProgressBar = bEnable; }
     bool IsHandleProgressBarEnabled() const { return mbHandleProgressBar; }

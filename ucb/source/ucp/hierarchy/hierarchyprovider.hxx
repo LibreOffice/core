@@ -52,7 +52,7 @@ struct ConfigProviderMapEntry
         com::sun::star::lang::XMultiServiceFactory > xConfigProvider;
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess > xRootReadAccess;
-    bool bTriedToGetRootReadAccess;  // #82494#
+    bool bTriedToGetRootReadAccess;
 
     ConfigProviderMapEntry() : bTriedToGetRootReadAccess( false ) {}
 };

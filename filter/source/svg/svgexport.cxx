@@ -568,7 +568,6 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                 mbPresentation = Reference< XPresentationSupplier >( mxSrcDoc, UNO_QUERY ).is();
                 mpObjects = new ObjectMap;
 
-                // #110680#
                 // mpSVGExport = new SVGExport( xDocHandler );
                 mpSVGExport = new SVGExport( xContext, xDocHandler, maFilterData );
 

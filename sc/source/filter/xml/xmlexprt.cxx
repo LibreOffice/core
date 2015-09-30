@@ -336,7 +336,6 @@ sal_Int16 ScXMLExport::GetMeasureUnit()
     return xProperties->getMetric();
 }
 
-// #110680#
 ScXMLExport::ScXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLExportFlags nExportFlag)

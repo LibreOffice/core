@@ -28,7 +28,6 @@ class ConstRectangle : public SwDrawBase
     bool bMarquee;
     bool bCapVertical;
 
-    // #93382#
     bool mbVertical;
 
  public:

@@ -301,7 +301,6 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     }
 
     m_xDatMan->load();
-    // #100312# ----------
     m_pDatMan->RegisterInterceptor(pBeamer);
 
     if ( rListener.is() )

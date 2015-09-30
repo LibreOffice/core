@@ -95,7 +95,6 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
         RIGHT_DOWN
     };
 
-    // #114409#
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOCursors;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOSelection;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOSelectionBorder;
@@ -403,7 +402,6 @@ public:
     void            UpdateDPFromFieldPopupMenu();
     bool            UpdateVisibleRange();
 
-    // #114409#
     void CursorChanged();
     void DrawLayerCreated();
     bool ContinueOnlineSpelling();
@@ -430,7 +428,6 @@ public:
     void            UpdateAllOverlays();
 
 protected:
-    // #114409#
     void ImpCreateOverlayObjects();
     void ImpDestroyOverlayObjects();
 

@@ -2207,7 +2207,6 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 
             if( nMnemonicPos >= nLen )
             {
-                // #106952#
                 // may occur in BiDi-Strings: the '~' is sometimes found behind the last char
                 // due to some strange BiDi text editors
                 // -> place the underline behind the string to indicate a failure

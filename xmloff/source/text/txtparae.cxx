@@ -2615,7 +2615,6 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     }
     else
     {
-        // #92210#
         nShapeFeatures |= XMLShapeExportFlags::NO_WS;
     }
 

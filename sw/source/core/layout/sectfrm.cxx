@@ -303,7 +303,6 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 
     // Add to the tree
     SwSectionFrm* pSect = pParent->FindSctFrm();
-    // #156927#
     // Assure that parent is not inside a table frame, which is inside the found section frame.
     if ( pSect )
     {
@@ -544,7 +543,6 @@ static SwContentFrm* lcl_GetNextContentFrm( const SwLayoutFrm* pLay, bool bFwd )
             return const_cast<SwContentFrm*>(static_cast<const SwContentFrm*>(pLay->GetPrev()));
     }
 
-    // #100926#
     const SwFrm* pFrm = pLay;
     SwContentFrm *pContentFrm = 0;
     bool bGoingUp = true;

@@ -205,7 +205,6 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
     sal_Int32 nPos = 0;
     sal_Int32 nOldPos = nPos;
 
-    // #108210#
     // Test if string length differ between original and CaseMapped
     bool bCaseMapLengthDiffers(aTxt.getLength() != rTxt.getLength());
 
@@ -238,7 +237,6 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
         {
             if(bCaseMapLengthDiffers)
             {
-                // #108210#
                 // If strings differ work preparing the necessary snippet to address that
                 // potential difference
                 const OUString aSnippet = rTxt.copy(nIdx + nOldPos, nPos-nOldPos);
@@ -268,7 +266,6 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
         {
             if(bCaseMapLengthDiffers)
             {
-                // #108210#
                 // If strings differ work preparing the necessary snippet to address that
                 // potential difference
                 const OUString aSnippet = rTxt.copy(nIdx + nOldPos, nPos - nOldPos);
@@ -293,7 +290,6 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 
             if(bCaseMapLengthDiffers)
             {
-                // #108210#
                 // If strings differ work preparing the necessary snippet to address that
                 // potential difference
                 const OUString aSnippet = rTxt.copy(nIdx + nOldPos, nPos - nOldPos);
@@ -355,7 +351,6 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
         aTxtSize.setWidth( pOut->GetTextWidth( rTxt, nIdx, nLen ) );
     else
     {
-        // #108210#
         const OUString aNewText = CalcCaseMap(rTxt);
         bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
         sal_Int32 nWidth(0L);
@@ -539,7 +534,6 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
             pOut->DrawStretchText( aPos, aSize.Width(), rTxt, nIdx, nTmp );
         else
         {
-            // #108210#
             const OUString aNewText = CalcCaseMap(rTxt);
             bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
 

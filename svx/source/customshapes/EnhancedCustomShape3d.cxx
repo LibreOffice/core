@@ -354,7 +354,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             else if ( ( eFillStyle == drawing::FillStyle_BITMAP ) || ( eFillStyle == drawing::FillStyle_GRADIENT ) || bUseExtrusionColor )
                 bUseTwoFillStyles = true;
 
-            // #116336#
             // If shapes are mirrored once (mirroring two times correct geometry again)
             // double-sided at the object and two-sided-lighting at the scene need to be set.
 

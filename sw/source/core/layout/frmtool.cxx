@@ -263,7 +263,6 @@ SwFrmNotify::~SwFrmNotify()
                 bool bNotifySize = false;
                 SwAnchoredObject* pObj = rObjs[i];
                 SwContact* pContact = ::GetUserCall( pObj->GetDrawObj() );
-                // #115759#
                 const bool bAnchoredAsChar = pContact->ObjAnchoredAsChar();
                 if ( !bAnchoredAsChar )
                 {
@@ -3320,7 +3319,6 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
                         pTmpFrm->Calc(pLayout ? pLayout->GetCurrShell()->GetOut() : 0);
                     }
 
-                    // #127369#
                     // aIter.IsChanged checks if the current pTmpFrm has been deleted while
                     // it is the current iterator
                     // FrmHolder watches for deletion of the current pMinFrm

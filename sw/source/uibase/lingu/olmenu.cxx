@@ -668,7 +668,6 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                 aTmp += ".";
             }
 
-            // #111827#
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UndoArg1, m_pSh->GetCrsrDescr());

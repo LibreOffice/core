@@ -129,7 +129,7 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
     nHeaderHeight ( 0 ),
     nFooterHeight ( 0 )
 {
-    SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW ); //#106611#
+    SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW );
     SetBackground();
 
     SetHelpId( HID_SC_WIN_PREVIEW );
@@ -158,7 +158,6 @@ void ScPreview::UpdateDrawView()        // nTab must be right
     ScDocument& rDoc = pDocShell->GetDocument();
     ScDrawLayer* pModel = rDoc.GetDrawLayer();     // is not 0
 
-    // #114135#
     if ( pModel )
     {
         SdrPage* pPage = pModel->GetPage(nTab);

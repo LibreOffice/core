@@ -60,7 +60,6 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
         maRect = rRect;
         ImpJustifyRect(maRect);
 
-        // #115391#
         AdaptTextMinSize();
 
         ImpCheckShear();
@@ -78,7 +77,6 @@ void SdrTextObj::NbcSetLogicRect(const Rectangle& rRect)
     maRect = rRect;
     ImpJustifyRect(maRect);
 
-    // #115391#
     AdaptTextMinSize();
 
     SetRectsDirty();
@@ -175,7 +173,6 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
     ImpJustifyRect(maRect);
 
-    // #115391#
     AdaptTextMinSize();
 
     if(bTextFrame && (!pModel || !pModel->IsPasteResize()))

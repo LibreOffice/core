@@ -50,7 +50,6 @@ protected:
     virtual void _ExportContent() SAL_OVERRIDE;
 
 public:
-    // #110680#
     SchXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         OUString const & implementationName,

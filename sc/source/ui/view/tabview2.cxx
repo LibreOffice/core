@@ -1386,7 +1386,6 @@ void ScTabView::MakeDrawLayer()
         // pDrawView is set per Notify
         OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer does not work");
 
-        // #114409#
         for(sal_uInt16 a(0); a < 4; a++)
         {
             if(pGridWin[a])

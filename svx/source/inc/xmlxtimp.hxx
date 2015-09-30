@@ -33,7 +33,6 @@ namespace com { namespace sun { namespace star {
 class SvxXMLXTableImport : public SvXMLImport
 {
 public:
-    // #110680#
     SvxXMLXTableImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & rTable,

@@ -2945,7 +2945,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
             sal_Int32 nLines = pPortion->GetLines().Count();
             sal_Int32 nLastLine = nLines-1;
 
-            // #108052#
             bool bEndOfParagraphWritten(false);
 
             if ( !IsVertical() )

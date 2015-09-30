@@ -357,7 +357,6 @@ IMPL_LINK_NOARG_TYPED(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, voi
                 else
                     aFmt.SetSuffix(_pSet->sSuffix);
                 aFmt.SetCharFormatName(sNumCharFmtName);
-                // #62069# // #92724#
                 aFmt.SetBulletRelSize(100);
                 pActNum->SetLevel(i, aFmt);
             }
@@ -513,7 +512,6 @@ IMPL_LINK_NOARG_TYPED(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                 aFmt.SetBulletFont(&rActBulletFont);
                 aFmt.SetBulletChar(cChar );
                 aFmt.SetCharFormatName(sBulletCharFormatName);
-                // #62069# // #92724#
                 aFmt.SetBulletRelSize(45);
                 pActNum->SetLevel(i, aFmt);
             }
@@ -763,14 +761,12 @@ IMPL_LINK_NOARG_TYPED(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                                         ? pLevelSettings->sBulletChar[0]
                                         : 0 );
                 aFmt.SetCharFormatName( sBulletCharFormatName );
-                // #62069# // #92724#
                 aFmt.SetBulletRelSize(45);
             }
             else
             {
                 aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 0));
                 aFmt.SetCharFormatName(sNumCharFmtName);
-                // #62069# // #92724#
                 aFmt.SetBulletRelSize(100);
                 // #i93908#
                 aFmt.SetPrefix(pLevelSettings->sPrefix);

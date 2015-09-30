@@ -1536,7 +1536,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     FmFormView* pDrawView = NULL;
 
-    // #114135#
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
 
     if( pModel )
