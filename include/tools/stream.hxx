@@ -47,7 +47,7 @@ enum class StreamMode {
     READ                     = 0x0001,  ///< allow read accesses
     WRITE                    = 0x0002,  ///< allow write accesses
 // file i/o
-    NOCREATE                 = 0x0004,  ///< 1 == Dont create file
+    NOCREATE                 = 0x0004,  ///< 1 == Don't create file
     TRUNC                    = 0x0008,  ///< Truncate _existing_ file to zero length
     COPY_ON_SYMLINK          = 0x0010,  ///< copy-on-write for symlinks (Unix)
 // sharing options

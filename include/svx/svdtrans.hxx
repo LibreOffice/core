@@ -40,7 +40,7 @@
 // Which is converted, by this:
 //   double nSin=sin(nAngle*nPi180);
 //
-// To convert it back, we use divison.
+// To convert it back, we use division.
 const double nPi=3.14159265358979323846;
 const double nPi180=0.000174532925199432957692222; // If we have too few digits, we get tan(4500*nPi180)!=1.0
 

@@ -42,7 +42,7 @@ public:
 
     virtual void ExecuteUnderflow(SdrOutliner *);
 
-    // Uses two outliners: one for the non-overfl text and one for overflowing (might be the same)
+    // Uses two outliners: one for the non-overflow text and one for overflowing (might be the same)
     virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *);
 
     bool IsOverflow() const;

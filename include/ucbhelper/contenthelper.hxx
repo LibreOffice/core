@@ -235,7 +235,7 @@ protected:
       * of this method will replace the content identifier of the content and
       * propagate the appropriate ContentEvent( EXCHANGED ).
       *
-      * @param  rNewId is the new content identifier for the contant.
+      * @param  rNewId is the new content identifier for the content.
       * @return a success indicator.
       */
     bool exchange( const com::sun::star::uno::Reference<
