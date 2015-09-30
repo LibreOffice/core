@@ -189,7 +189,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
                     SdrOutliner *pOutliner = mpView->GetTextEditOutliner();
 
-                    if (mpView->ISA(OutlineView))
+                    if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
                     {
                         pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
                             mpViewShell->GetActiveWindow());
@@ -261,13 +261,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
-                    if (mpView->ISA(OutlineView))
+                    if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
                     {
                         pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
                             mpViewShell->GetActiveWindow());
                     }
 
-                    bool bOutlineViewSh = mpViewShell->ISA(OutlineViewShell);
+                    bool bOutlineViewSh = dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr;
 
                     if (pOLV &&
                         ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
@@ -428,7 +428,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     rSet.Put( aAttrSet, false ); // <- sal_False, so DontCare-Status gets acquired
 
     // these are disabled in outline-mode
-    if (!mpViewShell || !mpViewShell->ISA(DrawViewShell))
+    if (!mpViewShell || dynamic_cast< const DrawViewShell *>( mpViewShell ) ==  nullptr)
     {
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_LEFT );
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_RIGHT );

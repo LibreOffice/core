@@ -173,7 +173,7 @@ void SwView::GotFocus() const
     // the top then)
     const SfxDispatcher& rDispatcher = const_cast< SwView* >( this )->GetDispatcher();
     SfxShell* pTopShell = rDispatcher.GetShell( 0 );
-    FmFormShell* pAsFormShell = PTR_CAST( FmFormShell, pTopShell );
+    FmFormShell* pAsFormShell = dynamic_cast<FmFormShell*>( pTopShell  );
     if ( pAsFormShell )
     {
         pAsFormShell->ForgetActiveControl();
@@ -181,7 +181,7 @@ void SwView::GotFocus() const
     }
     else if ( m_pPostItMgr )
     {
-        SwAnnotationShell* pAsAnnotationShell = PTR_CAST( SwAnnotationShell, pTopShell );
+        SwAnnotationShell* pAsAnnotationShell = dynamic_cast<SwAnnotationShell*>( pTopShell  );
         if ( pAsAnnotationShell )
         {
             m_pPostItMgr->SetActiveSidebarWin(0);
@@ -206,7 +206,7 @@ IMPL_LINK_NOARG_TYPED(SwView, FormControlActivated, LinkParamNone*, void)
     // of the dispatcher stack, then we need to activate it
     const SfxDispatcher& rDispatcher = GetDispatcher();
     const SfxShell* pTopShell = rDispatcher.GetShell( 0 );
-    const FmFormShell* pAsFormShell = PTR_CAST( FmFormShell, pTopShell );
+    const FmFormShell* pAsFormShell = dynamic_cast<const FmFormShell*>( pTopShell  );
     if ( !pAsFormShell )
     {
         // if we're editing text currently, cancel this
@@ -266,16 +266,16 @@ void SwView::SelectShell()
             for ( sal_uInt16 i = 0; true; ++i )
             {
                 SfxShell *pSfxShell = rDispatcher.GetShell( i );
-                if  (  pSfxShell->ISA( SwBaseShell )
-                    || pSfxShell->ISA( SwDrawTextShell )
-                    || pSfxShell->ISA( svx::ExtrusionBar )
-                    || pSfxShell->ISA( svx::FontworkBar )
-                    || pSfxShell->ISA( SwAnnotationShell )
+                if  (  dynamic_cast< const SwBaseShell *>( pSfxShell ) !=  nullptr
+                    || dynamic_cast< const SwDrawTextShell *>( pSfxShell ) !=  nullptr
+                    || dynamic_cast< const svx::ExtrusionBar*>( pSfxShell ) !=  nullptr
+                    || dynamic_cast< const svx::FontworkBar*>( pSfxShell ) !=  nullptr
+                    || dynamic_cast< const SwAnnotationShell *>( pSfxShell ) !=  nullptr
                     )
                 {
                     rDispatcher.Pop( *pSfxShell, SfxDispatcherPopFlags::POP_DELETE );
                 }
-                else if ( pSfxShell->ISA( FmFormShell ) )
+                else if ( dynamic_cast< const FmFormShell *>( pSfxShell ) !=  nullptr )
                 {
                     rDispatcher.Pop( *pSfxShell );
                 }
@@ -436,7 +436,7 @@ void SwView::SelectShell()
 
         SdrView* pDView = GetWrtShell().GetDrawView();
         if ( bInitFormShell && pDView )
-            m_pFormShell->SetView(PTR_CAST(FmFormView, pDView));
+            m_pFormShell->SetView(dynamic_cast<FmFormView*>( pDView) );
 
     }
     // Opportune time for the communication with OLE objects?
@@ -742,7 +742,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     m_aTimer.SetTimeout( 120 );
 
-    SwDocShell* pDocSh = PTR_CAST( SwDocShell, _pFrame->GetObjectShell() );
+    SwDocShell* pDocSh = dynamic_cast<SwDocShell*>( _pFrame->GetObjectShell()  );
     OSL_ENSURE( pDocSh, "view without DocShell." );
     bool bOldModifyFlag = pDocSh->IsEnableSetModified();
     if(bOldModifyFlag)
@@ -753,7 +753,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // manually.
     if( pDocSh->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         pDocSh->UpdateFontList();
-    bool bWebDShell = pDocSh->ISA(SwWebDocShell);
+    bool bWebDShell = dynamic_cast< const SwWebDocShell *>( pDocSh ) !=  nullptr;
 
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(bWebDShell);
     SwViewOption aUsrPref( *pUsrPref);
@@ -772,7 +772,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     {
         pExistingSh = pOldSh;
         // determine type of existing view
-        if( pExistingSh->IsA( TYPE( SwPagePreview ) ) )
+        if( dynamic_cast<const SwPagePreview *>(pExistingSh) != nullptr )
         {
             m_sSwViewData = static_cast<SwPagePreview*>(pExistingSh)->GetPrevSwViewData();
             m_sNewCrsrPos = static_cast<SwPagePreview*>(pExistingSh)->GetNewCrsrPos();
@@ -780,12 +780,12 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             m_bOldShellWasPagePreview = true;
             m_bIsPreviewDoubleClick = !m_sNewCrsrPos.isEmpty() || m_nNewPage != USHRT_MAX;
         }
-        else if( pExistingSh->IsA( TYPE( SwSrcView ) ) )
+        else if( dynamic_cast<const SwSrcView *>(pExistingSh) != nullptr )
             bOldShellWasSrcView = true;
     }
 
     SAL_INFO( "sw.ui", "before create WrtShell" );
-    if(PTR_CAST( SwView, pExistingSh))
+    if(dynamic_cast<SwView*>( pExistingSh) )
     {
         m_pWrtShell = new SwWrtShell( *static_cast<SwView*>(pExistingSh)->m_pWrtShell,
                                     m_pEditWin, *this);
@@ -977,7 +977,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     g_bNoInterrupt = bOld;
 
     // If a new GlobalDoc will be created, the navigator will also be generated.
-    if( pDocSh->IsA(SwGlobalDocShell::StaticType()) &&
+    if( dynamic_cast<const SwGlobalDocShell*>(pDocSh) != nullptr &&
         !pVFrame->GetChildWindow( SID_NAVIGATOR ))
     {
         SfxBoolItem aNavi(SID_NAVIGATOR, true);
@@ -1069,7 +1069,7 @@ SwView::~SwView()
 SwDocShell* SwView::GetDocShell()
 {
     SfxObjectShell* pDocShell = GetViewFrame()->GetObjectShell();
-    return PTR_CAST(SwDocShell, pDocShell);
+    return dynamic_cast<SwDocShell*>( pDocShell );
 }
 
 // Remember CursorPos
@@ -1646,7 +1646,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if ( GetFormShell() )
                     {
                         GetFormShell()->SetView(
-                            PTR_CAST(FmFormView, GetWrtShell().GetDrawView()) );
+                            dynamic_cast<FmFormView*>( GetWrtShell().GetDrawView())  );
                         SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetDocShell()->IsReadOnly());
                         GetDispatcher().Execute( SID_FM_DESIGN_MODE, SfxCallMode::SYNCHRON,
                                                   &aItem, 0L );

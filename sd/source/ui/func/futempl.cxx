@@ -529,7 +529,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                     while( aIter.IsMore() )
                                     {
                                         SdrObject* pObj = aIter.Next();
-                                        if( pObj->ISA(SdrPageObj) )
+                                        if( dynamic_cast< const SdrPageObj *>( pObj ) !=  nullptr )
                                         {
                                             // repaint only
                                             pObj->ActionChanged();
@@ -609,7 +609,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         {
             if ((mpView->AreObjectsMarked() && mpView->GetMarkedObjectList().GetMarkCount() == 1) ||
-                 mpView->ISA(OutlineView))
+                 dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
             {
                 pStyleSheet = mpView->GetStyleSheet();
 

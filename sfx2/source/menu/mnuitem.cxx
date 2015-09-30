@@ -194,7 +194,7 @@ void SfxMenuControl::StateChanged
     }
 
     bool bCheck = false;
-    if ( pState->ISA(SfxBoolItem) )
+    if ( dynamic_cast< const SfxBoolItem *>( pState ) !=  nullptr )
     {
         // BoolItem for check
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
@@ -203,7 +203,7 @@ void SfxMenuControl::StateChanged
         Menu* pMenu = pOwnMenu->GetSVMenu();
         pMenu->SetItemBits( GetId() , pMenu->GetItemBits( GetId() ) | MenuItemBits::CHECKABLE);
     }
-    else if ( pState->ISA(SfxEnumItemInterface) &&
+    else if ( dynamic_cast< const SfxEnumItemInterface *>( pState ) !=  nullptr &&
               static_cast<const SfxEnumItemInterface *>(pState)->HasBoolValue() )
     {
         // Treat EnumItem as Bool
@@ -213,7 +213,7 @@ void SfxMenuControl::StateChanged
         Menu* pMenu = pOwnMenu->GetSVMenu();
         pMenu->SetItemBits( GetId() , pMenu->GetItemBits( GetId() ) | MenuItemBits::CHECKABLE);
     }
-    else if ( ( b_ShowStrings || bIsObjMenu ) && pState->ISA(SfxStringItem) )
+    else if ( ( b_ShowStrings || bIsObjMenu ) && dynamic_cast< const SfxStringItem *>( pState ) !=  nullptr )
     {
         // Get MenuText from SfxStringItem
         OUString aStr( static_cast<const SfxStringItem*>(pState)->GetValue() );

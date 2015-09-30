@@ -227,7 +227,7 @@ void ScMoveTableDlg::InitDocListBox()
 
     while ( pSh )
     {
-        pScSh = PTR_CAST( ScDocShell, pSh );
+        pScSh = dynamic_cast<ScDocShell*>( pSh  );
 
         if ( pScSh )
         {

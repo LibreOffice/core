@@ -302,7 +302,7 @@ SwUndoDelSection::SwUndoDelSection(
             SwNodeIndex const*const pIndex)
     : SwUndo( UNDO_DELSECTION )
     , m_pSectionData( new SwSectionData(rSection) )
-    , m_pTOXBase( rSection.ISA( SwTOXBaseSection )
+    , m_pTOXBase( dynamic_cast<const SwTOXBaseSection*>( &rSection) !=  nullptr
             ? new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSection))
             : 0 )
     , m_pAttrSet( ::lcl_GetAttrSet(rSection) )

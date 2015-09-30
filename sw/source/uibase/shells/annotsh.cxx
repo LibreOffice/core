@@ -395,7 +395,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
                 const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
 
-                if (pFieldItem && pFieldItem->GetField()->ISA(SvxURLField))
+                if (pFieldItem && dynamic_cast< const SvxURLField *>( pFieldItem->GetField() ) != nullptr )
                 {
                     // Select the field so that it will be deleted during insert
                     ESelection aSel = pOLV->GetSelection();
@@ -476,7 +476,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             {
                 /* mod
                 SwView* pView = &GetView();
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
+                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
                 */
                 SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
@@ -521,7 +521,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             {
                 /* mod todo ???
                 SwView* pView = &GetView();
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
+                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
                 */
                 SfxItemSet aDlgAttr(GetPool(),
@@ -935,7 +935,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
             SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
             const SfxPoolItem* pItem;
             if ( rReq.GetArgs() && rReq.GetArgs()->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
-                                    pItem->ISA(SfxUInt32Item) )
+                                    dynamic_cast< const SfxUInt32Item *>( pItem ) !=  nullptr )
             {
                 nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
             }
@@ -1059,7 +1059,7 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
                     {
                         const SvxFieldData* pField = pFieldItem->GetField();
 
-                        if (pField->ISA(SvxURLField))
+                        if (dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
                         {
                             aHLinkItem.SetName(static_cast<const SvxURLField*>( pField)->GetRepresentation());
                             aHLinkItem.SetURL(static_cast<const SvxURLField*>( pField)->GetURL());
@@ -1665,7 +1665,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         sSym = static_cast<const SfxStringItem*>(pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
         pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
-        const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+        const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
         if ( pFontItem )
             sFontName = pFontItem->GetValue();
     }

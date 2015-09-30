@@ -371,7 +371,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
                 if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
                 {
                     const SvxFieldData* pField = pFieldItem->GetField();
-                    if ( pField->ISA(SvxURLField) )
+                    if ( dynamic_cast< const SvxURLField *>( pField ) !=  nullptr )
                     {
                         aHLinkItem.SetName(static_cast<const SvxURLField*>(pField)->GetRepresentation());
                         aHLinkItem.SetURL(static_cast<const SvxURLField*>(pField)->GetURL());
@@ -941,10 +941,10 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     {
         const SvxFieldItem* pFldItem = pOutlinerView->GetFieldAtSelection();
 
-        if( !( pFldItem && (pFldItem->GetField()->ISA( SvxDateField ) ||
-                            pFldItem->GetField()->ISA( SvxAuthorField ) ||
-                            pFldItem->GetField()->ISA( SvxExtFileField ) ||
-                            pFldItem->GetField()->ISA( SvxExtTimeField ) ) ) )
+        if( !( pFldItem && (0 != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
+                            0 != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
+                            0 != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
+                            0 != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) ) )
         {
             rSet.DisableItem( SID_MODIFY_FIELD );
         }

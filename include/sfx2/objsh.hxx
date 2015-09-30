@@ -52,6 +52,7 @@
 #include <memory>
 #include <set>
 #include <o3tl/typed_flags_set.hxx>
+#include <functional>
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
@@ -193,6 +194,10 @@ enum class SfxObjectCreateMode
 
 class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
+template<class T> bool checkSfxObjectShell(const SfxObjectShell* pShell)
+{
+    return dynamic_cast<const T*>(pShell) != nullptr;
+}
 
 class SFX2_DLLPUBLIC SfxObjectShell :
     public SfxShell, virtual public SotObject,
@@ -255,10 +260,10 @@ public:
     static OUString CreateShellID( const SfxObjectShell* pShell );
 
     // Document-Shell Iterator
-    static SfxObjectShell*      GetFirst( const TypeId* pType = 0,
+    static SfxObjectShell*      GetFirst( std::function<bool ( const SfxObjectShell* )> isObjectShell = nullptr,
                                           bool bOnlyVisible = true );
     static SfxObjectShell*      GetNext( const SfxObjectShell& rPrev,
-                                         const TypeId* pType = 0,
+                                         std::function<bool ( const SfxObjectShell* )> isObjectShell = nullptr,
                                          bool bOnlyVisible = true );
     static SfxObjectShell*      Current();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >

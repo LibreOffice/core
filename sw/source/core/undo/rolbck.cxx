@@ -1428,12 +1428,12 @@ void SwRegHistory::_MakeSetWhichIds()
     if( GetRegisteredIn() )
     {
         const SfxItemSet* pSet = 0;
-        if( GetRegisteredIn()->ISA( SwContentNode ) )
+        if( dynamic_cast< const SwContentNode *>( GetRegisteredIn() ) != nullptr  )
         {
             pSet = static_cast<SwContentNode*>(
                     GetRegisteredIn())->GetpSwAttrSet();
         }
-        else if ( GetRegisteredIn()->ISA( SwFormat ) )
+        else if ( dynamic_cast< const SwFormat *>( GetRegisteredIn() ) != nullptr  )
         {
             pSet = &static_cast<SwFormat*>(
                     GetRegisteredIn())->GetAttrSet();

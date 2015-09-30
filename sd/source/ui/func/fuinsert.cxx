@@ -123,7 +123,7 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
         int nError = aDlg.GetGraphic(aGraphic);
         if( nError == GRFILTER_OK )
         {
-            if( mpViewShell && mpViewShell->ISA(DrawViewShell))
+            if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
             {
                 sal_Int8    nAction = DND_ACTION_COPY;
                 SdrObject* pPickObj;
@@ -228,7 +228,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
             if( !mpView->InsertData( aDataHelper,
                                     mpWindow->PixelToLogic( Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
                                     nAction, false, nFormatId ) &&
-                ( mpViewShell && mpViewShell->ISA( DrawViewShell ) ) )
+                ( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr ) )
             {
                 DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(mpViewShell);
                 INetBookmark        aINetBookmark( "", "" );
@@ -702,7 +702,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
 
     if( pReqArgs )
     {
-        const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, &pReqArgs->Get( rReq.GetSlot() ) );
+        const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>( &pReqArgs->Get( rReq.GetSlot() )  );
 
         if( pStringItem )
         {

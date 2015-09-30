@@ -2907,7 +2907,7 @@ void ScInterpreter::ScMacro()
     }
 
     SbxVariable* pVar = pRoot ? pRoot->Find(aMacro, SbxCLASS_METHOD) : NULL;
-    if( !pVar || pVar->GetType() == SbxVOID || !pVar->ISA(SbMethod) )
+    if( !pVar || pVar->GetType() == SbxVOID || dynamic_cast<const SbMethod*>( pVar) ==  nullptr )
     {
         PushError( errNoMacro );
         return;
@@ -2919,7 +2919,7 @@ void ScInterpreter::ScMacro()
     SbModule* pModule = pMethod->GetModule();
     bool bUseVBAObjects = pModule->IsVBACompat();
     SbxObject* pObject = pModule->GetParent();
-    OSL_ENSURE(pObject->IsA(TYPE(StarBASIC)), "No Basic found!");
+    OSL_ENSURE(dynamic_cast<const StarBASIC *>(pObject) != nullptr, "No Basic found!");
     OUString aMacroStr = pObject->GetName() + "." + pModule->GetName() + "." + pMethod->GetName();
     OUString aBasicStr;
     if (pObject->GetParent())
@@ -3095,7 +3095,7 @@ void ScInterpreter::ScMacro()
         else if ( eResType & SbxARRAY )
         {
             SbxBase* pElemObj = refRes->GetObject();
-            SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,pElemObj);
+            SbxDimArray* pDimArray = dynamic_cast< SbxDimArray *>( pElemObj );
             short nDim = pDimArray->GetDims();
             if ( 1 <= nDim && nDim <= 2 )
             {

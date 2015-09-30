@@ -569,7 +569,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             }
                         }
 
-                        if( pTableNd->GetTable().IsA( TYPE( SwDDETable ) ))
+                        if( dynamic_cast<const SwDDETable*>(&pTableNd->GetTable()) != nullptr )
                         {
                             SwDDEFieldType* pTyp = static_cast<SwDDETable&>(pTableNd->
                                                 GetTable()).GetDDEFieldType();

@@ -622,14 +622,14 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
         for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pTmpObj = rObjs[i];
-            if ( pTmpObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast<const SwFlyFrm*>( pTmpObj) !=  nullptr )
             {
                 SwFlyFrm* pTmpFly = static_cast<SwFlyFrm*>(pTmpObj);
                 // #i28701# - use new method <GetPageFrm()>
                 if ( pTmpFly->IsFlyFreeFrm() && !pTmpFly->GetPageFrm() )
                     AppendFlyToPage( pTmpFly );
             }
-            else if ( pTmpObj->ISA(SwAnchoredDrawObject) )
+            else if ( dynamic_cast<const SwAnchoredDrawObject*>( pTmpObj) !=  nullptr )
             {
                 // #i87493#
                 if ( pTmpObj->GetPageFrm() != this )
@@ -770,7 +770,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
         for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pObj = rObjs[i];
-            if ( pObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast<const SwFlyFrm*>( pObj) !=  nullptr )
             {
                 SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
                 if ( pFly->IsFlyFreeFrm() )
@@ -783,7 +783,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
                         pDest->AppendFlyToPage( pFly );
                 }
             }
-            else if ( pObj->ISA(SwAnchoredDrawObject) )
+            else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
             {
                 RemoveDrawObjFromPage( *pObj );
                 pDest->AppendDrawObjToPage( *pObj );
@@ -794,7 +794,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
 
 void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
 {
-    if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
+    if ( dynamic_cast<const SwAnchoredDrawObject*>( &_rNewObj) ==  nullptr )
     {
         OSL_FAIL( "SwPageFrm::AppendDrawObjToPage(..) - anchored object of unexpected type -> object not appended" );
         return;
@@ -843,7 +843,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
 
 void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
 {
-    if ( !_rToRemoveObj.ISA(SwAnchoredDrawObject) )
+    if ( dynamic_cast<const SwAnchoredDrawObject*>( &_rToRemoveObj) ==  nullptr )
     {
         OSL_FAIL( "SwPageFrm::RemoveDrawObjFromPage(..) - anchored object of unexpected type -> object not removed" );
         return;
@@ -910,7 +910,7 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrameFormat* pFormat )
 bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
 {
     bool bRet = true;
-    if ( pSdrObj->ISA(SwVirtFlyDrawObj) )
+    if ( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) !=  nullptr )
     {
         const SwFlyFrm* pFly = static_cast<const SwVirtFlyDrawObj*>(pSdrObj)->GetFlyFrm();
         const bool bFollowTextFlow = pFly->GetFormat()->GetFollowTextFlow().GetValue();

@@ -283,7 +283,7 @@ void SwAnchoredDrawObject::MakeObjPos()
         // attributes only for 'master' drawing objects
         // #i44334#, #i44681# - check, if positioning
         // attributes already have been set.
-        if ( !GetDrawObj()->ISA(SwDrawVirtObj) &&
+        if ( dynamic_cast< const SwDrawVirtObj* >(GetDrawObj()) ==  nullptr &&
              !static_cast<SwDrawFrameFormat&>(GetFrameFormat()).IsPosAttrSet() )
         {
             _SetPositioningAttr();
@@ -338,7 +338,7 @@ void SwAnchoredDrawObject::MakeObjPos()
         // Assure for 'master' drawing object, that it's registered at the correct page.
         // Perform check not for as-character anchored drawing objects and only if
         // the anchor frame is valid.
-        if ( !GetDrawObj()->ISA(SwDrawVirtObj) &&
+        if ( dynamic_cast< const SwDrawVirtObj* >(GetDrawObj()) ==  nullptr &&
              !pDrawContact->ObjAnchoredAsChar() &&
              GetAnchorFrm()->IsValid() )
         {
@@ -567,7 +567,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
             // anchored object, because its positioned by the format of its anchor frame.
             // --> #i44559# - assure, that text hint is already
             // existing in the text frame
-            if ( GetAnchorFrm()->ISA(SwTextFrm) &&
+            if ( dynamic_cast< const SwTextFrm* >(GetAnchorFrm()) !=  nullptr &&
                  (GetFrameFormat().GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
             {
                 SwTextFrm* pAnchorTextFrm( static_cast<SwTextFrm*>(AnchorFrm()) );
@@ -626,7 +626,7 @@ const SwRect SwAnchoredDrawObject::GetObjRect() const
 // --> #i70122#
 const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 {
-    bool bGroupShape = PTR_CAST(SdrObjGroup, GetDrawObj());
+    bool bGroupShape = dynamic_cast<const SdrObjGroup*>( GetDrawObj() );
     // Resize objects with relative width or height
     if ( !bGroupShape && GetPageFrm( ) && ( GetDrawObj( )->GetRelativeWidth( ) || GetDrawObj()->GetRelativeHeight( ) ) )
     {

@@ -433,17 +433,17 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 aRect.SetPos(aInsPos);
                 pObj->SetLogicRect(aRect);
 
-                if ( pObj->ISA(SdrUnoObj) )
+                if ( dynamic_cast<const SdrUnoObj*>( pObj) !=  nullptr )
                     pObj->NbcSetLayer(SC_LAYER_CONTROLS);
                 else
                     pObj->NbcSetLayer(SC_LAYER_FRONT);
-                if (pObj->ISA(SdrObjGroup))
+                if (dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr)
                 {
                     SdrObjListIter aIter( *pObj, IM_DEEPWITHGROUPS );
                     SdrObject* pSubObj = aIter.Next();
                     while (pSubObj)
                     {
-                        if ( pSubObj->ISA(SdrUnoObj) )
+                        if ( dynamic_cast<const SdrUnoObj*>( pSubObj) !=  nullptr )
                             pSubObj->NbcSetLayer(SC_LAYER_CONTROLS);
                         else
                             pSubObj->NbcSetLayer(SC_LAYER_FRONT);
@@ -510,7 +510,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->ISA(SdrUnoObj) )
+                    if ( dynamic_cast<const SdrUnoObj*>( pObject) !=  nullptr )
                         pObject->NbcSetLayer(SC_LAYER_CONTROLS);
                     else
                         pObject->NbcSetLayer(SC_LAYER_FRONT);

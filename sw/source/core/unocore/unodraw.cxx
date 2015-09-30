@@ -304,7 +304,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) 
     throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< drawing::XShape >  xRet;
-    if(pObj->ISA(SwVirtFlyDrawObj) || pObj->GetObjInventor() == SWGInventor)
+    if(dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr || pObj->GetObjInventor() == SWGInventor)
     {
         SwFlyDrawContact* pFlyContact = static_cast<SwFlyDrawContact*>(pObj->GetUserCall());
         if(pFlyContact)
@@ -360,7 +360,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) 
             uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
             xRet = 0;
             uno::Reference< beans::XPropertySet >  xPrSet;
-            if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || (pObj->ISA(E3dScene))) )
+            if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || (dynamic_cast<const E3dScene*>( pObj) !=  nullptr)) )
                 xPrSet = new SwXGroupShape( xCreate );
             else
                 xPrSet = new SwXShape( xCreate );
@@ -2181,7 +2181,7 @@ void SwXShape::dispose() throw( uno::RuntimeException, std::exception )
         // a 'virtual' drawing object.
         // correct assertion and refine it for safety reason.
         OSL_ENSURE( !pObj ||
-                pObj->ISA(SwDrawVirtObj) ||
+                dynamic_cast<const SwDrawVirtObj*>( pObj) !=  nullptr ||
                 pObj->GetUpGroup() ||
                 pObj == pFormat->FindSdrObject(),
                 "<SwXShape::dispose(..) - different 'master' drawing objects!!" );
@@ -2190,7 +2190,7 @@ void SwXShape::dispose() throw( uno::RuntimeException, std::exception )
         // no delete of draw format for members
         // of a group
         if ( pObj &&
-             !pObj->ISA(SwDrawVirtObj) &&
+             dynamic_cast<const SwDrawVirtObj*>( pObj) ==  nullptr &&
              !pObj->GetUpGroup() &&
              pObj->IsInserted() )
         {
@@ -2342,7 +2342,7 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
                 {
                     bApplyPosAtDrawObj = true;
                     if ( pObj->GetUserCall() &&
-                         pObj->GetUserCall()->ISA(SwDrawContact) )
+                         dynamic_cast<const SwDrawContact*>( pObj->GetUserCall()) !=  nullptr )
                     {
                         bNoAdjustOfPosProp = true;
                     }

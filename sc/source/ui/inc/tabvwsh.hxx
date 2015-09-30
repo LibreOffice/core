@@ -89,7 +89,7 @@ enum ObjectSelectionType
     OST_Media
 };
 
-class ScTabViewShell: public SfxViewShell, public ScDBFunc
+class SC_DLLPUBLIC ScTabViewShell: public SfxViewShell, public ScDBFunc
 {
 private:
     SvxHtmlOptions          aHTMLOpt;
@@ -220,7 +220,7 @@ protected:
     virtual SdrView* GetDrawView() const SAL_OVERRIDE;
 
 public:
-                    TYPEINFO_VISIBILITY_OVERRIDE(SC_DLLPUBLIC);
+                    TYPEINFO_OVERRIDE();
                     SFX_DECL_INTERFACE(SCID_TABVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScTabViewShell);
 
@@ -236,7 +236,7 @@ public:
 
     virtual         ~ScTabViewShell();
 
-    SC_DLLPUBLIC vcl::Window* GetDialogParent();
+    vcl::Window* GetDialogParent();
 
     bool            IsRefInputMode() const;
     void            ExecuteInputDirect();
@@ -252,8 +252,8 @@ public:
     ::editeng::SvxBorderLine*   GetDefaultFrameLine() const { return pCurFrameLine; }
     void            SetDefaultFrameLine(const ::editeng::SvxBorderLine* pLine );
 
-    SC_DLLPUBLIC void           Execute( SfxRequest& rReq );
-    SC_DLLPUBLIC void           GetState( SfxItemSet& rSet );
+    void           Execute( SfxRequest& rReq );
+    void           GetState( SfxItemSet& rSet );
 
     void            ExecuteTable( SfxRequest& rReq );
     void            GetStateTable( SfxItemSet& rSet );
@@ -340,7 +340,7 @@ public:
 
     void            DeactivateOle();
 
-    SC_DLLPUBLIC static ScTabViewShell* GetActiveViewShell();
+    static ScTabViewShell* GetActiveViewShell();
     VclPtr<SfxModelessDialog> CreateRefDialog( SfxBindings* pB, SfxChildWindow* pCW,
                                                SfxChildWinInfo* pInfo,
                                                vcl::Window* pParent, sal_uInt16 nSlotId );

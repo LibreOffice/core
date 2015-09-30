@@ -1510,13 +1510,13 @@ short MSWordExportBase::GetDefaultFrameDirection( ) const
         {
             nDir = TrueFrameDirection( *static_cast< const SwFrameFormat * >(m_pOutFormatNode) );
         }
-        else if ( m_pOutFormatNode->ISA( SwContentNode ) )    //pagagraph
+        else if ( dynamic_cast< const SwContentNode *>( m_pOutFormatNode ) !=  nullptr )    //pagagraph
         {
             const SwContentNode *pNd = static_cast<const SwContentNode *>(m_pOutFormatNode);
             SwPosition aPos( *pNd );
             nDir = m_pDoc->GetTextDirection( aPos );
         }
-        else if ( m_pOutFormatNode->ISA( SwTextFormatColl ) )
+        else if ( dynamic_cast< const SwTextFormatColl *>( m_pOutFormatNode ) !=  nullptr )
         {
             if ( MsLangId::isRightToLeft( static_cast<LanguageType>(GetAppLanguage())) )
                 nDir = FRMDIR_HORI_RIGHT_TOP;

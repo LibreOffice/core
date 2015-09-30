@@ -175,13 +175,13 @@ void ScUndoCursorAttr::Redo()
 
 void ScUndoCursorAttr::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->ApplySelectionPattern( *pApplyPattern );
 }
 
 bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoEnterData::Value::Value() : mnTab(-1), mbHasFormat(false), mnFormat(0) {}
@@ -313,7 +313,7 @@ void ScUndoEnterData::Redo()
 
 void ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         OUString aTemp = maNewString;
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->EnterDataAtCursor( aTemp );
@@ -322,7 +322,7 @@ void ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoEnterValue::ScUndoEnterValue(
@@ -559,7 +559,7 @@ void ScUndoPageBreak::Redo()
 
 void ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
@@ -572,7 +572,7 @@ void ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoPageBreak::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoPrintZoom::ScUndoPrintZoom( ScDocShell* pNewDocShell,
@@ -632,7 +632,7 @@ void ScUndoPrintZoom::Redo()
 
 void ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         ScViewData& rViewData = rViewShell.GetViewData();
@@ -642,7 +642,7 @@ void ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoThesaurus::ScUndoThesaurus(
@@ -717,13 +717,13 @@ void ScUndoThesaurus::Redo()
 
 void ScUndoThesaurus::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DoThesaurus();
 }
 
 bool ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,

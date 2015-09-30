@@ -573,7 +573,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         {
             SfxItemSet aSet = CreateInsertFrameItemSet(aMgr);
 
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, GetView().GetDocShell()));
+            FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( GetView().GetDocShell()) != nullptr );
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
@@ -989,7 +989,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         aChars = static_cast<const SfxStringItem*>(pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
         pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
-        const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+        const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
         if ( pFontItem )
             aFontName = pFontItem->GetValue();
     }

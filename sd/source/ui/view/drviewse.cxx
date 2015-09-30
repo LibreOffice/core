@@ -266,7 +266,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             if(pDescriptorItem)
             {
                 // get the form view
-                FmFormView* pFormView = PTR_CAST(FmFormView, mpDrawView);
+                FmFormView* pFormView = dynamic_cast<FmFormView*>( mpDrawView );
                 SdrPageView* pPageView = pFormView ? pFormView->GetSdrPageView() : NULL;
 
                 if(pPageView)
@@ -348,7 +348,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
                 while (i < nMarkCnt && !b3DObjMarked)
                 {
-                    if (rMarkList.GetMark(i)->GetMarkedSdrObj()->ISA(E3dObject))
+                    if (0 != dynamic_cast< E3dObject *>( rMarkList.GetMark(i)->GetMarkedSdrObj() ))
                     {
                         b3DObjMarked = true;
                     }

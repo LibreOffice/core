@@ -1041,7 +1041,7 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
                 ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
 
             sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
-            if ( !bPrn && pShell->ISA( SwCrsrShell ) && (
+            if ( !bPrn && dynamic_cast< const SwCrsrShell *>( pShell ) !=  nullptr && (
                     (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
                     pOLENd->GetOLEObj().GetObject().IsGLChart()))
             {

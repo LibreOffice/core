@@ -70,13 +70,13 @@ sal_uIntPtr OIndexIterator::Find(bool bFirst)
         ONDXKey* pKey = GetNextKey();
         nRes = pKey ? pKey->GetRecord() : NODE_NOTFOUND;
     }
-    else if (m_pOperator->IsA(TYPE(OOp_ISNOTNULL)))
+    else if (dynamic_cast<const OOp_ISNOTNULL *>(m_pOperator) != nullptr)
         nRes = GetNotNull(bFirst);
-    else if (m_pOperator->IsA(TYPE(OOp_ISNULL)))
+    else if (dynamic_cast<const OOp_ISNULL *>(m_pOperator) != nullptr)
         nRes = GetNull(bFirst);
-    else if (m_pOperator->IsA(TYPE(OOp_LIKE)))
+    else if (dynamic_cast<const OOp_LIKE *>(m_pOperator) != nullptr)
         nRes = GetLike(bFirst);
-    else if (m_pOperator->IsA(TYPE(OOp_COMPARE)))
+    else if (dynamic_cast<const OOp_COMPARE *>(m_pOperator) != nullptr)
         nRes = GetCompare(bFirst);
 
     return nRes;

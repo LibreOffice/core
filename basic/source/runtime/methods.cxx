@@ -4439,11 +4439,11 @@ RTLFUNC(Load)
     SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     if ( pObj )
     {
-        if( pObj->IsA( TYPE( SbUserFormModule ) ) )
+        if( dynamic_cast<const SbUserFormModule *>(pObj) != nullptr )
         {
             static_cast<SbUserFormModule*>(pObj)->Load();
         }
-        else if( pObj->IsA( TYPE( SbxObject ) ) )
+        else if( dynamic_cast<const SbxObject *>(pObj) != nullptr )
         {
             SbxVariable* pVar = static_cast<SbxObject*>(pObj)->Find( OUString("Load"), SbxCLASS_METHOD );
             if( pVar )
@@ -4470,12 +4470,12 @@ RTLFUNC(Unload)
     SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     if ( pObj )
     {
-        if( pObj->IsA( TYPE( SbUserFormModule ) ) )
+        if( dynamic_cast<const SbUserFormModule *>(pObj) != nullptr )
         {
             SbUserFormModule* pFormModule = static_cast<SbUserFormModule*>(pObj);
             pFormModule->Unload();
         }
-        else if( pObj->IsA( TYPE( SbxObject ) ) )
+        else if( dynamic_cast<const SbxObject *>(pObj) != nullptr )
         {
             SbxVariable* pVar = static_cast<SbxObject*>(pObj)->Find( OUString("Unload"), SbxCLASS_METHOD );
             if( pVar )
@@ -4524,7 +4524,7 @@ RTLFUNC(SavePicture)
     }
 
     SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
-    if( pObj->IsA( TYPE( SbStdPicture ) ) )
+    if( dynamic_cast<const SbStdPicture *>(pObj) != nullptr )
     {
         SvFileStream aOStream( rPar.Get(2)->GetOUString(), StreamMode::WRITE | StreamMode::TRUNC );
         Graphic aGraphic = static_cast<SbStdPicture*>(pObj)->GetGraphic();

@@ -43,7 +43,7 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
         case SID_CURRENTCELL:
             if ( pItem )
             {
-                const SfxStringItem* pCellPosItem = PTR_CAST(SfxStringItem, pItem);
+                const SfxStringItem* pCellPosItem = dynamic_cast<const SfxStringItem*>( pItem );
 
                 OSL_ENSURE( pCellPosItem, "SfxStringItem expected!" );
 
@@ -65,7 +65,7 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
         case SID_CURRENTTAB:
             if ( pItem )
             {
-                const SfxUInt16Item* pTabItem = PTR_CAST(SfxUInt16Item, pItem);
+                const SfxUInt16Item* pTabItem = dynamic_cast< const SfxUInt16Item *>( pItem );
 
                 OSL_ENSURE( pTabItem, "SfxUInt16Item expected!" );
 

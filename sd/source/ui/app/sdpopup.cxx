@@ -55,7 +55,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
     InsertItem( nID++, SD_RESSTR( STR_VAR ), nStyle );
     InsertSeparator();
 
-    if( pField->ISA( SvxDateField ) )
+    if( dynamic_cast< const SvxDateField *>( pField ) !=  nullptr )
     {
         const SvxDateField* pDateField = static_cast<const SvxDateField*>( pField );
         SvxDateField aDateField( *pDateField );
@@ -87,7 +87,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 
         CheckItem( (sal_uInt16) ( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !
     }
-    else if( pField->ISA( SvxExtTimeField ) )
+    else if( dynamic_cast< const SvxExtTimeField *>( pField ) !=  nullptr )
     {
         const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( pField );
         SvxExtTimeField aTimeField( *pTimeField );
@@ -121,7 +121,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 
         CheckItem( (sal_uInt16) ( pTimeField->GetFormat() ) + 1 ); // - 2 + 3 !
     }
-    else if( pField->ISA( SvxExtFileField ) )
+    else if( dynamic_cast< const SvxExtFileField *>( pField ) !=  nullptr )
     {
         const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>(pField);
         //SvxExtFileField aFileField( *pFileField );
@@ -138,7 +138,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 
         CheckItem( (sal_uInt16) ( pFileField->GetFormat() ) + 3 );
     }
-    else if( pField->ISA( SvxAuthorField ) )
+    else if( dynamic_cast< const SvxAuthorField *>( pField ) !=  nullptr )
     {
         const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>(pField);
         SvxAuthorField aAuthorField( *pAuthorField );
@@ -166,7 +166,7 @@ SvxFieldData* SdFieldPopup::GetField()
     SvxFieldData* pNewField = NULL;
     sal_uInt16 nCount = GetItemCount();
 
-    if( pField->ISA( SvxDateField ) )
+    if( dynamic_cast< const SvxDateField *>( pField ) !=  nullptr )
     {
         const SvxDateField* pDateField = static_cast<const SvxDateField*>(pField);
         SvxDateType   eType;
@@ -199,7 +199,7 @@ SvxFieldData* SdFieldPopup::GetField()
             }
         }
     }
-    else if( pField->ISA( SvxExtTimeField ) )
+    else if( dynamic_cast< const SvxExtTimeField *>( pField ) !=  nullptr )
     {
         const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>(pField);
         SvxTimeType   eType;
@@ -233,7 +233,7 @@ SvxFieldData* SdFieldPopup::GetField()
 
         }
     }
-    else if( pField->ISA( SvxExtFileField ) )
+    else if( dynamic_cast< const SvxExtFileField *>( pField ) !=  nullptr )
     {
         const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>(pField);
         SvxFileType   eType;
@@ -255,8 +255,7 @@ SvxFieldData* SdFieldPopup::GetField()
         if( pFileField->GetFormat() != eFormat ||
             pFileField->GetType() != eType )
         {
-            ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell,
-                SfxObjectShell::Current() );
+            ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell* >( SfxObjectShell::Current() );
 
             if( pDocSh )
             {
@@ -273,7 +272,7 @@ SvxFieldData* SdFieldPopup::GetField()
             }
         }
     }
-    else if( pField->ISA( SvxAuthorField ) )
+    else if( dynamic_cast< const SvxAuthorField *>( pField ) !=  nullptr )
     {
         const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>(pField);
         SvxAuthorType   eType;

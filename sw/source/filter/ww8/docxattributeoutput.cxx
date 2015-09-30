@@ -4516,7 +4516,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
     if (!pObject || pObject->GetObjInventor() != FmFormInventor)
         return;
 
-    SdrUnoObj *pFormObj = const_cast<SdrUnoObj*>(PTR_CAST(SdrUnoObj,pObject));
+    SdrUnoObj *pFormObj = const_cast<SdrUnoObj*>(dynamic_cast< const SdrUnoObj*>(pObject));
     if (!pFormObj)
         return;
 

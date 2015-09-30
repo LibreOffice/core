@@ -1251,7 +1251,7 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
                 bool bDoThis = true;
                 if ( eWhat != SC_DET_ALL )
                 {
-                    bool bCircle = ( pObject->ISA(SdrCircObj) );
+                    bool bCircle = ( dynamic_cast<const SdrCircObj*>( pObject) !=  nullptr );
                     bool bCaption = ScDrawLayer::IsNoteCaption( pObject );
                     if ( eWhat == SC_DET_DETECTIVE )        // detektive, from menue
                         bDoThis = !bCaption;                // also circles
@@ -1502,7 +1502,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
                     {
                         //  frame for area reference has no ObjType, always gets arrow color
 
-                        if ( pObject->ISA( SdrRectObj ) && !pObject->ISA( SdrCaptionObj ) )
+                        if ( dynamic_cast<const SdrRectObj*>( pObject) != nullptr && dynamic_cast<const SdrCaptionObj*>( pObject) ==  nullptr )
                         {
                             bArrow = true;
                         }
@@ -1544,7 +1544,7 @@ bool ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
         {
             SdrObject* pPrevObj = pPage->GetObj(nOrdNum - 1);
 
-            if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && pPrevObj->ISA(SdrRectObj) )
+            if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && dynamic_cast<const SdrRectObj*>( pPrevObj) !=  nullptr )
             {
                 ScDrawObjData* pPrevData = ScDrawLayer::GetObjDataTab( pPrevObj, rRange.aStart.Tab() );
                 if ( pPrevData && pPrevData->maStart.IsValid() && pPrevData->maEnd.IsValid() && (pPrevData->maStart == rRange.aStart) )
@@ -1596,7 +1596,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
                 if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
                     rRedLine = true;
             }
-            else if ( pObject->ISA(SdrCircObj) )
+            else if ( dynamic_cast<const SdrCircObj*>( pObject) !=  nullptr )
             {
                 if ( bValidStart )
                 {

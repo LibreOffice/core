@@ -114,7 +114,7 @@ namespace sd {
 
 bool ViewShell::IsPageFlipMode() const
 {
-    return this->ISA(DrawViewShell) && mpContentWindow.get() != NULL &&
+    return dynamic_cast< const DrawViewShell *>( this ) !=  nullptr && mpContentWindow.get() != NULL &&
         mpContentWindow->GetVisibleHeight() >= 1.0;
 }
 

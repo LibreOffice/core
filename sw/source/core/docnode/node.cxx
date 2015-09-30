@@ -670,9 +670,9 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
                     static_cast<const SwFormatPageDesc*>(pItem)->GetDefinedIn() )
                 {
                     const SwModify* pMod = static_cast<const SwFormatPageDesc*>(pItem)->GetDefinedIn();
-                    if( pMod->ISA( SwContentNode ) )
+                    if( dynamic_cast<const SwContentNode*>( pMod) !=  nullptr )
                         aInfo.CheckNode( *static_cast<const SwContentNode*>(pMod) );
-                    else if( pMod->ISA( SwFormat ))
+                    else if( dynamic_cast<const SwFormat*>( pMod) !=  nullptr)
                         static_cast<const SwFormat*>(pMod)->GetInfo( aInfo );
                 }
             }

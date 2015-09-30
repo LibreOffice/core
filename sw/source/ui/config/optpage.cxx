@@ -1947,13 +1947,12 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
        nOldMarkMode != pOpt->GetMarkAlignMode())
     {
         // update all documents
-        TypeId aType(TYPE(SwDocShell));
-        SwDocShell* pDocShell = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(&aType));
+        SwDocShell* pDocShell = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<SwDocShell>));
 
         while( pDocShell )
         {
             pDocShell->GetWrtShell()->UpdateRedlineAttr();
-            pDocShell = static_cast<SwDocShell*>(SfxObjectShell::GetNext(*pDocShell, &aType));
+            pDocShell = static_cast<SwDocShell*>(SfxObjectShell::GetNext(*pDocShell, checkSfxObjectShell<SwDocShell>));
         }
     }
 

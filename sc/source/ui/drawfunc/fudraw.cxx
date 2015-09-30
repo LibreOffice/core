@@ -186,7 +186,7 @@ bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEvent* pInitialKey )
 {
     bool bReturn = false;
-    if ( pObj && pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
+    if ( pObj && dynamic_cast<const SdrTextObj*>( pObj) != nullptr && dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr )
     {
         // start text edit - like FuSelection::MouseButtonUp,
         // but with bCursorToEnd instead of mouse position
@@ -269,7 +269,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                    if( pObj && pObj->ISA( SdrOle2Obj ) && !bOle )
+                    if( pObj && dynamic_cast<const SdrOle2Obj*>( pObj) !=  nullptr && !bOle )
                     {
                         pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
 

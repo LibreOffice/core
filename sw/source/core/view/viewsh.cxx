@@ -329,7 +329,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             // e.g. additional mode, page half visible vertically, in the
             // middle a selection and with an other cursor jump to left
             // right border. Without ShowCrsr the selection disappears.
-            bool bShowCrsr = pRegion && IsA( TYPE(SwCrsrShell) );
+            bool bShowCrsr = pRegion && dynamic_cast<const SwCrsrShell*>(this) !=  nullptr;
             if( bShowCrsr )
                 static_cast<SwCrsrShell*>(this)->HideCrsrs();
 
@@ -655,7 +655,7 @@ void SwViewShell::UpdateFields(bool bCloseDB)
 {
     SET_CURR_SHELL( this );
 
-    bool bCrsr = ISA(SwCrsrShell);
+    bool bCrsr = dynamic_cast<const SwCrsrShell*>( this ) !=  nullptr;
     if ( bCrsr )
         static_cast<SwCrsrShell*>(this)->StartAction();
     else
@@ -732,7 +732,7 @@ void SwViewShell::LayoutIdle()
 
 static void lcl_InvalidateAllContent( SwViewShell& rSh, sal_uInt8 nInv )
 {
-    bool bCrsr = rSh.ISA(SwCrsrShell);
+    bool bCrsr = dynamic_cast<const SwCrsrShell*>( &rSh) !=  nullptr;
     if ( bCrsr )
         static_cast<SwCrsrShell&>(rSh).StartAction();
     else
@@ -752,7 +752,7 @@ static void lcl_InvalidateAllContent( SwViewShell& rSh, sal_uInt8 nInv )
  */
 static void lcl_InvalidateAllObjPos( SwViewShell &_rSh )
 {
-    const bool bIsCrsrShell = _rSh.ISA(SwCrsrShell);
+    const bool bIsCrsrShell = dynamic_cast<const SwCrsrShell*>( &_rSh) !=  nullptr;
     if ( bIsCrsrShell )
         static_cast<SwCrsrShell&>(_rSh).StartAction();
     else
@@ -1012,7 +1012,7 @@ void SwViewShell::SizeChgNotify()
     {
         mbDocSizeChgd = true;
 
-        if ( !Imp()->IsCalcLayoutProgress() && ISA( SwCrsrShell ) )
+        if ( !Imp()->IsCalcLayoutProgress() && dynamic_cast<const SwCrsrShell*>( this ) !=  nullptr )
         {
             const SwFrm *pCnt = static_cast<SwCrsrShell*>(this)->GetCurrFrm( false );
             const SwPageFrm *pPage;

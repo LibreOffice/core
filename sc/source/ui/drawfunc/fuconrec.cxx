@@ -129,7 +129,7 @@ bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 //  create OutlinerParaObject now so it can be set to vertical
-                if ( pObj->ISA(SdrTextObj) )
+                if ( dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr )
                     static_cast<SdrTextObj*>(pObj)->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if( pOPO && !pOPO->IsVertical() )
@@ -232,7 +232,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
         {
             case SID_DRAW_LINE:
             {
-                if(pObj->ISA(SdrPathObj))
+                if(dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr)
                 {
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
                     basegfx::B2DPolygon aPoly;
@@ -250,7 +250,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
             case SID_DRAW_CAPTION:
             case SID_DRAW_CAPTION_VERTICAL:
             {
-                if(pObj->ISA(SdrCaptionObj))
+                if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
                 {
                     bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
 

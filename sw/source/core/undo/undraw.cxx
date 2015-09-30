@@ -242,9 +242,9 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
         // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
         // #i45952# - notify that position attributes are already set
-        OSL_ENSURE( rSave.pFormat->ISA(SwDrawFrameFormat),
+        OSL_ENSURE( dynamic_cast< const SwDrawFrameFormat *>( rSave.pFormat ) !=  nullptr,
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
-        if ( rSave.pFormat->ISA(SwDrawFrameFormat) )
+        if ( dynamic_cast< const SwDrawFrameFormat *>( rSave.pFormat ) !=  nullptr )
         {
             static_cast<SwDrawFrameFormat*>(rSave.pFormat)->PosAttrSet();
         }
@@ -289,9 +289,9 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     // #i45718# - follow-up of #i35635# move object to visible layer
     pContact->MoveObjToVisibleLayer( pObjArr->pObj );
     // #i45952# - notify that position attributes are already set
-    OSL_ENSURE( pObjArr->pFormat->ISA(SwDrawFrameFormat),
+    OSL_ENSURE( dynamic_cast< const SwDrawFrameFormat *>( pObjArr->pFormat ) !=  nullptr,
             "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
-    if ( pObjArr->pFormat->ISA(SwDrawFrameFormat) )
+    if ( dynamic_cast< const SwDrawFrameFormat *>( pObjArr->pFormat ) !=  nullptr )
     {
         static_cast<SwDrawFrameFormat*>(pObjArr->pFormat)->PosAttrSet();
     }
@@ -387,9 +387,9 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     // #i45718# - follow-up of #i35635# move object to visible layer
     pContact->MoveObjToVisibleLayer( pObjArr->pObj );
     // #i45952# - notify that position attributes are already set
-    OSL_ENSURE( pObjArr->pFormat->ISA(SwDrawFrameFormat),
+    OSL_ENSURE( dynamic_cast< const SwDrawFrameFormat *>( pObjArr->pFormat ) !=  nullptr,
             "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
-    if ( pObjArr->pFormat->ISA(SwDrawFrameFormat) )
+    if ( dynamic_cast< const SwDrawFrameFormat *>( pObjArr->pFormat ) !=  nullptr )
     {
         static_cast<SwDrawFrameFormat*>(pObjArr->pFormat)->PosAttrSet();
     }
@@ -426,9 +426,9 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
         rFlyFormats.push_back( rSave.pFormat );
 
         // #i45952# - notify that position attributes are already set
-        OSL_ENSURE( rSave.pFormat->ISA(SwDrawFrameFormat),
+        OSL_ENSURE( dynamic_cast< const SwDrawFrameFormat *>( rSave.pFormat ) !=  nullptr,
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
-        if ( rSave.pFormat->ISA(SwDrawFrameFormat) )
+        if ( dynamic_cast< const SwDrawFrameFormat *>( rSave.pFormat ) !=  nullptr )
         {
             static_cast<SwDrawFrameFormat*>(rSave.pFormat)->PosAttrSet();
         }
@@ -526,9 +526,9 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
         // #i45952# - notify that position attributes are already set
-        OSL_ENSURE( rSave.pFormat->ISA(SwDrawFrameFormat),
+        OSL_ENSURE( dynamic_cast< const SwDrawFrameFormat *>( rSave.pFormat ) !=  nullptr,
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
-        if ( rSave.pFormat->ISA(SwDrawFrameFormat) )
+        if ( dynamic_cast< const SwDrawFrameFormat *>( rSave.pFormat ) !=  nullptr )
         {
             static_cast<SwDrawFrameFormat*>(rSave.pFormat)->PosAttrSet();
         }

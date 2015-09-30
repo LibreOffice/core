@@ -159,14 +159,14 @@ void ScUndoInsertTab::Redo()
 
 void ScUndoInsertTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData().GetDispatcher().
             Execute(FID_INS_TABLE, SfxCallMode::SLOT | SfxCallMode::RECORD);
 }
 
 bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
@@ -254,14 +254,14 @@ void ScUndoInsertTables::Redo()
 
 void ScUndoInsertTables::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData().GetDispatcher().
             Execute(FID_INS_TABLE, SfxCallMode::SLOT | SfxCallMode::RECORD);
 }
 
 bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell, const vector<SCTAB> &aTab,
@@ -412,7 +412,7 @@ void ScUndoDeleteTab::Redo()
 
 void ScUndoDeleteTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScTabViewShell* pViewShell = static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         pViewShell->DeleteTable( pViewShell->GetViewData().GetTabNo() );
@@ -421,7 +421,7 @@ void ScUndoDeleteTab::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoDeleteTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoRenameTab::ScUndoRenameTab( ScDocShell* pNewDocShell,
@@ -866,7 +866,7 @@ void ScUndoMakeScenario::Redo()
 
 void ScUndoMakeScenario::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->MakeScenario( aName, aComment, aColor, nFlags );
     }
@@ -874,7 +874,7 @@ void ScUndoMakeScenario::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoMakeScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoImportTab::ScUndoImportTab( ScDocShell* pShell,
@@ -1023,14 +1023,14 @@ void ScUndoImportTab::Redo()
 
 void ScUndoImportTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData().GetDispatcher().
             Execute(FID_INS_TABLE, SfxCallMode::SLOT | SfxCallMode::RECORD);
 }
 
 bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const OUString& rDocName ) :
@@ -1156,7 +1156,7 @@ void ScUndoShowHideTab::Redo()
 
 void ScUndoShowHideTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData().GetDispatcher().
             Execute( bShow ? FID_TABLE_SHOW : FID_TABLE_HIDE,
                                 SfxCallMode::SLOT | SfxCallMode::RECORD);
@@ -1164,7 +1164,7 @@ void ScUndoShowHideTab::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoShowHideTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 OUString ScUndoShowHideTab::GetComment() const
@@ -1563,14 +1563,14 @@ void ScUndoLayoutRTL::Redo()
 
 void ScUndoLayoutRTL::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData().GetDispatcher().
             Execute( FID_TAB_RTL, SfxCallMode::SLOT | SfxCallMode::RECORD);
 }
 
 bool ScUndoLayoutRTL::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 OUString ScUndoLayoutRTL::GetComment() const

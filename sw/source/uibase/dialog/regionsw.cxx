@@ -221,7 +221,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
                 OSL_ENSURE(pFact, "Dialog creation failed!");
                 std::unique_ptr<AbstractEditRegionDlg> pEditRegionDlg(pFact->CreateEditRegionDlg(pParentWin, rWrtShell));
                 OSL_ENSURE(pEditRegionDlg, "Dialog creation failed!");
-                if(pItem && pItem->ISA(SfxStringItem))
+                if(pItem && dynamic_cast< const SfxStringItem *>( pItem ) !=  nullptr)
                 {
                     pEditRegionDlg->SelectSection(static_cast<const SfxStringItem*>(pItem)->GetValue());
                 }

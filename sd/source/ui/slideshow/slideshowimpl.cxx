@@ -691,7 +691,7 @@ void SAL_CALL SlideshowImpl::disposing()
     }
 
     // show current window again
-    if( mpViewShell && !mpViewShell->ISA(PresentationViewShell))
+    if( mpViewShell && dynamic_cast< PresentationViewShell *>( mpViewShell ) ==  nullptr)
     {
         if( meAnimationMode == ANIMATIONMODE_SHOW )
         {
@@ -1624,7 +1624,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
     {
         // todo, better do it async?
         SdrObject* pObj = GetSdrObjectFromXShape( xShape );
-        SdrOle2Obj* pOleObject = PTR_CAST(SdrOle2Obj, pObj);
+        SdrOle2Obj* pOleObject = dynamic_cast< SdrOle2Obj* >(pObj);
         if (pOleObject && mpViewShell )
             mpViewShell->ActivateObject(pOleObject, pEvent->mnVerb);
     }

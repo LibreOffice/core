@@ -747,7 +747,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
     SwPaM *pTmpCrsr = pCurCrsr, *pSaveCrsr = pCurCrsr;
 
     // only create progress bar for ShellCrsr
-    bool bIsUnoCrsr = 0 != dynamic_cast<SwUnoCrsr*>(pCurCrsr);
+    bool bIsUnoCrsr = dynamic_cast<SwUnoCrsr*>(pCurCrsr) !=  nullptr;
     _PercentHdl* pPHdl = 0;
     sal_uInt16 nCrsrCnt = 0;
     if( FND_IN_SEL & eFndRngs )

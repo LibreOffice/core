@@ -56,8 +56,8 @@ SwTableHeightDlg::SwTableHeightDlg(vcl::Window *pParent, SwWrtShell &rS)
     get(m_pHeightEdit, "heightmf");
     get(m_pAutoHeightCB, "fit");
 
-    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( 0 != PTR_CAST( SwWebDocShell,
-                                rSh.GetView().GetDocShell() ) )->GetMetric();
+    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( dynamic_cast< const SwWebDocShell*>(
+                                rSh.GetView().GetDocShell() ) != nullptr  )->GetMetric();
     ::SetFieldUnit(*m_pHeightEdit, eFieldUnit);
 
     m_pHeightEdit->SetMin(MINLAY, FUNIT_TWIP);

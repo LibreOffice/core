@@ -1264,7 +1264,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         // drop as if from external
         const SwFrameFormat* pSwFrameFormat = rSh.GetFormatFromObj(*pPt);
 
-        if(pSwFrameFormat && 0 != dynamic_cast< const SwDrawFrameFormat* >(pSwFrameFormat))
+        if(pSwFrameFormat && dynamic_cast< const SwDrawFrameFormat* >(pSwFrameFormat) !=  nullptr)
         {
             bPrivateDrop = false;
             bNeedToSelectBeforePaste = true;
@@ -1601,7 +1601,7 @@ SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh,
         break;
 
     case OBJCNT_FLY:
-        if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+        if( dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) != nullptr  )
             nRet = SotExchangeDest::DOC_TEXTFRAME_WEB;
         else
             nRet = SotExchangeDest::DOC_TEXTFRAME;
@@ -1616,7 +1616,7 @@ SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh,
     // what do we do at multiple selections???
     default:
         {
-            if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+            if( dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) != nullptr  )
                 nRet = SotExchangeDest::SWDOC_FREE_AREA_WEB;
             else
                 nRet = SotExchangeDest::SWDOC_FREE_AREA;
@@ -2354,7 +2354,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         lclCheckAndPerformRotation(aGraphic);
 
         OUString sURL;
-        if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell)
+        if( dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) != nullptr
             // #i123922# if link action is noted, also take URL
             || DND_ACTION_LINK == nDropAction)
         {
@@ -2581,7 +2581,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                 OUString sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link<OUString *, bool>(), false );
                 const SfxFilter* pFlt = SwPasteSdr::SetAttr == nAction
                         ? 0 : SwIoSystem::GetFileFilter(sFileURL);
-                if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+                if( pFlt && dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) == nullptr )
                 {
                 // and then pull up the insert-region-dialog by PostUser event
                     SwSectionData * pSect = new SwSectionData(
@@ -2658,7 +2658,7 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
         if ( SotClipboardFormatId::XFORMS == nFormat )
         {
             rSh.MakeDrawView();
-            FmFormView* pFmView = PTR_CAST( FmFormView, rSh.GetDrawView() );
+            FmFormView* pFmView = dynamic_cast<FmFormView*>( rSh.GetDrawView()  );
             if(pFmView) {
                 const OXFormsDescriptor &rDesc = OXFormsTransferable::extractDescriptor(rData);
                 SdrObject* pObj = pFmView->CreateXFormsControl(rDesc);
@@ -2714,7 +2714,7 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
         else
         {
             rSh.MakeDrawView();
-            FmFormView* pFmView = PTR_CAST( FmFormView, rSh.GetDrawView() );
+            FmFormView* pFmView = dynamic_cast<FmFormView*>( rSh.GetDrawView()  );
             if (pFmView && bHaveColumnDescriptor)
             {
                 SdrObject* pObj = pFmView->CreateFieldControl( OColumnTransferable::extractColumnDescriptor(rData) );
@@ -3806,8 +3806,7 @@ void SwTrnsfrDdeLink::Disconnect( bool bRemoveDataAdvise )
 
 bool SwTrnsfrDdeLink::FindDocShell()
 {
-    TypeId aType( TYPE( SwDocShell ) );
-    SfxObjectShell* pTmpSh = SfxObjectShell::GetFirst( &aType );
+    SfxObjectShell* pTmpSh = SfxObjectShell::GetFirst( checkSfxObjectShell<SwDocShell> );
     while( pTmpSh )
     {
         if( pTmpSh == pDocShell )       // that's what we want to have
@@ -3816,7 +3815,7 @@ bool SwTrnsfrDdeLink::FindDocShell()
                 return true;
             break;      // the Doc is not there anymore, so leave!
         }
-        pTmpSh = SfxObjectShell::GetNext( *pTmpSh, &aType );
+        pTmpSh = SfxObjectShell::GetNext( *pTmpSh, checkSfxObjectShell<SwDocShell> );
     }
 
     pDocShell = 0;

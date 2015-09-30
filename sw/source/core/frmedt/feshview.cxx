@@ -98,7 +98,7 @@ SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh )
     if ( pLst && pLst->GetMarkCount() == 1 )
     {
         SdrObject *pO = pLst->GetMark( 0 )->GetMarkedSdrObj();
-        if ( pO && pO->ISA(SwVirtFlyDrawObj) )
+        if ( pO && dynamic_cast<const SwVirtFlyDrawObj*>( pO) !=  nullptr )
             return static_cast<SwVirtFlyDrawObj*>(pO)->GetFlyFrm();
     }
     return 0;
@@ -218,7 +218,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
         for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pTmpObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            bool bForget = pTmpObj->ISA(SwVirtFlyDrawObj);
+            bool bForget = dynamic_cast<const SwVirtFlyDrawObj*>( pTmpObj) !=  nullptr;
             if( bForget )
             {
                 pDView->UnmarkAll();
@@ -300,7 +300,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
     SwFrm* pOld;
     SwFlyFrm* pFly = NULL;
     SdrObject *pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
-    if( pObj->ISA(SwVirtFlyDrawObj) )
+    if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
     {
         pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
         pOld = pFly->AnchorFrm();
@@ -428,7 +428,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                     for( size_t i = 0; i<pPage->GetSortedObjs()->size(); ++i )
                     {
                         SwAnchoredObject* pAnchObj = (*pPage->GetSortedObjs())[i];
-                        if( pAnchObj->ISA(SwFlyFrm) )
+                        if( dynamic_cast<const SwFlyFrm*>( pAnchObj) !=  nullptr )
                         {
                             SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(pAnchObj);
                             if( pTmp == pOld )
@@ -638,7 +638,7 @@ void SwFEShell::StartCropImage()
         for ( size_t i = 0; i < rMarkList.GetMarkCount(); ++i )
         {
             SdrObject *pTmpObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-            bool bForget = pTmpObj->ISA(SwVirtFlyDrawObj);
+            bool bForget = dynamic_cast<const SwVirtFlyDrawObj*>( pTmpObj) !=  nullptr;
             if( bForget )
             {
                 pView->UnmarkAll();
@@ -714,7 +714,7 @@ long SwFEShell::EndDrag( const Point *, bool )
         for(SwViewShell& rSh : GetRingContainer())
         {
             rSh.EndAction();
-            if( rSh.IsA( TYPE( SwCrsrShell ) ) )
+            if( dynamic_cast<const SwCrsrShell *>(&rSh) != nullptr )
                 static_cast<SwCrsrShell*>(&rSh)->CallChgLnk();
         }
 
@@ -782,7 +782,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
         sal_Int16 aHori = text::HoriOrientation::NONE;
         SwRect aRect;
         SdrObject *pO = pLst->GetMark( j )->GetMarkedSdrObj();
-        if ( pO->ISA(SwVirtFlyDrawObj) )
+        if ( dynamic_cast<const SwVirtFlyDrawObj*>( pO) !=  nullptr )
         {
             SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pO)->GetFlyFrm();
 
@@ -813,7 +813,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
         for ( size_t i = 0; i < nCount; ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
-            if ( !pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast<const SwFlyFrm*>( pAnchoredObj) ==  nullptr )
                 continue;
 
             SwFlyFrm* pAct = static_cast<SwFlyFrm*>(pAnchoredObj);
@@ -941,7 +941,7 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
             {
                 pObj->SetLayer( nLayerId );
                 InvalidateWindows( SwRect( pObj->GetCurrentBoundRect() ) );
-                if ( pObj->ISA(SwVirtFlyDrawObj) )
+                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
                 {
                     SwFormat *pFormat = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetFormat();
                     SvxOpaqueItem aOpa( pFormat->GetOpaque() );
@@ -1203,7 +1203,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                 {
                     SdrObject *pCandidate = pPage->GetObj(a);
 
-                    if (pCandidate->ISA(SwVirtFlyDrawObj) &&
+                    if (dynamic_cast<const SwVirtFlyDrawObj*>( pCandidate) !=  nullptr &&
                        static_cast<SwVirtFlyDrawObj*>(pCandidate)->GetCurrentBoundRect().IsInside(rPt) )
                     {
                         bRet = false;
@@ -1225,9 +1225,9 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 static bool lcl_IsControlGroup( const SdrObject *pObj )
 {
     bool bRet = false;
-    if(pObj->ISA(SdrUnoObj))
+    if(dynamic_cast<const SdrUnoObj*>( pObj) !=  nullptr)
         bRet = true;
-    else if( pObj->ISA( SdrObjGroup ) )
+    else if( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
     {
         bRet = true;
         const SdrObjList *pLst = static_cast<const SdrObjGroup*>(pObj)->GetSubList();
@@ -1294,7 +1294,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
         if ( rMrkList.GetMarkCount() )
         {
             const SdrObject* pStartObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
-            if( pStartObj->ISA(SwVirtFlyDrawObj) )
+            if( dynamic_cast<const SwVirtFlyDrawObj*>( pStartObj) !=  nullptr )
                 aPos = static_cast<const SwVirtFlyDrawObj*>(pStartObj)->GetFlyFrm()->Frm().Pos();
             else
                 aPos = pStartObj->GetSnapRect().TopLeft();
@@ -1310,7 +1310,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
             // In this case we want to iterate over the group members.
             aPos = GetCharRect().Center();
             const SdrObject* pStartObj = pPV ? pPV->GetAktGroup() : 0;
-            if ( pStartObj && pStartObj->ISA( SdrObjGroup ) )
+            if ( pStartObj && dynamic_cast<const SdrObjGroup*>( pStartObj) !=  nullptr )
                 pList = pStartObj->GetSubList();
         }
 
@@ -1328,7 +1328,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
         while ( aObjIter.IsMore() )
         {
             SdrObject* pObj = aObjIter.Next();
-            bool bFlyFrm = pObj->ISA(SwVirtFlyDrawObj);
+            bool bFlyFrm = dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr;
             if( ( bNoFly && bFlyFrm ) ||
                 ( bNoDraw && !bFlyFrm ) ||
                 ( eType == GotoObjFlags::DrawSimple && lcl_IsControlGroup( pObj ) ) ||
@@ -1378,7 +1378,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                 while ( aTmpIter.IsMore() )
                 {
                     SdrObject* pTmpObj = aTmpIter.Next();
-                    bFlyFrm = pTmpObj->ISA(SwVirtFlyDrawObj);
+                    bFlyFrm = dynamic_cast<const SwVirtFlyDrawObj*>( pTmpObj) !=  nullptr;
                     if( ( bNoFly && bFlyFrm ) || ( bNoDraw && !bFlyFrm ) )
                         continue;
                     if( bFlyFrm )
@@ -1442,7 +1442,7 @@ bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
     if ( !pBest )
         return false;
 
-    bool bFlyFrm = pBest->ISA(SwVirtFlyDrawObj);
+    bool bFlyFrm = dynamic_cast<const SwVirtFlyDrawObj*>( pBest) !=  nullptr;
     if( bFlyFrm )
     {
         const SwVirtFlyDrawObj *pO = static_cast<const SwVirtFlyDrawObj*>(pBest);
@@ -1586,7 +1586,7 @@ bool SwFEShell::ImpEndCreate()
     SwFormatAnchor aAnch;
     const SwFrm *pAnch = 0;
     bool bCharBound = false;
-    if( rSdrObj.ISA( SdrUnoObj ) )
+    if( dynamic_cast<const SdrUnoObj*>( &rSdrObj) !=  nullptr )
     {
         SwPosition aPos( GetDoc()->GetNodes() );
         SwCrsrMoveState aState( MV_SETONLYTEXT );
@@ -1957,7 +1957,7 @@ bool SwFEShell::EndMark()
                 for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
                 {
                     SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-                    if( pObj->ISA(SwVirtFlyDrawObj) )
+                    if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
                     {
                         if ( !bShowHdl )
                         {
@@ -2007,7 +2007,7 @@ short SwFEShell::GetAnchorId() const
         for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            if ( pObj->ISA(SwVirtFlyDrawObj) )
+            if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
             {
                 nRet = -1;
                 break;
@@ -2178,7 +2178,7 @@ bool SwFEShell::IsGroupAllowed() const
             if ( bIsGroupAllowed )
             {
                 const SwFrm* pAnchorFrm = 0L;
-                if ( pObj->ISA(SwVirtFlyDrawObj) )
+                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
                 {
                     const SwFlyFrm* pFlyFrm =
                             static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
@@ -2361,7 +2361,7 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
                 nChk |= ( pObj->IsMoveProtect() ? FlyProtectFlags::Pos : FlyProtectFlags::NONE ) |
                         ( pObj->IsResizeProtect()? FlyProtectFlags::Size : FlyProtectFlags::NONE );
 
-                if( pObj->ISA(SwVirtFlyDrawObj) )
+                if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
                 {
                     SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
                     if ( (FlyProtectFlags::Content & eType) && pFly->GetFormat()->GetProtect().IsContentProtected() )
@@ -2395,7 +2395,7 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
                     return eType;
             }
             const SwFrm* pAnch;
-            if( pObj->ISA(SwVirtFlyDrawObj) )
+            if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
                 pAnch = static_cast<SwVirtFlyDrawObj*>( pObj )->GetFlyFrm()->GetAnchorFrm();
             else
             {
@@ -2572,7 +2572,7 @@ SwChainRet SwFEShell::Chainable( SwRect &rRect, const SwFrameFormat &rSource,
         const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
         if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE ) &&
-            pObj->ISA(SwVirtFlyDrawObj) )
+            dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
         {
             SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
             rRect = pFly->Frm();
@@ -2736,14 +2736,14 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
         }
         pObj->SetLogicRect(aRect);
 
-        if(pObj->ISA(SdrCircObj))
+        if(dynamic_cast<const SdrCircObj*>( pObj) !=  nullptr)
         {
             SfxItemSet aAttr(pDrawModel->GetItemPool());
             aAttr.Put(makeSdrCircStartAngleItem(9000));
             aAttr.Put(makeSdrCircEndAngleItem(0));
             pObj->SetMergedItemSet(aAttr);
         }
-        else if(pObj->ISA(SdrPathObj))
+        else if(dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr)
         {
             basegfx::B2DPolyPolygon aPoly;
 
@@ -2833,7 +2833,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
 
             static_cast<SdrPathObj*>(pObj)->SetPathPoly(aPoly);
         }
-        else if(pObj->ISA(SdrCaptionObj))
+        else if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
         {
             bool bVerticalText = ( SID_DRAW_TEXT_VERTICAL == nSlotId ||
                                             SID_DRAW_CAPTION_VERTICAL == nSlotId );
@@ -2850,7 +2850,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
             static_cast<SdrCaptionObj*>(pObj)->SetTailPos(
                 aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
         }
-        else if(pObj->ISA(SdrTextObj))
+        else if(dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
         {
             SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
             pText->SetLogicRect(aRect);
@@ -2914,8 +2914,8 @@ const Color SwFEShell::GetShapeBackgrd() const
             // get selected object
             const SdrObject *pSdrObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
             // check, if selected object is a shape (drawing object)
-            OSL_ENSURE( !pSdrObj->ISA(SwVirtFlyDrawObj), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
-            if ( !pSdrObj->ISA(SwVirtFlyDrawObj) )
+            OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr, "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
+            if ( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr )
             {
                 // determine page frame of the frame the shape is anchored.
                 const SwFrm* pAnchorFrm =
@@ -2962,8 +2962,8 @@ bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
             // get selected object
             const SdrObject *pSdrObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
             // check, if selected object is a shape (drawing object)
-            OSL_ENSURE( !pSdrObj->ISA(SwVirtFlyDrawObj), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
-            if ( !pSdrObj->ISA(SwVirtFlyDrawObj) )
+            OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr, "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
+            if ( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr )
             {
                 // determine page frame of the frame the shape is anchored.
                 const SwFrm* pAnchorFrm =

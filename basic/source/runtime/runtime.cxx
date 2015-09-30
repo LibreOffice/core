@@ -673,7 +673,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
 
             SbxVariable* v = pParams->Get( i );
             // methods are always byval!
-            bool bByVal = v->IsA( TYPE(SbxMethod) );
+            bool bByVal = dynamic_cast<const SbxMethod *>(v) != nullptr;
             SbxDataType t = v->GetType();
             bool bTargetTypeIsArray = false;
             if( p )
@@ -995,7 +995,7 @@ SbxVariableRef SbiRuntime::PopVar()
         SAL_INFO("basic", "PopVar: Name equals 'Cells'" );
 #endif
     // methods hold themselves in parameter 0
-    if( xVar->IsA( TYPE(SbxMethod) ) )
+    if( dynamic_cast<const SbxMethod *>(xVar.get()) != nullptr )
     {
         xVar->SetParameters(0);
     }
@@ -1725,7 +1725,7 @@ void SbiRuntime::StepPUT()
             refVar->Broadcast( SBX_HINT_DATAWANTED );
         if ( refVar->GetType() == SbxOBJECT )
         {
-            if  ( refVar->IsA( TYPE(SbxMethod) ) || ! refVar->GetParent() )
+            if  ( dynamic_cast<const SbxMethod *>(refVar.get()) != nullptr || ! refVar->GetParent() )
             {
                 SbxVariable* pDflt = getDefaultProp( refVar );
 
@@ -1735,7 +1735,7 @@ void SbiRuntime::StepPUT()
             else
                 bObjAssign = true;
         }
-        if (  refVal->GetType() == SbxOBJECT  && !bObjAssign && ( refVal->IsA( TYPE(SbxMethod) ) || ! refVal->GetParent() ) )
+        if (  refVal->GetType() == SbxOBJECT  && !bObjAssign && ( dynamic_cast<const SbxMethod *>(refVal.get()) != nullptr || ! refVal->GetParent() ) )
         {
             SbxVariable* pDflt = getDefaultProp( refVal );
             if ( pDflt )
@@ -1877,7 +1877,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
             bool bObjAssign = false;
             if ( refVar->GetType() == SbxOBJECT )
             {
-                if ( refVar->IsA( TYPE(SbxMethod) ) || ! refVar->GetParent() )
+                if ( dynamic_cast<const SbxMethod *>(refVar.get()) != nullptr || ! refVar->GetParent() )
                 {
                     SbxVariable* pDflt = getDefaultProp( refVar );
                     if ( pDflt )
@@ -3240,19 +3240,19 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     if( t == SbxOBJECT )
     {
         SbxObject* pObj;
-        if( pVal->IsA( TYPE(SbxObject) ) )
+        if( dynamic_cast<const SbxObject *>(pVal) != nullptr )
             pObj = static_cast<SbxObject*>( pVal );
         else
         {
             pObj = static_cast<SbxObject*>( refVal->GetObject() );
-            if( pObj && !pObj->IsA( TYPE(SbxObject) ) )
+            if( pObj && dynamic_cast<const SbxObject *>(pObj) == nullptr )
                 pObj = NULL;
         }
         if( pObj )
         {
             if( !implIsClass( pObj, aClass ) )
             {
-                if ( ( bVBAEnabled || CodeCompleteOptions::IsExtendedTypeDeclaration() ) && pObj->IsA( TYPE(SbUnoObject) ) )
+                if ( ( bVBAEnabled || CodeCompleteOptions::IsExtendedTypeDeclaration() ) && dynamic_cast<const SbUnoObject *>(pObj) != nullptr )
                 {
                     SbUnoObject& rUnoObj = dynamic_cast<SbUnoObject&>(*pObj);
                     bOk = checkUnoObjectType(rUnoObj, aClass);
@@ -3540,7 +3540,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             SetupArgs( pElem, nOp1 );
         }
         // because a particular call-type is requested
-        if( pElem->IsA( TYPE(SbxMethod) ) )
+        if( dynamic_cast<const SbxMethod *>(pElem) != nullptr )
         {
             // shall the type be converted?
             SbxDataType t2 = pElem->GetType();

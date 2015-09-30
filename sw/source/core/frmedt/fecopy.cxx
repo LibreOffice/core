@@ -399,7 +399,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                         pFormat->SetFormatAttr( SwFormatVertOrient( aPos.getY(), text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
                         // #i47455# - notify draw frame format
                         // that position attributes are already set.
-                        if ( pFormat->ISA(SwDrawFrameFormat) )
+                        if ( dynamic_cast<const SwDrawFrameFormat*>( pFormat) !=  nullptr )
                         {
                             static_cast<SwDrawFrameFormat*>(pFormat)->PosAttrSet();
                         }
@@ -933,7 +933,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                                 SdrObject* pOwner = pList->GetOwnerObj();
                                 if ( pOwner )
                                 {
-                                    SdrObjGroup* pThisGroup = PTR_CAST(SdrObjGroup, pOwner);
+                                    SdrObjGroup* pThisGroup = dynamic_cast<SdrObjGroup*>( pOwner );
                                     aGrpAnchor = pThisGroup->GetAnchorPos();
                                 }
                             }
@@ -1011,7 +1011,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                                 pDV->MarkObj( pObj, pDV->GetSdrPageView() );
                                 // #i47455# - notify draw frame format
                                 // that position attributes are already set.
-                                if ( pNew->ISA(SwDrawFrameFormat) )
+                                if ( dynamic_cast<const SwDrawFrameFormat*>( pNew) !=  nullptr )
                                 {
                                     static_cast<SwDrawFrameFormat*>(pNew)->PosAttrSet();
                                 }
@@ -1219,7 +1219,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
     if( rMrkList.GetMarkCount() )
     {
         if( rMrkList.GetMarkCount() == 1 &&
-            rMrkList.GetMark( 0 )->GetMarkedSdrObj()->ISA(SwVirtFlyDrawObj) )
+            dynamic_cast< const SwVirtFlyDrawObj* >(rMrkList.GetMark( 0 )->GetMarkedSdrObj()) != nullptr )
         {
             // select frame
             if( CNT_GRF == GetCntType() )
@@ -1366,7 +1366,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
         SdrObject* pClpObj = pModel->GetPage(0)->GetObj(0);
         SdrObject* pOldObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
 
-        if( SwPasteSdr::SetAttr == nAction && pOldObj->ISA(SwVirtFlyDrawObj) )
+        if( SwPasteSdr::SetAttr == nAction && dynamic_cast<const SwVirtFlyDrawObj*>( pOldObj) !=  nullptr )
             nAction = SwPasteSdr::Replace;
 
         switch( nAction )
@@ -1375,7 +1375,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
             {
                 const SwFrameFormat* pFormat(0);
                 const SwFrm* pAnchor(0);
-                if( pOldObj->ISA(SwVirtFlyDrawObj) )
+                if( dynamic_cast<const SwVirtFlyDrawObj*>( pOldObj) !=  nullptr )
                 {
                     pFormat = FindFrameFormat( pOldObj );
 
@@ -1405,14 +1405,14 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                 Point aVec = aOldObjRect.TopLeft() - aNewRect.TopLeft();
                 pNewObj->NbcMove(Size(aVec.getX(), aVec.getY()));
 
-                if( pNewObj->ISA( SdrUnoObj ) )
+                if( dynamic_cast<const SdrUnoObj*>( pNewObj) !=  nullptr )
                     pNewObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetControlsId() );
-                else if( pOldObj->ISA( SdrUnoObj ) )
+                else if( dynamic_cast<const SdrUnoObj*>( pOldObj) !=  nullptr )
                     pNewObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetHeavenId() );
                 else
                     pNewObj->SetLayer( pOldObj->GetLayer() );
 
-                if( pOldObj->ISA(SwVirtFlyDrawObj) )
+                if( dynamic_cast<const SwVirtFlyDrawObj*>( pOldObj) !=  nullptr )
                 {
                     // store attributes, then set SdrObject
                     SfxItemSet aFrmSet( mpDoc->GetAttrPool(),
@@ -1429,7 +1429,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                         } while( pTmp->IsFollow() );
                         pAnchor = pTmp;
                     }
-                    if( pOldObj->ISA( SdrCaptionObj ))
+                    if( dynamic_cast<const SdrCaptionObj*>( pOldObj) !=  nullptr)
                         aNullPt = static_cast<SdrCaptionObj*>(pOldObj)->GetTailPos();
                     else
                         aNullPt = aOldObjRect.TopLeft();
@@ -1535,7 +1535,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
             if ( nCnt > 1 )
                 pView->GroupMarked();
             SdrObject *pObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-            if( pObj->ISA( SdrUnoObj ) )
+            if( dynamic_cast<const SdrUnoObj*>( pObj) !=  nullptr )
             {
                 pObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetControlsId() );
                 bDesignMode = true;
@@ -1563,7 +1563,7 @@ bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
 
     bool bRet = 1 == pView->GetMarkedObjectList().GetMarkCount() &&
         (pObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj())->IsClosedObj() &&
-        !pObj->ISA( SdrOle2Obj );
+        dynamic_cast<const SdrOle2Obj*>( pObj) ==  nullptr;
 
     if( bRet && pObj )
     {

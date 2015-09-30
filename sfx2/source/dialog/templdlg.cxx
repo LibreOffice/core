@@ -1631,7 +1631,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 
     if ( (nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId) && (pTreeBox || aFmtLb->GetSelectionCount() <= 1) )
     {
-        const SfxUInt16Item *pFilterItem = PTR_CAST(SfxUInt16Item, pItem);
+        const SfxUInt16Item *pFilterItem = dynamic_cast< const SfxUInt16Item* >(pItem);
         OSL_ENSURE(pFilterItem, "SfxUINT16Item expected");
         sal_uInt16 nFilterFlags = pFilterItem->GetValue() & ~SFXSTYLEBIT_USERDEF;
         if(!nFilterFlags)       // User Template?
@@ -1881,7 +1881,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
     {
         vcl::Window* pTmp;
         pTmp = Application::GetDefDialogParent();
-        if ( ISA(SfxTemplateDialog_Impl) )
+        if ( dynamic_cast< const SfxTemplateDialog_Impl* >(this) !=  nullptr )
             Application::SetDefDialogParent( pWindow->GetParent() );
         else
             Application::SetDefDialogParent( pWindow );
@@ -1920,7 +1920,7 @@ void SfxCommonTemplateDialog_Impl::EditHdl(void *)
         vcl::Window* pTmp;
         //DefModalDialogParent set for modality of the following dialogs
         pTmp = Application::GetDefDialogParent();
-        if ( ISA(SfxTemplateDialog_Impl) )
+        if ( dynamic_cast< const SfxTemplateDialog_Impl* >(this) !=  nullptr )
             Application::SetDefDialogParent( pWindow->GetParent() );
         else
             Application::SetDefDialogParent( pWindow );
@@ -2076,7 +2076,7 @@ void SfxCommonTemplateDialog_Impl::EnableDelete()
 // After selecting a focused item if possible again on the app window
 void SfxCommonTemplateDialog_Impl::ResetFocus()
 {
-    if(ISA(SfxTemplateDialog_Impl))
+    if ( dynamic_cast< const SfxTemplateDialog_Impl* >(this) !=  nullptr )
     {
         SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
         SfxViewShell *pVu = pViewFrame->GetViewShell();

@@ -158,7 +158,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 {
     Construct( &pViewFrame->GetWindow() );
 
-    if ( pOldSh && pOldSh->ISA( ScTabViewShell ) )
+    if ( pOldSh && dynamic_cast<const ScTabViewShell*>( pOldSh) !=  nullptr )
     {
         //  store view settings, show table from TabView
         //! store live ScViewData instead, and update on ScTablesHint?

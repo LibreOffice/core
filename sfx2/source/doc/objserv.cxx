@@ -730,7 +730,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( ( nId == SID_SAVEASDOC || nId == SID_SAVEASREMOTE ) && nErrorCode == ERRCODE_NONE )
             {
                 SfxBoolItem const * saveTo = static_cast<SfxBoolItem const *>(
-                    rReq.GetArg(SID_SAVETO, false, TYPE(SfxBoolItem)));
+                    rReq.GetArg(SID_SAVETO, false, checkSfxPoolItem< SfxBoolItem >));
                 if (saveTo == nullptr || !saveTo->GetValue())
                 {
                     GetFrame()->RemoveInfoBar("readonly");

@@ -401,7 +401,7 @@ static void lcl_MakeObjs( const SwFrameFormats &rTable, SwPageFrm *pPage )
                 // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
                 SwDrawContact *pContact =
                             static_cast<SwDrawContact*>(::GetUserCall(pSdrObj));
-                if ( pSdrObj->ISA(SwDrawVirtObj) )
+                if ( dynamic_cast< const SwDrawVirtObj *>( pSdrObj ) !=  nullptr )
                 {
                     SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pSdrObj);
                     if ( pContact )
@@ -812,7 +812,7 @@ void SwPageFrm::Cut()
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
 
-                if ( pAnchoredObj->ISA(SwFlyAtCntFrm) )
+                if ( dynamic_cast< const SwFlyAtCntFrm *>( pAnchoredObj ) !=  nullptr )
                 {
                     SwFlyFrm* pFly = static_cast<SwFlyAtCntFrm*>(pAnchoredObj);
                     SwPageFrm *pAnchPage = pFly->GetAnchorFrm() ?
@@ -910,7 +910,7 @@ static void lcl_PrepFlyInCntRegister( SwContentFrm *pFrm )
         {
             // #i28701#
             SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
-            if ( pAnchoredObj->ISA(SwFlyInCntFrm) )
+            if ( dynamic_cast< const SwFlyInCntFrm *>( pAnchoredObj ) !=  nullptr )
             {
                 SwFlyFrm* pFly = static_cast<SwFlyInCntFrm*>(pAnchoredObj);
                 SwContentFrm *pCnt = pFly->ContainsContent();
@@ -940,7 +940,7 @@ void SwPageFrm::PrepareRegisterChg()
         {
             // #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
             {
                 SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 pFrm = pFly->ContainsContent();
@@ -1611,7 +1611,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
                 const SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-                const bool bFly = pAnchoredObj->ISA(SwFlyFrm);
+                const bool bFly = dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr;
                 if ((bFly && (FAR_AWAY == pAnchoredObj->GetObjRect().Width()))
                     || rFormat.GetFrmSize().GetWidthPercent())
                 {
@@ -1671,7 +1671,7 @@ void SwRootFrm::StartAllAction()
     if ( GetCurrShell() )
         for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
         {
-            if ( rSh.ISA( SwCrsrShell ) )
+            if ( dynamic_cast<const SwCrsrShell*>( &rSh) !=  nullptr )
                 static_cast<SwCrsrShell*>(&rSh)->StartAction();
             else
                 rSh.StartAction();
@@ -1685,11 +1685,11 @@ void SwRootFrm::EndAllAction( bool bVirDev )
         {
             const bool bOldEndActionByVirDev = rSh.IsEndActionByVirDev();
             rSh.SetEndActionByVirDev( bVirDev );
-            if ( rSh.ISA( SwCrsrShell ) )
+            if ( dynamic_cast<const SwCrsrShell*>( &rSh) !=  nullptr )
             {
                 static_cast<SwCrsrShell*>(&rSh)->EndAction();
                 static_cast<SwCrsrShell*>(&rSh)->CallChgLnk();
-                if ( rSh.ISA( SwFEShell ) )
+                if ( dynamic_cast<const SwFEShell*>( &rSh) !=  nullptr )
                     static_cast<SwFEShell*>(&rSh)->SetChainMarker();
             }
             else
@@ -1709,8 +1709,8 @@ void SwRootFrm::UnoRemoveAllActions()
             if ( !rSh.IsInEndAction() )
             {
                 OSL_ENSURE(!rSh.GetRestoreActions(), "Restore action count is already set!");
-                bool bCrsr = rSh.ISA( SwCrsrShell );
-                bool bFE = rSh.ISA( SwFEShell );
+                bool bCrsr = dynamic_cast<const SwCrsrShell*>( &rSh) !=  nullptr;
+                bool bFE = dynamic_cast<const SwFEShell*>( &rSh) !=  nullptr;
                 sal_uInt16 nRestore = 0;
                 while( rSh.ActionCount() )
                 {
@@ -1739,7 +1739,7 @@ void SwRootFrm::UnoRestoreAllActions()
             sal_uInt16 nActions = rSh.GetRestoreActions();
             while( nActions-- )
             {
-                if ( rSh.ISA( SwCrsrShell ) )
+                if ( dynamic_cast<const SwCrsrShell*>( &rSh) !=  nullptr )
                     static_cast<SwCrsrShell*>(&rSh)->StartAction();
                 else
                     rSh.StartAction();
@@ -1777,7 +1777,7 @@ static void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
 
         SwObjPositioningInProgress aPosInProgress( *pAnchoredObj );
 
-        if ( pAnchoredObj->ISA(SwFlyFrm) )
+        if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
         {
             SwFlyFrm* pFlyFrm( static_cast<SwFlyFrm*>(pAnchoredObj) );
             lcl_MoveAllLowers( pFlyFrm, rOffset );
@@ -1810,7 +1810,7 @@ static void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
                 }
             }
         }
-        else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+        else if ( dynamic_cast< const SwAnchoredDrawObject *>( pAnchoredObj ) !=  nullptr )
         {
             SwAnchoredDrawObject* pAnchoredDrawObj( static_cast<SwAnchoredDrawObject*>(pAnchoredObj) );
 
@@ -1860,7 +1860,7 @@ static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
     lcl_MoveAllLowerObjs( pFrm, rOffset );
 
     // finally, for layout frames we have to call this function recursively:
-    if ( pFrm->ISA(SwLayoutFrm) )
+    if ( dynamic_cast< const SwLayoutFrm *>( pFrm ) !=  nullptr )
     {
         SwFrm* pLowerFrm = pFrm->GetLower();
         while ( pLowerFrm )

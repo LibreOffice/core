@@ -48,8 +48,8 @@ SwTableWidthDlg::SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rTableFnc )
     get(m_pWidthMF, "width");
 
     bool bIsWeb = rTableFnc.GetShell()
-                  && (0 != PTR_CAST( SwWebDocShell,
-                                     rTableFnc.GetShell()->GetView().GetDocShell()) );
+                  && (dynamic_cast< const SwWebDocShell* >(
+                                     rTableFnc.GetShell()->GetView().GetDocShell()) != nullptr );
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( bIsWeb )->GetMetric();
     ::SetFieldUnit(*m_pWidthMF, eFieldUnit);
 

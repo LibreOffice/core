@@ -1277,7 +1277,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocu
 */
     // When the source is our document, we do the checking ourselves
     // (much quicker and doesn't use the crutch StxStylePool).
-    if( rSource.ISA( SwDocShell ))
+    if( dynamic_cast<const SwDocShell*>( &rSource) !=  nullptr)
     {
         // in order for the Headers/Footers not to get the fixed content
         // of the template, update all the Source's

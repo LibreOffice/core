@@ -876,7 +876,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
     {
         case EE_PARA_LRSPACE:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLRSpaceItem ) ), "ConvertItem: invalid Item!" );
+            DBG_ASSERT( dynamic_cast<const SvxLRSpaceItem *>(&rPoolItem) != nullptr, "ConvertItem: invalid Item!" );
             SvxLRSpaceItem& rItem = static_cast<SvxLRSpaceItem&>(rPoolItem);
             rItem.SetTextFirstLineOfst( sal::static_int_cast< short >( OutputDevice::LogicToLogic( rItem.GetTextFirstLineOfst(), eSourceUnit, eDestUnit ) ) );
             rItem.SetTextLeft( OutputDevice::LogicToLogic( rItem.GetTextLeft(), eSourceUnit, eDestUnit ) );
@@ -885,7 +885,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         break;
         case EE_PARA_ULSPACE:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxULSpaceItem ) ), "ConvertItem: Invalid Item!" );
+            DBG_ASSERT( dynamic_cast<const SvxULSpaceItem *>(&rPoolItem) != nullptr, "ConvertItem: Invalid Item!" );
             SvxULSpaceItem& rItem = static_cast<SvxULSpaceItem&>(rPoolItem);
             rItem.SetUpper( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetUpper(), eSourceUnit, eDestUnit ) ) );
             rItem.SetLower( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetLower(), eSourceUnit, eDestUnit ) ) );
@@ -893,7 +893,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         break;
         case EE_PARA_SBL:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLineSpacingItem ) ), "ConvertItem: Invalid Item!" );
+            DBG_ASSERT( dynamic_cast<const SvxLineSpacingItem *>(&rPoolItem) != nullptr, "ConvertItem: Invalid Item!" );
             SvxLineSpacingItem& rItem = static_cast<SvxLineSpacingItem&>(rPoolItem);
             // SetLineHeight changes also eLineSpace!
             if ( rItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
@@ -902,7 +902,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         break;
         case EE_PARA_TABS:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxTabStopItem ) ), "ConvertItem: Invalid Item!" );
+            DBG_ASSERT( dynamic_cast<const SvxTabStopItem *>(&rPoolItem) != nullptr, "ConvertItem: Invalid Item!" );
             SvxTabStopItem& rItem = static_cast<SvxTabStopItem&>(rPoolItem);
             SvxTabStopItem aNewItem( EE_PARA_TABS );
             for ( sal_uInt16 i = 0; i < rItem.Count(); i++ )
@@ -918,7 +918,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxFontHeightItem ) ), "ConvertItem: Invalid Item!" );
+            DBG_ASSERT( dynamic_cast<const SvxFontHeightItem *>(&rPoolItem) != nullptr, "ConvertItem: Invalid Item!" );
             SvxFontHeightItem& rItem = static_cast<SvxFontHeightItem&>(rPoolItem);
             rItem.SetHeight( OutputDevice::LogicToLogic( rItem.GetHeight(), eSourceUnit, eDestUnit ) );
         }

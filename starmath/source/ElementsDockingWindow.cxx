@@ -743,7 +743,7 @@ IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, ListBox*, pList)
 SmViewShell* SmElementsDockingWindow::GetView()
 {
     SfxViewShell* pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
-    return PTR_CAST(SmViewShell, pView);
+    return  dynamic_cast<SmViewShell*>( pView);
 }
 
 void SmElementsDockingWindow::Resize()

@@ -165,9 +165,9 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     const SdrHint *pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
     if ( !pSdrHint ||
          ( pSdrHint->GetObject() &&
-           ( pSdrHint->GetObject()->ISA(SwFlyDrawObj) ||
-             pSdrHint->GetObject()->ISA(SwVirtFlyDrawObj) ||
-             IS_TYPE(SdrObject,pSdrHint->GetObject()) ) ) )
+           ( dynamic_cast< const SwFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
+              dynamic_cast< const SwVirtFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
+             typeid(SdrObject) == typeid(pSdrHint->GetObject()) ) ) )
     {
         return;
     }
@@ -1122,7 +1122,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     size_t nShapes = 0;
 
     const SwViewShell *pVSh = GetShell();
-    const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
+    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr ?
                             static_cast< const SwFEShell * >( pVSh ) : nullptr;
     SwPaM* pCrsr = pFESh ? pFESh->GetCrsr( false /* ??? */ ) : nullptr;
 
@@ -1439,7 +1439,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     size_t nShapes = 0;
 
     const SwViewShell *pVSh = GetShell();
-    const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
+    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr ?
                             static_cast< const SwFEShell * >( pVSh ) : nullptr;
     const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
@@ -1607,7 +1607,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
 void SwAccessibleMap::DoInvalidateShapeFocus()
 {
     const SwViewShell *pVSh = GetShell();
-    const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
+    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr ?
                             static_cast< const SwFEShell * >( pVSh ) : nullptr;
     const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
@@ -2586,7 +2586,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
     SwAccessibleChild aFrmOrObj( pFrm );
     bool bShapeSelected = false;
     const SwViewShell *pVSh = GetShell();
-    if( pVSh->ISA( SwCrsrShell ) )
+    if( dynamic_cast<const SwCrsrShell*>( pVSh) !=  nullptr )
     {
         const SwCrsrShell *pCSh = static_cast< const SwCrsrShell * >( pVSh );
         if( pCSh->IsTableMode() )
@@ -2594,7 +2594,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
             while( aFrmOrObj.GetSwFrm() && !aFrmOrObj.GetSwFrm()->IsCellFrm() )
                 aFrmOrObj = aFrmOrObj.GetSwFrm()->GetUpper();
         }
-        else if( pVSh->ISA( SwFEShell ) )
+        else if( dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr )
         {
             const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
             const SwFrm *pFlyFrm = pFESh->GetSelectedFlyFrm();

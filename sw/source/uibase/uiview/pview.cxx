@@ -1192,11 +1192,11 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
 
     SwViewShell *pVS, *pNew;
 
-    if( pOldSh && pOldSh->IsA( TYPE( SwPagePreview ) ) )
+    if( pOldSh && dynamic_cast<const SwPagePreview *>(pOldSh) != nullptr )
         pVS = static_cast<SwPagePreview*>(pOldSh)->GetViewShell();
     else
     {
-        if( pOldSh && pOldSh->IsA( TYPE( SwView ) ) )
+        if( pOldSh && dynamic_cast<const SwView *>(pOldSh) != nullptr )
         {
             pVS = static_cast<SwView*>(pOldSh)->GetWrtShellPtr();
             // save the current ViewData of the previous SwView
@@ -1251,7 +1251,7 @@ SwPagePreview::~SwPagePreview()
 
 SwDocShell* SwPagePreview::GetDocShell()
 {
-    return PTR_CAST(SwDocShell, GetViewFrame()->GetObjectShell());
+    return dynamic_cast<SwDocShell*>( GetViewFrame()->GetObjectShell() );
 }
 
 int SwPagePreview::_CreateScrollbar( bool bHori )

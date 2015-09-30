@@ -759,7 +759,7 @@ const SwSectionFormat* SwSectionFrm::_GetEndSectFormat() const
     const SwSectionFormat *pFormat = pSection->GetFormat();
     while( !pFormat->GetEndAtTextEnd().IsAtEnd() )
     {
-        if( pFormat->GetRegisteredIn()->ISA( SwSectionFormat ) )
+        if( dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) !=  nullptr )
             pFormat = static_cast<const SwSectionFormat*>(pFormat->GetRegisteredIn());
         else
             return NULL;
@@ -2208,7 +2208,7 @@ bool SwSectionFrm::IsDescendantFrom( const SwSectionFormat* pFormat ) const
     const SwSectionFormat *pMyFormat = pSection->GetFormat();
     while( pFormat != pMyFormat )
     {
-        if( pMyFormat->GetRegisteredIn()->ISA( SwSectionFormat ) )
+        if( dynamic_cast< const SwSectionFormat *>( pMyFormat->GetRegisteredIn()) !=  nullptr )
             pMyFormat = static_cast<const SwSectionFormat*>(pMyFormat->GetRegisteredIn());
         else
             return false;
@@ -2225,7 +2225,7 @@ void SwSectionFrm::CalcFootnoteAtEndFlag()
                  FTNEND_ATTXTEND_OWNNUMANDFMT == nVal;
     while( !bFootnoteAtEnd && !bOwnFootnoteNum )
     {
-        if( pFormat->GetRegisteredIn()->ISA( SwSectionFormat ) )
+        if( dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) !=  nullptr )
             pFormat = static_cast<SwSectionFormat*>(pFormat->GetRegisteredIn());
         else
             break;
@@ -2250,7 +2250,7 @@ void SwSectionFrm::CalcEndAtEndFlag()
     bEndnAtEnd = pFormat->GetEndAtTextEnd( false ).IsAtEnd();
     while( !bEndnAtEnd )
     {
-        if( pFormat->GetRegisteredIn()->ISA( SwSectionFormat ) )
+        if( dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) !=  nullptr )
             pFormat = static_cast<SwSectionFormat*>(pFormat->GetRegisteredIn());
         else
             break;

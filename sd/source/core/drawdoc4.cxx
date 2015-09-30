@@ -833,7 +833,7 @@ IMPL_LINK_NOARG_TYPED(SdDrawDocument, OnlineSpellingHdl, Idle *, void)
 
         if (pObj)
         {
-            if (pObj->GetOutlinerParaObject() && pObj->ISA(SdrTextObj))
+            if (pObj->GetOutlinerParaObject() && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
             {
                 // Spell text object
                 SpellObject(static_cast<SdrTextObj*>(pObj));
@@ -849,7 +849,7 @@ IMPL_LINK_NOARG_TYPED(SdDrawDocument, OnlineSpellingHdl, Idle *, void)
                 {
                     SdrObject* pSubObj = aGroupIter.Next();
 
-                    if (pSubObj->GetOutlinerParaObject() && pSubObj->ISA(SdrTextObj))
+                    if (pSubObj->GetOutlinerParaObject() && dynamic_cast< SdrTextObj *>( pSubObj ) !=  nullptr)
                     {
                         // Found a text object in a group object
                         SpellObject(static_cast<SdrTextObj*>(pSubObj));
@@ -975,7 +975,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
         // restart when add to dictionary takes place, too.
         || nCommand == SpellCallbackCommand::ADDTODICTIONARY)
     {
-        if(pObj && pOutl && pObj->ISA(SdrTextObj))
+        if(pObj && pOutl && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
         {
             bool bModified(IsChanged());
             static_cast<SdrTextObj*>(pObj)->SetOutlinerParaObject(pOutl->CreateParaObject());

@@ -280,7 +280,7 @@ void TabControl::Command(const CommandEvent& rCEvt)
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        bool bGraphicShell = pDrViewSh->ISA(GraphicViewShell);
+        bool bGraphicShell = dynamic_cast< GraphicViewShell *>( pDrViewSh ) !=  nullptr;
         sal_uInt16 nResId = bGraphicShell ? RID_GRAPHIC_PAGETAB_POPUP :
                                         RID_DRAW_PAGETAB_POPUP;
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();

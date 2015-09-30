@@ -185,7 +185,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
         SdrPageView* pPV;
         SdrObject* pObj;
         if( pView->PickObj( aPos, 0, pObj, pPV, SdrSearchOptions::PICKMACRO ) &&
-             pObj->ISA(SwVirtFlyDrawObj) )
+             dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
         {
             SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
             const SwFormatURL &rURL = pFly->GetFormat()->GetURL();

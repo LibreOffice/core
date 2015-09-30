@@ -2099,7 +2099,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
 
     pNewTable->SetTableStyleName(pTableNd->GetTable().GetTableStyleName());
 
-    if( IS_TYPE( SwDDETable, this ))
+    if( typeid( SwDDETable) == typeid(*this))
     {
         // A DDE-Table is being copied
         // Does the new Document actually have it's FieldType?

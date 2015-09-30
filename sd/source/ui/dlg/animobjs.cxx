@@ -1147,7 +1147,7 @@ void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
 {
     if( eState >= SfxItemState::DEFAULT && nSId == SID_ANIMATOR_STATE )
     {
-        const SfxUInt16Item* pStateItem = PTR_CAST( SfxUInt16Item, pItem );
+        const SfxUInt16Item* pStateItem = dynamic_cast< const SfxUInt16Item*>( pItem );
         assert(pStateItem); //SfxUInt16Item expected
         if (pStateItem)
         {

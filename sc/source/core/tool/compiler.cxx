@@ -3064,7 +3064,7 @@ bool ScCompiler::IsMacro( const OUString& rName )
     // It really should be a BASIC function!
     if( pMeth->GetType() == SbxVOID
      || ( pMeth->IsFixed() && pMeth->GetType() == SbxEMPTY )
-     || !pMeth->ISA(SbMethod) )
+     || dynamic_cast<const SbMethod*>( pMeth) ==  nullptr )
     {
         return false;
     }

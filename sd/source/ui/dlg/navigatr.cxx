@@ -694,11 +694,11 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
             maLbDocs->InsertEntry( aStr, 0 );
 
         ::sd::DrawDocShell* pCurrentDocShell =
-              PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
-        SfxObjectShell* pSfxDocShell = SfxObjectShell::GetFirst(0, false);
+              dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
+        SfxObjectShell* pSfxDocShell = SfxObjectShell::GetFirst([](const SfxObjectShell*){return true;}, false);
         while( pSfxDocShell )
         {
-            ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, pSfxDocShell );
+            ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( pSfxDocShell );
             if( pDocShell  && !pDocShell->IsInDestruction() && ( pDocShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ) )
             {
                 NavDocInfo aInfo ;
@@ -724,7 +724,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
 
                 maDocList.push_back( aInfo );
             }
-            pSfxDocShell = SfxObjectShell::GetNext( *pSfxDocShell, 0, false );
+            pSfxDocShell = SfxObjectShell::GetNext( *pSfxDocShell, [](const SfxObjectShell*){return true;}, false );
         }
     }
     maLbDocs->SelectEntryPos( nPos );
@@ -873,7 +873,7 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
 {
     if( eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_STATE )
     {
-        const SfxUInt32Item* pStateItem = PTR_CAST( SfxUInt32Item, pItem );
+        const SfxUInt32Item* pStateItem = dynamic_cast< const SfxUInt32Item* >( pItem );
         DBG_ASSERT( pStateItem, "SfxUInt16Item expected");
         sal_uInt32 nState = pStateItem->GetValue();
 
@@ -957,7 +957,7 @@ void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
         NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
         if( pInfo && pInfo->IsActive() )
         {
-            const SfxStringItem* pStateItem = PTR_CAST( SfxStringItem, pItem );
+            const SfxStringItem* pStateItem = dynamic_cast<const SfxStringItem*>( pItem  );
             DBG_ASSERT( pStateItem, "SfxStringItem expected");
             OUString aPageName = pStateItem->GetValue();
 

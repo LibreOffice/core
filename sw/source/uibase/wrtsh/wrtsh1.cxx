@@ -1205,7 +1205,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                                      : 0;
         GetDoc()->getIDocumentContentOperations().RemoveLeadingWhiteSpace( *GetCrsr()->GetPoint() );
 
-        const bool bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
+        const bool bHtml = dynamic_cast<SwWebDocShell*>( pDocSh ) !=  nullptr;
         const bool bRightToLeft = IsInRightToLeftText();
         for( sal_uInt8 nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
         {

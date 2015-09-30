@@ -87,7 +87,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
 
     // first try to check if we are inside the outline view
     sd::OutlineView* pSdView = NULL;
-    if( pViewSh && pViewSh->ISA(sd::OutlineViewShell))
+    if( dynamic_cast<const sd::OutlineViewShell* >(pViewSh) !=  nullptr )
         pSdView = static_cast<sd::OutlineView*> (static_cast<sd::OutlineViewShell*>(pViewSh)->GetView());
 
     if (pSdView != NULL && (pOutliner ==  &pSdView->GetOutliner()))
@@ -218,7 +218,7 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
         if(pViewSh == NULL)
         {
-            ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
+            ::sd::ViewShellBase* pBase = dynamic_cast< ::sd::ViewShellBase *>( SfxViewShell::Current() );
             if(pBase)
                 pViewSh = pBase->GetMainViewShell().get();
         }
@@ -255,7 +255,7 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
         if(pViewSh == NULL)
         {
-            ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
+            ::sd::ViewShellBase* pBase = dynamic_cast< ::sd::ViewShellBase *>( SfxViewShell::Current() );
             if(pBase)
                 pViewSh = pBase->GetMainViewShell().get();
         }
@@ -285,7 +285,7 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
         if(pViewSh == NULL)
         {
-            ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
+            ::sd::ViewShellBase* pBase = dynamic_cast< ::sd::ViewShellBase *>( SfxViewShell::Current() );
             if(pBase)
                 pViewSh = pBase->GetMainViewShell().get();
         }
@@ -409,7 +409,7 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
 {
     ::sd::FrameView* pFrameView = NULL;
-    ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
+    ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
     SdDrawDocument* pDoc = NULL;
 
     // Here we set the DocType of the option dialog (not document!)
@@ -536,7 +536,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     bool bNewPrintOptions = false;
     bool bMiscOptions = false;
 
-    ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
+    ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
     SdDrawDocument* pDoc = NULL;
     // Here we set the DocType of the option dialog (not document!)
     DocumentType eDocType = DOCUMENT_TYPE_IMPRESS;

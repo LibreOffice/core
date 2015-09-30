@@ -1044,7 +1044,7 @@ bool SwXMLImport::FindAutomaticStyle(
     SwXMLItemSetStyleContext_Impl *pStyle = 0;
     if( GetAutoStyles() )
     {
-        pStyle = const_cast<SwXMLItemSetStyleContext_Impl*>(PTR_CAST( SwXMLItemSetStyleContext_Impl,
+        pStyle = const_cast<SwXMLItemSetStyleContext_Impl*>(dynamic_cast< const SwXMLItemSetStyleContext_Impl* >(
               GetAutoStyles()->
                     FindStyleChildContext( nFamily, rName,
                                            true ) ) );

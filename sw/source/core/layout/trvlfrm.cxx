@@ -382,7 +382,7 @@ bool SwPageFrm::FillSelection( SwSelectionList& rList, const SwRect& rRect ) con
             for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = rObjs[i];
-                if( !pAnchoredObj->ISA(SwFlyFrm) )
+                if( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) ==  nullptr )
                     continue;
                 const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                 if( pFly->FillSelection( rList, rRect ) )
@@ -2579,7 +2579,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
             for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
-                if ( !pAnchoredObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) ==  nullptr )
                     continue;
                 const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                 const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
@@ -2611,7 +2611,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
                     const sal_uInt32 nPos = pObj->GetOrdNum();
                     for ( size_t k = 0; bSub && k < aSortObjs.size(); ++k )
                     {
-                        OSL_ENSURE( aSortObjs[k]->ISA(SwFlyFrm),
+                        OSL_ENSURE( dynamic_cast< const SwFlyFrm *>( aSortObjs[k] ) !=  nullptr,
                             "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexpected type" );
                         const SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(aSortObjs[k]);
                         do

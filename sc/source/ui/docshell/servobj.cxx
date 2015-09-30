@@ -209,7 +209,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             //  don't access DocShell anymore for EndListening etc.
         }
     }
-    else if (rBC.ISA(SfxApplication))
+    else if (dynamic_cast<const SfxApplication*>( &rBC) !=  nullptr)
     {
         const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
         if ( !aItemStr.isEmpty() && pSimpleHint &&

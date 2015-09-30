@@ -1078,7 +1078,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
         SvXMLElementExport aElem( *this, nPrefix, XML_TABLE, true, true );
 
         // export DDE source (if this is a DDE table)
-        if ( rTable.ISA(SwDDETable) )
+        if ( dynamic_cast<const SwDDETable*>( &rTable) !=  nullptr )
         {
             // get DDE Field Type (contains the DDE connection)
             const SwDDEFieldType* pDDEFieldType =
