@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_ddcebbb3",
+        "filename": "sc/source/filter/excel/xicontent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-30T21:02:25Z",
+      "side": 1,
+      "message": "ugh? I\u0027ll submit an amended patch..",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 23
+      },
+      "revId": "a520c57d65a263901b11a3049743e3f01b0fc612",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
