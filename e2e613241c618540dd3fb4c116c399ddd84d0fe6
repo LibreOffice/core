@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_3772787d",
+        "filename": "basic/source/inc/opcodes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T05:57:40Z",
+      "side": 1,
+      "message": "what does that mean? maybe it\u0027s declare?",
+      "revId": "e2e613241c618540dd3fb4c116c399ddd84d0fe6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_176f7493",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T05:57:40Z",
+      "side": 1,
+      "message": "sign?",
+      "revId": "e2e613241c618540dd3fb4c116c399ddd84d0fe6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_776cf09c",
+        "filename": "canvas/source/tools/spriteredrawmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-30T05:57:40Z",
+      "side": 1,
+      "message": "mutexe is the correct plural.",
+      "revId": "e2e613241c618540dd3fb4c116c399ddd84d0fe6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
