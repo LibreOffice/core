@@ -574,7 +574,7 @@ void FmSearchDialog::EnableSearchUI(bool bEnable)
             m_aDelayedPaint.Stop();
     }
     // (the whole thing goes on below)
-    // this small intricateness hopfully leads to no flickering when turning the SearchUI off
+    // this small intricateness hopefully leads to no flickering when turning the SearchUI off
     // and on again shortly after (like it's the case during a short search process)
 
     if ( !bEnable )
@@ -777,7 +777,7 @@ void FmSearchDialog::LoadParams()
         nInitialField = 0;
     m_plbField->SelectEntryPos(nInitialField);
     LINK(this, FmSearchDialog, OnFieldSelected).Call(m_plbField);
-    // all fields/single field (AFTER selcting the field because OnClickedFieldRadios expects a valid value there)
+    // all fields/single field (AFTER selecting the field because OnClickedFieldRadios expects a valid value there)
     if (aParams.bAllFields)
     {
         m_prbSingleField->Check(false);

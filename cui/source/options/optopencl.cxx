@@ -175,7 +175,7 @@ OUString format(const OpenCLConfig::ImplMatcher& rImpl)
 void fillListBox(SvSimpleTable* pListBox, const OpenCLConfig::ImplMatcherSet& rSet)
 {
     pListBox->SetUpdateMode(false);
-// kill added UserData to treeitem
+// kill added UserData to tree item
     for ( sal_uLong i = 0; i < pListBox->GetEntryCount(); ++i )
         delete static_cast<OpenCLConfig::ImplMatcher*>(pListBox->GetEntry(i)->GetUserData());
 

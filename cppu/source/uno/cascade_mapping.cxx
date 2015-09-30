@@ -246,7 +246,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
         return;
 
     // reaching this point means, we need a mediated mapping!!!
-    // we generall mediate via uno[:free]
+    // we generally mediate via uno[:free]
     uno_Environment * pInterm = NULL;
 
     // chained uno -> uno
