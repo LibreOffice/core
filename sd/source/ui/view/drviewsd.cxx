@@ -96,7 +96,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
 
                     case PAGE_LAST:
                     {
-                        // jumpt to last page
+                        // jump to last page
                         SwitchPage(GetDoc()->GetSdPageCount(mpActualPage->GetPageKind()) - 1);
                     }
                     break;

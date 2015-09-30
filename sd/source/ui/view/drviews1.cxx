@@ -795,7 +795,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
     bool bOK = false;
 
     // With the current implementation of FuSlideShow there is a problem
-    // when it dsplays the show in a window: When the show is stopped it
+    // when it displays the show in a window: when the show is stopped it
     // returns at one point in time SDRPAGE_NOTFOUND as current page index.
     // Because FuSlideShow is currently being rewritten this bug is fixed
     // here.
