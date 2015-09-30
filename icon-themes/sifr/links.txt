@@ -1,3 +1,59 @@
+# Navigator - Writer
+sw/res/all_left.png cmd/sc_firstpage.png
+sw/res/all_right.png cmd/sc_lastpage.png
+sw/res/one_left.png cmd/sc_navigateback.png
+sw/res/one_right.png cmd/sc_navigateforward.png
+sw/res/styfamnu.png cmd/sc_defaultbullet.png
+sw/imglst/nc20001.png cmd/sc_inserttable.png
+sw/imglst/nc20002.png cmd/sc_text.png
+sw/imglst/nc20003.png cmd/sc_insertgraphic.png
+sw/imglst/nc20004.png cmd/sc_drawchart.png
+sw/imglst/nc20005.png cmd/sc_insertbookmark.png
+sw/imglst/nc20006.png cmd/sc_insertsection.png
+sw/imglst/nc20007.png cmd/sc_inserthyperlink.png
+sw/imglst/nc20008.png cmd/sc_insertreferencefield.png
+sw/imglst/nc20009.png cmd/sc_insertindexesentry.png
+sw/imglst/nc20010.png cmd/sc_insertannotation.png
+sw/imglst/nc20011.png cmd/sc_insertdraw.png
+sw/imglst/sc20171.png cmd/sc_downsearch.png
+sw/imglst/sc20172.png cmd/sc_navigateback.png
+sw/imglst/sc20173.png cmd/sc_navigateforward.png
+sw/imglst/sc20174.png cmd/sc_upsearch.png
+sw/imglst/sc20175.png cmd/sc_flowchartshapes.flowchart-merge.png
+sw/imglst/sc20186.png cmd/sc_flowchartshapes.flowchart-extract.png
+sw/imglst/sc20235.png cmd/sc_inserthyperlink.png
+sw/imglst/sc20239.png cmd/sc_copy.png
+sw/imglst/sc20249.png cmd/sc_navigator.png
+sw/imglst/sf01.png cmd/sc_controlcodes.png
+sw/imglst/sf02.png cmd/sc_bold.png
+sw/imglst/sf04.png cmd/sc_adddirect.png
+sw/imglst/sf05.png cmd/sc_defaultbullet.png
+sw/imglst/sr20000.png cmd/sc_downsearch.png
+sw/imglst/sr20001.png cmd/sc_upsearch.png
+sw/imglst/sr20002.png cmd/sc_inserttable.png
+sw/imglst/sr20003.png cmd/sc_text.png
+sw/imglst/sr20004.png cmd/sc_adddirect.png
+sw/imglst/sr20005.png cmd/sc_insertdraw.png
+sw/imglst/sr20006.png cmd/sc_choosecontrols.png
+sw/imglst/sr20007.png cmd/sc_insertsection.png
+sw/imglst/sr20008.png cmd/sc_insertbookmark.png
+sw/imglst/sr20009.png cmd/sc_insertgraphic.png
+sw/imglst/sr20010.png cmd/sc_drawchart.png
+sw/imglst/sr20015.png cmd/sc_insertannotation.png
+sw/imglst/sr20016.png cmd/sc_searchdialog.png
+sw/imglst/sr20013.png cmd/sc_insertfootnote.png
+sw/imglst/sr20014.png sw/imglst/sc20183.png
+sw/imglst/sr20017.png cmd/sc_insertindexesentry.png
+# Navigator - Calc
+sc/imglst/na05.png cmd/sc_upsearch.png
+sc/imglst/na06.png cmd/sc_downsearch.png
+sc/imglst/nc01.png cmd/sc_inserttable.png
+sc/imglst/nc04.png cmd/sc_insertgraphic.png
+sc/imglst/nc05.png cmd/sc_drawchart.png
+sc/imglst/nc06.png cmd/sc_insertannotation.png
+sc/imglst/nc08.png cmd/sc_insertdraw.png
+sc/res/table.png cmd/sc_inserttable.png
+
 # File Menu
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 
