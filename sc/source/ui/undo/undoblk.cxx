@@ -130,11 +130,11 @@ bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
     if ( pPasteUndo )
         return pPasteUndo->Merge( pNextAction );
 
-    if ( bPartOfPaste && pNextAction->ISA( ScUndoWrapper ) )
+    if ( bPartOfPaste && dynamic_cast<const ScUndoWrapper*>( pNextAction) !=  nullptr )
     {
         ScUndoWrapper* pWrapper = static_cast<ScUndoWrapper*>(pNextAction);
         SfxUndoAction* pWrappedAction = pWrapper->GetWrappedUndo();
-        if ( pWrappedAction && pWrappedAction->ISA( ScUndoPaste ) )
+        if ( pWrappedAction && dynamic_cast<const ScUndoPaste*>( pWrappedAction) !=  nullptr )
         {
             //  Store paste action if this is part of paste with inserting cells.
             //  A list action isn't used because Repeat wouldn't work (insert wrong cells).
@@ -311,7 +311,7 @@ void ScUndoInsertCells::Redo()
 
 void ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         if ( pPasteUndo )
         {
@@ -327,7 +327,7 @@ void ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
@@ -555,13 +555,13 @@ void ScUndoDeleteCells::Redo()
 
 void ScUndoDeleteCells::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( eCmd );
 }
 
 bool ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 // delete cells in multiselection
@@ -734,13 +734,13 @@ void ScUndoDeleteMulti::Redo()
 void ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
 {
     // if single selection
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( DEL_DELROWS );
 }
 
 bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoCut::ScUndoCut( ScDocShell* pNewDocShell,
@@ -835,13 +835,13 @@ void ScUndoCut::Redo()
 
 void ScUndoCut::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->CutToClip( NULL, true );
 }
 
 bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
@@ -1095,7 +1095,7 @@ void ScUndoPaste::Redo()
 
 void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScTabViewShell* pViewSh = static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pViewSh->GetActiveWin() );
@@ -1113,7 +1113,7 @@ void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
@@ -1498,13 +1498,13 @@ void ScUndoListNames::Redo()
 
 void ScUndoListNames::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->InsertNameList();
 }
 
 bool ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoConditionalFormat::ScUndoConditionalFormat(ScDocShell* pNewDocShell,
@@ -1660,7 +1660,7 @@ void ScUndoUseScenario::Redo()
 
 void ScUndoUseScenario::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         OUString aTemp = aName;
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->UseScenario(aTemp);
@@ -1669,7 +1669,7 @@ void ScUndoUseScenario::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScViewData& rViewData = static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData();
         return !rViewData.GetDocument()->IsScenario( rViewData.GetTabNo() );
@@ -1760,7 +1760,7 @@ void ScUndoSelectionStyle::Redo()
 
 void ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
@@ -1779,7 +1779,7 @@ void ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoSelectionStyle::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 sal_uInt16 ScUndoSelectionStyle::GetId() const
@@ -1859,7 +1859,7 @@ void ScUndoEnterMatrix::Redo()
 
 void ScUndoEnterMatrix::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         OUString aTemp = aFormula;
         ScDocument& rDoc = pDocShell->GetDocument();
@@ -1869,7 +1869,7 @@ void ScUndoEnterMatrix::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 static ScRange lcl_GetMultiMarkRange( const ScMarkData& rMark )
@@ -1929,13 +1929,13 @@ void ScUndoIndent::Redo()
 
 void ScUndoIndent::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->ChangeIndent( bIsIncrement );
 }
 
 bool ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoTransliterate::ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMarkData& rMark,
@@ -1985,13 +1985,13 @@ void ScUndoTransliterate::Redo()
 
 void ScUndoTransliterate::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->TransliterateText( nTransliterationType );
 }
 
 bool ScUndoTransliterate::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& rMark,
@@ -2046,7 +2046,7 @@ void ScUndoClearItems::Redo()
 
 void ScUndoClearItems::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScViewData& rViewData = static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData();
         rViewData.GetDocFunc().ClearItems( rViewData.GetMarkData(), pWhich, false );
@@ -2055,7 +2055,7 @@ void ScUndoClearItems::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoClearItems::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 // remove all line breaks of a table
@@ -2110,7 +2110,7 @@ void ScUndoRemoveBreaks::Redo()
 
 void ScUndoRemoveBreaks::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         rViewShell.RemoveManualBreaks();
@@ -2119,7 +2119,7 @@ void ScUndoRemoveBreaks::Repeat(SfxRepeatTarget& rTarget)
 
 bool ScUndoRemoveBreaks::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
@@ -2221,13 +2221,13 @@ void ScUndoRemoveMerge::Redo()
 
 void ScUndoRemoveMerge::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
         static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RemoveMerge();
 }
 
 bool ScUndoRemoveMerge::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA(ScTabViewTarget);
+    return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
 void ScUndoRemoveMerge::SetCurTab()

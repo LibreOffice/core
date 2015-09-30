@@ -188,7 +188,7 @@ const SvGlobalName & SvMetaExtern::GetUUId() const
 
 void SvMetaExtern::SetModule( SvIdlDataBase & rBase )
 {
-    pModule = static_cast<SvMetaModule *>(rBase.GetStack().Get( TYPE( SvMetaModule ) ));
+    pModule = static_cast<SvMetaModule *>(rBase.GetStack().Get( checkSvMetaObject<SvMetaModule> ));
 }
 
 void SvMetaExtern::ReadAttributesSvIdl( SvIdlDataBase & rBase,

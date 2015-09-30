@@ -73,12 +73,12 @@ void FuSearch::DoExecute( SfxRequest& )
 {
     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
-    if ( mpViewShell->ISA(DrawViewShell) )
+    if ( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr )
     {
         bOwnOutliner = true;
         pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
-    else if ( mpViewShell->ISA(OutlineViewShell) )
+    else if ( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr )
     {
         bOwnOutliner = false;
         pSdOutliner = mpDoc->GetOutliner();
@@ -102,14 +102,14 @@ FuSearch::~FuSearch()
 
 void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
 {
-    ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
+    ViewShellBase* pBase = dynamic_cast<ViewShellBase*>( SfxViewShell::Current() );
     ViewShell* pViewShell = NULL;
     if (pBase != NULL)
         pViewShell = pBase->GetMainViewShell().get();
 
     if (pViewShell != NULL)
     {
-        if ( pSdOutliner && pViewShell->ISA(DrawViewShell) && !bOwnOutliner )
+        if ( pSdOutliner && dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr && !bOwnOutliner )
         {
             pSdOutliner->EndSpelling();
 
@@ -117,7 +117,7 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
             pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->PrepareSpelling();
         }
-        else if ( pSdOutliner && pViewShell->ISA(OutlineViewShell) && bOwnOutliner )
+        else if ( pSdOutliner && dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr && bOwnOutliner )
         {
             pSdOutliner->EndSpelling();
             delete pSdOutliner;

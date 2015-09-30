@@ -342,7 +342,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
 
     if( pReqArgs )
     {
-        const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, &pReqArgs->Get( rReq.GetSlot() ) );
+        const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>( &pReqArgs->Get( rReq.GetSlot() )  );
 
         if( pStringItem )
         {

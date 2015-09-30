@@ -425,7 +425,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if ( pObjSh->IsModified() )
                 {
                     pObjSh->ExecuteSlot( aReq );
-                    const SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, aReq.GetReturnValue() );
+                    const SfxBoolItem *pItem = dynamic_cast<const SfxBoolItem*>( aReq.GetReturnValue()  );
                     if ( !pItem || !pItem->GetValue() )
                         bOK = false;
                 }
@@ -572,7 +572,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             {
                 SfxBoolItem const * pItem = static_cast< SfxBoolItem const * >(
                     rReq.GetArg(SID_SHOW_IME_STATUS_WINDOW, false,
-                                TYPE(SfxBoolItem)));
+                                checkSfxPoolItem<SfxBoolItem>));
                 bool bShow = pItem == 0
                     ? !pAppData_Impl->m_xImeStatusWindow->isShowing()
                     : pItem->GetValue();
@@ -636,7 +636,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_AVAILABLE_TOOLBARS:
         {
             SfxStringItem const * pToolbarName = static_cast< SfxStringItem const *>(
-                    rReq.GetArg(SID_AVAILABLE_TOOLBARS, false, TYPE(SfxStringItem)));
+                    rReq.GetArg(SID_AVAILABLE_TOOLBARS, false, checkSfxPoolItem< SfxStringItem >));
 
             if ( pToolbarName )
             {
@@ -971,7 +971,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             Reference < XFrame > xFrame;
             if ( pArgs && pArgs->GetItemState( SID_FILLFRAME, false, &pItem ) == SfxItemState::SET )
             {
-                OSL_ENSURE( pItem->ISA( SfxUnoFrameItem ), "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
+                OSL_ENSURE( dynamic_cast< const SfxUnoFrameItem *>( pItem ) !=  nullptr, "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
                 xFrame = static_cast< const SfxUnoFrameItem*>( pItem )->GetFrame();
             }
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

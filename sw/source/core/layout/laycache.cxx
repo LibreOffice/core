@@ -278,7 +278,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                 for ( size_t i = 0; i < rObjs.size(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = rObjs[i];
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                         if( pFly->Frm().Left() != FAR_AWAY &&
@@ -943,7 +943,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
         for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = rObjs[i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )  // a text frame?
+            if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )  // a text frame?
             {
                 SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 if( pFly->GetAnchorFrm() &&

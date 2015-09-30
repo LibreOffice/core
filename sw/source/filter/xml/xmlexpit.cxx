@@ -117,7 +117,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
 {
     if( 0 != (rEntry.nMemberId & MID_SW_FLAG_SPECIAL_ITEM_EXPORT) )
     {
-        if( rItem.ISA( SwFormatRowSplit ) )
+        if( dynamic_cast<const SwFormatRowSplit*>( &rItem) !=  nullptr )
         {
             OUString aValue;
             bool bAddAttribute = true;
@@ -134,7 +134,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             else
             {
                 OUStringBuffer aOut;
-                const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
+                const SfxBoolItem* pSplit = dynamic_cast<const SfxBoolItem*>( &rItem );
                 assert(pSplit && "Wrong Which-ID");
                 const unsigned int eEnum = (pSplit && pSplit->GetValue()) ? 1 : 0;
                 SvXMLUnitConverter::convertEnum( aOut, eEnum, aXML_KeepTogetherType );
@@ -147,13 +147,13 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                 rAttrList.AddAttribute( sName, aValue );
             }
         }
-        if( rItem.ISA( SvXMLAttrContainerItem ) )
+        if( dynamic_cast<const SvXMLAttrContainerItem*>( &rItem) !=  nullptr )
         {
             SvXMLNamespaceMap *pNewNamespaceMap = 0;
             const SvXMLNamespaceMap *pNamespaceMap = &rNamespaceMap;
 
             const SvXMLAttrContainerItem *pUnknown =
-                PTR_CAST( SvXMLAttrContainerItem, &rItem );
+                dynamic_cast<const SvXMLAttrContainerItem*>( &rItem  );
 
             const sal_uInt16 nCount = pUnknown ? pUnknown->GetAttrCount() : 0;
             for( sal_uInt16 i=0; i < nCount; i++ )
@@ -384,7 +384,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_LR_SPACE:
         {
-            const SvxLRSpaceItem* pLRSpace = PTR_CAST(SvxLRSpaceItem, &rItem);
+            const SvxLRSpaceItem* pLRSpace = dynamic_cast<const SvxLRSpaceItem*>( &rItem );
             OSL_ENSURE( pLRSpace != NULL, "Wrong Which-ID!" );
 
             bOk = true;
@@ -454,7 +454,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_UL_SPACE:
         {
-            const SvxULSpaceItem* pULSpace = PTR_CAST(SvxULSpaceItem, &rItem);
+            const SvxULSpaceItem* pULSpace = dynamic_cast<const SvxULSpaceItem*>( &rItem );
             OSL_ENSURE( pULSpace != NULL, "Wrong Which-ID!" );
 
             switch( nMemberId )
@@ -495,7 +495,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_SHADOW:
         {
-            const SvxShadowItem* pShadow = PTR_CAST(SvxShadowItem, &rItem);
+            const SvxShadowItem* pShadow = dynamic_cast<const SvxShadowItem*>( &rItem );
             assert(pShadow && "Wrong Which-ID");
             if (pShadow)
             {
@@ -536,7 +536,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_BOX:
         {
-            const SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
+            const SvxBoxItem* pBox = dynamic_cast<const SvxBoxItem*>( &rItem );
             assert(pBox && "Wrong Which-ID");
             if (pBox)
             {
@@ -839,7 +839,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_BREAK:
         {
-            const SvxFormatBreakItem* pFormatBreak = PTR_CAST(SvxFormatBreakItem, &rItem);
+            const SvxFormatBreakItem* pFormatBreak = dynamic_cast<const SvxFormatBreakItem*>( &rItem );
             OSL_ENSURE( pFormatBreak != NULL, "Wrong Which-ID" );
 
             unsigned int eEnum = 0;
@@ -886,7 +886,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_KEEP:
         {
-            const SvxFormatKeepItem* pFormatKeep = PTR_CAST(SvxFormatKeepItem, &rItem);
+            const SvxFormatKeepItem* pFormatKeep = dynamic_cast<const SvxFormatKeepItem*>( &rItem );
             assert(pFormatKeep && "Wrong Which-ID");
             if (pFormatKeep)
             {
@@ -900,7 +900,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_BACKGROUND:
         {
-            const SvxBrushItem* pBrush = PTR_CAST(SvxBrushItem, &rItem);
+            const SvxBrushItem* pBrush = dynamic_cast<const SvxBrushItem*>( &rItem );
             OSL_ENSURE( pBrush != NULL, "Wrong Which-ID" );
 
             // note: the graphic is only exported if nMemberId equals
@@ -1014,7 +1014,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_PAGEDESC:
         {
-            const SwFormatPageDesc* pPageDesc = PTR_CAST(SwFormatPageDesc, &rItem);
+            const SwFormatPageDesc* pPageDesc = dynamic_cast<const SwFormatPageDesc*>( &rItem );
             OSL_ENSURE( pPageDesc != NULL, "Wrong Which-ID" );
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
@@ -1038,7 +1038,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_LAYOUT_SPLIT:
         case RES_ROW_SPLIT:
         {
-            const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
+            const SfxBoolItem* pSplit = dynamic_cast<const SfxBoolItem*>( &rItem );
             assert(pSplit && "Wrong Which-ID");
             if (pSplit)
             {
@@ -1050,7 +1050,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_HORI_ORIENT:
         {
-            const SwFormatHoriOrient* pHoriOrient = PTR_CAST(SwFormatHoriOrient, &rItem);
+            const SwFormatHoriOrient* pHoriOrient = dynamic_cast<const SwFormatHoriOrient*>( &rItem );
             assert(pHoriOrient && "Wrong Which-ID");
             if (pHoriOrient)
             {
@@ -1063,7 +1063,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_VERT_ORIENT:
         {
-            const SwFormatVertOrient* pVertOrient = PTR_CAST(SwFormatVertOrient, &rItem);
+            const SwFormatVertOrient* pVertOrient = dynamic_cast<const SwFormatVertOrient*>( &rItem );
             assert(pVertOrient && "Wrong Which-ID");
 
             SvXMLUnitConverter::convertEnum( aOut, pVertOrient->GetVertOrient(),
@@ -1074,7 +1074,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_FRM_SIZE:
         {
-            const SwFormatFrmSize* pFrmSize = PTR_CAST(SwFormatFrmSize, &rItem);
+            const SwFormatFrmSize* pFrmSize = dynamic_cast<const SwFormatFrmSize*>( &rItem );
             OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
 
             bool bOutHeight = false;
@@ -1128,7 +1128,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_COLLAPSING_BORDERS:
         {
-            const SfxBoolItem* pBorders = PTR_CAST(SfxBoolItem, &rItem);
+            const SfxBoolItem* pBorders = dynamic_cast<const SfxBoolItem*>( &rItem );
             assert(pBorders && "Wrong RES-ID");
             if (pBorders)
             {

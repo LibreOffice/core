@@ -264,7 +264,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
     SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SfxFilterFlags::IMPORT, SFX_FILTER_NOTINSTALLED );
 
-    bool                bDrawMode = mpViewShell && mpViewShell->ISA(DrawViewShell);
+    bool                bDrawMode = mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr;
     bool                bInserted = false;
 
     if( pFilter )
@@ -357,7 +357,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
         if (pView)
         {
-            if (pView->ISA(OutlineView))
+            if( dynamic_cast< const OutlineView *>( pView ) !=  nullptr)
             {
                 pPage = static_cast<OutlineView*>(pView)->GetActualPage();
             }

@@ -58,7 +58,7 @@ void SwFEShell::EndAllActionAndCall()
 {
     for(SwViewShell& rCurrentShell : GetRingContainer())
     {
-        if( rCurrentShell.IsA( TYPE(SwCrsrShell) ) )
+        if( dynamic_cast<const SwCrsrShell*>( &rCurrentShell) !=  nullptr )
         {
             static_cast<SwFEShell*>(&rCurrentShell)->EndAction();
             static_cast<SwFEShell*>(&rCurrentShell)->CallChgLnk();
@@ -444,8 +444,8 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                 while ( !aDrawObjs.empty() )
                 {
                     SdrObject* pDrawObj = aDrawObjs.back();
-                    if ( !pDrawObj->ISA(SwVirtFlyDrawObj) &&
-                         !pDrawObj->ISA(SwFlyDrawObj) )
+                    if ( dynamic_cast<const SwVirtFlyDrawObj*>( pDrawObj) ==  nullptr &&
+                         dynamic_cast<const SwFlyDrawObj*>( pDrawObj) ==  nullptr )
                     {
                         SwFlyFrameFormat *pFormat =
                             GetDoc()->InsertDrawLabel( rText, rSeparator, rNumberSeparator, nId, rCharacterStyle, *pDrawObj );
@@ -1264,7 +1264,7 @@ bool SwFEShell::IsFrmVertical(const bool bEnvironment, bool& bRTL, bool& bVertL2
             return bVert;
         }
 
-        if ( pObj->ISA(SwVirtFlyDrawObj) && !bEnvironment )
+        if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr && !bEnvironment )
             pRef = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
 
         bVert = pRef->IsVertical();

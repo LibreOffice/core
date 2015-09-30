@@ -266,7 +266,7 @@ void SwFrm::CheckDirChange()
             for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                if( pAnchoredObj->ISA(SwFlyFrm) )
+                if( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                     static_cast<SwFlyFrm*>(pAnchoredObj)->CheckDirChange();
                 else
                 {
@@ -349,7 +349,7 @@ void SwFrm::DestroyImpl()
         for ( size_t i = mpDrawObjs->size(); i; )
         {
             SwAnchoredObject* pAnchoredObj = (*mpDrawObjs)[--i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
             {
                 SwFrm::DestroyFrm(static_cast<SwFlyFrm*>(pAnchoredObj));
             }
@@ -422,7 +422,7 @@ SwContentFrm::SwContentFrm( SwContentNode * const pContent, SwFrm* pSib ) :
 void SwContentFrm::DestroyImpl()
 {
     const SwContentNode* pCNd;
-    if( 0 != ( pCNd = PTR_CAST( SwContentNode, GetRegisteredIn() )) &&
+    if( 0 != ( pCNd = dynamic_cast<SwContentNode*>( GetRegisteredIn() ) ) &&
         !pCNd->GetDoc()->IsInDtor() )
     {
         //Unregister from root if I'm still in turbo there.
@@ -472,7 +472,7 @@ void SwLayoutFrm::DestroyImpl()
                 const size_t nCnt = pFrm->GetDrawObjs()->size();
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[0];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
                 {
                     SwFrm::DestroyFrm(static_cast<SwFlyFrm*>(pAnchoredObj));
                     assert(!pFrm->GetDrawObjs() || nCnt > pFrm->GetDrawObjs()->size());
@@ -507,7 +507,7 @@ void SwLayoutFrm::DestroyImpl()
 
             // #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[0];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
             {
                 SwFrm::DestroyFrm(static_cast<SwFlyFrm*>(pAnchoredObj));
                 assert(!GetDrawObjs() || nCnt > GetDrawObjs()->size());

@@ -2584,7 +2584,7 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
     // take care of all shells
     for(SwViewShell& rTmp : GetRingContainer())
     {
-        if( rTmp.IsA( TYPE( SwCrsrShell )))
+        if( dynamic_cast<const SwCrsrShell *>(&rTmp) != nullptr)
         {
             SwCrsrShell* pSh = static_cast<SwCrsrShell*>(&rTmp);
             if( pSh->m_pCrsrStk )
@@ -3026,7 +3026,7 @@ void SwCrsrShell::SetReadOnlyAvailable( bool bFlag )
 {
     // *never* switch in GlobalDoc
     if( (!GetDoc()->GetDocShell() ||
-         !GetDoc()->GetDocShell()->IsA( SwGlobalDocShell::StaticType() )) &&
+         dynamic_cast<const SwGlobalDocShell*>(GetDoc()->GetDocShell()) == nullptr ) &&
         bFlag != m_bSetCrsrInReadOnly )
     {
         // If the flag is switched off then all selections need to be

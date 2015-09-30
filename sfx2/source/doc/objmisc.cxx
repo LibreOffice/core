@@ -523,7 +523,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
             {
                 // TODO/LATER: currently the application guards against the reentrance problem
                 const SfxPoolItem* pItem = pViewFrame->GetBindings().ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC );
-                const SfxBoolItem* pResult = PTR_CAST( SfxBoolItem, pItem );
+                const SfxBoolItem* pResult = dynamic_cast<const SfxBoolItem*>( pItem  );
                 bResult = ( pResult && pResult->GetValue() );
                 if ( bResult )
                     aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
@@ -557,7 +557,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
                 // TODO/LATER: currently the application guards against the reentrance problem
                 SetModified(); // the modified flag has to be set to let the document be stored with the shared flag
                 const SfxPoolItem* pItem = pViewFrame->GetBindings().ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC );
-                const SfxBoolItem* pResult = PTR_CAST( SfxBoolItem, pItem );
+                const SfxBoolItem* pResult = dynamic_cast<const SfxBoolItem*>( pItem  );
                 bResult = ( pResult && pResult->GetValue() );
             }
         }

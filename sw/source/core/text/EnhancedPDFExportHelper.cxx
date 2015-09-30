@@ -271,7 +271,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
     mpPorInfo( pPorInfo )
 {
     mpPDFExtOutDevData =
-        PTR_CAST( vcl::PDFExtOutDevData, rOut.GetExtOutDevData() );
+        dynamic_cast< vcl::PDFExtOutDevData*>( rOut.GetExtOutDevData() );
 
     if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
@@ -1442,7 +1442,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
 bool SwTaggedPDFHelper::IsExportTaggedPDF( const OutputDevice& rOut )
 {
-    vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, rOut.GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData*>( rOut.GetExtOutDevData() );
     return pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF();
 }
 
@@ -1533,7 +1533,7 @@ Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrm* pCurrPage,
 void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 {
     vcl::PDFExtOutDevData* pPDFExtOutDevData =
-        PTR_CAST( vcl::PDFExtOutDevData, mrOut.GetExtOutDevData() );
+        dynamic_cast< vcl::PDFExtOutDevData*>( mrOut.GetExtOutDevData() );
 
     if ( !pPDFExtOutDevData )
         return;

@@ -471,14 +471,14 @@ bool SwEditShell::CanMergeTable( bool bWithPrev, bool* pChkNxtPrv ) const
     bool bRet = false;
     const SwPaM *pCrsr = GetCrsr();
     const SwTableNode* pTableNd = pCrsr->GetNode().FindTableNode();
-    if( pTableNd && !pTableNd->GetTable().ISA( SwDDETable ))
+    if( pTableNd && dynamic_cast< const SwDDETable* >(&pTableNd->GetTable()) ==  nullptr)
     {
         bool bNew = pTableNd->GetTable().IsNewModel();
         const SwNodes& rNds = GetDoc()->GetNodes();
         if( pChkNxtPrv )
         {
             const SwTableNode* pChkNd = rNds[ pTableNd->GetIndex() - 1 ]->FindTableNode();
-            if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
+            if( pChkNd && dynamic_cast< const SwDDETable* >(&pChkNd->GetTable()) ==  nullptr &&
                 bNew == pChkNd->GetTable().IsNewModel() &&
                 // Consider table in table case
                 pChkNd->EndOfSectionIndex() == pTableNd->GetIndex() - 1 )
@@ -486,7 +486,7 @@ bool SwEditShell::CanMergeTable( bool bWithPrev, bool* pChkNxtPrv ) const
             else
             {
                 pChkNd = rNds[ pTableNd->EndOfSectionIndex() + 1 ]->GetTableNode();
-                if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
+                if( pChkNd && dynamic_cast< const SwDDETable* >(&pChkNd->GetTable()) ==  nullptr &&
                     bNew == pChkNd->GetTable().IsNewModel() )
                     *pChkNxtPrv = false, bRet = true;   // using Next is possible
             }
@@ -505,7 +505,7 @@ bool SwEditShell::CanMergeTable( bool bWithPrev, bool* pChkNxtPrv ) const
             else
                 pTmpTableNd = rNds[ pTableNd->EndOfSectionIndex() + 1 ]->GetTableNode();
 
-            bRet = pTmpTableNd && !pTmpTableNd->GetTable().ISA( SwDDETable ) &&
+            bRet = pTmpTableNd && dynamic_cast< const SwDDETable* >(&pTmpTableNd->GetTable()) ==  nullptr &&
                    bNew == pTmpTableNd->GetTable().IsNewModel();
         }
     }

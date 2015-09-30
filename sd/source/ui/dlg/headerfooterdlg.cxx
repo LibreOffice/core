@@ -651,7 +651,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
                     if( aFieldInfo.pFieldItem )
                     {
                         const SvxFieldData* pFieldData = aFieldInfo.pFieldItem->GetField();
-                        if( pFieldData && (pFieldData->ISA( SvxDateTimeField ) || pFieldData->ISA( SvxDateField )) )
+                        if( pFieldData && ( dynamic_cast< const SvxDateTimeField *>( pFieldData ) != nullptr || dynamic_cast< const SvxDateField *>( pFieldData ) != nullptr))
                         {
                             break;
                         }

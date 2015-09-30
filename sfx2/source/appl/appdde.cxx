@@ -123,8 +123,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
     // with the specific name:
     sal_Bool bRet = sal_False;
     OUString sNm( rNm.toAsciiLowerCase() );
-    TypeId aType( TYPE(SfxObjectShell) );
-    SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
+    SfxObjectShell* pShell = SfxObjectShell::GetFirst();
     while( pShell )
     {
         OUString sTmp( pShell->GetTitle(SFX_TITLE_FULLNAME) );
@@ -134,7 +133,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
             bRet = true;
             break;
         }
-        pShell = SfxObjectShell::GetNext( *pShell, &aType );
+        pShell = SfxObjectShell::GetNext( *pShell );
     }
 
     if( !bRet )
@@ -155,7 +154,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
                     &aName, &aNewView,
                     &aSilent, 0L );
 
-            if( pRet && pRet->ISA( SfxViewFrameItem ) &&
+            if( pRet && dynamic_cast< const SfxViewFrameItem *>( pRet ) !=  nullptr &&
                 ((SfxViewFrameItem*)pRet)->GetFrame() &&
                 0 != ( pShell = ((SfxViewFrameItem*)pRet)
                     ->GetFrame()->GetObjectShell() ) )
@@ -174,8 +173,7 @@ OUString ImplDdeService::Topics()
     if( GetSysTopic() )
         sRet += GetSysTopic()->GetName();
 
-    TypeId aType( TYPE(SfxObjectShell) );
-    SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
+    SfxObjectShell* pShell = SfxObjectShell::GetFirst();
     while( pShell )
     {
         if( SfxViewFrame::GetFirst( pShell ) )
@@ -184,7 +182,7 @@ OUString ImplDdeService::Topics()
                 sRet += "\t";
             sRet += pShell->GetTitle(SFX_TITLE_FULLNAME);
         }
-        pShell = SfxObjectShell::GetNext( *pShell, &aType );
+        pShell = SfxObjectShell::GetNext( *pShell );
     }
     if( !sRet.isEmpty() )
         sRet += "\r\n";
@@ -413,14 +411,13 @@ void SfxObjectShell::ReconnectDdeLink(SfxObjectShell& /*rServer*/)
 
 void SfxObjectShell::ReconnectDdeLinks(SfxObjectShell& rServer)
 {
-    TypeId aType = TYPE(SfxObjectShell);
-    SfxObjectShell* p = GetFirst(&aType, false);
+    SfxObjectShell* p = GetFirst(nullptr, false);
     while (p)
     {
         if (&rServer != p)
             p->ReconnectDdeLink(rServer);
 
-        p = GetNext(*p, &aType, false);
+        p = GetNext(*p, nullptr, false);
     }
 }
 

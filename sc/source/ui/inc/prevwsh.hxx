@@ -36,7 +36,7 @@ struct ScHeaderFieldData;
 class ScPreviewLocationData;
 class CommandEvent;
 
-class ScPreviewShell: public SfxViewShell
+class SC_DLLPUBLIC ScPreviewShell: public SfxViewShell
 {
     ScDocShell*     pDocShell;
 
@@ -75,7 +75,7 @@ protected:
     virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) SAL_OVERRIDE;
 
 public:
-                    TYPEINFO_VISIBILITY_OVERRIDE( SC_DLLPUBLIC );
+                    TYPEINFO_OVERRIDE();
                     SFX_DECL_INTERFACE(SCID_PREVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScPreviewShell);
 
@@ -116,7 +116,7 @@ public:
 
     const ScPreviewLocationData& GetLocationData();
     ScDocument&     GetDocument();
-    SC_DLLPUBLIC ScPreview*      GetPreview() { return pPreview; }
+    ScPreview*      GetPreview() { return pPreview; }
 };
 
 #endif

@@ -941,7 +941,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
     UpdatePageList();
 
     SfxObjectShell* pShell = xDocShell;
-    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell,pShell);
+    ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( pShell );
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
 
     if(pDoc)
@@ -1309,7 +1309,7 @@ void AssistentDlgImpl::UpdateUserData()
     OUString aInfo  = mpPage4AskInfoEDT->GetText();
 
     SfxObjectShell* pShell = xDocShell;
-    DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
+    DrawDocShell* pDocShell = dynamic_cast< DrawDocShell *>( pShell );
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
     SdPage* pPage = pDoc?pDoc->GetSdPage(0, PK_STANDARD):NULL;
 
@@ -1372,7 +1372,7 @@ void AssistentDlgImpl::UpdatePageList()
     maPageListFile = maDocFile;
 
     SfxObjectShell* pShell = xDocShell;
-    DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
+    DrawDocShell* pDocShell = dynamic_cast< DrawDocShell *>( pShell );
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
 
     mpPage5PageListCT->Clear();
@@ -1431,7 +1431,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
         if( aLayoutFile != maLayoutFile )
         {
             SfxObjectShell* pShell = xDocShell;
-            DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
+            DrawDocShell* pDocShell = dynamic_cast< DrawDocShell *>( pShell );
             ::svl::IUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():NULL;
             if(pUndoMgr)
                 pUndoMgr->Undo();
@@ -1470,7 +1470,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
             aReq.AppendItem( SfxBoolItem( SID_HIDDEN, true ) );
             aReq.AppendItem( SfxBoolItem( SID_PREVIEW, bDocPreview ) );
 
-            const SfxViewFrameItem* pRet = PTR_CAST( SfxViewFrameItem, SfxGetpApp()->ExecuteSlot( aReq ) );
+            const SfxViewFrameItem* pRet = dynamic_cast<const SfxViewFrameItem*>( SfxGetpApp()->ExecuteSlot( aReq )  );
 
             if ( pRet && pRet->GetFrame() && pRet->GetFrame()->GetObjectShell() )
                 xDocShell = pRet->GetFrame()->GetObjectShell();
@@ -1509,11 +1509,11 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
 
         // determine the implementation
         SfxObjectShell* pShell = xDocShell;
-        DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
+        DrawDocShell* pDocShell = dynamic_cast< DrawDocShell *>( pShell );
         SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
 
         pShell = xLayoutDocShell;
-        pDocShell = PTR_CAST(DrawDocShell,pShell);
+        pDocShell = dynamic_cast< DrawDocShell *>( pShell );
         SdDrawDocument* pLayoutDoc = pDocShell?pDocShell->GetDoc():NULL;
 
         if( pDoc && pLayoutDoc )

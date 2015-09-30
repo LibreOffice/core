@@ -70,8 +70,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
 
     if( pReqArgs )
     {
-        const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, &pReqArgs->Get( rReq.GetSlot() ) );
-
+        const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>( &pReqArgs->Get( rReq.GetSlot() )  );
         if( pStringItem )
         {
             aURL = pStringItem->GetValue();
