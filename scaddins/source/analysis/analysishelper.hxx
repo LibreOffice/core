@@ -91,7 +91,6 @@ double              GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_
                         throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 inline double       GetYearFrac( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
                         throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-inline void         AlignDate( sal_uInt16& rDay, sal_uInt16 nMonth, sal_uInt16 nYear );
 
 double              BinomialCoefficient( double n, double k );
 double              GetGcd( double f1, double f2 );
@@ -103,7 +102,6 @@ double              Erf( double fX );
 double              Erfc( double fX );
 bool                ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
 OUString            GetString( double fNumber, bool bLeadingSign = false, sal_uInt16 nMaxNumOfDigits = 15 );
-inline double       Exp10( sal_Int16 nPower );      // 10 ^ nPower
 
 double              GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
                                 double fRestVal, double fPer, double fRate, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );

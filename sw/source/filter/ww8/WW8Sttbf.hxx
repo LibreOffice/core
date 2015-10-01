@@ -65,12 +65,6 @@ typedef ::std::vector<OUString> StringVector_t;
         WW8Sttb(SvStream& rSt, sal_Int32 nPos, sal_uInt32 nSize);
         virtual ~WW8Sttb();
 
-        sal_uInt32 getCount() const;
-        OUString getEntry(sal_uInt32 nEntry) const
-        {
-            return m_Strings[nEntry];
-        }
-
         StringVector_t & getStrings()
         {
             return m_Strings;

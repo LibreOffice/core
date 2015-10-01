@@ -57,8 +57,6 @@ public:
     void Execute( vcl::Window* pWin, sal_uInt16 nId );
 };
 
-void GetPreferredExtension( OUString &rExt, const Graphic &rGrf );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

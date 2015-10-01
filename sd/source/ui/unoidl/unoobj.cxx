@@ -281,9 +281,7 @@ SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
     mpMap( pModel?
                     lcl_ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeKind() == OBJ_GRAF )
                 :   lcl_GetEmpty_SdXShapePropertyMap_Impl() ),
-    mpModel(pModel),
-    mpImplementationId( NULL )
-
+    mpModel(pModel)
 {
 
     pShape->setMaster( this );

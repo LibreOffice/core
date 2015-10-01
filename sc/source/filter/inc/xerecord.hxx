@@ -332,9 +332,6 @@ public:
     /** Appends a newly created record to the list. */
     inline void         AppendNewRecord( RecType* pRec )
                             { if( pRec ) AppendRecord( RecordRefType( pRec ) ); }
-    /** Replaces the record at the specified position from the list with the passed newly created record. */
-    inline void         ReplaceNewRecord( RecType* pRec, size_t nPos )
-                            { RemoveRecord( nPos ); InsertNewRecord( pRec, nPos ); }
 
     /** Removes the record at the specified position from the list. */
     inline void         RemoveRecord( size_t nPos )

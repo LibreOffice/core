@@ -98,7 +98,6 @@ class ClientBox : public Control
     long m_nTopIndex;
     long m_nStdHeight;
     long m_nActiveHeight;
-    long m_nExtraHeight;
     Size            m_aOutputSize;
 
     VclPtr<NumericBox> m_aPinBox;
@@ -129,9 +128,6 @@ class ClientBox : public Control
 
     DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl, ScrollBar*, void );
     DECL_DLLPRIVATE_LINK_TYPED( DeauthoriseHdl, Button*, void );
-    //Index starts with 1.
-    //Throws an com::sun::star::lang::IllegalArgumentException, when the index is invalid.
-    void checkIndex(sal_Int32 pos) const;
 
 public:
     ClientBox( vcl::Window* pParent, WinBits nStyle );
@@ -144,23 +140,16 @@ public:
     Size GetOptimalSize() const SAL_OVERRIDE;
     bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    const Size GetMinOutputSizePixel() const;
-    void SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
     TClientBoxEntry GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long GetActiveEntryIndex();
-    long GetEntryCount() { return (long) m_vEntries.size(); }
     Rectangle GetEntryRect( const long nPos ) const;
     long PointToPos( const Point& rPos );
     void DoScroll( long nDelta );
     void RecalcAll();
-    void RemoveUnlocked();
 
     void selectEntry( const long nPos );
     long addEntry(std::shared_ptr<ClientInfo> pClientInfo);
     void clearEntries();
-
-    void prepareChecking();
-    void checkEntries();
 
     OUString getPin();
     void populateEntries();

@@ -195,11 +195,6 @@ public:
     virtual void Reverse() SAL_OVERRIDE;
 
 protected:
-    /** Initialize this iterator with respect to the given location.  After
-        this call the object looks like newly constructed.
-    */
-    void Init (IteratorLocation aLocation);
-
     /** Set up page pointer and object list iterator for the specified
         page.
         @param nPageIndex

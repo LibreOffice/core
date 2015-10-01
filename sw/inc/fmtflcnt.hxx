@@ -47,7 +47,6 @@ public:
     inline void SetFlyFormat( SwFrameFormat* pNew = 0 )   { pFormat = pNew; }
 
     const SwTextFlyCnt *GetTextFlyCnt() const { return pTextAttr; }
-          SwTextFlyCnt *GetTextFlyCnt()       { return pTextAttr; }
 };
 
 #endif

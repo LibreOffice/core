@@ -714,7 +714,6 @@ private:
     void CmdField_Impl( FieldInfos& rInfos );
     void EndField_Impl( FieldInfos& rInfos );
 
-    static void AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
     static void AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );
     static void AddToAttrList( css::uno::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
     static void AddToAttrList( css::uno::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );

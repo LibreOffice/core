@@ -69,15 +69,6 @@ inline bool td_equals( typelib_TypeDescription * pTD, typelib_TypeDescriptionRef
              rtl_ustr_compare( pTD->pTypeName->buffer, pType->pTypeName->buffer ) == 0));
 }
 
-inline typelib_TypeDescription * getTypeByName( const OUString & rName )
-{
-    typelib_TypeDescription * pTypeDescr = 0;
-    typelib_typedescription_getByName( &pTypeDescr, rName.pData );
-    if (! pTypeDescr->bComplete)
-        typelib_typedescription_complete( &pTypeDescr );
-    return pTypeDescr;
-}
-
 typedef std::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlField >,
     OUStringHash > OUString2Field;
 typedef std::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlMethod >,

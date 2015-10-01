@@ -216,13 +216,6 @@ namespace slideshow
                              rLHS.getLuminance() + rRHS.getLuminance() );
         }
 
-        HSLColor operator*( const HSLColor& rLHS, const HSLColor& rRHS )
-        {
-            return HSLColor( rLHS.getHue() * rRHS.getHue(),
-                             rLHS.getSaturation() * rRHS.getSaturation(),
-                             rLHS.getLuminance() * rRHS.getLuminance() );
-        }
-
         HSLColor operator*( double nFactor, const HSLColor& rRHS )
         {
             return HSLColor( nFactor * rRHS.getHue(),

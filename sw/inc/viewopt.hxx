@@ -101,9 +101,6 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_SECTION_BOUNDARIES  0x0080
 #define VIEWOPT_SHADOW              0x0100
 
-// Implementation in core/text/txtpaint.cxx.
-extern void SyncVout( const OutputDevice *pOut );
-
 class SW_DLLPUBLIC SwViewOption
 {
     static Color    aDocColor;  // color of document boundaries

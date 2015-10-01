@@ -59,7 +59,6 @@ public:
     virtual             ~XclExpTablesManager();
 
     void                Initialize();
-    bool                AppendTable( const ScDBData& rData, sal_Int32 nTableId );
     XclExpTables*       GetTablesBySheet( SCTAB nTab );
 
 private:

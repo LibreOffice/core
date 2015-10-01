@@ -58,8 +58,6 @@ SwGlossaryList* GetGlossaryList();
 
 extern  void _InitUI();
 extern  void _FinitUI();
-extern  void _InitSpell();
-extern  void _FinitSpell();
 
 #endif
 

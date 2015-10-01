@@ -193,7 +193,6 @@ private:
     */
     DECL_LINK_TYPED(ClickHandler, ValueSet*, void);
     DECL_LINK_TYPED(RightClickHandler, const MouseEvent&, void);
-    DECL_LINK(ContextMenuCallback, CommandEvent*);
     DECL_LINK_TYPED(ContainerChangeListener, MasterPageContainerChangeEvent&, void);
     DECL_LINK_TYPED(OnMenuItemSelected, Menu*, bool);
 

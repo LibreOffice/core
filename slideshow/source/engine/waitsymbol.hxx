@@ -72,16 +72,6 @@ private:
     void setVisible( const bool bVisible );
     ::basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView ) const;
 
-    template <typename func_type>
-    void for_each_sprite( func_type const & func ) const
-    {
-        ViewsVecT::const_iterator iPos( maViews.begin() );
-        const ViewsVecT::const_iterator iEnd( maViews.end() );
-        for ( ; iPos != iEnd; ++iPos )
-            if( iPos->second )
-                func( iPos->second );
-    }
-
     typedef ::std::vector<
         ::std::pair<UnoViewSharedPtr,
                     cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;

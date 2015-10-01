@@ -80,11 +80,6 @@ public:
     */
     void NotifyDragFinished();
 
-    /** Call when drag-and-drop or multi selection is started or stopped in
-        order to update permission of mouse over indication.
-    */
-    void UpdateMouseOverIndicationPermission();
-
     class EventDescriptor;
     class ModeHandler;
     friend class ModeHandler;
@@ -121,7 +116,6 @@ private:
 
     /// The rectangle of the mouse drag selection.
     Rectangle maDragSelectionRectangle;
-    bool mbDragSelection;
 
     /// Box of the insert marker in model coordinates.
     Rectangle maInsertionMarkerBox;
@@ -171,8 +165,6 @@ private:
         const FocusManager::FocusMoveDirection eDirection,
         const bool bIsShiftDown,
         const bool bIsControlDown);
-
-    void StopDragAndDrop();
 
     void SwitchMode (const std::shared_ptr<ModeHandler>& rpHandler);
 };

@@ -198,7 +198,6 @@ void control(Tokenrow *);
 void dodefine(Tokenrow *);
 void doadefine(Tokenrow *, int);
 void doinclude(Tokenrow *, int, int);
-void doif(Tokenrow *, enum kwtype);
 void expand(Tokenrow *, Nlist *, MacroValidatorList *);
 void builtin(Tokenrow *, int);
 int gatherargs(Tokenrow *, Tokenrow **, int *);

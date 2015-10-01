@@ -250,7 +250,6 @@ struct transition
     bool mbDirection; // true: default geometric direction
 
     static const transition* find( const OUString& rName );
-    static const sal_Char* find( const sal_Int16 mnType, const sal_Int16 mnSubType, const bool bDirection );
 };
 static const transition gTransitions[] =
 {

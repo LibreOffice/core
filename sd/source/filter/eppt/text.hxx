@@ -255,8 +255,7 @@ public:
     sal_uInt32      ParagraphCount() const;
     sal_uInt32      Count() const;
     int             GetInstance() const;
-    bool        HasExtendedBullets();
-    void            WriteTextSpecInfo( SvStream* pStrm );
+    bool            HasExtendedBullets();
 };
 
 #endif

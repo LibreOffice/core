@@ -69,12 +69,6 @@ private:
     SfxDispatcher* mpDispatcher;
     sal_Int32 mnCurrentSlideNumber;
 
-    /** The display count is used to determine whether the number of
-        displays has changed and thus whether restarting the slide show is
-        really necessary.
-    */
-    sal_Int32 GetDisplayCount();
-
     DECL_LINK_TYPED(EndPresentation, void*, void);
 
     /** Restart the presentation on the slide last shown before the restart

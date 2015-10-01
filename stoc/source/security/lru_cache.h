@@ -82,10 +82,6 @@ public:
     */
     inline void set( t_key const & key, t_val const & val );
 
-    /** Clears the cache, releasing all cached elements and keys.
-    */
-    inline void clear();
-
     /** Sets the number of elements to be cached.  This will clear previous entries.
 
         @param cacheSize number of elements to be cached
@@ -238,20 +234,6 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
         entry->m_val = val;
         toFront( entry );
     }
-}
-
-template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
-inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::clear()
-{
-    m_key2element.clear();
-    for ( ::std::size_t nPos = m_size; nPos--; )
-    {
-        m_block[ nPos ].m_key = t_key();
-        m_block[ nPos ].m_val = t_val();
-    }
-#ifdef __CACHE_DIAGNOSE
-    OSL_TRACE( "> cleared cache" );
-#endif
 }
 
 }

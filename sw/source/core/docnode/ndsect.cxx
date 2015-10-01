@@ -1000,36 +1000,6 @@ SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
     rFormat.UnlockModify();
 }
 
-#ifdef DBG_UTIL
-//remove superfluous SectionFrms
-SwFrm* SwClearDummies( SwFrm* pFrm )
-{
-    SwFrm* pTmp = pFrm;
-    while( pTmp )
-    {
-        OSL_ENSURE( !pTmp->GetUpper(), "SwClearDummies: No Upper allowed!" );
-        if( pTmp->IsSctFrm() )
-        {
-            SwSectionFrm* pSectFrm = static_cast<SwSectionFrm*>(pFrm);
-            pTmp = pTmp->GetNext();
-            if( !pSectFrm->GetLower() )
-            {
-                if( pSectFrm->GetPrev() )
-                    pSectFrm->GetPrev()->mpNext = pTmp;
-                else
-                    pFrm = pTmp;
-                if( pTmp )
-                    pTmp->mpPrev = pSectFrm->GetPrev();
-                SwFrm::DestroyFrm(pSectFrm);
-            }
-        }
-        else
-            pTmp = pTmp->GetNext();
-    }
-    return pFrm;
-}
-#endif
-
 SwSectionNode::~SwSectionNode()
 {
     // mba: test if iteration works as clients will be removed in callback

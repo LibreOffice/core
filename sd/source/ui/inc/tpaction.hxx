@@ -69,7 +69,6 @@ private:
     VclPtr<PushButton>             m_pBtnSearch;
     VclPtr<PushButton>             m_pBtnSeek;
 
-    const SfxItemSet&       rOutAttrs;
     const ::sd::View*       mpView;
     SdDrawDocument*         mpDoc;
     XColorListRef           pColList;
@@ -88,11 +87,9 @@ private:
     void                    OpenFileDialog();
     ::com::sun::star::presentation::ClickAction     GetActualClickAction();
     void                    SetActualClickAction( ::com::sun::star::presentation::ClickAction eCA );
-    void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
     void                    SetEditText( OUString const & rStr );
     OUString                GetEditText( bool bURL = false );
     static sal_uInt16       GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
-    sal_uInt16              GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
 
 public:
             SdTPAction( vcl::Window* pParent, const SfxItemSet& rInAttrs );

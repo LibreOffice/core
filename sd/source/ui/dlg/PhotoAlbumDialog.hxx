@@ -74,7 +74,6 @@ private:
     DECL_LINK_TYPED(CreateHdl, Button*, void);
 
     DECL_LINK_TYPED(FileHdl, Button*, void);
-    DECL_LINK(TextHdl, void*);
     DECL_LINK_TYPED(UpHdl, Button*, void);
     DECL_LINK_TYPED(DownHdl, Button*, void);
     DECL_LINK_TYPED(RemoveHdl, Button*, void);

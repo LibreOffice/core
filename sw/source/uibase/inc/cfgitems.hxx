@@ -37,8 +37,6 @@ class SwViewOption;
 class SwContentOptPage;
 class SwShdwCrsrOptionsTabPage;
 
-void        SetPrt( SfxPrinter* );
-
 // OS 12.01.95
 // Item for settings dialog - document view
 class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem

@@ -235,8 +235,6 @@ private:
     static void InitInterface_Impl();
 
 public:
-    inline vcl::Window& GetFrameWindow() const
-    { return GetViewFrame()->GetWindow(); }
     inline SwViewShell* GetViewShell() const
     { return pViewWin->GetViewShell(); }
     inline void RepaintCoreRect( const SwRect& rRect )

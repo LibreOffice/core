@@ -85,26 +85,6 @@ uno::Reference< excel::XRange> ScVbaPageBreak<Ifc1>::Location() throw ( script::
     return new ScVbaRange( ScVbaPageBreak_BASE::getParent(), ScVbaPageBreak_BASE::mxContext, xRange);
 }
 
-template< typename Ifc1 >
-OUString
-ScVbaPageBreak<Ifc1>::getServiceImplName()
-{
-    return OUString("ScVbaPageBreak");
-}
-
-template< typename Ifc1 >
-uno::Sequence< OUString >
-ScVbaPageBreak<Ifc1>::getServiceNames()
-{
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
-    {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.PageBreak";
-    }
-    return aServiceNames;
-}
-
 template class ScVbaPageBreak< excel::XHPageBreak >;
 
 /* class ScVbaHPageBreak */

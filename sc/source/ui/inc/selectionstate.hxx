@@ -59,7 +59,6 @@ private:
 };
 
 bool operator==( const ScSelectionState& rL, const ScSelectionState& rR );
-inline bool operator!=( const ScSelectionState& rL, const ScSelectionState& rR ) { return !(rL == rR); }
 
 #endif
 

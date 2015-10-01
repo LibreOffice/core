@@ -224,8 +224,6 @@ enum SwDateTimeSubType
 };
 
 /// General tools.
-OUString  GetResult(double nVal, sal_uInt32 nNumFormat, sal_uInt16 nLang = LANGUAGE_SYSTEM);
-void      SetErrorStr(const OUString& rStr);
 OUString  FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat);
 
 /** Instances of SwFields and those derived from it occur 0 to n times.

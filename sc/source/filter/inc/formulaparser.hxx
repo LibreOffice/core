@@ -114,18 +114,6 @@ public:
                             FormulaType eType,
                             SequenceInputStream& rStrm ) const;
 
-    /** Imports and converts a BIFF2-BIFF8 token array from the passed stream.
-        @param pnFmlaSize  Size of the token array. If null is passed, reads
-        it from stream (1 byte in BIFF2, 2 bytes otherwise) first. */
-    ApiTokenSequence    importFormula(
-                            const ::com::sun::star::table::CellAddress& rBaseAddr,
-                            FormulaType eType,
-                            BiffInputStream& rStrm,
-                            const sal_uInt16* pnFmlaSize = 0 ) const;
-
-    /** Converts the passed BIFF error code to a similar formula. */
-    ApiTokenSequence    convertErrorToFormula( sal_uInt8 nErrorCode ) const;
-
     /** Converts the passed XML formula to an OLE link target. */
     OUString     importOleTargetLink( const OUString& rFormulaString );
 

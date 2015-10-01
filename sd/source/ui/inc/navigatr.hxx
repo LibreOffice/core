@@ -142,10 +142,8 @@ private:
     static sal_uInt16           GetDragTypeSdResId( NavigatorDragType eDT, bool bImage = false );
     NavDocInfo*                 GetDocInfo();
 
-                                DECL_LINK( GetFocusObjectsHdl, void * );
                                 DECL_LINK_TYPED( SelectToolboxHdl, ToolBox *, void );
                                 DECL_LINK_TYPED( DropdownClickToolBoxHdl, ToolBox *, void );
-                                DECL_LINK( ClickPageHdl, void * );
                                 DECL_LINK_TYPED( ClickObjectHdl, SvTreeListBox*, bool );
                                 DECL_LINK( SelectDocumentHdl, void * );
                                 DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );

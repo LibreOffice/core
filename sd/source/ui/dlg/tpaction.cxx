@@ -99,7 +99,6 @@ SdActionDlg::SdActionDlg (
 SdTPAction::SdTPAction(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow, "InteractionPage",
         "modules/simpress/ui/interactionpage.ui", &rInAttrs)
-    , rOutAttrs(rInAttrs)
     , mpView(NULL)
     , mpDoc(NULL)
     , bTreeUpdated(false)

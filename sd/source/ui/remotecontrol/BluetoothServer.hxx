@@ -36,7 +36,9 @@ namespace sd
         static void doEnsureDiscoverable();
         static void doRestoreDiscoverable();
 
+#if defined(MACOSX)
         void addCommunicator( Communicator* pCommunicator );
+#endif
     private:
         BluetoothServer( std::vector<Communicator*>* pCommunicators );
         virtual ~BluetoothServer();

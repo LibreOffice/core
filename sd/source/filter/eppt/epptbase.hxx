@@ -313,7 +313,6 @@ class PPTExStyleSheet
                 ~PPTExStyleSheet();
 
                 PPTExParaSheet& GetParaSheet( int nInstance ) { return *mpParaSheet[ nInstance ]; };
-                PPTExCharSheet& GetCharSheet( int nInstance ) { return *mpCharSheet[ nInstance ]; };
 
                 void            SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                                 FontCollection& rFontCollection, int nInstance, int nLevel );

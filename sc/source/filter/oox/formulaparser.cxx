@@ -2797,22 +2797,6 @@ ApiTokenSequence FormulaParser::importFormula( const CellAddress& rBaseAddress, 
     return mxImpl->importBiff12Formula( rBaseAddress, eType, rStrm );
 }
 
-ApiTokenSequence FormulaParser::importFormula( const CellAddress& rBaseAddress, FormulaType eType, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) const
-{
-    return mxImpl->importBiffFormula( rBaseAddress, eType, rStrm, pnFmlaSize );
-}
-
-ApiTokenSequence FormulaParser::convertErrorToFormula( sal_uInt8 nErrorCode ) const
-{
-    ApiTokenSequence aTokens( 3 );
-    // HACK: enclose all error codes into an 1x1 matrix
-    aTokens[ 0 ].OpCode = OPCODE_ARRAY_OPEN;
-    aTokens[ 1 ].OpCode = OPCODE_PUSH;
-    aTokens[ 1 ].Data <<= BiffHelper::calcDoubleFromError( nErrorCode );
-    aTokens[ 2 ].OpCode = OPCODE_ARRAY_CLOSE;
-    return aTokens;
-}
-
 OUString FormulaParser::importOleTargetLink( const OUString& rFormulaString )
 {
     sal_Int32 nRefId = -1;

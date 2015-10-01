@@ -49,16 +49,12 @@ SW_DLLPUBLIC void SetProgressState  ( long nPosition, SwDocShell *pDocShell );
 void SetProgressText   ( sal_uInt16 nMessId, SwDocShell *pDocShell );
 void RescheduleProgress( SwDocShell *pDocShell );
 
-void EnableCmdInterface(bool bEnable = true);
-
 void RepaintPagePreview( SwViewShell* pVwSh, const SwRect& rRect );
 
 // Read ChgMode for tables from configuration.
 TableChgMode GetTableChgDefaultMode();
 
 bool JumpToSwMark( SwViewShell* pVwSh, const OUString& rMark );
-
-extern void AccessibilityScrollMDI(SwViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY, bool isLeftTop);
 
 #endif
 

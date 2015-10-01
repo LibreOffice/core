@@ -40,10 +40,6 @@ namespace sd{
             :name(aname), port(aport){}
         virtual ~ZeroconfService(){}
 
-        std::string getName() const {return name;}
-        void setName(const char * n) {name = n;}
-        uint getPort() const {return port;}
-
         // Clean up the service when closing
         virtual void clear() = 0;
         // Bonjour for OSX, Avahi for Linux
