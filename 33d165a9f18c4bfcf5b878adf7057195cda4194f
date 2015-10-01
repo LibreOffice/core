@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_2048702d",
+        "filename": "vcl/qa/cppunit/timer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-10-01T11:30:21Z",
+      "side": 1,
+      "message": "“beasties” is NOT a typo, for the record.",
+      "revId": "33d165a9f18c4bfcf5b878adf7057195cda4194f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_8055fcc7",
+        "filename": "vcl/source/filter/igif/gifread.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-10-01T11:30:21Z",
+      "side": 1,
+      "message": "you didn’t fix “transparant”",
+      "revId": "33d165a9f18c4bfcf5b878adf7057195cda4194f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
