@@ -913,7 +913,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable,XFTable* pXFTable,
     }
     pXFRow->SetStyleName(pXFStyleManager->AddStyle(pRowStyle).m_pStyle->GetStyleName());
 
-    //construct headong row
+    //construct heading row
     XFCell* pXFCell1 = new XFCell;
     XFCell* pXFCell2 = new XFCell;
     XFTable* pSubTable1 = new XFTable;
@@ -1097,7 +1097,7 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
 {
 
     //Comment:The old code doesn't check if the LwpFoundry pointer is NULL,
-    //        So the NULL pointer cause sodc frozee. Add code to check the
+    //        So the NULL pointer cause sodc frozen. Add code to check the
     //        the pointer.
     //New Code
     if( !pFoundry ) return;
@@ -1132,7 +1132,7 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
                 sal_uInt16 nRowID =  pRowList->GetRowID();
                 {
                     LwpCellList* pCellList = static_cast<LwpCellList*>(pRowList->GetChildHeadID().obj().get());
-                    //loop the celllist
+                    //loop the cellList
                     while( NULL!=pCellList)
                     {
                         {//put cell
