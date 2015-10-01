@@ -164,7 +164,7 @@ Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
     if( xFrameContext.Is() )
     {
         SvXMLImportContext *pContext = &xFrameContext;
-        xShape = dynamic_cast<XMLTextFrameContext*>( pContext )->GetShape( );
+        xShape = dynamic_cast<XMLTextFrameContext&>(*pContext).GetShape();
     }
 
     return xShape;
