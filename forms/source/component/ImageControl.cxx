@@ -242,7 +242,7 @@ void OImageControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) co
 }
 
 
-void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception)
+void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( css::uno::Exception, std::exception)
 {
     switch (nHandle)
     {
@@ -345,13 +345,13 @@ void OImageControlModel::describeAggregateProperties( Sequence< Property >& /* [
 }
 
 
-OUString OImageControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+OUString OImageControlModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_IMAGECONTROL);  // old (non-sun) name for compatibility !
 }
 
 
-void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     // Base class
     OBoundControlModel::write(_rxOutStream);
@@ -365,7 +365,7 @@ void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStrea
 }
 
 
-void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     OBoundControlModel::read(_rxInStream);
 
@@ -871,7 +871,7 @@ bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
 
 // MouseListener
 
-void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void OImageControlControl::mousePressed(const css::awt::MouseEvent& e) throw ( css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -986,16 +986,16 @@ void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) th
 
 }   // namespace frm
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OImageControlModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OImageControlModel_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageControlModel(component));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OImageControlControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OImageControlControl_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageControlControl(component));
 }

@@ -1689,12 +1689,12 @@ namespace frm
             Reference< XExecutableDialog> xDialog;
             if ( _bFilter )
             {
-                xDialog = com::sun::star::sdb::FilterDialog::createWithQuery(m_xContext, m_xParser, m_xCursor,
-                              Reference<com::sun::star::awt::XWindow>());
+                xDialog = css::sdb::FilterDialog::createWithQuery(m_xContext, m_xParser, m_xCursor,
+                              Reference<css::awt::XWindow>());
             }
             else
             {
-                xDialog = com::sun::star::sdb::OrderDialog::createWithQuery(m_xContext, m_xParser, m_xCursorProperties);
+                xDialog = css::sdb::OrderDialog::createWithQuery(m_xContext, m_xParser, m_xCursorProperties);
             }
 
 

@@ -48,8 +48,8 @@ namespace frm
 
     PCommandDescriptionProvider
         createDocumentCommandDescriptionProvider(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::frame::XModel >& _rxDocument
         );
 
 

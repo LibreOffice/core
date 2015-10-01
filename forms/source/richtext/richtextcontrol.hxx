@@ -40,7 +40,7 @@ namespace frm
 
     class ORichTextFeatureDispatcher;
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XDispatchProvider
+    typedef ::cppu::ImplHelper1 <   css::frame::XDispatchProvider
                                 >   ORichTextControl_Base;
     class ORichTextControl  :public UnoEditControl
                             ,public ORichTextControl_Base
@@ -54,32 +54,32 @@ namespace frm
     public:
         // XServiceInfo - static version
         static  OUString SAL_CALL getImplementationName_Static();
-        static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
+        static  css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
 
     protected:
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ORichTextControl, UnoEditControl )
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XControl
-        virtual void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _rParent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& _rParent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName()  throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
 
         // XDispatchProvider
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& Requests ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // UnoControl
         virtual bool   requiresNewPeer( const OUString& _rPropertyName ) const SAL_OVERRIDE;
     };
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XDispatchProvider
+    typedef ::cppu::ImplHelper1 <   css::frame::XDispatchProvider
                                 >   ORichTextPeer_Base;
     class ORichTextPeer :public VCLXWindow
                         ,public ORichTextPeer_Base
@@ -96,7 +96,7 @@ namespace frm
                 a new ORichTextPeer instance, which has been acquired once!
         */
         static ORichTextPeer* Create(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >&         _rxModel,
+            const css::uno::Reference< css::awt::XControlModel >&         _rxModel,
             vcl::Window* _pParentWindow,
             WinBits _nStyle
         );
@@ -109,28 +109,28 @@ namespace frm
         virtual ~ORichTextPeer();
 
         // XView
-        void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XVclWindowPeer
-        virtual void SAL_CALL setProperty( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue )
-            throw (::com::sun::star::uno::RuntimeException,
+        virtual void SAL_CALL setProperty( const OUString& _rPropertyName, const css::uno::Any& _rValue )
+            throw (css::uno::RuntimeException,
                    std::exception) SAL_OVERRIDE;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
 
         // XComponent
-        virtual void SAL_CALL dispose( ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispose( ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDispatchProvider
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& Requests ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ITextSelectionListener
         virtual void    onSelectionChanged( const ESelection& _rSelection ) SAL_OVERRIDE;
 
     private:
-        SingleAttributeDispatcher implCreateDispatcher( SfxSlotId _nSlotId, const ::com::sun::star::util::URL& _rURL );
+        SingleAttributeDispatcher implCreateDispatcher( SfxSlotId _nSlotId, const css::util::URL& _rURL );
     };
 
 

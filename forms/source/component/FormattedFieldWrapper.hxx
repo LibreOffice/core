@@ -32,24 +32,24 @@ class OEditModel;
 
 //= OFormattedFieldWrapper
 
-typedef ::cppu::WeakAggImplHelper3  <   ::com::sun::star::io::XPersistObject
-                                    ,   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::util::XCloneable
+typedef ::cppu::WeakAggImplHelper3  <   css::io::XPersistObject
+                                    ,   css::lang::XServiceInfo
+                                    ,   css::util::XCloneable
                                     >   OFormattedFieldWrapper_Base;
 
 class OFormattedFieldWrapper : public OFormattedFieldWrapper_Base
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
+    css::uno::Reference< css::uno::XComponentContext> m_xContext;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
+    css::uno::Reference< css::uno::XAggregation>      m_xAggregate;
 
     rtl::Reference< OEditModel > m_pEditPart;
     // if we act as formatted this is used to write the EditModel part
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>     m_xFormattedPart;
+    css::uno::Reference< css::io::XPersistObject>     m_xFormattedPart;
 
 private:
-    OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
+    OFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
 protected:
     virtual ~OFormattedFieldWrapper();
@@ -59,24 +59,24 @@ public:
     // to read and write the FormattedModel part
     // if bActAsFormatted is false, the state is undetermined until somebody calls
     // ::read or does anything which requires a living aggregate
-    static css::uno::Reference<css::uno::XInterface> createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted);
+    static css::uno::Reference<css::uno::XInterface> createFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory, bool bActAsFormatted);
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OFormattedFieldWrapper, OWeakAggObject)
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XCloneable
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     /// ensure we're in a defined state, which means a FormattedModel _OR_ an EditModel

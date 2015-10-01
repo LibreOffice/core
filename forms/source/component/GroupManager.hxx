@@ -89,22 +89,22 @@ namespace frm
 class OGroupComp
 {
     OUString m_aName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xComponent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>     m_xControlModel;
+    css::uno::Reference< css::beans::XPropertySet>    m_xComponent;
+    css::uno::Reference< css::awt::XControlModel>     m_xControlModel;
     sal_Int32   m_nPos;
     sal_Int16   m_nTabIndex;
 
     friend class OGroupCompLess;
 
 public:
-    OGroupComp(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement, sal_Int32 nInsertPos );
+    OGroupComp(const css::uno::Reference< css::beans::XPropertySet>& rxElement, sal_Int32 nInsertPos );
     OGroupComp(const OGroupComp& _rSource);
     OGroupComp();
 
     bool operator==( const OGroupComp& rComp ) const;
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>&   GetControlModel() const { return m_xControlModel; }
+    inline const css::uno::Reference< css::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
+    inline const css::uno::Reference< css::awt::XControlModel>&   GetControlModel() const { return m_xControlModel; }
 
     sal_Int32   GetPos() const { return m_nPos; }
     sal_Int16   GetTabIndex() const { return m_nTabIndex; }
@@ -116,18 +116,18 @@ typedef std::vector<OGroupComp> OGroupCompArr;
 class OGroupComp;
 class OGroupCompAcc
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xComponent;
+    css::uno::Reference< css::beans::XPropertySet>    m_xComponent;
 
     OGroupComp                                      m_aGroupComp;
 
     friend class OGroupCompAccLess;
 
 public:
-    OGroupCompAcc(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement, const OGroupComp& _rGroupComp );
+    OGroupCompAcc(const css::uno::Reference< css::beans::XPropertySet>& rxElement, const OGroupComp& _rGroupComp );
 
     bool operator==( const OGroupCompAcc& rCompAcc ) const;
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>&  GetComponent() const { return m_xComponent; }
+    inline const css::uno::Reference< css::beans::XPropertySet>&  GetComponent() const { return m_xComponent; }
     const OGroupComp&   GetGroupComponent() const { return m_aGroupComp; }
 };
 
@@ -148,12 +148,12 @@ public:
     bool operator==( const OGroup& rGroup ) const;
 
     OUString GetGroupName() const { return m_aGroupName; }
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>  > GetControlModels() const;
+    css::uno::Sequence< css::uno::Reference< css::awt::XControlModel>  > GetControlModels() const;
 
-    void InsertComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
-    void RemoveComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
+    void InsertComponent( const css::uno::Reference< css::beans::XPropertySet>& rxElement );
+    void RemoveComponent( const css::uno::Reference< css::beans::XPropertySet>& rxElement );
     sal_uInt16 Count() const { return sal::static_int_cast< sal_uInt16 >(m_aCompArray.size()); }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& GetObject( sal_uInt16 nP ) const
+    const css::uno::Reference< css::beans::XPropertySet>& GetObject( sal_uInt16 nP ) const
         { return m_aCompArray[nP].GetComponent(); }
 };
 
@@ -161,42 +161,42 @@ typedef std::map<OUString, OGroup> OGroupArr;
 typedef std::vector<OGroupArr::iterator> OActiveGroups;
 
 
-class OGroupManager : public ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>
+class OGroupManager : public ::cppu::WeakImplHelper< css::beans::XPropertyChangeListener, css::container::XContainerListener>
 {
     OGroup*         m_pCompGroup;           // Sort all Components by TabIndices
     OGroupArr       m_aGroupArr;            // Sort all Components by group
     OActiveGroups   m_aActiveGroupMap;      // This map contains all indices of all groups with more than 1 element
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >
+    css::uno::Reference< css::container::XContainer >
                     m_xContainer;
 
     // Helper functions
-    void InsertElement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
-    void RemoveElement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
-    void removeFromGroupMap(const OUString& _sGroupName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSet);
+    void InsertElement( const css::uno::Reference< css::beans::XPropertySet>& rxElement );
+    void RemoveElement( const css::uno::Reference< css::beans::XPropertySet>& rxElement );
+    void removeFromGroupMap(const OUString& _sGroupName,const css::uno::Reference< css::beans::XPropertySet>& _xSet);
 
 public:
-    OGroupManager(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _rxContainer);
+    OGroupManager(const css::uno::Reference< css::container::XContainer >& _rxContainer);
     virtual ~OGroupManager();
 
-// ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::lang::XEventListener
+    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::beans::XPropertyChangeListener
+    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::container::XContainerListener
-    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& _rEvent) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& _rEvent) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& _rEvent) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::container::XContainerListener
+    virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& _rEvent) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& _rEvent) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& _rEvent) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // Other functions
     sal_Int32 getGroupCount();
-    void getGroup(sal_Int32 nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> >& _rGroup, OUString& Name);
-    void getGroupByName(const OUString& Name, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> >& _rGroup);
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> > getControlModels();
+    void getGroup(sal_Int32 nGroup, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup, OUString& Name);
+    void getGroupByName(const OUString& Name, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup);
+    css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> > getControlModels();
 
-    static OUString GetGroupName( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xComponent );
+    static OUString GetGroupName( css::uno::Reference< css::beans::XPropertySet> xComponent );
 };
 
 

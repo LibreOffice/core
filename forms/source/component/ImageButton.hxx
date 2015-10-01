@@ -33,37 +33,37 @@ class OImageButtonModel
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OImageButtonModel );
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OImageButtonModel"); }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::io::XPersistObject
+    virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const SAL_OVERRIDE;
 
 protected:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XMouseListener> OImageButtonControl_BASE;
+typedef ::cppu::ImplHelper1< css::awt::XMouseListener> OImageButtonControl_BASE;
 class OImageButtonControl : public OClickableImageBaseControl,
                             public OImageButtonControl_BASE
 {
 protected:
     // UNO Binding
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
-    OImageButtonControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
+    OImageButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
@@ -74,17 +74,17 @@ public:
 
     // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OImageButtonControl, OClickableImageBaseControl)
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { OControl::disposing(_rSource); }
 
     // XMouseListener
-    virtual void SAL_CALL mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL mousePressed(const css::awt::MouseEvent& e) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL mouseReleased(const css::awt::MouseEvent& e) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL mouseEntered(const css::awt::MouseEvent& e) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL mouseExited(const css::awt::MouseEvent& e) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // prevent method hiding
     using OClickableImageBaseControl::disposing;

@@ -29,7 +29,7 @@
 template<class T>
 class NamedCollection : public cppu::ImplInheritanceHelper<
                             Collection<T>,
-                            com::sun::star::container::XNameAccess>
+                            css::container::XNameAccess>
 {
     using Collection<T>::maItems;
     using Collection<T>::getItem;
@@ -50,7 +50,7 @@ public:
         return findItem( rName ) != maItems.end();
     }
 
-    typedef com::sun::star::uno::Sequence<OUString> Names_t;
+    typedef css::uno::Sequence<OUString> Names_t;
     Names_t getNames() const
     {
         // iterate over members, and collect all those that have names
@@ -59,8 +59,8 @@ public:
              aIter != maItems.end();
              ++aIter )
         {
-            com::sun::star::uno::Reference<com::sun::star::container::XNamed>
-                xNamed( *aIter, com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference<css::container::XNamed>
+                xNamed( *aIter, css::uno::UNO_QUERY );
             if( xNamed.is() )
                 aNames.push_back( xNamed->getName() );
         }
@@ -80,8 +80,8 @@ protected:
              aIter != maItems.end();
              ++aIter )
         {
-            com::sun::star::uno::Reference<com::sun::star::container::XNamed>
-                xNamed( *aIter, com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference<css::container::XNamed>
+                xNamed( *aIter, css::uno::UNO_QUERY );
             if( xNamed.is()  &&  xNamed->getName() == rName )
                 return aIter;
         }
@@ -111,7 +111,7 @@ public:
                css::uno::RuntimeException ) SAL_OVERRIDE
     {
         if( hasItem( aName ) )
-            return com::sun::star::uno::makeAny( getItem( aName ) );
+            return css::uno::makeAny( getItem( aName ) );
         else
             throw css::container::NoSuchElementException();
 

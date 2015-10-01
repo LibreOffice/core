@@ -32,10 +32,10 @@ namespace frm
 {
 
 
-    struct TypeCompareLess : public ::std::binary_function< ::com::sun::star::uno::Type, ::com::sun::star::uno::Type, bool >
+    struct TypeCompareLess : public ::std::binary_function< css::uno::Type, css::uno::Type, bool >
     {
     private:
-        typedef ::com::sun::star::uno::Type             Type;
+        typedef css::uno::Type             Type;
 
     public:
         bool operator()( const Type& _rLHS, const Type& _rRHS ) const
@@ -44,14 +44,14 @@ namespace frm
         }
     };
 
-    /** a helper class which merges sequences of <type scope="com::sun::star::uno">Type</type>s,
+    /** a helper class which merges sequences of <type scope="css::uno">Type</type>s,
         so that the resulting sequence contains every type at most once
     */
     class TypeBag
     {
     public:
-        typedef ::com::sun::star::uno::Type             Type;
-        typedef ::com::sun::star::uno::Sequence< Type > TypeSequence;
+        typedef css::uno::Type                          Type;
+        typedef css::uno::Sequence< Type >              TypeSequence;
         typedef ::std::set< Type, TypeCompareLess >     TypeSet;
 
     private:
@@ -81,8 +81,8 @@ namespace frm
         TypeSequence    getTypes() const;
     };
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  getXModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+    css::uno::Reference< css::frame::XModel >  getXModel(
+        const css::uno::Reference< css::uno::XInterface >& _rxComponent );
 
 
 } // namespace frm

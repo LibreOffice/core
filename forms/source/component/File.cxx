@@ -154,7 +154,7 @@ void OFileControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) con
 }
 
 
-void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception)
+void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( css::uno::Exception, std::exception)
 {
     switch (nHandle)
     {
@@ -190,13 +190,13 @@ void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps )
 }
 
 
-OUString SAL_CALL OFileControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OFileControlModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_FILECONTROL);   // old (non-sun) name for compatibility !
 }
 
 
-void OFileControlModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OFileControlModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     OControlModel::write(_rxOutStream);
 
@@ -210,7 +210,7 @@ void OFileControlModel::write(const Reference<css::io::XObjectOutputStream>& _rx
 }
 
 
-void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     OControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -236,7 +236,7 @@ void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxIn
 }
 
 
-void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OFileControlModel::reset() throw ( css::uno::RuntimeException, std::exception)
 {
     ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
@@ -256,13 +256,13 @@ void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
 }
 
 
-void OFileControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void OFileControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( css::uno::RuntimeException, std::exception)
 {
     m_aResetListeners.addInterface(_rxListener);
 }
 
 
-void OFileControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void OFileControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( css::uno::RuntimeException, std::exception)
 {
     m_aResetListeners.removeInterface(_rxListener);
 }
@@ -280,9 +280,9 @@ void OFileControlModel::_reset()
 
 }   // namespace frm
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OFileControlModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OFileControlModel_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OFileControlModel(component));
 }

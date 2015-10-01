@@ -295,7 +295,7 @@ namespace frm
     }
 
 
-    void OEntryListHelper::setNewStringItemList( const ::com::sun::star::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
+    void OEntryListHelper::setNewStringItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
     {
         OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewStringItemList: this should never have survived convertNewListSourceProperty!" );
         OSL_VERIFY( _rValue >>= m_aStringItems );

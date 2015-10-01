@@ -42,13 +42,13 @@ namespace frm
     private:
         static sal_Int32    s_nInstanceCount;
         static ::osl::Mutex s_aMutex;
-        static ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
+        static css::uno::Reference< css::util::XNumberFormatsSupplier >
                             s_xStandardFormats;
 
     protected:
         sal_Int32           m_nFormatEnumPropertyHandle;
         const sal_Int16     m_nTableId;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet >
+        css::uno::Reference< css::beans::XFastPropertySet >
                             m_xAggregate;
 
     protected:
@@ -57,32 +57,32 @@ namespace frm
             pass the same value here share one table.</p>
         */
         OLimitedFormats(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const sal_Int16 _nClassId
             );
         ~OLimitedFormats();
 
     protected:
         void setAggregateSet(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet >& _rxAggregate,
+            const css::uno::Reference< css::beans::XFastPropertySet >& _rxAggregate,
             sal_Int32 _nOriginalPropertyHandle
         );
 
     protected:
-        void        getFormatKeyPropertyValue( ::com::sun::star::uno::Any& _rValue ) const;
+        void        getFormatKeyPropertyValue( css::uno::Any& _rValue ) const;
         bool    convertFormatKeyPropertyValue(
-                        ::com::sun::star::uno::Any& _rConvertedValue,
-                        ::com::sun::star::uno::Any& _rOldValue,
-                const   ::com::sun::star::uno::Any& _rNewValue
+                        css::uno::Any& _rConvertedValue,
+                        css::uno::Any& _rOldValue,
+                const   css::uno::Any& _rNewValue
             );
-        void        setFormatKeyPropertyValue( const ::com::sun::star::uno::Any& _rNewValue );
+        void        setFormatKeyPropertyValue( const css::uno::Any& _rNewValue );
         // setFormatKeyPropertyValue should only be called with a value got from convertFormatKeyPropertyValue!
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
+        css::uno::Reference< css::util::XNumberFormatsSupplier >
                     getFormatsSupplier() const { return s_xStandardFormats; }
 
     private:
-        void acquireSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+        void acquireSupplier(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
         void releaseSupplier();
 
         static void ensureTableInitialized(const sal_Int16 _nTableId);

@@ -29,10 +29,10 @@ namespace frm
     class OCloneableAggregation
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>  m_xAggregate;
+        css::uno::Reference< css::uno::XAggregation>  m_xAggregate;
 
     protected:
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > createAggregateClone( const OCloneableAggregation* _pOriginal );
+        static css::uno::Reference< css::uno::XAggregation > createAggregateClone( const OCloneableAggregation* _pOriginal );
     };
 
 

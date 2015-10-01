@@ -37,18 +37,18 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OGroupBoxModel"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
-    virtual OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL    getServiceName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
-        write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
-        read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OControlModel's property handling
     virtual void describeAggregateProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const SAL_OVERRIDE;
 
 protected:
@@ -61,14 +61,14 @@ protected:
 class OGroupBoxControl : public OControl
 {
 public:
-    OGroupBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
+    OGroupBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OGroupBoxControl"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

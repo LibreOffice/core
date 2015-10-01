@@ -270,7 +270,7 @@ void OGroupManager::removeFromGroupMap(const OUString& _sGroupName,const Referen
         _xSet->removePropertyChangeListener( PROPERTY_TABINDEX, this );
 }
 
-void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) throw ( css::uno::RuntimeException, std::exception)
 {
     Reference<XPropertySet>  xSet(evt.Source, UNO_QUERY);
 
@@ -301,7 +301,7 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) thro
 }
 
 // XContainerListener
-void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event) throw ( css::uno::RuntimeException, std::exception)
 {
     Reference< XPropertySet > xProps;
     Event.Element >>= xProps;
@@ -309,7 +309,7 @@ void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event) throw 
         InsertElement( xProps );
 }
 
-void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event) throw ( css::uno::RuntimeException, std::exception)
 {
     Reference<XPropertySet> xProps;
     Event.Element >>= xProps;
@@ -317,7 +317,7 @@ void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event) throw (
         RemoveElement( xProps );
 }
 
-void SAL_CALL OGroupManager::elementReplaced(const ContainerEvent& Event) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OGroupManager::elementReplaced(const ContainerEvent& Event) throw ( css::uno::RuntimeException, std::exception)
 {
     Reference<XPropertySet> xProps;
     Event.ReplacedElement >>= xProps;
@@ -425,7 +425,7 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
     removeFromGroupMap(sGroupName,xSet);
 }
 
-OUString OGroupManager::GetGroupName( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xComponent )
+OUString OGroupManager::GetGroupName( css::uno::Reference< css::beans::XPropertySet> xComponent )
 {
     if (!xComponent.is())
         return OUString();

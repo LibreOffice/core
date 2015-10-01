@@ -39,20 +39,20 @@
 
 
 class CLibxml2XFormsExtension : public cppu::WeakImplHelper<
-    com::sun::star::xml::xpath::XXPathExtension, com::sun::star::lang::XInitialization>
+    css::xml::xpath::XXPathExtension, css::lang::XInitialization>
 {
 private:
-    com::sun::star::uno::Reference <com::sun::star::xforms::XModel>  m_aModel;
-    com::sun::star::uno::Reference <com::sun::star::xml::dom::XNode> m_aContextNode;
+    css::uno::Reference <css::xforms::XModel>  m_aModel;
+    css::uno::Reference <css::xml::dom::XNode> m_aContextNode;
 
 public:
     CLibxml2XFormsExtension() {}
 
-    com::sun::star::uno::Reference< com::sun::star::xforms::XModel > getModel() { return m_aModel;}
-    com::sun::star::uno::Reference< com::sun::star::xml::dom::XNode > getContextNode() { return m_aContextNode;}
+    css::uno::Reference< css::xforms::XModel > getModel() { return m_aModel;}
+    css::uno::Reference< css::xml::dom::XNode > getContextNode() { return m_aContextNode;}
 
-    virtual com::sun::star::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL initialize(const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aSequence) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& aSequence) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

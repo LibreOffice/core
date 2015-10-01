@@ -86,7 +86,7 @@ void OComponentEventThread::impl_clearEventQueue()
     m_aFlags.erase( m_aFlags.begin(), m_aFlags.end() );
 }
 
-void OComponentEventThread::disposing( const EventObject& evt ) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void OComponentEventThread::disposing( const EventObject& evt ) throw ( css::uno::RuntimeException, std::exception)
 {
     if( evt.Source == m_xComp )
     {

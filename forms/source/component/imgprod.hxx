@@ -44,13 +44,13 @@ namespace com { namespace sun { namespace star { namespace io {
 }}}}
 
 
-class ImageProducer :   public ::com::sun::star::awt::XImageProducer,
-                        public ::com::sun::star::lang::XInitialization,
+class ImageProducer :   public css::awt::XImageProducer,
+                        public css::lang::XInitialization,
                         public ::cppu::OWeakObject
 {
 private:
 
-    typedef boost::ptr_vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > > ConsumerList_t;
+    typedef boost::ptr_vector< css::uno::Reference< css::awt::XImageConsumer > > ConsumerList_t;
 
     OUString        maURL;
     ConsumerList_t  maConsList;
@@ -77,23 +77,23 @@ public:
 
     void            SetDoneHdl( const Link<Graphic*,void>& i_rHdl ) { maDoneHdl = i_rHdl; }
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void                                        SAL_CALL acquire() throw() SAL_OVERRIDE  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() SAL_OVERRIDE  { OWeakObject::release(); }
+    // css::uno::XInterface
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void                           SAL_CALL acquire() throw() SAL_OVERRIDE  { OWeakObject::acquire(); }
+    void                           SAL_CALL release() throw() SAL_OVERRIDE  { OWeakObject::release(); }
 
     // MT: ???
-    void            setImage( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStmRef );
+    void            setImage( css::uno::Reference< css::io::XInputStream > & rStmRef );
 
-    // ::com::sun::star::awt::XImageProducer
-    void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer )
-        throw(::com::sun::star::uno::RuntimeException,
+    // css::awt::XImageProducer
+    void SAL_CALL addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer )
+        throw(css::uno::RuntimeException,
               std::exception) SAL_OVERRIDE;
-    void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL startProduction(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL startProduction(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XInitialization
-    void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::lang::XInitialization
+    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

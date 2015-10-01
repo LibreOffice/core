@@ -29,37 +29,35 @@ namespace frm
 class OCurrencyModel
                 :public OEditBaseModel
 {
-    ::com::sun::star::uno::Any          m_aSaveValue;
+    css::uno::Any          m_aSaveValue;
 
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OCurrencyModel );
 
-    // ::com::sun::star::lang::XServiceInfo
+    // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OCurrencyModel"); }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::io::XPersistObject
+    // css::io::XPersistObject
     virtual OUString SAL_CALL getServiceName() throw ( ::com::sun ::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const SAL_OVERRIDE;
 
 protected:
     // OBoundControlModel overridables
-    virtual ::com::sun::star::uno::Any
-                            translateDbColumnToControlValue( ) SAL_OVERRIDE;
+    virtual css::uno::Any   translateDbColumnToControlValue( ) SAL_OVERRIDE;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any
-                            getDefaultForReset() const SAL_OVERRIDE;
+    virtual css::uno::Any   getDefaultForReset() const SAL_OVERRIDE;
 
     virtual void            resetNoBroadcast() SAL_OVERRIDE;
 
@@ -72,11 +70,11 @@ protected:
 class OCurrencyControl: public OBoundControl
 {
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
-    OCurrencyControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
-    // ::com::sun::star::lang::XServiceInfo
+    OCurrencyControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+    // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OCurrencyControl"); }

@@ -39,7 +39,7 @@ namespace frm
         by external instances
 
         For using this class, instantiate it as member, derive yourself from
-        <type scope="com::sun::star::frame">XDispatchProviderInterception</type>, and forward all
+        <type scope="css::frame">XDispatchProviderInterception</type>, and forward all
         respective methods to this member.
 
         Additionally, don't forget to call <member>dispose</member> when your class is disposed itself.
@@ -47,8 +47,8 @@ namespace frm
     class ControlFeatureInterception
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >
-                                            m_xFirstDispatchInterceptor;
+        css::uno::Reference< css::frame::XDispatchProviderInterceptor >
+                                              m_xFirstDispatchInterceptor;
         ::std::unique_ptr< UrlTransformer >   m_pUrlTransformer;
 
     public:
@@ -57,29 +57,29 @@ namespace frm
         const UrlTransformer& getTransformer() const { return *m_pUrlTransformer; }
 
     public:
-        ControlFeatureInterception( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
+        ControlFeatureInterception( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         // XDispatchProviderInterception
-        void SAL_CALL registerDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException );
-        void SAL_CALL releaseDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException );
+        void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException );
+        void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException );
 
         // XComponent
         void SAL_CALL dispose();
 
         /** queries the interceptor chain for the given dispatch
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
-            queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags );
+        css::uno::Reference< css::frame::XDispatch >
+            queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags );
 
         /** queries the interceptor chain for the given dispatch, with a blank target frame and no frame search flags
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
-            queryDispatch( const ::com::sun::star::util::URL& _rURL );
+        css::uno::Reference< css::frame::XDispatch >
+            queryDispatch( const css::util::URL& _rURL );
 
         /** queries the interceptor chain for the URL given as ASCII string,
             with a blank target frame and no frame search flags
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
+        css::uno::Reference< css::frame::XDispatch >
             queryDispatch( const sal_Char* _pAsciiURL );
     };
 

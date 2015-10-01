@@ -32,29 +32,29 @@ namespace frm
     class UrlTransformer
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                         m_xORB;
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >
+        mutable css::uno::Reference< css::util::XURLTransformer >
                         m_xTransformer;
         mutable bool    m_bTriedToCreateTransformer;
 
     public:
-        UrlTransformer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
+        UrlTransformer( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         /** returns an URL object for the given URL string
         */
-        ::com::sun::star::util::URL
+        css::util::URL
             getStrictURL( const OUString& _rURL ) const;
 
         /** returns an URL object for the given URL ASCII string
         */
-        ::com::sun::star::util::URL
+        css::util::URL
             getStrictURLFromAscii( const sal_Char* _pAsciiURL ) const;
 
         /** parses a given URL smartly, with a protocol given by ASCII string
         */
         void
-            parseSmartWithAsciiProtocol( ::com::sun::star::util::URL& _rURL, const sal_Char* _pAsciiURL ) const;
+            parseSmartWithAsciiProtocol( css::util::URL& _rURL, const sal_Char* _pAsciiURL ) const;
 
     private:
         /** ensures that we have an URLTransformer instance in <member>m_xTransformer</member>

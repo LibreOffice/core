@@ -49,13 +49,13 @@ class OGridColumn;
 
 // OGridControlModel
 
-typedef ::cppu::ImplHelper7 <   ::com::sun::star::awt::XControlModel
-                            ,   ::com::sun::star::form::XGridColumnFactory
-                            ,   ::com::sun::star::form::XReset
-                            ,   ::com::sun::star::view::XSelectionSupplier
-                            ,   ::com::sun::star::sdb::XSQLErrorListener
-                            ,   ::com::sun::star::sdb::XRowSetSupplier
-                            ,   ::com::sun::star::sdb::XRowSetChangeBroadcaster
+typedef ::cppu::ImplHelper7 <   css::awt::XControlModel
+                            ,   css::form::XGridColumnFactory
+                            ,   css::form::XReset
+                            ,   css::view::XSelectionSupplier
+                            ,   css::sdb::XSQLErrorListener
+                            ,   css::sdb::XRowSetSupplier
+                            ,   css::sdb::XRowSetChangeBroadcaster
                             >   OGridControlModel_BASE;
 
 class OGridControlModel :public OControlModel
@@ -69,16 +69,16 @@ class OGridControlModel :public OControlModel
                                             m_aRowSetChangeListeners;
 
 // [properties]
-    ::com::sun::star::uno::Any              m_aRowHeight; // Row height
-    ::com::sun::star::uno::Any              m_aTabStop;
-    ::com::sun::star::uno::Any              m_aBackgroundColor;
-    ::com::sun::star::uno::Any              m_aCursorColor; // transient
-    ::com::sun::star::uno::Any              m_aBorderColor;
+    css::uno::Any                    m_aRowHeight; // Row height
+    css::uno::Any                    m_aTabStop;
+    css::uno::Any                    m_aBackgroundColor;
+    css::uno::Any                    m_aCursorColor; // transient
+    css::uno::Any                    m_aBorderColor;
     OUString                         m_aDefaultControl;
     OUString                         m_sHelpText;
 // [properties]
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSelection;
+    css::uno::Reference< css::beans::XPropertySet >       m_xSelection;
 
 // [properties]
     OUString                m_sHelpURL;                 // URL
@@ -102,71 +102,71 @@ public:
 
     // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OControlModel)
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XChild
-    virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw(css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OGridControlModel"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XReset
-    virtual void SAL_CALL reset() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addResetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeResetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL reset() throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSelectionSupplier
-    virtual sal_Bool SAL_CALL select(const ::com::sun::star::uno::Any& aElement) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL getSelection() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addSelectionChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeSelectionChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL select(const css::uno::Any& aElement) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getSelection() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XGridColumnFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> SAL_CALL createColumn(const OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Sequence<OUString> SAL_CALL getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::beans::XPropertySet> SAL_CALL createColumn(const OUString& ColumnType) throw ( :: css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getColumnTypes() throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                                        throw(::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const css::uno::Any& rValue )
+                                        throw(css::lang::IllegalArgumentException) SAL_OVERRIDE;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) throw ( css::uno::Exception, std::exception) SAL_OVERRIDE;
 
     // XPropertyState
-    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
+    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
 
     // XSQLErrorListener
-    virtual void SAL_CALL errorOccured( const ::com::sun::star::sdb::SQLErrorEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL errorOccured( const css::sdb::SQLErrorEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XRowSetSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > SAL_CALL getRowSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setRowSet( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xDataSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::sdbc::XRowSet > SAL_CALL getRowSet(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setRowSet( const css::uno::Reference< css::sdbc::XRowSet >& xDataSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XRowSetChangeBroadcaster
-    virtual void SAL_CALL addRowSetChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetChangeListener >& i_Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeRowSetChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetChangeListener >& i_Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addRowSetChangeListener( const css::uno::Reference< css::sdb::XRowSetChangeListener >& i_Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeRowSetChangeListener( const css::uno::Reference< css::sdb::XRowSetChangeListener >& i_Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const SAL_OVERRIDE;
 
     // prevent method hiding
@@ -178,11 +178,11 @@ protected:
 
 protected:
     virtual void approveNewElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxObject,
             ElementDescription* _pElement
         ) SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  createColumnById(sal_Int32 nTypeId) const;
+    css::uno::Reference< css::beans::XPropertySet>  createColumnById(sal_Int32 nTypeId) const;
 
     static OGridColumn* getColumnImplementation(const css::uno::Reference<css::uno::XInterface>& _rxIFace);
 
@@ -192,12 +192,12 @@ protected:
     virtual void implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject) SAL_OVERRIDE;
     virtual void implInserted( const ElementDescription* _pElement ) SAL_OVERRIDE;
     virtual void impl_replacedElement(
-                    const ::com::sun::star::container::ContainerEvent& _rEvent,
+                    const css::container::ContainerEvent& _rEvent,
                     ::osl::ClearableMutexGuard& _rInstanceLock
                 ) SAL_OVERRIDE;
 
-    void gotColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);
-    void lostColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);
+    void gotColumn(const css::uno::Reference< css::uno::XInterface >& _rxColumn);
+    void lostColumn(const css::uno::Reference< css::uno::XInterface >& _rxColumn);
 
     void cloneColumns( const OGridControlModel* _pOriginalContainer );
 };

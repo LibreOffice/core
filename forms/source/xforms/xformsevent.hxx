@@ -36,7 +36,7 @@ class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
 
         XFormsEventConcrete()
             : m_canceled(false)
-            , m_phase(com::sun::star::xml::dom::events::PhaseType_CAPTURING_PHASE)
+            , m_phase(css::xml::dom::events::PhaseType_CAPTURING_PHASE)
             , m_bubbles(false)
             , m_cancelable(false)
         {

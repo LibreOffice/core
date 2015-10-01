@@ -70,7 +70,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OErrorBroadcaster::onError( const ::com::sun::star::sdb::SQLErrorEvent& _rError )
+    void SAL_CALL OErrorBroadcaster::onError( const css::sdb::SQLErrorEvent& _rError )
     {
         if ( m_aErrorListeners.getLength() )
         {

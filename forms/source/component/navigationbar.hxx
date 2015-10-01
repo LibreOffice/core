@@ -36,7 +36,7 @@
 namespace frm
 {
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XControlModel
+    typedef ::cppu::ImplHelper1 <   css::awt::XControlModel
                                 > ONavigationBarModel_BASE;
 
     class ONavigationBarModel
@@ -46,22 +46,22 @@ namespace frm
                         ,public ONavigationBarModel_BASE
     {
         // <properties>
-        ::com::sun::star::uno::Any          m_aTabStop;
-        ::com::sun::star::uno::Any          m_aBackgroundColor;
+        css::uno::Any                m_aTabStop;
+        css::uno::Any                m_aBackgroundColor;
         OUString                     m_sDefaultControl;
         OUString                     m_sHelpText;
         OUString                     m_sHelpURL;
-        sal_Int16                           m_nIconSize;
-        sal_Int16                           m_nBorder;
-        sal_Int32                           m_nDelay;
-        bool                            m_bEnabled;
-        bool                            m_bEnableVisible;
-        bool                            m_bShowPosition;
-        bool                            m_bShowNavigation;
-        bool                            m_bShowActions;
-        bool                            m_bShowFilterSort;
-        sal_Int16                           m_nWritingMode;
-        sal_Int16                           m_nContextWritingMode;
+        sal_Int16                    m_nIconSize;
+        sal_Int16                    m_nBorder;
+        sal_Int32                    m_nDelay;
+        bool                         m_bEnabled;
+        bool                         m_bEnableVisible;
+        bool                         m_bShowPosition;
+        bool                         m_bShowNavigation;
+        bool                         m_bShowActions;
+        bool                         m_bShowFilterSort;
+        sal_Int16                    m_nWritingMode;
+        sal_Int16                    m_nContextWritingMode;
         // </properties>
 
     public:
@@ -69,16 +69,16 @@ namespace frm
 
         // XServiceInfo - static version
         static  OUString SAL_CALL getImplementationName_Static();
-        static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
+        static  css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
 
     protected:
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ONavigationBarModel, OControlModel )
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName()  throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
@@ -87,23 +87,23 @@ namespace frm
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // XPersistObject
-        virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet
-        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
-                                              sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                                            throw(::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
+                                              sal_Int32 nHandle, const css::uno::Any& rValue )
+                                            throw(css::lang::IllegalArgumentException) SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) throw ( css::uno::Exception, std::exception) SAL_OVERRIDE;
 
         // XPropertyState
-        virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
+        virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
         ) const SAL_OVERRIDE;
 
         // prevent method hiding

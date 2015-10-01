@@ -48,7 +48,7 @@ OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext
 {
 }
 
-css::uno::Reference<css::uno::XInterface> OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted)
+css::uno::Reference<css::uno::XInterface> OFormattedFieldWrapper::createFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory, bool bActAsFormatted)
 {
     OFormattedFieldWrapper *pRef = new OFormattedFieldWrapper(_rxFactory);
 
@@ -342,9 +342,9 @@ void OFormattedFieldWrapper::ensureAggregate()
     osl_atomic_decrement(&m_refCount);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OFormattedFieldWrapper_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OFormattedFieldWrapper_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     css::uno::Reference<css::uno::XInterface> inst(
         OFormattedFieldWrapper::createFormattedFieldWrapper(component, false));
@@ -352,9 +352,9 @@ com_sun_star_form_OFormattedFieldWrapper_get_implementation(::com::sun::star::un
     return inst.get();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     css::uno::Reference<css::uno::XInterface> inst(
         OFormattedFieldWrapper::createFormattedFieldWrapper(component, true));

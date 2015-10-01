@@ -41,8 +41,8 @@ using namespace comphelper;
 namespace frm
 {
 
-typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::lang::XUnoTunnel
-                                            ,   ::com::sun::star::util::XCloneable > OGridColumn_BASE;
+typedef ::cppu::WeakAggComponentImplHelper2 <   css::lang::XUnoTunnel
+                                            ,   css::util::XCloneable > OGridColumn_BASE;
 class OGridColumn   :public ::comphelper::OBaseMutex
                     ,public OGridColumn_BASE
                     ,public OPropertySetAggregationHelper
@@ -50,15 +50,15 @@ class OGridColumn   :public ::comphelper::OBaseMutex
 {
 protected:
 // [properties]
-    ::com::sun::star::uno::Any  m_aWidth;  // column width
-    ::com::sun::star::uno::Any  m_aAlign;  // column alignment
-    ::com::sun::star::uno::Any  m_aHidden; // column hidden?
+    css::uno::Any  m_aWidth;  // column width
+    css::uno::Any  m_aAlign;  // column alignment
+    css::uno::Any  m_aHidden; // column hidden?
 // [properties]
 
-    OUString                 m_aModelName;
+    OUString       m_aModelName;
 
 // [properties]
-    OUString                m_aLabel;      // Column name
+    OUString       m_aLabel;      // Column name
 // [properties]
 
 public:
@@ -68,47 +68,47 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OGridColumn_BASE)
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelImplementationId();
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelImplementationId();
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<sal_Int8>& _rIdentifier) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<sal_Int8>& _rIdentifier) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type>   SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
-    void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
-    void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
+    void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
+    void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
 
     // XPropertySet
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE = 0;
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                                        throw(::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const css::uno::Any& rValue )
+                                        throw(css::lang::IllegalArgumentException) SAL_OVERRIDE;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
     using OPropertySetAggregationHelper::getFastPropertyValue;
 
-    // ::com::sun::star::beans::XPropertyState
-    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
+    // css::beans::XPropertyState
+    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
 
     // XCloneable
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     const OUString& getModelName() const { return m_aModelName; }
 
 protected:
-    static void clearAggregateProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps, bool bAllowDropDown);
-    static void setOwnProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps);
+    static void clearAggregateProperties(css::uno::Sequence< css::beans::Property>& seqProps, bool bAllowDropDown);
+    static void setOwnProperties(css::uno::Sequence< css::beans::Property>& seqProps);
 
     virtual OGridColumn* createCloneColumn() const = 0;
 };
@@ -122,12 +122,12 @@ public:                                                                         
     ClassName(const css::uno::Reference<css::uno::XComponentContext>& _rContext );                                            \
     ClassName(const ClassName* _pCloneFrom);                                                                \
                                                                                                             \
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;                                         \
                                                                                                             \
     virtual void fillProperties(                                                                            \
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,          \
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps  \
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,          \
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps  \
         ) const SAL_OVERRIDE;                                                                                            \
                                                                                                             \
     virtual OGridColumn* createCloneColumn() const SAL_OVERRIDE;                                                         \
@@ -143,9 +143,9 @@ ClassName::ClassName( const ClassName* _pCloneFrom ) \
     :OGridColumn( _pCloneFrom ) \
 { \
 } \
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  ClassName::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) \
+css::uno::Reference< css::beans::XPropertySetInfo>  ClassName::getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) \
 { \
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) ); \
+    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) ); \
     return xInfo; \
 } \
 ::cppu::IPropertyArrayHelper& ClassName::getInfoHelper() \
@@ -153,8 +153,8 @@ ClassName::ClassName( const ClassName* _pCloneFrom ) \
     return *getArrayHelper(); \
 } \
 void ClassName::fillProperties( \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps, \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps \
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps, \
+    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps \
     ) const \
 { \
     if (m_xAggregateSet.is()) \

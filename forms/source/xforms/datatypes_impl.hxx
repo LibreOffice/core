@@ -33,14 +33,14 @@ ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::ODerivedDataType( const
 template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 ::cppu::IPropertyArrayHelper* ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::createArrayHelper( ) const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
+    css::uno::Sequence< css::beans::Property > aProps;
     ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::describeProperties( aProps );
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
 
 template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException )
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::getPropertySetInfo() throw( css::uno::RuntimeException )
 {
         return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
 }

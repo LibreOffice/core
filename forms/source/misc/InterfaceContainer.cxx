@@ -675,7 +675,7 @@ void SAL_CALL OInterfaceContainer::disposing(const css::lang::EventObject& _rSou
 // XPropertyChangeListener
 
 void OInterfaceContainer::propertyChange(const PropertyChangeEvent& evt)
-throw (::com::sun::star::uno::RuntimeException, std::exception) {
+throw (css::uno::RuntimeException, std::exception) {
     if (evt.PropertyName == PROPERTY_NAME)
     {
         ::osl::MutexGuard aGuard( m_rMutex );

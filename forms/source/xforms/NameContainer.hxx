@@ -34,7 +34,7 @@
 #include <osl/diagnose.h>
 
 typedef cppu::WeakImplHelper<
-    com::sun::star::container::XNameContainer
+    css::container::XNameContainer
 > NameContainer_t;
 
 template<class T>
@@ -90,14 +90,14 @@ public:
     // methods for XElementAccess
 
 
-    virtual com::sun::star::uno::Type SAL_CALL getElementType()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return cppu::UnoType<T>::get();
     }
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return hasItems();
     }
@@ -107,23 +107,23 @@ public:
     // methods for XNameAccess (inherits XElementAccess)
 
 
-    virtual com::sun::star::uno::Any SAL_CALL getByName(
+    virtual css::uno::Any SAL_CALL getByName(
         const OUString& rName )
-        throw( com::sun::star::container::NoSuchElementException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         typename map_t::const_iterator aIter = findItem( rName );
         if( aIter == maItems.end() )
-            throw com::sun::star::container::NoSuchElementException();
+            throw css::container::NoSuchElementException();
         else
-            return com::sun::star::uno::makeAny( aIter->second );
+            return css::uno::makeAny( aIter->second );
     }
 
-    virtual com::sun::star::uno::Sequence<OUString> SAL_CALL getElementNames()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
-        com::sun::star::uno::Sequence<OUString> aSequence( maItems.size() );
+        css::uno::Sequence<OUString> aSequence( maItems.size() );
         typename map_t::const_iterator aIter = maItems.begin();
         OUString* pStrings = aSequence.getArray();
         while( aIter != maItems.end() )
@@ -139,7 +139,7 @@ public:
 
     virtual sal_Bool SAL_CALL hasByName(
         const OUString& rName )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return hasItem( rName );
     }
@@ -151,20 +151,20 @@ public:
 
     virtual void SAL_CALL replaceByName(
         const OUString& rName,
-        const com::sun::star::uno::Any& aElement )
-        throw( com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::container::NoSuchElementException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        const css::uno::Any& aElement )
+        throw( css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         T aItem;
         if( aElement >>= aItem )
             if( hasByName( rName ) )
                 replace( rName, aItem );
             else
-                throw com::sun::star::container::NoSuchElementException();
+                throw css::container::NoSuchElementException();
         else
-            throw com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
     }
 
 
@@ -174,32 +174,32 @@ public:
 
     virtual void SAL_CALL insertByName(
         const OUString& rName,
-        const com::sun::star::uno::Any& aElement )
-        throw( com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::container::ElementExistException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+        const css::uno::Any& aElement )
+        throw( css::lang::IllegalArgumentException,
+               css::container::ElementExistException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         T aItem;
         if( aElement >>= aItem )
             if( ! hasByName( rName ) )
                 insert( rName, aItem );
             else
-                throw com::sun::star::container::ElementExistException();
+                throw css::container::ElementExistException();
         else
-            throw com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
     }
 
     virtual void SAL_CALL removeByName(
         const OUString& rName )
-        throw( com::sun::star::container::NoSuchElementException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw( css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if( hasByName( rName ) )
             remove( rName );
         else
-            throw com::sun::star::container::NoSuchElementException();
+            throw css::container::NoSuchElementException();
     }
 
 };

@@ -32,13 +32,13 @@ namespace xforms
 
     class OXSDDataType;
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::xforms::XDataTypeRepository
+    typedef ::cppu::WeakImplHelper <   css::xforms::XDataTypeRepository
                                     >   ODataTypeRepository_Base;
     class ODataTypeRepository : public ODataTypeRepository_Base
     {
     private:
         typedef ::rtl::Reference< OXSDDataType >            DataType;
-        typedef ::std::map< OUString, DataType >     Repository;
+        typedef ::std::map< OUString, DataType >            Repository;
 
         ::osl::Mutex                                        m_aMutex;
         Repository                                          m_aRepository;
@@ -50,22 +50,22 @@ namespace xforms
         virtual ~ODataTypeRepository( );
 
         // XDataTypeRepository
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType > SAL_CALL getBasicDataType( sal_Int16 dataTypeClass ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType > SAL_CALL cloneDataType( const OUString& sourceName, const OUString& newName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL revokeDataType( const OUString& typeName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::util::VetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType > SAL_CALL getDataType( const OUString& typeName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL getBasicDataType( sal_Int16 dataTypeClass ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL cloneDataType( const OUString& sourceName, const OUString& newName ) throw (css::container::NoSuchElementException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL revokeDataType( const OUString& typeName ) throw (css::container::NoSuchElementException, css::util::VetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL getDataType( const OUString& typeName ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEnumerationAccess (base of XDataTypeRepository)
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XNameAccess (base of XDataTypeRepository)
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XElementAccess (base of XEnumerationAccess and XNameAccess)
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         ODataTypeRepository( const ODataTypeRepository& ) SAL_DELETED_FUNCTION;

@@ -314,7 +314,7 @@ void OGridControlModel::removeSelectionChangeListener(const Reference< XSelectio
 }
 
 // XGridColumnFactory
-Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString& ColumnType) throw ( :: css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     const Sequence< OUString >& rColumnTypes = frm::getColumnTypes();
@@ -341,13 +341,13 @@ Reference<XPropertySet>  OGridControlModel::createColumnById(sal_Int32 nTypeId) 
     }
     return xReturn;
 }
-css::uno::Sequence<OUString> SAL_CALL OGridControlModel::getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OGridControlModel::getColumnTypes() throw ( css::uno::RuntimeException, std::exception)
 {
     return frm::getColumnTypes();
 }
 
 // XReset
-void SAL_CALL OGridControlModel::reset() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OGridControlModel::reset() throw ( css::uno::RuntimeException, std::exception)
 {
     ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
@@ -360,11 +360,11 @@ void SAL_CALL OGridControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
         m_aResetListeners.notifyEach( &XResetListener::resetted, aEvt );
     }
 }
-void SAL_CALL OGridControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OGridControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( css::uno::RuntimeException, std::exception)
 {
     m_aResetListeners.addInterface(_rxListener);
 }
-void SAL_CALL OGridControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OGridControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( css::uno::RuntimeException, std::exception)
 {
     m_aResetListeners.removeInterface(_rxListener);
 }
@@ -575,7 +575,7 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
     }
     return bModified;
 }
-void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw ( ::com::sun::star::uno::Exception, std::exception)
+void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw ( css::uno::Exception, std::exception)
 {
     switch (nHandle)
     {
@@ -767,12 +767,12 @@ void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxO
 }
 
 // XPersistObject
-OUString SAL_CALL OGridControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OGridControlModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_GRID);  // old (non-sun) name for compatibility!
 }
 
-void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     OControlModel::write(_rxOutStream);
     Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
@@ -864,7 +864,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         _rxOutStream->writeLong(getINT32(m_aBackgroundColor));
 }
 
-void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     OControlModel::read(_rxInStream);

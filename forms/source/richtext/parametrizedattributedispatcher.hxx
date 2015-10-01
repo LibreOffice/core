@@ -33,7 +33,7 @@ namespace frm
         OParametrizedAttributeDispatcher(
             EditView&                           _rView,
             AttributeId                         _nAttributeId,
-            const ::com::sun::star::util::URL&  _rURL,
+            const css::util::URL&               _rURL,
             IMultiAttributeDispatcher*          _pMasterDispatcher
         );
 
@@ -41,10 +41,10 @@ namespace frm
         virtual ~OParametrizedAttributeDispatcher();
 
         // XDispatch
-        virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // OAttributeDispatcher
-        virtual void    fillFeatureEventFromAttributeState( ::com::sun::star::frame::FeatureStateEvent& _rEvent, const AttributeState& _rState ) const SAL_OVERRIDE;
+        virtual void    fillFeatureEventFromAttributeState( css::frame::FeatureStateEvent& _rEvent, const AttributeState& _rState ) const SAL_OVERRIDE;
 
     protected:
         // own overridables
@@ -52,7 +52,7 @@ namespace frm
             be used with a IMultiAttributeDispatcher::executeAttribute
         */
         virtual const SfxPoolItem* convertDispatchArgsToItem(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
+            const css::uno::Sequence< css::beans::PropertyValue >& _rArguments );
     };
 
 

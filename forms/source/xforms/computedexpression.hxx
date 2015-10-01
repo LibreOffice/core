@@ -59,7 +59,7 @@ protected:
     bool mbIsSimple;
 
     /// the result from the last bind
-    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> mxResult;
+    css::uno::Reference<css::xml::xpath::XXPathObject> mxResult;
 
 
     /// implementation of isSimpleExpression
@@ -70,7 +70,7 @@ protected:
     const OUString _getExpressionForEvaluation() const { return msExpression; }
 
     /// obtain a (suitable) XPathAPI implementation
-    static com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathAPI> _getXPathAPI(const xforms::EvaluationContext& aContext);
+    static css::uno::Reference<css::xml::xpath::XXPathAPI> _getXPathAPI(const xforms::EvaluationContext& aContext);
 
     /// evaluate the expression relative to the content node.
     bool _evaluate( const xforms::EvaluationContext& rContext,
@@ -112,7 +112,7 @@ public:
     // get the result of this expression as string/bool/...
     // (Results will be based on the last call of evaluate(..). The caller
     // must call evaluate to ensure current results.)
-    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> getXPath() const { return mxResult;}
+    css::uno::Reference<css::xml::xpath::XXPathObject> getXPath() const { return mxResult;}
     bool getBool( bool bDefault = false ) const;
     OUString getString( const OUString& rDefault = OUString() ) const;
 

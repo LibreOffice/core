@@ -290,7 +290,7 @@ namespace frm
     }
 
 
-    void OListBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (com::sun::star::uno::Exception, std::exception)
+    void OListBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (css::uno::Exception, std::exception)
     {
         switch (_nHandle)
         {
@@ -1630,7 +1630,7 @@ namespace frm
     Any OListBoxModel::getCurrentFormComponentValue() const
     {
         {
-            Reference< com::sun::star::form::validation::XValidator > vtor (const_cast<OListBoxModel*>(this)->getValidator());
+            Reference< css::form::validation::XValidator > vtor (const_cast<OListBoxModel*>(this)->getValidator());
             Reference< XValueBinding > extBinding (const_cast<OListBoxModel*>(this)->getValueBinding());
             if ( vtor.is() && vtor == extBinding )
                 return translateControlValueToExternalValue();
@@ -2140,16 +2140,16 @@ namespace frm
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OListBoxModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OListBoxModel_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OListBoxModel(component));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OListBoxControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OListBoxControl_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OListBoxControl(component));
 }

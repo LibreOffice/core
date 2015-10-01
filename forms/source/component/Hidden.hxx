@@ -35,30 +35,30 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( OHiddenModel );
 
     // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
+                throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-                throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+                css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue )
+                throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OHiddenModel"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
-    virtual OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL    getServiceName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
-        write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
-        read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const SAL_OVERRIDE;
 
     // prevent method hiding

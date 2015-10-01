@@ -43,8 +43,8 @@ namespace frm
 
     //= OFormNavigationHelper
 
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::frame::XDispatchProviderInterception
-                                ,   ::com::sun::star::frame::XStatusListener
+    typedef ::cppu::ImplHelper2 <   css::frame::XDispatchProviderInterception
+                                ,   css::frame::XStatusListener
                                 >   OFormNavigationHelper_Base;
 
     class OFormNavigationHelper
@@ -54,17 +54,17 @@ namespace frm
     private:
         struct FeatureInfo
         {
-            ::com::sun::star::util::URL                                             aURL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDispatcher;
-            bool                                                                bCachedState;
-            ::com::sun::star::uno::Any                                              aCachedAdditionalState;
+            css::util::URL                                             aURL;
+            css::uno::Reference< css::frame::XDispatch >               xDispatcher;
+            bool                                                       bCachedState;
+            css::uno::Any                                              aCachedAdditionalState;
 
             FeatureInfo() : bCachedState( false ) { }
         };
         typedef ::std::map< sal_Int16, FeatureInfo >    FeatureMap;
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                             m_xORB;
         ::std::unique_ptr< ControlFeatureInterception >
                             m_pFeatureInterception;
@@ -75,25 +75,25 @@ namespace frm
         sal_Int32           m_nConnectedFeatures;
 
     protected:
-        OFormNavigationHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
+        OFormNavigationHelper( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
         virtual ~OFormNavigationHelper();
 
         // XComponent
-        void SAL_CALL dispose(  ) throw( ::com::sun::star::uno::RuntimeException );
+        void SAL_CALL dispose(  ) throw( css::uno::RuntimeException );
 
         // XDispatchProviderInterception
-        virtual void SAL_CALL registerDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL releaseDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& State ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& State ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // IFeatureDispatcher
         virtual void            dispatch( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
-        virtual void            dispatchWithArgument( sal_Int16 _nFeatureId, const sal_Char* _pParamName, const ::com::sun::star::uno::Any& _rParamValue ) const SAL_OVERRIDE;
+        virtual void            dispatchWithArgument( sal_Int16 _nFeatureId, const sal_Char* _pParamName, const css::uno::Any& _rParamValue ) const SAL_OVERRIDE;
         virtual bool            isEnabled( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
         virtual bool            getBooleanState( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
         virtual OUString getStringState( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
@@ -152,8 +152,8 @@ namespace frm
 
         /** queries the interceptor chain for a dispatcher for the given URL
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
-                queryDispatch( const ::com::sun::star::util::URL& _rURL );
+        css::uno::Reference< css::frame::XDispatch >
+                queryDispatch( const css::util::URL& _rURL );
 
         /** invalidates the set of supported features
 
@@ -179,7 +179,7 @@ namespace frm
 
     public:
         OFormNavigationMapper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
         ~OFormNavigationMapper( );
 
@@ -197,7 +197,7 @@ namespace frm
                 <TRUE/> if and only if the given id is a known feature id
                 (which is a valid usage)
         */
-        bool        getFeatureURL( sal_Int16 _nFeatureId, ::com::sun::star::util::URL& /* [out] */ _rURL );
+        bool        getFeatureURL( sal_Int16 _nFeatureId, css::util::URL& /* [out] */ _rURL );
 
         /** retrieves the feature id belonging to an feature URL
 

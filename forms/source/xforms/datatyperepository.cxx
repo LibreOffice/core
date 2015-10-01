@@ -53,22 +53,22 @@ namespace xforms
 
         // insert some basic types
         OUString sName( FRM_RES_STRING( RID_STR_DATATYPE_STRING ) );
-        m_aRepository[ sName ] = new OStringType( sName, ::com::sun::star::xsd::DataTypeClass::STRING );
+        m_aRepository[ sName ] = new OStringType( sName, css::xsd::DataTypeClass::STRING );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_URL );
-        m_aRepository[ sName ] = new OStringType( sName, ::com::sun::star::xsd::DataTypeClass::anyURI );
+        m_aRepository[ sName ] = new OStringType( sName, css::xsd::DataTypeClass::anyURI );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_BOOLEAN );
         m_aRepository[ sName ] = new OBooleanType( sName );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_DECIMAL );
-        m_aRepository[ sName ] = new ODecimalType( sName, ::com::sun::star::xsd::DataTypeClass::DECIMAL );
+        m_aRepository[ sName ] = new ODecimalType( sName, css::xsd::DataTypeClass::DECIMAL );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_FLOAT );
-        m_aRepository[ sName ] = new ODecimalType( sName, ::com::sun::star::xsd::DataTypeClass::FLOAT );
+        m_aRepository[ sName ] = new ODecimalType( sName, css::xsd::DataTypeClass::FLOAT );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_DOUBLE );
-        m_aRepository[ sName ] = new ODecimalType( sName, ::com::sun::star::xsd::DataTypeClass::DOUBLE );
+        m_aRepository[ sName ] = new ODecimalType( sName, css::xsd::DataTypeClass::DOUBLE );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_DATE );
         m_aRepository[ sName ] = new ODateType( sName );
@@ -80,13 +80,13 @@ namespace xforms
         m_aRepository[ sName ] = new ODateTimeType( sName );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_YEAR );
-        m_aRepository[ sName ] = new OShortIntegerType( sName, ::com::sun::star::xsd::DataTypeClass::gYear );
+        m_aRepository[ sName ] = new OShortIntegerType( sName, css::xsd::DataTypeClass::gYear );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_MONTH );
-        m_aRepository[ sName ] = new OShortIntegerType( sName, ::com::sun::star::xsd::DataTypeClass::gMonth );
+        m_aRepository[ sName ] = new OShortIntegerType( sName, css::xsd::DataTypeClass::gMonth );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_DAY );
-        m_aRepository[ sName ] = new OShortIntegerType( sName, ::com::sun::star::xsd::DataTypeClass::gDay );
+        m_aRepository[ sName ] = new OShortIntegerType( sName, css::xsd::DataTypeClass::gDay );
     }
 
 
@@ -212,7 +212,7 @@ namespace xforms
     // template instantiations
 
     template<>
-    void OValueLimitedType<com::sun::star::util::Date>::registerProperties()
+    void OValueLimitedType<css::util::Date>::registerProperties()
     {
         OValueLimitedType_Base::registerProperties();
 
@@ -223,7 +223,7 @@ namespace xforms
     }
 
     template<>
-    void OValueLimitedType<com::sun::star::util::Time>::registerProperties()
+    void OValueLimitedType<css::util::Time>::registerProperties()
     {
         OValueLimitedType_Base::registerProperties();
 
@@ -234,7 +234,7 @@ namespace xforms
     }
 
     template<>
-    void OValueLimitedType<com::sun::star::util::DateTime>::registerProperties()
+    void OValueLimitedType<css::util::DateTime>::registerProperties()
     {
         OValueLimitedType_Base::registerProperties();
 

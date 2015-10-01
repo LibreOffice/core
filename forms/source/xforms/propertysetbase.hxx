@@ -49,9 +49,9 @@ protected:
 
 public:
 
-    virtual bool    approveValue( const com::sun::star::uno::Any& rValue ) const = 0;
-    virtual void    setValue( const com::sun::star::uno::Any& rValue ) = 0;
-    virtual void    getValue( com::sun::star::uno::Any& rValue ) const = 0;
+    virtual bool    approveValue( const css::uno::Any& rValue ) const = 0;
+    virtual void    setValue( const css::uno::Any& rValue ) = 0;
+    virtual void    getValue( css::uno::Any& rValue ) const = 0;
     virtual bool    isWriteable() const = 0;
 };
 
@@ -78,22 +78,22 @@ public:
     {
     }
 
-    virtual bool    approveValue( const com::sun::star::uno::Any& rValue ) const SAL_OVERRIDE
+    virtual bool    approveValue( const css::uno::Any& rValue ) const SAL_OVERRIDE
     {
         VALUE aVal;
         return ( rValue >>= aVal );
     }
 
-    virtual void    setValue( const com::sun::star::uno::Any& rValue ) SAL_OVERRIDE
+    virtual void    setValue( const css::uno::Any& rValue ) SAL_OVERRIDE
     {
         VALUE aTypedVal = VALUE();
         OSL_VERIFY( rValue >>= aTypedVal );
         (m_pInstance->*m_pWriter)( aTypedVal );
     }
 
-    virtual void getValue( com::sun::star::uno::Any& rValue ) const SAL_OVERRIDE
+    virtual void getValue( css::uno::Any& rValue ) const SAL_OVERRIDE
     {
-        rValue = com::sun::star::uno::makeAny( (m_pInstance->*m_pReader)() );
+        rValue = css::uno::makeAny( (m_pInstance->*m_pReader)() );
     }
 
     virtual bool isWriteable() const SAL_OVERRIDE
@@ -177,11 +177,9 @@ public:
 class PropertySetBase : public ::comphelper::OStatefulPropertySet
 {
 private:
-    typedef com::sun::star::uno::Any    Any_t;
-
     typedef ::std::map< const sal_Int32, ::rtl::Reference< PropertyAccessorBase > >     PropertyAccessors;
-    typedef ::std::vector< ::com::sun::star::beans::Property >                          PropertyArray;
-    typedef ::std::map< const sal_Int32, Any_t >                                        PropertyValueCache;
+    typedef ::std::vector< css::beans::Property >                                       PropertyArray;
+    typedef ::std::map< const sal_Int32, css::uno::Any >                                PropertyValueCache;
 
     PropertyArray                   m_aProperties;
     cppu::IPropertyArrayHelper*     m_pProperties;
@@ -204,7 +202,7 @@ protected:
             calls in the constructor of your class.
     */
     void registerProperty(
-        const com::sun::star::beans::Property& rProperty,
+        const css::beans::Property& rProperty,
         const ::rtl::Reference< PropertyAccessorBase >& rAccessor
     );
 
@@ -255,14 +253,14 @@ protected:
     void initializePropertyValueCache( sal_Int32 nHandle );
 
     /// OPropertysetHelper methods
-    virtual sal_Bool SAL_CALL convertFastPropertyValue( Any_t& rConvertedValue, Any_t& rOldValue, sal_Int32 nHandle, const Any_t& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any_t& rValue )
-        throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL getFastPropertyValue( Any_t& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue )
+        throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
+        throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
 
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
     /// helper struct for granting selective access to some notification-related methods
@@ -273,14 +271,14 @@ public:
             one previously registered via <member>registerProperty</member>.
         @see registerProperty
     */
-    inline void getCurrentPropertyValueByHandle( sal_Int32 nHandle, Any_t& /* [out] */ rValue, const NotifierAccess& ) const
+    inline void getCurrentPropertyValueByHandle( sal_Int32 nHandle, css::uno::Any& /* [out] */ rValue, const NotifierAccess& ) const
     {
         getFastPropertyValue( rValue, nHandle );
     }
 
     /** notifies a change in a given property to all interested listeners
     */
-    inline void notifyPropertyChange( sal_Int32 nHandle, const Any_t& rOldValue, const Any_t& rNewValue, const NotifierAccess& ) const
+    inline void notifyPropertyChange( sal_Int32 nHandle, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue, const NotifierAccess& ) const
     {
         const_cast< PropertySetBase* >( this )->firePropertyChange( nHandle, rNewValue, rOldValue );
     }
@@ -317,7 +315,7 @@ struct PropertyChangeNotifier
 private:
     const PropertySetBase&      m_rPropertySet;
     sal_Int32                   m_nHandle;
-    com::sun::star::uno::Any    m_aOldValue;
+    css::uno::Any               m_aOldValue;
 
 public:
     /** constructs a PropertyChangeNotifier
@@ -337,7 +335,7 @@ public:
     }
     inline ~PropertyChangeNotifier()
     {
-        com::sun::star::uno::Any aNewValue;
+        css::uno::Any aNewValue;
         m_rPropertySet.getCurrentPropertyValueByHandle( m_nHandle, aNewValue, PropertySetBase::NotifierAccess() );
         if ( aNewValue != m_aOldValue )
         {
@@ -347,11 +345,11 @@ public:
 };
 
 
-#define PROPERTY_FLAGS( NAME, TYPE, FLAG ) com::sun::star::beans::Property( \
+#define PROPERTY_FLAGS( NAME, TYPE, FLAG ) css::beans::Property( \
     OUString( #NAME, sizeof( #NAME ) - 1, RTL_TEXTENCODING_ASCII_US ), \
     HANDLE_##NAME, cppu::UnoType<TYPE>::get(), FLAG )
-#define PROPERTY( NAME, TYPE )      PROPERTY_FLAGS( NAME, TYPE, com::sun::star::beans::PropertyAttribute::BOUND )
-#define PROPERTY_RO( NAME, TYPE )   PROPERTY_FLAGS( NAME, TYPE, com::sun::star::beans::PropertyAttribute::BOUND | com::sun::star::beans::PropertyAttribute::READONLY )
+#define PROPERTY( NAME, TYPE )      PROPERTY_FLAGS( NAME, TYPE, css::beans::PropertyAttribute::BOUND )
+#define PROPERTY_RO( NAME, TYPE )   PROPERTY_FLAGS( NAME, TYPE, css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY )
 
 #endif
 
