@@ -151,7 +151,7 @@ Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
     if( xFrameContext.Is() )
     {
         SvXMLImportContext *pContext = &xFrameContext;
-        xTxt = dynamic_cast<XMLTextFrameContext*>( pContext )->GetTextContent( );
+        xTxt = dynamic_cast<XMLTextFrameContext&>(*pContext).GetTextContent();
     }
 
     return xTxt;
