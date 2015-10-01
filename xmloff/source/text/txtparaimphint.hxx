@@ -205,11 +205,10 @@ public:
     {
         css::uno::Reference < css::text::XTextContent > xTxt;
         SvXMLImportContext *pContext = &xContext;
-        if( 0 != dynamic_cast<const XMLTextFrameContext*>(pContext) )
-            xTxt = dynamic_cast< XMLTextFrameContext*>( pContext )->GetTextContent();
-        else if( 0 != dynamic_cast<const XMLTextFrameHyperlinkContext*>(pContext) )
-            xTxt = dynamic_cast< XMLTextFrameHyperlinkContext* >( pContext )
-                        ->GetTextContent();
+        if (XMLTextFrameContext *pFrameContext =  dynamic_cast<XMLTextFrameContext*>(pContext))
+            xTxt = pFrameContext->GetTextContent();
+        else if (XMLTextFrameHyperlinkContext *pLinkContext = dynamic_cast<XMLTextFrameHyperlinkContext*>(pContext))
+            xTxt = pLinkContext->GetTextContent();
 
         return xTxt;
     }
@@ -219,7 +218,7 @@ public:
     {
         css::uno::Reference < css::drawing::XShape > xShape;
         SvXMLImportContext *pContext = &xContext;
-        if (XMLTextFrameContext *pFrameContext = dynamic_cast<XMLTextFrameContext*>(pContext) )
+        if (XMLTextFrameContext *pFrameContext = dynamic_cast<XMLTextFrameContext*>(pContext))
             xShape = pFrameContext->GetShape();
         else if(XMLTextFrameHyperlinkContext *pLinkContext =  dynamic_cast<XMLTextFrameHyperlinkContext*>(pContext))
             xShape = pLinkContext->GetShape();
