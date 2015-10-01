@@ -65,7 +65,7 @@ properties:
 	echo "APP_PLATFORM := android-21" >> jni/Application.mk
 
 install:
-	unset JAVA_HOME && $(ANT) $(if $(verbose),,-quiet) debug install
+	unset JAVA_HOME && $(ANT) debug install
 	@echo
 	@echo 'Run it with "make run"'
 	@echo
