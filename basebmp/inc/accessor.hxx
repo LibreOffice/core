@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_ACCESSOR_HXX
-#define INCLUDED_BASEBMP_ACCESSOR_HXX
+#ifndef INCLUDED_BASEBMP_INC_ACCESSOR_HXX
+#define INCLUDED_BASEBMP_INC_ACCESSOR_HXX
 
 #include <vigra/numerictraits.hxx>
 
@@ -108,6 +108,6 @@ public:
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_ACCESSOR_HXX */
+#endif /* INCLUDED_BASEBMP_INC_ACCESSOR_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

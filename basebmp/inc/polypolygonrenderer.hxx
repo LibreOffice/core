@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_POLYPOLYGONRENDERER_HXX
-#define INCLUDED_BASEBMP_POLYPOLYGONRENDERER_HXX
+#ifndef INCLUDED_BASEBMP_INC_POLYPOLYGONRENDERER_HXX
+#define INCLUDED_BASEBMP_INC_POLYPOLYGONRENDERER_HXX
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -350,6 +350,6 @@ namespace basebmp
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_POLYPOLYGONRENDERER_HXX */
+#endif /* INCLUDED_BASEBMP_INC_POLYPOLYGONRENDERER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_SCALEIMAGE_HXX
-#define INCLUDED_BASEBMP_SCALEIMAGE_HXX
+#ifndef INCLUDED_BASEBMP_INC_SCALEIMAGE_HXX
+#define INCLUDED_BASEBMP_INC_SCALEIMAGE_HXX
 
 #include <osl/diagnose.h>
 
@@ -184,6 +184,6 @@ inline void scaleImage( vigra::triple<SourceIter,SourceIter,SourceAcc> const& sr
 
 }
 
-#endif /* INCLUDED_BASEBMP_SCALEIMAGE_HXX */
+#endif /* INCLUDED_BASEBMP_INC_SCALEIMAGE_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

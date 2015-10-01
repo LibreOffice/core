@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_RGB24PIXELFORMATS_HXX
-#define INCLUDED_BASEBMP_RGB24PIXELFORMATS_HXX
+#ifndef INCLUDED_BASEBMP_INC_RGB24PIXELFORMATS_HXX
+#define INCLUDED_BASEBMP_INC_RGB24PIXELFORMATS_HXX
 
 #include <basebmp/color.hxx>
-#include <basebmp/accessor.hxx>
-#include <basebmp/pixeliterator.hxx>
-#include <basebmp/pixelformatadapters.hxx>
+#include <accessor.hxx>
+#include <pixeliterator.hxx>
+#include <pixelformatadapters.hxx>
 
 #include <vigra/rgbvalue.hxx>
 
@@ -87,6 +87,6 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGR24::getter_type,
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_RGB24PIXELFORMATS_HXX */
+#endif /* INCLUDED_BASEBMP_INC_RGB24PIXELFORMATS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_GREYLEVELFORMATS_HXX
-#define INCLUDED_BASEBMP_GREYLEVELFORMATS_HXX
+#ifndef INCLUDED_BASEBMP_INC_GREYLEVELFORMATS_HXX
+#define INCLUDED_BASEBMP_INC_GREYLEVELFORMATS_HXX
 
 #include <basebmp/color.hxx>
-#include <basebmp/colortraits.hxx>
-#include <basebmp/accessor.hxx>
-#include <basebmp/pixeliterator.hxx>
-#include <basebmp/packedpixeliterator.hxx>
-#include <basebmp/pixelformatadapters.hxx>
-#include <basebmp/metafunctions.hxx>
+#include <colortraits.hxx>
+#include <accessor.hxx>
+#include <pixeliterator.hxx>
+#include <packedpixeliterator.hxx>
+#include <pixelformatadapters.hxx>
+#include <metafunctions.hxx>
 
 #include <vigra/numerictraits.hxx>
 #include <vigra/metaprogramming.hxx>
@@ -124,6 +124,6 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_GREY8::getter_type,
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_GREYLEVELFORMATS_HXX */
+#endif /* INCLUDED_BASEBMP_INC_GREYLEVELFORMATS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_STRIDEDARRAYITERATOR_HXX
-#define INCLUDED_BASEBMP_STRIDEDARRAYITERATOR_HXX
+#ifndef INCLUDED_BASEBMP_INC_STRIDEDARRAYITERATOR_HXX
+#define INCLUDED_BASEBMP_INC_STRIDEDARRAYITERATOR_HXX
 
-#include <basebmp/metafunctions.hxx>
+#include <metafunctions.hxx>
 
 namespace basebmp
 {
@@ -103,6 +103,6 @@ private:
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_STRIDEDARRAYITERATOR_HXX */
+#endif /* INCLUDED_BASEBMP_INC_STRIDEDARRAYITERATOR_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

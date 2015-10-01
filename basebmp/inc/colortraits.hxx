@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_COLORTRAITS_HXX
-#define INCLUDED_BASEBMP_COLORTRAITS_HXX
+#ifndef INCLUDED_BASEBMP_INC_COLORTRAITS_HXX
+#define INCLUDED_BASEBMP_INC_COLORTRAITS_HXX
 
-#include <basebmp/accessoradapters.hxx>
-#include <basebmp/metafunctions.hxx>
+#include <accessoradapters.hxx>
+#include <metafunctions.hxx>
 
 #include <vigra/mathutil.hxx>
 
@@ -132,6 +132,6 @@ template< typename ColorType > struct ColorTraits
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_COLORTRAITS_HXX */
+#endif /* INCLUDED_BASEBMP_INC_COLORTRAITS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

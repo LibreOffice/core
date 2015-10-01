@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_METAFUNCTIONS_HXX
-#define INCLUDED_BASEBMP_METAFUNCTIONS_HXX
+#ifndef INCLUDED_BASEBMP_INC_METAFUNCTIONS_HXX
+#define INCLUDED_BASEBMP_INC_METAFUNCTIONS_HXX
 
 #include <boost/mpl/integral_c.hpp>
 #include <vigra/metaprogramming.hxx>
@@ -212,6 +212,6 @@ template< typename T > inline T shiftRight( T v, int shift )
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_METAFUNCTIONS_HXX */
+#endif /* INCLUDED_BASEBMP_INC_METAFUNCTIONS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

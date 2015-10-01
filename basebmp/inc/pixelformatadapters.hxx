@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_PIXELFORMATADAPTERS_HXX
-#define INCLUDED_BASEBMP_PIXELFORMATADAPTERS_HXX
+#ifndef INCLUDED_BASEBMP_INC_PIXELFORMATADAPTERS_HXX
+#define INCLUDED_BASEBMP_INC_PIXELFORMATADAPTERS_HXX
 
-#include <basebmp/accessortraits.hxx>
-#include <basebmp/accessoradapters.hxx>
+#include <accessortraits.hxx>
+#include <accessoradapters.hxx>
 
 #include <vigra/metaprogramming.hxx>
 
@@ -97,6 +97,6 @@ template< class Accessor > struct AccessorTraits<                 \
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_PIXELFORMATADAPTERS_HXX */
+#endif /* INCLUDED_BASEBMP_INC_PIXELFORMATADAPTERS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

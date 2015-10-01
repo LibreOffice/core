@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_PALETTEIMAGEACCESSOR_HXX
-#define INCLUDED_BASEBMP_PALETTEIMAGEACCESSOR_HXX
+#ifndef INCLUDED_BASEBMP_INC_PALETTEIMAGEACCESSOR_HXX
+#define INCLUDED_BASEBMP_INC_PALETTEIMAGEACCESSOR_HXX
 
-#include <basebmp/colortraits.hxx>
-#include <basebmp/accessortraits.hxx>
+#include <colortraits.hxx>
+#include <accessortraits.hxx>
 
 #include <vigra/numerictraits.hxx>
 #include <vigra/metaprogramming.hxx>
@@ -157,6 +157,6 @@ public:
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_PALETTEIMAGEACCESSOR_HXX */
+#endif /* INCLUDED_BASEBMP_INC_PALETTEIMAGEACCESSOR_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

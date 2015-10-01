@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_RGBMASKPIXELFORMATS_HXX
-#define INCLUDED_BASEBMP_RGBMASKPIXELFORMATS_HXX
+#ifndef INCLUDED_BASEBMP_INC_RGBMASKPIXELFORMATS_HXX
+#define INCLUDED_BASEBMP_INC_RGBMASKPIXELFORMATS_HXX
 
 #include <basebmp/color.hxx>
-#include <basebmp/colortraits.hxx>
-#include <basebmp/accessor.hxx>
-#include <basebmp/pixeliterator.hxx>
-#include <basebmp/pixelformatadapters.hxx>
-#include <basebmp/metafunctions.hxx>
-#include <basebmp/endian.hxx>
+#include <colortraits.hxx>
+#include <accessor.hxx>
+#include <pixeliterator.hxx>
+#include <pixelformatadapters.hxx>
+#include <metafunctions.hxx>
+#include <endian.hxx>
 
 #include <vigra/numerictraits.hxx>
 #include <vigra/metaprogramming.hxx>
@@ -350,6 +350,6 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGRX32_8888::getter_type,
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_RGBMASKPIXELFORMATS_HXX */
+#endif /* INCLUDED_BASEBMP_INC_RGBMASKPIXELFORMATS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

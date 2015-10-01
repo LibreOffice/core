@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_COLORMISC_HXX
-#define INCLUDED_BASEBMP_COLORMISC_HXX
+#ifndef INCLUDED_BASEBMP_INC_COLORMISC_HXX
+#define INCLUDED_BASEBMP_INC_COLORMISC_HXX
 
 #include <osl/diagnose.h>
 #include <basebmp/color.hxx>
-#include <basebmp/colortraits.hxx>
-#include <basebmp/accessortraits.hxx>
+#include <colortraits.hxx>
+#include <accessortraits.hxx>
 #include <vigra/mathutil.hxx>
 
 // Contents of this header moved out of color.hxx, as it is not useful
@@ -168,6 +168,6 @@ struct NumericTraits<basebmp::Color>
 
 } // namespace vigra
 
-#endif /* INCLUDED_BASEBMP_COLORMISC_HXX */
+#endif /* INCLUDED_BASEBMP_INC_COLORMISC_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

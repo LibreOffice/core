@@ -24,31 +24,31 @@
 
 #include <basebmp/bitmapdevice.hxx>
 
-#include <basebmp/compositeiterator.hxx>
-#include <basebmp/iteratortraits.hxx>
+#include <compositeiterator.hxx>
+#include <iteratortraits.hxx>
 
-#include <basebmp/accessor.hxx>
-#include <basebmp/accessortraits.hxx>
-#include <basebmp/accessoradapters.hxx>
-#include <basebmp/colorblendaccessoradapter.hxx>
+#include <accessor.hxx>
+#include <accessortraits.hxx>
+#include <accessoradapters.hxx>
+#include <colorblendaccessoradapter.hxx>
 
 #include <basebmp/color.hxx>
-#include <basebmp/colormisc.hxx>
-#include <basebmp/colortraits.hxx>
+#include <colormisc.hxx>
+#include <colortraits.hxx>
 
-#include <basebmp/greylevelformats.hxx>
-#include <basebmp/paletteformats.hxx>
-#include <basebmp/rgbmaskpixelformats.hxx>
-#include <basebmp/rgb24pixelformats.hxx>
+#include <greylevelformats.hxx>
+#include <paletteformats.hxx>
+#include <rgbmaskpixelformats.hxx>
+#include <rgb24pixelformats.hxx>
 
 #include <basebmp/scanlineformats.hxx>
-#include <basebmp/fillimage.hxx>
-#include <basebmp/scaleimage.hxx>
-#include <basebmp/clippedlinerenderer.hxx>
-#include <basebmp/polypolygonrenderer.hxx>
-#include <basebmp/genericcolorimageaccessor.hxx>
+#include <fillimage.hxx>
+#include <scaleimage.hxx>
+#include <clippedlinerenderer.hxx>
+#include <polypolygonrenderer.hxx>
+#include <genericcolorimageaccessor.hxx>
 
-#include <basebmp/tools.hxx>
+#include <tools.hxx>
 #include "intconversion.hxx"
 
 #include <rtl/alloc.h>

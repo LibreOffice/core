@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_ACCESSORTRAITS_HXX
-#define INCLUDED_BASEBMP_ACCESSORTRAITS_HXX
+#ifndef INCLUDED_BASEBMP_INC_ACCESSORTRAITS_HXX
+#define INCLUDED_BASEBMP_INC_ACCESSORTRAITS_HXX
 
-#include <basebmp/accessorfunctors.hxx>
-#include <basebmp/accessoradapters.hxx>
-#include <basebmp/metafunctions.hxx>
+#include <accessorfunctors.hxx>
+#include <accessoradapters.hxx>
+#include <metafunctions.hxx>
 
 namespace basebmp
 {
@@ -125,6 +125,6 @@ template< class Accessor > struct AccessorTraits
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_ACCESSORTRAITS_HXX */
+#endif /* INCLUDED_BASEBMP_INC_ACCESSORTRAITS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
