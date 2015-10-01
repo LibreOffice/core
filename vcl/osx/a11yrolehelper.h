@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_OSX_A11YROLEHELPER_H
 #define INCLUDED_VCL_OSX_A11YROLEHELPER_H
 
-#include "osx/salinst.h"
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 @interface AquaA11yRoleHelper : NSObject
