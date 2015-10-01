@@ -665,7 +665,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                 }
                                 else
                                 {
-                                    // if there isn't enough space in the (colmuned)
+                                    // if there isn't enough space in the (columned)
                                     // section, leave it and set available space <nAvail>
                                     // to the space below the section.
                                     // if the new available space isn't also enough,

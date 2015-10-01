@@ -193,7 +193,7 @@ sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
     if( nMax > 0 )
     {
         // For smart tag lists, we may not use a binary search. We return the
-        // position of the first smart tag which coveres nValue
+        // position of the first smart tag which covers nValue
         if ( !maList[0].maType.isEmpty() || maList[0].mpSubList )
         {
             for (std::vector<SwWrongArea>::const_iterator aIter(maList.begin()), aEnd(maList.end()); aIter != aEnd; ++aIter)

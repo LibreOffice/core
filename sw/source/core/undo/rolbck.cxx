@@ -991,7 +991,7 @@ void SwHistory::Add(
 
     //UUUU To be able to include the DrawingLayer FillItems something more
     // general has to be done to check if an Item is default than to check
-    // if it's pointzer equals that in Writer's global PoolDefaults (held in
+    // if its pointer equals that in Writer's global PoolDefaults (held in
     // aAttrTab and used to fill the pool defaults in Writer - looks as if
     // Writer is *older* than the SfxItemPool ?). I checked the possibility to
     // get the SfxItemPool here (works), but decided to use the SfxPoolItem's

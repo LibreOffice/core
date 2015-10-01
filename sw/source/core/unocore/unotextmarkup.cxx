@@ -394,7 +394,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     if (!m_pImpl->m_pTextNode)
         return;
 
-    // check for equal length of all sequnces
+    // check for equal length of all sequences
     sal_Int32 nLen = rMarkups.getLength();
 
     // for grammar checking there should be exactly one sentence markup
