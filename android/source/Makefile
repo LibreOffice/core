@@ -1,6 +1,6 @@
 ifeq ($(BUILDDIR),)
 gb_Side:=host
-include ../../../config_host.mk
+include ../../config_host.mk
 endif
 
 # The default target just builds.
