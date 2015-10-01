@@ -40,6 +40,7 @@
 #include <undo.hrc>
 #include <comcore.hrc>
 #include <docsh.hxx>
+#include <o3tl/make_unique.hxx>
 
 // This class saves the Pam as integers and can recompose those into a PaM
 SwUndRng::SwUndRng()
@@ -1028,9 +1029,7 @@ bool SwUndo::FillSaveDataForFormat(
                  && eCmpPos != POS_COLLIDE_END
                  && eCmpPos != POS_COLLIDE_START )
             {
-                std::unique_ptr<SwRedlineSaveData> pNewData(
-                    new SwRedlineSaveData(eCmpPos, *pStt, *pEnd, *pRedl, true));
-                rSData.push_back(std::move(pNewData));
+                rSData.push_back(o3tl::make_unique<SwRedlineSaveData>(eCmpPos, *pStt, *pEnd, *pRedl, true));
             }
 
         }

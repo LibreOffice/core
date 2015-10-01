@@ -25,6 +25,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/make_unique.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <sot/formats.hxx>
@@ -84,7 +86,6 @@
 #include <postithelper.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
-#include <o3tl/sorted_vector.hxx>
 #include <svtools/treelistentry.hxx>
 
 #include "swabstdlg.hxx"
@@ -3468,9 +3469,7 @@ void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
     const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
-    std::unique_ptr<SwContentLBoxString> pStr(
-        new SwContentLBoxString(pEntry, 0, rCol.GetText()));
-    pEntry->ReplaceItem(std::move(pStr), nColToHilite);
+    pEntry->ReplaceItem(o3tl::make_unique<SwContentLBoxString>(pEntry, 0, rCol.GetText()), nColToHilite);
 }
 
 void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
