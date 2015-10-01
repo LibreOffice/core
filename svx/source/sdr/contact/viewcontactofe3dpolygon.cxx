@@ -149,11 +149,11 @@ namespace sdr
 
             // #i98295#
             // unfortunately, this SdrObject type which allows a free 3d geometry definition was defined
-            // wrong topologically in relation to it's plane normal and 3D visibility when it was invented
+            // wrong topologically in relation to its plane normal and 3D visibility when it was invented
             // a long time ago. Since the API allows creation of this SDrObject type, it is not possible to
             // simply change this definition. Only the chart should use it, and at least this object type
             // only exists at Runtime (is not saved and/or loaded in any FileFormat). Still someone external
-            // may have used it in it's API. To not risk wrong 3D lightings, I have to switch the orientation
+            // may have used it in its API. To not risk wrong 3D lightings, I have to switch the orientation
             // of the polygon here
             aPolyPolygon3D.flip();
 

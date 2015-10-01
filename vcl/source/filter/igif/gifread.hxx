@@ -79,7 +79,7 @@ class GIFReader : public GraphicReader
     sal_uInt16          nLoops;
     GIFAction           eActAction;
     bool                bStatus;
-    bool                bGCTransparent;         // is the image transparant, if yes:
+    bool                bGCTransparent;         // is the image transparent, if yes:
     bool                bInterlaced;
     bool                bOverreadBlock;
     bool                bImGraphicReady;
