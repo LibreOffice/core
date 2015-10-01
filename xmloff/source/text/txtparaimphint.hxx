@@ -230,14 +230,12 @@ public:
     {
         bool bRet = false;
         SvXMLImportContext *pContext = &xContext;
-        if( 0 != dynamic_cast<const XMLTextFrameContext*>(pContext) )
+        if (XMLTextFrameContext *pFrameContext = dynamic_cast<XMLTextFrameContext*>(pContext))
             bRet = css::text::TextContentAnchorType_AT_CHARACTER ==
-                dynamic_cast<const XMLTextFrameContext*>( pContext )
-                    ->GetAnchorType();
-        else if( 0 != dynamic_cast<const XMLTextFrameHyperlinkContext*>( pContext) )
+                pFrameContext->GetAnchorType();
+        else if (XMLTextFrameHyperlinkContext *pLinkContext = dynamic_cast<XMLTextFrameHyperlinkContext*>(pContext))
             bRet = css::text::TextContentAnchorType_AT_CHARACTER ==
-                dynamic_cast<const XMLTextFrameHyperlinkContext*>( pContext )
-                    ->GetAnchorType();
+                pLinkContext->GetAnchorType();
         return bRet;
     }
 };
