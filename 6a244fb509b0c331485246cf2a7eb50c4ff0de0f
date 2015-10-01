@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_2b65f1e0",
+        "filename": "filter/source/graphicfilter/ios2met/ios2met.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2481,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-10-01T18:08:56Z",
+      "side": 1,
+      "message": "I think the intended word was “therein”.",
+      "range": {
+        "startLine": 2481,
+        "startChar": 15,
+        "endLine": 2481,
+        "endChar": 23
+      },
+      "revId": "6a244fb509b0c331485246cf2a7eb50c4ff0de0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_8b623dd7",
+        "filename": "forms/source/component/FormattedField.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-10-01T18:08:56Z",
+      "side": 1,
+      "message": "it\u0027s → its",
+      "range": {
+        "startLine": 548,
+        "startChar": 7,
+        "endLine": 548,
+        "endChar": 11
+      },
+      "revId": "6a244fb509b0c331485246cf2a7eb50c4ff0de0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_6b5fe90e",
+        "filename": "forms/source/component/ListBox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-10-01T18:08:56Z",
+      "side": 1,
+      "message": "otherwhise → otherwise",
+      "range": {
+        "startLine": 738,
+        "startChar": 68,
+        "endLine": 738,
+        "endChar": 78
+      },
+      "revId": "6a244fb509b0c331485246cf2a7eb50c4ff0de0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_ab9f41b3",
+        "filename": "forms/source/inc/FormComponent.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-10-01T18:08:56Z",
+      "side": 1,
+      "message": "recommend → recommended",
+      "range": {
+        "startLine": 678,
+        "startChar": 40,
+        "endLine": 678,
+        "endChar": 49
+      },
+      "revId": "6a244fb509b0c331485246cf2a7eb50c4ff0de0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
