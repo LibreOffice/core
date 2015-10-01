@@ -862,8 +862,8 @@ KeyEvent Menu::GetActivationKey( sal_uInt16 nItemId ) const
                 nCode = KEY_A + (cAccel-'A');
             else if( cAccel >= '0' && cAccel <= '9' )
                 nCode = KEY_0 + (cAccel-'0');
-            if(nCode )
-                aRet = KeyEvent( cAccel, KeyCode( nCode, KEY_MOD2 ) );
+
+            aRet = KeyEvent( cAccel, KeyCode( nCode, KEY_MOD2 ) );
         }
 
     }
