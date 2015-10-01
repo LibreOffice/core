@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_00b44cf0",
+        "filename": "vcl/Library_vcl.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2015-10-01T12:24:09Z",
+      "side": 1,
+      "message": "Not an expert but freetype does not look optional to me. \nReading https://kripken.github.io/emscripten-site/docs/compiling/Building-Projects.html#using-libraries i think we may need some gbuild tricks to maybe download dependencies as precompiled libraries bytecode? Assuming the bytecode is portable.",
+      "revId": "6ba7f37f36ca3ce9f64066a2ec4e2e921b3fa5de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
