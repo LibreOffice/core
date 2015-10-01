@@ -247,36 +247,6 @@ Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel (unsigned int nScreen)
     return Rectangle (Point(aRect.x, aRect.y), Size(aRect.width, aRect.height));
 }
 
-OUString GtkSalSystem::GetDisplayScreenName(unsigned int nScreen)
-{
-    gchar *pStr;
-    gint nMonitor;
-    GdkScreen *pScreen;
-    pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
-    if (!pScreen)
-        return OUString();
-
-#if GTK_CHECK_VERSION(3,0,0) || GTK_CHECK_VERSION(2,14,0)
-    pStr = gdk_screen_get_monitor_plug_name (pScreen, nMonitor);
-#else
-    static gchar * (*get_fn) (GdkScreen *, int) = NULL;
-
-    GModule *module = g_module_open (NULL, (GModuleFlags) 0);
-    if (!g_module_symbol (module, "gdk_screen_get_monitor_plug_name",
-                          (gpointer *)&get_fn))
-        get_fn = NULL;
-    g_module_close (module);
-
-    if (get_fn)
-        pStr = get_fn (pScreen, nMonitor);
-    else
-        pStr = g_strdup_printf ("%d", nScreen);
-#endif
-    OUString aRet (pStr, strlen (pStr), RTL_TEXTENCODING_UTF8);
-    g_free (pStr);
-    return aRet;
-}
-
 // convert ~ to indicate mnemonic to '_'
 static OString MapToGtkAccelerator(const OUString &rStr)
 {

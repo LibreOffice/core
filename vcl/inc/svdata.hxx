@@ -363,8 +363,6 @@ DockingManager*     ImplGetDockingManager();
 BlendFrameCache*    ImplGetBlendFrameCache();
 void        ImplWindowAutoMnemonic( vcl::Window* pWindow );
 
-void        ImplUpdateSystemProcessWindow();
-
 bool        ImplCallHotKey( const vcl::KeyCode& rKeyCode );
 void        ImplFreeHotKeyData();
 void        ImplFreeEventHookData();
@@ -374,7 +372,9 @@ bool        ImplCallPreNotify( NotifyEvent& rEvt );
 VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData();
 VCL_PLUGIN_PUBLIC void ImplHideSplash();
 
+#ifdef _WIN32
 bool ImplInitAccessBridge();
+#endif
 
 FieldUnitStringList* ImplGetFieldUnits();
 FieldUnitStringList* ImplGetCleanedFieldUnits();

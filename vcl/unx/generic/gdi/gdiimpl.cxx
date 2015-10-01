@@ -326,20 +326,6 @@ GC X11SalGraphicsImpl::GetTrackingGC()
     return mpTrackingGC;
 }
 
-inline GC X11SalGraphicsImpl::GetMonoGC( Pixmap hPixmap )
-{
-    if( !mpMonoGC )
-        mpMonoGC = CreateGC( hPixmap );
-
-    if( !mbMonoGC )
-    {
-        mrParent.SetClipRegion( mpMonoGC );
-        mbMonoGC = true;
-    }
-
-    return mpMonoGC;
-}
-
 GC X11SalGraphicsImpl::GetInvertGC()
 {
     if( !mpInvertGC )

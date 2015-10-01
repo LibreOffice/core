@@ -247,8 +247,7 @@ public:
     Returns the screen number the window is on
 
     The Display Screen number is counted the same way that
-    <code>Application::GetScreenPosSizePixel</code>,
-    <code>Application::GetDisplayScreenName</code>
+    <code>Application::GetScreenPosSizePixel</code>
     and of course <code>SystemWindow::SetScreenNumber</code>
     are counted in.
 
@@ -268,8 +267,7 @@ public:
     positioning apply as in <code>SystemWindow::GetScreenNumber</code>
 
     The Display Screen number is counted the same way that
-    <code>Application::GetScreenPosSizePixel</code>,
-    <code>Application::GetDisplayScreenName</code>
+    <code>Application::GetScreenPosSizePixel</code>
     and of course <code>SystemWindow::GetScreenNumber</code>
     are counted in.
 

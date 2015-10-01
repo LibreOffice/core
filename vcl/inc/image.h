@@ -34,7 +34,6 @@ public:
                 ~ImplImageBmp();
 
     void        Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight,sal_uInt16 nInitSize );
-    void        ColorTransform();
     void        Draw( OutputDevice* pDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = NULL );
 
 private:

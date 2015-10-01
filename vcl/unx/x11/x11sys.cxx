@@ -85,47 +85,6 @@ Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     return aRet;
 }
 
-OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
-{
-    OUString aScreenName;
-    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());
-    if( pSalDisp->IsXinerama() )
-    {
-        const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();
-        if( nScreen >= rScreens.size() )
-            nScreen = 0;
-        OUStringBuffer aBuf( 256 );
-        aBuf.append( OStringToOUString( OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
-        aBuf.append( " [" );
-        aBuf.append( static_cast<sal_Int32>(nScreen) );
-        aBuf.append( ']' );
-        aScreenName = aBuf.makeStringAndClear();
-    }
-    else
-    {
-        if( nScreen >= static_cast<unsigned int>(pSalDisp->GetXScreenCount()) )
-            nScreen = 0;
-        OUStringBuffer aBuf( 256 );
-        aBuf.append( OStringToOUString( OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
-        // search backwards for ':'
-        int nPos = aBuf.getLength();
-        if( nPos > 0 )
-            nPos--;
-        while( nPos > 0 && aBuf[nPos] != ':' )
-            nPos--;
-        // search forward to '.'
-        while( nPos < aBuf.getLength() && aBuf[nPos] != '.' )
-            nPos++;
-        if( nPos < aBuf.getLength() )
-            aBuf.setLength( nPos+1 );
-        else
-            aBuf.append( '.' );
-        aBuf.append( static_cast<sal_Int32>(nScreen) );
-        aScreenName = aBuf.makeStringAndClear();
-    }
-    return aScreenName;
-}
-
 int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMessage, const std::list< OUString >& rButtons, int nDefButton )
 {
     int nRet = -1;

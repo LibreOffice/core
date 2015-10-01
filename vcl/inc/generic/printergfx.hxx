@@ -76,8 +76,6 @@ public:
     bool        Is () const
     { return meColorspace != eInvalid; }
 
-    ColorSpace      GetColorSpace () const
-    { return meColorspace; }
     sal_uInt16      GetRed () const
     { return mnRed; }
     sal_uInt16      GetGreen () const
@@ -137,8 +135,6 @@ public:
     virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const = 0;
     virtual sal_uInt8   GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const = 0;
     virtual sal_uInt8   GetPixelIdx  (sal_uInt32 nRow, sal_uInt32 nColumn) const = 0;
-    virtual sal_uInt32  GetWidth ()     const = 0;
-    virtual sal_uInt32  GetHeight ()    const = 0;
     virtual sal_uInt32  GetDepth ()     const = 0;
 };
 
@@ -188,12 +184,6 @@ private:
 
     osl::File*      mpPageHeader;
     osl::File*      mpPageBody;
-
-    static void     TranslateCoordinates (sal_Int32 &rXOut, sal_Int32 &rYOut,
-                                          sal_Int32 nXIn, sal_Int32 nYIn )
-    { rXOut = nXIn; rYOut = nYIn; }
-    static void     TranslateCoordinates (Point& rOut, const Point& rIn)
-    { rOut = rIn; }
 
     /* text/font related data, for a type1 font it has to be checked
        whether this font has already been downloaded. A TrueType font

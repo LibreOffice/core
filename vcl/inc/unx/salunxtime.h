@@ -85,18 +85,6 @@ inline timeval &operator += ( timeval &t1, sal_uIntPtr t2 )
     return t1;
 }
 
-inline timeval operator + ( const timeval &t1, const timeval &t2 )
-{
-    timeval t0 = t1;
-    return t0 += t2;
-}
-
-inline timeval operator + ( const timeval &t1, sal_uIntPtr t2 )
-{
-    timeval t0 = t1;
-    return t0 += t2;
-}
-
 inline timeval operator - ( const timeval &t1, const timeval &t2 )
 {
     timeval t0 = t1;

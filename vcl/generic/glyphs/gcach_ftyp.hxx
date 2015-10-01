@@ -60,7 +60,7 @@ class FtFontInfo
 public:
                            FtFontInfo( const ImplDevFontAttributes&,
                                const OString& rNativeFileName,
-                               int nFaceNum, sal_IntPtr nFontId, int nSynthetic);
+                               int nFaceNum, sal_IntPtr nFontId);
                           ~FtFontInfo();
 
     const unsigned char*  GetTable( const char*, sal_uLong* pLength=0 ) const;
@@ -72,8 +72,6 @@ public:
     void                  ReleaseFaceFT();
 
     const OString&        GetFontFileName() const   { return mpFontFile->GetFileName(); }
-    int                   GetFaceNum() const        { return mnFaceNum; }
-    int                   GetSynthetic() const      { return mnSynthetic; }
     sal_IntPtr            GetFontId() const         { return mnFontId; }
     bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
     const ImplFontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
@@ -91,7 +89,6 @@ private:
     FtFontFile*     mpFontFile;
     const int       mnFaceNum;
     int             mnRefCount;
-    const int       mnSynthetic;
 #if ENABLE_GRAPHITE
     bool            mbCheckedGraphite;
     GraphiteFaceWrapper * mpGraphiteFace;

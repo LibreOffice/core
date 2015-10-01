@@ -100,10 +100,6 @@ public:
 
     void                        RemoveTimer (SalTimer *pTimer);
 
-    // for managing a mirror of the in-flight un-dispatched gdk event queue
-    void                        addEvent( sal_uInt16 nMask );
-    void                        subtractEvent( sal_uInt16 nMask );
-
     std::shared_ptr<vcl::unx::GtkPrintWrapper> getPrintWrapper() const;
 
 private:
