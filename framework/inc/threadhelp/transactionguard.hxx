@@ -27,7 +27,7 @@ namespace framework{
 
 /*-************************************************************************************************************
     @short          implement a guard to support non breakable transactions
-    @descr          If you wish to support non breakable method calls without lockingf any mutex, rw-lock or
+    @descr          If you wish to support non breakable method calls without locking any mutex, rw-lock or
                     something like that - you should use this guard implementation.
                     Initialize it at first in your method and don't release it till end of your function!
                     Your "transaction" is registered in ctor and automatically released in dtor.

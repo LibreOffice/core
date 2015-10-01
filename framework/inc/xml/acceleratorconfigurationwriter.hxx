@@ -48,7 +48,7 @@ class AcceleratorConfigurationWriter
         /** @short  is used to map key codes to its
                     string representation.
 
-            @descr  To perform this operatio is
+            @descr  To perform this operation is
                     created only one times and holded
                     alive forever ...*/
         ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;

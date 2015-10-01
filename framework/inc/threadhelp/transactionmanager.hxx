@@ -66,7 +66,7 @@ enum ERejectReason
 /*-************************************************************************************************************
     @descr          A transaction object should support throwing exceptions if user used it at wrong working mode.
                     e.g. We can throw a DisposedException if user try to work and our mode is E_CLOSE!
-                    But sometimes he dont need this feature - will handle it by himself.
+                    But sometimes he doesn't need this feature - will handle it by himself.
                     Then we must differ between some exception-modi:
                         E_HARDEXCEPTIONS        We throw exceptions for all working modes different from E_WORK!
                         E_SOFTEXCEPTIONS        We throw exceptions for all working modes different from E_WORK AND E_INCLOSE!
