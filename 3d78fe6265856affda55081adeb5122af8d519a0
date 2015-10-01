@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_c02a54e7",
+        "filename": "include/o3tl/make_unique.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-01T14:18:40Z",
+      "side": 1,
+      "message": "I\u0027m not a huge fan of the static cast here, but it was the only way I could think of avoiding narrowing in the initializer list. E.g. int to unsigned int as seen in the tests.",
+      "revId": "3d78fe6265856affda55081adeb5122af8d519a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_e0395843",
+        "filename": "o3tl/qa/test-make_unique.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-01T14:18:40Z",
+      "side": 1,
+      "message": "This is where the static cast comes in. This will fail without it.",
+      "revId": "3d78fe6265856affda55081adeb5122af8d519a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
