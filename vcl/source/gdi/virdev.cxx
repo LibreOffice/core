@@ -393,6 +393,7 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
 
 bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                             const basebmp::RawMemorySharedArray &pBuffer,
+                                            const basebmp::RawMemorySharedArray &pAlphaBuffer,
                                             const bool bTopDown )
 {
     if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer, bTopDown) )
@@ -409,7 +410,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
             {
                 mpAlphaVDev = VclPtr<VirtualDevice>::Create( *this, mnAlphaDepth );
                 mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase,
-                                                         basebmp::RawMemorySharedArray(),
+                                                         pAlphaBuffer,
                                                          bTopDown );
             }
 
@@ -443,13 +444,16 @@ void VirtualDevice::EnableRTL( bool bEnable )
 
 bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase )
 {
-    return ImplSetOutputSizePixel( rNewSize, bErase, basebmp::RawMemorySharedArray(), false );
+    return ImplSetOutputSizePixel( rNewSize, bErase, basebmp::RawMemorySharedArray(), basebmp::RawMemorySharedArray(), false );
 }
 
 bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(
     const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset,
-    const basebmp::RawMemorySharedArray &pBuffer, const bool bTopDown )
+    const basebmp::RawMemorySharedArray &pBuffer, const basebmp::RawMemorySharedArray &pAlphaBuffer, const bool bTopDown )
 {
+    if (pAlphaBuffer)
+        mnAlphaDepth = 8;
+
     if (pBuffer) {
         MapMode mm = GetMapMode();
         mm.SetOrigin( rNewOffset );
@@ -457,7 +461,7 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(
         mm.SetScaleY( rScale );
         SetMapMode( mm );
     }
-    return ImplSetOutputSizePixel( rNewSize, true, pBuffer, bTopDown );
+    return ImplSetOutputSizePixel( rNewSize, true, pBuffer, pAlphaBuffer, bTopDown );
 }
 
 void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )

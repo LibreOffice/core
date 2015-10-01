@@ -755,10 +755,21 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     InitSvpForLibreOfficeKit();
 
     ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)32) ;
+
+    // Set background to transparent by default.
+    memset(pBuffer, 0, nCanvasWidth * nCanvasHeight * 4);
+    pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+
     boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
+
+    // Allocate a separate buffer for the alpha device.
+    std::vector<sal_uInt8> aAlpha(nCanvasWidth * nCanvasHeight);
+    memset(aAlpha.data(), 0, nCanvasWidth * nCanvasHeight);
+    boost::shared_array<sal_uInt8> aAlphaBuffer(aAlpha.data(), NoDelete<sal_uInt8>());
+
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
-                aBuffer, true );
+                aBuffer, aAlphaBuffer, true );
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
@@ -771,6 +782,17 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #endif
+
+    // Overwrite pBuffer's alpha channel with the separate alpha buffer.
+    for (int nRow = 0; nRow < nCanvasHeight; ++nRow)
+    {
+        for (int nCol = 0; nCol < nCanvasWidth; ++nCol)
+        {
+            const int nOffset = (nCanvasHeight * nRow) + nCol;
+            // VCL's transparent is 0, RGBA's transparent is 0xff.
+            pBuffer[nOffset * 4 +3] = 0xff - aAlpha[nOffset];
+        }
+    }
 
     static bool bDebug = getenv("LOK_DEBUG") != 0;
     if (bDebug)

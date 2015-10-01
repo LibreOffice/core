@@ -48,6 +48,7 @@ private:
                                                      const bool bTopDown );
     SAL_DLLPRIVATE bool ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                                 const basebmp::RawMemorySharedArray &pBuffer,
+                                                const basebmp::RawMemorySharedArray &pAlphaBuffer,
                                                 const bool bTopDown );
 
     VirtualDevice (const VirtualDevice &) SAL_DELETED_FUNCTION;
@@ -126,6 +127,7 @@ public:
                                                                 const Fraction& rScale,
                                                                 const Point& rNewOffset,
                                                                 const basebmp::RawMemorySharedArray &pBuffer,
+                                                                const basebmp::RawMemorySharedArray &pAlphaBuffer,
                                                                 const bool bTopDown = false );
     bool                SetOutputSize( const Size& rNewSize, bool bErase = true )
                             { return SetOutputSizePixel( LogicToPixel( rNewSize ), bErase ); }
