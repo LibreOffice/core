@@ -153,7 +153,7 @@ namespace sdr
             // a long time ago. Since the API allows creation of this SDrObject type, it is not possible to
             // simply change this definition. Only the chart should use it, and at least this object type
             // only exists at Runtime (is not saved and/or loaded in any FileFormat). Still someone external
-            // may have used it in it's API. To not risk wrong 3D lightings, i have to switch the orientation
+            // may have used it in it's API. To not risk wrong 3D lightings, I have to switch the orientation
             // of the polygon here
             aPolyPolygon3D.flip();
 

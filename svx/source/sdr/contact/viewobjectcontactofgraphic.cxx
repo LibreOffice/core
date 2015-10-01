@@ -234,7 +234,7 @@ namespace sdr
             if(mpAsynchLoadEvent)
             {
                 OSL_ENSURE(!pEvent || mpAsynchLoadEvent == pEvent,
-                    "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: Forced to forget another event then i have scheduled (?)");
+                    "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: Forced to forget another event then I have scheduled (?)");
 
                 // forget event
                 mpAsynchLoadEvent = 0;

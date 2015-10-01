@@ -105,7 +105,7 @@ namespace sdr
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SfxItemSet& rItemSet = GetCustomShapeObj().GetMergedItemSet();
 
-            // #i98072# Get shandow and text; eventually suppress the text if it's
+            // #i98072# Get shadow and text; eventually suppress the text if it's
             // a TextPath FontworkGallery object
             const drawinglayer::attribute::SdrShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrShadowTextAttribute(

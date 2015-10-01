@@ -2862,7 +2862,7 @@ Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlMod
 
         if ( !xControl.is() )
         {
-            // fallabck (some controls might not have been created, yet, since they were never visible so far)
+            // fallback (some controls might not have been created, yet, since they were never visible so far)
             Reference< XControl > xContainerControl( xControlContainer, UNO_QUERY_THROW );
             const vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerControl->getPeer() );
             ENSURE_OR_THROW( pContainerWindow, "unexpected control container implementation" );
