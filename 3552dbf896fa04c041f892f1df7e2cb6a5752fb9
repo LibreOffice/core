@@ -16,6 +16,24 @@
       "revId": "3552dbf896fa04c041f892f1df7e2cb6a5752fb9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_c011b4b1",
+        "filename": "basic/source/classes/sbxmod.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1000247
+      },
+      "writtenOn": "2015-10-01T14:20:12Z",
+      "side": 1,
+      "message": "it is ok",
+      "parentUuid": "9a061dce_a02f60f5",
+      "revId": "3552dbf896fa04c041f892f1df7e2cb6a5752fb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
