@@ -135,15 +135,14 @@ SbxVariable* getDefaultProp( SbxVariable* pRef )
     SbxVariable* pDefaultProp = NULL;
     if ( pRef->GetType() == SbxOBJECT )
     {
-          SbxObject* pObj = dynamic_cast<SbxObject*>( pRef );
-        if ( !pObj )
+        SbxObject* pObj = dynamic_cast<SbxObject*>(pRef);
+        if (!pObj)
         {
             SbxBase* pObjVarObj = pRef->GetObject();
             pObj = dynamic_cast<SbxObject*>( pObjVarObj );
         }
-        if ( pObj && 0 != dynamic_cast<const SbUnoObject*>( pObj) )
+        if (SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>(pObj))
         {
-            SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( pObj );
             pDefaultProp = pUnoObj->GetDfltProperty();
         }
     }
