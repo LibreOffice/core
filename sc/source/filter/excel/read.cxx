@@ -41,6 +41,28 @@
 
 #include <memory>
 
+namespace
+{
+    bool TryStartNextRecord(XclImpStream& rIn, sal_Size nProgressBasePos)
+    {
+        bool bValid = true;
+        // i#115255 fdo#40304 BOUNDSHEET doesn't point to a valid
+        // BOF record position.  Scan the records manually (from
+        // the BOUNDSHEET position) until we find a BOF.  Some 3rd
+        // party Russian programs generate invalid xls docs with
+        // this kind of silliness.
+        if (rIn.PeekRecId(nProgressBasePos) == EXC_ID5_BOF)
+            // BOUNDSHEET points to a valid BOF record.  Good.
+            rIn.StartNextRecord(nProgressBasePos);
+        else
+        {
+            while (bValid && rIn.GetRecId() != EXC_ID5_BOF)
+                bValid = rIn.StartNextRecord();
+        }
+        return bValid;
+    }
+}
+
 FltError ImportExcel::Read()
 {
     XclImpPageSettings&     rPageSett       = GetPageSettings();
@@ -98,7 +120,13 @@ FltError ImportExcel::Read()
             {
                 nProgressBaseSize += (aIn.GetSvStreamPos() - nProgressBasePos);
                 nProgressBasePos = maSheetOffsets[ nScTab ];
-                aIn.StartNextRecord( nProgressBasePos );
+
+                bool bValid = TryStartNextRecord(aIn, nProgressBasePos);
+                if (!bValid)
+                {
+                    // Safeguard ourselves from potential infinite loop.
+                    eAkt = Z_Ende;
+                }
             }
             else
                 eAkt = Z_Ende;
@@ -435,7 +463,7 @@ FltError ImportExcel::Read()
                     case 0x0223: break;                 // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x0231: rFontBfr.ReadFont( maStrm );           break;
-                    case 0x0409:                        // BOF          [   4 ]
+                    case EXC_ID4_BOF:                   // BOF          [   4 ]
                         Bof4();
                         if( pExcRoot->eDateiTyp == Biff4 )
                         {
@@ -527,7 +555,7 @@ FltError ImportExcel::Read()
                         eAkt = Z_Ende;
                         break;
                     case 0x8F:  break;                  // BUNDLEHEADER [   4 ]
-                    case 0x0409:                        // BOF          [   4 ]
+                    case EXC_ID4_BOF:                   // BOF          [   4 ]
                         Bof4();
                         NewTable();
                         if( pExcRoot->eDateiTyp == Biff4 )
@@ -595,7 +623,7 @@ FltError ImportExcel::Read()
 
             case Z_Biff5TPre:   // ------------------------------- Z_Biff5Pre -
             {
-                if( nOpcode == 0x0809 )
+                if (nOpcode == EXC_ID5_BOF)
                     nBofLevel++;
                 else if( (nOpcode == 0x000A) && nBofLevel )
                     nBofLevel--;
@@ -681,7 +709,7 @@ FltError ImportExcel::Read()
                     case 0xD6:  Rstring(); break;       // RSTRING      [    5]
                     case 0x00E5: Cellmerging();          break;  // #i62300#
                     case 0x0236: TableOp(); break;      // TABLE        [    5]
-                    case 0x0809:                        // BOF          [    5]
+                    case EXC_ID5_BOF:                   // BOF          [    5]
                         XclTools::SkipSubStream( maStrm );
                         break;
                 }
@@ -693,7 +721,7 @@ FltError ImportExcel::Read()
             {
                 switch( nOpcode )
                 {
-                    case 0x0809:                        // BOF          [    5]
+                    case EXC_ID5_BOF:                   // BOF          [    5]
                         Bof5();
                         NewTable();
                         switch( pExcRoot->eDateiTyp )
@@ -836,23 +864,11 @@ FltError ImportExcel8::Read()
                 nProgressBaseSize += (maStrm.GetSvStreamPos() - nProgressBasePos);
                 nProgressBasePos = maSheetOffsets[ nScTab ];
 
-                // i#115255 fdo#40304 BOUNDSHEET doesn't point to a valid
-                // BOF record position.  Scan the records manually (from
-                // the BOUNDSHEET position) until we find a BOF.  Some 3rd
-                // party Russian programs generate invalid xls docs with
-                // this kind of silliness.
-                if (aIn.PeekRecId(nProgressBasePos) == EXC_ID5_BOF)
-                    // BOUNDSHEET points to a valid BOF record.  Good.
-                    aIn.StartNextRecord(nProgressBasePos);
-                else
+                bool bValid = TryStartNextRecord(aIn, nProgressBasePos);
+                if (!bValid)
                 {
-                    bool bValid = true;
-                    while (bValid && aIn.GetRecId() != EXC_ID5_BOF)
-                        bValid = aIn.StartNextRecord();
-
-                    if (!bValid)
-                        // Safeguard ourselves from potential infinite loop.
-                        eAkt = EXC_STATE_END;
+                    // Safeguard ourselves from potential infinite loop.
+                    eAkt = EXC_STATE_END;
                 }
 
                 // import only 256 sheets
