@@ -138,7 +138,7 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
             OSL_ENSURE( false, "<SwTextINetFormat::GetCharFormat()> - missing character format at hyperlink attribute");
         }
 
-        // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
+        // JP 10.02.2000, Bug 72806: don't modify the doc for getting the
         //      correct charstyle.
         bool bResetMod = !pDoc->getIDocumentState().IsModified();
         Link<bool,void> aOle2Lnk;
@@ -260,7 +260,7 @@ SwCharFormat* SwTextRuby::GetCharFormat()
                              ? static_cast<sal_uInt16>(RES_POOLCHR_RUBYTEXT)
                              : rFormat.GetCharFormatId();
 
-        // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
+        // JP 10.02.2000, Bug 72806: don't modify the doc for getting the
         //              correct charstyle.
         const bool bResetMod = !pDoc->getIDocumentState().IsModified();
         Link<bool,void> aOle2Lnk;

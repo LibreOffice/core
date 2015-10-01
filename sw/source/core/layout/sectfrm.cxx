@@ -396,7 +396,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 /**
 |*  Here it's decided whether the this-SectionFrm should break up
 |*  the passed (Section)frm (or not).
-|*  Initiall, all superior sections are broken up. Later on that could
+|*  Initially, all superior sections are broken up. Later on that could
 |*  be made configurable.
 |*/
 bool SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const

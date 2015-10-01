@@ -45,7 +45,7 @@ class SwTextFormatter : public SwTextPainter
     bool bTruncLines : 1; // Flag for extending the repaint rect, if needed
     bool bUnclipped : 1; // Flag whether repaint is larger than the fixed line height
     size_t m_nHintEndIndex; // HACK for TryNewNoLengthPortion
-    SwLinePortion* m_pFirstOfBorderMerge; // The first text portion of a joined border (during portion bulding)
+    SwLinePortion* m_pFirstOfBorderMerge; // The first text portion of a joined border (during portion building)
 
     SwLinePortion *NewPortion( SwTextFormatInfo &rInf );
     SwTextPortion  *NewTextPortion( SwTextFormatInfo &rInf );

@@ -396,7 +396,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
     SwSection *const pRet =
         pDoc->InsertSwSection( aPam, aSect, 0, aSet.Count() ? &aSet : 0 );
-    if (!pRet) // fdo#42450 text range could parially overlap existing section
+    if (!pRet) // fdo#42450 text range could partially overlap existing section
     {
         // shouldn't have created an undo object yet
         pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );

@@ -253,7 +253,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 }
             }
         }
-        // If no left Glue remaines we set the break condition.
+        // If no left Glue remains, we set the break condition.
         pRight = pLeft ? pLeft : this;
     }
 }

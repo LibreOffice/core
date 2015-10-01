@@ -3987,7 +3987,7 @@ void SwRowFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAtt
                 }
                 else
                 {
-                    // pTmpRow is a first row in the table structue.
+                    // pTmpRow is a first row in the table structure.
                     // We go up in the table structure:
                     pTmpRow = pTmpRow->GetUpper()->GetUpper() &&
                               pTmpRow->GetUpper()->GetUpper()->IsRowFrm() ?
