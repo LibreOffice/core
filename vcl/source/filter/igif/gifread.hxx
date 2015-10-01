@@ -85,7 +85,7 @@ class GIFReader : public GraphicReader
     bool                bImGraphicReady;
     bool                bGlobalPalette;
     sal_uInt8           nBackgroundColor;       // backgroundcolour
-    sal_uInt8           nGCTransparentIndex;    // pixelx of this index are transparant
+    sal_uInt8           nGCTransparentIndex;    // pixels of this index are transparant
     sal_uInt8           nGCDisposalMethod;      // 'Disposal Method' (see GIF docs)
     sal_uInt8           cTransIndex1;
     sal_uInt8           cNonTransIndex1;

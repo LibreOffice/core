@@ -1728,7 +1728,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
     aEditCursor.Left() -= 1;
 
     if ( bGotoCursor
-        // #i81283# protext maStartDocPos against initialization problems
+        // #i81283# protect maStartDocPos against initialization problems
         && aOutSz.Width() && aOutSz.Height()
     )
     {

@@ -242,7 +242,7 @@ public class PersistentWindowTest
         DocumentHandle docHandle = null;
         try
         {
-            // create component loaader
+            // create component loader
             XComponentLoader xCompLoader = UnoRuntime.queryInterface(XComponentLoader.class, xMSF.createInstance("com.sun.star.frame.Desktop"));
             XFramesSupplier xFrameSupp = UnoRuntime.queryInterface(XFramesSupplier.class, xCompLoader);
             // close all existing frames
