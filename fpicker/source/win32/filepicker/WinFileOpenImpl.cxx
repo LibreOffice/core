@@ -566,7 +566,7 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
 void SAL_CALL CWinFileOpenImpl::InitControlLabel(HWND hWnd)
 {
 
-    // set the labels for all extendet controls
+    // set the labels for all extended controls
 
 
     sal_Int16 aCtrlId = sal::static_int_cast< sal_Int16 >(GetDlgCtrlID(hWnd));

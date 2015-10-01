@@ -161,9 +161,9 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
 
         /** @short  a callback for asynchronous started operations.
 
-            @descr  As already mentione, we make internally all operations
+            @descr  As already mentioned, we make internally all operations
                     asynchronous. Otherwise our callis kill its own environment
-                    during they call us ...
+                    during they call us...
         */
         DECL_LINK_TYPED( impl_asyncCallback, LinkParamNone*, void );
 

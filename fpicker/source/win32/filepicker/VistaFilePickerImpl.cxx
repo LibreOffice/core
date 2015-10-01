@@ -1042,7 +1042,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
     ::sal_Int16   nAction = rRequest->getArgumentOrDefault(PROP_CONTROL_ACTION, INVALID_CONTROL_ACTION);
     css::uno::Any aValue  = rRequest->getArgumentOrDefault(PROP_CONTROL_VALUE , css::uno::Any()       );
 
-    // dont check for right values here ...
+    // don't check for right values here ...
     // most parameters are optional !
 
     TFileDialogCustomize iCustom = impl_getCustomizeInterface();
@@ -1115,7 +1115,7 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
 {
     ::sal_Int16 nId     = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID    );
 
-    // dont check for right values here ...
+    // don't check for right values here ...
     // most parameters are optional !
 
     TFileDialogCustomize iCustom = impl_getCustomizeInterface();
@@ -1151,7 +1151,7 @@ void VistaFilePickerImpl::impl_sta_SetControlLabel(const RequestRef& rRequest)
     ::sal_Int16     nId    = rRequest->getArgumentOrDefault(PROP_CONTROL_ID   , INVALID_CONTROL_ID  );
     OUString sLabel = rRequest->getArgumentOrDefault(PROP_CONTROL_LABEL, OUString() );
 
-    // dont check for right values here ...
+    // don't check for right values here ...
     // most parameters are optional !
 
     TFileDialogCustomize iCustom = impl_getCustomizeInterface();
@@ -1171,7 +1171,7 @@ void VistaFilePickerImpl::impl_sta_EnableControl(const RequestRef& rRequest)
     ::sal_Int16 nId      = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID  );
     sal_Bool  bEnabled = rRequest->getArgumentOrDefault(PROP_CONTROL_ENABLE, (sal_Bool)sal_True);
 
-    // dont check for right values here ...
+    // don't check for right values here ...
     // most parameters are optional !
 
     TFileDialogCustomize iCustom = impl_getCustomizeInterface();

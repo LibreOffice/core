@@ -61,7 +61,7 @@ class StatusIndicator : public  ::cppu::WeakImplHelper< css::task::XStatusIndica
         /** @short  weak reference to our factory
             @descr  All our interface calls will be forwarded
                     to a suitable c++ interface on this factory.
-                    But we dont hold our factory alive. They
+                    But we don't hold our factory alive. They
                     correspond with e.g. with a Frame service and
                     will be owned by him. If the frame will be closed
                     he close our factory too ...
