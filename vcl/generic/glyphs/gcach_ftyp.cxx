@@ -214,13 +214,12 @@ const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, siz
 #endif
 
 FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
-    const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId, int nSynthetic)
+    const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId)
 :
     maFaceFT( NULL ),
     mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
     mnFaceNum( nFaceNum ),
     mnRefCount( 0 ),
-    mnSynthetic( nSynthetic ),
 #if ENABLE_GRAPHITE
     mbCheckedGraphite(false),
     mpGraphiteFace(NULL),
@@ -400,7 +399,7 @@ void FreetypeManager::AddFontFile( const OString& rNormalizedName,
         return;
 
     FtFontInfo* pFontInfo = new FtFontInfo( rDevFontAttr,
-        rNormalizedName, nFaceNum, nFontId, 0);
+        rNormalizedName, nFaceNum, nFontId);
     maFontList[ nFontId ] = pFontInfo;
     if( mnMaxFontId < nFontId )
         mnMaxFontId = nFontId;

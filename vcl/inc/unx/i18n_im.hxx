@@ -22,8 +22,6 @@
 
 #include <vclpluginapi.h>
 
-extern "C" char* GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize);
-
 #define bUseInputMethodDefault True
 
 class VCLPLUG_GEN_PUBLIC SalI18N_InputMethod

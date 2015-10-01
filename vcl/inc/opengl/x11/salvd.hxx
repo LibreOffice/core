@@ -43,7 +43,6 @@ public:
     virtual long GetHeight() const SAL_OVERRIDE { return mnHeight; }
 
     SalDisplay *            GetDisplay() const { return mpDisplay; }
-    sal_uInt16              GetDepth() const { return mnDepth; }
     SalX11Screen            GetXScreenNumber() const { return mnXScreen; }
 
     virtual SalGraphics*    AcquireGraphics() SAL_OVERRIDE;

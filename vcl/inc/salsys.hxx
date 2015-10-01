@@ -78,14 +78,6 @@ public:
                  size: size of the screen
     */
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) = 0;
-    /* Gets the name of a screen
-
-       @param nScreen
-       The screen number to be queried
-
-       @returns the name of the screen
-    */
-    virtual OUString GetDisplayScreenName( unsigned int nScreen ) = 0;
 
     /*  Shows a native message box with the specified title, message and button
         combination.

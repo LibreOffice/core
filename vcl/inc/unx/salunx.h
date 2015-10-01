@@ -28,9 +28,6 @@
 inline long Divide( long nDividend, long nDivisor )
 { return (nDividend + nDivisor/2) / nDivisor; }
 
-inline long DPI( long pixel, long mm )
-{ return Divide( pixel*254, mm*10 ); }
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

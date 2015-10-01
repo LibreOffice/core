@@ -118,7 +118,6 @@ public:
     long                GetSlant() const        { return mnSlant; }
 
     bool                IsScalable() const      { return ((mnMiscFlags & SCALABLE_FLAG) != 0); }
-    bool                SupportsCJK() const     { return ((mnMiscFlags & CJK_FLAG) != 0); }
 
     bool                operator==( const ImplFontMetric& ) const;
 };
@@ -208,8 +207,6 @@ public:
 };
 
 bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
-
-void UpdateAttributesFromPSName( const OUString& rPSName, ImplDevFontAttributes& );
 
 #endif // INCLUDED_VCL_INC_IMPFONT_HXX
 

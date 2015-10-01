@@ -75,7 +75,6 @@ public:
     void                            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
     void                            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = NULL, bool bDeleteColormap = false );
     void                            Init( X11OpenGLSalVirtualDevice *pVirtualDevice );
-    void                            Init( class ImplSalPrinterData *pPrinter );
     void                            DeInit();
 
     virtual SalGraphicsImpl*        GetImpl() const SAL_OVERRIDE;
@@ -307,16 +306,8 @@ protected:
     bool                            GetDitherPixmap ( SalColor nSalColor );
 
     using SalGraphics::DrawBitmap;
-    void                            DrawBitmap(
-                                        const SalTwoRect& rPosAry,
-                                        SalGraphics      *pThis,
-                                        const SalBitmap  &rSalBitmap,
-                                        const SalBitmap  &rTransparentBitmap,
-                                        SalColor          nTransparentColor );
 
     GC                              GetFontGC();
-    void                            DrawPrinterString( const SalLayout& );
-    void                            DrawServerFontString( const ServerFontLayout& );
 
     void                            freeResources();
 

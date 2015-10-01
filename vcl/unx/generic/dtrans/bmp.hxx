@@ -71,7 +71,6 @@ public:
     Pixmap getPixmap() const { return m_aPixmap; }
     Pixmap getBitmap() const { return m_aBitmap; }
     VisualID getVisualID() const { return m_aInfo.visualid; }
-    int getClass() const { return m_aInfo.c_class; }
     int getDepth() const { return m_aInfo.depth; }
 };
 

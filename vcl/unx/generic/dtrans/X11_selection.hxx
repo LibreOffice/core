@@ -428,7 +428,6 @@ namespace x11 {
         static SelectionManager& get( const OUString& rDisplayName = OUString() );
 
         Display * getDisplay() { return m_pDisplay; };
-        ::Window getWindow() { return m_aWindow; };
 
         void registerHandler( Atom selection, SelectionAdaptor& rAdaptor );
         void deregisterHandler( Atom selection );

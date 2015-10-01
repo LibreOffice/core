@@ -2413,6 +2413,7 @@ int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphA
     return nchars;
 }
 
+#if defined(WNT) || defined(MACOSX)
 sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
 {
     switch (ttf->cmapType) {
@@ -2438,6 +2439,8 @@ sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
         ch = (sal_uInt16)UseGSUB(ttf,ch);
     return ch;
 }
+#endif
+
 
 int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical)
 {

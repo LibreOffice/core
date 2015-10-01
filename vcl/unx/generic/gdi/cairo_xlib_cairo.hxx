@@ -60,8 +60,6 @@ namespace cairo {
         {}
 
         ~X11Pixmap();
-
-        void clear() { mpDisplay=NULL; mhDrawable=0; }
     };
 
     typedef std::shared_ptr<X11Pixmap>       X11PixmapSharedPtr;

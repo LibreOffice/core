@@ -135,9 +135,11 @@ public:
 
     virtual ~GraphiteLayout() throw();
     void SetFont(gr_font * pFont) { mpFont = pFont; }
+#ifdef WNT
     gr_font * GetFont() { return mpFont; }
-    void SetFeatures(grutils::GrFeatureParser * aFeature) { mpFeatures = aFeature; }
     void SetFontScale(float s) { mfScaling = s; };
+#endif
+    void SetFeatures(grutils::GrFeatureParser * aFeature) { mpFeatures = aFeature; }
     virtual sal_GlyphId getKashidaGlyph(int & width) = 0;
     void kashidaJustify(std::vector<int> & rDeltaWidth, sal_GlyphId, int width);
 

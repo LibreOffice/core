@@ -519,13 +519,6 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
     return;
 }
 
-void
-SwitchIMCallback (XIC, XPointer, XPointer call_data)
-{
-    XIMSwitchIMNotifyCallbackStruct* pCallData = reinterpret_cast<XIMSwitchIMNotifyCallbackStruct*>(call_data);
-    vcl::I18NStatus::get().changeIM( OStringToOUString(pCallData->to->name, RTL_TEXTENCODING_UTF8) );
-}
-
 // vii. destroy callbacks: internally disable all IC/IM calls
 
 void
