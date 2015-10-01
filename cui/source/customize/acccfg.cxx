@@ -1474,7 +1474,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
     const SfxPoolItem* pMacroItem=0;
     if( SfxItemState::SET == rSet->GetItemState( SID_MACROINFO, true, &pMacroItem ) )
     {
-        m_pMacroInfoItem = dynamic_cast<const SfxMacroInfoItem*>( pMacroItem  );
+        m_pMacroInfoItem = &dynamic_cast<const SfxMacroInfoItem&>(*pMacroItem);
         m_pGroupLBox->SelectMacro( m_pMacroInfoItem );
     }
     else
