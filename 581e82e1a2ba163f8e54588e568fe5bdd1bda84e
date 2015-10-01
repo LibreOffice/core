@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_3dced783",
+        "filename": "vcl/opengl/salbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-01T03:00:15Z",
+      "side": 1,
+      "message": "free the memory GetFomat allocated",
+      "revId": "581e82e1a2ba163f8e54588e568fe5bdd1bda84e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
