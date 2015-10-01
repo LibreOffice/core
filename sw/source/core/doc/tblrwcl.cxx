@@ -4519,7 +4519,7 @@ void SwShareBoxFormats::RemoveFormat( const SwFrameFormat& rFormat )
 
 bool SwShareBoxFormats::Seek_Entry( const SwFrameFormat& rFormat, sal_uInt16* pPos ) const
 {
-    sal_uLong nIdx = reinterpret_cast<sal_uLong>(&rFormat);
+    sal_uIntPtr nIdx = reinterpret_cast<sal_uIntPtr>(&rFormat);
     auto nO = m_ShareArr.size();
     decltype(nO) nU = 0;
     if( nO > 0 )
@@ -4528,7 +4528,7 @@ bool SwShareBoxFormats::Seek_Entry( const SwFrameFormat& rFormat, sal_uInt16* pP
         while( nU <= nO )
         {
             const auto nM = nU + ( nO - nU ) / 2;
-            sal_uLong nFormat = reinterpret_cast<sal_uLong>(&m_ShareArr[ nM ]->GetOldFormat());
+            sal_uIntPtr nFormat = reinterpret_cast<sal_uIntPtr>(&m_ShareArr[ nM ]->GetOldFormat());
             if( nFormat == nIdx )
             {
                 if( pPos )
