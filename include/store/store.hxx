@@ -24,7 +24,7 @@
 #include <sal/types.h>
 #include <stddef.h>
 #include <rtl/ustring.hxx>
-#include "types.h"
+#include <types.h>
 
 namespace store
 {
