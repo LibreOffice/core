@@ -22,8 +22,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include "pyuno_impl.hxx"
-
 #include <rtl/strbuf.hxx>
 
 #include <osl/diagnose.h>
@@ -31,6 +29,8 @@
 #include <typelib/typedescription.hxx>
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+
+#include "pyuno_impl.hxx"
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
