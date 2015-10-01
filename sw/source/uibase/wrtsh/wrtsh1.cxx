@@ -1588,12 +1588,27 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
     if(CanInsert())
     {
         bool bStarted = false;
+        SwRewriter aRewriter;
+
         if(HasSelection())
         {
                 // Only parenthese here, because the regular insert
                 // is already clipped to the editshell
             StartAllAction();
-            StartUndo(UNDO_INSERT);
+
+            OUString aTmpStr1;
+            aTmpStr1 += SW_RES(STR_START_QUOTE);
+            aTmpStr1 += GetSelText();
+            aTmpStr1 += SW_RES(STR_END_QUOTE);
+            OUString aTmpStr3;
+            aTmpStr3 += SW_RES(STR_START_QUOTE);
+            aTmpStr3 += OUString(cChar);
+            aTmpStr3 += SW_RES(STR_END_QUOTE);
+            aRewriter.AddRule( UndoArg1, aTmpStr1 );
+            aRewriter.AddRule( UndoArg2, SW_RES(STR_YIELDS) );
+            aRewriter.AddRule( UndoArg3, aTmpStr3 );
+
+            StartUndo( UNDO_REPLACE, &aRewriter );
             bStarted = true;
             DelRight();
         }
@@ -1602,7 +1617,7 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
         if(bStarted)
         {
             EndAllAction();
-            EndUndo(UNDO_INSERT);
+            EndUndo( UNDO_REPLACE, &aRewriter );
         }
     }
 }
