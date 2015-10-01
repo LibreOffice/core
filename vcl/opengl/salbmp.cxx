@@ -447,6 +447,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
 
                 pSrcData += mnBytesPerRow;
             }
+            delete pSrcFormat;
         }
     }
 
