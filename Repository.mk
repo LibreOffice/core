@@ -428,6 +428,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		vclplug_gen \
 		$(if $(ENABLE_TDE),vclplug_tde) \
 	) \
+    vcleventfilter \
 	writerperfect \
 	xmlscript \
 	xmlfa \
