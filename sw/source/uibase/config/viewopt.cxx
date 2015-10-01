@@ -39,6 +39,7 @@
 #include <unotools/syslocale.hxx>
 
 #include <editeng/acorrcfg.hxx>
+#include <comphelper/lok.hxx>
 
 #ifdef DBG_UTIL
 bool SwViewOption::s_bTest9 = false;        //DrawingLayerNotLoading
@@ -209,6 +210,8 @@ SwViewOption::SwViewOption() :
     m_bTest1 = m_bTest2 = m_bTest3 = m_bTest4 =
              m_bTest5 = m_bTest6 = m_bTest7 = m_bTest8 = m_bTest10 = false;
 #endif
+    if (comphelper::LibreOfficeKit::isActive())
+        aAppBackgroundColor = COL_TRANSPARENT;
 }
 
 SwViewOption::SwViewOption(const SwViewOption& rVOpt)
