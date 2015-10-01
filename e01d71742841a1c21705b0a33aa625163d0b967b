@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_fd43bf6a",
+        "filename": "bridges/Module_bridges.mk",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2015-10-01T09:20:37Z",
+      "side": 1,
+      "message": "Couldn\u0027t you add a (temporary?) emscripten ifdefery there?",
+      "revId": "e01d71742841a1c21705b0a33aa625163d0b967b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_bd494791",
+        "filename": "configure.ac",
+        "patchSetId": 12
+      },
+      "lineNbr": 10109,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2015-10-01T09:20:37Z",
+      "side": 1,
+      "message": "this should be a different commit",
+      "revId": "e01d71742841a1c21705b0a33aa625163d0b967b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_9d4e0395",
+        "filename": "include/sal/types.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2015-10-01T09:20:37Z",
+      "side": 1,
+      "message": "this looks unrelated",
+      "revId": "e01d71742841a1c21705b0a33aa625163d0b967b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
