@@ -32,26 +32,26 @@ class OTimeModel
                 ,public OLimitedFormats
 {
 private:
-    ::com::sun::star::uno::Any      m_aSaveValue;
+    css::uno::Any               m_aSaveValue;
     bool                        m_bDateTimeField;
 
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OTimeModel );
 
     // css::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::beans::XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                                        throw(::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+    // css::beans::XPropertySet
+    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const css::uno::Any& rValue )
+                                        throw(css::lang::IllegalArgumentException) SAL_OVERRIDE;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) throw ( css::uno::Exception, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XServiceInfo
+    // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OTimeModel"); }
@@ -60,7 +60,7 @@ public:
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const SAL_OVERRIDE;
 
     // prevent method hiding
@@ -68,25 +68,21 @@ public:
 
 protected:
     // OBoundControlModel overridables
-    virtual ::com::sun::star::uno::Any
+    virtual css::uno::Any
                             translateDbColumnToControlValue( ) SAL_OVERRIDE;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+    virtual css::uno::Sequence< css::uno::Type >
                             getSupportedBindingTypes() SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any
-                            translateControlValueToExternalValue( ) const SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
+    virtual css::uno::Any   translateControlValueToExternalValue( ) const SAL_OVERRIDE;
+    virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any
-                            translateControlValueToValidatableValue( ) const SAL_OVERRIDE;
+    virtual css::uno::Any   translateControlValueToValidatableValue( ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any
-                            getDefaultForReset() const SAL_OVERRIDE;
+    virtual css::uno::Any   getDefaultForReset() const SAL_OVERRIDE;
     virtual void            resetNoBroadcast() SAL_OVERRIDE;
 
-    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm ) SAL_OVERRIDE;
+    virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) SAL_OVERRIDE;
 
 protected:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -95,13 +91,13 @@ protected:
 class OTimeControl: public OBoundControl
 {
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
-    OTimeControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
+    OTimeControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
     DECLARE_UNO3_AGG_DEFAULTS(OTimeControl, OBoundControl)
 
-    // ::com::sun::star::lang::XServiceInfo
+    // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OTimeControl"); }

@@ -83,12 +83,12 @@ void OImageButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
     END_DESCRIBE_PROPERTIES();
 }
 
-OUString OImageButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+OUString OImageButtonModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_IMAGEBUTTON);   // old (non-sun) name for compatibility !
 }
 
-void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     OControlModel::write(_rxOutStream);
 
@@ -102,7 +102,7 @@ void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     writeHelpTextCompatibly(_rxOutStream);
 }
 
-void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     OControlModel::read(_rxInStream);
 
@@ -185,7 +185,7 @@ Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (Ru
     return aReturn;
 }
 
-void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -222,16 +222,16 @@ void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/) thr
 
 }   // namespace frm
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OImageButtonModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OImageButtonModel_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageButtonModel(component));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OImageButtonControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OImageButtonControl_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageButtonControl(component));
 }

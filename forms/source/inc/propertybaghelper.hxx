@@ -41,11 +41,11 @@ namespace frm
         virtual ::osl::Mutex&   getMutex() = 0;
 
         virtual void            describeFixedAndAggregateProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _out_rFixedProperties,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _out_rAggregateProperties
+            css::uno::Sequence< css::beans::Property >& _out_rFixedProperties,
+            css::uno::Sequence< css::beans::Property >& _out_rAggregateProperties
         ) const = 0;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >
+        virtual css::uno::Reference< css::beans::XMultiPropertySet >
                                 getPropertiesInterface() = 0;
 
     protected:
@@ -71,18 +71,18 @@ namespace frm
         inline ::comphelper::OPropertyArrayAggregationHelper& getInfoHelper() const;
 
         // XPropertyContainer equivalent
-        void addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const ::com::sun::star::uno::Any& _rInitialValue );
+        void addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const css::uno::Any& _rInitialValue );
         void removeProperty( const OUString& _rName );
 
         // XPropertyAccess equivalent
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues();
-        void setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rProps );
+        css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues();
+        void setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& _rProps );
 
         // forwards to m_aDynamicProperties
-        inline void getDynamicFastPropertyValue( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _out_rValue ) const;
-        inline bool convertDynamicFastPropertyValue( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rNewValue, ::com::sun::star::uno::Any& _out_rConvertedValue, ::com::sun::star::uno::Any& _out_rCurrentValue ) const;
-        inline void setDynamicFastPropertyValue( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue );
-        inline void getDynamicPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _out_rValue ) const;
+        inline void getDynamicFastPropertyValue( sal_Int32 _nHandle, css::uno::Any& _out_rValue ) const;
+        inline bool convertDynamicFastPropertyValue( sal_Int32 _nHandle, const css::uno::Any& _rNewValue, css::uno::Any& _out_rConvertedValue, css::uno::Any& _out_rCurrentValue ) const;
+        inline void setDynamicFastPropertyValue( sal_Int32 _nHandle, const css::uno::Any& _rValue );
+        inline void getDynamicPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _out_rValue ) const;
         inline bool hasDynamicPropertyByHandle( sal_Int32 _nHandle ) const;
 
     private:
@@ -112,25 +112,25 @@ namespace frm
     }
 
 
-    inline void PropertyBagHelper::getDynamicFastPropertyValue( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _out_rValue ) const
+    inline void PropertyBagHelper::getDynamicFastPropertyValue( sal_Int32 _nHandle, css::uno::Any& _out_rValue ) const
     {
         m_aDynamicProperties.getFastPropertyValue( _nHandle, _out_rValue );
     }
 
 
-    inline bool PropertyBagHelper::convertDynamicFastPropertyValue( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rNewValue, ::com::sun::star::uno::Any& _out_rConvertedValue, ::com::sun::star::uno::Any& _out_rCurrentValue ) const
+    inline bool PropertyBagHelper::convertDynamicFastPropertyValue( sal_Int32 _nHandle, const css::uno::Any& _rNewValue, css::uno::Any& _out_rConvertedValue, css::uno::Any& _out_rCurrentValue ) const
     {
         return m_aDynamicProperties.convertFastPropertyValue( _nHandle, _rNewValue, _out_rConvertedValue, _out_rCurrentValue );
     }
 
 
-    inline void PropertyBagHelper::setDynamicFastPropertyValue( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
+    inline void PropertyBagHelper::setDynamicFastPropertyValue( sal_Int32 _nHandle, const css::uno::Any& _rValue )
     {
         m_aDynamicProperties.setFastPropertyValue( _nHandle, _rValue );
     }
 
 
-    inline void PropertyBagHelper::getDynamicPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _out_rValue ) const
+    inline void PropertyBagHelper::getDynamicPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _out_rValue ) const
     {
         m_aDynamicProperties.getPropertyDefaultByHandle( _nHandle, _out_rValue );
     }

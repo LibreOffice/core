@@ -241,7 +241,7 @@ namespace frm
         return aServices;
     }
 
-    Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException, std::exception)
+    Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException, std::exception)
     {
         Reference< XDispatch > aReturn;
         Reference< XDispatchProvider > xTypedPeer( getPeer(), UNO_QUERY );
@@ -330,7 +330,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY ) throw(css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -463,7 +463,7 @@ namespace frm
     }
 
 
-    ORichTextPeer::SingleAttributeDispatcher ORichTextPeer::implCreateDispatcher( SfxSlotId _nSlotId, const ::com::sun::star::util::URL& _rURL )
+    ORichTextPeer::SingleAttributeDispatcher ORichTextPeer::implCreateDispatcher( SfxSlotId _nSlotId, const css::util::URL& _rURL )
     {
         VclPtr< RichTextControl > pRichTextControl = GetAs< RichTextControl >();
         OSL_PRECOND( pRichTextControl, "ORichTextPeer::implCreateDispatcher: invalid window!" );
@@ -625,7 +625,7 @@ namespace frm
     }
 
 
-    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ ) throw (RuntimeException, std::exception)
+    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const css::util::URL& _rURL, const OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ ) throw (RuntimeException, std::exception)
     {
         Reference< XDispatch > xReturn;
         if ( !GetWindow() )
@@ -691,9 +691,9 @@ namespace frm
 
 }   // namespace frm
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_form_ORichTextControl_get_implementation(::com::sun::star::uno::XComponentContext*,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_form_ORichTextControl_get_implementation(css::uno::XComponentContext*,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::ORichTextControl());
 }

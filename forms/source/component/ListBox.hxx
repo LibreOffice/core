@@ -106,13 +106,13 @@ class OListBoxModel :public OBoundControlModel
     ::connectivity::ORowSetValue                m_aSaveValue;
 
     // <properties>
-    ::com::sun::star::form::ListSourceType      m_eListSourceType;      // type der list source
-    ::com::sun::star::uno::Any                  m_aBoundColumn;
+    css::form::ListSourceType                   m_eListSourceType;      // type der list source
+    css::uno::Any                               m_aBoundColumn;
     ValueList                                   m_aListSourceValues;
     ValueList                                   m_aBoundValues;         // do not write directly; use setBoundValues()
     mutable ValueList                           m_aConvertedBoundValues;
     mutable sal_Int32                           m_nConvertedBoundValuesType;
-    ::com::sun::star::uno::Sequence<sal_Int16>  m_aDefaultSelectSeq;    // DefaultSelected
+    css::uno::Sequence<sal_Int16>               m_aDefaultSelectSeq;    // DefaultSelected
     // </properties>
 
     mutable sal_Int16                           m_nNULLPos;             // position of the NULL value in our list
@@ -121,7 +121,7 @@ class OListBoxModel :public OBoundControlModel
 private:
     ::connectivity::ORowSetValue getFirstSelectedValue() const;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type>   _getTypes() SAL_OVERRIDE;
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OListBoxModel );
@@ -131,50 +131,50 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OListBoxModel"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxModel, OBoundControlModel)
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
+                throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-                throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+                css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue )
+                throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
 
 protected:
     static const ::connectivity::ORowSetValue s_aEmptyValue;
     static const ::connectivity::ORowSetValue s_aEmptyStringValue;
 
     // XMultiPropertySet
-    virtual void SAL_CALL   setPropertyValues(const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   setPropertyValues(const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
-    virtual OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL    getServiceName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
-        write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
-        read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const SAL_OVERRIDE;
     virtual void describeAggregateProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
+        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OPropertyChangeListener
-    virtual void    _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& _rEvt ) throw ( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
+    virtual void    _propertyChanged( const css::beans::PropertyChangeEvent& _rEvt ) throw ( css::uno::RuntimeException ) SAL_OVERRIDE;
 
     // prevent method hiding
     using OBoundControlModel::getFastPropertyValue;
@@ -182,27 +182,21 @@ protected:
 
 protected:
     // OBoundControlModel overridables
-    virtual ::com::sun::star::uno::Any
-                            translateDbColumnToControlValue( ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+    virtual css::uno::Any   translateDbColumnToControlValue( ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type >
                             getSupportedBindingTypes() SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any
-                            translateControlValueToExternalValue( ) const SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any
-                            translateControlValueToValidatableValue( ) const SAL_OVERRIDE;
+    virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
+    virtual css::uno::Any   translateControlValueToExternalValue( ) const SAL_OVERRIDE;
+    virtual css::uno::Any   translateControlValueToValidatableValue( ) const SAL_OVERRIDE;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
-    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm ) SAL_OVERRIDE;
+    virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) SAL_OVERRIDE;
     virtual void            onDisconnectedDbColumn() SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any
-                            getDefaultForReset() const SAL_OVERRIDE;
+    virtual css::uno::Any   getDefaultForReset() const SAL_OVERRIDE;
     virtual void            resetNoBroadcast() SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any
-                            getCurrentFormComponentValue() const SAL_OVERRIDE;
+    virtual css::uno::Any   getCurrentFormComponentValue() const SAL_OVERRIDE;
 
     // OEntryListHelper overridables
     virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) SAL_OVERRIDE;
@@ -214,12 +208,12 @@ protected:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void init();
-    ::com::sun::star::uno::Any getCurrentSingleValue() const;
-    ::com::sun::star::uno::Any getCurrentMultiValue() const;
-    ::com::sun::star::uno::Sequence< sal_Int16 > translateBindingValuesToControlValue(
-        const ::com::sun::star::uno::Sequence< const ::com::sun::star::uno::Any > &i_aValues)
+    css::uno::Any getCurrentSingleValue() const;
+    css::uno::Any getCurrentMultiValue() const;
+    css::uno::Sequence< sal_Int16 > translateBindingValuesToControlValue(
+        const css::uno::Sequence< const css::uno::Any > &i_aValues)
         const;
-    ::com::sun::star::uno::Sequence< sal_Int16 > translateDbValueToControlValue(
+    css::uno::Sequence< sal_Int16 > translateDbValueToControlValue(
         const ::connectivity::ORowSetValue &aValue)
         const;
 
@@ -241,16 +235,16 @@ private:
 
     void        convertBoundValues(sal_Int32 nType) const;
 
-    bool        impl_hasBoundComponent() const { return m_nBoundColumnType != ::com::sun::star::sdbc::DataType::SQLNULL; }
+    bool        impl_hasBoundComponent() const { return m_nBoundColumnType != css::sdbc::DataType::SQLNULL; }
 };
 
 
 //= OListBoxControl
 
-typedef ::cppu::ImplHelper4 <   ::com::sun::star::awt::XFocusListener
-                            ,   ::com::sun::star::awt::XItemListener
-                            ,   ::com::sun::star::awt::XListBox
-                            ,   ::com::sun::star::form::XChangeBroadcaster
+typedef ::cppu::ImplHelper4 <   css::awt::XFocusListener
+                            ,   css::awt::XItemListener
+                            ,   css::awt::XListBox
+                            ,   css::form::XChangeBroadcaster
                             >   OListBoxControl_BASE;
 
 class OListBoxControl   :public OBoundControl
@@ -261,10 +255,10 @@ private:
     ::cppu::OInterfaceContainerHelper       m_aChangeListeners;
     ::cppu::OInterfaceContainerHelper       m_aItemListeners;
 
-    ::com::sun::star::uno::Any              m_aCurrentSelection;
+    css::uno::Any                           m_aCurrentSelection;
     Idle                                    m_aChangeIdle;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >
+    css::uno::Reference< css::awt::XListBox >
                                             m_xAggregateListBox;
 
     ::rtl::Reference< ::comphelper::AsyncEventNotifier >
@@ -272,63 +266,63 @@ private:
 
 protected:
     // UNO Anbindung
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes() SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type>   _getTypes() SAL_OVERRIDE;
 
 public:
-    OListBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
+    OListBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
     virtual ~OListBoxControl();
 
     // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxControl, OBoundControl)
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OListBoxControl"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XChangeBroadcaster
-        virtual void SAL_CALL addChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XFocusListener
-    virtual void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL focusGained(const css::awt::FocusEvent& _rEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL focusLost(const css::awt::FocusEvent& _rEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XItemListener
-    virtual void SAL_CALL itemStateChanged(const ::com::sun::star::awt::ItemEvent& _rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL itemStateChanged(const css::awt::ItemEvent& _rEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 // XListBox
-    virtual void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addItem( const OUString& aItem, ::sal_Int16 nPos ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< OUString >& aItems, ::sal_Int16 nPos ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Int16 SAL_CALL getItemCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getItem( ::sal_Int16 nPos ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getItems(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Int16 SAL_CALL getSelectedItemPos(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int16 > SAL_CALL getSelectedItemsPos(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getSelectedItem(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL selectItemPos( ::sal_Int16 nPos, sal_Bool bSelect ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL selectItemsPos( const ::com::sun::star::uno::Sequence< ::sal_Int16 >& aPositions, sal_Bool bSelect ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL selectItem( const OUString& aItem, sal_Bool bSelect ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isMutipleMode(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setMultipleMode( sal_Bool bMulti ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Int16 SAL_CALL getDropDownLineCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 nLines ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL makeVisible( ::sal_Int16 nEntry ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addItem( const OUString& aItem, ::sal_Int16 nPos ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addItems( const css::uno::Sequence< OUString >& aItems, ::sal_Int16 nPos ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Int16 SAL_CALL getItemCount(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getItem( ::sal_Int16 nPos ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getItems(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Int16 SAL_CALL getSelectedItemPos(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< ::sal_Int16 > SAL_CALL getSelectedItemsPos(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getSelectedItem(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL selectItemPos( ::sal_Int16 nPos, sal_Bool bSelect ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL selectItemsPos( const css::uno::Sequence< ::sal_Int16 >& aPositions, sal_Bool bSelect ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL selectItem( const OUString& aItem, sal_Bool bSelect ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isMutipleMode(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setMultipleMode( sal_Bool bMulti ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Int16 SAL_CALL getDropDownLineCount(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 nLines ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL makeVisible( ::sal_Int16 nEntry ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     // IEventProcessor

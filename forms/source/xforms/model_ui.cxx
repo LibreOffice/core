@@ -89,30 +89,30 @@ OUString Model::getDefaultServiceNameForNode( const XNode_t& xNode )
 
         switch( mxDataTypes->getDataType( sTypeName )->getTypeClass() )
         {
-        case com::sun::star::xsd::DataTypeClass::BOOLEAN:
+        case css::xsd::DataTypeClass::BOOLEAN:
             sService = "com.sun.star.form.component.CheckBox";
             break;
-        case com::sun::star::xsd::DataTypeClass::DOUBLE:
-        case com::sun::star::xsd::DataTypeClass::DECIMAL:
-        case com::sun::star::xsd::DataTypeClass::FLOAT:
+        case css::xsd::DataTypeClass::DOUBLE:
+        case css::xsd::DataTypeClass::DECIMAL:
+        case css::xsd::DataTypeClass::FLOAT:
             sService = "com.sun.star.form.component.NumericField";
             break;
 
-        case com::sun::star::xsd::DataTypeClass::STRING:
-        case com::sun::star::xsd::DataTypeClass::DURATION:
-        case com::sun::star::xsd::DataTypeClass::DATETIME:
-        case com::sun::star::xsd::DataTypeClass::TIME:
-        case com::sun::star::xsd::DataTypeClass::DATE:
-        case com::sun::star::xsd::DataTypeClass::gYearMonth:
-        case com::sun::star::xsd::DataTypeClass::gYear:
-        case com::sun::star::xsd::DataTypeClass::gMonthDay:
-        case com::sun::star::xsd::DataTypeClass::gDay:
-        case com::sun::star::xsd::DataTypeClass::gMonth:
-        case com::sun::star::xsd::DataTypeClass::hexBinary:
-        case com::sun::star::xsd::DataTypeClass::base64Binary:
-        case com::sun::star::xsd::DataTypeClass::anyURI:
-        case com::sun::star::xsd::DataTypeClass::QName:
-        case com::sun::star::xsd::DataTypeClass::NOTATION:
+        case css::xsd::DataTypeClass::STRING:
+        case css::xsd::DataTypeClass::DURATION:
+        case css::xsd::DataTypeClass::DATETIME:
+        case css::xsd::DataTypeClass::TIME:
+        case css::xsd::DataTypeClass::DATE:
+        case css::xsd::DataTypeClass::gYearMonth:
+        case css::xsd::DataTypeClass::gYear:
+        case css::xsd::DataTypeClass::gMonthDay:
+        case css::xsd::DataTypeClass::gDay:
+        case css::xsd::DataTypeClass::gMonth:
+        case css::xsd::DataTypeClass::hexBinary:
+        case css::xsd::DataTypeClass::base64Binary:
+        case css::xsd::DataTypeClass::anyURI:
+        case css::xsd::DataTypeClass::QName:
+        case css::xsd::DataTypeClass::NOTATION:
         default:
             // keep default
             break;
@@ -506,7 +506,7 @@ void Model::removeInstance( const OUString& sName )
 }
 
 static Reference<XNameContainer> lcl_getModels(
-    const Reference<com::sun::star::frame::XModel>& xComponent )
+    const Reference<css::frame::XModel>& xComponent )
 {
     Reference<XNameContainer> xRet;
     Reference<XFormsSupplier> xSupplier( xComponent, UNO_QUERY );
@@ -517,7 +517,7 @@ static Reference<XNameContainer> lcl_getModels(
     return xRet;
 }
 
-css::uno::Reference<css::xforms::XModel> Model::newModel( const Reference<com::sun::star::frame::XModel>& xCmp,
+css::uno::Reference<css::xforms::XModel> Model::newModel( const Reference<css::frame::XModel>& xCmp,
                                  const OUString& sName )
     throw( RuntimeException, std::exception )
 {
@@ -538,7 +538,7 @@ css::uno::Reference<css::xforms::XModel> Model::newModel( const Reference<com::s
     return xModel;
 }
 
-void Model::renameModel( const Reference<com::sun::star::frame::XModel>& xCmp,
+void Model::renameModel( const Reference<css::frame::XModel>& xCmp,
                          const OUString& sFrom,
                          const OUString& sTo )
     throw( RuntimeException, std::exception )
@@ -555,7 +555,7 @@ void Model::renameModel( const Reference<com::sun::star::frame::XModel>& xCmp,
     }
 }
 
-void Model::removeModel( const Reference<com::sun::star::frame::XModel>& xCmp,
+void Model::removeModel( const Reference<css::frame::XModel>& xCmp,
                          const OUString& sName )
     throw( RuntimeException, std::exception )
 {

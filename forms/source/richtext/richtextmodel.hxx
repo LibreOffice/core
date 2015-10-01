@@ -41,9 +41,9 @@ namespace frm
 
     //= ORichTextModel
 
-    typedef ::cppu::ImplHelper3 <   ::com::sun::star::awt::XControlModel
-                                ,   ::com::sun::star::lang::XUnoTunnel
-                                ,   ::com::sun::star::util::XModifyBroadcaster
+    typedef ::cppu::ImplHelper3 <   css::awt::XControlModel
+                                ,   css::lang::XUnoTunnel
+                                ,   css::util::XModifyBroadcaster
                                 >   ORichTextModel_BASE;
 
     class ORichTextModel
@@ -58,12 +58,12 @@ namespace frm
 
     private:
         // <properties>
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >
+        css::uno::Reference< css::awt::XDevice >
                                     m_xReferenceDevice;
-        ::com::sun::star::uno::Any  m_aTabStop;
-        ::com::sun::star::uno::Any  m_aBackgroundColor;
-        ::com::sun::star::uno::Any  m_aBorderColor;
-        ::com::sun::star::uno::Any  m_aVerticalAlignment;
+        css::uno::Any  m_aTabStop;
+        css::uno::Any  m_aBackgroundColor;
+        css::uno::Any  m_aBorderColor;
+        css::uno::Any  m_aVerticalAlignment;
         OUString             m_sDefaultControl;
         OUString             m_sHelpText;
         OUString             m_sHelpURL;
@@ -85,7 +85,7 @@ namespace frm
         // </properties>
 
         // <properties_for_awt_edit_compatibility>
-        ::com::sun::star::uno::Any  m_aAlign;
+        css::uno::Any  m_aAlign;
         sal_Int16                   m_nEchoChar;
         sal_Int16                   m_nMaxTextLength;
         bool                    m_bMultiLine;
@@ -99,13 +99,13 @@ namespace frm
                                     m_aModifyListeners;
 
     public:
-        static  RichTextEngine* getEditEngine( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel );
+        static  RichTextEngine* getEditEngine( const css::uno::Reference< css::awt::XControlModel >& _rxModel );
 
     private:
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ORichTextModel, OControlModel )
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -121,26 +121,26 @@ namespace frm
         virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet and friends
-        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
-                                            sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                                        throw(::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
+                                            sal_Int32 nHandle, const css::uno::Any& rValue )
+                                        throw(css::lang::IllegalArgumentException) SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) throw ( css::uno::Exception, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
         ) const SAL_OVERRIDE;
         virtual void describeAggregateProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
+            css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const SAL_OVERRIDE;
 
         // prevent method hiding
@@ -170,7 +170,7 @@ namespace frm
 
         DECL_LINK_TYPED( OnEngineContentModified, LinkParamNone*, void );
 
-        static  ::com::sun::star::uno::Sequence< sal_Int8 > getEditEngineTunnelId();
+        static  css::uno::Sequence< sal_Int8 > getEditEngineTunnelId();
 
     private:
         ORichTextModel( const ORichTextModel& ) SAL_DELETED_FUNCTION;

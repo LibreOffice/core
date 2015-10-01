@@ -44,12 +44,12 @@ namespace frm
 
     //= FormOperations
 
-    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::form::runtime::XFormOperations
-                                                ,   ::com::sun::star::lang::XInitialization
-                                                ,   ::com::sun::star::lang::XServiceInfo
-                                                ,   ::com::sun::star::beans::XPropertyChangeListener
-                                                ,   ::com::sun::star::util::XModifyListener
-                                                ,   ::com::sun::star::sdbc::XRowSetListener
+    typedef ::cppu::WeakComponentImplHelper    <   css::form::runtime::XFormOperations
+                                                ,   css::lang::XInitialization
+                                                ,   css::lang::XServiceInfo
+                                                ,   css::beans::XPropertyChangeListener
+                                                ,   css::util::XModifyListener
+                                                ,   css::sdbc::XRowSetListener
                                                 >   FormOperations_Base;
 
     class FormOperations    :public ::cppu::BaseMutex
@@ -59,16 +59,14 @@ namespace frm
         class MethodGuard;
 
     private:
-        css::uno::Reference<css::uno::XComponentContext>                                        m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xController;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xCursor;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >            m_xUpdateCursor;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xCursorProperties;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >                   m_xLoadableForm;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation >
-                                                                                                m_xFeatureInvalidation;
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
-                                                                                                m_xParser;
+        css::uno::Reference<css::uno::XComponentContext>                      m_xContext;
+        css::uno::Reference< css::form::runtime::XFormController >            m_xController;
+        css::uno::Reference< css::sdbc::XRowSet >                             m_xCursor;
+        css::uno::Reference< css::sdbc::XResultSetUpdate >                    m_xUpdateCursor;
+        css::uno::Reference< css::beans::XPropertySet >                       m_xCursorProperties;
+        css::uno::Reference< css::form::XLoadable >                           m_xLoadableForm;
+        css::uno::Reference< css::form::runtime::XFeatureInvalidation >       m_xFeatureInvalidation;
+        mutable css::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xParser;
 
         bool    m_bInitializedParser;
         bool    m_bActiveControlModified;
@@ -79,11 +77,11 @@ namespace frm
     #endif
 
     public:
-        FormOperations( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+        FormOperations( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
         // XServiceInfo - static versions
-        static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+        static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
 
         struct MethodAccess { friend class MethodGuard; private: MethodAccess() { } };
 
@@ -108,49 +106,49 @@ namespace frm
         virtual ~FormOperations();
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XFormOperations
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > SAL_CALL getCursor() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate > SAL_CALL getUpdateCursor() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > SAL_CALL getController() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation > SAL_CALL getFeatureInvalidation() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setFeatureInvalidation(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation > & the_value) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::form::runtime::FeatureState SAL_CALL getState(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isEnabled(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL execute(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL executeWithArguments(::sal_Int16 Feature, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL commitCurrentRecord(sal_Bool & RecordInserted) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::sdbc::SQLException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL commitCurrentControl() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::sdbc::SQLException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isInsertionRow() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isModifiedRow() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XRowSet > SAL_CALL getCursor() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XResultSetUpdate > SAL_CALL getUpdateCursor() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getController() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::form::runtime::XFeatureInvalidation > SAL_CALL getFeatureInvalidation() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setFeatureInvalidation(const css::uno::Reference< css::form::runtime::XFeatureInvalidation > & the_value) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::form::runtime::FeatureState SAL_CALL getState(::sal_Int16 Feature) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isEnabled(::sal_Int16 Feature) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL execute(::sal_Int16 Feature) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::sdbc::SQLException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL executeWithArguments(::sal_Int16 Feature, const css::uno::Sequence< css::beans::NamedValue >& Arguments) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::sdbc::SQLException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL commitCurrentRecord(sal_Bool & RecordInserted) throw (css::uno::RuntimeException, css::sdbc::SQLException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL commitCurrentControl() throw (css::uno::RuntimeException, css::sdbc::SQLException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isInsertionRow() throw (css::uno::RuntimeException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isModifiedRow() throw (css::uno::RuntimeException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
 
         // XRowSetListener
-        virtual void SAL_CALL cursorMoved( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL rowChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL rowSetChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL cursorMoved( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL rowChanged( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL rowSetChanged( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& _rSource ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL modified( const css::lang::EventObject& _rSource ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XComponent/OComponentHelper
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     private:
         // service constructors
-        void    createWithFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController );
-        void    createWithForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm );
+        void    createWithFormController( const css::uno::Reference< css::form::runtime::XFormController >& _rxController );
+        void    createWithForm( const css::uno::Reference< css::form::XForm >& _rxForm );
 
         /** determines whether or not we're already disposed
         */
@@ -224,7 +222,7 @@ namespace frm
             @precond
                 m_xController.is()
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                     impl_getCurrentBoundField_nothrow( ) const;
 
         /** returns the control model of the current control
@@ -235,7 +233,7 @@ namespace frm
             @precond
                 m_xController.is()
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+        css::uno::Reference< css::awt::XControlModel >
                     impl_getCurrentControlModel_throw() const;
 
         /// determines if we have a valid cursor
@@ -246,7 +244,7 @@ namespace frm
             A grid control can have columns which are currently hidden, so the index of a
             column in the view is not necessarily the same as its index in the model.
         */
-        static sal_Int16   impl_gridView2ModelPos_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxColumns, sal_Int16 _nViewPos );
+        static sal_Int16   impl_gridView2ModelPos_nothrow( const css::uno::Reference< css::container::XIndexAccess >& _rxColumns, sal_Int16 _nViewPos );
 
         /** moves our cursor one position to the left, caring for different possible
             cursor states.
@@ -312,7 +310,7 @@ namespace frm
         {
         public:
             impl_appendOrderByColumn_throw(const FormOperations *pFO,
-                                           ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xField,
+                                           css::uno::Reference< css::beans::XPropertySet > xField,
                                            bool bUp)
                 : m_pFO(pFO)
                 , m_xField(xField)
@@ -322,7 +320,7 @@ namespace frm
             void operator()() { m_pFO->m_xParser->appendOrderByColumn(m_xField, m_bUp); }
         private:
             const FormOperations *m_pFO;
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xField;
+            css::uno::Reference< css::beans::XPropertySet > m_xField;
             bool m_bUp;
         };
 
@@ -331,15 +329,15 @@ namespace frm
         {
         public:
             impl_appendFilterByColumn_throw(const FormOperations *pFO,
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xField)
+                                            css::uno::Reference< css::beans::XPropertySet > xField)
                 : m_pFO(pFO)
                 , m_xField(xField)
             {};
 
-            void operator()() { m_pFO->m_xParser->appendFilterByColumn( m_xField, sal_True, ::com::sun::star::sdb::SQLFilterOperator::EQUAL ); }
+            void operator()() { m_pFO->m_xParser->appendFilterByColumn( m_xField, sal_True, css::sdb::SQLFilterOperator::EQUAL ); }
         private:
             const FormOperations *m_pFO;
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xField;
+            css::uno::Reference< css::beans::XPropertySet > m_xField;
         };
 
     private:

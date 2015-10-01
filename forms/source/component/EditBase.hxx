@@ -49,7 +49,7 @@ class OEditBaseModel :  public OBoundControlModel
 
 protected:
 // [properties]         for all EditingFields
-    ::com::sun::star::uno::Any  m_aDefault;
+    css::uno::Any           m_aDefault;
     OUString                m_aDefaultText;             // default value
     bool                    m_bEmptyIsNull : 1;         // empty string will be interepreted as NULL when committing
     bool                    m_bFilterProposal : 1;      // use a list of possible value in filtermode
@@ -59,7 +59,7 @@ protected:
 
 public:
     OEditBaseModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory,
+        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
         const OUString& _rUnoControlModelTypeName,
         const OUString& _rDefault,
         const bool _bSupportExternalBinding,
@@ -69,24 +69,24 @@ public:
     virtual ~OEditBaseModel();
 
     // XPersistObject
-    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                                        throw(::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const css::uno::Any& rValue )
+                                        throw(css::lang::IllegalArgumentException) SAL_OVERRIDE;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) throw ( css::uno::Exception, std::exception) SAL_OVERRIDE;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
     // XPropertyState
-    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
+    virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
 
 protected:
     // new properties common to all edit models should be handled with the following two methods
-    void SAL_CALL readCommonEditProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
-    void SAL_CALL writeCommonEditProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
+    void SAL_CALL readCommonEditProperties(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
+    void SAL_CALL writeCommonEditProperties(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
     void defaultCommonEditProperties();
 
     virtual sal_uInt16 getPersistenceFlags() const;

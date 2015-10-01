@@ -420,7 +420,7 @@ sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldV
 }
 
 
-void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception)
+void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (css::uno::Exception, std::exception)
 {
     switch (nHandle)
     {

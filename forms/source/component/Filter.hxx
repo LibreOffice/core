@@ -47,11 +47,11 @@ namespace frm
 
     // OFilterControl
 
-    typedef ::cppu::ImplHelper5 <   ::com::sun::star::awt::XTextComponent
-                                ,   ::com::sun::star::awt::XFocusListener
-                                ,   ::com::sun::star::awt::XItemListener
-                                ,   ::com::sun::star::form::XBoundComponent
-                                ,   ::com::sun::star::lang::XInitialization
+    typedef ::cppu::ImplHelper5 <   css::awt::XTextComponent
+                                ,   css::awt::XFocusListener
+                                ,   css::awt::XItemListener
+                                ,   css::form::XBoundComponent
+                                ,   css::lang::XInitialization
                                 >   OFilterControl_BASE;
 
     class OFilterControl    :public UnoControl
@@ -60,89 +60,89 @@ namespace frm
     {
         TextListenerMultiplexer     m_aTextListeners;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xField;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                 m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >           m_xMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                      m_xMessageParent;
+        css::uno::Reference< css::uno::XComponentContext >            m_xContext;
+        css::uno::Reference< css::beans::XPropertySet >               m_xField;
+        css::uno::Reference< css::util::XNumberFormatter >            m_xFormatter;
+        css::uno::Reference< css::sdbc::XConnection >                 m_xConnection;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >           m_xMetaData;
+        css::uno::Reference< css::awt::XWindow >                      m_xMessageParent;
 
         typedef std::unordered_map< OUString, OUString, OUStringHash > MapString2String;
         MapString2String                m_aDisplayItemToValueItem;
 
-        OUString                 m_aText;
+        OUString                        m_aText;
 #if HAVE_FEATURE_DBCONNECTIVITY
         ::connectivity::OSQLParser      m_aParser;
 #endif
         sal_Int16                       m_nControlClass;        // which kind of control do we use?
-        bool                        m_bFilterList : 1;
-        bool                        m_bMultiLine : 1;
-        bool                        m_bFilterListFilled : 1;
+        bool                            m_bFilterList : 1;
+        bool                            m_bMultiLine : 1;
+        bool                            m_bFilterListFilled : 1;
 
     private:
         void implInitFilterList();
-        void initControlModel(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xControlModel);
+        void initControlModel(css::uno::Reference< css::beans::XPropertySet >& xControlModel);
 
     public:
-        OFilterControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
+        OFilterControl( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject)
-        ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual OUString GetComponentServiceName() SAL_OVERRIDE;
-        virtual void SAL_CALL   createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > & rxToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  & rParentPeer ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL   createPeer( const css::uno::Reference< css::awt::XToolkit > & rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >  & rParentPeer ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XComponent
-        virtual void SAL_CALL   dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    // css::lang::XComponent
+        virtual void SAL_CALL   dispose() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    // ::com::sun::star::awt::XTextComponent
-        virtual void            SAL_CALL addTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener > & l ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void            SAL_CALL removeTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener > & l ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void            SAL_CALL setText( const OUString& aText ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void            SAL_CALL insertText( const ::com::sun::star::awt::Selection& rSel, const OUString& aText ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getText() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getSelectedText() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void            SAL_CALL setSelection( const ::com::sun::star::awt::Selection& aSelection ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual ::com::sun::star::awt::Selection SAL_CALL getSelection() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual sal_Bool        SAL_CALL isEditable() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void            SAL_CALL setEditable( sal_Bool bEditable ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void            SAL_CALL setMaxTextLen( sal_Int16 nLength ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual sal_Int16       SAL_CALL getMaxTextLen() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    // css::awt::XTextComponent
+        virtual void            SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void            SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void            SAL_CALL setText( const OUString& aText ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void            SAL_CALL insertText( const css::awt::Selection& rSel, const OUString& aText ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getText() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getSelectedText() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void            SAL_CALL setSelection( const css::awt::Selection& aSelection ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::awt::Selection SAL_CALL getSelection() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Bool        SAL_CALL isEditable() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void            SAL_CALL setEditable( sal_Bool bEditable ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void            SAL_CALL setMaxTextLen( sal_Int16 nLength ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Int16       SAL_CALL getMaxTextLen() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    // ::com::sun::star::form::XBoundComponent
-        virtual void            SAL_CALL addUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener > & /*l*/) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE {}
-        virtual void            SAL_CALL removeUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener > & /*l*/) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE {}
-        virtual sal_Bool        SAL_CALL commit() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    // css::form::XBoundComponent
+        virtual void            SAL_CALL addUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE {}
+        virtual void            SAL_CALL removeUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE {}
+        virtual sal_Bool        SAL_CALL commit() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XEventListener
-        virtual void            SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    // css::lang::XEventListener
+        virtual void            SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    // ::com::sun::star::awt::XFocusListener
-        virtual void            SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void            SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    // css::awt::XFocusListener
+        virtual void            SAL_CALL focusGained(const css::awt::FocusEvent& e) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void            SAL_CALL focusLost(const css::awt::FocusEvent& e) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    // ::com::sun::star::awt::XItemListener
-        virtual void            SAL_CALL itemStateChanged(const ::com::sun::star::awt::ItemEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    // css::awt::XItemListener
+        virtual void            SAL_CALL itemStateChanged(const css::awt::ItemEvent& rEvent) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    // ::com::sun::star::util::XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::util::XInitialization
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // com::sun::star::lang::XServiceInfo - static version
+        // css::lang::XServiceInfo - static version
         static  OUString SAL_CALL getImplementationName_Static();
-        static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
+        static  css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
 
     protected:
-        virtual void PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc ) SAL_OVERRIDE;
-        virtual void ImplSetPeerProperty( const OUString& rPropName, const ::com::sun::star::uno::Any& rVal ) SAL_OVERRIDE;
+        virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) SAL_OVERRIDE;
+        virtual void ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) SAL_OVERRIDE;
 
         bool ensureInitialized( );
 
-        void displayException( const ::com::sun::star::sdb::SQLContext& _rExcept );
+        void displayException( const css::sdb::SQLContext& _rExcept );
     };
 
 }   // namespace frm

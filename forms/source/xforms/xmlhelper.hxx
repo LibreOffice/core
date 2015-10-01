@@ -31,12 +31,12 @@ namespace com { namespace sun { namespace star {
 
 
 bool isValidQName( const OUString& sName,
-                   const com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>& xNamespaces );
+                   const css::uno::Reference<css::container::XNameContainer>& xNamespaces );
 
 bool isValidPrefixName( const OUString& sName,
-                        const com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>& xNamespaces );
+                        const css::uno::Reference<css::container::XNameContainer>& xNamespaces );
 
-com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocumentBuilder> getDocumentBuilder();
+css::uno::Reference<css::xml::dom::XDocumentBuilder> getDocumentBuilder();
 
 
 #endif

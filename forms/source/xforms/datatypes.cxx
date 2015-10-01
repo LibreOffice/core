@@ -268,7 +268,7 @@ namespace xforms
     }
 
 
-    bool OXSDDataType::checkPropertySanity( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rNewValue, OUString& _rErrorMessage )
+    bool OXSDDataType::checkPropertySanity( sal_Int32 _nHandle, const css::uno::Any& _rNewValue, OUString& _rErrorMessage )
     {
         if ( _nHandle == PROPERTY_ID_XSD_PATTERN )
         {
@@ -354,7 +354,7 @@ namespace xforms
 
 
     void SAL_CALL OValueLimitedType_Base::setFastPropertyValue_NoBroadcast(
-        sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::Exception, std::exception)
+        sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw (css::uno::Exception, std::exception)
     {
         OXSDDataType::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 

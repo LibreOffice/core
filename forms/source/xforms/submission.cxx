@@ -562,7 +562,7 @@ static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, cons
 }
 Reference< XDocument > Submission::getInstanceDocument(const Reference< XXPathObject >& aObj)
 {
-    using namespace com::sun::star::xml::xpath;
+    using namespace css::xml::xpath;
     // result
     Reference< XDocument > aDocument;
 
@@ -577,7 +577,7 @@ Reference< XDocument > Submission::getInstanceDocument(const Reference< XXPathOb
 
 Reference< XDocumentFragment > Submission::createSubmissionDocument(const Reference< XXPathObject >& aObj, bool bRemoveWSNodes)
 {
-    using namespace com::sun::star::xml::xpath;
+    using namespace css::xml::xpath;
     Reference< XDocumentBuilder > aDocBuilder = DocumentBuilder::create(comphelper::getProcessComponentContext());
     Reference< XDocument > aDocument = aDocBuilder->newDocument();
     Reference< XDocumentFragment > aFragment = aDocument->createDocumentFragment();
@@ -602,7 +602,7 @@ Reference< XDocumentFragment > Submission::createSubmissionDocument(const Refere
 
 // some forwarding: XPropertySet is implemented in our base class,
 // but also available as base of XSubmission
-Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL Submission::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+Reference< css::beans::XPropertySetInfo > SAL_CALL Submission::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
 {
     return PropertySetBase::getPropertySetInfo();
 }
@@ -614,19 +614,19 @@ Any SAL_CALL Submission::getPropertyValue( const OUString& PropertyName ) throw(
 {
     return PropertySetBase::getPropertyValue( PropertyName );
 }
-void SAL_CALL Submission::addPropertyChangeListener( const OUString& aPropertyName, const Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL Submission::addPropertyChangeListener( const OUString& aPropertyName, const Reference< css::beans::XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     PropertySetBase::addPropertyChangeListener( aPropertyName, xListener );
 }
-void SAL_CALL Submission::removePropertyChangeListener( const OUString& aPropertyName, const Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL Submission::removePropertyChangeListener( const OUString& aPropertyName, const Reference< css::beans::XPropertyChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     PropertySetBase::removePropertyChangeListener( aPropertyName, aListener );
 }
-void SAL_CALL Submission::addVetoableChangeListener( const OUString& PropertyName, const Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL Submission::addVetoableChangeListener( const OUString& PropertyName, const Reference< css::beans::XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     PropertySetBase::addVetoableChangeListener( PropertyName, aListener );
 }
-void SAL_CALL Submission::removeVetoableChangeListener( const OUString& PropertyName, const Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL Submission::removeVetoableChangeListener( const OUString& PropertyName, const Reference< css::beans::XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     PropertySetBase::removeVetoableChangeListener( PropertyName, aListener );
 }

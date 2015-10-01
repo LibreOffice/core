@@ -60,8 +60,8 @@ namespace frm
         ~WindowStateGuard();
 
         void    attach(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2 >& _rxWindow,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel
+            const css::uno::Reference< css::awt::XWindow2 >& _rxWindow,
+            const css::uno::Reference< css::awt::XControlModel >& _rxModel
         );
     };
 

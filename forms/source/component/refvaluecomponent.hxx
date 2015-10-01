@@ -51,7 +51,7 @@ namespace frm
 
     protected:
         OReferenceValueComponent(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory,
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
             const OUString& _rUnoControlModelTypeName,
             const OUString& _rDefault,
             bool _bSupportNoCheckRefValue = false
@@ -60,30 +60,26 @@ namespace frm
         virtual ~OReferenceValueComponent();
 
         // OPropertySet and friends
-        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                    throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
+                    throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                    ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-                    throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+                    css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue )
+                    throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
         virtual void describeFixedProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
         ) const SAL_OVERRIDE;
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
         // OBoundControlModel overridables
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+        virtual css::uno::Sequence< css::uno::Type >
                                 getSupportedBindingTypes() SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any
-                                translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any
-                                translateControlValueToExternalValue( ) const SAL_OVERRIDE;
+        virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
+        virtual css::uno::Any   translateControlValueToExternalValue( ) const SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Any
-                                translateControlValueToValidatableValue( ) const SAL_OVERRIDE;
+        virtual css::uno::Any   translateControlValueToValidatableValue( ) const SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Any
-                                getDefaultForReset() const SAL_OVERRIDE;
+        virtual css::uno::Any   getDefaultForReset() const SAL_OVERRIDE;
     };
 
 

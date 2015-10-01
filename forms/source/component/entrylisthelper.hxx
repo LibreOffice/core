@@ -39,9 +39,9 @@ namespace frm
 
     //= OEntryListHelper
 
-    typedef ::cppu::ImplHelper3 <      ::com::sun::star::form::binding::XListEntrySink
-                                ,   ::com::sun::star::form::binding::XListEntryListener
-                                ,   ::com::sun::star::util::XRefreshable
+    typedef ::cppu::ImplHelper3 <   css::form::binding::XListEntrySink
+                                ,   css::form::binding::XListEntryListener
+                                ,   css::util::XRefreshable
                                 >   OEntryListHelper_BASE;
 
     class OEntryListHelper : public OEntryListHelper_BASE
@@ -49,9 +49,9 @@ namespace frm
     private:
         OControlModel&  m_rControlModel;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >
+        css::uno::Reference< css::form::binding::XListEntrySource >
                         m_xListSource;      /// our external list source
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
                         m_aStringItems;     /// "overridden" StringItemList property value
         ::cppu::OInterfaceContainerHelper
                         m_aRefreshListeners;
@@ -63,7 +63,7 @@ namespace frm
         virtual ~OEntryListHelper( );
 
         /// returns the current string item list
-        inline const ::com::sun::star::uno::Sequence< OUString >&
+        inline const css::uno::Sequence< OUString >&
                     getStringItemList() const { return m_aStringItems; }
 
         /// determines whether we actually have an external list source
@@ -75,14 +75,14 @@ namespace frm
                 <TRUE/> if and only if the disposed object was our list source, and so the
                 event was handled
         */
-        bool        handleDisposing( const ::com::sun::star::lang::EventObject& _rEvent );
+        bool        handleDisposing( const css::lang::EventObject& _rEvent );
 
         /** to be called by derived classes' instances when they're being disposed
         */
         void        disposing( );
 
         // prevent method hiding
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
 
         /** helper for implementing convertFastPropertyValue( StringItemList )
 
@@ -90,9 +90,9 @@ namespace frm
             as convertFastPropertyValue.</p>
         */
         bool    convertNewListSourceProperty(
-                        ::com::sun::star::uno::Any& _rConvertedValue,
-                        ::com::sun::star::uno::Any& _rOldValue,
-                        const ::com::sun::star::uno::Any& _rValue
+                        css::uno::Any& _rConvertedValue,
+                        css::uno::Any& _rOldValue,
+                        const css::uno::Any& _rValue
                     );
 
         /** helper for implementing setFastPropertyValueNoBroadcast
@@ -104,7 +104,7 @@ namespace frm
                 not to be called when we have an external list source
             @see hasExternalListSource
         */
-        void        setNewStringItemList( const ::com::sun::star::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
+        void        setNewStringItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
 
         /** announces that the list of entries has changed.
 
@@ -131,19 +131,19 @@ namespace frm
 
     private:
         // XListEntrySink
-        virtual void SAL_CALL setListEntrySource( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource > SAL_CALL getListEntrySource(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setListEntrySource( const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::form::binding::XListEntrySource > SAL_CALL getListEntrySource(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XListEntryListener
-        virtual void SAL_CALL entryChanged( const ::com::sun::star::form::binding::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL entryRangeInserted( const ::com::sun::star::form::binding::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL entryRangeRemoved( const ::com::sun::star::form::binding::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL allEntriesChanged( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL entryChanged( const css::form::binding::ListEntryEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL entryRangeInserted( const css::form::binding::ListEntryEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL entryRangeRemoved( const css::form::binding::ListEntryEvent& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL allEntriesChanged( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XRefreshable
-        virtual void SAL_CALL refresh() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL addRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL refresh() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addRefreshListener(const css::uno::Reference< css::util::XRefreshListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener>& _rxListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         /** disconnects from the active external list source, if present
@@ -157,7 +157,7 @@ namespace frm
             @see disconnectExternalListSource
         */
         void        connectExternalListSource(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource,
+                        const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource,
                         ControlModelLock& _rInstanceLock
                     );
 

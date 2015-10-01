@@ -43,8 +43,8 @@ namespace frm
         }
 
         // XReset equivalents
-        void addResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& _listener );
-        void removeResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& _listener );
+        void addResetListener( const css::uno::Reference< css::form::XResetListener >& _listener );
+        void removeResetListener( const css::uno::Reference< css::form::XResetListener >& _listener );
 
         // calling listeners
         bool approveReset();

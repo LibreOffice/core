@@ -727,7 +727,7 @@ void Binding::valueModified()
 
 void Binding::distributeMIP( const css::uno::Reference<css::xml::dom::XNode> & rxNode ) {
 
-    typedef com::sun::star::xforms::XFormsEventConcrete XFormsEvent_t;
+    typedef css::xforms::XFormsEventConcrete XFormsEvent_t;
     OUString sEventName("xforms-generic");
     XFormsEvent_t *pEvent = new XFormsEvent_t;
     pEvent->initXFormsEvent(sEventName, sal_True, sal_False);

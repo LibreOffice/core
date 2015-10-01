@@ -45,7 +45,7 @@ OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactor
 }
 
 
-css::uno::Sequence<OUString> SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -84,7 +84,7 @@ IMPLEMENT_DEFAULT_CLONING( OCheckBoxModel )
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<OUString> aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
@@ -270,16 +270,16 @@ bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OCheckBoxModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OCheckBoxModel_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OCheckBoxModel(component));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OCheckBoxControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OCheckBoxControl_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OCheckBoxControl(component));
 }

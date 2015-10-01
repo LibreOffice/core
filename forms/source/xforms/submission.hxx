@@ -57,8 +57,8 @@ namespace xforms
  */
 typedef cppu::ImplInheritanceHelper<
     PropertySetBase,
-    com::sun::star::lang::XUnoTunnel,
-    com::sun::star::xforms::XSubmission
+    css::lang::XUnoTunnel,
+    css::xforms::XSubmission
 > Submission_t;
 
 class Submission : public Submission_t
@@ -78,19 +78,19 @@ class Submission : public Submission_t
     OUString msCDataSectionElement;
     OUString msReplace;
     OUString msSeparator;
-    com::sun::star::uno::Sequence< OUString > msIncludeNamespacePrefixes;
+    css::uno::Sequence< OUString > msIncludeNamespacePrefixes;
 
 private:
 
     /// the Model to which this Submission belongs; may be NULL
-    com::sun::star::uno::Reference<com::sun::star::xforms::XModel> mxModel;
+    css::uno::Reference<css::xforms::XModel> mxModel;
 
     // this will extract the document from the model that will be submitted
-    com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocumentFragment >
-        createSubmissionDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject,
+    css::uno::Reference< css::xml::dom::XDocumentFragment >
+        createSubmissionDocument(const css::uno::Reference< css::xml::xpath::XXPathObject >& aObject,
                                  bool bRemoveWSNodes = false);
-    static com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument >
-        getInstanceDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject);
+    static css::uno::Reference< css::xml::dom::XDocument >
+        getInstanceDocument(const css::uno::Reference< css::xml::xpath::XXPathObject >& aObject);
 
 public:
     Submission();
@@ -101,12 +101,12 @@ public:
 
 
     /// get XForms model
-    com::sun::star::uno::Reference<com::sun::star::xforms::XModel>
+    css::uno::Reference<css::xforms::XModel>
         getModel() const { return mxModel;}
 
     /// set XForms model
     void setModel(
-        const com::sun::star::uno::Reference<com::sun::star::xforms::XModel>& );
+        const css::uno::Reference<css::xforms::XModel>& );
 
     OUString getID() const { return msID;}         /// get ID for this submission
     void setID( const OUString& );  /// set ID for this submission
@@ -150,23 +150,23 @@ public:
     OUString getSeparator() const { return msSeparator;}
     void setSeparator( const OUString& );
 
-    com::sun::star::uno::Sequence< OUString > getIncludeNamespacePrefixes() const { return msIncludeNamespacePrefixes;}
-    void setIncludeNamespacePrefixes( const com::sun::star::uno::Sequence< OUString >& );
+    css::uno::Sequence< OUString > getIncludeNamespacePrefixes() const { return msIncludeNamespacePrefixes;}
+    void setIncludeNamespacePrefixes( const css::uno::Sequence< OUString >& );
 
     /** perform the submission
      * @returns if submission was successful */
-    bool doSubmit( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler );
+    bool doSubmit( const css::uno::Reference< css::task::XInteractionHandler >& aHandler );
 
     // helpers for UNO tunnel
-    static com::sun::star::uno::Sequence<sal_Int8> getUnoTunnelID();
-    static Submission* getSubmission( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& );
+    static css::uno::Sequence<sal_Int8> getUnoTunnelID();
+    static Submission* getSubmission( const css::uno::Reference<css::beans::XPropertySet>& );
 
 private:
 
     /// check whether object is live, and throw suitable exception if not
     /// (to be used be API methods before acting on the object)
     void liveCheck()
-        throw( com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     /// get the model implementation
     xforms::Model* getModelImpl() const;
@@ -179,11 +179,11 @@ protected:
 
 
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
-        com::sun::star::uno::Any& rConvertedValue,
-        com::sun::star::uno::Any& rOldValue,
+        css::uno::Any& rConvertedValue,
+        css::uno::Any& rOldValue,
         sal_Int32 nHandle,
-        const com::sun::star::uno::Any& rValue )
-        throw ( com::sun::star::lang::IllegalArgumentException ) SAL_OVERRIDE;
+        const css::uno::Any& rValue )
+        throw ( css::lang::IllegalArgumentException ) SAL_OVERRIDE;
 
 private:
     void initializePropertySet();
@@ -197,10 +197,10 @@ public:
 
 
     virtual OUString SAL_CALL getName()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL setName( const OUString& )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -209,8 +209,8 @@ public:
 
 
     virtual sal_Int64 SAL_CALL getSomething(
-        const com::sun::star::uno::Sequence<sal_Int8>& )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        const css::uno::Sequence<sal_Int8>& )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -218,32 +218,32 @@ public:
 
 
     virtual void SAL_CALL submit(  )
-        throw ( com::sun::star::util::VetoException,
-                com::sun::star::lang::WrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::util::VetoException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL submitWithInteraction(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler )
-        throw ( com::sun::star::util::VetoException,
-                com::sun::star::lang::WrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        const css::uno::Reference< css::task::XInteractionHandler >& aHandler )
+        throw ( css::util::VetoException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL addSubmissionVetoListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmissionVetoListener >& listener )
-        throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener )
+        throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeSubmissionVetoListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmissionVetoListener >& listener )
-        throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener )
+        throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // XPropertySet
     // (need to disambiguate this)
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

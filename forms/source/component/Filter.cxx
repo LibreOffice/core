@@ -600,7 +600,7 @@ namespace frm
                 Reference< XVclWindowPeer >  xVclWindow( getPeer(), UNO_QUERY );
                 if (xVclWindow.is())
                 {
-                    OUString aRefText = ::comphelper::getString(com::sun::star::uno::Reference< XPropertySet > (getModel(), UNO_QUERY)->getPropertyValue(PROPERTY_REFVALUE));
+                    OUString aRefText = ::comphelper::getString(css::uno::Reference< XPropertySet > (getModel(), UNO_QUERY)->getPropertyValue(PROPERTY_REFVALUE));
                     Any aValue;
                     if (aText == aRefText)
                         aValue <<= (sal_Int32)TRISTATE_TRUE;
@@ -662,7 +662,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OFilterControl::insertText( const ::com::sun::star::awt::Selection& rSel, const OUString& aText ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL OFilterControl::insertText( const css::awt::Selection& rSel, const OUString& aText ) throw(css::uno::RuntimeException, std::exception)
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         if (xText.is())
@@ -690,7 +690,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OFilterControl::setSelection( const ::com::sun::star::awt::Selection& aSelection ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL OFilterControl::setSelection( const css::awt::Selection& aSelection ) throw(css::uno::RuntimeException, std::exception)
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         if (xText.is())
@@ -698,9 +698,9 @@ namespace frm
     }
 
 
-    ::com::sun::star::awt::Selection SAL_CALL OFilterControl::getSelection() throw(::com::sun::star::uno::RuntimeException, std::exception)
+    css::awt::Selection SAL_CALL OFilterControl::getSelection() throw(css::uno::RuntimeException, std::exception)
     {
-        ::com::sun::star::awt::Selection aSel;
+        css::awt::Selection aSel;
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         if (xText.is())
             aSel = xText->getSelection();
@@ -738,7 +738,7 @@ namespace frm
     }
 
 
-    void OFilterControl::displayException( const ::com::sun::star::sdb::SQLContext& _rExcept )
+    void OFilterControl::displayException( const css::sdb::SQLContext& _rExcept )
     {
         try
         {

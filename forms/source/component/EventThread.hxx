@@ -44,11 +44,11 @@ namespace frm
 typedef ::osl::Thread   OComponentEventThread_TBASE;
 class OComponentEventThread
             :public OComponentEventThread_TBASE
-            ,public ::com::sun::star::lang::XEventListener
+            ,public css::lang::XEventListener
             ,public ::cppu::OWeakObject
 {
     typedef std::vector<css::lang::EventObject*> ThreadEvents;
-    typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter> > ThreadObjects;
+    typedef std::vector< css::uno::Reference< css::uno::XAdapter> > ThreadObjects;
     typedef std::vector<sal_Bool> ThreadBools;
 
     ::osl::Mutex                    m_aMutex;
@@ -57,8 +57,8 @@ class OComponentEventThread
     ThreadObjects                   m_aControls;        // Control for Submit
     ThreadBools                     m_aFlags;           // Flags for Submit/Reset
 
-    ::cppu::OComponentHelper*                   m_pCompImpl;    // Implementation of the Control
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>   m_xComp; // ::com::sun::star::lang::XComponent of the Control
+    ::cppu::OComponentHelper*                     m_pCompImpl;    // Implementation of the Control
+    css::uno::Reference< css::lang::XComponent>   m_xComp; // css::lang::XComponent of the Control
 
 protected:
 
@@ -68,7 +68,7 @@ protected:
     virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
     // The following method is called to duplicate the Event while respecting it's type.
-    virtual ::com::sun::star::lang::EventObject* cloneEvent(const ::com::sun::star::lang::EventObject* _pEvt) const = 0;
+    virtual css::lang::EventObject* cloneEvent(const css::lang::EventObject* _pEvt) const = 0;
 
     // Edit an Event:
     // The mutex is not locked, but pCompImpl stays valid in any case.
@@ -76,25 +76,25 @@ protected:
     // rControl is only set, if a Control has been passed in addEvent.
     // Because the Control is only held as a WeakRef, it can disappear in the meantime.
     virtual void processEvent( ::cppu::OComponentHelper* _pCompImpl,
-                               const ::com::sun::star::lang::EventObject* _pEvt,
-                               const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _rControl,
+                               const css::lang::EventObject* _pEvt,
+                               const css::uno::Reference< css::awt::XControl>& _rControl,
                                bool _bFlag) = 0;
 
 public:
 
     // UNO Anbindung
     DECLARE_UNO3_DEFAULTS(OComponentEventThread, OWeakObject)
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
     virtual ~OComponentEventThread();
 
-    void addEvent( const ::com::sun::star::lang::EventObject* _pEvt, bool bFlag = false );
-    void addEvent( const ::com::sun::star::lang::EventObject* _pEvt, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& rControl,
+    void addEvent( const css::lang::EventObject* _pEvt, bool bFlag = false );
+    void addEvent( const css::lang::EventObject* _pEvt, const css::uno::Reference< css::awt::XControl>& rControl,
                    bool bFlag = false );
 
-    // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::lang::XEventListener
+    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Resolve ambiguity: both OWeakObject and OObject have these memory operators
     void * SAL_CALL operator new( size_t size ) throw() { return osl::Thread::operator new(size); }

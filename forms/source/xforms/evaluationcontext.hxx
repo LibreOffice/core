@@ -41,9 +41,9 @@ public:
     { }
 
     EvaluationContext(
-        const com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>& xContextNode,
-        const com::sun::star::uno::Reference<com::sun::star::xforms::XModel>& xModel,
-        const com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>& xNamespaces,
+        const css::uno::Reference<css::xml::dom::XNode>& xContextNode,
+        const css::uno::Reference<css::xforms::XModel>& xModel,
+        const css::uno::Reference<css::container::XNameContainer>& xNamespaces,
         sal_Int32 nPosition,
         sal_Int32 nSize )
         : mxContextNode( xContextNode ),
@@ -53,9 +53,9 @@ public:
           mnContextSize( nSize )
     { }
 
-    com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> mxContextNode;
-    com::sun::star::uno::Reference<com::sun::star::xforms::XModel> mxModel;
-    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> mxNamespaces;
+    css::uno::Reference<css::xml::dom::XNode> mxContextNode;
+    css::uno::Reference<css::xforms::XModel> mxModel;
+    css::uno::Reference<css::container::XNameContainer> mxNamespaces;
 
     sal_Int32 mnContextPosition;
     sal_Int32 mnContextSize;

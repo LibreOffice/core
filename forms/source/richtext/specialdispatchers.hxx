@@ -29,18 +29,18 @@ namespace frm
     class OSelectAllDispatcher : public ORichTextFeatureDispatcher
     {
     public:
-        OSelectAllDispatcher( EditView& _rView, const ::com::sun::star::util::URL&  _rURL );
+        OSelectAllDispatcher( EditView& _rView, const css::util::URL&  _rURL );
 
     protected:
         virtual ~OSelectAllDispatcher();
 
         // XDispatch
-        virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )
-            throw (::com::sun::star::uno::RuntimeException,
+        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
+            throw (css::uno::RuntimeException,
                    std::exception) SAL_OVERRIDE;
 
         // ORichTextFeatureDispatcher
-        virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
+        virtual css::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
     };
 
     class OParagraphDirectionDispatcher : public OAttributeDispatcher
@@ -49,26 +49,26 @@ namespace frm
         OParagraphDirectionDispatcher(
             EditView&                           _rView,
             AttributeId                         _nAttributeId,
-            const ::com::sun::star::util::URL&  _rURL,
+            const css::util::URL&               _rURL,
             IMultiAttributeDispatcher*          _pMasterDispatcher
         );
 
     protected:
         // ORichTextFeatureDispatcher
-        virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
+        virtual css::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
     };
 
     class OTextDirectionDispatcher : public ORichTextFeatureDispatcher
     {
     public:
-        OTextDirectionDispatcher( EditView& _rView, const ::com::sun::star::util::URL&  _rURL );
+        OTextDirectionDispatcher( EditView& _rView, const css::util::URL&  _rURL );
 
     protected:
         // XDispatch
-        virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ORichTextFeatureDispatcher
-        virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
+        virtual css::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
     };
 
     class OAsianFontLayoutDispatcher : public OParametrizedAttributeDispatcher
@@ -77,14 +77,14 @@ namespace frm
         OAsianFontLayoutDispatcher(
             EditView&                           _rView,
             AttributeId                         _nAttributeId,
-            const ::com::sun::star::util::URL&  _rURL,
+            const css::util::URL&                _rURL,
             IMultiAttributeDispatcher*          _pMasterDispatcher
         );
 
     protected:
         // OParametrizedAttributeDispatcher
         virtual const SfxPoolItem* convertDispatchArgsToItem(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments ) SAL_OVERRIDE;
+            const css::uno::Sequence< css::beans::PropertyValue >& _rArguments ) SAL_OVERRIDE;
     };
 
 

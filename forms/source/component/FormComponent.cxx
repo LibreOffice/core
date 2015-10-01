@@ -237,7 +237,7 @@ Sequence< OUString > SAL_CALL OControl::getSupportedServiceNames_Static() throw(
 }
 
 // XEventListener
-void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException, std::exception)
+void SAL_CALL OControl::disposing(const css::lang::EventObject& _rEvent) throw (RuntimeException, std::exception)
 {
     Reference< XInterface > xAggAsIface;
     query_aggregation(m_xAggregate, xAggAsIface);
@@ -245,7 +245,7 @@ void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEve
     // does the disposing come from the aggregate?
     if (xAggAsIface != Reference< XInterface >(_rEvent.Source, UNO_QUERY))
     {   // no -> forward it
-        Reference<com::sun::star::lang::XEventListener> xListener;
+        Reference<css::lang::XEventListener> xListener;
         if (query_aggregation(m_xAggregate, xListener))
             xListener->disposing(_rEvent);
     }
@@ -618,7 +618,7 @@ Reference< XInterface > SAL_CALL OControlModel::getParent() throw(RuntimeExcepti
     return m_xParent;
 }
 
-void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException, std::exception)
+void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent) throw(css::lang::NoSupportException, RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -702,7 +702,7 @@ Sequence< OUString > SAL_CALL OControlModel::getSupportedServiceNames_Static() t
 }
 
 // XEventListener
-void SAL_CALL OControlModel::disposing(const com::sun::star::lang::EventObject& _rSource) throw (RuntimeException, std::exception)
+void SAL_CALL OControlModel::disposing(const css::lang::EventObject& _rSource) throw (RuntimeException, std::exception)
 {
     // release the parent
     if (_rSource.Source == m_xParent)
@@ -712,7 +712,7 @@ void SAL_CALL OControlModel::disposing(const com::sun::star::lang::EventObject& 
     }
     else
     {
-        Reference<com::sun::star::lang::XEventListener> xEvtLst;
+        Reference<css::lang::XEventListener> xEvtLst;
         if (query_aggregation(m_xAggregate, xEvtLst))
         {
             osl::MutexGuard aGuard(m_aMutex);
@@ -726,7 +726,7 @@ void OControlModel::disposing()
 {
     OPropertySetAggregationHelper::disposing();
 
-    Reference<com::sun::star::lang::XComponent> xComp;
+    Reference<css::lang::XComponent> xComp;
     if (query_aggregation(m_xAggregate, xComp))
         xComp->dispose();
 
@@ -794,7 +794,7 @@ void SAL_CALL OControlModel::write(const Reference<css::io::XObjectOutputStream>
     // EOIN!
 }
 
-void OControlModel::read(const Reference<css::io::XObjectInputStream>& InStream) throw (::com::sun::star::io::IOException, RuntimeException, std::exception)
+void OControlModel::read(const Reference<css::io::XObjectInputStream>& InStream) throw (css::io::IOException, RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -950,7 +950,7 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
 
 sal_Bool OControlModel::convertFastPropertyValue(
                         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
-                        throw (com::sun::star::lang::IllegalArgumentException)
+                        throw (css::lang::IllegalArgumentException)
 {
     bool bModified(false);
     switch (_nHandle)
@@ -1370,7 +1370,7 @@ void OBoundControlModel::disposing()
         m_pAggPropMultiplexer->dispose();
 
     // notify all our listeners
-    com::sun::star::lang::EventObject aEvt( static_cast< XWeak* >( this ) );
+    css::lang::EventObject aEvt( static_cast< XWeak* >( this ) );
     m_aUpdateListeners.disposeAndClear( aEvt );
     m_aResetHelper.disposing();
 
@@ -1466,7 +1466,7 @@ void OBoundControlModel::doFormListening( const bool _bStart )
 }
 
 // XChild
-void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException, std::exception)
+void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxParent) throw(css::lang::NoSupportException, RuntimeException, std::exception)
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -1493,7 +1493,7 @@ void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxPare
 }
 
 // XEventListener
-void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException, std::exception)
+void SAL_CALL OBoundControlModel::disposing(const css::lang::EventObject& _rEvent) throw (RuntimeException, std::exception)
 {
     ControlModelLock aLock( *this );
     if ( _rEvent.Source == getField() )
@@ -1563,9 +1563,9 @@ void SAL_CALL OBoundControlModel::write( const Reference<css::io::XObjectOutputS
 
 void OBoundControlModel::defaultCommonProperties()
 {
-    Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, UNO_QUERY);
+    Reference<css::lang::XComponent> xComp(m_xLabelControl, UNO_QUERY);
     if (xComp.is())
-        xComp->removeEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
+        xComp->removeEventListener(static_cast<css::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
     m_xLabelControl = NULL;
 }
 
@@ -1584,7 +1584,7 @@ void OBoundControlModel::readCommonProperties(const Reference<css::io::XObjectIn
     m_xLabelControl.set(xPersist, css::uno::UNO_QUERY);
     Reference< XComponent > xComp( m_xLabelControl, UNO_QUERY );
     if (xComp.is())
-        xComp->addEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
+        xComp->addEventListener(static_cast<css::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
     // read any other new common properties here
     // skip the remaining bytes
     xMark->jumpToMark(nMark);
@@ -1656,7 +1656,7 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
                                 Any& _rConvertedValue, Any& _rOldValue,
                 sal_Int32 _nHandle,
                                 const Any& _rValue)
-                throw (com::sun::star::lang::IllegalArgumentException)
+                throw (css::lang::IllegalArgumentException)
 {
     bool bModified(false);
     switch (_nHandle)
@@ -1669,7 +1669,7 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
             break;
         case PROPERTY_ID_BOUNDFIELD:
             SAL_WARN("forms.component",  "OBoundControlModel::convertFastPropertyValue: BoundField should be a read-only property !" );
-            throw com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
             if (!_rValue.hasValue())
             {   // property set to void
@@ -1723,11 +1723,11 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             break;
         case PROPERTY_ID_BOUNDFIELD:
             SAL_WARN("forms.component", "OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
-            throw com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
         {
             if ( rValue.hasValue() && ( rValue.getValueTypeClass() != TypeClass_INTERFACE ) )
-                throw com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             Reference< XInterface > xNewValue( rValue, UNO_QUERY );
             if ( !xNewValue.is() )
             {   // set property to "void"
@@ -1744,7 +1744,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             Reference< XChild >         xAsChild        ( xAsPropSet,       UNO_QUERY );
             if ( !xAsChild.is() || !xAsServiceInfo->supportsService( m_aLabelServiceName ) )
             {
-                throw com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             }
 
             // Check if we and the given model have a common ancestor (up to the forms collection)
@@ -1774,13 +1774,13 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             if (xNewTopLevel != xMyTopLevel)
             {
                 // the both objects don't belong to the same forms collection -> not acceptable
-                throw com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             }
 
             m_xLabelControl = xAsPropSet;
-            Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, UNO_QUERY);
+            Reference<css::lang::XComponent> xComp(m_xLabelControl, UNO_QUERY);
             if (xComp.is())
-                xComp->addEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
+                xComp->addEventListener(static_cast<css::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
         }
 
         break;
@@ -1939,7 +1939,7 @@ bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
         if (m_xCursor.is())
         {
             Reference<XColumnsSupplier> xColumnsSupplier(m_xCursor, UNO_QUERY);
-            DBG_ASSERT(xColumnsSupplier.is(), "OBoundControlModel::connectToField : the row set should support the com::sun::star::sdb::ResultSet service !");
+            DBG_ASSERT(xColumnsSupplier.is(), "OBoundControlModel::connectToField : the row set should support the css::sdb::ResultSet service !");
             if (xColumnsSupplier.is())
             {
                 Reference<XNameAccess> xColumns(xColumnsSupplier->getColumns(), UNO_QUERY);
@@ -2093,12 +2093,12 @@ void SAL_CALL OBoundControlModel::loaded( const EventObject& _rEvent ) throw(Run
     impl_connectDatabaseColumn_noNotify( false );
 }
 
-void SAL_CALL OBoundControlModel::unloaded( const com::sun::star::lang::EventObject& /*aEvent*/ ) throw(RuntimeException, std::exception)
+void SAL_CALL OBoundControlModel::unloaded( const css::lang::EventObject& /*aEvent*/ ) throw(RuntimeException, std::exception)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::unloaded: we should never reach this with an external value binding!" );
 }
 
-void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventObject& /*aEvent*/ ) throw(RuntimeException, std::exception)
+void SAL_CALL OBoundControlModel::reloading( const css::lang::EventObject& /*aEvent*/ ) throw(RuntimeException, std::exception)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::reloading: we should never reach this with an external value binding!" );
     if ( hasExternalValueBinding() )
@@ -2107,7 +2107,7 @@ void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventOb
     m_bForwardValueChanges = false;
 }
 
-void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObject& /*aEvent*/) throw(RuntimeException, std::exception)
+void SAL_CALL OBoundControlModel::unloading(const css::lang::EventObject& /*aEvent*/) throw(RuntimeException, std::exception)
 {
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
@@ -2766,7 +2766,7 @@ sal_Bool SAL_CALL OBoundControlModel::isValid(  ) throw (RuntimeException, std::
     return m_bIsCurrentValueValid;
 }
 
-::com::sun::star::uno::Any OBoundControlModel::getCurrentFormComponentValue() const
+css::uno::Any OBoundControlModel::getCurrentFormComponentValue() const
 {
     if ( hasValidator() )
         return translateControlValueToValidatableValue();

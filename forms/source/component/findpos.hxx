@@ -29,7 +29,7 @@ namespace detail {
 
 sal_Int32 findPos(
     const OUString& aStr,
-    const ::com::sun::star::uno::Sequence< OUString >& rList);
+    const css::uno::Sequence< OUString >& rList);
 
 }
 

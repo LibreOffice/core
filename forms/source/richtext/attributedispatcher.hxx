@@ -50,7 +50,7 @@ namespace frm
         OAttributeDispatcher(
             EditView&                           _rView,
             AttributeId                         _nAttributeId,
-            const ::com::sun::star::util::URL&  _rURL,
+            const css::util::URL&               _rURL,
             IMultiAttributeDispatcher*          _pMasterDispatcher
         );
 
@@ -58,7 +58,7 @@ namespace frm
         virtual ~OAttributeDispatcher( );
 
         // XDispatch
-        virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ITextAttributeListener
         virtual void    onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& _rState ) SAL_OVERRIDE;
@@ -67,10 +67,10 @@ namespace frm
         virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify ) SAL_OVERRIDE;
 
         // ORichTextFeatureDispatcher
-        virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
+        virtual css::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
 
         // own overridables
-        virtual void    fillFeatureEventFromAttributeState( ::com::sun::star::frame::FeatureStateEvent& _rEvent, const AttributeState& _rState ) const;
+        virtual void    fillFeatureEventFromAttributeState( css::frame::FeatureStateEvent& _rEvent, const AttributeState& _rState ) const;
     };
 
 

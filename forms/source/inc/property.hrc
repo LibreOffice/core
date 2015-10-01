@@ -204,10 +204,10 @@ namespace frm
 #define PROPERTY_ID_PRIVILEGES          (PROPERTY_ID_START +179)    // INT32
 #define PROPERTY_ID_DETAILFIELDS        (PROPERTY_ID_START +180)    // Sequence< ::rtl::OUString >
 #define PROPERTY_ID_COMMAND             (PROPERTY_ID_START +181)    // String
-#define PROPERTY_ID_COMMANDTYPE         (PROPERTY_ID_START +182)    // INT32 (com::sun::star::sdb::CommandType)
-#define PROPERTY_ID_RESULTSET_CONCURRENCY   (PROPERTY_ID_START +183)// INT32 (com::sun::star::sdbc::ResultSetConcurrency)
+#define PROPERTY_ID_COMMANDTYPE         (PROPERTY_ID_START +182)    // INT32 (css::sdb::CommandType)
+#define PROPERTY_ID_RESULTSET_CONCURRENCY   (PROPERTY_ID_START +183)// INT32 (css::sdbc::ResultSetConcurrency)
 #define PROPERTY_ID_INSERTONLY          (PROPERTY_ID_START +184)    // BOOL
-#define PROPERTY_ID_RESULTSET_TYPE      (PROPERTY_ID_START +185)    // INT32 (com::sun::star::sdbc::ResultSetType)
+#define PROPERTY_ID_RESULTSET_TYPE      (PROPERTY_ID_START +185)    // INT32 (css::sdbc::ResultSetType)
 #define PROPERTY_ID_ESCAPE_PROCESSING   (PROPERTY_ID_START +186)    // BOOL
 #define PROPERTY_ID_APPLYFILTER         (PROPERTY_ID_START +187)    // BOOL
 
@@ -216,7 +216,7 @@ namespace frm
 #define PROPERTY_ID_ISCURRENCY          (PROPERTY_ID_START +190)    // BOOL
 #define PROPERTY_ID_URL                 (PROPERTY_ID_START +192)    // String
 #define PROPERTY_ID_TITLE               (PROPERTY_ID_START +193)    // String
-#define PROPERTY_ID_ACTIVE_CONNECTION   (PROPERTY_ID_START +194)    // com::sun::star::sdbc::XConnection
+#define PROPERTY_ID_ACTIVE_CONNECTION   (PROPERTY_ID_START +194)    // css::sdbc::XConnection
 #define PROPERTY_ID_SCALE               (PROPERTY_ID_START +195)    // INT32
 #define PROPERTY_ID_SORT                (PROPERTY_ID_START +196)    // String
 

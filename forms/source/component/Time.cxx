@@ -137,7 +137,7 @@ OTimeModel::~OTimeModel( )
 IMPLEMENT_DEFAULT_CLONING( OTimeModel )
 
 
-OUString SAL_CALL OTimeModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OTimeModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
 {
     return OUString(FRM_COMPONENT_TIMEFIELD); // old (non-sun) name for compatibility !
 }
@@ -182,7 +182,7 @@ sal_Bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, An
 }
 
 
-void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( ::com::sun::star::uno::Exception, std::exception)
+void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( css::uno::Exception, std::exception)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         setFormatKeyPropertyValue(_rValue);
@@ -304,16 +304,16 @@ Sequence< Type > OTimeModel::getSupportedBindingTypes()
 
 }   // namespace frm
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OTimeModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OTimeModel_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OTimeModel(component));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OTimeControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OTimeControl_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OTimeControl(component));
 }

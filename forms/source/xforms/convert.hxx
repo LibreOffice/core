@@ -34,16 +34,16 @@ namespace xforms
 
 struct TypeLess
 {
-    bool operator()( const com::sun::star::uno::Type& rType1,
-                     const com::sun::star::uno::Type& rType2 ) const
+    bool operator()( const css::uno::Type& rType1,
+                     const css::uno::Type& rType2 ) const
     { return rType1.getTypeName() < rType2.getTypeName(); }
 };
 
 class Convert
 {
-    typedef com::sun::star::uno::Type Type_t;
-    typedef com::sun::star::uno::Sequence<com::sun::star::uno::Type> Types_t;
-    typedef com::sun::star::uno::Any Any_t;
+    typedef css::uno::Type Type_t;
+    typedef css::uno::Sequence<css::uno::Type> Types_t;
+    typedef css::uno::Any Any_t;
 
     // hold conversion objects
     typedef OUString (*fn_toXSD)( const Any_t& );

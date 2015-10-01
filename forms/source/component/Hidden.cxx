@@ -74,7 +74,7 @@ void OHiddenModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 }
 
 
-void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (com::sun::star::uno::Exception, std::exception)
+void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (css::uno::Exception, std::exception)
 {
     switch (_nHandle)
     {
@@ -118,7 +118,7 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OHiddenModel::getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<OUString>{
         FRM_SUN_COMPONENT_HIDDENCONTROL, FRM_SUN_FORMCOMPONENT,
@@ -163,9 +163,9 @@ void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStrea
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_form_OHiddenModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OHiddenModel_get_implementation(css::uno::XComponentContext* component,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OHiddenModel(component));
 }

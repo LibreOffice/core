@@ -47,7 +47,7 @@ namespace xforms
 namespace xforms
 {
 
-class BindingCollection : public NamedCollection<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> >
+class BindingCollection : public NamedCollection<css::uno::Reference<css::beans::XPropertySet> >
 {
     Model* mpModel;
 
@@ -74,7 +74,7 @@ protected:
     }
 };
 
-class SubmissionCollection : public NamedCollection<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> >
+class SubmissionCollection : public NamedCollection<css::uno::Reference<css::beans::XPropertySet> >
 {
     Model* mpModel;
 
@@ -92,22 +92,22 @@ protected:
     virtual void _insert( const T& t ) SAL_OVERRIDE
     {
         OSL_ENSURE( Submission::getSubmission( t ) != NULL, "invalid item?" );
-        Submission::getSubmission( t )->setModel( com::sun::star::uno::Reference<com::sun::star::xforms::XModel>( mpModel ) );
+        Submission::getSubmission( t )->setModel( css::uno::Reference<css::xforms::XModel>( mpModel ) );
     }
 
     virtual void _remove( const T& t ) SAL_OVERRIDE
     {
         OSL_ENSURE( Submission::getSubmission( t ) != NULL, "invalid item?" );
-        Submission::getSubmission( t )->setModel( com::sun::star::uno::Reference<com::sun::star::xforms::XModel>( ) );
+        Submission::getSubmission( t )->setModel( css::uno::Reference<css::xforms::XModel>( ) );
     }
 };
 
-class InstanceCollection : public Collection<com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> >
+class InstanceCollection : public Collection<css::uno::Sequence<css::beans::PropertyValue> >
 {
 public:
     virtual bool isValid( const T& t ) const SAL_OVERRIDE
     {
-        const com::sun::star::beans::PropertyValue* pValues = t.getConstArray();
+        const css::beans::PropertyValue* pValues = t.getConstArray();
         OUString sInstance( "Instance" );
         bool bFound = false;
         for( sal_Int32 i = 0; ( ! bFound ) && ( i < t.getLength() ); i++ )
@@ -129,17 +129,17 @@ sal_Int32 lcl_findInstance( const InstanceCollection*,
 
 // get values from Sequence<PropertyValue> describing an Instance
 void getInstanceData(
-    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&,
+    const css::uno::Sequence<css::beans::PropertyValue>&,
     OUString* pID,
-    com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument>*,
+    css::uno::Reference<css::xml::dom::XDocument>*,
     OUString* pURL,
     bool* pURLOnce );
 
 // set values on Sequence<PropertyValue> for an Instance
 void setInstanceData(
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&,
+    css::uno::Sequence<css::beans::PropertyValue>&,
     const OUString* pID,
-    const com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument>*,
+    const css::uno::Reference<css::xml::dom::XDocument>*,
     const OUString* pURL,
     const bool* pURLOnce );
 

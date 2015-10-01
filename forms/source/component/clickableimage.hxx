@@ -49,9 +49,9 @@ namespace frm
 
     // OClickableImageBaseModel
 
-    typedef ::cppu::ImplHelper3 <   ::com::sun::star::form::XImageProducerSupplier
-                                ,   ::com::sun::star::awt::XImageProducer
-                                ,   ::com::sun::star::form::submission::XSubmissionSupplier
+    typedef ::cppu::ImplHelper3 <   css::form::XImageProducerSupplier
+                                ,   css::awt::XImageProducer
+                                ,   css::form::submission::XSubmissionSupplier
                                 >   OClickableImageBaseModel_Base;
 
     class OClickableImageBaseModel  :public OClickableImageBaseModel_Base
@@ -59,22 +59,22 @@ namespace frm
                                     ,public OPropertyChangeListener
     {
     protected:
-        ::com::sun::star::form::FormButtonType  m_eButtonType; // Type of the button (push, submit, reset)
+        css::form::FormButtonType        m_eButtonType; // Type of the button (push, submit, reset)
         OUString                         m_sTargetURL;         // URL for the URL button
         OUString                         m_sTargetFrame;       // TargetFrame to open
 
         // ImageProducer stuff
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xProducer;
+        css::uno::Reference< css::awt::XImageProducer>    m_xProducer;
         // Store the image in a graphic object to make it accesible via graphic cache using graphic ID.
-        ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > m_xGraphicObject;
-        SfxMedium*                              m_pMedium;     // Download medium
-        ImageProducer*                          m_pProducer;
+        css::uno::Reference< css::graphic::XGraphicObject > m_xGraphicObject;
+        SfxMedium*                          m_pMedium;     // Download medium
+        ImageProducer*                      m_pProducer;
         bool                                m_bDispatchUrlInternal; // property: is not allowed to set : 1
         bool                                m_bDownloading : 1;     // Is a download in progress?
         bool                                m_bProdStarted : 1;
 
         // XSubmission stuff
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmission >
+        css::uno::Reference< css::form::submission::XSubmission >
                                                 m_xSubmissionDelegate;
 
         DECL_LINK_TYPED( DownloadDoneLink, void*, void );
@@ -86,13 +86,13 @@ namespace frm
         void DataAvailable();
         void DownloadDone();
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
+        css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
         inline bool isDispatchUrlInternal() const { return m_bDispatchUrlInternal; }
         inline void     setDispatchUrlInternal(bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
 
     public:
         OClickableImageBaseModel(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory,
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
             const OUString& _rUnoControlModelTypeName,
             const OUString& _rDefault
         );
@@ -101,41 +101,41 @@ namespace frm
 
         // UNO Binding
         DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseModel, OControlModel)
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         // OComponentHelper
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-        // ::com::sun::star::form::XImageProducerSupplier
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer> SAL_CALL getImageProducer() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return m_xProducer; }
+        // css::form::XImageProducerSupplier
+        virtual css::uno::Reference< css::awt::XImageProducer> SAL_CALL getImageProducer() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return m_xProducer; }
 
         // OPropertySetHelper
-        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-            throw(::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue )
+            throw(css::lang::IllegalArgumentException) SAL_OVERRIDE;
 
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
         // OPropertyChangeListener
-        virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent&) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void _propertyChanged(const css::beans::PropertyChangeEvent&) throw(css::uno::RuntimeException) SAL_OVERRIDE;
 
         // XPropertyState
-        virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
+        virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
 
         // XImageProducer
-        virtual void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL startProduction(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& xConsumer ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& xConsumer ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL startProduction(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XSubmissionSupplier
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmission > SAL_CALL getSubmission() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setSubmission( const ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmission >& _submission ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::form::submission::XSubmission > SAL_CALL getSubmission() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setSubmission( const css::uno::Reference< css::form::submission::XSubmission >& _submission ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
         using OControlModel::disposing;
@@ -166,9 +166,9 @@ namespace frm
             :GuardBase( _rModel.getMutex( OClickableImageBaseModel::GuardAccess() ) )
         {
             if ( NULL == _rModel.getImageProducer( OClickableImageBaseModel::GuardAccess() ) )
-                throw ::com::sun::star::lang::DisposedException(
+                throw css::lang::DisposedException(
                     OUString(),
-                    static_cast< ::com::sun::star::form::XImageProducerSupplier* >( &_rModel )
+                    static_cast< css::form::XImageProducerSupplier* >( &_rModel )
                 );
         }
     };
@@ -176,9 +176,9 @@ namespace frm
 
     // OClickableImageBaseControl
 
-    typedef ::cppu::ImplHelper3 <   ::com::sun::star::form::XApproveActionBroadcaster
-                                ,   ::com::sun::star::form::submission::XSubmission
-                                ,   ::com::sun::star::frame::XDispatchProviderInterception
+    typedef ::cppu::ImplHelper3 <   css::form::XApproveActionBroadcaster
+                                ,   css::form::submission::XSubmission
+                                ,   css::frame::XDispatchProviderInterception
                                 >   OClickableImageBaseControl_BASE;
 
     class OClickableImageBaseControl    :public OClickableImageBaseControl_BASE
@@ -198,45 +198,45 @@ namespace frm
         OUString m_aActionCommand;
 
         // XSubmission
-        virtual void SAL_CALL submit(  ) throw (::com::sun::star::util::VetoException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL submitWithInteraction( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler ) throw (::com::sun::star::util::VetoException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL addSubmissionVetoListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmissionVetoListener >& listener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeSubmissionVetoListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmissionVetoListener >& listener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL submit(  ) throw (css::util::VetoException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL submitWithInteraction( const css::uno::Reference< css::task::XInteractionHandler >& aHandler ) throw (css::util::VetoException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addSubmissionVetoListener( const css::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeSubmissionVetoListener( const css::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
         using OControl::disposing;
 
     public:
         OClickableImageBaseControl(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory,
+            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
             const OUString& _aService);
         virtual ~OClickableImageBaseControl();
 
     protected:
         // UNO Binding
         DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseControl, OControl)
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // OComponentHelper
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-        // ::com::sun::star::form::XApproveActionBroadcaster
-        virtual void SAL_CALL addApproveActionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XApproveActionListener>& _rxListener)
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeApproveActionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XApproveActionListener>& _rxListener)
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::form::XApproveActionBroadcaster
+        virtual void SAL_CALL addApproveActionListener(const css::uno::Reference< css::form::XApproveActionListener>& _rxListener)
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeApproveActionListener(const css::uno::Reference< css::form::XApproveActionListener>& _rxListener)
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDispatchProviderInterception
-        virtual void SAL_CALL registerDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL releaseDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        virtual void actionPerformed_Impl( bool bNotifyListener, const ::com::sun::star::awt::MouseEvent& rEvt );
+        virtual void actionPerformed_Impl( bool bNotifyListener, const css::awt::MouseEvent& rEvt );
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > _getTypes() SAL_OVERRIDE;
+        css::uno::Sequence< css::uno::Type > _getTypes() SAL_OVERRIDE;
 
         /** approves the action by calling the approve listeners
             @return <TRUE/> if and only if the action has <em>not</em> been cancelled by a listener
@@ -251,8 +251,8 @@ namespace frm
 
     private:
         void implSubmit(
-            const ::com::sun::star::awt::MouseEvent& _rEvent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler
+            const css::awt::MouseEvent& _rEvent,
+            const css::uno::Reference< css::task::XInteractionHandler >& aHandler
         );
     };
 
@@ -261,13 +261,13 @@ namespace frm
     protected:
 
         // This method was called to duplicate the Event by taking its type into account
-        virtual ::com::sun::star::lang::EventObject* cloneEvent( const ::com::sun::star::lang::EventObject* _pEvt ) const SAL_OVERRIDE;
+        virtual css::lang::EventObject* cloneEvent( const css::lang::EventObject* _pEvt ) const SAL_OVERRIDE;
 
         // Process an Event.
         // The mutex is not locked, pCompImpl stays valid in any case
         virtual void processEvent( ::cppu::OComponentHelper *pCompImpl,
-                                const ::com::sun::star::lang::EventObject*,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>&,
+                                const css::lang::EventObject*,
+                                const css::uno::Reference< css::awt::XControl>&,
                                 bool ) SAL_OVERRIDE;
 
     public:
@@ -275,7 +275,7 @@ namespace frm
             OComponentEventThread( pControl )
         {}
 
-        void addEvent() { ::com::sun::star::lang::EventObject aEvt; OComponentEventThread::addEvent( &aEvt ); }
+        void addEvent() { css::lang::EventObject aEvt; OComponentEventThread::addEvent( &aEvt ); }
 
     protected:
         using OComponentEventThread::addEvent;

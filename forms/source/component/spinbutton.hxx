@@ -47,33 +47,29 @@ namespace frm
         virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertyState
-        virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const SAL_OVERRIDE;
+        virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const SAL_OVERRIDE;
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
         ) const SAL_OVERRIDE;
 
         // OPropertySetHelper
-        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle ) const SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-            throw ( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-            throw ( ::com::sun::star::lang::IllegalArgumentException ) SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue )
+            throw ( css::uno::Exception, std::exception ) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue )
+            throw ( css::lang::IllegalArgumentException ) SAL_OVERRIDE;
 
         // OBoundControlModel
-        virtual ::com::sun::star::uno::Any
-                                translateDbColumnToControlValue( ) SAL_OVERRIDE;
+        virtual css::uno::Any   translateDbColumnToControlValue( ) SAL_OVERRIDE;
         virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any
-                                getDefaultForReset() const SAL_OVERRIDE;
+        virtual css::uno::Any   getDefaultForReset() const SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+        virtual css::uno::Sequence< css::uno::Type >
                                 getSupportedBindingTypes() SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any
-                                translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any
-                                translateControlValueToExternalValue( ) const SAL_OVERRIDE;
+        virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
+        virtual css::uno::Any   translateControlValueToExternalValue( ) const SAL_OVERRIDE;
 
         // XCoponent and related helpers
         virtual void SAL_CALL disposing() SAL_OVERRIDE;

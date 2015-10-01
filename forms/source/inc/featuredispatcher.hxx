@@ -50,7 +50,7 @@ namespace frm
         virtual void dispatchWithArgument(
                 sal_Int16 _nFeatureId,
                 const sal_Char* _pParamName,
-                const ::com::sun::star::uno::Any& _rParamValue
+                const css::uno::Any& _rParamValue
              ) const = 0;
 
         /** checks whether a given feature is enabled

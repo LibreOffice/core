@@ -35,21 +35,21 @@ namespace com { namespace sun { namespace star {
 
 /** implement XEnumeration based on container::XIndexAccess */
 class Enumeration
-    : public cppu::WeakImplHelper<com::sun::star::container::XEnumeration>
+    : public cppu::WeakImplHelper<css::container::XEnumeration>
 {
-    com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> mxContainer;
+    css::uno::Reference<css::container::XIndexAccess> mxContainer;
     sal_Int32 mnIndex;
 
 public:
-    Enumeration( com::sun::star::container::XIndexAccess* );
+    Enumeration( css::container::XIndexAccess* );
 
     virtual sal_Bool SAL_CALL hasMoreElements()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Any SAL_CALL nextElement()
-        throw( com::sun::star::container::NoSuchElementException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL nextElement()
+        throw( css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 #endif
