@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_PACKEDPIXELITERATOR_HXX
-#define INCLUDED_BASEBMP_PACKEDPIXELITERATOR_HXX
+#ifndef INCLUDED_BASEBMP_INC_PACKEDPIXELITERATOR_HXX
+#define INCLUDED_BASEBMP_INC_PACKEDPIXELITERATOR_HXX
 
-#include <basebmp/metafunctions.hxx>
-#include <basebmp/stridedarrayiterator.hxx>
-#include <basebmp/nonstandarditerator.hxx>
-#include <basebmp/accessortraits.hxx>
+#include <metafunctions.hxx>
+#include <stridedarrayiterator.hxx>
+#include <nonstandarditerator.hxx>
+#include <accessortraits.hxx>
 
 #include <vigra/metaprogramming.hxx>
 #include <vigra/diff2d.hxx>
@@ -665,6 +665,6 @@ template< class Accessor,
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_PACKEDPIXELITERATOR_HXX */
+#endif /* INCLUDED_BASEBMP_INC_PACKEDPIXELITERATOR_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

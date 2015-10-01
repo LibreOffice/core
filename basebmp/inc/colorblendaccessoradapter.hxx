@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_COLORBLENDACCESSORADAPTER_HXX
-#define INCLUDED_BASEBMP_COLORBLENDACCESSORADAPTER_HXX
+#ifndef INCLUDED_BASEBMP_INC_COLORBLENDACCESSORADAPTER_HXX
+#define INCLUDED_BASEBMP_INC_COLORBLENDACCESSORADAPTER_HXX
 
-#include <basebmp/colortraits.hxx>
+#include <colortraits.hxx>
 
 namespace basebmp
 {
@@ -137,6 +137,6 @@ public:
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_COLORBLENDACCESSORADAPTER_HXX */
+#endif /* INCLUDED_BASEBMP_INC_COLORBLENDACCESSORADAPTER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

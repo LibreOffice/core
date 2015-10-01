@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_NONSTANDARDITERATOR_HXX
-#define INCLUDED_BASEBMP_NONSTANDARDITERATOR_HXX
+#ifndef INCLUDED_BASEBMP_INC_NONSTANDARDITERATOR_HXX
+#define INCLUDED_BASEBMP_INC_NONSTANDARDITERATOR_HXX
 
 #include <vigra/metaprogramming.hxx>
 
@@ -34,6 +34,6 @@ namespace basebmp
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_NONSTANDARDITERATOR_HXX */
+#endif /* INCLUDED_BASEBMP_INC_NONSTANDARDITERATOR_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

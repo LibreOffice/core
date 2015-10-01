@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_CLIPPEDLINERENDERER_HXX
-#define INCLUDED_BASEBMP_CLIPPEDLINERENDERER_HXX
+#ifndef INCLUDED_BASEBMP_INC_CLIPPEDLINERENDERER_HXX
+#define INCLUDED_BASEBMP_INC_CLIPPEDLINERENDERER_HXX
 
 #include <basegfx/tools/rectcliptools.hxx>
 #include <basegfx/point/b2ipoint.hxx>
@@ -433,6 +433,6 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_CLIPPEDLINERENDERER_HXX */
+#endif /* INCLUDED_BASEBMP_INC_CLIPPEDLINERENDERER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_FILLIMAGE_HXX
-#define INCLUDED_BASEBMP_FILLIMAGE_HXX
+#ifndef INCLUDED_BASEBMP_INC_FILLIMAGE_HXX
+#define INCLUDED_BASEBMP_INC_FILLIMAGE_HXX
 
 #include <vigra/tuple.hxx>
 #include <vigra/iteratortraits.hxx>
@@ -58,6 +58,6 @@ inline void fillImage( vigra::triple<DestIterator,DestIterator,DestAccessor> con
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_FILLIMAGE_HXX */
+#endif /* INCLUDED_BASEBMP_INC_FILLIMAGE_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_ACCESSORFUNCTORS_HXX
-#define INCLUDED_BASEBMP_ACCESSORFUNCTORS_HXX
+#ifndef INCLUDED_BASEBMP_INC_ACCESSORFUNCTORS_HXX
+#define INCLUDED_BASEBMP_INC_ACCESSORFUNCTORS_HXX
 
 #include <osl/diagnose.h>
-#include <basebmp/metafunctions.hxx>
+#include <metafunctions.hxx>
 
 #include <functional>
 
@@ -176,6 +176,6 @@ public:
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_ACCESSORFUNCTORS_HXX */
+#endif /* INCLUDED_BASEBMP_INC_ACCESSORFUNCTORS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

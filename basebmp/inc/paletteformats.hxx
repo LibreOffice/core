@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_PALETTEFORMATS_HXX
-#define INCLUDED_BASEBMP_PALETTEFORMATS_HXX
+#ifndef INCLUDED_BASEBMP_INC_PALETTEFORMATS_HXX
+#define INCLUDED_BASEBMP_INC_PALETTEFORMATS_HXX
 
 #include <basebmp/color.hxx>
-#include <basebmp/colortraits.hxx>
-#include <basebmp/accessor.hxx>
-#include <basebmp/pixeliterator.hxx>
-#include <basebmp/packedpixeliterator.hxx>
-#include <basebmp/pixelformatadapters.hxx>
-#include <basebmp/paletteimageaccessor.hxx>
-#include <basebmp/metafunctions.hxx>
+#include <colortraits.hxx>
+#include <accessor.hxx>
+#include <pixeliterator.hxx>
+#include <packedpixeliterator.hxx>
+#include <pixelformatadapters.hxx>
+#include <paletteimageaccessor.hxx>
+#include <metafunctions.hxx>
 
 #include <vigra/numerictraits.hxx>
 #include <vigra/metaprogramming.hxx>
@@ -134,6 +134,6 @@ typedef PixelFormatTraitsTemplate_Palette<
 
 } // namespace basebmp
 
-#endif // INCLUDED_BASEBMP_PALETTEFORMATS_HXX
+#endif // INCLUDED_BASEBMP_INC_PALETTEFORMATS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

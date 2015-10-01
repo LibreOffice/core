@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_PIXELITERATOR_HXX
-#define INCLUDED_BASEBMP_PIXELITERATOR_HXX
+#ifndef INCLUDED_BASEBMP_INC_PIXELITERATOR_HXX
+#define INCLUDED_BASEBMP_INC_PIXELITERATOR_HXX
 
-#include <basebmp/metafunctions.hxx>
-#include <basebmp/stridedarrayiterator.hxx>
+#include <metafunctions.hxx>
+#include <stridedarrayiterator.hxx>
 
 #include <vigra/metaprogramming.hxx>
 #include <vigra/diff2d.hxx>
@@ -344,6 +344,6 @@ public:
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_PIXELITERATOR_HXX */
+#endif /* INCLUDED_BASEBMP_INC_PIXELITERATOR_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

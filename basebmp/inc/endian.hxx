@@ -17,33 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_ITERATORTRAITS_HXX
-#define INCLUDED_BASEBMP_ITERATORTRAITS_HXX
+#ifndef INCLUDED_BASEBMP_INC_ENDIAN_HXX
+#define INCLUDED_BASEBMP_INC_ENDIAN_HXX
 
-#include <basebmp/accessor.hxx>
-#include <basebmp/nonstandarditerator.hxx>
+#include <osl/endian.h>
 
 namespace basebmp
 {
 
-template< class Iterator > struct IteratorTraits
-{
-    /// VigraTrueType, if iterator does not provide *operator()/operator[] methods
-    typedef typename vigra::IsDerivedFrom<Iterator,NonStandardIterator>::result
-            isNonStandardIterator;
+/// Swap the order of bytes for the given POD type
+template< typename T > inline T byteSwap( T );
 
-    /// Retrieve default accessor for this iterator (and given value type)
-    template< typename ValueType > struct defaultAccessor : public
-        // select according to non-standardness of iterator type
-        vigra::If< isNonStandardIterator,
-            NonStandardAccessor< ValueType >,
-            StandardAccessor< ValueType > >
-    {};
+#define BASEBMP_BYTE_SWAP(Type,SwapFunc) \
+   template<> inline Type byteSwap<Type>( Type v ) \
+   { \
+       return SwapFunc(v); \
+   }
 
-};
+// byteSwap<T> shall fail for any type T not in the list below
+BASEBMP_BYTE_SWAP(sal_Int8,)
+BASEBMP_BYTE_SWAP(sal_uInt8,)
+BASEBMP_BYTE_SWAP(sal_Int16,OSL_SWAPWORD)
+BASEBMP_BYTE_SWAP(sal_uInt16,OSL_SWAPWORD)
+BASEBMP_BYTE_SWAP(sal_Int32,OSL_SWAPDWORD)
+BASEBMP_BYTE_SWAP(sal_uInt32,OSL_SWAPDWORD)
+
+#undef BASEBMP_BYTE_SWAP
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_ITERATORTRAITS_HXX */
+#endif /* INCLUDED_BASEBMP_INC_ENDIAN_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
