@@ -34,6 +34,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <editeng/outliner.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace sw { namespace sidebarwindows {
 
@@ -166,9 +167,7 @@ SidebarTextControlAccessibleContext::SidebarTextControlAccessibleContext( Sideba
     , mpAccessibleTextHelper( 0 )
     , maMutex()
 {
-    ::std::unique_ptr<SvxEditSource> pEditSource(
-                        new SidebarTextEditSource( mrSidebarTextControl ) );
-    mpAccessibleTextHelper = new ::accessibility::AccessibleTextHelper( std::move(pEditSource) );
+    mpAccessibleTextHelper = new ::accessibility::AccessibleTextHelper( o3tl::make_unique<SidebarTextEditSource>(mrSidebarTextControl) );
     mpAccessibleTextHelper->SetEventSource( mrSidebarTextControl.GetWindowPeer() );
 }
 

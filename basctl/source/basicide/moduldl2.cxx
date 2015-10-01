@@ -254,9 +254,7 @@ void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
         for ( sal_uInt16 nCol = 1; nCol < nCount; ++nCol )
         {
             SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nCol ));
-            std::unique_ptr<LibLBoxString> pStr(
-                   new LibLBoxString( pEntry, 0, rCol.GetText()));
-            pEntry->ReplaceItem(std::move(pStr), nCol);
+            pEntry->ReplaceItem(o3tl::make_unique<LibLBoxString>( pEntry, 0, rCol.GetText() ), nCol);
         }
     }
 }
