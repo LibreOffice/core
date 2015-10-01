@@ -174,7 +174,7 @@ xray ThisComponent.DrawPage.getByIndex(0).BoundRect
 DECLARE_WW8IMPORT_TEST(testN757905, "n757905.doc")
 {
     // The problem was that the paragraph had only a single fly
-    // (as-character-anchored), and the height of that was smallar than the
+    // (as-character-anchored), and the height of that was smaller than the
     // paragraph height. When in Word-compat mode, we should take the max of
     // the two, not just the height of the fly.
 

@@ -1509,7 +1509,7 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     // That can also be a Fly in a Fly in the Header.
     // Is also used by sw3io, to determine if a Redline object is
     // in the Header or Footer.
-    // Because Redlines are also attached to Start and EndNoden,
+    // Because Redlines are also attached to Start and EndNode,
     // the Index must not necessarily be from a ContentNode.
     SwNode* pNd = &rIdx.GetNode();
     const SwNode* pFlyNd = pNd->FindFlyStartNode();
