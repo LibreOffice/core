@@ -49,6 +49,7 @@
 #include <navicont.hxx>
 #include <edtwin.hxx>
 #include <uitool.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <cmdid.h>
 #include <helpid.h>
@@ -1232,9 +1233,7 @@ void SwGlobalTree::InitEntry(SvTreeListEntry* pEntry,
     const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
-    std::unique_ptr<SwLBoxString> pStr(
-        new SwLBoxString(pEntry, 0, rCol.GetText()));
-    pEntry->ReplaceItem(std::move(pStr), nColToHilite);
+    pEntry->ReplaceItem(o3tl::make_unique<SwLBoxString>(pEntry, 0, rCol.GetText()), nColToHilite);
 }
 
 void SwLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,

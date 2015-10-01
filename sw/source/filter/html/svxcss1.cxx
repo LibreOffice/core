@@ -48,6 +48,7 @@
 #include <svtools/svparser.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include "css1kywd.hxx"
 #include "svxcss1.hxx"
@@ -928,8 +929,7 @@ void SvxCSS1Parser::InsertMapEntry( const OUString& rKey,
     CSS1Map::iterator itr = rMap.find(rKey);
     if (itr == rMap.end())
     {
-        std::unique_ptr<SvxCSS1MapEntry> p(new SvxCSS1MapEntry(rKey, rItemSet, rProp));
-        rMap.insert(std::make_pair(rKey, std::move(p)));
+        rMap.insert(std::make_pair(rKey, o3tl::make_unique<SvxCSS1MapEntry>(rKey, rItemSet, rProp)));
     }
     else
     {

@@ -46,6 +46,7 @@
 #include <fmtfsize.hxx>
 #include <list>
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
                     SwTable& rDstTable, SwTableBox* pDstBox,
@@ -213,8 +214,7 @@ namespace
                         SwTableLine *pLine2 = rLines[ ++nEndLn ];
                         SwTableBox *pTmpBox = pLine2->GetTabBoxes()[0];
                         _FndLine *pInsLine = new _FndLine( pLine2, &rFndBox );
-                        std::unique_ptr<_FndBox> pFndBox(new _FndBox(pTmpBox, pInsLine));
-                        pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), std::move(pFndBox));
+                        pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), o3tl::make_unique<_FndBox>(pTmpBox, pInsLine));
                         rFndLines.push_back(std::unique_ptr<_FndLine>(pInsLine));
                     }
                 }
