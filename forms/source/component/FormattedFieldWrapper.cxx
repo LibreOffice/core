@@ -316,7 +316,7 @@ void OFormattedFieldWrapper::ensureAggregate()
         css::uno::Reference<css::uno::XInterface>  xEditModel = m_xContext->getServiceManager()->createInstanceWithContext(FRM_SUN_COMPONENT_TEXTFIELD, m_xContext);
         if (!xEditModel.is())
         {
-            // arghhh ... instantiate it directly ... it's dirty, but we really need this aggregate
+            // arghhh... instantiate it directly... it's dirty, but we really need this aggregate
             OEditModel* pModel = new OEditModel(m_xContext);
             xEditModel.set(static_cast<XWeak*>(pModel), css::uno::UNO_QUERY);
         }
