@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_a02f60f5",
+        "filename": "basic/source/classes/sbxmod.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2015-10-01T14:15:47Z",
+      "side": 1,
+      "message": "Is this supposed to be here ^^^ or is it stray debugging stuff ?",
+      "revId": "3552dbf896fa04c041f892f1df7e2cb6a5752fb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
