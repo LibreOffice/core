@@ -74,9 +74,9 @@ namespace sdr
         {
             // #i102380# The graphic is swapped out. To let that have an effect ist is necessary to
             // delete copies of the GraphicObject which are not swapped out and have no SwapHandler set
-            // (this is what happnes when the GraphicObject gets copied to a SdrGrafPrimitive2D). This
+            // (this is what happens when the GraphicObject gets copied to a SdrGrafPrimitive2D). This
             // is best achieved for the VC by clearing the local decomposition cache. It would be possible
-            // to also do this for the VOC cache, but that VOCs exist exactly expresss that the object
+            // to also do this for the VOC cache, but that VOCs exist exactly express that the object
             // gets visualised, so this would be wrong.
             flushViewIndependentPrimitive2DSequence();
         }
@@ -380,7 +380,7 @@ namespace sdr
             {
                 // #i102380# The graphic is swapped out. To not force a swap-in here, there is a mechanism
                 // which shows a swapped-out-visualisation (which gets created here now) and an asynchronious
-                // visual update mechanism for swapped-out grapgics when they were loaded (see AsynchGraphicLoadingEvent
+                // visual update mechanism for swapped-out graphics when they were loaded (see AsynchGraphicLoadingEvent
                 // and ViewObjectContactOfGraphic implementation). Not forcing the swap-in here allows faster
                 // (non-blocking) processing here and thus in the effect e.g. fast scrolling through pages
                 xRetval = createVIP2DSForDraft(aObjectMatrix, aAttribute);

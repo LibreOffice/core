@@ -203,7 +203,7 @@ namespace svxform
             if (IsEditingActive())
                 CancelTextEditing();
 
-            m_bDragDataDirty = true;    // as a precaution, although i dont drag
+            m_bDragDataDirty = true;    // as a precaution, although I don't drag
         }
         GetNavModel()->UpdateContent( pFormShell );
 
@@ -341,7 +341,7 @@ namespace svxform
                 // update my selection data
                 CollectSelectionData(SDI_ALL);
 
-                // if there is at least one no-root-entry and the root selected, i deselect root
+                // if there is at least one no-root-entry and the root selected, I deselect root
                 if ( (m_arrCurrentSelection.size() > 1) && m_bRootSelected )
                 {
                     Select( m_pRootEntry, false );
@@ -351,7 +351,7 @@ namespace svxform
 
 
                 DBG_ASSERT( (m_arrCurrentSelection.size() > 0) || m_bRootSelected, "no entries selected" );
-                    // shouldn't happen, because i would have selected one during call to IsSelected,
+                    // shouldn't happen, because I would have selected one during call to IsSelected,
                     // if there was none before
 
 
@@ -382,7 +382,7 @@ namespace svxform
                     aContextMenu.EnableItem( SID_COPY, !m_bRootSelected && implAllowExchange( DND_ACTION_COPY ) );
                     aContextMenu.EnableItem( SID_PASTE, implAcceptPaste( ) );
 
-                    // TabDialog, if exaclty one form
+                    // TabDialog, if exactly one form
                     aContextMenu.EnableItem( SID_FM_TAB_DIALOG, bSingleSelection && m_nFormsSelected );
 
                     // in XML forms, we don't allow for the properties of a form
@@ -597,7 +597,7 @@ namespace svxform
                 NULL, false, 0, NULL );
         }
         else if (!m_bMarkingObjects && dynamic_cast<const FmNavRequestSelectHint*>(&rHint))
-        {   // if m_bMarkingObjects is sal_True, i mark objects myself
+        {   // if m_bMarkingObjects is sal_True, I mark objects myself
             // and because of the synchronous mechanism, its exactly the hint,
             // which was triggered by myself, and thus can be ignored
             FmNavRequestSelectHint* pershHint = const_cast<FmNavRequestSelectHint*>(static_cast<const FmNavRequestSelectHint*>(&rHint));
@@ -605,8 +605,8 @@ namespace svxform
             SynchronizeSelection(arredToSelect);
 
             if (pershHint->IsMixedSelection())
-                // in this case i deselect all, although the view had a mixed selection
-                // during next selection, i must adapt the navigator to the view
+                // in this case I deselect all, although the view had a mixed selection
+                // during next selection, I must adapt the navigator to the view
                 m_bPrevSelectionMixed = true;
         }
     }
@@ -659,18 +659,18 @@ namespace svxform
             return;
 
         // delete entry from TreeListBox
-        // i'm not allowed, to treat the selection, which i trigger:
+        // I'm not allowed, to treat the selection, which I trigger:
         // select changes the MarkList of the view, if somebody else does this at the same time
         // and removes a selection, we get a problem
         // e.g. Group controls with open navigator
         LockSelectionHandling();
 
-        // little problem : i remember the selected data, but if somebody deletes one of these entries,
-        // i get inconsistent ... this would be bad
+        // little problem: I remember the selected data, but if somebody deletes one of these entries,
+        // I get inconsistent... this would be bad
         Select(pEntry, false);
 
         // selection can be modified during deletion,
-        // but because i disabled SelectionHandling, i have to do it later
+        // but because I disabled SelectionHandling, I have to do it later
         sal_uIntPtr nExpectedSelectionCount = GetSelectionCount();
 
         if( pEntry )
@@ -679,7 +679,7 @@ namespace svxform
         if (nExpectedSelectionCount != GetSelectionCount())
             SynchronizeSelection();
 
-        // by default i treat the selection of course
+        // by default I treat the selection of course
         UnlockSelectionHandling();
     }
 
@@ -780,11 +780,11 @@ namespace svxform
         if ( m_bDragDataDirty || !bHasDefControlFormat )
         {
             if (!bHasControlPathFormat)
-                // i am in the shell/page, which has the contorls, but i have no format,
+                // I am in the shell/page, which has the controls, but I have no format,
                 // which survived the shell change (SVX_FM_CONTROLS_AS_PATH)
                 return DND_ACTION_NONE;
 
-            // i must recreate the list of the ExchangeObjects, because the shell was changed during dragging
+            // I must recreate the list of the ExchangeObjects, because the shell was changed during dragging
             // (there are SvLBoxEntries in it, and we lost them during change)
             m_aControlExchange->buildListFromPath(this, m_pRootEntry);
             m_bDragDataDirty = false;
@@ -895,7 +895,7 @@ namespace svxform
             {
                 // restart counting
                 m_aTimerCounter = DROP_ACTION_TIMER_INITIAL_TICKS;
-                // remember pos, because i get AcceptDrops, although mouse hasn't moved
+                // remember pos, because I get AcceptDrops, although mouse hasn't moved
                 m_aTimerTriggered = aDropPos;
                 // start Timer
                 if (!m_aDropActionTimer.IsActive()) // exist Timer?
@@ -939,8 +939,8 @@ namespace svxform
         bool bForeignCollection = _rData.getFormsRoot().get() != GetNavModel()->GetFormPage()->GetForms().get();
         DBG_ASSERT(!bForeignCollection || bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: invalid format (AcceptDrop shouldn't have let this pass) !");
         DBG_ASSERT(bForeignCollection || !m_bDragDataDirty, "NavigatorTree::implExecuteDataTransfer: invalid state (shell changed since last exchange resync) !");
-            // this should be done in AcceptDrop : the list of conrtols is created in _rData
-            // and m_bDragDataDirty is reseted
+            // this should be done in AcceptDrop: the list of controls is created in _rData
+            // and m_bDragDataDirty is resetted
 #endif
 
         if ( DND_ACTION_COPY == _nAction )
@@ -1718,7 +1718,7 @@ namespace svxform
 
             // because deletion is done by the view, and i build on its MarkList,
             // but normally only direct controls, no indirect ones, are marked in a marked form,
-            // i have to do it later
+            // I have to do it later
             if (bIsForm)
                 MarkViewObj(static_cast<FmFormData*>(pCurrent), true, true);     // second sal_True means "deep"
 
@@ -1790,7 +1790,7 @@ namespace svxform
                 continue;
 
             // one remaining subtile problem, before deleting it : if it's a form and the shell
-            // knows it as CurrentObject, i have to tell it something else
+            // knows it as CurrentObject, I have to tell it something else
             if (dynamic_cast<const FmFormData*>( pCurrent) !=  nullptr)
             {
                 Reference< XForm >  xCurrentForm( static_cast< FmFormData* >( pCurrent )->GetFormIface() );
@@ -1996,7 +1996,7 @@ namespace svxform
             }
         }
 
-        // if PropertyBrowser is open, i have to adopt it according to my selection
+        // if PropertyBrowser is open, I have to adopt it according to my selection
         // (Not as MarkList of view : if a form is selected, all belonging controls are selected in the view
         // but of course i want to see the form-properties
         ShowSelectionProperties();

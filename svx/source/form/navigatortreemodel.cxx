@@ -557,7 +557,7 @@ namespace svxform
                     Insert(pSubFormData, CONTAINER_APPEND);
 
 
-                    // new branch, if SubForm contains Subfroms itself
+                    // new branch, if SubForm contains Subforms itself
                     FillBranch(pSubFormData);
                 }
                 else

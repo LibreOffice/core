@@ -38,7 +38,7 @@ using namespace com::sun::star;
 namespace
 {
     // Helper method to recursively travel the DrawHierarchy for 3D objects contained in
-    // the 2D Scene. This will chreate all VOCs for the currenbt OC which are needed
+    // the 2D Scene. This will create all VOCs for the current OC which are needed
     // for ActionChanged() functionality
     void impInternalSubHierarchyTraveller(const sdr::contact::ViewObjectContact& rVOC)
     {
