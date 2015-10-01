@@ -2556,9 +2556,9 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
             if ( pBasic )
             {
                 SbModule* pModule = pBasic->FindModule( aModuleName );
-                if ( pModule )
+                SbMethod* pMethod = pModule ? static_cast<SbMethod*>(pModule->GetMethods()->Find(aMacroName, SbxCLASS_METHOD)) : nullptr;
+                if (pMethod)
                 {
-                    SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ));
                     aOUSource = pModule->GetSource32();
                     sal_uInt16 nStart, nEnd;
                     pMethod->GetLineRange( nStart, nEnd );
