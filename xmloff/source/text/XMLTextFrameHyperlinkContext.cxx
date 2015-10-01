@@ -138,7 +138,7 @@ TextContentAnchorType XMLTextFrameHyperlinkContext::GetAnchorType() const
     if( xFrameContext.Is() )
     {
         SvXMLImportContext *pContext = &xFrameContext;
-        return dynamic_cast<XMLTextFrameContext*>( pContext ) ->GetAnchorType( );
+        return dynamic_cast<XMLTextFrameContext&>(*pContext).GetAnchorType();
     }
     else
         return eDefaultAnchorType;
