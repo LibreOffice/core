@@ -105,7 +105,7 @@ public:
                     or if you set the format to 'a', then the output would be:
                         a item1
                         b item2
-                    some sepecial, if you set the format to a sequence,ie. "一,二,三,..."
+                    some special, if you set the format to a sequence,ie. "一,二,三,..."
                     the output would be:
                         一 item1
                         二 item2

@@ -93,9 +93,9 @@ public:
     virtual enumXFStyle GetStyleFamily() = 0;
 
     /**
-     * @descr:  Compare wheather two style object are the same.Used only by XFStyleManager.
+     * @descr:  Compare whatever two style object are the same. Used only by XFStyleManager.
      * @param:  pStyle the style to be compared.
-     * @return: return sal_True if equals,else sal_False.
+     * @return: return sal_True if equals, else sal_False.
      */
     virtual bool    Equal(IXFStyle *pStyle) = 0;
 

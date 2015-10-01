@@ -77,7 +77,7 @@ sal_uLong   LtcUtBenValueStream::GetData( void* pData, sal_uLong nSize )
     return AmtRead;
 }
  /**
-*   Value stream write function, not suppoted now
+*   Value stream write function, not supported now
 *   @param  pointer of saved buffer
 *   @param  size of buffer to be written
 *   @return number of bytes written into value stream
