@@ -285,32 +285,8 @@ void CAccActionBase::GetkeyBindingStrByXkeyBinding( const Sequence< KeyStroke > 
     {
         KeyStroke stroke = keySet[iIndex];
         OLECHAR wString[64] = {NULL};
-        if(iIndex>0)
-            wcscat( wString, OLESTR("  ") );
-        if((stroke.Modifiers & MODIFIER_SHIFT) == MODIFIER_SHIFT)
-            wcscat( wString, OLESTR("Shift+") );
-        if((stroke.Modifiers & MODIFIER_CTRL) == MODIFIER_CTRL)
-            wcscat( wString, OLESTR("Ctrl+") );
-        if((stroke.Modifiers & MODIFIER_ALT) == MODIFIER_ALT)
-            wcscat( wString, OLESTR("Alt+") );
-        if(stroke.KeyCode)
-        {
-            OLECHAR* pChar = getOLECHARFromKeyCode(stroke.KeyCode);
-            if(pChar != NULL)
-                wcscat( wString, pChar );
-            else if (stroke.KeyCode <= 255)
-            {
-                OLECHAR pChar[4] = {NULL};
-                swprintf( pChar, L"%c", stroke.KeyCode);
-                wcscat( wString, pChar);
-            }
-            else
-            {
-                OLECHAR pChar[4] = {NULL};
-                swprintf( pChar, L"%d", stroke.KeyCode);
-                wcscat( wString, pChar);
-            }
-        }
+        wcscat(wString, OLESTR("\n"));
+        wcscat(wString, &stroke.KeyChar);
 
         wcscat( pString, wString);
     }
