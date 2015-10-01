@@ -104,7 +104,7 @@ Menu RID_MENU_SPELL
             SubMenu = Menu
             {
             };
-            Text [ en-US ] = "AutoCorrect ~to" ;
+            Text [ en-US ] = "AutoCorrect ~To" ;
         };
         MenuItem
         {
