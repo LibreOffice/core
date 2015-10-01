@@ -11,6 +11,11 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,basebmp))
 
 $(eval $(call gb_StaticLibrary_use_sdk_api,basebmp))
 
+$(eval $(call gb_StaticLibrary_set_include,basebmp,\
+	-I$(SRCDIR)/basebmp/inc \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_StaticLibrary_use_externals,basebmp,\
 	boost_headers \
 	vigra_headers \
