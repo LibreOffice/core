@@ -857,7 +857,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                     rToken = OString(OOO_STRING_SVTOOLS_HTML_parabreak);
                 break;
             case RES_POOLCOLL_HTML_HR:
-                // do not exort HR !
+                // do not export HR !
                 bStop = (nDeep==0);
                 break;
             case RES_POOLCOLL_FOOTNOTE:

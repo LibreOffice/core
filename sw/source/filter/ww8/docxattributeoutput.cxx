@@ -6463,7 +6463,7 @@ void DocxAttributeOutput::CharIdctHint( const SfxPoolItem& )
 
 void DocxAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
 {
-    // Not rorated or we the rotation already handled?
+    // Not rotated or we the rotation already handled?
     if ( !rRotate.GetValue() || m_bBtLr || m_rExport.SdrExporter().getFrameBtLr())
         return;
 

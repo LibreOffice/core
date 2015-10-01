@@ -586,7 +586,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_MULTICOL_ON );
 
-    //.is the multicol elememt contained in a container? That may be the
+    //.is the multicol element contained in a container? That may be the
     // case for 5.0 documents.
     bool bInCntnr = false;
     auto i = aContexts.size();

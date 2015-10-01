@@ -2277,12 +2277,12 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                             ? pTextNd->GetSwpHints().Count() : 0;
     if( nCntAttr )
     {
-        // These are the end position of all script depenent hints.
+        // These are the end position of all script dependent hints.
         // If we find a hint that starts before the current end position,
         // we have to set it. If we find a hint that start behind or at
-        // that position, we have to take the hint's value into account.
-        // If it is equal to the style, or in fact the paragarph's value
-        // for that hint, the hint is removed. Otherwise it's end position
+        // that position, we have to take the hint value into account.
+        // If it is equal to the style, or in fact the paragarph value
+        // for that hint, the hint is removed. Otherwise its end position
         // is remembered.
         sal_Int32 aEndPos[15] =
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -5194,7 +5194,7 @@ void SwHTMLParser::InsertLineBreak()
         // muss anschliessen ein neuer Absatz aufgemacht werden
         // MIB 21.02.97: Eigentlich muesste man hier den unteren Absatz-
         // Absatnd auf 0 drehen. Das geht aber bei sowas wie <BR ..><P>
-        // schief (>Netacpe). Deshalb lassen wir das erstmal.
+        // schief (>Netscape). Deshalb lassen wir das erstmal.
         AppendTextNode( AM_NOSPACE );
     }
     if( bBreakItem && SVX_BREAK_PAGE_BEFORE==aBreakItem.GetBreak() )
