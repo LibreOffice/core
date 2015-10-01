@@ -988,10 +988,9 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
         StartOnlineSpelling();
     }
     else if (nCommand == SpellCallbackCommand::STARTSPELLDLG)
-    {
-        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SPELL_DIALOG,
-            SfxCallMode::ASYNCHRON );
-    }
+        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
+    else if (nCommand == SpellCallbackCommand::AUTOCORRECT_OPTIONS)
+        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
 }
 
 // Replace the unambiguous names of the default layers by their names in the

@@ -762,7 +762,6 @@ bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWron
 
 void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack )
 {
-
     Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
     aPos = pImpEditView->GetDocPos( aPos );
     EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aPos, false);
@@ -988,6 +987,11 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
                 SpellCallbackInfo aInf( SpellCallbackCommand::STARTSPELLDLG, OUString() );
                 pCallBack->Call( aInf );
             }
+        }
+        else if ( nId == MN_AUTO_CORRECT_DLG && pCallBack)
+        {
+            SpellCallbackInfo aInf( SpellCallbackCommand::AUTOCORRECT_OPTIONS, OUString() );
+            pCallBack->Call( aInf );
         }
         else if ( nId >= MN_DICTSTART || nId == MN_INSERT_SINGLE )
         {

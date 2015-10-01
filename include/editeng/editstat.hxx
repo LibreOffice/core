@@ -136,11 +136,12 @@ public:
 
 enum class SpellCallbackCommand
 {
-    IGNOREWORD         = 0x0001,
-    STARTSPELLDLG      = 0x0002,
-    ADDTODICTIONARY    = 0x0003,
-    WORDLANGUAGE       = 0x0004,
-    PARALANGUAGE       = 0x0005,
+    IGNOREWORD          = 0x0001,
+    STARTSPELLDLG       = 0x0002,
+    ADDTODICTIONARY     = 0x0003,
+    WORDLANGUAGE        = 0x0004,
+    PARALANGUAGE        = 0x0005,
+    AUTOCORRECT_OPTIONS = 0x0006,
 };
 
 struct SpellCallbackInfo

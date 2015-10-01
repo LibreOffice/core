@@ -729,6 +729,8 @@ IMPL_LINK_TYPED(SwView, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
 {
     if (rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG)
         GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
+    else if (rInfo.nCommand == SpellCallbackCommand::AUTOCORRECT_OPTIONS)
+        GetViewFrame()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
 }
 
 bool SwView::ExecDrwTextSpellPopup(const Point& rPt)

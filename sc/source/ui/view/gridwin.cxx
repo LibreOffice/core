@@ -587,6 +587,8 @@ IMPL_LINK_TYPED( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo&, rInfo, void
 {
     if( rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG )
         pViewData->GetDispatcher().Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
+    else if (rInfo.nCommand == SpellCallbackCommand::AUTOCORRECT_OPTIONS)
+        pViewData->GetDispatcher().Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
 }
 
 void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, bool bHasSelection, const OUString& rStr )
