@@ -37,6 +37,7 @@
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <comphelper/oslfile2streamwrap.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -1205,8 +1206,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImport602(const OUString &rURL
     osl::File aInputFile(rURL);
     aInputFile.open(osl_File_OpenFlag_Read);
     css::uno::Reference<io::XInputStream> xStream(new comphelper::OSLInputStreamWrapper(aInputFile));
-    T602ImportFilter::T602ImportFilter aImport(xStream);
-    return aImport.test();
+    rtl::Reference<T602ImportFilter::T602ImportFilter> aImport(
+        new T602ImportFilter::T602ImportFilter(xStream));
+    return aImport->test();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
