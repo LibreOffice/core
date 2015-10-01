@@ -2492,7 +2492,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int nFallba
     const ImplWinFontData& rFontFace = *mpWinFontData[ nFallbackLevel ];
     ImplWinFontEntry& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
-    bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled();
+    bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
 
     if (!bUspInited)
         InitUSP();
