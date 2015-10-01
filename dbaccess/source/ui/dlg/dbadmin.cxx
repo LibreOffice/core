@@ -109,8 +109,8 @@ void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     impl_resetPages( xDatasource );
 
-    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( getOutputSet()->GetItem(DSID_TYPECOLLECTION) );
-    ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
+    const DbuTypeCollectionItem& rCollectionItem = dynamic_cast<const DbuTypeCollectionItem&>(*getOutputSet()->GetItem(DSID_TYPECOLLECTION));
+    ::dbaccess::ODsnTypeCollection* pCollection = rCollectionItem.getCollection();
     ::dbaccess::DATASOURCE_TYPE eType = pCollection->determineType(getDatasourceType(*getOutputSet()));
 
     // and insert the new ones
@@ -200,8 +200,8 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
 
     // special case: MySQL Native does not have the generic "advanced" page
 
-    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( getOutputSet()->GetItem(DSID_TYPECOLLECTION) );
-    ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
+    const DbuTypeCollectionItem& rCollectionItem = dynamic_cast<const DbuTypeCollectionItem&>(*getOutputSet()->GetItem(DSID_TYPECOLLECTION));
+    ::dbaccess::ODsnTypeCollection* pCollection = rCollectionItem.getCollection();
     if ( pCollection->determineType(getDatasourceType( *pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
         AddTabPage( PAGE_MYSQL_NATIVE, OUString( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, NULL );
