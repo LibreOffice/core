@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_6000a8ab",
+        "filename": "nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/sco/SCAgent.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-10-01T11:45:22Z",
+      "side": 1,
+      "message": "You’re fixing typos, not introducing them. It should be “evaluate”.",
+      "revId": "ecf5384f754c2140bf14579d97585e634e1a14a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
