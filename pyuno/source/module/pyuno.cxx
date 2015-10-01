@@ -22,8 +22,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include "pyuno_impl.hxx"
-
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -44,6 +42,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+
+#include "pyuno_impl.hxx"
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
