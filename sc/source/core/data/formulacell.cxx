@@ -1485,7 +1485,7 @@ bool ScFormulaCell::MarkUsedExternalReferences()
     return pCode && pDocument->MarkUsedExternalReferences(*pCode, aPos);
 }
 
-void ScFormulaCell::Interpret()
+void ScFormulaCell::Interpret(bool bUseOpenCL)
 {
 #if DEBUG_CALCULATION
     static bool bDebugCalculationInit = true;
@@ -1541,7 +1541,7 @@ void ScFormulaCell::Interpret()
     }
     else
     {
-        if ( ! InterpretFormulaGroup() )
+        if ( !bUseOpenCL || !InterpretFormulaGroup() )
             InterpretTail( SCITP_NORMAL);
     }
 
@@ -2435,7 +2435,7 @@ bool ScFormulaCell::NeedsInterpret() const
 void ScFormulaCell::MaybeInterpret()
 {
     if (NeedsInterpret())
-        Interpret();
+        Interpret(officecfg::Office::Common::Misc::UseOpenCL::get());
 }
 
 bool ScFormulaCell::IsHyperLinkCell() const
@@ -2522,7 +2522,7 @@ const ScMatrix* ScFormulaCell::GetMatrix()
         if( IsDirtyOrInTableOpDirty()
         // Was stored !bDirty but an accompanying matrix cell was bDirty?
         || (!bDirty && cMatrixFlag == MM_FORMULA && !aResult.GetMatrix()))
-            Interpret();
+            Interpret(officecfg::Office::Common::Misc::UseOpenCL::get());
     }
     return aResult.GetMatrix().get();
 }
@@ -3890,9 +3890,6 @@ bool ScFormulaCell::InterpretFormulaGroup()
             // Not good.
             return false;
     }
-
-    if (!officecfg::Office::Common::Misc::UseOpenCL::get())
-        return false;
 
     // TODO : Disable invariant formula group interpretation for now in order
     // to get implicit intersection to work.

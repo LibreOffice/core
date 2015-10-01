@@ -811,7 +811,7 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetective
         return DET_INS_CIRCULAR;
 
     if (pFCell->GetDirty())
-        pFCell->Interpret();                // can't be called after SetRunning
+        pFCell->Interpret(officecfg::Office::Common::Misc::UseOpenCL::get()); // can't be called after SetRunning
     pFCell->SetRunning(true);
 
     sal_uInt16 nResult = DET_INS_EMPTY;
@@ -900,7 +900,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
         return nLevel;
 
     if (pFCell->GetDirty())
-        pFCell->Interpret();                // can't be called after SetRunning
+        pFCell->Interpret(officecfg::Office::Common::Misc::UseOpenCL::get()); // can't be called after SetRunning
     pFCell->SetRunning(true);
 
     sal_uInt16 nResult = nLevel;
@@ -958,7 +958,7 @@ sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiv
         return DET_INS_CIRCULAR;
 
     if (pFCell->GetDirty())
-        pFCell->Interpret();                // can't be called after SetRunning
+        pFCell->Interpret(officecfg::Office::Common::Misc::UseOpenCL::get()); // can't be called after SetRunning
     pFCell->SetRunning(true);
 
     sal_uInt16 nResult = DET_INS_EMPTY;
@@ -1010,7 +1010,7 @@ sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCo
         bool bRunning = pFCell->IsRunning();
 
         if (pFCell->GetDirty())
-            pFCell->Interpret();                // can't be called after SetRunning
+            pFCell->Interpret(officecfg::Office::Common::Misc::UseOpenCL::get()); // can't be called after SetRunning
         pFCell->SetRunning(true);
 
         ScDetectiveRefIter aIter(pFCell);
@@ -1098,7 +1098,7 @@ sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2
         bool bRunning = pFCell->IsRunning();
 
         if (pFCell->GetDirty())
-            pFCell->Interpret();                // can't be called after SetRunning
+            pFCell->Interpret(officecfg::Office::Common::Misc::UseOpenCL::get()); // can't be called after SetRunning
         pFCell->SetRunning(true);
 
         ScDetectiveRefIter aIter(pFCell);

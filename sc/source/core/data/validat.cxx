@@ -633,7 +633,7 @@ bool ScValidationData::GetSelectionFromFormula(
 
     // Make sure the formula gets interpreted and a result is delivered,
     // regardless of the AutoCalc setting.
-    aValidationSrc.Interpret();
+    aValidationSrc.Interpret(officecfg::Office::Common::Misc::UseOpenCL::get());
 
     ScMatrixRef xMatRef;
     const ScMatrix *pValues = aValidationSrc.GetMatrix();
