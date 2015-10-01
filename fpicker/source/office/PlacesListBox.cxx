@@ -167,6 +167,23 @@ void PlacesListBox::SetSizePixel( const Size& rNewSize )
     mpDelBtn->SetPosPixel( Point( 6 + 24, nBtnY ) );
 }
 
+bool PlacesListBox::Notify( NotifyEvent& rNEvt )
+{
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    {
+        const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+        const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
+
+        if( rCode.GetCode() == KEY_RETURN )
+        {
+            mbSelectionChanged = true;
+            updateView();
+            return true;
+        }
+    }
+    return Control::Notify( rNEvt );
+}
+
 Image PlacesListBox::getEntryIcon( PlacePtr pPlace )
 {
     Image theImage = mpDlg->GetButtonImage( IMG_FILEDLG_PLACE_LOCAL );
