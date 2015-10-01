@@ -12,6 +12,7 @@
 
 #include <memory>
 #include <utility>
+#include <type_traits>
 
 namespace o3tl
 {
@@ -21,10 +22,21 @@ namespace o3tl
  *
  * Can be replaced by std::make_unique when we allow C++14.
  */
+
 template<typename T, typename... Args>
-typename std::unique_ptr<T> make_unique(Args&& ... args)
+typename std::enable_if<std::conditional<std::is_array<T>::value,
+                                         std::false_type, std::true_type>::type::value,
+                         std::unique_ptr<T>>::type
+make_unique(Args&&... args)
 {
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
+template<typename T>
+typename std::enable_if<std::is_array<T>::value, std::unique_ptr<T>>::type
+make_unique( unsigned int sz )
+{
+    return std::unique_ptr<T>(new typename ::std::remove_extent<T>::type[sz]());
 }
 
 }
