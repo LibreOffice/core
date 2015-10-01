@@ -62,8 +62,6 @@ namespace x11 {
 
         virtual ~X11Clipboard();
 
-        static X11Clipboard* get( const OUString& rDisplayName, Atom aSelection );
-
         /*
          * XServiceInfo
          */

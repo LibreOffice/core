@@ -52,9 +52,6 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 
     basebmp::DrawMode                    m_aDrawMode;
 
-protected:
-    basegfx::B2IVector                   GetSize() { return m_aOrigDevice->getSize(); }
-
 public:
     static GlyphCache& getPlatformGlyphCache();
     void setDevice(basebmp::BitmapDeviceSharedPtr& rDevice);

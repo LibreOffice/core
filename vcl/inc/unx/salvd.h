@@ -57,10 +57,6 @@ public:
     {
         return pDisplay_;
     }
-    bool IsDisplay() const
-    {
-        return pDisplay_->IsDisplay();
-    }
     Pixmap          GetDrawable() const { return hDrawable_; }
     sal_uInt16      GetDepth() const { return nDepth_; }
     SalX11Screen            GetXScreenNumber() const { return m_nXScreen; }

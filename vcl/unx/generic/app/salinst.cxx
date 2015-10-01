@@ -190,16 +190,14 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 void X11SalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService)
 {
-    const OUString SYM_ADD_TO_RECENTLY_USED_FILE_LIST("add_to_recently_used_file_list");
-    const OUString LIB_RECENT_FILE("librecentfile.so");
     typedef void (*PFUNC_ADD_TO_RECENTLY_USED_LIST)(const OUString&, const OUString&, const OUString&);
 
     PFUNC_ADD_TO_RECENTLY_USED_LIST add_to_recently_used_file_list = 0;
 
     osl::Module module;
-    module.loadRelative( &thisModule, LIB_RECENT_FILE );
+    module.loadRelative( &thisModule, "librecentfile.so" );
     if (module.is())
-        add_to_recently_used_file_list = reinterpret_cast<PFUNC_ADD_TO_RECENTLY_USED_LIST>(module.getFunctionSymbol(SYM_ADD_TO_RECENTLY_USED_FILE_LIST));
+        add_to_recently_used_file_list = reinterpret_cast<PFUNC_ADD_TO_RECENTLY_USED_LIST>(module.getFunctionSymbol("add_to_recently_used_file_list"));
     if (add_to_recently_used_file_list)
         add_to_recently_used_file_list(rFileUrl, rMimeType, rDocumentService);
 }

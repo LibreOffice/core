@@ -33,7 +33,6 @@ public:
     Drawable GetDrawable() const { return GetPixmap(); };
     int GetWidth() const { return mnWidth; };
     int GetHeight() const { return mnHeight; };
-    Size GetSize() const { return Size( mnWidth, mnHeight ); };
 
 protected:
     int             mnWidth;

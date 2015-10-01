@@ -303,7 +303,6 @@ public:
 
     friend SvStream& ReadBmapType(SvStream& rIStream, BmapType& rBmap);
     virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
-    void SetPaths( const INetURLObject& rFltPath );
 };
 
 #define GrupSize 48

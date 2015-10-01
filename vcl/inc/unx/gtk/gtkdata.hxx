@@ -158,7 +158,6 @@ public:
     virtual int CaptureMouse( SalFrame* pFrame ) SAL_OVERRIDE;
 #endif
 
-    int          GetDefaultScreen() { return m_pSys->GetDisplayBuiltInScreen(); }
     SalX11Screen GetDefaultXScreen() { return m_pSys->GetDisplayDefaultXScreen(); }
     Size         GetScreenSize( int nDisplayScreen );
     int          GetXScreenCount() { return m_pSys->GetDisplayXScreenCount(); }

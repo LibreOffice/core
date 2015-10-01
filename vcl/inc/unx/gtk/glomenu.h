@@ -107,11 +107,6 @@ gchar *     g_lo_menu_get_accelerator_from_item_in_section              (GLOMenu
                                                                          gint         section,
                                                                          gint         position);
 
-void        g_lo_menu_set_submenu_to_item_in_section                    (GLOMenu     *menu,
-                                                                         gint         section,
-                                                                         gint         position,
-                                                                         GMenuModel  *submenu);
-
 void        g_lo_menu_new_submenu_in_item_in_section                    (GLOMenu     *menu,
                                                                          gint         section,
                                                                          gint         position);
@@ -124,9 +119,6 @@ void        g_lo_menu_set_submenu_action_to_item_in_section             (GLOMenu
                                                                          gint         section,
                                                                          gint         position,
                                                                          const gchar *action);
-
-GLOMenu *   g_lo_menu_get_menu_containing_item                          (GLOMenu     *menu,
-                                                                         gint         item_id);
 
 G_END_DECLS
 

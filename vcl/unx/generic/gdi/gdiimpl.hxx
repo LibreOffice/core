@@ -80,7 +80,6 @@ private:
     GC GetTrackingGC();
     GC GetInvertGC();
     GC GetInvert50GC();
-    inline GC GetMonoGC( Pixmap hPixmap );
 
     void DrawLines( sal_uIntPtr              nPoints,
                                const SalPolyLine &rPoints,

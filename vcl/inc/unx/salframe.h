@@ -146,7 +146,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
     long            HandleFocusEvent    ( XFocusChangeEvent *pEvent );
     long            HandleExposeEvent   ( XEvent            *pEvent );
     long            HandleSizeEvent     ( XConfigureEvent   *pEvent );
-    long            HandleMapUnmapEvent ( XEvent            *pEvent );
     long            HandleStateEvent    ( XPropertyEvent    *pEvent );
     long            HandleReparentEvent ( XReparentEvent    *pEvent );
     long            HandleClientMessage ( XClientMessageEvent*pEvent );
@@ -176,18 +175,12 @@ public:
     {
         return pDisplay_->GetDisplay();
     }
-    ::Window GetDrawable() const
-    {
-        return GetWindow();
-    }
     SalX11Screen            GetScreenNumber() const { return m_nXScreen; }
     ::Window                GetWindow() const { return mhWindow; }
     ::Window                GetShellWindow() const { return mhShellWindow; }
     ::Window                GetForeignParent() const { return mhForeignParent; }
     ::Window                GetStackingWindow() const { return mhStackingWindow; }
-    long                    ShutDown() const { return CallCallback( SALEVENT_SHUTDOWN, 0 ); }
     long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
-              sal_uIntPtr           GetStyle() const { return nStyle_; }
 
     Cursor          GetCursor() const { return hCursor_; }
     bool            IsCaptured() const { return nCaptured_ == 1; }
@@ -199,8 +192,6 @@ public:
     bool                    IsSysChildWindow() const { return (nStyle_ & (SAL_FRAME_STYLE_SYSTEMCHILD)) != 0; }
     bool                    IsFloatGrabWindow() const;
     SalI18N_InputContext* getInputContext() const { return mpInputContext; }
-    void                    getPosSize( Rectangle& rRect ) { GetPosSize( rRect ); }
-    void                    setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
     bool                    isMapped() const { return bMapped_; }
     bool                    hasFocus() const { return mbInputFocus; }
 
@@ -270,8 +261,6 @@ public:
     virtual void                    EndSetClipRegion() SAL_OVERRIDE;
 
     virtual Window GetX11Window() SAL_OVERRIDE;
-
-    static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
 
     /// @internal
     void setPendingSizeEvent();

@@ -67,7 +67,6 @@ public:
     // get info about the display
     virtual unsigned int GetDisplayScreenCount() SAL_OVERRIDE;
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) SAL_OVERRIDE;
-    virtual OUString GetDisplayScreenName( unsigned int nScreen ) SAL_OVERRIDE;
 
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,

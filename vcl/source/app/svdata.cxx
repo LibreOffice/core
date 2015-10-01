@@ -249,6 +249,7 @@ BlendFrameCache* ImplGetBlendFrameCache()
 bool HasAtHook();
 #endif
 
+#ifdef _WIN32
 bool ImplInitAccessBridge()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -256,7 +257,6 @@ bool ImplInitAccessBridge()
     {
         css::uno::Reference< XComponentContext > xContext(comphelper::getProcessComponentContext());
 
-#ifdef _WIN32
         if (!HasAtHook() && !getenv("SAL_FORCE_IACCESSIBLE2"))
         {
             SAL_INFO("vcl", "Apparently no running AT -> "
@@ -276,11 +276,11 @@ bool ImplInitAccessBridge()
                  return false;
              }
         }
-#endif
     }
 
     return true;
 }
+#endif
 
 vcl::Window* ImplFindWindow( const SalFrame* pFrame, ::Point& rSalFramePos )
 {
