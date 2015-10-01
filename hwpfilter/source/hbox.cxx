@@ -46,7 +46,7 @@ HBox::~HBox()
 }
 
 
-int HBox::WSize(void)
+int HBox::WSize()
 {
     static const int wsize[32] =
     {
@@ -71,39 +71,36 @@ hchar_string HBox::GetString()
 }
 
 
-hunit HBox::Height(CharShape *csty)
-{
-    return( csty->size );
-}
-
-
 // skip block
-SkipData::SkipData(hchar hch):HBox(hch)
+SkipData::SkipData(hchar hch)
+    : HBox(hch)
+    , data_block_len(0)
+    , dummy(0)
+    , data_block(0)
 {
-    data_block = 0;
 }
 
-
-SkipData::~SkipData(void)
+SkipData::~SkipData()
 {
     delete[]data_block;
 }
 
 
 // FieldCode [5]
-FieldCode::FieldCode(void) : HBox(CH_FIELD)
+FieldCode::FieldCode()
+    : HBox(CH_FIELD)
+    , location_info(0)
+    , str1(NULL)
+    , str2(NULL)
+    , str3(NULL)
+    , bin(NULL)
+    , m_pDate(NULL)
 {
-    str1 = 0;
-    str2 = 0;
-    str3 = 0;
-    bin = 0;
     reserved1 = new char[4];
     reserved2 = new char[22];
-     m_pDate = 0L;
 }
 
-
-FieldCode::~FieldCode(void)
+FieldCode::~FieldCode()
 {
     delete[] str1;
     delete[] str2;
@@ -111,34 +108,35 @@ FieldCode::~FieldCode(void)
     delete[] bin;
     delete[] reserved1;
     delete[] reserved2;
-     if( m_pDate )
-          delete m_pDate;
+    delete m_pDate;
 }
-
 
 // book mark(6)
-Bookmark::Bookmark(void):HBox(CH_BOOKMARK)
+Bookmark::Bookmark()
+    : HBox(CH_BOOKMARK)
+    , dummy(0)
+    , type(0)
 {
 }
 
-
-Bookmark::~Bookmark(void)
+Bookmark::~Bookmark()
 {
 }
-
 
 // date format(7)
-DateFormat::DateFormat(void):HBox(CH_DATE_FORM)
+DateFormat::DateFormat()
+    : HBox(CH_DATE_FORM)
+    , dummy(0)
 {
 }
-
 
 // date code(8)
-
-DateCode::DateCode(void):HBox(CH_DATE_CODE)
+DateCode::DateCode()
+    : HBox(CH_DATE_CODE)
+    , dummy(0)
+    , key(0)
 {
 }
-
 
 #define _DATECODE_WEEK_DEFINES_
 #include "datecode.h"
@@ -167,112 +165,112 @@ hchar_string DateCode::GetString()
 
         switch (*fmt)
         {
-            case '0':
-                add_zero = true;
+        case '0':
+            add_zero = true;
+            break;
+        case '1':
+            num = date[YEAR];
+            form = "%04d";
+            break;
+        case '!':
+            num = date[YEAR] % 100;
+            break;
+        case '2':
+            num = date[MONTH];
+            break;
+        case '@':
+            memcpy(cbuf, eng_mon + (date[MONTH] - 1) * 3, 3);
+            cbuf[3] = '.';
+            cbuf[4] = 0;
                 break;
-            case '1':
-                num = date[YEAR];
-                form = "%04d";
+        case '*':
+            strncat(cbuf, en_mon[date[MONTH] - 1], sizeof(cbuf) - strlen(cbuf) - 1);
+            break;
+        case '3':                             /* 'D' is day of korean */
+            num = date[DAY];
+            break;
+        case '#':
+            num = date[DAY];
+            switch (date[DAY] % 10)
+            {
+            case 1:
+                form = "%dst";
                 break;
-            case '!':
-                num = date[YEAR] % 100;
+            case 2:
+                form = "%dnd";
                 break;
-            case '2':
-                num = date[MONTH];
-                break;
-            case '@':
-                memcpy(cbuf, eng_mon + (date[MONTH] - 1) * 3, 3);
-                cbuf[3] = '.';
-                cbuf[4] = 0;
-                break;
-            case '*':
-                strcpy(cbuf, en_mon[date[MONTH] - 1]);
-                break;
-            case '3':                             /* 'D' is day of korean */
-                num = date[DAY];
-                break;
-            case '#':
-                num = date[DAY];
-                switch (date[DAY] % 10)
-                {
-                    case 1:
-                        form = "%dst";
-                        break;
-                    case 2:
-                        form = "%dnd";
-                        break;
-                    case 3:
-                        form = "%drd";
-                        break;
-                    default:
-                        form = "%dth";
-                        break;
-                }
-                break;
-            case '4':
-                num = date[HOUR] - ((date[HOUR] > 12) ? 12 : 0);
-                break;
-            case '$':
-                num = date[HOUR];
-                break;
-            case '5':
-            case '%':
-                num = date[MIN];
-                break;
-            case '6':
-                ret.push_back(kor_week[date[WEEK]]);
-                break;
-            case '^':
-                memcpy(cbuf, eng_week + date[WEEK] * 3, 3);
-                cbuf[3] = '.';
-                cbuf[4] = 0;
-                break;
-            case '_':
-                strcpy(cbuf, en_week[date[WEEK]]);
-                break;
-            case '7':
-                ret.push_back(0xB5A1);
-                ret.push_back((is_pm) ? 0xD281 : 0xB8E5);
-                break;
-            case '&':
-                strcpy(cbuf, (is_pm) ? "p.m." : "a.m.");
-                break;
-            case '+':
-                strcpy(cbuf, (is_pm) ? "P.M." : "A.M.");
-                break;
-            case '8':                             // 2.5 feature
-            case '9':
-#if 0
-// LATER
-                mkcurfilename(cbuf, *fmt);
-                for (i = 0; cbuf[i] != 0 && slen > 1; i++)
-                {                                 //for hangle filename
-                    if (cbuf[i] & 0x80 && cbuf[i + 1] != 0)
-                    {
-                        *d++ = (cbuf[i] << 8) | cbuf[i + 1];
-                        i++;
-                    }
-                    else
-                        *d++ = cbuf[i];
-                    slen--;
-                }
-#endif
-                cbuf[0] = 0;
-                break;
-            case '~':                             // 3.0b feature
-                if (fmt[1] == 0)
-                    break;
-                fmt++;
-                if (*fmt == '6')
-                {
-                    ret.push_back(china_week[date[WEEK]]);
-                    break;
-                }
+            case 3:
+                form = "%drd";
                 break;
             default:
-                if (*fmt == '\\' && *++fmt == 0)
-                    goto done;
-                ret.push_back(*fmt);
+                form = "%dth";
+                break;
+            }
+            break;
+        case '4':
+            num = date[HOUR] - ((date[HOUR] > 12) ? 12 : 0);
+            break;
+        case '$':
+            num = date[HOUR];
+            break;
+        case '5':
+        case '%':
+            num = date[MIN];
+            break;
+        case '6':
+            ret.push_back(kor_week[date[WEEK]]);
+            break;
+        case '^':
+            memcpy(cbuf, eng_week + date[WEEK] * 3, 3);
+            cbuf[3] = '.';
+            cbuf[4] = 0;
+            break;
+        case '_':
+            strncat(cbuf, en_week[date[WEEK]], sizeof(cbuf) - strlen(cbuf) - 1);
+            break;
+        case '7':
+            ret.push_back(0xB5A1);
+            ret.push_back((is_pm) ? 0xD281 : 0xB8E5);
+            break;
+        case '&':
+            strncat(cbuf, (is_pm) ? "p.m." : "a.m.", sizeof(cbuf) - strlen(cbuf) - 1);
+            break;
+        case '+':
+            strncat(cbuf, (is_pm) ? "P.M." : "A.M.", sizeof(cbuf) - strlen(cbuf) - 1);
+            break;
+        case '8':                             // 2.5 feature
+        case '9':
+#if 0
+// LATER
+            mkcurfilename(cbuf, *fmt);
+            for (i = 0; cbuf[i] != 0 && slen > 1; i++)
+            {                                 //for hangle filename
+                if (cbuf[i] & 0x80 && cbuf[i + 1] != 0)
+                {
+                    *d++ = (cbuf[i] << 8) | cbuf[i + 1];
+                    i++;
+                }
+                else
+                    *d++ = cbuf[i];
+                slen--;
+            }
+#endif
+            cbuf[0] = 0;
+            break;
+        case '~':                             // 3.0b feature
+            if (fmt[1] == 0)
+                break;
+            fmt++;
+            if (*fmt == '6')
+            {
+                ret.push_back(china_week[date[WEEK]]);
+                break;
+            }
+            break;
+        default:
+            if (*fmt == '\\' && *++fmt == 0)
+                goto done;
+            ret.push_back(*fmt);
         }
         if (num != -1)
             sprintf(cbuf, form, num);
@@ -285,35 +283,72 @@ hchar_string DateCode::GetString()
     return ret;
 }
 
-
 // tab(9)
-
-Tab::Tab(void):HBox(CH_TAB)
+Tab::Tab()
+    : HBox(CH_TAB)
+    , width(0)
+    , leader(0)
+    , dummy(0)
 {
 }
-
 
 // floating box
-FBox::FBox(hchar hch):HBox(hch)
+FBox::FBox(hchar hch)
+    : HBox(hch)
+    , zorder(0)
+    , option(0)
+    , ctrl_ch(0)
+    , box_xs(0)
+    , box_ys(0)
+    , cap_xs(0)
+    , cap_ys(0)
+    , xs(0)
+    , ys(0)
+    , cap_margin(0)
+    , xpos_type(0)
+    , ypos_type(0)
+    , smart_linesp(0)
+    , boundsy(0)
+    , boundey(0)
+    , boundx(0)
+    , draw(0)
+    , pgx(0)
+    , pgy(0)
+    , pgno(0)
+    , showpg(0)
+    , prev(NULL)
+    , next(NULL)
 {
-    prev = next = 0;
-     zorder = 0;
 }
-
 
 FBox::~FBox()
 {
 }
 
-
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
-
-TxtBox::TxtBox(void):FBox(CH_TEXT_BOX), cell(0), plists(0)
+TxtBox::TxtBox()
+    : FBox(CH_TEXT_BOX)
+    , dummy(0)
+    , dummy1(0)
+    , cap_len(0)
+    , next(0)
+    , dummy2(0)
+    , reserved1(0)
+    , cap_pos(0)
+    , num(0)
+    , dummy3(0)
+    , baseline(0)
+    , type(0)
+    , nCell(0)
+    , protect(0)
+    , cell(0)
+    , m_pTable(NULL)
+    , plists(NULL)
 {
+    reserved[0] = reserved[1] = 0;
 }
 
-
-TxtBox::~TxtBox(void)
+TxtBox::~TxtBox()
 {
     delete[]cell;
 
@@ -338,26 +373,28 @@ TxtBox::~TxtBox(void)
 }
 
 
-hunit TxtBox::Height(CharShape * csty)
-{
-    return (style.anchor_type == CHAR_ANCHOR) ? box_ys : csty->size;
-}
-
-
 // picture(11)
 
-Picture::Picture(void):FBox(CH_PICTURE)
+Picture::Picture()
+    : FBox(CH_PICTURE)
+    , dummy(0)
+    , follow_block_size(0)
+    , dummy1(0)
+    , dummy2(0)
+    , reserved1(0)
+    , cap_pos(0)
+    , num(0)
+    , pictype(0)
+    , follow(0)
+    , ishyper(false)
 {
-    follow = 0;
-    ishyper = false;
 }
 
-
-Picture::~Picture(void)
+Picture::~Picture()
 {
     delete[]follow;
     if( pictype == PICTYPE_DRAW && picinfo.picdraw.hdo )
-        delete (HWPDrawingObject *) picinfo.picdraw.hdo;
+        delete static_cast<HWPDrawingObject *>(picinfo.picdraw.hdo);
 
     std::list < HWPPara* >::iterator it = caption.begin();
     for (; it != caption.end(); ++it)
@@ -374,15 +411,9 @@ int Picture::Type()
 }
 
 
-hunit Picture::Height(CharShape * sty)
-{
-    return (style.anchor_type == CHAR_ANCHOR) ? box_ys : sty->size;
-}
-
-
 // line(14)
 // hidden(15)
-Hidden::~Hidden(void)
+Hidden::~Hidden()
 {
     std::list < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
@@ -394,7 +425,7 @@ Hidden::~Hidden(void)
 
 
 // header/footer(16)
-HeaderFooter::~HeaderFooter(void)
+HeaderFooter::~HeaderFooter()
 {
     std::list < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
@@ -406,7 +437,7 @@ HeaderFooter::~HeaderFooter(void)
 
 
 // footnote(17)
-Footnote::~Footnote(void)
+Footnote::~Footnote()
 {
     std::list < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
@@ -420,7 +451,7 @@ Footnote::~Footnote(void)
 // auto number(18)
 // new number(19)
 // show page number (20)
-// 홀수쪽시작/감추기 (21)
+// Start/Hide odd-numbered side (21)
 
 // mail merge(22)
 hchar_string MailMerge::GetString()
@@ -488,7 +519,7 @@ static const hchar *GetOutlineStyleChars(int style)
         {                                         // 3
             0x2f18, 0x2f16, 0x2f12, 0x2f10, 0x2f06, 0x2f00, 0x2043, 0x0000
         },
-        {                                         //
+        {
             0xAC61, 0xB677, 0xB861, 0xB8F7, 0xB781, 0x0000
         },
     };
@@ -566,9 +597,9 @@ static void getOutlineNumStr(int style, int level, int num, hchar * hstr)
 enum
 { OUTLINE_ON, OUTLINE_NUM };
 
-/*  level 은 0부터 시작. 즉 1.1.1. 의 레벨은 2이다.
-    number는 값이 그대로 들어가 있다. 즉, 1.2.1에는 1,2,1이 들어가 있다.
-    style 은 1부터 값이 들어가 있다. hbox.h에 정의된 데로..
+/* level starts from zero. ex) '1.1.1.' is the level 2.
+   number has the value. ex) '1.2.1' has '1,2,1'
+   style has the value which starts from 1 according to the definition in hbox.h
  */
 hchar_string Outline::GetUnicode() const
 {
@@ -627,17 +658,17 @@ hchar_string Outline::GetUnicode() const
                     if( deco[i][0] ){
                         buffer[l++] = deco[i][0];
                     }
-/*  level 은 0부터 시작. 즉 1.1.1. 의 레벨은 2이다.
-    number는 값이 그대로 들어가 있다. 즉, 1.2.1에는 1,2,1이 들어가 있다.
-    style 은 1부터 값이 들어가 있다. hbox.h에 정의된 데로..
+/* level starts from zero. ex) '1.1.1.' is the level 2.
+   number has the value. ex) '1.2.1' has '1,2,1'
+   style has the value which starts from 1 according to the definition in hbox.h
  */
                     switch( user_shape[i] )
                     {
                         case 0:
                             buffer[l++] = '1' + number[i] - 1;
                             break;
-                        case 1: /* 대문자로마 */
-                        case 2: /* 소문자로마 */
+                        case 1: /* Uppercase Roman */
+                        case 2: /* Lowercase Roman */
                             num2roman(number[i], dest);
                             if( user_shape[i] == 1 ){
                                 char *ptr = dest;
@@ -662,22 +693,22 @@ hchar_string Outline::GetUnicode() const
                         case 6:
                             buffer[l++] = olHanglJaso(number[i] -1, OL_HANGL_JASO);
                             break;
-                        case 7: /* 한자 숫자 : 일반 숫자로 표현 */
+                        case 7: /* Chinese numbers: the number represented by the general */
                             buffer[l++] = '1' + number[i] -1;
                             break;
-                        case 8: /* 원숫자 */
+                        case 8: /* Circled numbers */
                             buffer[l++] = 0x2e00 + number[i];
                             break;
-                        case 9: /* 원 알파벳 소문자 */
+                        case 9: /* Circled lowercase alphabet */
                             buffer[l++] = 0x2c20 + number[i];
                             break;
-                        case 10: /* 원 가나다 */
+                        case 10: /* Circled Korean Alphabet */
                             buffer[l++] = 0x2c50 + number[i] -1;
                             break;
-                        case 11: /* 원 ㄱ ㄴ */
+                        case 11: /* Circled Korean Characters */
                             buffer[l++] = 0x2c40 + number[i] -1;
                             break;
-                        case 12: /* 이어진 숫자. */
+                        case 12: /* Sequenced numbers. */
                         {
                              char cur_num_str[10],buf[80];
                              int j;
@@ -711,7 +742,7 @@ hchar_string Outline::GetUnicode() const
 }
 
 
-/* 묶음 빈칸(30) */
-/* 고정폭 빈칸(31) */
+/* Bundle of spaces (30) */
+/* Fixed-width spaces (31) */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

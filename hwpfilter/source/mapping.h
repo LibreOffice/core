@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __MAPPING_H__
-#define __MAPPING_H__
+#ifndef INCLUDED_HWPFILTER_SOURCE_MAPPING_H
+#define INCLUDED_HWPFILTER_SOURCE_MAPPING_H
 
 #include <string.h>
 #include <stdio.h>
@@ -363,7 +363,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 #ifndef DEBUG
 hchar_string getMathMLEntity(const char *tex)
 {
-     static size_t tabSize = sizeof(FormulaMapTab) / sizeof(FormulaMapTab[0]);
+     static const size_t tabSize = sizeof(FormulaMapTab) / sizeof(FormulaMapTab[0]);
 
      hchar_string buf;
      for (size_t i = 0 ; i < tabSize ; i++) {

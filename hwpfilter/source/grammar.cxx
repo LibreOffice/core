@@ -32,27 +32,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "grammar.hxx"
+#include "lexer.hxx"
 #include "nodes.h"
 
 std::list<Node*> nodelist;
 
-Node *mainParse(const char *_code);
 void yyerror(const char *);
-int yylex();
-void initFlex( const char *s );
-void viewResult(Node *res);
 
 Node *top=0L;
 
 int Node::count = 0;
 
-#define allocValue(x,y) \
-x = (char *)malloc( strlen(y) +1 ); \
-strcpy(x,y)
-
-#define allocChar(x,y) \
-x = (char *)malloc(2); \
-sprintf(x,"%c",y)
 #ifdef PARSE_DEBUG
 #define debug printf
 #else
@@ -379,7 +370,7 @@ static const short yycheck[] = {    11,
 #define YYSTACK_USE_ALLOCA
 #define alloca __builtin_alloca
 #else /* not GNU C.  */
-#if (!defined (__STDC__) && defined (sparc)) || defined (__sparc__) || defined (__sparc) || defined (__sgi) || (defined (__sun) && defined (__i386))
+#if (!defined (__STDC__) && defined (sparc)) || defined (__sparc__) || defined (__sparc) || (defined (__sun) && defined (__i386))
 #define YYSTACK_USE_ALLOCA
 #include <sal/alloca.h>
 #else /* not sparc */
@@ -468,50 +459,6 @@ int yydebug;            /*  nonzero means print parse trace */
 #define YYMAXDEPTH 10000
 #endif
 
-/* Define __yy_memcpy.  Note that the size argument
-   should be passed with type unsigned int, because that is what the non-GCC
-   definitions require.  With GCC, __builtin_memcpy takes an arg
-   of type size_t, but it can handle unsigned int.  */
-
-#if defined(__GNUC__)
-#define __yy_memcpy(TO,FROM,COUNT)  __builtin_memcpy(TO,FROM,COUNT)
-#else
-#ifndef __cplusplus
-
-/* This is the most reliable way to avoid incompatibilities
-   in available built-in functions on various systems.  */
-static void
-__yy_memcpy (to, from, count)
-     char *to;
-     char *from;
-     unsigned int count;
-{
-  register char *f = from;
-  register char *t = to;
-  register int i = count;
-
-  while (i-- > 0)
-    *t++ = *f++;
-}
-
-#else /* __cplusplus */
-
-/* This is the most reliable way to avoid incompatibilities
-   in available built-in functions on various systems.  */
-static void
-__yy_memcpy (char *to, char *from, unsigned int count)
-{
-  register char *t = to;
-  register char *f = from;
-  register int i = count;
-
-  while (i-- > 0)
-    *t++ = *f++;
-}
-
-#endif
-#endif
-
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
    into yyparse.  The argument should have type void *.
    It should actually point to an object.
@@ -536,7 +483,7 @@ __yy_memcpy (char *to, char *from, unsigned int count)
 #ifdef YYPARSE_PARAM
 int yyparse (void *);
 #else
-int yyparse (void);
+int yyparse();
 #endif
 #endif
 
@@ -544,17 +491,17 @@ int
 yyparse(YYPARSE_PARAM_ARG)
      YYPARSE_PARAM_DECL
 {
-  register int yystate;
-  register int yyn;
-  register short *yyssp;
-  register YYSTYPE *yyvsp;
+  int yystate;
+  int yyn;
+  short *yyssp;
+  YYSTYPE *yyvsp;
   int yyerrstatus;  /*  number of tokens to shift before error messages enabled */
   int yychar1 = 0;      /*  lookahead token as an internal (translated) token number */
 
   short yyssa[YYINITDEPTH]; /*  the state stack         */
   YYSTYPE yyvsa[YYINITDEPTH];   /*  the semantic value stack        */
 
-  short *yyss = yyssa;      /*  refer to the stacks thru separate pointers */
+  short *yyss = yyssa;      /*  refer to the stacks through separate pointers */
   YYSTYPE *yyvs = yyvsa;    /*  to allow yyoverflow to reallocate them elsewhere */
 
 #ifdef YYLSP_NEEDED
@@ -668,15 +615,15 @@ yynewstate:
 #ifndef YYSTACK_USE_ALLOCA
       yyfree_stacks = 1;
 #endif
-      yyss = (short *) YYSTACK_ALLOC (yystacksize * sizeof (*yyssp));
-      __yy_memcpy ((char *)yyss, (char *)yyss1,
+      yyss = static_cast<short *>(YYSTACK_ALLOC (yystacksize * sizeof (*yyssp)));
+      memcpy (yyss, yyss1,
            size * (unsigned int) sizeof (*yyssp));
-      yyvs = (YYSTYPE *) YYSTACK_ALLOC (yystacksize * sizeof (*yyvsp));
-      __yy_memcpy ((char *)yyvs, (char *)yyvs1,
+      yyvs = static_cast<YYSTYPE *>(YYSTACK_ALLOC (yystacksize * sizeof (*yyvsp)));
+      memcpy (yyvs, yyvs1,
            size * (unsigned int) sizeof (*yyvsp));
 #ifdef YYLSP_NEEDED
       yyls = (YYLTYPE *) YYSTACK_ALLOC (yystacksize * sizeof (*yylsp));
-      __yy_memcpy ((char *)yyls, (char *)yyls1,
+      memcpy ((char *)yyls, (char *)yyls1,
            size * (unsigned int) sizeof (*yylsp));
 #endif
 #endif /* no yyoverflow */
@@ -838,55 +785,55 @@ yyreduce:
   switch (yyn) {
 
 case 1:
-{ yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 2:
-{ yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 3:
-{ yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 4:
-{ yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 5:
-{ yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 6:
-{ yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 7:
-{ yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 8:
-{ yyval.ptr = new Node(ID_CHARACTER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_CHARACTER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 9:
-{ yyval.ptr = new Node(ID_OPERATOR); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_OPERATOR); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 10:
-{ yyval.ptr = new Node(ID_OPERATOR); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_OPERATOR); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 11:
-{ yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 12:
-{ yyval.ptr = new Node(ID_DELIMETER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_DELIMETER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 13:
-{ yyval.ptr = new Node(ID_DELIMETER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_DELIMETER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 14:
-{ yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 15:
-{ yyval.ptr = new Node(ID_CHARACTER); allocChar(yyval.ptr->value , '|'); debug("Identifier : '|'\n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_CHARACTER); yyval.ptr->value = strdup("|"); debug("Identifier : '|'\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 16:
-{ yyval.ptr = new Node(ID_NUMBER); allocValue(yyval.ptr->value , yyvsp[0].dval); debug("Number : %s\n",yyvsp[0].dval); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_NUMBER); yyval.ptr->value = strdup(yyvsp[0].dval); debug("Number : %s\n",yyvsp[0].dval); nodelist.push_back(yyval.ptr); ;
     break;}
 case 17:
-{ yyval.ptr = new Node(ID_STRING); allocValue(yyval.ptr->value , yyvsp[0].str); debug("String : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_STRING); yyval.ptr->value = strdup(yyvsp[0].str); debug("String : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 18:
 { yyval.ptr = new Node(ID_PRIMARYEXPR); yyval.ptr->child = yyvsp[0].ptr; debug("PrimaryExpr\n"); nodelist.push_back(yyval.ptr); ;
@@ -895,46 +842,46 @@ case 19:
 { yyval.ptr = new Node(ID_PRIMARYEXPR); yyval.ptr->child = yyvsp[-1].ptr; yyval.ptr->next = yyvsp[0].ptr; debug("PrimaryExpr : PrimaryExpr Identifier\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 20:
-{ yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '('); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_LEFT); yyval.ptr->value = strdup("("); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 21:
-{ yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '['); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_LEFT); yyval.ptr->value = strdup("["); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 22:
-{   yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '{'); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
+{   yyval.ptr = new Node(ID_LEFT); yyval.ptr->value = strdup("{"); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 23:
-{   yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '<'); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
+{   yyval.ptr = new Node(ID_LEFT); yyval.ptr->value = strdup("<"); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 24:
-{ yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '|'); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_LEFT); yyval.ptr->value = strdup("|"); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 25:
-{ yyval.ptr = new Node(ID_LEFT); allocValue(yyval.ptr->value , "||"); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_LEFT); yyval.ptr->value =strdup("||"); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 26:
-{ yyval.ptr = new Node(ID_LEFT); allocValue(yyval.ptr->value , yyvsp[0].str); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_LEFT); yyval.ptr->value = strdup(yyvsp[0].str); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 27:
-{ yyval.ptr = new Node(ID_RIGHT); allocChar(yyval.ptr->value , ')'); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_RIGHT); yyval.ptr->value = strdup(")"); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 28:
-{ yyval.ptr = new Node(ID_RIGHT); allocChar(yyval.ptr->value , ']'); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_RIGHT); yyval.ptr->value = strdup("]"); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 29:
-{ yyval.ptr = new Node(ID_RIGHT); allocChar(yyval.ptr->value , '}'); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_RIGHT); yyval.ptr->value = strdup("}"); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 30:
-{ yyval.ptr = new Node(ID_RIGHT); allocChar(yyval.ptr->value , '>'); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_RIGHT); yyval.ptr->value = strdup(">"); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 31:
-{ yyval.ptr = new Node(ID_RIGHT); allocChar(yyval.ptr->value , '|'); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_RIGHT); yyval.ptr->value = strdup("|"); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 32:
-{ yyval.ptr = new Node(ID_RIGHT); allocValue(yyval.ptr->value , "||"); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_RIGHT); yyval.ptr->value = strdup("||"); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 33:
-{ yyval.ptr = new Node(ID_RIGHT); allocValue(yyval.ptr->value , yyvsp[0].str); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_RIGHT); yyval.ptr->value = strdup(yyvsp[0].str); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 34:
 { yyval.ptr = new Node(ID_FENCE); yyval.ptr->child=yyvsp[-2].ptr; yyvsp[-2].ptr->next=yyvsp[-1].ptr; yyvsp[-1].ptr->next=yyvsp[0].ptr; debug("Fence \n"); nodelist.push_back(yyval.ptr); ;
@@ -973,13 +920,13 @@ case 45:
 { yyval.ptr = new Node(ID_OVER); yyval.ptr->child = yyvsp[-3].ptr; yyvsp[-3].ptr->next = yyvsp[-1].ptr; debug("OverExpr\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 46:
-{ yyval.ptr = new Node(ID_ACCENTEXPR); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Accent : %s\n", yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_ACCENTEXPR); yyval.ptr->value = strdup(yyvsp[0].str); debug("Accent : %s\n", yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 47:
 { yyval.ptr = new Node(ID_ACCENTEXPR); yyval.ptr->child=yyvsp[-1].ptr; yyvsp[-1].ptr->next = yyvsp[0].ptr; debug("AccentExpr \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 48:
-{ yyval.ptr = new Node(ID_DECORATIONEXPR); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Decoration : %s\n", yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
+{ yyval.ptr = new Node(ID_DECORATIONEXPR); yyval.ptr->value = strdup(yyvsp[0].str); debug("Decoration : %s\n", yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 49:
 { yyval.ptr = new Node(ID_DECORATIONEXPR); yyval.ptr->child = yyvsp[-1].ptr; yyvsp[-1].ptr->next = yyvsp[0].ptr; debug("DecorationExpr \n"); nodelist.push_back(yyval.ptr); ;
@@ -1054,7 +1001,7 @@ case 72:
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : EndExpr\n");  nodelist.push_back(yyval.ptr);;
     break;}
 }
-   /* the action file gets copied in in place of this dollarsign */
+   /* the action file gets copied in place of this dollarsign */
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1125,7 +1072,7 @@ yyerrlab:   /* here on detecting error */
 
       count = 0;
       /* Start X at -yyn if nec to avoid negative indexes in yycheck.  */
-      for (x = (yyn < 0 ? -yyn : 0);
+      for (x = ((yyn < 0) ? -yyn : 0);
            x < (sizeof(yytname) / sizeof(char *)); x++)
         if (yycheck[x + yyn] == x)
           size += strlen(yytname[x]) + 15, count++;
@@ -1137,7 +1084,7 @@ yyerrlab:   /* here on detecting error */
           if (count < 5)
         {
           count = 0;
-          for (x = (yyn < 0 ? -yyn : 0);
+          for (x = ((yyn < 0) ? -yyn : 0);
                x < (sizeof(yytname) / sizeof(char *)); x++)
             if (yycheck[x + yyn] == x)
               {
@@ -1291,11 +1238,10 @@ void yyerror(const char * /*err*/)
 {
 //  printf("REALKING ERR[%s]\n",err);
     // if error, delete all nodes.
-    Node *pNode = 0L;
     int ncount = nodelist.size();
     for( int i = 0 ; i < ncount ; i++){
-	pNode = nodelist.front();
-	nodelist.pop_front();
+        Node *pNode = nodelist.front();
+        nodelist.pop_front();
         delete pNode;
     }
     top = 0L;

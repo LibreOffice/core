@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HWPINFO_H_
-#define _HWPINFO_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HINFO_H
+#define INCLUDED_HWPFILTER_SOURCE_HINFO_H
 
 #include "hwplib.h"
+#include "string.h"
 
 #define CHAIN_MAX_PATH  40
 #define ANNOTATION_LEN  24
@@ -32,7 +33,7 @@ class CHTMLOut;
 /**
  * Information of page (phisical)
  */
-typedef struct
+struct PaperInfo
 {
     unsigned char paper_kind;
     unsigned char paper_direction;
@@ -45,37 +46,74 @@ typedef struct
     hunit     header_length;
     hunit     footer_length;
     hunit     gutter_length;
-} PaperInfo;
+    PaperInfo()
+        : paper_kind(0)
+        , paper_direction(0)
+        , paper_height(0)
+        , paper_width(0)
+        , top_margin(0)
+        , bottom_margin(0)
+        , left_margin(0)
+        , right_margin(0)
+        , header_length(0)
+        , footer_length(0)
+        , gutter_length(0)
+    {
+    }
+};
 
 /* ?????? ??????, ???????? ???? */
-typedef struct
+struct PaperBackInfo
 {
-     char type;  // 0- background color, 1 - external image, 2- embeded image
-     char reserved1[8];
-     int luminance; /* ???? ( -100 ~ 100 ) */
-     int contrast; /* ???? ( -100 ~ 100 ) */
-     char effect; /* 0-????????, 1-????????????, 2-???? */
-     char reserved2[8];
-     char filename[260 + 1]; // filename
-     unsigned char color[3]; //0 - red, 1 - green, 2 - blue
-     unsigned short flag; /* 0 - ????????, 1 - ????????, 2 - ??????, 3 - ???????? */
-     int range; /* 0-????, 1-????????, 3-??????, 4-?????? */
-     char reserved3[27];
-     int size;
-     char *data;        // image data
-     bool isset;
-} PaperBackInfo;
+    char type;  // 0- background color, 1 - external image, 2- embedded image
+    char reserved1[8];
+    int luminance; /* ???? ( -100 ~ 100 ) */
+    int contrast; /* ???? ( -100 ~ 100 ) */
+    char effect; /* 0-????????, 1-????????????, 2-???? */
+    char reserved2[8];
+    char filename[260 + 1]; // filename
+    unsigned char color[3]; //0 - red, 1 - green, 2 - blue
+    unsigned short flag; /* 0 - ????????, 1 - ????????, 2 - ??????, 3 - ???????? */
+    int range; /* 0-????, 1-????????, 3-??????, 4-?????? */
+    char reserved3[27];
+    int size;
+    char *data;        // image data
+    bool isset;
+    PaperBackInfo()
+        : type(0)
+        , luminance(0)
+        , contrast(0)
+        , effect(0)
+        , flag(0)
+        , range(0)
+        , size(0)
+        , data(NULL)
+        , isset(false)
+    {
+        memset(reserved1, 0, sizeof(reserved1));
+        memset(reserved2, 0, sizeof(reserved2));
+        memset(filename, 0, sizeof(filename));
+        memset(color, 0, sizeof(color));
+        memset(reserved3, 0, sizeof(reserved3));
+    }
+};
 
 /* ???????? ???? */
 /**
  * Information of printing for chained page
  */
-typedef struct
+struct DocChainInfo
 {
     unsigned char chain_page_no;
     unsigned char chain_footnote_no;
     unsigned char chain_filename[CHAIN_MAX_PATH];
-} DocChainInfo;
+    DocChainInfo()
+        : chain_page_no(0)
+        , chain_footnote_no(0)
+    {
+        memset(chain_filename, 0, sizeof(chain_filename));
+    }
+};
 
 /* ???? ???? */
 /**
@@ -122,7 +160,7 @@ class DLLEXPORT HWPInfo
  */
         PaperInfo paper;
 
-          PaperBackInfo back_info;
+        PaperBackInfo back_info;
 /**
  * Sets the attribute of read-only or read/write.
  */
@@ -168,8 +206,6 @@ class DLLEXPORT HWPInfo
         ~HWPInfo(void);
 
         bool Read(HWPFile &hwpf);
-        bool Write(CTextOut &txtf);
-        bool Write(CHTMLOut &html);
 
 };
 
@@ -251,6 +287,6 @@ struct ParaShape
     bool  Read(HWPFile &);
 //  virtual ~ParaShape();
 };
-#endif                                            /* _HWPINFO_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HINFO_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -602,7 +602,7 @@
             <desc>Indicates whether to enable the Impress remote controller.</desc>
             <label>Enable remote control</label>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="EnablePresenterScreen" oor:type="xs:boolean" oor:nillable="false">
            <info>

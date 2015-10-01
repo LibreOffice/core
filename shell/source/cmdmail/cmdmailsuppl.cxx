@@ -105,6 +105,47 @@ Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage( 
 // XSimpleMailClient
 //------------------------------------------------
 
+namespace {
+
+void appendShellWord(OStringBuffer & buffer, OUString const & word, bool strict)
+{
+    OString sys;
+    if (!word.convertToString(
+            &sys, osl_getThreadTextEncoding(),
+            (strict
+             ? (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)
+             : OUSTRING_TO_OSTRING_CVTFLAGS)))
+    {
+        throw css::uno::Exception(
+            ("Could not convert \"" + word + "\" to encoding #"
+             + OUString::number(osl_getThreadTextEncoding())),
+            css::uno::Reference<css::uno::XInterface>());
+    }
+    buffer.append('\'');
+    for (sal_Int32 i = 0; i != sys.getLength(); ++i) {
+        char c = sys[i];
+        switch (c) {
+        case 0:
+            if (strict) {
+                throw css::uno::Exception(
+                    "Could not convert word containing NUL, \"" + word + "\"",
+                    css::uno::Reference<css::uno::XInterface>());
+            }
+            break;
+        case '\'':
+            buffer.append("'\\''");
+            break;
+        default:
+            buffer.append(c);
+            break;
+        }
+    }
+    buffer.append('\'');
+}
+
+}
+
 void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 /*aFlag*/ )
     throw (IllegalArgumentException, Exception, RuntimeException)
 {
@@ -131,7 +172,8 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
             static_cast < XSimpleMailClient * > (this));
     }
 
-    OStringBuffer aBuffer("\"" + OUStringToOString(aProgram, osl_getThreadTextEncoding()) + "\" ");
+    OStringBuffer aBuffer;
+    appendShellWord(aBuffer, aProgram, true);
 
     try
     {
@@ -167,12 +209,12 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
                 // make sure we have a system path
                 FileBase::getSystemPathFromFileURL( aMailer, aMailer );
 
-                aBuffer.append("--mailclient " + OUStringToOString( aMailer, osl_getThreadTextEncoding() ) +
-                               " ");
+                aBuffer.append(" --mailclient ");
+                appendShellWord(aBuffer, aMailer, true);
             }
 #ifdef MACOSX
             else
-                aBuffer.append("--mailclient Mail ");
+                aBuffer.append(" --mailclient Mail");
 #endif
         }
 
@@ -189,17 +231,15 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     // Append originator if set in the message
     if ( !xSimpleMailMessage->getOriginator().isEmpty() )
     {
-        aBuffer.append("--from \"" +
-                        OUStringToOString(xSimpleMailMessage->getOriginator(), osl_getThreadTextEncoding()) +
-                       "\" ");
+        aBuffer.append(" --from ");
+        appendShellWord(aBuffer, xSimpleMailMessage->getOriginator(), false);
     }
 
     // Append receipient if set in the message
     if ( !xSimpleMailMessage->getRecipient().isEmpty() )
     {
-        aBuffer.append("--to \"" +
-                       OUStringToOString(xSimpleMailMessage->getRecipient(), osl_getThreadTextEncoding()) +
-                       "\" ");
+        aBuffer.append(" --to ");
+        appendShellWord(aBuffer, xSimpleMailMessage->getRecipient(), false);
     }
 
     // Append carbon copy receipients set in the message
@@ -207,9 +247,8 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     sal_Int32 n, nmax = aStringList.getLength();
     for ( n = 0; n < nmax; n++ )
     {
-        aBuffer.append("--cc \"" +
-                       OUStringToOString(aStringList[n], osl_getThreadTextEncoding()) +
-                       "\" ");
+        aBuffer.append(" --cc ");
+        appendShellWord(aBuffer, aStringList[n], false);
     }
 
     // Append blind carbon copy receipients set in the message
@@ -217,17 +256,15 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     nmax = aStringList.getLength();
     for ( n = 0; n < nmax; n++ )
     {
-        aBuffer.append("--bcc \"" +
-                       OUStringToOString(aStringList[n], osl_getThreadTextEncoding()) +
-                       "\" ");
+        aBuffer.append(" --bcc ");
+        appendShellWord(aBuffer, aStringList[n], false);
     }
 
     // Append subject if set in the message
     if ( !xSimpleMailMessage->getSubject().isEmpty() )
     {
-        aBuffer.append("--subject \"" +
-                       OUStringToOString(xSimpleMailMessage->getSubject(), osl_getThreadTextEncoding()) +
-                       "\" ");
+        aBuffer.append(" --subject ");
+        appendShellWord(aBuffer, xSimpleMailMessage->getSubject(), false);
     }
 
     // Append attachments set in the message
@@ -238,9 +275,8 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         OUString aSystemPath;
         if ( FileBase::E_None == FileBase::getSystemPathFromFileURL(aStringList[n], aSystemPath) )
         {
-            aBuffer.append("--attach \"" +
-                           OUStringToOString(aSystemPath, osl_getThreadTextEncoding()) +
-                           "\" ");
+            aBuffer.append(" --attach ");
+            appendShellWord(aBuffer, aSystemPath, true);
         }
     }
 

@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "hgzip.h"
-#include "hstream.h"
+#include "hstream.hxx"
 
 #ifndef local
 #  define local static
@@ -58,12 +58,12 @@ gz_stream *gz_open(HStream & _stream)
     //char *m = fmode;
     gz_stream *s;
 
-    s = (gz_stream *) ALLOC(sizeof(gz_stream));
+    s = static_cast<gz_stream *>(ALLOC(sizeof(gz_stream)));
     if (!s)
         return Z_NULL;
-    s->stream.zalloc = (alloc_func) 0;
-    s->stream.zfree = (free_func) 0;
-    s->stream.opaque = (voidpf) 0;
+    s->stream.zalloc = nullptr;
+    s->stream.zfree = nullptr;
+    s->stream.opaque = nullptr;
     s->stream.next_in = s->inbuf = Z_NULL;
     s->stream.next_out = s->outbuf = Z_NULL;
     s->stream.avail_in = s->stream.avail_out = 0;
@@ -78,11 +78,12 @@ gz_stream *gz_open(HStream & _stream)
 
 //realking
     err = inflateInit2(&(s->stream), -MAX_WBITS);
-    s->stream.next_in = s->inbuf = (Byte *) ALLOC(Z_BUFSIZE);
+    s->stream.next_in = s->inbuf = static_cast<Byte *>(ALLOC(Z_BUFSIZE));
 
     if (err != Z_OK || s->inbuf == Z_NULL)
     {
-        return destroy(s), (gz_stream *) Z_NULL;
+        destroy(s);
+        return Z_NULL;
     }
 
     s->stream.avail_out = Z_BUFSIZE;
@@ -90,7 +91,7 @@ gz_stream *gz_open(HStream & _stream)
     errno = 0;
     s->_inputstream = &_stream;
 
-    return (gz_stream *) s;
+    return s;
 }
 
 
@@ -156,8 +157,8 @@ local int destroy(gz_stream * s)
 int gz_read(gz_stream * file, voidp buf, unsigned len)
 {
 //printf("@@ gz_read : len : %d\t",len);
-    gz_stream *s = (gz_stream *) file;
-    Bytef *start = (Bytef *) buf;                 /* starting point for crc computation */
+    gz_stream *s = file;
+    Bytef *start = static_cast<Bytef *>(buf);                 /* starting point for crc computation */
     Byte *next_out;                               /* == stream.next_out but not forced far (for MSDOS) */
     if (s == NULL)
         return Z_STREAM_ERROR;
@@ -167,7 +168,7 @@ int gz_read(gz_stream * file, voidp buf, unsigned len)
     if (s->z_err == Z_STREAM_END)
         return 0;                                 /* EOF */
 
-    s->stream.next_out = next_out = (Bytef *) buf;
+    s->stream.next_out = next_out = static_cast<Bytef *>(buf);
     s->stream.avail_out = len;
 
     while (s->stream.avail_out != 0)
@@ -241,8 +242,8 @@ int gz_read(gz_stream * file, voidp buf, unsigned len)
 int gz_flush(gz_stream * file, int flush)
 {
     uInt len;
-    int done = 0;
-    gz_stream *s = (gz_stream *) file;
+    bool done = false;
+    gz_stream *s = file;
 
     if (s == NULL || s->mode != 'w')
         return Z_STREAM_ERROR;
@@ -284,15 +285,15 @@ int gz_flush(gz_stream * file, int flush)
 */
 local uLong getLong(gz_stream * s)
 {
-    uLong x = (uLong) get_byte(s);
-    int c;
+    uLong x = (unsigned char) get_byte(s);
 
-    x += ((uLong) get_byte(s)) << 8;
-    x += ((uLong) get_byte(s)) << 16;
-    c = get_byte(s);
-    if (c == EOF)
+    x += ((unsigned char) get_byte(s)) << 8;
+    x += ((unsigned char) get_byte(s)) << 16;
+    x += ((unsigned char) get_byte(s)) << 24;
+    if (s->z_eof)
+    {
         s->z_err = Z_DATA_ERROR;
-    x += ((uLong) c) << 24;
+    }
     return x;
 }
 
@@ -304,7 +305,7 @@ local uLong getLong(gz_stream * s)
 int gz_close(gz_stream * file)
 {
 //  int err;
-    gz_stream *s = (gz_stream *) file;
+    gz_stream *s = file;
 
     if (s == NULL)
         return Z_STREAM_ERROR;

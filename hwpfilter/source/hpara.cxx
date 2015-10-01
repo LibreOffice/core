@@ -31,14 +31,28 @@
 
 bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
 {
-    pos = sal::static_int_cast<unsigned short>(hwpf.Read2b());
-    space_width = (short) hwpf.Read2b();
-    height = (short) hwpf.Read2b();
+    if (!hwpf.Read2b(pos))
+        return false;
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    space_width = tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    height = tmp16;
 // internal information
-    pgy = (short) hwpf.Read2b();
-    sx = (short) hwpf.Read2b();
-    psx = (short) hwpf.Read2b();
-    pex = (short) hwpf.Read2b();
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    pgy = tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    sx = tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    psx = tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    pex = tmp16;
     height_sp = 0;
 
     if( pex >> 15 & 0x01 )
@@ -52,24 +66,30 @@ bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
     return (!hwpf.State());
 }
 
-
-HWPPara::HWPPara(void)
+HWPPara::HWPPara()
+    : _next(NULL)
+    , reuse_shape(0)
+    , nch(0)
+    , nline(0)
+    , begin_ypos(0)
+    , scflag(0)
+    , contain_cshape(0)
+    , etcflag(0)
+    , ctrlflag(0)
+    , pstyno(0)
+    , pno(0)
+    , linfo(NULL)
+    , cshapep(NULL)
+    , hhstr(NULL)
 {
-    _next = NULL;
-    linfo = NULL;
-    cshapep = NULL;
-    hhstr = NULL;
-    pno = 0;
-
+    memset(&cshape, 0, sizeof(cshape));
+    memset(&pshape, 0, sizeof(pshape));
 }
 
-
-HWPPara::~HWPPara(void)
+HWPPara::~HWPPara()
 {
-    if (linfo)
-        delete[]linfo;
-    if (cshapep)
-        delete[]cshapep;
+    delete[] linfo;
+    delete[] cshapep;
     if (hhstr)
     {
 // virtual destructor
@@ -83,10 +103,10 @@ HWPPara::~HWPPara(void)
 }
 
 
-int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
+bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 {
     unsigned char same_cshape;
-    register int ii;
+    int ii;
     scflag = flag;
 // Paragraph Information
     hwpf.Read1b(&reuse_shape, 1);
@@ -98,12 +118,12 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     hwpf.Read1b(&pstyno, 1);
 
 
-/* Paragraph 대표 글자 */
+/* Paragraph representative character */
     cshape.Read(hwpf);
     if (nch > 0)
         hwpf.AddCharShape(&cshape);
 
-/* Paragraph 문단 모양 */
+/* Paragraph paragraphs shape  */
     if (nch && !reuse_shape)
     {
         pshape.Read(hwpf);
@@ -182,10 +202,6 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 }
 
 
-HWPPara *HWPPara::Next(void)
-{
-    return _next;
-}
 
 
 CharShape *HWPPara::GetCharShape(int pos)
@@ -196,15 +212,14 @@ CharShape *HWPPara::GetCharShape(int pos)
 }
 
 
-ParaShape *HWPPara::GetParaShape(void)
-{
-    return &pshape;
-}
 
 
 HBox *HWPPara::readHBox(HWPFile & hwpf)
 {
-    hchar hh = sal::static_int_cast<hchar>(hwpf.Read2b());
+    hchar hh;
+    if (!hwpf.Read2b(hh))
+        return 0;
+
     HBox *hbox = 0;
 
     if (hwpf.State() != HWP_NoError)

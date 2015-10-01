@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FORMULA_H__
-#define __FORMULA_H__
+#ifndef INCLUDED_HWPFILTER_SOURCE_FORMULA_H
+#define INCLUDED_HWPFILTER_SOURCE_FORMULA_H
 
 // DVO: remove DEBUG dependency
 // #ifndef DEBUG
@@ -53,7 +53,7 @@ public:
     void setAttributeListImpl( AttributeListImpl *p )
     {
         pList = p;
-        rList = (XAttributeList *) pList;
+        rList = static_cast<XAttributeList *>(pList);
     }
     int parse();
 private:
@@ -68,16 +68,12 @@ private:
      void makeSubSup(Node *res);
      void makeFraction(Node *res);
      void makeDecoration(Node *res);
-     void makeFunction(Node *res);
      void makeRoot(Node *res);
-     void makeArrow(Node *res);
      void makeAccent(Node *res);
      void makeParenth(Node *res);
      void makeFence(Node *res);
      void makeBracket(Node *res);
      void makeBlock(Node *res);
-     void makeBegin(Node *res);
-     void makeEnd(Node *res);
 
 private:
      Reference< XDocumentHandler >  m_rxDocumentHandler;

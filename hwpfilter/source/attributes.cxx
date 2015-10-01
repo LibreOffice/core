@@ -24,7 +24,6 @@
 
 struct TagAttribute
 {
-    TagAttribute(){}
     TagAttribute( const OUString &rName, const OUString &rType , const OUString &rValue )
     {
         sName     = rName;
@@ -47,7 +46,7 @@ struct AttributeListImpl_impl
     std::vector<struct TagAttribute> vecAttribute;
 };
 
-sal_Int16 SAL_CALL AttributeListImpl::getLength(void) throw (RuntimeException)
+sal_Int16 SAL_CALL AttributeListImpl::getLength() throw (RuntimeException)
 {
     return (sal_Int16)m_pImpl->vecAttribute.size();
 }

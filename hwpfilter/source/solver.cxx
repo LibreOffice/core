@@ -20,7 +20,7 @@
 #include <math.h>
 #include "solver.h"
 
-//---------------------------------------------------------------------------
+
 double** mgcLinearSystemD::NewMatrix (int N)
 {
   double** A = new double*[N];
@@ -42,14 +42,14 @@ double** mgcLinearSystemD::NewMatrix (int N)
   }
   return A;
 }
-//---------------------------------------------------------------------------
+
 void mgcLinearSystemD::DeleteMatrix (int N, double** A)
 {
   for (int row = 0; row < N; row++)
     delete[] A[row];
   delete[] A;
 }
-//---------------------------------------------------------------------------
+
 double* mgcLinearSystemD::NewVector (int N)
 {
   double* B = new double[N];
@@ -60,7 +60,7 @@ double* mgcLinearSystemD::NewVector (int N)
     B[row] = 0;
   return B;
 }
-//---------------------------------------------------------------------------
+
 int mgcLinearSystemD::Solve (int n, double** a, double* b)
 {
   int* indxc = new int[n];
@@ -81,14 +81,14 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
   int i, j, k;
   int irow = 0;
   int icol = 0;
-  double big, pivinv, save;
+  double save;
 
   for (j = 0; j < n; j++)
     ipiv[j] = 0;
 
   for (i = 0; i < n; i++)
   {
-    big = 0;
+    double big = 0;
     for (j = 0; j < n; j++)
     {
       if ( ipiv[j] != 1 )
@@ -137,7 +137,7 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
       return 0;
     }
 
-    pivinv = 1/a[icol][icol];
+    double pivinv = 1/a[icol][icol];
     a[icol][icol] = 1;
     for (k = 0; k < n; k++)
       a[icol][k] *= pivinv;

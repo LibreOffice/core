@@ -17,37 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HSTYLE_H
-#define INCLUDED_HWPFILTER_SOURCE_HSTYLE_H
+#ifndef INCLUDED_HWPFILTER_SOURCE_GRAMMAR_HXX
+#define INCLUDED_HWPFILTER_SOURCE_GRAMMAR_HXX
 
-#include <stdlib.h>
-#include <string.h>
+#include <sal/config.h>
 
-#include <hwplib.h>
-#include <hinfo.h>
-/**
- * @short Using for global style object like "Standard"
- */
-class DLLEXPORT HWPStyle
-{
-    short nstyles;
-    void *style;
-    public:
-        HWPStyle( void );
-        ~HWPStyle( void );
+class Node;
 
-        int Num( void ) const { return nstyles;}
-        char *GetName( int n ) const;
-        CharShape *GetCharShape( int n ) const;
-        ParaShape *GetParaShape( int n ) const;
+Node * mainParse(char const * _code);
 
-        void SetName( int n, char *name );
-        void SetCharShape( int n, CharShape *cshapep );
-        void SetParaShape( int n, ParaShape *pshapep );
-
-        bool Read( HWPFile &hwpf );
-};
 #endif
-/* _HWPSTYLE+H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

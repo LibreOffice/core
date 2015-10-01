@@ -22,6 +22,7 @@
 #include <ctype.h>
 #include "hwpfile.h"
 #include "hbox.h"
+#include "hutil.h"
 
 static char *get_one_roman(int num, char one, char five, char ten, char *str)
 {
@@ -83,11 +84,11 @@ void str2hstr(const char *c, hchar * i)
 
 int hstrlen(const hchar * s)
 {
-    register int n = 0;
+    int n = 0;
 
     while (*s++)
         n++;
-    return (n);
+    return n;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

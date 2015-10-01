@@ -25,6 +25,7 @@
 
 #include "impldde.hxx"
 
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
@@ -44,6 +45,8 @@
 
 #include <svl/svdde.hxx>
 #include <sot/formats.hxx>
+
+#include <unotools/securityoptions.hxx>
 
 #define DDELINK_ERROR_APP   1
 #define DDELINK_ERROR_DATA  2
@@ -195,9 +198,6 @@ sal_Bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
 
 sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 {
-#if defined(WNT)
-    static sal_Bool bInWinExec = sal_False;
-#endif
     sal_uInt16 nLinkType = pSvLink->GetUpdateMode();
     if( pConnection )           // Connection is already made
     {
@@ -224,61 +224,22 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     pConnection = new DdeConnection( sServer, sTopic );
     if( pConnection->GetError() )
     {
-       // Is it possible to address the system-Topic?
-       // then the server is up, it just does not know the topic!
-        if( sTopic.EqualsIgnoreCaseAscii( "SYSTEM" ) )
+        // check if the DDE server knows the "SYSTEM" topic
+        bool bSysTopic = false;
+        if (!OUStringToOString(sTopic, RTL_TEXTENCODING_UTF8).equalsIgnoreAsciiCase("SYSTEM"))
         {
-            sal_Bool bSysTopic;
-            {
-                DdeConnection aTmp(sServer, OUString("SYSTEM"));
-                bSysTopic = !aTmp.GetError();
-            }
-
-            if( bSysTopic )
-            {
-                nError = DDELINK_ERROR_DATA;
-                return sal_False;
-            }
-            // otherwise in  Win/WinNT, start the Application directly
+            DdeConnection aTmp(sServer, OUString("SYSTEM"));
+            bSysTopic = !aTmp.GetError();
         }
 
-#if defined(WNT)
-
-        // Server not up, try once more to start it.
-        if( !bInWinExec )
+        if( bSysTopic )
         {
-            OStringBuffer aCmdLine(OUStringToOString(sServer, RTL_TEXTENCODING_ASCII_US));
-            aCmdLine.append(RTL_CONSTASCII_STRINGPARAM(".exe "));
-            aCmdLine.append(OUStringToOString(sTopic, RTL_TEXTENCODING_ASCII_US));
-
-            if( WinExec( aCmdLine.getStr(), SW_SHOWMINIMIZED ) < 32 )
-                nError = DDELINK_ERROR_APP;
-            else
-            {
-                sal_uInt16 i;
-                for( i=0; i<5; i++ )
-                {
-                    bInWinExec = sal_True;
-                    Application::Reschedule();
-                    bInWinExec = sal_False;
-
-                    delete pConnection;
-                    pConnection = new DdeConnection( sServer, sTopic );
-                    if( !pConnection->GetError() )
-                        break;
-                }
-
-                if( i == 5 )
-                {
-                    nError = DDELINK_ERROR_APP;
-                }
-            }
+            // if the system topic works then the server is up but just doesn't know the original topic
+            nError = DDELINK_ERROR_DATA;
+            return false;
         }
-        else
-#endif  // WNT
-        {
-            nError = DDELINK_ERROR_APP;
-        }
+
+        nError = DDELINK_ERROR_APP;
     }
 
     if( LINKUPDATE_ALWAYS == nLinkType && !pLink && !pConnection->GetError() )

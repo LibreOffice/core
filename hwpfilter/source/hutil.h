@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UTIL_H_
-#define _UTIL_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HUTIL_H
+#define INCLUDED_HWPFILTER_SOURCE_HUTIL_H
 
 #include "hbox.h"
 /**

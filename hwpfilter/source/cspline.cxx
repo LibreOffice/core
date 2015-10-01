@@ -47,8 +47,11 @@
 // matrix.  Therefore for very large N, you may have to worry about memory
 // usage.
 
+#include <sal/config.h>
+
+#include "cspline.h"
 #include "solver.h"
-//-----------------------------------------------------------------------------
+
 void NaturalSpline (int N, double* x, double* a, double*& b, double*& c,
     double*& d)
 {
@@ -123,8 +126,8 @@ void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
     h[i] = x[i+1]-x[i];
 
   mgcLinearSystemD sys;
-  double** mat = sys.NewMatrix(N+1);  // guaranteed to be zeroed memory
-  c = sys.NewVector(N+1);   // guaranteed to be zeroed memory
+  double** mat = mgcLinearSystemD::NewMatrix(N+1);  // guaranteed to be zeroed memory
+  c = mgcLinearSystemD::NewVector(N+1);   // guaranteed to be zeroed memory
 
   // c[0] - c[N] = 0
   mat[0][0] = +1.0f;
@@ -149,7 +152,7 @@ void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
   c[N] = 3.0f*((a[1]-a[0])/h[0] - (a[0]-a[N-1])/h[N-1]);
 
   // solve for c[0] through c[N]
-  sys.Solve(N+1,mat,c);
+  mgcLinearSystemD::Solve(N+1,mat,c);
 
   const double oneThird = 1.0/3.0;
   b = new double[N];
@@ -161,7 +164,7 @@ void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
   }
 
   delete[] h;
-  sys.DeleteMatrix(N+1,mat);
+  mgcLinearSystemD::DeleteMatrix(N+1,mat);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HTAGS_H_
-#define _HTAGS_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HTAGS_H
+#define INCLUDED_HWPFILTER_SOURCE_HTAGS_H
 
 class HWPFile;
 /**
- * @short Embeded image
+ * @short Embedded image
  */
 struct EmPicture
 {
@@ -54,17 +54,17 @@ struct HyperText
 struct OlePicture
 {
     int   size;
-    ulong signature;
+    uint signature;
 #ifdef WIN32
-     IStorage *pis;
+    IStorage *pis;
 #else
-     char *pis;
+    char *pis;
 #endif
     OlePicture(int tsize);
     ~OlePicture(void);
 
     bool Read(HWPFile& hwpf);
 };
-#endif                                            /* _HTAGS_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HTAGS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

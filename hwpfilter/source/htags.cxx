@@ -56,7 +56,7 @@ EmPicture::EmPicture(size_t tsize)
 #ifdef WIN32
 #define unlink _unlink
 #endif
-EmPicture::~EmPicture(void)
+EmPicture::~EmPicture()
 {
     if (data)
         delete[]data;
@@ -78,18 +78,18 @@ bool EmPicture::Read(HWPFile & hwpf)
 
 
 OlePicture::OlePicture(int tsize)
+    : signature(0)
+    , pis(NULL)
 {
     size = tsize - 4;
     if (size <= 0)
         return;
-#ifdef WIN32
-     pis = 0L;
-#else
+#ifndef WIN32
      pis = new char[size];
 #endif
 };
 
-OlePicture::~OlePicture(void)
+OlePicture::~OlePicture()
 {
 #ifdef WIN32
      if( pis )
@@ -112,7 +112,7 @@ bool OlePicture::Read(HWPFile & hwpf)
         return false;
 #ifdef WIN32
     char *data = new char[size];
-    if( data == 0 || hwpf.ReadBlock(data,size) == 0 )
+    if (hwpf.ReadBlock(data,size) == 0)
     {
           delete [] data;
           return false;

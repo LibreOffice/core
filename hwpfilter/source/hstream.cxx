@@ -19,28 +19,20 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "hstream.h"
+#include "hstream.hxx"
 
-HStream::HStream() : size(0), pos(0)
+HStream::HStream()
+    : size(0)
+    , pos(0)
 {
-    seq = 0;
 }
 
-
-HStream::~HStream()
+void HStream::addData(const byte *buf, int aToAdd)
 {
-    if( seq )
-        free( seq );
-}
-
-
-void HStream::addData( const byte *buf, int aToAdd)
-{
-    seq = (byte *)realloc( seq, size + aToAdd );
-    memcpy( seq + size, buf, aToAdd );
+    seq.resize(size + aToAdd);
+    memcpy(seq.data() + size, buf, aToAdd);
     size += aToAdd;
 }
-
 
 int HStream::readBytes(byte * buf, int aToRead)
 {
@@ -51,7 +43,6 @@ int HStream::readBytes(byte * buf, int aToRead)
     return aToRead;
 }
 
-
 int HStream::skipBytes(int aToSkip)
 {
     if (aToSkip >= (size - pos))
@@ -60,15 +51,9 @@ int HStream::skipBytes(int aToSkip)
     return aToSkip;
 }
 
-
 int HStream::available() const
 {
     return size - pos;
-}
-
-
-void HStream::closeInput()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

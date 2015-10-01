@@ -156,7 +156,7 @@ struct yy_buffer_state
      * instead of fread(), to make sure we stop fetching input after
      * each newline.
      */
-    int yy_is_interactive;
+    bool yy_is_interactive;
 
     /* Whether we're considered to be at the beginning of a line.
      * If so, '^' rules will be active on the next match, otherwise
@@ -203,7 +203,7 @@ static int yy_n_chars;      /* number of characters read into yy_ch_buf */
 int yyleng;
 
 /* Points to current character in buffer. */
-static char *yy_c_buf_p = (char *) 0;
+static char *yy_c_buf_p = nullptr;
 static int yy_init = 1;     /* whether we need to initialize */
 static int yy_start = 0;    /* start state number */
 
@@ -230,7 +230,7 @@ static void *yy_flex_realloc YY_PROTO(( void *, yy_size_t ));
 static void yy_flex_free YY_PROTO(( void * ));
 
 typedef unsigned char YY_CHAR;
-FILE *yyin = (FILE *) 0, *yyout = (FILE *) 0;
+FILE *yyin = nullptr, *yyout = nullptr;
 typedef int yy_state_type;
 extern char *yytext;
 #define yytext_ptr yytext
@@ -988,14 +988,6 @@ int token_debug(const char *format, ...);
  * section 1.
  */
 
-#ifndef YY_SKIP_YYWRAP
-#ifdef __cplusplus
-extern "C" int yywrap YY_PROTO(( void ));
-#else
-extern int yywrap YY_PROTO(( void ));
-#endif
-#endif
-
 #ifndef YY_NO_UNPUT
 //static void yyunput YY_PROTO(( int c, char *buf_ptr ));
 #endif
@@ -1043,6 +1035,8 @@ YY_MALLOC_DECL
 #endif
 #endif
 
+#include <lexer.hxx>
+
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
 #define YY_READ_BUF_SIZE 8192
@@ -1054,7 +1048,7 @@ YY_MALLOC_DECL
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO do { if (fwrite( yytext, yyleng, 1, yyout )) {} } while (0)
+#define ECHO do { if (fwrite( yytext, yyleng, 1, yyout )) {} } while (false)
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -1116,9 +1110,9 @@ YY_MALLOC_DECL
 
 YY_DECL
     {
-    register yy_state_type yy_current_state;
-    register char *yy_cp, *yy_bp;
-    register int yy_act;
+    yy_state_type yy_current_state;
+    char *yy_cp, *yy_bp;
+    int yy_act;
 
     if ( yy_init )
         {
@@ -1144,7 +1138,7 @@ YY_DECL
         yy_load_buffer_state();
         }
 
-    while ( 1 )     /* loops until end-of-file is reached */
+    while ( true )     /* loops until end-of-file is reached */
         {
         yy_cp = yy_c_buf_p;
 
@@ -1160,7 +1154,7 @@ YY_DECL
 yy_match:
         do
             {
-            register YY_CHAR yy_c = sal::static_int_cast<YY_CHAR>(yy_ec[YY_SC_TO_UI(*yy_cp)]);
+            YY_CHAR yy_c = sal::static_int_cast<YY_CHAR>(yy_ec[YY_SC_TO_UI(*yy_cp)]);
             if ( yy_accept[yy_current_state] )
                 {
                 yy_last_accepting_state = yy_current_state;
@@ -1525,9 +1519,9 @@ case YY_STATE_EOF(INITIAL):
 
 static int yy_get_next_buffer()
     {
-    register char *dest = yy_current_buffer->yy_ch_buf;
-    register char *source = yytext_ptr;
-    register int number_to_move, i;
+    char *dest = yy_current_buffer->yy_ch_buf;
+    char *source = yytext_ptr;
+    int number_to_move, i;
     int ret_val;
 
     if ( yy_c_buf_p > &yy_current_buffer->yy_ch_buf[yy_n_chars + 1] )
@@ -1594,10 +1588,10 @@ static int yy_get_next_buffer()
                 else
                     b->yy_buf_size *= 2;
 
-                b->yy_ch_buf = (char *)
+                b->yy_ch_buf = static_cast<char *>(
                     /* Include room in for 2 EOB chars. */
-                    yy_flex_realloc( (void *) b->yy_ch_buf,
-                             b->yy_buf_size + 2 );
+                    yy_flex_realloc( static_cast<void *>(b->yy_ch_buf),
+                             b->yy_buf_size + 2 ));
                 }
             else
                 /* Can't grow it, we don't own it. */
@@ -1657,14 +1651,14 @@ static int yy_get_next_buffer()
 
 static yy_state_type yy_get_previous_state()
     {
-    register yy_state_type yy_current_state;
-    register char *yy_cp;
+    yy_state_type yy_current_state;
+    char *yy_cp;
 
     yy_current_state = yy_start;
 
     for ( yy_cp = yytext_ptr + YY_MORE_ADJ; yy_cp < yy_c_buf_p; ++yy_cp )
         {
-        register YY_CHAR yy_c = sal::static_int_cast<YY_CHAR>(*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
+        YY_CHAR yy_c = sal::static_int_cast<YY_CHAR>(*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
         if ( yy_accept[yy_current_state] )
             {
             yy_last_accepting_state = yy_current_state;
@@ -1696,10 +1690,10 @@ static yy_state_type yy_try_NUL_trans( yy_current_state )
 yy_state_type yy_current_state;
 #endif
     {
-    register int yy_is_jam;
-    register char *yy_cp = yy_c_buf_p;
+    bool yy_is_jam;
+    char *yy_cp = yy_c_buf_p;
 
-    register YY_CHAR yy_c = 1;
+    YY_CHAR yy_c = 1;
     if ( yy_accept[yy_current_state] )
         {
         yy_last_accepting_state = yy_current_state;
@@ -1763,7 +1757,7 @@ YY_BUFFER_STATE new_buffer;
 
 
 #ifdef YY_USE_PROTOS
-void yy_load_buffer_state( void )
+void yy_load_buffer_state()
 #else
 void yy_load_buffer_state()
 #endif
@@ -1785,7 +1779,7 @@ int size;
     {
     YY_BUFFER_STATE b;
 
-    b = (YY_BUFFER_STATE) yy_flex_alloc( sizeof( struct yy_buffer_state ) );
+    b = static_cast<YY_BUFFER_STATE>(yy_flex_alloc( sizeof( struct yy_buffer_state ) ));
     if ( ! b )
         YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
 
@@ -1794,7 +1788,7 @@ int size;
     /* yy_ch_buf has to be 2 characters longer than the size given because
      * we need to put in 2 end-of-buffer characters.
      */
-    b->yy_ch_buf = (char *) yy_flex_alloc( b->yy_buf_size + 2 );
+    b->yy_ch_buf = static_cast<char *>(yy_flex_alloc( b->yy_buf_size + 2 ));
     if ( ! b->yy_ch_buf )
         YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
 
@@ -1817,12 +1811,12 @@ YY_BUFFER_STATE b;
         return;
 
     if ( b == yy_current_buffer )
-        yy_current_buffer = (YY_BUFFER_STATE) 0;
+        yy_current_buffer = nullptr;
 
     if ( b->yy_is_our_buffer )
-        yy_flex_free( (void *) b->yy_ch_buf );
+        yy_flex_free( static_cast<void *>(b->yy_ch_buf) );
 
-    yy_flex_free( (void *) b );
+    yy_flex_free( static_cast<void *>(b) );
     }
 
 
@@ -1848,12 +1842,12 @@ FILE *file;
     b->yy_fill_buffer = 1;
 
 #if YY_ALWAYS_INTERACTIVE
-    b->yy_is_interactive = 1;
+    b->yy_is_interactive = true;
 #else
 #if YY_NEVER_INTERACTIVE
-    b->yy_is_interactive = 0;
+    b->yy_is_interactive = false;
 #else
-    b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
+    b->yy_is_interactive = file && isatty( fileno(file) ) > 0;
 #endif
 #endif
     }
@@ -1906,7 +1900,7 @@ yy_size_t size;
         /* They forgot to leave room for the EOB's. */
         return 0;
 
-    b = (YY_BUFFER_STATE) yy_flex_alloc( sizeof( struct yy_buffer_state ) );
+    b = static_cast<YY_BUFFER_STATE>(yy_flex_alloc( sizeof( struct yy_buffer_state ) ));
     if ( ! b )
         YY_FATAL_ERROR( "out of dynamic memory in yy_scan_buffer()" );
 
@@ -1915,7 +1909,7 @@ yy_size_t size;
     b->yy_is_our_buffer = 0;
     b->yy_input_file = 0;
     b->yy_n_chars = b->yy_buf_size;
-    b->yy_is_interactive = 0;
+    b->yy_is_interactive = false;
     b->yy_at_bol = 1;
     b->yy_fill_buffer = 0;
     b->yy_buffer_status = YY_BUFFER_NEW;
@@ -1960,7 +1954,7 @@ int len;
 
     /* Get memory for full buffer, including space for trailing EOB's. */
     n = len + 2;
-    buf = (char *) yy_flex_alloc( n );
+    buf = static_cast<char *>(yy_flex_alloc( n ));
     if ( ! buf )
         YY_FATAL_ERROR( "out of dynamic memory in yy_scan_bytes()" );
 
@@ -2064,7 +2058,7 @@ yyconst char *s2;
 int n;
 #endif
     {
-    register int i;
+    int i;
     for ( i = 0; i < n; ++i )
         s1[i] = s2[i];
     }
@@ -2078,7 +2072,7 @@ static int yy_flex_strlen( s )
 yyconst char *s;
 #endif
     {
-    register int n;
+    int n;
     for ( n = 0; s[n]; ++n )
         ;
 
@@ -2094,7 +2088,7 @@ static void *yy_flex_alloc( size )
 yy_size_t size;
 #endif
     {
-    return (void *) malloc( size );
+    return malloc( size );
     }
 
 #ifdef YY_USE_PROTOS
@@ -2112,7 +2106,7 @@ yy_size_t size;
      * any pointer type to void*, and deal with argument conversions
      * as though doing an assignment.
      */
-    return (void *) realloc( (char *) ptr, size );
+    return realloc( ptr, size );
     }
 
 #ifdef YY_USE_PROTOS
