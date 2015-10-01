@@ -252,7 +252,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     rIStm.ReadUChar( cDummy );
 
     // if we cannot read all
-    // we returnn and wait for new data
+    // we return and wait for new data
     if ( rIStm.GetError() != ERRCODE_IO_PENDING )
     {
         rIStm.Seek( nLastPos );

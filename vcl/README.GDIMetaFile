@@ -1,21 +1,21 @@
 GDIMetaFile class
 =================
 
-The GDIMetaFile class reads, writes, manipulates and replays metafiles via the VCL module. 
+The GDIMetaFile class reads, writes, manipulates and replays metafiles via the VCL module.
 
-A typical usecase is to intialize a new GDIMetaFile, open the actual stored metafile and
+A typical use case is to intialize a new GDIMetaFile, open the actual stored metafile and
 read it in via GDIMetaFile::Read( aIStream ). This reads in the metafile into the GDIMetafile
 object - it can read in an old-style VCLMTF metafile (back in the days that Microsoft didn't
 document the metafile format this was used), as well as EMF+ files - and adds them to a list
 (vector) of MetaActions. You can also populate your own GDIMetaFile via AddAction(),
-RemoveAction(), ReplaceAction(), etc. 
+RemoveAction(), ReplaceAction(), etc.
 
 Once the GDIMetafile object is read to be used, you can "play" the metafile, pause it, wind
 forward or rewind the metafile. The metafile can be moved, scaled, rotated and clipped, as
-well have the colours adjusted or replaced, or even made monochrome. 
+well have the colours adjusted or replaced, or even made monochrome.
 
 The GDIMetafile can be used to get an OutputDevice's metafile via the Linker() and Record()
-functions. 
+functions.
 
 
 Using GDIMetafile

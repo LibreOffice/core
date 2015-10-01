@@ -594,7 +594,7 @@ static void SAL_CALL MainWorkerFunction( void* pArgs )
 void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData )
 {
 #ifdef WNT
-    // sal thread always call CoInitializeEx, so a sysdepen implementation is necessary
+    // sal thread always call CoInitializeEx, so a system dependent implementation is necessary
 
     unsigned uThreadID;
     hThreadID = (HANDLE)_beginthreadex(

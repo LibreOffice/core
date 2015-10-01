@@ -207,7 +207,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
     return eReadState;
 }
 
-// ImplGetColor returns variouls colour values,
+// ImplGetColor returns various colour values,
 // returns TRUE if various colours could be assigned
 
 bool XPMReader::ImplGetColor( sal_uLong nNumb )
