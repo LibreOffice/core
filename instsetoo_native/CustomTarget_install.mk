@@ -65,7 +65,7 @@ define instsetoo_native_msitemplates
 TEMPLATE_DIR=$(dir $@)msi_templates \
 && rm -rf $${TEMPLATE_DIR} \
 && mkdir -p $${TEMPLATE_DIR}/Binary \
-&& for I in $(SRCDIR)/instsetoo_native/inc_$(1)/windows/msi_templates/*.* ; do $(GREP) -v '^#' "$$I" > $${TEMPLATE_DIR}/`basename $$I` ; done \
+&& for I in $(SRCDIR)/instsetoo_native/inc_$(1)/windows/msi_templates/*.* ; do $(GREP) -v '^#' "$$I" > $${TEMPLATE_DIR}/`basename $$I` || true ; done \
 && $(GNUCOPY) $(SRCDIR)/instsetoo_native/inc_common/windows/msi_templates/Binary/*.* $${TEMPLATE_DIR}/Binary
 endef
 else
