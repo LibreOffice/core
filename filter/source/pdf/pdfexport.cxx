@@ -184,10 +184,10 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
 
         if( pOut )
         {
-            vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData* >( pOut->GetExtOutDevData() );
             if ( nPageCount )
             {
-                pPDFExtOutDevData->SetIsExportNotesPages( bExportNotesPages );
+                vcl::PDFExtOutDevData& rPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData&>(*pOut->GetExtOutDevData());
+                rPDFExtOutDevData.SetIsExportNotesPages( bExportNotesPages );
 
                 sal_Int32 nCurrentPage(0);
                 StringRangeEnumerator::Iterator aIter = rRangeEnum.begin();
@@ -203,7 +203,7 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                             aRenderer[ nProperty].Value >>= aPageSize;
                     }
 
-                    pPDFExtOutDevData->SetCurrentPageNumber( nCurrentPage );
+                    rPDFExtOutDevData.SetCurrentPageNumber( nCurrentPage );
 
                     GDIMetaFile                 aMtf;
                     const MapMode               aMapMode( MAP_100TH_MM );
@@ -231,7 +231,7 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
 
                     if( aMtf.GetActionSize() &&
                              ( !mbSkipEmptyPages || aPageSize.Width || aPageSize.Height ) )
-                        bRet = ImplExportPage( rPDFWriter, *pPDFExtOutDevData, aMtf ) || bRet;
+                        bRet = ImplExportPage(rPDFWriter, rPDFExtOutDevData, aMtf) || bRet;
 
                     pOut->Pop();
 
