@@ -3254,8 +3254,8 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
             {
                 if ( ( bVBAEnabled || CodeCompleteOptions::IsExtendedTypeDeclaration() ) && pObj->IsA( TYPE(SbUnoObject) ) )
                 {
-                    SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( pObj );
-                    bOk = checkUnoObjectType( pUnoObj, aClass );
+                    SbUnoObject& rUnoObj = dynamic_cast<SbUnoObject&>(*pObj);
+                    bOk = checkUnoObjectType(&rUnoObj, aClass);
                 }
                 else
                     bOk = false;
@@ -3723,10 +3723,9 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                 else if( bVBAEnabled && p->GetType() == SbxOBJECT && (0 == dynamic_cast<const SbxMethod*>( p) || !p->IsBroadcaster()) )
                 {
                     // Check for default method with named parameters
-                    SbxBaseRef pObj = p->GetObject();
-                    if( pObj && 0 != dynamic_cast<const SbUnoObject*>( &pObj) )
+                    SbxBaseRef xObj = p->GetObject();
+                    if (SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>(&xObj))
                     {
-                        SbUnoObject* pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj));
                         Any aAny = pUnoObj->getUnoAny();
 
                         if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
