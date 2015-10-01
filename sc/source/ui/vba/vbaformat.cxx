@@ -771,26 +771,6 @@ ScVbaFormat<Ifc1>::getXPropertyState() throw ( uno::RuntimeException )
 }
 
 template< typename Ifc1 >
-OUString
-ScVbaFormat<Ifc1>::getServiceImplName()
-{
-    return OUString("ScVbaFormat");
-}
-
-template< typename Ifc1 >
-uno::Sequence< OUString >
-ScVbaFormat<Ifc1>::getServiceNames()
-{
-        static uno::Sequence< OUString > aServiceNames;
-        if ( aServiceNames.getLength() == 0 )
-        {
-                aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = "ooo.vba.excel.Format";
-        }
-        return aServiceNames;
-}
-
-template< typename Ifc1 >
 ScCellRangesBase*
 ScVbaFormat<Ifc1>::getCellRangesBase() throw ( ::uno::RuntimeException )
 {

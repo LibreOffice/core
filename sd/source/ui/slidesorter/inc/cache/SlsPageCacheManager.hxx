@@ -143,15 +143,6 @@ private:
         const Size& rPreviewSize,
         const std::shared_ptr<Cache>& rpCache);
 
-    /** Return a sorted list of the available caches, both active caches and
-        those recently used, for the given document.  The sort order is so
-        that an exact match of the preview size is at the front.  Other
-        caches follow with the largest size first.
-    */
-    BestFittingPageCaches GetBestFittingCaches (
-        DocumentKey pDocument,
-        const Size& rPreviewSize);
-
     /** This method is used internally to initialize a newly created
         BitmapCache with already exisiting previews.
     */

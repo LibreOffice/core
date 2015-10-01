@@ -24,7 +24,6 @@
 class SwNode;
 class SwContentNode;
 class ReReadThread;
-long GrfNodeChanged( void* pLink, void* pCaller );
 
 class SwBaseLink : public ::sfx2::SvBaseLink
 {

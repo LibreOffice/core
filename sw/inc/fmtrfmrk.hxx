@@ -61,7 +61,6 @@ public:
     void InvalidateRefMark();
 
     const SwTextRefMark *GetTextRefMark() const   { return pTextAttr; }
-    SwTextRefMark *GetTextRefMark()               { return pTextAttr; }
 
     inline       OUString &GetRefName()       { return aRefName; }
     inline const OUString &GetRefName() const { return aRefName; }

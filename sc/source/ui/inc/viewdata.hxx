@@ -47,8 +47,6 @@ enum ScVSplitPos { SC_SPLIT_TOP, SC_SPLIT_BOTTOM };
 
 inline ScHSplitPos WhichH( ScSplitPos ePos );
 inline ScVSplitPos WhichV( ScSplitPos ePos );
-inline ScSplitPos Which( ScHSplitPos eHPos );
-inline ScSplitPos Which( ScVSplitPos eVPos );
 
 /**  Screen behavior related to cursor movements */
 enum ScFollowMode { SC_FOLLOW_NONE, SC_FOLLOW_LINE, SC_FOLLOW_FIX, SC_FOLLOW_JUMP };

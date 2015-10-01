@@ -88,7 +88,6 @@ private:
     Point maIconOffset;
     std::unique_ptr<FramePainter> mpShadowPainter;
 
-    void SetPositionAndSize (const Rectangle& rBoundingBox);
     Point PaintRepresentatives (
         OutputDevice& rContent,
         const Size& rPreviewSize,

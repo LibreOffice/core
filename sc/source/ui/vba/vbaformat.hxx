@@ -89,9 +89,6 @@ public:
     virtual css::uno::Any SAL_CALL getMergeCells(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) = 0;
     virtual void SAL_CALL setReadingOrder( const css::uno::Any& ReadingOrder ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getReadingOrder(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    // XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif

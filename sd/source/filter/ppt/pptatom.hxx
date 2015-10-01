@@ -36,8 +36,6 @@ public:
     /** imports this atom and its child atoms */
     static Atom* import( const DffRecordHeader& rRootRecordHeader, SvStream& rStCtrl );
 
-    inline const DffRecordHeader& getHeader() const;
-
     /** @return true if at least one atom with the given nRecType is found */
     inline bool hasChildAtom( sal_uInt16 nRecType ) const;
 
@@ -85,11 +83,6 @@ inline bool Atom::hasChildAtom( sal_uInt16 nRecType ) const
 inline const Atom* Atom::findFirstChildAtom( sal_uInt16 nRecType ) const
 {
     return findNextChildAtom( nRecType, NULL );
-}
-
-inline const DffRecordHeader& Atom::getHeader() const
-{
-    return maRecordHeader;
 }
 
 inline const Atom* Atom::findFirstChildAtom() const

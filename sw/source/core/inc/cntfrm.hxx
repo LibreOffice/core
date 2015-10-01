@@ -78,7 +78,6 @@ public:
     inline const SwContentFrm *GetFollow() const;
     inline       SwContentFrm *GetFollow();
     inline const SwContentFrm *GetPrecede() const;
-    inline       SwContentFrm *GetPrecede();
     SwTextFrm* FindMaster() const;
 
     // layout dependent cursor travelling
@@ -139,10 +138,6 @@ inline SwContentFrm *SwContentFrm::GetFollow()
 inline const SwContentFrm *SwContentFrm::GetPrecede() const
 {
     return static_cast<const SwContentFrm*>(SwFlowFrm::GetPrecede());
-}
-inline SwContentFrm *SwContentFrm::GetPrecede()
-{
-    return static_cast<SwContentFrm*>(SwFlowFrm::GetPrecede());
 }
 
 #endif

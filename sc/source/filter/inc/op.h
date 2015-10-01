@@ -31,10 +31,7 @@ void OP_EOF(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
 void OP_Integer(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
 void OP_Number(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
 void OP_Label(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Integer3(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );  // WK3
-void OP_Number3(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );   // WK3
 void OP_Formula(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Formula3(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );  // WK3
 void OP_ColumnWidth(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
 void OP_NamedRange(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
 void OP_SymphNamedRange(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );

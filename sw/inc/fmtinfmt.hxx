@@ -68,10 +68,6 @@ public:
     {
         return mpTextAttr;
     }
-    SwTextINetFormat* GetTextINetFormat()
-    {
-        return mpTextAttr;
-    }
 
     const OUString& GetValue() const
     {

@@ -54,7 +54,6 @@ private:
         throw (std::exception);
     bool IsPresObj() const
         throw (std::exception);
-    void SetPresObj( bool bPresObj ) throw();
 
     bool IsEmptyPresObj() const throw();
     void SetEmptyPresObj(bool bEmpty)
@@ -64,8 +63,6 @@ private:
     void SetMasterDepend( bool bDepend ) throw();
 
     OUString GetPlaceholderText() const;
-
-    com::sun::star::uno::Sequence< sal_Int8 >* mpImplementationId;
 
 public:
     SdXShape(SvxShape* pShape, SdXImpressDocument* pModel) throw();
@@ -108,26 +105,6 @@ public:
 
     // XEventsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-private:
-    void setOldEffect( const com::sun::star::uno::Any& aValue );
-    void setOldTextEffect( const com::sun::star::uno::Any& aValue );
-    void setOldSpeed( const com::sun::star::uno::Any& aValue );
-    void setOldDimColor( const com::sun::star::uno::Any& aValue );
-    void setOldDimHide( const com::sun::star::uno::Any& aValue );
-    void setOldDimPrevious( const com::sun::star::uno::Any& aValue );
-    void setOldPresOrder( const com::sun::star::uno::Any& aValue );
-    void updateOldSoundEffect( SdAnimationInfo* pInfo );
-
-    void getOldEffect( com::sun::star::uno::Any& rValue ) const;
-    void getOldTextEffect( com::sun::star::uno::Any& rValue ) const;
-    void getOldSpeed( com::sun::star::uno::Any& rValue ) const;
-    void getOldSoundFile( com::sun::star::uno::Any& rValue ) const;
-    void getOldSoundOn( com::sun::star::uno::Any& rValue ) const;
-    void getOldDimColor( com::sun::star::uno::Any& rValue ) const;
-    void getOldDimHide( com::sun::star::uno::Any& rValue ) const;
-    void getOldDimPrev( com::sun::star::uno::Any& rValue ) const;
-    void getOldPresOrder( com::sun::star::uno::Any& rValue ) const;
 };
 
 struct SvEventDescription;

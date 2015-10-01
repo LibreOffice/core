@@ -74,7 +74,6 @@ public:
     virtual bool exportDocument() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?
-    static sal_Int32 getSchemeClr( sal_Int32 /* nColorSchemeToken */ ) { return 0; }
     virtual oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE { return NULL; }
     virtual const oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE { return NULL; }
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE { return oox::drawingml::table::TableStyleListPtr(); }

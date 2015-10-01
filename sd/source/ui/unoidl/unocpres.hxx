@@ -54,7 +54,6 @@ public:
     virtual ~SdXCustomPresentation() throw();
 
     // internal
-    void Invalidate() { mpSdCustomShow = NULL; }
     SdCustomShow* GetSdCustomShow() const throw() { return mpSdCustomShow; }
     void SetSdCustomShow( SdCustomShow* pShow ) throw() { mpSdCustomShow = pShow; }
     SdXImpressDocument* GetModel() const throw() { return mpModel; }

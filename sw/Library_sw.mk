@@ -345,7 +345,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/objectpositioning/tolayoutanchoredobjectposition \
     sw/source/core/ole/ndole \
     sw/source/core/para/paratr \
-    sw/source/core/sw3io/sw3convert \
     sw/source/core/sw3io/swacorr \
     sw/source/core/swg/SwXMLBlockExport \
     sw/source/core/swg/SwXMLBlockImport \

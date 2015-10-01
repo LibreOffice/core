@@ -44,14 +44,6 @@ inline long SmPtsTo100th_mm(long nNumPts)
 }
 
 
-inline long SmPtsTo100th_mm(const Fraction &rNumPts)
-    // as above but with argument 'rNumPts' as 'Fraction'
-{
-    Fraction  aTmp (254000L, 7227L);
-    return aTmp *= rNumPts;
-}
-
-
 inline Fraction Sm100th_mmToPts(long nNum100th_mm)
     // returns the length (in points) that corresponds to the length
     // 'nNum100th_mm' (in 100th of mm).

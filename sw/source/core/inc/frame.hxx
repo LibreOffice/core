@@ -224,11 +224,6 @@ class SW_DLLPUBLIC SwFrm: public SwClient, public SfxBroadcaster
     friend SwFrm *SaveContent( SwLayoutFrm *, SwFrm* pStart );
     friend void   RestoreContent( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
-#ifdef DBG_UTIL
-    // remove empty SwSectionFrms from a chain
-    friend SwFrm* SwClearDummies( SwFrm* pFrm );
-#endif
-
     // for validating a mistakenly invalidated one in SwContentFrm::MakeAll
     friend void ValidateSz( SwFrm *pFrm );
     // implemented in text/txtftn.cxx, prevents Footnote oscillation

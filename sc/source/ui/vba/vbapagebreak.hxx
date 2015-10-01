@@ -48,10 +48,6 @@ public:
 
     virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange> SAL_CALL Location() throw ( css::script::BasicErrorException, css::uno::RuntimeException);
-
-    // XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 typedef ScVbaPageBreak < ov::excel::XHPageBreak > ScVbaHPageBreak_BASE;

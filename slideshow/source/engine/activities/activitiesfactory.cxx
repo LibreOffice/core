@@ -586,13 +586,6 @@ public:
             (*mpAnim)( getPresentationValue( maValues.back() ) );
     }
 
-    /// Disposable:
-    virtual void dispose()
-    {
-        mpAnim.reset();
-        BaseType::dispose();
-    }
-
 private:
     ValueVectorType                         maValues;
 

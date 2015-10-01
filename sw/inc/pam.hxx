@@ -154,8 +154,6 @@ extern SwGoInDoc fnGoContentCells;
 extern SwGoInDoc fnGoContentSkipHidden;
 extern SwGoInDoc fnGoContentCellsSkipHidden;
 
-void _InitPam();
-
 class SwPaM;
 /// PaM is Point and Mark: a selection of the document model.
 class SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>

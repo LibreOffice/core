@@ -129,7 +129,6 @@ LayoutMenu::LayoutMenu (
       DropTargetHelper(this),
       mrBase(rViewShellBase),
       mbUseOwnScrollBar(false),
-      mnPreferredColumnCount(3),
       mxListener(NULL),
       mbSelectionUpdatePending(true),
       mbIsMainViewChangePending(false),

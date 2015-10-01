@@ -34,11 +34,9 @@ void        PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB 
 
 void        SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt);
 
-OUString    DosToSystem( sal_Char *pSource );
-
 double      SnumToDouble( sal_Int16 nVal );
 
-double          Snum32ToDouble( sal_uInt32 nValue );
+double      Snum32ToDouble( sal_uInt32 nValue );
 
 typedef sal_uInt16 StampTyp;
 

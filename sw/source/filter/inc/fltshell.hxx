@@ -45,12 +45,6 @@ class SwTableBox;
 class SwDoc;
 class SwPaM;
 
-inline void SwFltClearFlag(sal_uLong& rFieldFlags, int no)
-    { rFieldFlags &= ~(1L << no); }
-
-inline void SwFltSetFlag(sal_uLong& rFieldFlags, int no)
-    { rFieldFlags |= sal_uLong(1) << no; }
-
 inline bool SwFltGetFlag(sal_uLong nFieldFlags, int no)
     { return (nFieldFlags & (sal_uLong(1) << no)) != 0; }
 

@@ -57,7 +57,6 @@ public:
                                         sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     const SwTextRuby* GetTextRuby() const         { return pTextAttr; }
-    SwTextRuby* GetTextRuby()                     { return pTextAttr; }
 
     OUString GetText() const                    { return sRubyText; }
     void SetText( const OUString& rText )        { sRubyText = rText; }

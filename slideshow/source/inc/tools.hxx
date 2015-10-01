@@ -298,6 +298,7 @@ namespace slideshow
 
         /// To work around ternary operator in initializer lists
         /// (Solaris compiler problems)
+#ifdef SOLARIS
         template <typename T>
         inline T const & ternary_op(
             const bool cond, T const & arg1, T const & arg2 )
@@ -307,6 +308,7 @@ namespace slideshow
             else
                 return arg2;
         }
+#endif
 
         template <typename ValueType>
         inline bool getPropertyValue(

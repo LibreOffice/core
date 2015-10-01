@@ -79,7 +79,6 @@ public:
     void UpdatePageNum();               // insert page numbering
     TYPEINFO_OVERRIDE();                         // for rtti
 
-    SwTOXSortTabBases& GetTOXSortTabBases() { return aSortArr; }
     const SwTOXSortTabBases& GetTOXSortTabBases() const { return aSortArr; }
 
     bool SetPosAtStartEnd( SwPosition& rPos, bool bAtStart = true ) const;

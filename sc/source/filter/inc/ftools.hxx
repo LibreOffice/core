@@ -55,11 +55,6 @@ template< typename ReturnType, typename Type >
 inline ReturnType llimit_cast( Type nValue, ReturnType nMin )
 { return static_cast< ReturnType >( ::std::max< Type >( nValue, nMin ) ); }
 
-/** Returns the value, if it fits into ReturnType, otherwise the minimum value of ReturnType. */
-template< typename ReturnType, typename Type >
-inline ReturnType llimit_cast( Type nValue )
-{ return llimit_cast( nValue, ::std::numeric_limits< ReturnType >::min() ); }
-
 /** Returns the value, if it is not greater than nMax, otherwise nMax. */
 template< typename ReturnType, typename Type >
 inline ReturnType ulimit_cast( Type nValue, ReturnType nMax )

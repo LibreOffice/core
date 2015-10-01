@@ -39,12 +39,6 @@
 
 
 
-inline const OUString GetExportSymbolName( const OUString &rUiSymbolName )
-{
-    return SmLocalizedSymbolData::GetExportSymbolName( rUiSymbolName );
-}
-
-
 inline const OUString GetUiSymbolName( const OUString &rExportSymbolName )
 {
     return SmLocalizedSymbolData::GetUiSymbolName( rExportSymbolName );

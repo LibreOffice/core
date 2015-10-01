@@ -51,16 +51,6 @@ enum SdShapeTypes
     PRESENTATION_PAGENUMBER
 };
 
-/** Factory method that creates accessibility objects corresponding to the
-    type of the given shape.
-*/
-AccessibleShape*
-    CreateSdAccessibleShape (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape
-        );
-
 } // end of namespace accessibility
 
 #endif

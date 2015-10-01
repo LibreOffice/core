@@ -332,7 +332,6 @@ private:
     DECL_LINK_TYPED( TriStateHdl, Button*, void );
     DECL_LINK_TYPED( CheckHdl, SvTreeListBox*, void );
     DECL_LINK( EdModifyHdl, void* );
-    DECL_LINK_TYPED( EdModifyCheckBoxHdl, CheckBox&, void );
 
 private:
     VclPtr<Edit>           maEdSearch;

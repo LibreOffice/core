@@ -129,7 +129,6 @@ private:
     /** If we are asked for the preferred window size, then use this
         many columns for the calculation.
     */
-    const int mnPreferredColumnCount;
     css::uno::Reference<css::frame::XStatusListener> mxListener;
     bool mbSelectionUpdatePending;
     bool mbIsMainViewChangePending;
@@ -189,7 +188,6 @@ private:
     /** When clicked then set the current page of the view in the center pane.
     */
     DECL_LINK_TYPED(ClickHandler, ValueSet*, void);
-    DECL_LINK_TYPED(RightClickHandler, const MouseEvent&, void);
     DECL_LINK_TYPED(StateChangeHandler, const OUString&, void);
     DECL_LINK_TYPED(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
     DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);

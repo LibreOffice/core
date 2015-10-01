@@ -73,7 +73,6 @@ ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
     m_nActive( 0 ),
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
-    m_nExtraHeight( 2 ),
     m_aPinBox( VclPtr<NumericBox>::Create( this, 0 ) ),
     m_aDeauthoriseButton( VclPtr<PushButton>::Create( this ) ),
     m_aScrollBar( VclPtr<ScrollBar>::Create( this, WB_VERT ) )
