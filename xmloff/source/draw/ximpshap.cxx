@@ -3606,7 +3606,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
                                                 IsXMLToken( rLocalName, XML_THUMBNAIL ) ) ) )
     {
         SvXMLImportContext *pImplContext = &mxImplContext;
-        pContext = dynamic_cast<SdXMLShapeContext*>( pImplContext  )->CreateChildContext( nPrefix,
+        pContext = dynamic_cast<SdXMLShapeContext&>(*pImplContext).CreateChildContext( nPrefix,
                                                                         rLocalName, xAttrList );
     }
     else if ( (XML_NAMESPACE_DRAW == nPrefix) && IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
