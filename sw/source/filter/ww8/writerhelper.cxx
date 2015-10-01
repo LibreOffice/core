@@ -516,7 +516,7 @@ namespace sw
         }
 
         /*
-           Utility to extract flyfmts from a document, potentially from a
+           Utility to extract FlyFormats from a document, potentially from a
            selection.
            */
         Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM /*, bool bAll*/)

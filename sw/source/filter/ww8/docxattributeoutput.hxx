@@ -791,7 +791,7 @@ private:
     /// names of these bookmarks for each sequence.
     std::map<OUString, std::vector<OString> > m_aSeqBookmarksNames;
 
-    /// GrabBag for text effexts like glow, shadow, ...
+    /// GrabBag for text effects like glow, shadow, ...
     std::vector<css::beans::PropertyValue> m_aTextEffectsGrabBag;
 
     /// The current table helper
