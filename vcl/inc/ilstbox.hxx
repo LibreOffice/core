@@ -294,7 +294,6 @@ public:
         either at top or in the middle depending on the chosen style*/
     void            ShowProminentEntry( sal_Int32  nEntryPos );
     void            SetProminentEntryType( ProminentEntry eType ) { meProminentType = eType; }
-    ProminentEntry  GetProminentEntryType() const { return meProminentType; }
     using Window::IsVisible;
     bool            IsVisible( sal_Int32  nEntry ) const;
 
@@ -333,19 +332,14 @@ public:
 
     void            SetScrollHdl( const Link<ImplListBoxWindow*,void>& rLink ) { maScrollHdl = rLink; }
     void            SetSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maSelectHdl = rLink; }
-    const Link<LinkParamNone*,void>&   GetSelectHdl() const                { return maSelectHdl; }
     void            SetCancelHdl( const Link<LinkParamNone*,void>& rLink ) { maCancelHdl = rLink; }
-    const Link<LinkParamNone*,void>&   GetCancelHdl() const                { return maCancelHdl; }
     void            SetDoubleClickHdl( const Link<ImplListBoxWindow*,void>& rLink ) { maDoubleClickHdl = rLink; }
-    const Link<ImplListBoxWindow*,void>&   GetDoubleClickHdl() const               { return maDoubleClickHdl; }
     void            SetMRUChangedHdl( const Link<LinkParamNone*,void>& rLink ) { maMRUChangedHdl = rLink; }
     void            SetFocusHdl( const Link<sal_Int32,void>& rLink )  { maFocusHdl = rLink ; }
-    const Link<sal_Int32,void>&   GetFocusHdl() const             { return maFocusHdl; }
 
     boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
     void            SetListItemSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maListItemSelectHdl = rLink ; }
-    const Link<LinkParamNone*,void>&   GetListItemSelectHdl() const                { return maListItemSelectHdl; }
     bool            IsSelectionChanged() const { return mbSelectionChanged; }
     sal_uInt16      GetSelectModifier() const { return mnSelectModifier; }
 
@@ -606,7 +600,6 @@ public:
     boost::signals2::signal< void ( ImplBtn* ) > buttonDownSignal;
 };
 
-void ImplInitFieldSettings( vcl::Window* pWin, bool bFont, bool bForeground, bool bBackground );
 void ImplInitDropDownButton( PushButton* pButton );
 
 #endif // INCLUDED_VCL_INC_ILSTBOX_HXX

@@ -86,8 +86,6 @@ private:
         virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const SAL_OVERRIDE;
         virtual sal_uInt8   GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const SAL_OVERRIDE;
         virtual sal_uInt8   GetPixelIdx  (sal_uInt32 nRow, sal_uInt32 nColumn) const SAL_OVERRIDE;
-        virtual sal_uInt32  GetWidth () const SAL_OVERRIDE;
-        virtual sal_uInt32  GetHeight() const SAL_OVERRIDE;
         virtual sal_uInt32  GetDepth () const SAL_OVERRIDE;
 };
 
@@ -154,18 +152,6 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
 
 SalPrinterBmp::~SalPrinterBmp ()
 {
-}
-
-sal_uInt32
-SalPrinterBmp::GetWidth () const
-{
-    return mpBmpBuffer->mnWidth;
-}
-
-sal_uInt32
-SalPrinterBmp::GetHeight () const
-{
-    return mpBmpBuffer->mnHeight;
 }
 
 sal_uInt32

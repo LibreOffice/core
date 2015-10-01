@@ -41,8 +41,6 @@ public:
         numClipRectangles = 0;      }
     sal_uInt16      GetClipRegionType() {
         return nClipRegionType;     }
-    void        SetClipRegionType( sal_uInt16 nType ) {
-        nClipRegionType = nType;    }
     int         GetRectangleCount() {
         return numClipRectangles;   }
 

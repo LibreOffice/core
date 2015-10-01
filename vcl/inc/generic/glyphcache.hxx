@@ -144,7 +144,6 @@ public:
                             GlyphData() : mnLruValue(0) {}
 
     const GlyphMetric&      GetMetric() const           { return maMetric; }
-    Size                    GetSize() const             { return maMetric.GetSize(); }
 
     void                    SetSize( const Size& s)     { maMetric.SetSize( s ); }
     void                    SetOffset( int nX, int nY ) { maMetric.SetOffset( nX, nY ); }
@@ -185,7 +184,6 @@ public:
     void                    FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
     int                     GetEmUnits() const { return maFaceFT->units_per_EM;}
-    const FT_Size_Metrics&  GetMetricsFT() const { return maSizeFT->metrics; }
     double                  GetStretch() { return mfStretch; }
     const FontCharMapPtr    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;

@@ -76,11 +76,9 @@ public:
     void                        SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
     Menu*                       GetMenu() { return mpVCLMenu; }
     void                        SetMenuModel( GMenuModel* pMenuModel ) { mpMenuModel = pMenuModel; }
-    GMenuModel*                 GetMenuModel() { return mpMenuModel; }
     unsigned                    GetItemCount() { return maItems.size(); }
     GtkSalMenuItem*             GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
     void                        SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
-    GActionGroup*               GetActionGroup() { return mpActionGroup; }
     bool                        IsItemVisible( unsigned nPos );
 
     void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText );

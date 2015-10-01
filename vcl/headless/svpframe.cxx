@@ -49,21 +49,6 @@ namespace {
     };
 }
 
-void SvpSalFrame::enableDamageTracker( bool bOn )
-{
-    if( m_bDamageTracking == bOn )
-        return;
-    if( m_aFrame.get() )
-    {
-        if( m_bDamageTracking )
-            m_aFrame->setDamageTracker( basebmp::IBitmapDeviceDamageTrackerSharedPtr() );
-        else
-            m_aFrame->setDamageTracker(
-                basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker ) );
-    }
-    m_bDamageTracking = bOn;
-}
-
 #endif
 
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,

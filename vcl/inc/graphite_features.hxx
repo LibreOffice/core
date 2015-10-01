@@ -48,9 +48,6 @@ namespace grutils
         GrFeatureParser(const gr_face * face, const OString& features, const OString& lang);
         GrFeatureParser(const gr_face * face, const OString& lang);
         ~GrFeatureParser();
-        gr_uint32 getLanguage() const { return maLang.num; };
-        sal_Int32 hashCode() const { return mnHash; }
-        size_t numFeatures() const { return mnNumSettings; }
         gr_feature_val * values() const { return mpSettings; };
     private:
         GrFeatureParser(const GrFeatureParser & copy) SAL_DELETED_FUNCTION;

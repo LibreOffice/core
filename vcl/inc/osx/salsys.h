@@ -36,7 +36,6 @@ public:
     virtual unsigned int GetDisplayScreenCount() SAL_OVERRIDE;
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) SAL_OVERRIDE;
 
-    virtual OUString GetDisplayScreenName( unsigned int nScreen ) SAL_OVERRIDE;
     virtual int ShowNativeMessageBox( const OUString& rTitle,
                                       const OUString& rMessage,
                                       int nButtonCombination,

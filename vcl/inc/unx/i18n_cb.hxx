@@ -35,14 +35,10 @@ void PreeditCaretCallback( XIC ic, XPointer client_data,
                            XIMPreeditCaretCallbackStruct *call_data );
 void GetPreeditSpotLocation(XIC ic, XPointer client_data);
 
-// private hook to prevent from sending further edit events
-void PreeditCancelCallback( XPointer client_data );
-
 void StatusStartCallback (XIC ic, XPointer client_data, XPointer call_data);
 void StatusDoneCallback  (XIC ic, XPointer client_data, XPointer call_data);
 void StatusDrawCallback  (XIC ic, XPointer client_data,
             XIMStatusDrawCallbackStruct *call_data);
-void SwitchIMCallback (XIC ix, XPointer client_data, XPointer call_data );
 
 // keep informed if kinput2 crashed again
 void IC_IMDestroyCallback (XIM im, XPointer client_data, XPointer call_data);

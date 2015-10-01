@@ -45,8 +45,6 @@ public:
 
     void                Dispatch( XEvent *pEvent ); // keep track of group changes
 
-    inline sal_uInt32   GetGroup() const ;          // the current keyboard group
-    inline sal_uInt32   GetDefaultGroup() const ;   // base group, usually group 1
     inline int          GetEventBase() const ;
 
 protected:
@@ -69,18 +67,6 @@ inline void
 SalI18N_KeyboardExtension::UseExtension( bool bState )
 {
     mbUseExtension = mbUseExtension && bState;
-}
-
-inline sal_uInt32
-SalI18N_KeyboardExtension::GetGroup() const
-{
-    return mnGroup;
-}
-
-inline sal_uInt32
-SalI18N_KeyboardExtension::GetDefaultGroup() const
-{
-    return mnDefaultGroup;
 }
 
 inline int

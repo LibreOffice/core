@@ -509,27 +509,6 @@ g_lo_menu_new_submenu_in_item_in_section (GLOMenu *menu,
     }
 }
 
-void
-g_lo_menu_set_submenu_to_item_in_section (GLOMenu    *menu,
-                                          gint        section,
-                                          gint        position,
-                                          GMenuModel *submenu)
-{
-    g_return_if_fail (G_IS_LO_MENU (menu));
-    g_return_if_fail (0 <= section && section < (gint) menu->items->len);
-
-    GLOMenu *model = g_lo_menu_get_section (menu, section);
-
-    g_return_if_fail (model != NULL);
-
-    g_lo_menu_set_link (model, position, G_MENU_LINK_SUBMENU, submenu);
-
-    // Notify the update.
-    g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
-
-    g_object_unref (model);
-}
-
 GLOMenu *
 g_lo_menu_get_submenu_from_item_in_section (GLOMenu *menu,
                                             gint     section,

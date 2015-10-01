@@ -167,7 +167,6 @@ public:
         // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
         void appendWaveLine( sal_Int32 nLength, sal_Int32 nYOffset, sal_Int32 nDelta, OStringBuffer& rBuffer ) const;
 
-        sal_Int32 getWidth() const { return m_nPageWidth ? m_nPageWidth : m_pWriter->m_nInheritedPageWidth; }
         sal_Int32 getHeight() const { return m_nPageHeight ? m_nPageHeight : m_pWriter->m_nInheritedPageHeight; }
     };
 
@@ -884,8 +883,6 @@ i12626
     bool emitWidgetAnnotations();
     // writes all annotation objects
     bool emitAnnotations();
-    // writes the dest dict for the catalog
-    sal_Int32 emitDestDict();
     //write the named destination stuff
     sal_Int32 emitNamedDestinations();//i56629
     // writes outline dict and tree

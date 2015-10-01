@@ -57,22 +57,6 @@ Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     return aRet;
 }
 
-OUString AquaSalSystem::GetDisplayScreenName( unsigned int nScreen )
-{
-   NSArray* pScreens = [NSScreen screens];
-   OUString aRet;
-   if( nScreen < [pScreens count] )
-   {
-        ResMgr* pMgr = ImplGetResMgr();
-        if( pMgr )
-        {
-            OUString aScreenName(ResId(SV_MAC_SCREENNNAME, *pMgr).toString());
-            aRet = aScreenName.replaceAll("%d", OUString::number(nScreen));
-        }
-   }
-   return aRet;
-}
-
 static NSString* getStandardString( StandardButtonType nButtonId, bool bUseResources )
 {
     OUString aText;

@@ -61,12 +61,6 @@ public:
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const SAL_OVERRIDE;
     virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const SAL_OVERRIDE;
     virtual void frameIsMapping( X11SalFrame* pFrame ) const SAL_OVERRIDE;
-    virtual void setFrameStruts( X11SalFrame* pFrame,
-                                 int left, int right, int top, int bottom,
-                                 int left_start_y, int left_end_y,
-                                 int right_start_y, int right_end_y,
-                                 int top_start_x, int top_end_x,
-                                 int bottom_start_x, int bottom_end_x ) const SAL_OVERRIDE;
     virtual void setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const SAL_OVERRIDE;
 };
 
@@ -2225,66 +2219,6 @@ void WMAdaptor::frameIsMapping( X11SalFrame* ) const
 void NetWMAdaptor::frameIsMapping( X11SalFrame* pFrame ) const
 {
     setNetWMState( pFrame );
-}
-
-/*
- * WMAdaptor::setFrameStruts
- */
-void WMAdaptor::setFrameStruts( X11SalFrame*,
-                                int, int, int, int,
-                                int, int, int, int,
-                                int, int, int, int ) const
-{
-}
-
-/*
- * NetWMAdaptor::setFrameStruts
- */
-void NetWMAdaptor::setFrameStruts( X11SalFrame* pFrame,
-                                   int left, int right, int top, int bottom,
-                                   int left_start_y, int left_end_y,
-                                   int right_start_y, int right_end_y,
-                                   int top_start_x, int top_end_x,
-                                   int bottom_start_x, int bottom_end_x ) const
-{
-    long nData[12];
-    nData[0] = left;
-    nData[1] = right;
-    nData[2] = top;
-    nData[3] = bottom;
-    nData[4] = left_start_y;
-    nData[5] = left_end_y;
-    nData[6] = right_start_y;
-    nData[7] = right_end_y;
-    nData[8] = top_start_x;
-    nData[9] = top_end_x;
-    nData[10]= bottom_start_x;
-    nData[11]= bottom_end_x;
-    Atom aProperty = None;
-    int nSetData = 0;
-
-    if( m_aWMAtoms[NET_WM_STRUT_PARTIAL] )
-    {
-        aProperty = m_aWMAtoms[NET_WM_STRUT_PARTIAL];
-        nSetData = 12;
-    }
-    else if( m_aWMAtoms[NET_WM_STRUT] )
-    {
-        aProperty = m_aWMAtoms[NET_WM_STRUT];
-        nSetData = 4;
-    }
-    if( nSetData )
-    {
-            XChangeProperty( m_pDisplay,
-                             pFrame->GetShellWindow(),
-                             aProperty,
-                             XA_CARDINAL,
-                             32,
-                             PropModeReplace,
-                             reinterpret_cast<unsigned char*>(&nData),
-                             nSetData
-                             );
-    }
 }
 
 /*

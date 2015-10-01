@@ -70,7 +70,6 @@ private:
 
     const Point&    getOutPos() const { return maPt; }
 
-    const Size&     getOutSize() const { return maSz; }
     const Size&     getOutSizePix() const { return maSzPix; }
 
     void            pause( bool bPause ) { mbPause = bPause; }

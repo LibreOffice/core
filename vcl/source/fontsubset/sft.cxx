@@ -2413,32 +2413,6 @@ int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphA
     return nchars;
 }
 
-sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
-{
-    switch (ttf->cmapType) {
-        case CMAP_MS_Symbol:
-        {
-            const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
-            if( ttf->mapper == getGlyph0 && ( ch & 0xf000 ) == 0xf000 )
-                ch &= 0x00ff;
-            return (sal_uInt16)ttf->mapper(ttf->cmap, nMaxCmapSize, ch );
-        }
-
-        case CMAP_MS_Unicode:   break;
-        case CMAP_MS_ShiftJIS:  ch = TranslateChar12(ch); break;
-        case CMAP_MS_Big5:      ch = TranslateChar13(ch); break;
-        case CMAP_MS_PRC:       ch = TranslateChar14(ch); break;
-        case CMAP_MS_Wansung:   ch = TranslateChar15(ch); break;
-        case CMAP_MS_Johab:     ch = TranslateChar16(ch); break;
-        default:                return 0;
-    }
-    const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
-    ch = (sal_uInt16)ttf->mapper(ttf->cmap, nMaxCmapSize, ch);
-    if (ch!=0 && bvertical)
-        ch = (sal_uInt16)UseGSUB(ttf,ch);
-    return ch;
-}
-
 int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical)
 {
     int nRet = 0;

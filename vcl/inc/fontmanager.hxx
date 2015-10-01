@@ -335,9 +335,6 @@ public:
 
     void initialize();
 
-    // returns the number of managed fonts
-    int getFontCount() const { return m_aFonts.size(); }
-
     // returns the ids of all managed fonts.
     void getFontList( std::list< fontID >& rFontIDs );
 
@@ -350,9 +347,6 @@ public:
 
     // get a specific fonts PSName name
     const OUString& getPSName( fontID nFontID ) const;
-
-    // get a specific fonts family name aliases
-    void getFontFamilyAliases( fontID nFontID ) const;
 
     // get a specific fonts type
     fonttype::type getFontType( fontID nFontID ) const
@@ -368,25 +362,11 @@ public:
         return pFont ? pFont->m_eItalic : ITALIC_DONTKNOW;
     }
 
-    // get a specific fonts width type
-    FontWidth getFontWidth( fontID nFontID ) const
-    {
-        PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_eWidth : WIDTH_DONTKNOW;
-    }
-
     // get a specific fonts weight type
     FontWeight getFontWeight( fontID nFontID ) const
     {
         PrintFont* pFont = getFont( nFontID );
         return pFont ? pFont->m_eWeight : WEIGHT_DONTKNOW;
-    }
-
-    // get a specific fonts pitch type
-    FontPitch getFontPitch( fontID nFontID ) const
-    {
-        PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_ePitch : PITCH_DONTKNOW;
     }
 
     // get a specific fonts encoding
@@ -448,12 +428,6 @@ public:
     // helper for type 1 fonts
     std::list< OString > getAdobeNameFromUnicode( sal_Unicode aChar ) const;
 
-    std::pair< std::unordered_multimap< sal_Unicode, sal_uInt8 >::const_iterator,
-               std::unordered_multimap< sal_Unicode, sal_uInt8 >::const_iterator >
-    getAdobeCodeFromUnicode( sal_Unicode aChar ) const
-    {
-        return m_aUnicodeToAdobecode.equal_range( aChar );
-    }
     std::list< sal_Unicode >  getUnicodeFromAdobeName( const OString& rName ) const;
     std::pair< std::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator,
                  std::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator >
@@ -528,7 +502,6 @@ public:
 
     bool Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes );
 
-    int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );
 };
 
 } // namespace

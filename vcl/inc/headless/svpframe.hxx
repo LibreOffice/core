@@ -71,7 +71,6 @@ public:
     void GetFocus();
     void LoseFocus();
     void PostPaint(bool bImmediate) const;
-    void AllocateFrame();
 
 #if defined ANDROID
     const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aFrame; }
@@ -126,15 +125,9 @@ public:
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void                EndSetClipRegion() SAL_OVERRIDE;
 
-#ifndef IOS
-    // If enabled we can get damage notifications for regions immediately rendered to ...
-    void                        enableDamageTracker( bool bOn = true );
-#endif
-
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) SAL_OVERRIDE { (void)nScreen; }
     virtual void                SetApplicationID(const OUString &rApplicationID) SAL_OVERRIDE { (void) rApplicationID; }
-    bool                        IsVisible() { return m_bVisible; }
 
     static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
 

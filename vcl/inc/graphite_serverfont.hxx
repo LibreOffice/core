@@ -104,10 +104,6 @@ public:
         virtual ~GraphiteServerFontLayout() throw();
 
         static bool IsGraphiteEnabledFont(ServerFont& rServerFont);
-// For use with PspGraphics
-        const sal_Unicode* getTextPtr() const { return mpStr; };
-        int getMinCharPos() const { return mnMinCharPos; }
-        int getMaxCharPos() const { return mnEndCharPos; }
 };
 
 #endif

@@ -66,9 +66,7 @@ public:
     void UnsetICFocus( SalFrame* pFrame );
     void HandleDestroyIM();
 
-    int  HandleKeyEvent( XKeyEvent *pEvent, SalFrame *pFrame ); // unused
     void EndExtTextInput( EndExtTextInputFlags nFlags );        // unused
-    int  CommitStringCallback( sal_Unicode* pText, sal_Size nLength );
     int  CommitKeyEvent( sal_Unicode* pText, sal_Size nLength );
     int  UpdateSpotLocation();
 
