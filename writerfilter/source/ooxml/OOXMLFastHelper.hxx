@@ -36,15 +36,7 @@ public:
     (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine);
 
     static void newProperty(OOXMLFastContextHandler * pHandler,
-                            Id nId,
-                            const OUString & rValue);
-
-    static void newProperty(OOXMLFastContextHandler * pHandler,
                             Id nId, sal_Int32 nValue);
-
-    static void attributes
-    (OOXMLFastContextHandler * pContext,
-     const css::uno::Reference < css::xml::sax::XFastAttributeList > & Attribs);
 };
 
 template <class T>
@@ -59,16 +51,6 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> OOXMLFastHelper<T>::crea
     css::uno::Reference<css::xml::sax::XFastContextHandler> aResult(pTmp);
 
     return aResult;
-}
-
-template <class T>
-void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
-                                     Id nId,
-                                     const OUString & rValue)
-{
-    OOXMLValue::Pointer_t pVal(new T(rValue));
-
-    pHandler->newProperty(nId, pVal);
 }
 
 template <class T>

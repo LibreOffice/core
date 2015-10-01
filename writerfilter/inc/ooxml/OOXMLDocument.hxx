@@ -258,8 +258,6 @@ public:
 
 };
 
-void ooxmlidsToXML(::std::iostream & out);
-
 std::string fastTokenToId(sal_uInt32 nToken);
 
 }}
