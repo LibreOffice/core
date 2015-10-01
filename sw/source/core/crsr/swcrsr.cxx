@@ -558,7 +558,7 @@ bool SwCursor::IsInProtectTable( bool bMove, bool bChgCrsr )
     if (m_pSavePos->nNode == GetPoint()->nNode.GetIndex())
         return false;
 
-    // Check for convered cell:
+    // Check for covered cell:
     bool bInCoveredCell = false;
     const SwStartNode* pTmpSttNode = pCNd->FindTableBoxStartNode();
     OSL_ENSURE( pTmpSttNode, "In table, therefore I expect to get a SwTableBoxStartNode" );

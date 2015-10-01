@@ -339,7 +339,7 @@ void SwAccessibleContext::ScrolledOut( const SwRect& rOldVisArea )
     // all children that are existing only if they are visible. They
     // are not disposed by the recursive Dispose call that follows later on,
     // because this call will only dispose children that are in the
-    // new vis area. The children we want to dispode however are in the
+    // new vis area. The children we want to dispose however are in the
     // old vis area all.
     ChildrenScrolled( GetFrm(), rOldVisArea );
 

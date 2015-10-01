@@ -248,7 +248,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
     else
     {
         // The unsorted list is sorted enough, because it returns lower
-        // frames in the correct order. Morover, we can iterate forward,
+        // frames in the correct order. Moreover, we can iterate forward,
         // because the lowers don't overlap!
         const SwAccessibleChildSList aVisList( rVisArea, rFrm, rAccMap );
         SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
