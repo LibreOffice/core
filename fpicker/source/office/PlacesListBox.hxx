@@ -70,6 +70,8 @@ class PlacesListBox : public Control
         VclPtr<PushButton> GetDeleteButton() const { return mpDelBtn; }
         VclPtr<PlacesListBox_Impl> GetPlacesListBox() const { return mpImpl; }
 
+        virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+
     private:
 
         Image getEntryIcon( PlacePtr pPlace );
