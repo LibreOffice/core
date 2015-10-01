@@ -587,9 +587,8 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         // which kind of text pointer have we to show - horz / vert - ?
         if( PointerStyle::Text == eStyle && rSh.IsInVerticalText( &rLPt ))
             eStyle = PointerStyle::TextVertical;
-        else
-        if (rSh.GetViewOptions()->CanHideWhitespace() &&
-            rSh.GetLayout()->IsBetweenPages(rLPt))
+        else if (rSh.GetViewOptions()->CanHideWhitespace() &&
+                 rSh.GetLayout()->IsBetweenPages(rLPt))
         {
             if (rSh.GetViewOptions()->IsHideWhitespaceMode())
                 eStyle = PointerStyle::ShowWhitespace;
