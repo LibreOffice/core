@@ -348,7 +348,6 @@ try_again:
                 }
                 ret = (int) (*pfnImport)(out);
             }
-
             else if (strcmp(argv[2], "hwp") == 0)
             {
                 static HFilterCall pfnImport(0);
@@ -358,6 +357,19 @@ try_again:
                     aLibrary.loadRelative(&thisModule, "libhwplo.so", SAL_LOADMODULE_LAZY);
                     pfnImport = reinterpret_cast<HFilterCall>(
                         aLibrary.getFunctionSymbol("TestImportHWP"));
+                    aLibrary.release();
+                }
+                ret = (int) (*pfnImport)(out);
+            }
+            else if (strcmp(argv[2], "602") == 0)
+            {
+                static HFilterCall pfnImport(0);
+                if (!pfnImport)
+                {
+                    osl::Module aLibrary;
+                    aLibrary.loadRelative(&thisModule, "libt602filterlo.so", SAL_LOADMODULE_LAZY);
+                    pfnImport = reinterpret_cast<HFilterCall>(
+                        aLibrary.getFunctionSymbol("TestImport602"));
                     aLibrary.release();
                 }
                 ret = (int) (*pfnImport)(out);

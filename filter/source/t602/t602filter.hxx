@@ -255,6 +255,7 @@ private:
 
     public:
         T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
+        T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream);
         virtual ~T602ImportFilter();
 
     // XFilter
@@ -283,6 +284,8 @@ private:
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+        bool SAL_CALL test();
 };
 
 OUString T602ImportFilter_getImplementationName()

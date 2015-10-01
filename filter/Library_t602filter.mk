@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_sdk_api,t602filter))
 $(eval $(call gb_Library_use_libraries,t602filter,\
 	xo \
 	tl \
+	comphelper \
 	cppuhelper \
 	cppu \
 	sal \

@@ -36,6 +36,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <comphelper/oslfile2streamwrap.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -115,11 +116,17 @@ namespace T602ImportFilter {
         "\x00\xb4\x00\xb0\x00\xc0\x02\xc6\x01\x58\x01\x59\x00\x20\x00\x20";
 
 #define _Start(_nam) \
-    mxHandler->startElement(_nam, mAttrList);\
-    mpAttrList->Clear();
+    if (mxHandler.is()) \
+    { \
+        mxHandler->startElement(_nam, mAttrList); \
+        mpAttrList->Clear(); \
+    }
 
 #define _End(_nam) \
-    mxHandler->endElement(_nam);
+    if (mxHandler.is()) \
+    { \
+        mxHandler->endElement(_nam); \
+    }
 
 inistruct ini;
 
@@ -129,6 +136,14 @@ T602ImportFilter::T602ImportFilter(const css::uno::Reference<css::lang::XMultiSe
     , node(START)
 {
 }
+
+T602ImportFilter::T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream)
+    : mxInputStream(xInputStream)
+    , mpAttrList(NULL)
+    , node(START)
+{
+}
+
 
 T602ImportFilter::~T602ImportFilter()
 {
@@ -219,7 +234,8 @@ void T602ImportFilter::inschr(unsigned char ch)
         } else {
             char s[20];
             sprintf(s,"%i",pst.wasspace);
-            mpAttrList->AddAttribute("text:c",OUString::createFromAscii(s));
+            if (mpAttrList)
+                mpAttrList->AddAttribute("text:c",OUString::createFromAscii(s));
             _Start("text:s");
             _End("text:s");
         }
@@ -440,6 +456,13 @@ bool SAL_CALL T602ImportFilter::importImpl( const Sequence< css::beans::Property
     return true;
 }
 
+bool SAL_CALL T602ImportFilter::test()
+{
+    Reset602();
+    Read602();
+    return true;
+}
+
 void T602ImportFilter::Reset602()
 {
     node = START;
@@ -496,7 +519,8 @@ void T602ImportFilter::inschrdef(unsigned char ch)
         xch[0] = ch;
 
     pst.waspar = false;
-    mxHandler->characters(OUString(xch));
+    if (mxHandler.is())
+        mxHandler->characters(OUString(xch));
 }
 
 void T602ImportFilter::wrtfnt()
@@ -517,8 +541,9 @@ void T602ImportFilter::wrtfnt()
     }
 
     _End("text:span");
-    mpAttrList->AddAttribute(
-        "text:style-name", OUString::createFromAscii(style));
+    if (mpAttrList)
+        mpAttrList->AddAttribute(
+            "text:style-name", OUString::createFromAscii(style));
     _Start("text:span");
 }
 
@@ -555,7 +580,8 @@ void T602ImportFilter::par602(bool endofpage)
             if(pst.waspar||ini.reformatpars) {
                 _End("text:span");
                 _End("text:p");
-                mpAttrList->AddAttribute("text:style-name", "P1");
+                if (mpAttrList)
+                    mpAttrList->AddAttribute("text:style-name", "P1");
                 _Start("text:p");
                 _Start("text:span");
                 wrtfnt();
@@ -581,7 +607,8 @@ void T602ImportFilter::par602(bool endofpage)
             if(!ini.reformatpars) {
                 _End("text:span");
                 _End("text:p");
-                mpAttrList->AddAttribute("text:style-name", "P2");
+                if (mpAttrList)
+                    mpAttrList->AddAttribute("text:style-name", "P2");
                 _Start("text:p");
                 _Start("text:span");
                 wrtfnt();
@@ -688,9 +715,11 @@ void T602ImportFilter::Read602()
 
     if (node==QUIT) return;
 
-    mpAttrList->AddAttribute("text:style-name", "P1");
+    if (mpAttrList)
+        mpAttrList->AddAttribute("text:style-name", "P1");
     _Start("text:p");
-    mpAttrList->AddAttribute("text:style-name", "T1");
+    if (mpAttrList)
+        mpAttrList->AddAttribute("text:style-name", "T1");
     _Start("text:span");
 
     if (node==START) { node = EOL; }
@@ -739,7 +768,8 @@ void T602ImportFilter::Read602()
                     node = SETCMD;   //nedodelano
                 else {
                     inschr('@');
-                    mxHandler->characters(OUString::createFromAscii(cmd602));
+                    if (mxHandler.is())
+                        mxHandler->characters(OUString::createFromAscii(cmd602));
                     node = READCH;
                 }
             } else {
@@ -1168,6 +1198,15 @@ Reference< XInterface > SAL_CALL T602ImportFilterDialog_createInstance( const Re
     return static_cast<cppu::OWeakObject*>(new T602ImportFilterDialog( rSMgr ));
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImport602(const OUString &rURL)
+{
+    osl::File aInputFile(rURL);
+    aInputFile.open(osl_File_OpenFlag_Read);
+    css::uno::Reference<io::XInputStream> xStream(new comphelper::OSLInputStreamWrapper(aInputFile));
+    T602ImportFilter::T602ImportFilter aImport(xStream);
+    return aImport.test();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
