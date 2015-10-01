@@ -743,7 +743,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     pNewItem->SetWhich(nWhich);
 #ifdef DBG_UTIL
     SFX_ASSERT( rItem.Type() == pNewItem->Type(), nWhich, "unequal types in Put(): no Clone()?" )
-    if ( !dynamic_cast<const SfxSetItem*>( &rItem ) !=  nullptr )
+    if (dynamic_cast<const SfxSetItem*>(&rItem) == nullptr)
     {
         SFX_ASSERT( !IsItemFlag(nWhich, SfxItemPoolFlags::POOLABLE) ||
                     rItem == *pNewItem,
