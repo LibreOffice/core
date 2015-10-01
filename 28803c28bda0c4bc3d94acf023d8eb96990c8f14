@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_c05d34ee",
+        "filename": "svx/source/sdr/contact/viewcontactofe3dpolygon.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-10-01T11:31:37Z",
+      "side": 1,
+      "message": "you overlooked a more important fix: it\u0027s → its",
+      "revId": "28803c28bda0c4bc3d94acf023d8eb96990c8f14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
