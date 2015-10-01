@@ -32,7 +32,6 @@ namespace dbaui
     class OTableDesignHelpBar : public TabPage, public IClipboardTest
     {
     private:
-        OUString        m_sHelpText;
         VclPtr<MultiLineEdit>  m_pTextWin;
 
     protected:

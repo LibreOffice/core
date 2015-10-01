@@ -45,8 +45,6 @@ namespace dbaui
 
         css::uno::Reference< css::beans::XPropertySet >       m_xTable;
 
-        OUString        m_sCatalogName;         // catalog for update data
-        OUString        m_sSchemaName;          // schema for update data
         OUString        m_sName;                // table for update data
         OUString        m_sAutoIncrementValue;  // the autoincrement value set in the datasource
         OUString        m_sTypeNames;           // these type names are the ones out of the resource file
