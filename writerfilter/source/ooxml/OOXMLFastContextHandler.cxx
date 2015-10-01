@@ -828,10 +828,6 @@ OUString OOXMLFastContextHandler::getTargetForId
     return mpParserState->getDocument()->getTargetForId(rId);
 }
 
-void OOXMLFastContextHandler::resolvePropertySetAttrs()
-{
-}
-
 void OOXMLFastContextHandler::sendPropertyToParent()
 {
     if (mpParent != nullptr)
@@ -912,11 +908,6 @@ void OOXMLFastContextHandlerStream::sendProperty(Id nId)
                     sText.getLength());
 }
 
-
-void OOXMLFastContextHandlerStream::resolvePropertySetAttrs()
-{
-    mpStream->props(mpPropertySetAttrs);
-}
 
 OOXMLPropertySet::Pointer_t OOXMLFastContextHandlerStream::getPropertySet()
     const

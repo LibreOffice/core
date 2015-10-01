@@ -225,8 +225,6 @@ protected:
     void startAction(Token_t Element);
     void endAction(Token_t Element);
 
-    virtual void resolvePropertySetAttrs();
-
     css::uno::Reference< css::uno::XComponentContext > getComponentContext() { return m_xContext;}
 
     sal_uInt32 mnInstanceNumber;
@@ -261,9 +259,6 @@ public:
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const SAL_OVERRIDE;
 
     void handleHyperlink();
-
-protected:
-    virtual void resolvePropertySetAttrs() SAL_OVERRIDE;
 
 private:
     mutable OOXMLPropertySet::Pointer_t mpPropertySetAttrs;
