@@ -6347,6 +6347,16 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
     }
     enum E { e };
     auto v = g(E::e);
+
+    struct S {
+        int n_;
+        constexpr bool f() {
+            int n = n_;
+            int i = 0;
+            while (n > 0) { --n; ++i; }
+            return i == 0;
+        }
+    };
     ]])], [cxx14_constexpr=yes], [cxx14_constexpr=no])
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
