@@ -1,0 +1,14 @@
+--- src/common/classes/alloc.cpp
++++ src/common/classes/alloc.cpp
+@@ -2121,3 +2121,11 @@
+ {
+ 	Firebird::MemoryPool::globalFree(mem);
+ }
++void operator delete(void* mem, size_t) throw()
++{
++	Firebird::MemoryPool::globalFree(mem);
++}
++void operator delete[](void* mem, size_t) throw()
++{
++	Firebird::MemoryPool::globalFree(mem);
++}
