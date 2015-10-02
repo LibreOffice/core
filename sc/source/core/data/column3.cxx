@@ -54,6 +54,7 @@
 
 #include <mdds/flat_segment_tree.hpp>
 
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>

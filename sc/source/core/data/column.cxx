@@ -46,6 +46,7 @@
 #include <stlalgorithm.hxx>
 #include <formulagroup.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>

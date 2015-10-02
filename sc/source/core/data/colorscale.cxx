@@ -17,6 +17,7 @@
 #include "refupdatecontext.hxx"
 
 #include <formula/token.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <algorithm>
 

@@ -18,6 +18,7 @@
  */
 
 #include "scitems.hxx"
+#include <officecfg/Office/Common.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>

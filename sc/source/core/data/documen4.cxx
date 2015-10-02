@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Common.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <formula/token.hxx>

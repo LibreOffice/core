@@ -30,6 +30,7 @@
 #include <basic/basmgr.hxx>
 
 #include <basic/sbx.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <vcl/layout.hxx>

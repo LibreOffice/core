@@ -19,6 +19,7 @@
 
 #include "scitems.hxx"
 
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/linkmgr.hxx>
