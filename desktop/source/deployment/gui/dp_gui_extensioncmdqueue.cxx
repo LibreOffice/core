@@ -791,7 +791,7 @@ void ExtensionCmdQueue::Thread::execute()
                 //This exception is thrown when a user clicked cancel in the messagebox which was
                 //startet by the interaction handler. For example the user will be asked if he/she
                 //really wants to install the extension.
-                //These interaction are run for exectly one extension at a time. Therefore we continue
+                //These interaction are run for exactly one extension at a time. Therefore we continue
                 //with installing the remaining extensions.
                 continue;
             }

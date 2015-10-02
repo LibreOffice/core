@@ -619,7 +619,7 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
             if (m_stop) {
                 return;
             }
-            //all errors should be handeld by the command environment.
+            //all errors should be handled by the command environment.
             aUpdateData.sLocalURL = destFolder + "/" + sTitle;
         }
     }

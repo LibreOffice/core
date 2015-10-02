@@ -51,7 +51,7 @@ namespace drawinglayer
 
                 if(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0))
                 {
-                    // check if content overlaps with tageted size and needs to be embedded with a
+                    // check if content overlaps with target size and needs to be embedded with a
                     // clipping primitive
                     const basegfx::B2DRange aRealContentRange(getB2DRangeFromPrimitive2DSequence(aContent, rViewInformation));
                     const basegfx::B2DRange aAllowedContentRange(0.0, 0.0, getContentWidth(), getContentHeight());

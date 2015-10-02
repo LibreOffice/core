@@ -388,7 +388,7 @@ namespace
 
 namespace
 {
-    /** Helper class to buffer and hold a Primive target vector. It
+    /** Helper class to buffer and hold a Primitive target vector. It
         encapsulates the new/delete functionality and allows to work
         on pointers of the implementation classes. All data will
         be converted to uno sequences of uno references when accessing the
@@ -953,7 +953,7 @@ namespace
     {
         const bool bNewActive(rClipPolyPolygon.count());
 
-        // #i108636# The handlig of new ClipPolyPolygons was not done as good as possible
+        // #i108636# The handling of new ClipPolyPolygons was not done as good as possible
         // in the first version of this interpreter; e.g. when a ClipPolyPolygon was set
         // initially and then using a lot of push/pop actions, the pop always leads
         // to setting a 'new' ClipPolyPolygon which indeed is the return to the ClipPolyPolygon
@@ -1309,7 +1309,7 @@ namespace
 
             if(bDecoratedIsNeeded)
             {
-                // prepare overline, underline and srikeout data
+                // prepare overline, underline and strikeout data
                 const drawinglayer::primitive2d::TextLine eFontOverline(drawinglayer::primitive2d::mapFontUnderlineToTextLine(rFont.GetOverline()));
                 const drawinglayer::primitive2d::TextLine eFontUnderline(drawinglayer::primitive2d::mapFontUnderlineToTextLine(rFont.GetUnderline()));
                 const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rFont.GetStrikeout()));
@@ -1627,7 +1627,7 @@ namespace
         creations, nor in EMF/WMF imports (checked with a whole bunch of critical EMF/WMF
         bugdocs)
 
-        For more commens, see the single action implementations.
+        For more comments, see the single action implementations.
     */
     void interpretMetafile(
         const GDIMetaFile& rMetaFile,
@@ -2304,7 +2304,7 @@ namespace
                                 if(rPropertyHolders.Current().isRasterOpInvert())
                                 {
                                     // use a special version of FillGradientPrimitive2D which creates
-                                    // non-overlapping geometry on decomposition to makethe old XOR
+                                    // non-overlapping geometry on decomposition to make the old XOR
                                     // paint 'trick' work.
                                     xGradient[0] = drawinglayer::primitive2d::Primitive2DReference(
                                         new drawinglayer::primitive2d::NonOverlappingFillGradientPrimitive2D(
@@ -2880,7 +2880,7 @@ namespace
                 case MetaActionType::EPS :
                 {
                     /** CHECKED, WORKS WELL */
-                    // To support this action, i have added a EpsPrimitive2D which will
+                    // To support this action, I have added a EpsPrimitive2D which will
                     // by default decompose to the Metafile replacement data. To support
                     // this EPS on screen, the renderer visualizing this has to support
                     // that primitive and visualize the Eps file (e.g. printing)
