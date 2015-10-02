@@ -103,7 +103,7 @@ public:
     void CopyWithFlyInFly( const SwNodeRange& rRg,
                             const sal_Int32 nEndContentIndex,
                             const SwNodeIndex& rInsPos,
-                            const SwPaM* pCopiedPaM = NULL,
+                            const std::pair<const SwPaM&, const SwPosition&> * pCopiedPaM = nullptr,
                             bool bMakeNewFrms = true,
                             bool bDelRedlines = true,
                             bool bCopyFlyAtFly = false ) const;
