@@ -5039,6 +5039,15 @@ XMLFooterFieldImportContext::XMLFooterFieldImportContext(
     bValid = true;
 }
 
+XMLFooterFieldImportContext::XMLFooterFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_footer, Element )
+{
+    sServicePrefix = sAPI_presentation_prefix;
+    bValid = true;
+}
+
 /// process attribute values
 void XMLFooterFieldImportContext::ProcessAttribute( sal_uInt16, const OUString& )
 {
