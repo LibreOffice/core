@@ -333,6 +333,7 @@ public:
     Time            GetLastUserEventTime( bool bAlwaysReget = false ) const;
 
     bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate, long i_nTimeout = 1000 ) const;
+    SalXLib*        GetXLib() const { return pXLib_; }
 
     SalI18N_InputMethod*        GetInputMethod()  const { return mpInputMethod;  }
     SalI18N_KeyboardExtension*  GetKbdExtension() const { return mpKbdExtension; }
