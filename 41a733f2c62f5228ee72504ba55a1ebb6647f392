@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_6baa4972",
+        "filename": "sw/source/core/text/blink.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-02T06:51:20Z",
+      "side": 1,
+      "message": "This is wrong, as \u0027it\u0027 gets invalidated in the m_LIst.erase(it) call.",
+      "revId": "41a733f2c62f5228ee72504ba55a1ebb6647f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_abbaa1be",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-02T06:51:20Z",
+      "side": 1,
+      "message": "The typical mess of #include line order being what it is, one plausible approach is to group new #include \u003co3tl/...\u003e with existing #include \u003co3lt/...\u003e (preferably, lexicographically sorted).",
+      "revId": "41a733f2c62f5228ee72504ba55a1ebb6647f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
