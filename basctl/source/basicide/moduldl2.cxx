@@ -58,7 +58,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <cassert>
-#include <memory>
 
 namespace basctl
 {

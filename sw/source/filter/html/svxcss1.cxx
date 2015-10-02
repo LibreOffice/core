@@ -53,7 +53,6 @@
 #include "css1kywd.hxx"
 #include "svxcss1.hxx"
 
-#include <memory>
 #include <utility>
 
 using namespace ::com::sun::star;

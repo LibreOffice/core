@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <utility>
 
 #include <SidebarTxtControlAcc.hxx>
 
