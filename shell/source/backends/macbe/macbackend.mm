@@ -193,22 +193,22 @@ rtl::OUString GetOUString( NSString* pStr )
 
 void MacOSXBackend::setPropertyValue(
     rtl::OUString const &, css::uno::Any const &)
-    throw (
+    /*throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException, std::exception)
+        css::uno::RuntimeException, std::exception)*/
 {
-    throw css::lang::IllegalArgumentException(
+    /**throw css::lang::IllegalArgumentException(
         rtl::OUString(
             "setPropertyValue not supported"),
-        static_cast< cppu::OWeakObject * >(this), -1);
+        static_cast< cppu::OWeakObject * >(this), -1);**/
 }
 
 css::uno::Any MacOSXBackend::getPropertyValue(
     rtl::OUString const & PropertyName)
-    throw (
+    /*throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException, std::exception)
+        css::uno::RuntimeException, std::exception)*/
 {
     if ( PropertyName == "WorkPathVariable" )
     {
@@ -419,8 +419,9 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         }
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     } else {
-        throw css::beans::UnknownPropertyException(
-            PropertyName, static_cast< cppu::OWeakObject * >(this));
+        return uno::makeAny( false );
+        /**throw css::beans::UnknownPropertyException(
+            PropertyName, static_cast< cppu::OWeakObject * >(this));**/
     }
 }
 
@@ -430,7 +431,7 @@ rtl::OUString SAL_CALL MacOSXBackend::getBackendName(void)
 }
 
 rtl::OUString SAL_CALL MacOSXBackend::getImplementationName(void)
-    throw (uno::RuntimeException, std::exception)
+    /*throw (uno::RuntimeException, std::exception)*/
 {
     return getBackendName();
 }
@@ -443,13 +444,13 @@ uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getBackendServiceNames(void
 }
 
 sal_Bool SAL_CALL MacOSXBackend::supportsService(const rtl::OUString& aServiceName)
-    throw (uno::RuntimeException, std::exception)
+    /*throw (uno::RuntimeException, std::exception)*/
 {
     return cppu::supportsService(this, aServiceName);
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
-    throw (uno::RuntimeException, std::exception)
+    /*throw (uno::RuntimeException, std::exception)*/
 {
     return getBackendServiceNames();
 }

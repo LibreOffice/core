@@ -60,9 +60,10 @@ using namespace ::com::sun::star::uno;
         NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
         OUString newText = GetOUString ( (NSString *) value );
         NSRange selectedTextRange = [ [ AquaA11yTextWrapper selectedTextRangeAttributeForElement: wrapper ] rangeValue ];
-        try {
+        @try {
             [ wrapper accessibleEditableText ] -> replaceText ( selectedTextRange.location, selectedTextRange.location + selectedTextRange.length, newText );
-        } catch ( const Exception & e ) {
+        }
+        @catch ( ... ) {
             // empty
         }
         [ pool release ];
@@ -85,9 +86,10 @@ using namespace ::com::sun::star::uno;
 
 +(void)setSelectedTextRangeAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value {
     NSRange range = [ value rangeValue ];
-    try {
+    @try {
         [ wrapper accessibleText ] -> setSelection ( range.location, range.location + range.length );
-    } catch ( const Exception & e ) {
+    }
+    @catch ( ... ) {
         // empty
     }
 }
@@ -152,10 +154,11 @@ using namespace ::com::sun::star::uno;
 
 +(id)lineForIndexAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)index {
     NSNumber * lineNumber = nil;
-    try {
+    @try {
         sal_Int32 line = [ wrapper accessibleMultiLineText ] -> getLineNumberAtIndex ( (sal_Int32) [ index intValue ] );
         lineNumber = [ NSNumber numberWithInt: line ];
-    } catch ( IndexOutOfBoundsException & e ) {
+    }
+    @catch ( ... ) {
         // empty
     }
     return lineNumber;
@@ -163,10 +166,11 @@ using namespace ::com::sun::star::uno;
 
 +(id)rangeForLineAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)line {
     NSValue * range = nil;
-    try {
+    @try {
         TextSegment textSegment = [ wrapper accessibleMultiLineText ] -> getTextAtLineNumber ( [ line intValue ] );
         range = [ NSValue valueWithRange: NSMakeRange ( textSegment.SegmentStart, textSegment.SegmentEnd - textSegment.SegmentStart ) ];
-    } catch ( IndexOutOfBoundsException & e ) {
+    }
+    @catch ( ... ) {
         // empty
     }
     return range;
@@ -176,9 +180,10 @@ using namespace ::com::sun::star::uno;
     int loc = [ range rangeValue ].location;
     int len = [ range rangeValue ].length;
     NSMutableString * textRange = [ [ NSMutableString alloc ] init ];
-    try {
+    @try {
         [ textRange appendString: CreateNSString ( [ wrapper accessibleText ] -> getTextRange ( loc, loc + len ) ) ];
-    } catch ( IndexOutOfBoundsException & e ) {
+    }
+    @catch ( ... ) {
         // empty
     }
     return textRange;
@@ -190,12 +195,11 @@ using namespace ::com::sun::star::uno;
 
 +(id)rangeForIndexAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)index {
     NSValue * range = nil;
-    try {
+    @try {
         TextSegment textSegment = [ wrapper accessibleText ] -> getTextBeforeIndex ( [ index intValue ], AccessibleTextType::GLYPH );
         range = [ NSValue valueWithRange: NSMakeRange ( textSegment.SegmentStart, textSegment.SegmentEnd - textSegment.SegmentStart ) ];
-    } catch ( IndexOutOfBoundsException & e ) {
-        // empty
-    } catch ( IllegalArgumentException & e ) {
+    }
+    @catch ( ... ) {
         // empty
     }
     return range;
@@ -216,7 +220,7 @@ using namespace ::com::sun::star::uno;
 
 +(id)boundsForRangeAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)range {
     NSValue * rect = nil;
-    try {
+    @try {
         // TODO: this is ugly!!!
         // the UNP-API can only return the bounds for a single character, not for a range
         int loc = [ range rangeValue ].location;
@@ -246,7 +250,8 @@ using namespace ::com::sun::star::uno;
             rect = [ NSValue valueWithRect: NSMakeRect ( [ nsPos pointValue ].x, [ nsPos pointValue ].y - size.Y, size.X, size.Y ) ];
             //printf("Range: %s --- Rect: %s\n", [ NSStringFromRange ( [ range rangeValue ] ) UTF8String ], [ NSStringFromRect ( [ rect rectValue ] ) UTF8String ]);
         }
-    } catch ( IndexOutOfBoundsException & e ) {
+    }
+    @catch ( ... ) {
         // empty
     }
     return rect;
@@ -254,12 +259,11 @@ using namespace ::com::sun::star::uno;
 
 +(id)styleRangeForIndexAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)index {
     NSValue * range = nil;
-    try {
+    @try {
         TextSegment textSegment = [ wrapper accessibleText ] -> getTextAtIndex ( [ index intValue ], AccessibleTextType::ATTRIBUTE_RUN );
         range = [ NSValue valueWithRange: NSMakeRange ( textSegment.SegmentStart, textSegment.SegmentEnd - textSegment.SegmentStart ) ];
-    } catch ( IndexOutOfBoundsException & e ) {
-        // empty
-    } catch ( IllegalArgumentException & e ) {
+    }
+    @catch ( ... ) {
         // empty
     }
     return range;

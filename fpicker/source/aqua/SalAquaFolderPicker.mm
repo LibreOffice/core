@@ -67,14 +67,16 @@ SalAquaFolderPicker::SalAquaFolderPicker( const uno::Reference<lang::XMultiServi
 
 // XExecutableDialog
 
-void SAL_CALL SalAquaFolderPicker::setTitle( const rtl::OUString& aTitle ) throw( uno::RuntimeException )
+void SAL_CALL SalAquaFolderPicker::setTitle( const rtl::OUString& aTitle )
+    /*throw( uno::RuntimeException )*/
 {
     SolarMutexGuard aGuard;
 
     implsetTitle(aTitle);
 }
 
-sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
+sal_Int16 SAL_CALL SalAquaFolderPicker::execute()
+    /*throw( uno::RuntimeException )*/
 {
     SolarMutexGuard aGuard;
 
@@ -101,7 +103,8 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
         break;
 
     default:
-        throw uno::RuntimeException("The dialog returned with an unknown result!", static_cast< cppu::OWeakObject * >( this ));
+        /**throw uno::RuntimeException("The dialog returned with an unknown result!", static_cast< cppu::OWeakObject * >( this ));**/
+        retVal = ExecutableDialogResults::CANCEL;
         break;
     }
 
@@ -111,14 +114,15 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
 // XFolderPicker
 
 void SAL_CALL SalAquaFolderPicker::setDisplayDirectory( const rtl::OUString& aDirectory )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    /*throw( lang::IllegalArgumentException, uno::RuntimeException )*/
 {
     SolarMutexGuard aGuard;
 
     implsetDisplayDirectory(aDirectory);
 }
 
-rtl::OUString SAL_CALL SalAquaFolderPicker::getDisplayDirectory() throw( uno::RuntimeException )
+rtl::OUString SAL_CALL SalAquaFolderPicker::getDisplayDirectory()
+    /*throw( uno::RuntimeException )*/
 {
     SolarMutexGuard aGuard;
 
@@ -127,7 +131,8 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDisplayDirectory() throw( uno::Ru
     return aDirectory;
 }
 
-rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeException )
+rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory()
+    /*throw( uno::RuntimeException )*/
 {
     SolarMutexGuard aGuard;
 
@@ -139,9 +144,9 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
     long nFiles = [files count];
     SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
-    if (nFiles < 1) {
+    /**if (nFiles < 1) {
         throw uno::RuntimeException("no directory selected", static_cast< cppu::OWeakObject * >( this ));
-    }
+    }**/
 
     rtl::OUString aDirectory;
 
@@ -155,7 +160,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
 }
 
 void SAL_CALL SalAquaFolderPicker::setDescription( const rtl::OUString& rDescription )
-    throw( uno::RuntimeException )
+    /*throw( uno::RuntimeException )*/
 {
     [m_pDialog setMessage:[NSString stringWithOUString:rDescription]];
 }
@@ -163,7 +168,7 @@ void SAL_CALL SalAquaFolderPicker::setDescription( const rtl::OUString& rDescrip
 // XServiceInfo
 
 rtl::OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
-    throw( uno::RuntimeException )
+    /*throw( uno::RuntimeException )*/
 {
     rtl::OUString retVal( FOLDER_PICKER_IMPL_NAME );
 
@@ -171,20 +176,20 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
 }
 
 sal_Bool SAL_CALL SalAquaFolderPicker::supportsService( const rtl::OUString& sServiceName )
-    throw( uno::RuntimeException )
+    /*throw( uno::RuntimeException )*/
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNames()
-    throw( uno::RuntimeException )
+    /*throw( uno::RuntimeException )*/
 {
     return FolderPicker_getSupportedServiceNames();
 }
 
 // XCancellable
 
-void SAL_CALL SalAquaFolderPicker::cancel() throw( uno::RuntimeException )
+void SAL_CALL SalAquaFolderPicker::cancel() /*throw( uno::RuntimeException )*/
 {
     SolarMutexGuard aGuard;
 
@@ -194,7 +199,7 @@ void SAL_CALL SalAquaFolderPicker::cancel() throw( uno::RuntimeException )
 // XEventListener
 
 void SAL_CALL SalAquaFolderPicker::disposing( const lang::EventObject& )
-    throw( uno::RuntimeException )
+    /*throw( uno::RuntimeException )*/
 {
 }
 

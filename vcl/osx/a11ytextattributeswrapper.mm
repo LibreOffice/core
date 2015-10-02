@@ -331,7 +331,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     int len = [ origRange rangeValue ].length;
     int endIndex = loc + len;
     int currentIndex = loc;
-    try {
+    @try {
         NSString * myString = CreateNSString ( [ wrapper accessibleText ] -> getText() ); // TODO: dirty fix for i87817
         string = [ [ NSMutableAttributedString alloc ] initWithString: CreateNSString ( [ wrapper accessibleText ] -> getTextRange ( loc, loc + len ) ) ];
         if ( [ wrapper accessibleTextAttributes ] && [myString characterAtIndex:0] != 57361) { // TODO: dirty fix for i87817
@@ -357,12 +357,10 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                 [AquaA11yTextAttributesWrapper addMarkup:[wrapper accessibleTextMarkup] toString:string inRange:[origRange rangeValue]];
             [ string endEditing ];
         }
-    } catch ( IllegalArgumentException & e ) {
+    }
+    @catch ( ... )
+    {
         // empty
-    } catch ( IndexOutOfBoundsException & e ) {
-        // empty
-    } catch ( RuntimeException& ) {
-        // at least don't crash
     }
     return string;
 }

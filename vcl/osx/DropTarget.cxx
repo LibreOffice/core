@@ -474,9 +474,18 @@ void DropTarget::fire_drop( const DropTargetDropEvent& dte)
         while( iter.hasMoreElements())
         {
             uno::Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
-
-            try { listener->drop( dte); }
+#ifdef __OBJC__
+            @try {
+#else
+            try {
+#endif
+                listener->drop( dte);
+            }
+#ifdef __OBJC__
+            @catch(...) {}
+#else
             catch(RuntimeException&) {}
+#endif
         }
     }
 }
@@ -490,9 +499,18 @@ void DropTarget::fire_dragEnter(const DropTargetDragEnterEvent& e)
         while( iter.hasMoreElements())
         {
             uno::Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
-
-            try { listener->dragEnter( e); }
+#ifdef __OBJC__
+            @try {
+#else
+            try {
+#endif
+                listener->dragEnter( e);
+            }
+#ifdef __OBJC__
+            @catch(...) {}
+#else
             catch (RuntimeException&) {}
+#endif
         }
     }
 }
@@ -507,9 +525,18 @@ void DropTarget::fire_dragExit(const DropTargetEvent& dte)
         while( iter.hasMoreElements())
         {
             uno::Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
-
-            try { listener->dragExit( dte); }
+#ifdef __OBJC__
+            @try {
+#else
+            try {
+#endif
+                listener->dragExit( dte);
+            }
+#ifdef __OBJC__
+            @catch(...) {}
+#else
             catch (RuntimeException&) {}
+#endif
         }
     }
 }
@@ -523,9 +550,18 @@ void DropTarget::fire_dragOver(const DropTargetDragEvent& dtde)
         while( iter.hasMoreElements())
         {
             uno::Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
-
-            try { listener->dragOver( dtde); }
+#ifdef __OBJC__
+            @try {
+#else
+            try {
+#endif
+                listener->dragOver( dtde);
+            }
+#ifdef __OBJC__
+            @catch(...) {}
+#else
             catch (RuntimeException&) {}
+#endif
         }
     }
 }
@@ -539,9 +575,18 @@ void DropTarget::fire_dropActionChanged(const DropTargetDragEvent& dtde)
         while( iter.hasMoreElements())
         {
             uno::Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
-
-            try { listener->dropActionChanged( dtde); }
+#ifdef __OBJC__
+            @try {
+#else
+            try {
+#endif
+                listener->dropActionChanged( dtde);
+            }
+#ifdef __OBJC__
+            @catch(...) {}
+#else
             catch (RuntimeException&) {}
+#endif
         }
     }
 }

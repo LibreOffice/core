@@ -130,24 +130,25 @@ public:
         @param rType demanded type
         @return demanded type or empty any
     */
-    virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type & rType )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     /** increasing m_refCount
     */
     virtual void SAL_CALL acquire()
-        throw () SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( ) SAL_OVERRIDE;
+
     /** decreasing m_refCount
     */
     virtual void SAL_CALL release()
-        throw () SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( ) SAL_OVERRIDE;
 
     /** XWeak::queryAdapter() implementation
 
         @return a com::sun::star::uno::XAdapter reference
     */
     virtual css::uno::Reference< css::uno::XAdapter > SAL_CALL queryAdapter()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Cast operator to XInterface reference.
 

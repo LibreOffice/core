@@ -35,7 +35,7 @@ using namespace ::com::sun::star::uno;
     if( accessibleTable )
     {
         NSMutableArray * cells = [ [ NSMutableArray alloc ] init ];
-        try
+        @try
         {
             sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
             sal_Int32 nCols = accessibleTable->getAccessibleColumnCount();
@@ -95,7 +95,7 @@ using namespace ::com::sun::star::uno;
             }
             pResult = NSAccessibilityUnignoredChildren( cells );
         }
-        catch (const Exception &e) 
+        @catch ( ... )
         {
         }
         [cells autorelease];
@@ -133,7 +133,7 @@ using namespace ::com::sun::star::uno;
         if( nRows * nCols < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
         {
             NSMutableArray * cells = [ [ NSMutableArray alloc ] init ];
-            try
+            @try
             {
                 for( sal_Int32 n = 0; n < nRows; n++ )
                 {
@@ -147,7 +147,7 @@ using namespace ::com::sun::star::uno;
                 }
                 pResult = NSAccessibilityUnignoredChildren( cells );
             }
-            catch (const Exception &e) 
+            @catch ( ... )
             {
                 pResult = nil;
             }
@@ -171,7 +171,7 @@ using namespace ::com::sun::star::uno;
         if( nRows * nCols < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
         {
             NSMutableArray * cells = [ [ NSMutableArray alloc ] init ];
-            try
+            @try
             {
                 // find out number of columns
                 for( sal_Int32 n = 0; n < nCols; n++ )
@@ -186,7 +186,7 @@ using namespace ::com::sun::star::uno;
                 }
                 pResult = NSAccessibilityUnignoredChildren( cells );
             }
-            catch (const Exception &e) 
+            @catch ( ... )
             {
                 pResult = nil;
             }

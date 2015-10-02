@@ -55,7 +55,7 @@ VCLXTopWindow_Base::~VCLXTopWindow_Base()
 {
 }
 
-Any VCLXTopWindow_Base::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any VCLXTopWindow_Base::queryInterface( const Type & rType ) SAL_THROW_IfNotObjectiveC( RuntimeException, std::exception )
 {
     css::uno::Any aRet( VCLXTopWindow_XBase::queryInterface( rType ) );
 
@@ -66,7 +66,7 @@ Any VCLXTopWindow_Base::queryInterface( const Type & rType ) throw(RuntimeExcept
     return aRet;
 }
 
-Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException, std::exception)
+Sequence< Type > VCLXTopWindow_Base::getTypes() SAL_THROW_IfNotObjectiveC( RuntimeException, std::exception )
 {
     Sequence< Type > aTypes( VCLXTopWindow_XBase::getTypes() );
     if ( m_bWHWND )
@@ -266,7 +266,8 @@ vcl::Window* VCLXTopWindow::GetWindowImpl()
 }
 
 // css::uno::XInterface
-css::uno::Any VCLXTopWindow::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXTopWindow::queryInterface( const css::uno::Type & rType )
+    SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet( VCLXTopWindow_Base::queryInterface( rType ) );
 
@@ -276,12 +277,14 @@ css::uno::Any VCLXTopWindow::queryInterface( const css::uno::Type & rType ) thro
     return aRet;
 }
 
-css::uno::Sequence< sal_Int8 > VCLXTopWindow::getImplementationId() throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< sal_Int8 > VCLXTopWindow::getImplementationId()
+    SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-css::uno::Sequence< css::uno::Type > VCLXTopWindow::getTypes() throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Type > VCLXTopWindow::getTypes()
+    SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception )
 {
     return ::comphelper::concatSequences( VCLXTopWindow_Base::getTypes(), VCLXContainer::getTypes() );
 }

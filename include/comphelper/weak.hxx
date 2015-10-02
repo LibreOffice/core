@@ -40,11 +40,14 @@ public:
     OWeakTypeObject();
     virtual ~OWeakTypeObject() override;
 
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type & rType )  throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC ( ) override;
+    virtual void SAL_CALL release() SAL_THROW_IfNotObjectiveC ( ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  )
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  )
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) override;
 
 };
 

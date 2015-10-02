@@ -51,11 +51,15 @@ public:
     /** If a delegator is set, then the delegators gets acquired.  Otherwise call is delegated to
         base class ::cppu::OWeakObject.
     */
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL acquire()
+        SAL_THROW_IfNotObjectiveC( ) SAL_OVERRIDE;
+
     /** If a delegator is set, then the delegators gets released.  Otherwise call is delegated to
         base class ::cppu::OWeakObject.
     */
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL release()
+        SAL_THROW_IfNotObjectiveC( ) SAL_OVERRIDE;
+
     /** If a delegator is set, then the delegator is queried for the demanded interface.  If the
         delegator cannot provide the demanded interface, it calls queryAggregation() on its
         aggregated objects.
@@ -65,21 +69,22 @@ public:
         @see queryAggregation.
     */
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Set the delegator.  The delegator member reference is a weak reference.
 
         @param Delegator the object that delegate its queryInterface to this aggregate.
     */
     virtual void SAL_CALL setDelegator( const css::uno::Reference< css::uno::XInterface > & Delegator )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     /** Called by the delegator or queryInterface. Re-implement this method instead of
         queryInterface.
 
         @see queryInterface
     */
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
     /** Virtual dtor. Called when reference count is 0.
@@ -93,6 +98,7 @@ protected:
     /** weak reference to delegator.
     */
     css::uno::WeakReferenceHelper xDelegator;
+
 private:
     OWeakAggObject( const OWeakAggObject & rObj ) SAL_DELETED_FUNCTION;
     OWeakAggObject & operator = ( const OWeakAggObject & rObj )

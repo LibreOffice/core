@@ -233,14 +233,16 @@ public:
                     VCLXCheckBox();
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
-
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::lang::XComponent
     void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -292,13 +294,16 @@ public:
                     VCLXRadioButton();
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::lang::XComponent
     void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -340,13 +345,16 @@ public:
                         virtual ~VCLXMessageBox() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
 
     // css::awt::XMessageBox
@@ -375,12 +383,14 @@ public:
     virtual ~VCLXFrame() override;
 
     // css::uno::XInterface
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    void                                        SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::awt::XView
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception) override;
@@ -406,13 +416,16 @@ public:
                         virtual ~VCLXDialog() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::awt::XDialog2
     virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (css::uno::RuntimeException, std::exception) override;
@@ -447,12 +460,14 @@ public:
                         virtual ~VCLXTabPage() override;
 
     // css::uno::XInterface
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    void                                        SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::awt::XView
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception) override;
@@ -479,13 +494,16 @@ public:
     virtual ~VCLXMultiPage() override;
 
     // css::uno::XInterface
-    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL acquire() throw() override { OWeakObject::acquire(); }
-    void SAL_CALL release() throw() override { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::lang::XComponent
     void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -539,16 +557,19 @@ public:
     virtual ~VCLXFixedHyperlink() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XComponent
     void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::awt::XFixedHyperlink
     void SAL_CALL setText( const OUString& Text ) throw(css::uno::RuntimeException, std::exception) override;
@@ -587,13 +608,16 @@ public:
                         virtual ~VCLXFixedText() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::awt::XFixedText
     void SAL_CALL setText( const OUString& Text ) throw(css::uno::RuntimeException, std::exception) override;
@@ -626,13 +650,16 @@ protected:
 public:
                     VCLXScrollBar();
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
 
     // css::lang::XComponent
@@ -693,13 +720,16 @@ public:
     TextListenerMultiplexer&    GetTextListeners() { return maTextListeners; }
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
 
     // css::lang::XComponent
@@ -897,13 +927,16 @@ public:
                     VCLXSpinField();
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
 
     // css::awt::XSpinField
@@ -960,13 +993,16 @@ public:
                     virtual ~VCLXDateField() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
 
     // css::awt::XDateField
@@ -1008,13 +1044,16 @@ public:
                     virtual ~VCLXTimeField() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::awt::XTimeField
     void SAL_CALL setTime( const css::util::Time& Time ) throw(css::uno::RuntimeException, std::exception) override;
@@ -1051,13 +1090,16 @@ public:
                     virtual ~VCLXNumericField() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::awt::XNumericField
     void SAL_CALL setValue( double Value ) throw(css::uno::RuntimeException, std::exception) override;
@@ -1101,13 +1143,16 @@ public:
     virtual ~VCLXMetricField() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
     // css::awt::XMetricField
     virtual void SAL_CALL setValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (css::uno::RuntimeException, std::exception) override;
@@ -1148,13 +1193,16 @@ public:
                     virtual ~VCLXCurrencyField() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
 
     // css::awt::XCurrencyField
@@ -1194,13 +1242,16 @@ public:
                     virtual ~VCLXPatternField() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::acquire(); }
+    void SAL_CALL release() SAL_THROW_IfNotObjectiveC() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId()
+        SAL_THROW_IfNotObjectiveC( css::uno::RuntimeException, std::exception ) override;
 
 
     // css::awt::XPatternField

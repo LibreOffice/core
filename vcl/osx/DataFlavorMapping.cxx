@@ -541,7 +541,11 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
 {
   DataProviderPtr_t dp;
 
+#ifdef __OBJC__
+  @try
+#else
   try
+#endif
     {
       DataFlavor oOOFlavor = systemToOpenOfficeFlavor(systemFlavor);
 
@@ -582,7 +586,11 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
           dp = DataProviderPtr_t(new UniDataProvider(data));
         }
     }
+#ifdef __OBJC__
+  @catch (...)
+#else
   catch(UnsupportedFlavorException&)
+#endif
     {
       // Somebody violates the contract of the clipboard
       // interface @see XTransferable
@@ -628,11 +636,19 @@ bool DataFlavorMapper::isValidMimeContentType(const OUString& contentType) const
 {
   bool result = true;
 
+#ifdef __OBJC__
+  @try
+#else
   try
+#endif
     {
       Reference<XMimeContentType> xCntType(mrXMimeCntFactory->createMimeContentType(contentType));
     }
+#ifdef __OBJC__
+  @catch( ... )
+#else
   catch( IllegalArgumentException& )
+#endif
     {
       result = false;
     }

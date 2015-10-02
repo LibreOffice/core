@@ -48,7 +48,11 @@ void SAL_CALL
 DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
     throw( RuntimeException, std::exception )
 {
+#ifndef __OBJC__
     try {
+#else
+    @try {
+#endif
         switch( aEvent.EventId )
         {
             case AccessibleEventId::STATE_CHANGED:
@@ -85,7 +89,11 @@ DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
                 break;
         }
     }
+#ifndef __OBJC__
     catch (const IndexOutOfBoundsException&)
+#else
+    @catch (...)
+#endif
     {
         SAL_WARN("vcl", "Focused object has invalid index in parent");
     }

@@ -81,7 +81,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     mpReferenceWrapper -> rAccessibleContext = rxAccessibleContext;
     mIsTableCell = NO;
     // Querying all supported interfaces
-    try {
+    @try {
         // XAccessibleComponent
         mpReferenceWrapper->rAccessibleComponent.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleExtendedComponent
@@ -130,7 +130,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         if ( rxAccessibleContext -> getAccessibleRole() == AccessibleRole::TABLE_CELL ) {
             mIsTableCell = YES;
         }
-    } catch ( const Exception ) {
+    } @catch ( ... ) {
     }
 }
 
@@ -289,7 +289,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         }
         return nil;
     }
-    try {
+    @try {
         Reference< XAccessible > xParent( [ self accessibleContext ] -> getAccessibleParent() );
         if ( xParent.is() ) {
             Reference< XAccessibleContext > xContext( xParent -> getAccessibleContext() );
@@ -299,7 +299,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
                 return NSAccessibilityUnignoredAncestor( parent_wrapper );
             }
         }
-    } catch (const Exception&) {
+    } @catch ( ... ) {
     }
 
     OSL_ASSERT( false );
@@ -330,7 +330,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         AquaA11yTableWrapper* pTable = [self isKindOfClass: [AquaA11yTableWrapper class]] ? (AquaA11yTableWrapper*)self : nil;
         return [ AquaA11yTableWrapper childrenAttributeForElement: pTable ];
     } else {
-        try {
+        @try {
             NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
             Reference< XAccessibleContext > xContext( [ self accessibleContext ] );
 
@@ -365,11 +365,11 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 
             [ children autorelease ];
             return NSAccessibilityUnignoredChildren( children );
-        } catch (const Exception &e) {
+        } @catch ( ... ) {
             // TODO: Log
-            return nil;
         }
     }
+    return nil;
 }
 
 -(id)windowAttribute {
@@ -682,16 +682,20 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     // if we are no longer in the wrapper repository, we have been disposed
     AquaA11yWrapper * theWrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ self accessibleContext ] createIfNotExists: NO ];
     if ( theWrapper || mIsTableCell ) {
-        try {
+        @try {
             SEL methodSelector = [ self selectorForAttribute: attribute asGetter: YES withGetterParameter: NO ];
             if ( [ self respondsToSelector: methodSelector ] ) {
                 value = [ self performSelector: methodSelector ];
             }
-        } catch ( const DisposedException & e ) {
+        }
+#if 0
+        catch ( const DisposedException & e ) {
             mIsTableCell = NO; // just to be sure
             [ AquaA11yFactory removeFromWrapperRepositoryFor: [ self accessibleContext ] ];
             return nil;
-        } catch ( const Exception & e ) {
+        }
+#endif
+        @catch ( ... ) {
             // empty
         }
     }
@@ -735,7 +739,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     NSString * title = nil;
     NSMutableArray * attributeNames = nil;
     sal_Int32 nAccessibleChildren = 0;
-    try {
+    @try {
         // Default Attributes
         attributeNames = [ NSMutableArray arrayWithObjects:
             NSAccessibilityRoleAttribute,
@@ -753,15 +757,14 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         if ( nativeSubrole && ! [ nativeSubrole isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilitySubroleAttribute ];
         }
-        try
+        @try
         {
             nAccessibleChildren = [ self accessibleContext ] -> getAccessibleChildCount();
             if (  nAccessibleChildren > 0 ) {
                 [ attributeNames addObject: NSAccessibilityChildrenAttribute ];
         }
         }
-        catch( DisposedException& ) {}
-        catch( RuntimeException& ) {}
+        @catch( ... ) { }
 
         if ( title && ! [ title isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilityTitleAttribute ];
@@ -791,7 +794,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         [ nativeSubrole release ];
         [ title release ];
         return attributeNames;
-    } catch ( DisposedException & e ) { // Object is no longer available
+    }
+#if 0
+    catch ( DisposedException & e ) { // Object is no longer available
         if ( nativeSubrole ) {
             [ nativeSubrole release ];
         }
@@ -804,6 +809,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         [ AquaA11yFactory removeFromWrapperRepositoryFor: [ self accessibleContext ] ];
         return [ [ NSArray alloc ] init ];
     }
+#endif
+    @catch( ... ) { }
+    return nil;
 }
 
 -(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
@@ -976,7 +984,7 @@ Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
                                                  Reference < XAccessibleContext > const & rxAccessibleContext ) {
     Reference < XAccessibleContext > hitChild;
     Reference < XAccessibleContext > emptyReference;
-    try {
+    @try {
         Reference < XAccessibleComponent > rxAccessibleComponent ( rxAccessibleContext, UNO_QUERY );
         if ( rxAccessibleComponent.is() ) {
             css::awt::Point location = rxAccessibleComponent -> getLocationOnScreen();
@@ -1016,7 +1024,7 @@ Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
                 }
             }
         }
-    } catch ( RuntimeException ) {
+    } @catch ( ... ) {
         return emptyReference;
     }
     return hitChild;

@@ -43,13 +43,22 @@ id AquaA11yFocusListener::getFocusedUIElement()
 {
     if ( nil == m_focusedObject ) {
         Reference< XAccessible > xAccessible( TheAquaA11yFocusTracker::get().getFocusedObject() );
+#ifdef __OBJC__
+        @try {
+#else
         try {
+#endif
             if( xAccessible.is() ) {
                 Reference< XAccessibleContext > xContext(xAccessible->getAccessibleContext());
                 if( xContext.is() )
                     m_focusedObject = [ AquaA11yFactory wrapperForAccessibleContext: xContext ];
             }
-        } catch(const RuntimeException &)  {
+        }
+#ifdef __OBJC__
+        @catch( ... )  {
+#else
+        catch ( ... ) {
+#endif
             // intentionally do nothing ..
         }
     }
@@ -65,7 +74,11 @@ AquaA11yFocusListener::focusedObjectChanged(const Reference< XAccessible >& xAcc
         m_focusedObject = nil;
     }
 
+#ifdef __OBJC__
+    @try {
+#else
     try {
+#endif
         if( xAccessible.is() ) {
             Reference< XAccessibleContext > xContext(xAccessible->getAccessibleContext());
             if( xContext.is() )
@@ -74,7 +87,12 @@ AquaA11yFocusListener::focusedObjectChanged(const Reference< XAccessible >& xAcc
                 NSAccessibilityPostNotification(m_focusedObject, NSAccessibilityFocusedUIElementChangedNotification);
             }
         }
-    } catch(const RuntimeException &) {
+    }
+#ifdef __OBJC__
+    @catch( ... ) {
+#else
+    catch( ... ) {
+#endif
         // intentionally do nothing ..
     }
 }

@@ -52,6 +52,7 @@ protected:
         @param rMutex mutex to sync upon disposing
     */
     WeakComponentImplHelperBase( ::osl::Mutex & rMutex );
+
 public:
     /** Destructor
     */
@@ -67,21 +68,25 @@ public:
     inline static void SAL_CALL operator delete( void *, void * )
         {}
 
-    virtual css::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType )
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     virtual void SAL_CALL acquire()
-        throw () SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( ) SAL_OVERRIDE;
+
     virtual void SAL_CALL release()
-        throw () SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( ) SAL_OVERRIDE;
+
     virtual void SAL_CALL dispose()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     virtual void SAL_CALL addEventListener(
         css::uno::Reference< css::lang::XEventListener > const & xListener )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     virtual void SAL_CALL removeEventListener(
         css::uno::Reference< css::lang::XEventListener > const & xListener )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 /** Implementation helper base class for components. Inherits from ::cppu::OWeakAggObject and
@@ -99,6 +104,7 @@ protected:
     virtual void SAL_CALL disposing();
 
     WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex );
+
 public:
     virtual ~WeakAggComponentImplHelperBase() SAL_OVERRIDE;
 
@@ -112,24 +118,28 @@ public:
     inline static void SAL_CALL operator delete( void *, void * )
         {}
 
-    virtual css::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Any SAL_CALL queryAggregation(
-        css::uno::Type const & rType )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType )
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType )
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     virtual void SAL_CALL acquire()
-        throw () SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( ) SAL_OVERRIDE;
+
     virtual void SAL_CALL release()
-        throw () SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( ) SAL_OVERRIDE;
+
     virtual void SAL_CALL dispose()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     virtual void SAL_CALL addEventListener(
         css::uno::Reference< css::lang::XEventListener > const & xListener )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     virtual void SAL_CALL removeEventListener(
         css::uno::Reference< css::lang::XEventListener > const & xListener )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        SAL_THROW_IfNotObjectiveC ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 /** WeakComponentImplHelper

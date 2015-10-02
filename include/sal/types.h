@@ -375,6 +375,13 @@ typedef struct _sal_Sequence
 
 #endif
 
+/** Use to split Objective-C code and C++ exceptions */
+#if defined __OBJC__
+#  define SAL_THROW_IfNotObjectiveC( ... )
+#else
+#  define SAL_THROW_IfNotObjectiveC( ... )  throw( __VA_ARGS__ )
+#endif
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -384,17 +384,25 @@ inline bool BaseReference::operator == ( XInterface * pInterface ) const
 {
     if (_pInterface == pInterface)
         return true;
+#ifndef __OBJC__
     try
+#else
+    @try
+#endif
     {
         // only the query to XInterface must return the same pointer if they belong to same objects
         Reference< XInterface > x1( _pInterface, UNO_QUERY );
         Reference< XInterface > x2( pInterface, UNO_QUERY );
         return (x1._pInterface == x2._pInterface);
     }
+#ifndef __OBJC__
     catch (RuntimeException &)
+#else
+    @catch (...)
+#endif
     {
-        return false;
     }
+    return false;
 }
 
 
@@ -403,17 +411,25 @@ inline bool BaseReference::operator < (
 {
     if (_pInterface == rRef._pInterface)
         return false;
+#ifndef __OBJC__
     try
+#else
+    @try
+#endif
     {
         // only the query to XInterface must return the same pointer:
         Reference< XInterface > x1( _pInterface, UNO_QUERY );
         Reference< XInterface > x2( rRef, UNO_QUERY );
         return (x1._pInterface < x2._pInterface);
     }
+#ifndef __OBJC__
     catch (RuntimeException &)
+#else
+    @catch (...)
+#endif
     {
-        return false;
     }
+    return false;
 }
 
 

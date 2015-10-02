@@ -93,7 +93,7 @@ PropertyHelper_Spell & MacSpellChecker::GetPropHelper_Impl()
 
 
 Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -187,7 +187,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
 
 
 sal_Bool SAL_CALL MacSpellChecker::hasLocale(const Locale& rLocale)
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -272,7 +272,7 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
 sal_Bool SAL_CALL
     MacSpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
-        throw(IllegalArgumentException, RuntimeException)
+        /* throw(IllegalArgumentException, RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -385,7 +385,7 @@ Reference< XSpellAlternatives >
 Reference< XSpellAlternatives > SAL_CALL
     MacSpellChecker::spell( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
-        throw(IllegalArgumentException, RuntimeException)
+        /* throw(IllegalArgumentException, RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -406,7 +406,7 @@ Reference< XSpellAlternatives > SAL_CALL
 
 Reference< XInterface > SAL_CALL MacSpellChecker_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
-        throw(Exception)
+        /* throw(Exception) */
 {
 
     Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new MacSpellChecker);
@@ -417,7 +417,7 @@ Reference< XInterface > SAL_CALL MacSpellChecker_CreateInstance(
 sal_Bool SAL_CALL
     MacSpellChecker::addLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -433,7 +433,7 @@ sal_Bool SAL_CALL
 sal_Bool SAL_CALL
     MacSpellChecker::removeLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -449,7 +449,7 @@ sal_Bool SAL_CALL
 
 OUString SAL_CALL
     MacSpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return OUString( "Mac OS X Spell Checker" );
@@ -458,7 +458,7 @@ OUString SAL_CALL
 
 void SAL_CALL
     MacSpellChecker::initialize( const Sequence< Any >& rArguments )
-        throw(Exception, RuntimeException)
+        /* throw(Exception, RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -488,7 +488,7 @@ void SAL_CALL
 
 void SAL_CALL
     MacSpellChecker::dispose()
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -503,7 +503,7 @@ void SAL_CALL
 
 void SAL_CALL
     MacSpellChecker::addEventListener( const Reference< XEventListener >& rxListener )
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -514,7 +514,7 @@ void SAL_CALL
 
 void SAL_CALL
     MacSpellChecker::removeEventListener( const Reference< XEventListener >& rxListener )
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -524,25 +524,25 @@ void SAL_CALL
 
 // Service specific part
 OUString SAL_CALL MacSpellChecker::getImplementationName()
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     return getImplementationName_Static();
 }
 
 sal_Bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName )
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL MacSpellChecker::getSupportedServiceNames()
-        throw(RuntimeException)
+        /* throw(RuntimeException) */
 {
     return getSupportedServiceNames_Static();
 }
 
 Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
-        throw()
+        /* throw() */
 {
     Sequence< OUString > aSNS { SN_SPELLCHECKER };
     return aSNS;

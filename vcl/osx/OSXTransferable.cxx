@@ -52,7 +52,11 @@ bool cmpAllContentTypeParameter(const Reference<XMimeContentType> & xLhs,
   if (xLhsFlavors.getLength() != xRhsFlavors.getLength())
     return false;
 
+#ifdef __OBJC__
+  @try
+#else
   try
+#endif
     {
       OUString pLhs;
       OUString pRhs;
@@ -68,7 +72,11 @@ bool cmpAllContentTypeParameter(const Reference<XMimeContentType> & xLhs,
             }
         }
     }
+#ifdef __OBJC__
+  @catch(...)
+#else
   catch(IllegalArgumentException&)
+#endif
     {
       return false;
     }
@@ -166,7 +174,11 @@ void OSXTransferable::initClipboardItemList()
  */
 bool OSXTransferable::compareDataFlavors(const DataFlavor& lhs, const DataFlavor& rhs )
 {
+#ifdef __OBJC__
+    @try
+#else
     try
+#endif
     {
         Reference<XMimeContentType> xLhs(mrXMimeCntFactory->createMimeContentType(lhs.MimeType));
         Reference<XMimeContentType> xRhs(mrXMimeCntFactory->createMimeContentType(rhs.MimeType));
@@ -177,7 +189,11 @@ bool OSXTransferable::compareDataFlavors(const DataFlavor& lhs, const DataFlavor
             return false;
           }
     }
+#ifdef __OBJC__
+    @catch( ... )
+#else
     catch( IllegalArgumentException& )
+#endif
     {
         OSL_FAIL( "Invalid content type detected" );
         return false;

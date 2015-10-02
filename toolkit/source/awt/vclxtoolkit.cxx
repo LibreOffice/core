@@ -648,11 +648,19 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
     osl_setThreadName("VCLXToolkit VCL main thread");
 
     css::uno::Reference<css::lang::XMultiServiceFactory> xServiceManager;
+#ifdef __OBJC__
+    @try
+#else
     try
+#endif
     {
         xServiceManager = ::comphelper::getProcessServiceFactory();
     }
+#ifdef __OBJC__
+    @catch (...)
+#else
     catch (const css::uno::DeploymentException&)
+#endif
     {
     }
     if (!xServiceManager.is())
@@ -679,11 +687,19 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
             SolarMutexGuard aGuard;
             Application::Execute();
         }
+#ifdef __OBJC__
+        @try
+#else
         try
+#endif
         {
             pTk->dispose();
         }
+#ifdef __OBJC__
+        @catch( ...)
+#else
         catch( css::uno::Exception & )
+#endif
         {
         }
         DeInitVCL();
@@ -1406,14 +1422,24 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
             aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
             #endif
             SolarMutexGuard aGuard;
+#ifdef __OBJC__
+            @try
+#else
             try
+#endif
             {
                 pChildWindow.reset( VclPtr<WorkWindow>::Create( &aParentData ) );
             }
+#ifdef __OBJC__
+            @catch ( ... )
+#else
             catch ( const css::uno::RuntimeException & rEx )
+#endif
             {
                 // system child window could not be created
+#ifndef __OBJC__
                 SAL_WARN("toolkit", "caught " << rEx.Message);
+#endif
                 pChildWindow.clear();
             }
         }
@@ -1793,10 +1819,9 @@ IMPL_LINK(VCLXToolkit, keyListenerHandler, ::VclWindowEvent&, rEvent, bool)
     return false;
 }
 
-void VCLXToolkit::callTopWindowListeners(
-    ::VclSimpleEvent const * pEvent,
-    void (SAL_CALL css::awt::XTopWindowListener::* pFn)(
-        css::lang::EventObject const &))
+using TopWindowListenerFunPtr = void ( com::sun::star::awt::XTopWindowListener::* )( css::lang::EventObject const & );
+
+void VCLXToolkit::callTopWindowListeners( ::VclSimpleEvent const * pEvent, TopWindowListenerFunPtr pFun )
 {
     vcl::Window * pWindow
           = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
@@ -1812,21 +1837,24 @@ void VCLXToolkit::callTopWindowListeners(
             {
                 css::uno::Reference< css::awt::XTopWindowListener >
                       xListener(i, css::uno::UNO_QUERY);
+#ifndef __OBJC__
                 try
                 {
-                    (xListener.get()->*pFn)(aAwtEvent);
+#endif
+                    (xListener.get()->*pFun)(aAwtEvent);
+#ifndef __OBJC__
                 }
                 catch (const css::uno::RuntimeException & rEx)
                 {
                     SAL_WARN("toolkit", "caught " << rEx.Message);
                 }
+#endif
             }
         }
     }
 }
 
-bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
-                                  bool bPressed)
+bool VCLXToolkit::callKeyHandlers( ::VclSimpleEvent const * pEvent, bool bPressed )
 {
     std::vector< css::uno::Reference< css::uno::XInterface > >
           aHandlers(m_aKeyHandlers.getElements());
@@ -1855,16 +1883,20 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
         {
             css::uno::Reference< css::awt::XKeyHandler > xHandler(
                 i, css::uno::UNO_QUERY);
+#ifndef __OBJC__
             try
             {
+#endif
                 if ((bPressed ? xHandler->keyPressed(aAwtEvent)
                       : xHandler->keyReleased(aAwtEvent)))
                     return true;
+#ifndef __OBJC__
             }
             catch (const css::uno::RuntimeException & rEx)
             {
                 SAL_WARN("toolkit", "caught " << rEx.Message);
             }
+#endif
         }
     }
     return false;
@@ -1902,15 +1934,19 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
             {
                 css::uno::Reference< css::awt::XFocusListener > xListener(
                     i, css::uno::UNO_QUERY);
+#ifndef __OBJC__
                 try
                 {
+#endif
                     bGained ? xListener->focusGained(aAwtEvent)
                         : xListener->focusLost(aAwtEvent);
+#ifndef __OBJC__
                 }
                 catch (const css::uno::RuntimeException & rEx)
                 {
                     SAL_WARN("toolkit", "caught " << rEx.Message);
                 }
+#endif
             }
         }
     }

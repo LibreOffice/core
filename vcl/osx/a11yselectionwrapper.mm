@@ -34,7 +34,7 @@ using namespace ::com::sun::star::uno;
     if( xAccessibleSelection.is() )
     {
         NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
-        try {
+        @try {
             sal_Int32 n = xAccessibleSelection -> getSelectedAccessibleChildCount();
             for ( sal_Int32 i=0 ; i < n ; ++i ) {
                 [ children addObject: [ AquaA11yFactory wrapperForAccessible: xAccessibleSelection -> getSelectedAccessibleChild( i ) ] ];
@@ -42,9 +42,8 @@ using namespace ::com::sun::star::uno;
 
             return children;
 
-        } catch ( Exception& e)
-        {
         }
+        @catch ( ... ) { }
     }
 
     return nil;
@@ -72,15 +71,15 @@ using namespace ::com::sun::star::uno;
 +(void)setSelectedChildrenAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value
 {
     Reference< XAccessibleSelection > xAccessibleSelection = [ wrapper accessibleSelection ];
-    try {
+    @try {
         xAccessibleSelection -> clearAccessibleSelection();
 
         unsigned c = [ value count ];
         for ( unsigned i = 0 ; i < c ; ++i ) {
             xAccessibleSelection -> selectAccessibleChild( [ [ value objectAtIndex: i ] accessibleContext ] -> getAccessibleIndexInParent() );
         }
-    } catch ( Exception& e) {
     }
+    @catch ( ... ) { }
 }
 
 @end

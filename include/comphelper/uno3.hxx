@@ -32,16 +32,16 @@ namespace comphelper
     /** used for declaring UNO3-Defaults, i.e. acquire/release
     */
     #define DECLARE_UNO3_DEFAULTS(classname, baseclass) \
-        virtual void    SAL_CALL acquire() throw() override { baseclass::acquire(); }    \
-        virtual void    SAL_CALL release() throw() override { baseclass::release(); }
+        virtual void    SAL_CALL acquire() SAL_THROW_IfNotObjectiveC () override { baseclass::acquire(); }    \
+        virtual void    SAL_CALL release() SAL_THROW_IfNotObjectiveC () override { baseclass::release(); }
 
     /** used for declaring UNO3-Defaults, i.e. acquire/release if you want to forward all queryInterfaces to the base class,
         (e.g. if you override queryAggregation)
     */
     #define DECLARE_UNO3_AGG_DEFAULTS(classname, baseclass) \
-        virtual void            SAL_CALL acquire() throw() override { baseclass::acquire(); } \
-        virtual void            SAL_CALL release() throw() override { baseclass::release(); }    \
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override \
+        virtual void           SAL_CALL acquire() SAL_THROW_IfNotObjectiveC () override { baseclass::acquire(); } \
+        virtual void           SAL_CALL release() SAL_THROW_IfNotObjectiveC () override { baseclass::release(); }    \
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) override \
             { return baseclass::queryInterface(_rType); }
 
     /** Use this macro to forward XComponent methods to base class
@@ -67,21 +67,21 @@ namespace comphelper
         that would be ::cppu::WeakComponentImplHelperBase
     */
     #define DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS(classname, baseclass, implhelper) \
-        virtual void SAL_CALL acquire() throw() override { baseclass::acquire(); }   \
-        virtual void SAL_CALL release() throw() override { baseclass::release(); }   \
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override \
+        virtual void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC () override { baseclass::acquire(); }   \
+        virtual void SAL_CALL release() SAL_THROW_IfNotObjectiveC () override { baseclass::release(); }   \
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) override \
             { return baseclass::queryInterface(_rType); }                               \
-        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override \
+        virtual void SAL_CALL dispose() SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) override \
         {                                                                               \
             implhelper::dispose();                                                      \
         }                                                                               \
         virtual void SAL_CALL addEventListener(                                         \
-            css::uno::Reference< css::lang::XEventListener > const & xListener ) throw (css::uno::RuntimeException, std::exception) override \
+            css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) override \
         {                                                                               \
             implhelper::addEventListener(xListener);                                        \
         }                                                                               \
         virtual void SAL_CALL removeEventListener(                                      \
-            css::uno::Reference< css::lang::XEventListener > const & xListener ) throw (css::uno::RuntimeException, std::exception) override \
+            css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) override \
         {                                                                               \
             implhelper::removeEventListener(xListener);                                 \
         }
@@ -91,17 +91,17 @@ namespace comphelper
     //= forwarding/merging XInterface funtionality
 
     #define DECLARE_XINTERFACE( )   \
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override; \
-        virtual void SAL_CALL acquire() throw() override; \
-        virtual void SAL_CALL release() throw() override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) override; \
+        virtual void SAL_CALL acquire() SAL_THROW_IfNotObjectiveC () override; \
+        virtual void SAL_CALL release() SAL_THROW_IfNotObjectiveC () override;
 
     #define IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        void SAL_CALL classname::acquire() throw() { refcountbase::acquire(); } \
-        void SAL_CALL classname::release() throw() { refcountbase::release(); }
+        void SAL_CALL classname::acquire() SAL_THROW_IfNotObjectiveC () { refcountbase::acquire(); } \
+        void SAL_CALL classname::release() SAL_THROW_IfNotObjectiveC () { refcountbase::release(); }
 
     #define IMPLEMENT_FORWARD_XINTERFACE2( classname, refcountbase, baseclass2 ) \
         IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        css::uno::Any SAL_CALL classname::queryInterface( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) \
+        css::uno::Any SAL_CALL classname::queryInterface( const css::uno::Type& _rType ) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) \
         { \
             css::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
             if ( !aReturn.hasValue() ) \
@@ -111,7 +111,7 @@ namespace comphelper
 
     #define IMPLEMENT_FORWARD_XINTERFACE3( classname, refcountbase, baseclass2, baseclass3 ) \
         IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        css::uno::Any SAL_CALL classname::queryInterface( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) \
+        css::uno::Any SAL_CALL classname::queryInterface( const css::uno::Type& _rType ) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) \
         { \
             css::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
             if ( !aReturn.hasValue() ) \
@@ -127,17 +127,17 @@ namespace comphelper
     //= forwarding/merging XTypeProvider funtionality
 
     #define DECLARE_XTYPEPROVIDER( )    \
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override; \
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) override; \
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) override;
 
     #define IMPLEMENT_GET_IMPLEMENTATION_ID( classname ) \
-        css::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) \
+        css::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) \
         { \
             return css::uno::Sequence<sal_Int8>(); \
         }
 
     #define IMPLEMENT_FORWARD_XTYPEPROVIDER2( classname, baseclass1, baseclass2 ) \
-        css::uno::Sequence< css::uno::Type > SAL_CALL classname::getTypes(  ) throw (css::uno::RuntimeException, std::exception) \
+        css::uno::Sequence< css::uno::Type > SAL_CALL classname::getTypes(  ) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) \
         { \
             return ::comphelper::concatSequences( \
                 baseclass1::getTypes(), \
@@ -148,7 +148,7 @@ namespace comphelper
         IMPLEMENT_GET_IMPLEMENTATION_ID( classname )
 
     #define IMPLEMENT_FORWARD_XTYPEPROVIDER3( classname, baseclass1, baseclass2, baseclass3 ) \
-        css::uno::Sequence< css::uno::Type > SAL_CALL classname::getTypes(  ) throw (css::uno::RuntimeException, std::exception) \
+        css::uno::Sequence< css::uno::Type > SAL_CALL classname::getTypes(  ) SAL_THROW_IfNotObjectiveC (css::uno::RuntimeException, std::exception) \
         { \
             return ::comphelper::concatSequences( \
                 baseclass1::getTypes(), \

@@ -158,12 +158,16 @@ DragSource::~DragSource()
 }
 
 void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
-  throw(Exception, std::exception)
+  SAL_THROW_IfNotObjectiveC( Exception, std::exception )
 {
   if (aArguments.getLength() < 2)
     {
+      #ifndef __OBJC__
       throw Exception("DragSource::initialize: Not enough parameter.",
                       static_cast<OWeakObject*>(this));
+      #else
+      return;
+      #endif
     }
 
   Any pNSView = aArguments[1];
@@ -180,14 +184,22 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   if (![mView respondsToSelector: @selector(registerMouseEventListener:)] ||
       ![mView respondsToSelector: @selector(unregisterMouseEventListener:)])
     {
+      #ifndef __OBJC__
       throw Exception("DragSource::initialize: Provided view doesn't support mouse listener",
                       static_cast<OWeakObject*>(this));
+      #else
+      return;
+      #endif
     }
   NSWindow* pWin = [mView window];
   if( ! pWin || ![pWin respondsToSelector: @selector(getSalFrame)] )
   {
+      #ifndef __OBJC__
       throw Exception("DragSource::initialize: Provided view is not attached to a vcl frame",
                       static_cast<OWeakObject*>(this));
+      #else
+      return;
+      #endif
   }
   mpFrame = reinterpret_cast<AquaSalFrame*>([pWin performSelector: @selector(getSalFrame)]);
 
@@ -195,21 +207,25 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
 
   if (mDragSourceHelper == nil)
     {
+      #ifndef __OBJC__
       throw Exception("DragSource::initialize: Cannot initialize DragSource",
                       static_cast<OWeakObject*>(this));
+      #else
+      return;
+      #endif
     }
 
   [(id <MouseEventListener>)mView registerMouseEventListener: mDragSourceHelper];
 }
 
 sal_Bool SAL_CALL DragSource::isDragImageSupported(  )
-  throw(RuntimeException, std::exception)
+  SAL_THROW_IfNotObjectiveC( RuntimeException, std::exception )
 {
   return true;
 }
 
 sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 /*dragAction*/ )
-  throw( IllegalArgumentException, RuntimeException, std::exception)
+  SAL_THROW_IfNotObjectiveC( IllegalArgumentException, RuntimeException, std::exception )
 {
   return 0;
 }
@@ -220,7 +236,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
                                     sal_Int32 /*image*/,
                                     const uno::Reference<XTransferable >& transferable,
                                     const uno::Reference<XDragSourceListener >& listener )
-  throw( RuntimeException, std::exception)
+  SAL_THROW_IfNotObjectiveC( RuntimeException, std::exception )
 {
   MutexGuard guard(m_aMutex);
 
@@ -323,17 +339,20 @@ unsigned int DragSource::getSupportedDragOperations(bool isLocal) const
   return srcActions;
 }
 
-OUString SAL_CALL DragSource::getImplementationName(  ) throw (RuntimeException, std::exception)
+OUString SAL_CALL DragSource::getImplementationName(  )
+  SAL_THROW_IfNotObjectiveC( RuntimeException, std::exception )
 {
   return dragSource_getImplementationName();
 }
 
-sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName )
+  SAL_THROW_IfNotObjectiveC( RuntimeException, std::exception )
 {
   return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames()
+  SAL_THROW_IfNotObjectiveC( RuntimeException, std::exception )
 {
   return dragSource_getSupportedServiceNames();
 }

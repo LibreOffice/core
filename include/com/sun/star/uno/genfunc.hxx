@@ -52,7 +52,11 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
 {
     if (pCppI)
     {
+#ifndef __OBJC__
         try
+#else
+        @try
+#endif
         {
             Any aRet( static_cast< XInterface * >( pCppI )->queryInterface(
                 * reinterpret_cast< const Type * >( &pType ) ) );
@@ -63,7 +67,11 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
                 return pRet;
             }
         }
+#ifndef __OBJC__
         catch (RuntimeException &)
+#else
+        @catch (...)
+#endif
         {
         }
     }
