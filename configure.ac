@@ -4519,7 +4519,6 @@ if test "$cross_compiling" = "yes"; then
         lo.xcent.in \
         instsetoo_native/util/openoffice.lst.in \
         config_host/*.in \
-        solenv/gbuild/shell.mk.in \
         sysui/desktop/macosx/Info.plist.in \
         ios/lo.xcconfig.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
@@ -4956,15 +4955,6 @@ STALE_MAKE=
 if test "$_make_ver_check" = ""; then
    STALE_MAKE=TRUE
 fi
-
-if test -z "$SHELL_BASH"; then
-    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
-        SHELL_BASH=$(cygpath -m $(which bash))
-    else
-        SHELL_BASH=`which bash`
-    fi
-fi
-AC_SUBST(SHELL_BASH)
 
 HAVE_LD_HASH_STYLE=FALSE
 WITH_LINKER_HASH_STYLE=
@@ -12998,7 +12988,6 @@ AC_CONFIG_FILES([config_host.mk
                  Makefile
                  lo.xcent
                  instsetoo_native/util/openoffice.lst
-                 solenv/gbuild/shell.mk
                  sysui/desktop/macosx/Info.plist
                  ios/lo.xcconfig])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
