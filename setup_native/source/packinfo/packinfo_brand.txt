@@ -28,6 +28,7 @@ vendor = "The Document Foundation"
 description = "Brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
+provides = "libreoffice"
 End
 
 Start
@@ -42,6 +43,7 @@ vendor = "The Document Foundation"
 description = "Writer brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-writer"
 End
 
 Start
@@ -56,6 +58,7 @@ vendor = "The Document Foundation"
 description = "Calc brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-calc"
 End
 
 Start
@@ -70,6 +73,7 @@ vendor = "The Document Foundation"
 description = "Impress brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-impress"
 End
 
 Start
@@ -84,6 +88,7 @@ vendor = "The Document Foundation"
 description = "Draw brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-draw"
 End
 
 Start
@@ -98,6 +103,7 @@ vendor = "The Document Foundation"
 description = "Math brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-math"
 End
 
 Start
@@ -112,6 +118,7 @@ vendor = "The Document Foundation"
 description = "Base brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-base"
 End
 
 Start
