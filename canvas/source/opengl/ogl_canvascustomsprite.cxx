@@ -153,7 +153,7 @@ namespace oglcanvas
             IBufferContextSharedPtr pBufferContext;
             if( mfAlpha != 1.0 || mxClip.is() )
             {
-                // drats. Need to render to temp surface before, and then
+                // drafts. Need to render to temp surface before, and then
                 // composite that to screen
 
                 // TODO(P3): buffer texture
