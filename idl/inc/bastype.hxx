@@ -57,8 +57,6 @@ public:
     operator    bool() const { return nVal; }
     bool        IsSet() const { return bSet; }
 
-    friend SvStream& operator >> (SvStream &, SvBOOL &);
-
     bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
 };
 
@@ -146,7 +144,6 @@ public:
                     return !(*this == r);
                 }
 
-    friend SvStream& operator >> (SvStream &, SvVersion &);
     bool        ReadSvIdl( SvTokenStream & rInStm );
 };
 

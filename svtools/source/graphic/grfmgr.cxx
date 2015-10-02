@@ -425,15 +425,6 @@ void GraphicObject::SetUserData( const OUString& rUserData )
         SetSwapState();
 }
 
-void GraphicObject::SetSwapStreamHdl()
-{
-    if( mpSwapOutTimer )
-    {
-        delete mpSwapOutTimer, mpSwapOutTimer = NULL;
-    }
-    maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
-}
-
 static sal_uInt32 GetCacheTimeInMs()
 {
     if (utl::ConfigManager::IsAvoidConfig())

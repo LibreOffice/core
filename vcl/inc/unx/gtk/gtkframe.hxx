@@ -239,7 +239,6 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     static void         signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer );
 #if GTK_CHECK_VERSION(3,0,0)
     static gboolean     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
-    static void         signalFlagsChanged( GtkWidget*, GtkStateFlags, gpointer );
 #if GTK_CHECK_VERSION(3,14,0)
     static void         gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame);
     static void         gestureLongPress(GtkGestureLongPress* gesture, gpointer frame);
@@ -263,7 +262,6 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     void            Center();
     void            SetDefaultSize();
     void            setAutoLock( bool bLock );
-    void            setScreenSaverTimeout( int nTimeout );
 
     void            doKeyCallback( guint state,
                                    guint keyval,
@@ -322,7 +320,6 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     void updateWMClass();
     void SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize = NULL );
 
-    DECL_LINK( ImplDelayedFullScreenHdl, void* );
 public:
 #if GTK_CHECK_VERSION(3,0,0)
     basebmp::BitmapDeviceSharedPtr  m_aFrame;

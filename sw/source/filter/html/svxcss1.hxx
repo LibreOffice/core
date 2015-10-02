@@ -159,7 +159,6 @@ class SvxCSS1MapEntry
     SvxCSS1PropertyInfo aPropInfo;
 
 public:
-
     SvxCSS1MapEntry( SfxItemPool& rPool, const sal_uInt16 *pWhichMap ) :
         aItemSet( rPool, pWhichMap )
     {}
@@ -172,22 +171,7 @@ public:
 
     const SvxCSS1PropertyInfo& GetPropertyInfo() const { return aPropInfo; }
     SvxCSS1PropertyInfo& GetPropertyInfo() { return aPropInfo; }
-
-    friend bool operator==( const SvxCSS1MapEntry& rE1,
-                            const SvxCSS1MapEntry& rE2 );
-    friend bool operator<( const SvxCSS1MapEntry& rE1,
-                            const SvxCSS1MapEntry& rE2 );
 };
-
-inline bool operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
-{
-    return  rE1.aKey==rE2.aKey;
-}
-
-inline bool operator<( const SvxCSS1MapEntry& rE1,  const SvxCSS1MapEntry& rE2 )
-{
-    return  rE1.aKey<rE2.aKey;
-}
 
 // Diese Klasse bereitet den Output des CSS1-Parsers auf,
 // indem die CSS1-Properties in SvxItem(Set)s umgewandelt werden.

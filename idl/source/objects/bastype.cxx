@@ -57,38 +57,6 @@ static bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
     return false;
 }
 
-SvStream& operator >> (SvStream & rStm, SvBOOL & rb )
-{
-    sal_uInt8 n;
-    rStm.ReadUChar( n );
-    rb.nVal = (n & 0x01) != 0;
-    rb.bSet = (n & 0x02) != 0;
-    if( n & ~0x03 )
-    {
-        rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        OSL_FAIL( "format error" );
-    }
-    return rStm;
-}
-
-SvStream& operator >> (SvStream & rStm, SvVersion & r )
-{
-    sal_uInt8 n;
-    rStm.ReadUChar( n );
-    if( n == 0 )
-    { // not compressed
-        rStm.ReadUInt16( r.nMajorVersion );
-        rStm.ReadUInt16( r.nMinorVersion );
-    }
-    else
-    { // compressed
-        r.nMajorVersion = (n >> 4) & 0x0F;
-        r.nMinorVersion = n & 0x0F;
-    }
-    return rStm;
-}
-
-
 bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();

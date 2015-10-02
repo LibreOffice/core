@@ -154,9 +154,6 @@ public:
     static bool sha512(std::vector<sal_uInt8>& digest, std::vector<sal_uInt8>& input);
 };
 
-bool sha1(  std::vector<sal_uInt8>& digest, std::vector<sal_uInt8>& input);
-bool sha512(std::vector<sal_uInt8>& digest, std::vector<sal_uInt8>& input);
-
 } // namespace core
 } // namespace oox
 

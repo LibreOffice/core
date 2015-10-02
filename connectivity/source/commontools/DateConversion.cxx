@@ -297,7 +297,6 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                 case NumberFormat::DATETIME:
                 case NumberFormat::TIME:
                     DBTypeConversion::setValue(xVariant,rNullDate,fValue,nRealUsedTypeClass);
-                    //  xVariant->updateDouble(toStandardDbDate(rNullDate, fValue));
                     break;
                 case NumberFormat::CURRENCY:
                 case NumberFormat::NUMBER:

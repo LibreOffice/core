@@ -78,7 +78,6 @@ namespace vcl { class Window; }
 // displaying a database exception for the user
 // display info about a simple css::sdbc::SQLException
 void displayException(const css::sdbc::SQLException&, vcl::Window* _pParent = NULL);
-void displayException(const css::sdbc::SQLWarning&, vcl::Window* _pParent = NULL);
 SVX_DLLPUBLIC void displayException(const css::sdb::SQLContext&, vcl::Window* _pParent = NULL);
 void displayException(const css::sdb::SQLErrorEvent&, vcl::Window* _pParent = NULL);
 void displayException(const css::uno::Any&, vcl::Window* _pParent = NULL);

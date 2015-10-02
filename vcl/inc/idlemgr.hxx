@@ -40,9 +40,6 @@ public:
     bool            InsertIdleHdl( const Link<Application*,void>& rLink, sal_uInt16 nPriority );
     void            RemoveIdleHdl( const Link<Application*,void>& rLink );
 
-    void            RestartIdler()
-                        { if ( maTimer.IsActive() ) maTimer.Start(); }
-
                     // Timer* kann auch NULL sein
                     DECL_LINK_TYPED(TimeoutHdl, Timer *, void);
 };

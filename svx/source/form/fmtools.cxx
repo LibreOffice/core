@@ -148,12 +148,6 @@ void displayException(const ::com::sun::star::sdbc::SQLException& _rExcept, vcl:
 }
 
 
-void displayException(const ::com::sun::star::sdbc::SQLWarning& _rExcept, vcl::Window* _pParent)
-{
-    displayException(makeAny(_rExcept), _pParent);
-}
-
-
 void displayException(const ::com::sun::star::sdb::SQLContext& _rExcept, vcl::Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);

@@ -2,6 +2,7 @@
 
 import sys
 import re
+import io
 
 definitionSet = set()
 definitionToSourceLocationMap = dict()
@@ -71,6 +72,7 @@ exclusionSet = set([
     "Ring<value_type> * sw::Ring::Ring_node_traits::get_previous(const Ring<value_type> *)",
     "void sw::Ring::Ring_node_traits::set_next(Ring<value_type> *,Ring<value_type> *)",
     "void sw::Ring::Ring_node_traits::set_previous(Ring<value_type> *,Ring<value_type> *)",
+    "type-parameter-0-0 checking_cast(type-parameter-0-0,type-parameter-0-0)",
     # I need to teach the plugin that for loops with range expressions call begin() and end()
     "class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwAnchoredObject *const *, class std::__cxx1998::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > >, class std::__debug::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > > SwSortedObjs::begin() const",
     "class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwAnchoredObject *const *, class std::__cxx1998::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > >, class std::__debug::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > > SwSortedObjs::end() const",
@@ -85,22 +87,36 @@ exclusionSet = set([
     "class chart::opengl::OpenglShapeFactory * getOpenglShapeFactory()",
     "class VclAbstractDialogFactory * CreateDialogFactory()",
     "_Bool GetSpecialCharsForEdit(class vcl::Window *,const class vcl::Font &,class rtl::OUString &)",
-    "const struct ImplTextEncodingData * sal_getFullTextEncodingData(unsigned short)"
+    "const struct ImplTextEncodingData * sal_getFullTextEncodingData(unsigned short)",
+    "class SalInstance * create_SalInstance()",
+    "class SwAbstractDialogFactory * SwCreateDialogFactory()",
+    "class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> WordPerfectImportFilterDialog_createInstance(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)",
+    "class UnoWrapperBase * CreateUnoWrapper()",
+    "class SwAbstractDialogFactory * SwCreateDialogFactory()",
+    "unsigned long GetSaveWarningOfMSVBAStorage_ww8(class SfxObjectShell &)",
+    "unsigned long SaveOrDelMSVBAStorage_ww8(class SfxObjectShell &,class SotStorage &,unsigned char,const class rtl::OUString &)",
+    "void ExportRTF(const class rtl::OUString &,const class rtl::OUString &,class tools::SvRef<class Writer> &)",
+    "void ExportDOC(const class rtl::OUString &,const class rtl::OUString &,class tools::SvRef<class Writer> &)",
+    "class Reader * ImportRTF()",
+    "void ImportXE(class SwDoc &,class SwPaM &,const class rtl::OUString &)",
+    "_Bool TestImportDOC(const class rtl::OUString &,const class rtl::OUString &)",
+    "class vcl::Window * CreateWindow(class VCLXWindow **,const struct com::sun::star::awt::WindowDescriptor *,class vcl::Window *,long)",
     ])
 
 
 # The parsing here is designed to avoid grabbing stuff which is mixed in from gbuild.
 # I have not yet found a way of suppressing the gbuild output.
-with open(sys.argv[1]) as txt:
+with io.open(sys.argv[1], "rb", buffering=1024*1024) as txt:
     for line in txt:
         if line.startswith("definition:\t"):
-            tokens = line.split("\t")
-            funcInfo = (tokens[1], tokens[2])
+            idx1 = line.find("\t",12)
+            idx2 = line.find("\t",idx1+1)
+            funcInfo = (line[12:idx1], line[idx1+1:idx2])
             definitionSet.add(funcInfo)
-            definitionToSourceLocationMap[funcInfo] = tokens[3].strip()
+            definitionToSourceLocationMap[funcInfo] = line[idx2+1:].strip()
         elif line.startswith("call:\t"):
-            tokens = line.split("\t")
-            callSet.add((tokens[1], tokens[2].strip()))
+            idx1 = line.find("\t",6)
+            callSet.add((line[6:idx1], line[idx1+1:].strip()))
 
 tmp1set = set()
 for d in definitionSet:
@@ -137,6 +153,10 @@ for d in definitionSet:
         clazz2 = clazz.replace("::iterator", "::const_iterator") + " const"
         if ((d[0],clazz2) in callSet):
            continue
+    # just ignore iterators, they normally occur in pairs, and we typically want to leave one constness version alone
+    # alone if the other one is in use.
+    if d[1] == "begin() const" or d[1] == "begin()" or d[1] == "end()" or d[1] == "end() const":
+        continue
     # There is lots of macro magic going on in SRCDIR/include/sax/fshelper.hxx that should be using C++11 varag templates
     if d[1].startswith("sax_fastparser::FastSerializerHelper::"):
        continue
@@ -171,9 +191,13 @@ for d in definitionSet:
     # ignore the VCL_BUILDER_DECL_FACTORY stuff
     if d[0]=="void" and d[1].startswith("make") and ("(class VclPtr<class vcl::Window> &" in d[1]):
        continue
+    # ignore methods used to dump objects to stream - normally used for debugging
+    if d[0] == "class std::basic_ostream<char> &" and d[1].startswith("operator<<(class std::basic_ostream<char> &"):
+       continue
 
     tmp1set.add((clazz, definitionToSourceLocationMap[d]))
 
+# sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]

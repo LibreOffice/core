@@ -129,9 +129,6 @@ private:
         throw( com::sun::star::uno::RuntimeException );
     com::sun::star::uno::Reference < XBreakIterator > SAL_CALL getLocaleSpecificBreakIterator( const com::sun::star::lang::Locale& rLocale )
         throw( com::sun::star::uno::RuntimeException );
-    const com::sun::star::lang::Locale& SAL_CALL getLocaleByScriptType(const com::sun::star::lang::Locale& rLocale, const OUString& Text,
-        sal_Int32 nStartPos, bool forward, bool skipWhiteSpace)
-        throw(com::sun::star::uno::RuntimeException);
 
 };
 

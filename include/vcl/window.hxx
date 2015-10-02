@@ -456,8 +456,6 @@ inline bool ImplDoTiledRendering()
 
 
 namespace vcl { class Window; }
-vcl::Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
-
 namespace vcl { class Cursor; }
 class Dialog;
 class WindowImpl;
@@ -550,7 +548,6 @@ private:
 #ifdef DBG_UTIL
     friend const char* ::ImplDbgCheckWindow( const void* pObj );
 #endif
-    friend vcl::Window* ::ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
 
 public:
 

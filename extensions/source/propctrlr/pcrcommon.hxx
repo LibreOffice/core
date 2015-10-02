@@ -100,8 +100,6 @@ namespace pcr
 
         inline sal_Int32 size() const { return UnoBase::getLength(); }
         inline bool empty() const { return UnoBase::getLength() == 0; }
-
-        inline void resize( size_t _newSize ) { UnoBase::realloc( _newSize ); }
     };
 
 

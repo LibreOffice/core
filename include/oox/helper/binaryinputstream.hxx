@@ -116,21 +116,6 @@ public:
     template< typename Type >
     sal_Int32           readArray( Type* opnArray, sal_Int32 nElemCount );
 
-    /** Reads a sequence of values from the stream.
-
-        The sequence will be reallocated internally. Converts all values in the
-        array to platform byte order. All data types supported by the
-        ByteOrderConverter class can be used.
-
-        @param nElemCount
-            Number of elements to put into the sequence (NOT byte count).
-
-        @return
-            Number of sequence elements really read (NOT byte count).
-     */
-    template< typename Type >
-    sal_Int32           readArray( ::com::sun::star::uno::Sequence< Type >& orSequence, sal_Int32 nElemCount );
-
     /** Reads a vector of values from the stream.
 
         The vector will be resized internally. Converts all values in the
@@ -145,16 +130,6 @@ public:
      */
     template< typename Type >
     sal_Int32           readArray( ::std::vector< Type >& orVector, sal_Int32 nElemCount );
-
-    /** Skips an array of values of a certain type in the stream.
-
-        All data types supported by the ByteOrderConverter class can be used.
-
-        @param nElemCount
-            Number of array elements to skip (NOT byte count).
-     */
-    template< typename Type >
-    void                skipArray( sal_Int32 nElemCount );
 
     /** Reads a NUL-terminated Unicode character array and returns the string.
      */
@@ -253,24 +228,10 @@ sal_Int32 BinaryInputStream::readArray( Type* opnArray, sal_Int32 nElemCount )
 }
 
 template< typename Type >
-sal_Int32 BinaryInputStream::readArray( ::com::sun::star::uno::Sequence< Type >& orSequence, sal_Int32 nElemCount )
-{
-    orSequence.reallocate( nElemCount );
-    return orSequence.hasElements() ? readArray( orSequence.getArray(), nElemCount ) : 0;
-}
-
-template< typename Type >
 sal_Int32 BinaryInputStream::readArray( ::std::vector< Type >& orVector, sal_Int32 nElemCount )
 {
     orVector.resize( static_cast< size_t >( nElemCount ) );
     return orVector.empty() ? 0 : readArray( &orVector.front(), nElemCount );
-}
-
-template< typename Type >
-void BinaryInputStream::skipArray( sal_Int32 nElemCount )
-{
-    sal_Int32 nSkipSize = getLimitedValue< sal_Int32, sal_Int32 >( nElemCount, 0, SAL_MAX_INT32 / sizeof( Type ) ) * sizeof( Type );
-    skip( nSkipSize, sizeof( Type ) );
 }
 
 

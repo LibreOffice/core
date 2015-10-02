@@ -85,9 +85,6 @@ public:
 
     const ::std::vector< ChoiceData >& getChoices() const { return m_aChoices; }
 
-    // for SwitchIMCallback
-    void changeIM( const OUString& );
-
     // External Control:
 
     /** Toggle the status window on or off.

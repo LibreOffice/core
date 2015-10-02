@@ -54,8 +54,7 @@ public:
     bool        IsImportUnknown() const;
     void        SetImportUnknown(bool bSet);
 
-    sal_uInt16      GetExportMode() const;
-    void        SetExportMode(sal_uInt16 nSet);
+    sal_uInt16  GetExportMode() const;
 
     bool        IsStarBasic() const;
     void        SetStarBasic(bool bSet);

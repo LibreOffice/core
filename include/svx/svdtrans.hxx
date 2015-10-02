@@ -55,7 +55,6 @@ inline long Round(double a) { return a>0.0 ? (long)(a+0.5) : -(long)((-a)+0.5); 
 inline void MoveRect(Rectangle& rRect, const Size& S)    { rRect.Move(S.Width(),S.Height()); }
 inline void MovePoint(Point& rPnt, const Size& S)        { rPnt.X()+=S.Width(); rPnt.Y()+=S.Height(); }
 inline void MovePoly(tools::Polygon& rPoly, const Size& S)      { rPoly.Move(S.Width(),S.Height()); }
-inline void MovePoly(tools::PolyPolygon& rPoly, const Size& S)  { rPoly.Move(S.Width(),S.Height()); }
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 
 SVX_DLLPUBLIC void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bNoJustify = false);
@@ -69,7 +68,6 @@ void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs);
 void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs);
 
 void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2);
-void MirrorPoly(tools::Polygon& rPoly, const Point& rRef1, const Point& rRef2);
 void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2);
 
 inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear = false);

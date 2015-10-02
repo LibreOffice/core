@@ -48,11 +48,6 @@ public:
     virtual ~StylePreviewRenderer()
     {}
 
-    void setRenderText(OUString& rRenderText)
-    {
-        msRenderText = rRenderText;
-    }
-
     virtual bool recalculate() = 0;
     virtual Size getRenderSize() = 0;
     virtual bool render(const Rectangle& aRectangle, RenderAlign eRenderAlign = RenderAlign::CENTER) = 0;

@@ -42,16 +42,13 @@ public:
     bool        GetIsAllowAnimatedGraphics() const;
     bool        GetIsAllowAnimatedText() const;
     bool        GetIsAutomaticFontColor() const;
-    sal_Int16   GetHelpTipSeconds() const;
     bool        IsSelectionInReadonly() const;
     bool        GetAutoDetectSystemHC() const;
 
     void        SetIsForPagePreviews(bool bSet);
-    void        SetIsHelpTipsDisappear(bool bSet);
     void        SetIsAllowAnimatedGraphics(bool bSet);
     void        SetIsAllowAnimatedText(bool bSet);
     void        SetIsAutomaticFontColor(bool bSet);
-    void        SetHelpTipSeconds(sal_Int16 nSet);
     void        SetSelectionInReadonly(bool bSet);
     void        SetAutoDetectSystemHC(bool bSet);
 
