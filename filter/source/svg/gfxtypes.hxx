@@ -62,8 +62,6 @@ struct GradientStop
     ARGBColor     maStopColor;
     double        mnStopPosition;
 };
-inline bool operator==( const GradientStop& rLHS, const GradientStop& rRHS )
-{ return rLHS.mnStopPosition==rRHS.mnStopPosition && rLHS.maStopColor==rRHS.maStopColor; }
 
 struct Gradient
 {

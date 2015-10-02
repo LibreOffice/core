@@ -30,11 +30,10 @@
 
 namespace ww8
 {
-    typedef boost::shared_array<sal_uInt8> DataArray_t;
 
-class WW8Struct : public ::sw::ExternalData
+    class WW8Struct : public ::sw::ExternalData
     {
-        DataArray_t mp_data;
+        boost::shared_array<sal_uInt8> mp_data;
         sal_uInt32 mn_offset;
         sal_uInt32 mn_size;
 
@@ -51,28 +50,21 @@ class WW8Struct : public ::sw::ExternalData
         OUString getUString(sal_uInt32 nOffset, sal_uInt32 nCount);
     };
 
-typedef ::std::vector<OUString> StringVector_t;
     template <class T>
     class WW8Sttb : public WW8Struct
     {
         typedef std::shared_ptr< void > ExtraPointer_t;
-        typedef ::std::vector< ExtraPointer_t > ExtrasVector_t;
-        bool bDoubleByteCharacters;
-        StringVector_t m_Strings;
-        ExtrasVector_t m_Extras;
+        bool                            bDoubleByteCharacters;
+        std::vector<OUString>           m_Strings;
+        std::vector< ExtraPointer_t >   m_Extras;
 
     public:
         WW8Sttb(SvStream& rSt, sal_Int32 nPos, sal_uInt32 nSize);
         virtual ~WW8Sttb();
 
-        StringVector_t & getStrings()
+        std::vector<OUString> & getStrings()
         {
             return m_Strings;
-        }
-
-        const T * getExtra(sal_uInt32 nEntry) const
-        {
-            return dynamic_cast<const T *> (m_Extras[nEntry].get());
         }
     };
 

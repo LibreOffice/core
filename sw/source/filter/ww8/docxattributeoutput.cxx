@@ -8540,23 +8540,6 @@ void DocxAttributeOutput::BulletDefinition(int nId, const Graphic& rGraphic, Siz
     m_pSerializer->endElementNS(XML_w, XML_numPicBullet);
 }
 
-void DocxAttributeOutput::AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrs, ... )
-{
-    if( !pAttrList )
-        pAttrList.reset(FastSerializerHelper::createAttrList());
-
-    va_list args;
-    va_start( args, nAttrs );
-    for( sal_Int32 i = 0; i<nAttrs; i++)
-    {
-        sal_Int32 nName = va_arg( args, sal_Int32 );
-        const char* pValue = va_arg( args, const char* );
-        if( pValue )
-            pAttrList->add( nName, pValue );
-    }
-    va_end( args );
-}
-
 void DocxAttributeOutput::AddToAttrList( uno::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue )
 {
     AddToAttrList( pAttrList, 1, nAttrName, sAttrValue );

@@ -173,10 +173,8 @@ private:
 bool operator==( const Style& rL, const Style& rR );
 SVX_DLLPUBLIC bool operator<( const Style& rL, const Style& rR );
 
-inline bool operator!=( const Style& rL, const Style& rR ) { return !(rL == rR); }
 inline bool operator>( const Style& rL, const Style& rR ) { return rR < rL; }
 inline bool operator<=( const Style& rL, const Style& rR ) { return !(rR < rL); }
-inline bool operator>=( const Style& rL, const Style& rR ) { return !(rL < rR); }
 
 
 
@@ -219,24 +217,6 @@ SVX_DLLPUBLIC double GetHorDiagAngle( long nWidth, long nHeight );
 /** Returns the angle between horizontal border of a rectangle and its diagonal.
 
     The returned values represents the inner angle between the diagonals and
-    horizontal borders, and is therefore in the range [0,PI/2] (inclusive). The
-    passed rectangle positions may be unordered, they are adjusted internally.
- */
-inline double GetHorDiagAngle( long nX1, long nX2, long nY1, long nY2 )
-{ return GetHorDiagAngle( nX2 - nX1, nY2 - nY1 ); }
-
-/** Returns the angle between horizontal border of a rectangle and its diagonal.
-
-    The returned values represents the inner angle between the diagonals and
-    horizontal borders, and is therefore in the range [0,PI/2] (inclusive). The
-    passed rectangle edges may be unordered, they are adjusted internally.
- */
-inline double GetHorDiagAngle( const Point& rP1, const Point& rP2 )
-{ return GetHorDiagAngle( rP2.X() - rP1.X(), rP2.Y() - rP1.Y() ); }
-
-/** Returns the angle between horizontal border of a rectangle and its diagonal.
-
-    The returned values represents the inner angle between the diagonals and
     horizontal borders, and is therefore in the range [0,PI/2] (inclusive).
  */
 inline double GetHorDiagAngle( const Rectangle& rRect )
@@ -252,24 +232,6 @@ inline double GetHorDiagAngle( const Rectangle& rRect )
  */
 inline double GetVerDiagAngle( long nWidth, long nHeight )
 { return GetHorDiagAngle( nHeight, nWidth ); }
-
-/** Returns the angle between vertical border of a rectangle and its diagonal.
-
-    The returned values represents the inner angle between the diagonals and
-    vertical borders, and is therefore in the range [0,PI/2] (inclusive). The
-    passed rectangle positions may be unordered, they are adjusted internally.
- */
-inline double GetVerDiagAngle( long nX1, long nX2, long nY1, long nY2 )
-{ return GetVerDiagAngle( nX2 - nX1, nY2 - nY1 ); }
-
-/** Returns the angle between vertical border of a rectangle and its diagonal.
-
-    The returned values represents the inner angle between the diagonals and
-    vertical borders, and is therefore in the range [0,PI/2] (inclusive). The
-    passed rectangle edges may be unordered, they are adjusted internally.
- */
-inline double GetVerDiagAngle( const Point& rP1, const Point& rP2 )
-{ return GetVerDiagAngle( rP2.X() - rP1.X(), rP2.Y() - rP1.Y() ); }
 
 /** Returns the angle between vertical border of a rectangle and its diagonal.
 

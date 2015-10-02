@@ -101,8 +101,6 @@ public:
 protected:
     virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *) SAL_OVERRIDE;
 
-    virtual void impSetTextForEditingOutliner(OutlinerParaObject *);
-
     virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *) SAL_OVERRIDE;
 
 private:

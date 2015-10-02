@@ -296,18 +296,6 @@ sal_uInt16  SvxHtmlOptions::GetExportMode() const
 
 
 
-void SvxHtmlOptions::SetExportMode(sal_uInt16 nSet)
-{
-    if(nSet <= HTML_CFG_MAX )
-    {
-        pImp->nExportMode = nSet;
-        SetModified();
-    }
-}
-
-
-
-
 bool SvxHtmlOptions::IsStarBasic() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_STAR_BASIC) ;

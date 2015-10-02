@@ -217,9 +217,6 @@ public:
     sal_uInt16  GetTransparentSelectionPercent() const { return m_nTransparentSelectionPercent;}
     sal_uInt16  GetSelectionMaximumLuminancePercent() const { return m_nSelectionMaximumLuminancePercent;}
 
-    void        SetTransparentSelection( bool bState );
-    void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
-
 //  private methods
 
 private:
@@ -757,29 +754,6 @@ void SvtOptionsDrawinglayer_Impl::SetAntiAliasing( bool bState )
     }
 }
 
-// #i97672# selection settings
-
-void SvtOptionsDrawinglayer_Impl::SetTransparentSelection( bool bState )
-{
-    if(m_bTransparentSelection != bState)
-    {
-        m_bTransparentSelection = bState;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetTransparentSelectionPercent( sal_uInt16 nPercent )
-{
-    if(m_nTransparentSelectionPercent != nPercent)
-    {
-        m_nTransparentSelectionPercent = nPercent;
-        SetModified();
-    }
-}
-
-
-
-
 //  private method
 
 Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
@@ -1058,12 +1032,6 @@ bool SvtOptionsDrawinglayer::IsTransparentSelection() const
     return m_pDataContainer->IsTransparentSelection();
 }
 
-void SvtOptionsDrawinglayer::SetTransparentSelection( bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetTransparentSelection( bState );
-}
-
 sal_uInt16 SvtOptionsDrawinglayer::GetTransparentSelectionPercent() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -1081,24 +1049,6 @@ sal_uInt16 SvtOptionsDrawinglayer::GetTransparentSelectionPercent() const
     }
 
     return aRetval;
-}
-
-void SvtOptionsDrawinglayer::SetTransparentSelectionPercent( sal_uInt16 nPercent )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-
-    // crop to range [10% .. 90%]
-    if(nPercent < 10)
-    {
-        nPercent = 10;
-    }
-
-    if(nPercent > 90)
-    {
-        nPercent = 90;
-    }
-
-    m_pDataContainer->SetTransparentSelectionPercent( nPercent );
 }
 
 sal_uInt16 SvtOptionsDrawinglayer::GetSelectionMaximumLuminancePercent() const

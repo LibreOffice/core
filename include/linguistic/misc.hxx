@@ -144,7 +144,6 @@ LNG_DLLPUBLIC bool      HasDigits( const OUString &rText );
 LNG_DLLPUBLIC bool      IsNumeric( const OUString &rText );
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > GetOneInstanceService( const char *pServiceName );
 LNG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLinguProperties > GetLinguProperties();
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > GetDictionaryList();
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary > GetIgnoreAllList();

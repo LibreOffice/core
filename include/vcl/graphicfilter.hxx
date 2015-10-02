@@ -287,7 +287,6 @@ public:
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
                                     SvStream& rOStm, sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                         const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = NULL );
-    long                GetExportGraphicHint() const { return nExpGraphHint; }
 
     sal_uInt16          CanImportGraphic( const INetURLObject& rPath,
                                       sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,

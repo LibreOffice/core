@@ -114,7 +114,6 @@ namespace
     struct FindUnoInstanceHint SAL_FINAL : SfxHint
     {
         FindUnoInstanceHint(Tcoretype* pCore) : m_pCore(pCore), m_pResult(nullptr) {};
-        void SetResult(Tunotype* pResult) const { m_pResult = pResult; };
         const Tcoretype* const m_pCore;
         mutable Tunotype* m_pResult;
     };

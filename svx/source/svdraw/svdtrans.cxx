@@ -133,14 +133,6 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
     }
 }
 
-void MirrorPoly(tools::Polygon& rPoly, const Point& rRef1, const Point& rRef2)
-{
-    sal_uInt16 nCount=rPoly.GetSize();
-    for (sal_uInt16 i=0; i<nCount; i++) {
-        MirrorPoint(rPoly[i],rRef1,rRef2);
-    }
-}
-
 void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
     sal_uInt16 nCount=rPoly.GetPointCount();

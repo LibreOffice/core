@@ -331,8 +331,7 @@ public:
     static void          SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt );
 
     SdrOutliner&         GetChainingOutliner(const SdrTextObj* pObj=NULL) const;
-    TextChain *GetTextChain() const;
-    static void SetNextLinkInTextChain(SdrTextObj *pPrev, SdrTextObj *pNext);
+    TextChain *          GetTextChain() const;
 
     // ReferenceDevice for the EditEngine
     void                 SetRefDevice(OutputDevice* pDev);

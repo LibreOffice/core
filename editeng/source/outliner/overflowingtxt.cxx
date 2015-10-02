@@ -199,11 +199,6 @@ OFlowChainedText::~OFlowChainedText()
 }
 
 
-ESelection OFlowChainedText::GetInsertionPointSel()
-{
-    return OverflowingText::GetInsertionPointSel();
-}
-
 ESelection OFlowChainedText::GetOverflowPointSel() const
 {
     return mpNonOverflowingTxt->GetOverflowPointSel();

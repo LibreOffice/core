@@ -215,45 +215,6 @@ public:
         When nothing is selected, which is the case when getItemCount returns '0',
         then this function returns ENTRY_NOTFOUND */
     virtual sal_Int32 getSelIndex() const SAL_OVERRIDE;
-
-    /** @return  The item name of the entry with the given index
-        The index starts with 0.
-        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemName( sal_Int32 index ) const SAL_OVERRIDE;
-
-    /** @return  The version string of the entry with the given index
-        The index starts with 0.
-        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemVersion( sal_Int32 index ) const SAL_OVERRIDE;
-
-    /** @return  The description string of the entry with the given index
-        The index starts with 0.
-        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemDescription( sal_Int32 index ) const SAL_OVERRIDE;
-
-    /** @return  The publisher string of the entry with the given index
-        The index starts with 0.
-        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemPublisher( sal_Int32 index ) const SAL_OVERRIDE;
-
-    /** @return  The link behind the publisher text of the entry with the given index
-        The index starts with 0.
-        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemPublisherLink( sal_Int32 index ) const SAL_OVERRIDE;
-
-    /** The entry at the given position will be selected
-        Index starts with 0.
-        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
-    virtual void select( sal_Int32 pos ) SAL_OVERRIDE;
-
-    /** The first found entry with the given name will be selected
-        When there was no entry found with the name, the selection doesn't change.
-        Please note that there might be more than one entry with the same
-        name, because:
-            1. the name is not unique
-            2. one extension can be installed as user and shared extension.
-    */
-    virtual void select( const OUString & sName ) SAL_OVERRIDE;
 };
 
 }

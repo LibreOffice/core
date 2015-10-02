@@ -249,12 +249,6 @@ struct SwHTMLFormatInfo
                    bool bHardDrop=false );
     ~SwHTMLFormatInfo();
 
-    friend bool operator==( const SwHTMLFormatInfo& rInfo1,
-                            const SwHTMLFormatInfo& rInfo2 )
-    {
-        return reinterpret_cast<sal_IntPtr>(rInfo1.pFormat) == reinterpret_cast<sal_IntPtr>(rInfo2.pFormat);
-    }
-
     friend bool operator<( const SwHTMLFormatInfo& rInfo1,
                             const SwHTMLFormatInfo& rInfo2 )
     {

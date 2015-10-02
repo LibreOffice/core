@@ -96,12 +96,12 @@ public:
     void Paint (const Rectangle& rRect, ::sd::Window* pWin);
 
                     // Callbacks fuer LINKs
-    DECL_LINK_TYPED( ParagraphInsertedHdl, Outliner *, void );
-    DECL_LINK_TYPED( ParagraphRemovingHdl, Outliner *, void );
-    DECL_LINK_TYPED( DepthChangedHdl, Outliner *, void );
+    DECL_LINK_TYPED( ParagraphInsertedHdl, ::Outliner *, void );
+    DECL_LINK_TYPED( ParagraphRemovingHdl, ::Outliner *, void );
+    DECL_LINK_TYPED( DepthChangedHdl, ::Outliner *, void );
     DECL_LINK_TYPED( StatusEventHdl, EditStatus&, void );
-    DECL_LINK_TYPED( BeginMovingHdl, Outliner *, void );
-    DECL_LINK_TYPED( EndMovingHdl, Outliner *, void );
+    DECL_LINK_TYPED( BeginMovingHdl, ::Outliner *, void );
+    DECL_LINK_TYPED( EndMovingHdl, ::Outliner *, void );
     DECL_LINK_TYPED( RemovingPagesHdl, OutlinerView *, bool );
     DECL_LINK_TYPED( IndentingPagesHdl, OutlinerView *, bool );
     DECL_LINK_TYPED( BeginDropHdl, EditView*, void );

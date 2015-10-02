@@ -66,11 +66,6 @@ void OFieldDescGenWin::SetReadOnly( bool bReadOnly )
     m_pFieldControl->SetReadOnly(bReadOnly);
 }
 
-OUString OFieldDescGenWin::GetControlText( sal_uInt16 nControlId )
-{
-    return m_pFieldControl->GetControlText(nControlId);
-}
-
 void OFieldDescGenWin::SetControlText( sal_uInt16 nControlId, const OUString& rText )
 {
     // set texts of the controls

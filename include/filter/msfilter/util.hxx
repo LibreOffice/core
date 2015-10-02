@@ -61,15 +61,6 @@ enum TextCategory
     sym         //Symbol
 };
 
-/** Categorize codepoints according to how MS seems to do it.
-
-  It's been bugging me for ages as to what codepoint MS considers in
-  what category. Tom Jebo has a post suggesting the criteria used here
-  and indicating its been submitting to the standards working group
-  as a proposed resolution.
-*/
-MSFILTER_DLLPUBLIC TextCategory categorizeCodePoint(sal_uInt32 codePoint, const OUString &rBcp47LanguageTag);
-
 #define OOXML_COLOR_AUTO 0x0a
 
 /**

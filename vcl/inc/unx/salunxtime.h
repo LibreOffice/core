@@ -44,11 +44,6 @@ inline bool operator > ( const timeval &t1, const timeval &t2 )
     return t1.tv_sec > t2.tv_sec;
 }
 
-inline bool operator == ( const timeval &t1, const timeval &t2 )
-{
-    return t1.tv_sec == t2.tv_sec && t1.tv_usec == t2.tv_usec;
-}
-
 inline timeval &operator -= ( timeval &t1, const timeval &t2 )
 {
     if( t1.tv_usec < t2.tv_usec )
@@ -58,18 +53,6 @@ inline timeval &operator -= ( timeval &t1, const timeval &t2 )
     }
     t1.tv_sec  -= t2.tv_sec;
     t1.tv_usec -= t2.tv_usec;
-    return t1;
-}
-
-inline timeval &operator += ( timeval &t1, const timeval &t2 )
-{
-    t1.tv_sec  += t2.tv_sec;
-    t1.tv_usec += t2.tv_usec;
-    if( t1.tv_usec > 1000000 )
-    {
-        t1.tv_sec++;
-        t1.tv_usec -= 1000000;
-    }
     return t1;
 }
 

@@ -1083,7 +1083,6 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-release-event", G_CALLBACK(signalButton), this ));
 #if GTK_CHECK_VERSION(3,0,0)
     g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
-//    g_signal_connect( G_OBJECT(m_pWindow), "state-flags-changed", G_CALLBACK(signalFlagsChanged), this );
 #if GTK_CHECK_VERSION(3,14,0)
     GtkGesture *pSwipe = gtk_gesture_swipe_new(pEventWidget);
     g_signal_connect(pSwipe, "swipe", G_CALLBACK(gestureSwipe), this);
@@ -3497,27 +3496,6 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
 
     return true;
 }
-
-#if GTK_CHECK_VERSION(3,0,0)
-void GtkSalFrame::signalFlagsChanged( GtkWidget* ,  GtkStateFlags state, gpointer frame )
-{
-    //TO-DO: This isn't as helpful as I'd like it to be. The color selector puts the main
-    //windows into the backdrop, disabling everything, and the floating navigator window
-    //is also problematic.
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-
-    bool bOldBackDrop = state & GTK_STATE_FLAG_BACKDROP;
-    bool bNewBackDrop = (gtk_widget_get_state_flags(GTK_WIDGET(pThis->m_pWindow)) & GTK_STATE_FLAG_BACKDROP);
-    if (bNewBackDrop && !bOldBackDrop)
-    {
-        pThis->GetWindow()->Disable();
-    }
-    else if (bOldBackDrop && !bNewBackDrop)
-    {
-        pThis->GetWindow()->Enable();
-    }
-}
-#endif
 
 gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame )
 {

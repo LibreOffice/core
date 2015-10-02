@@ -293,13 +293,6 @@ void EditingTextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverf
     //GetLinkTarget()->NbcSetOutlinerParaObject(pNewText);
 }
 
-void EditingTextChainFlow::impSetTextForEditingOutliner(OutlinerParaObject *pNewText)
-{
-    if (GetLinkTarget()->pEdtOutl != NULL) {
-        GetLinkTarget()->pEdtOutl->SetText(*pNewText);
-    }
-}
-
 void EditingTextChainFlow::impSetFlowOutlinerParams(SdrOutliner *pFlowOutl, SdrOutliner *pParamOutl)
 {
     // Set right size for overflow

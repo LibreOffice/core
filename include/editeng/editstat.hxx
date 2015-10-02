@@ -98,14 +98,6 @@ namespace o3tl
     EditStatusFlags::CRSRLEFTPARA at the time cursor movement and the enter.
 */
 
-inline void SetFlags( EEControlBits& rBits, EEControlBits nMask, bool bOn )
-{
-    if ( bOn )
-        rBits |= nMask;
-    else
-        rBits &= ~nMask;
-}
-
 inline void SetFlags( EVControlBits& rBits, EVControlBits nMask, bool bOn )
 {
     if ( bOn )

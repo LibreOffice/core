@@ -127,8 +127,6 @@ struct XMLAutoStyleFamily : boost::noncopyable
     explicit XMLAutoStyleFamily( sal_Int32 nFamily );
     ~XMLAutoStyleFamily();
 
-    friend bool operator<(const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2);
-
     void ClearEntries();
 };
 

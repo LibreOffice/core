@@ -293,7 +293,7 @@ class wwFont
 //In some future land the stream could be converted to a nice stream interface
 //and we could have harmony
 private:
-    sal_uInt8 maWW8_FFN[6];
+sal_uInt8 maWW8_FFN[6];
     OUString msFamilyNm;
     OUString msAltNm;
     bool mbAlt;
@@ -301,7 +301,7 @@ private:
     FontFamily meFamily;
     rtl_TextEncoding meChrSet;
 public:
-    wwFont( const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
+     wwFont( const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet);
     bool Write( SvStream *pTableStram ) const;
     void WriteDocx( DocxAttributeOutput* rAttrOutput ) const;

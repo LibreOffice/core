@@ -502,12 +502,6 @@ IMPL_LINK_TYPED( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar, void )
     }
 }
 
-IMPL_LINK (ThumbnailView, OnItemSelected, ThumbnailViewItem*, pItem)
-{
-    maItemStateHdl.Call(pItem);
-    return 0;
-}
-
 void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 {
     // Get the last selected item in the list

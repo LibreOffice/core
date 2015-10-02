@@ -130,9 +130,6 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         // combined with Application::GetSettings().GetStyleSettings().GetHighlightColor())
         Color getHilightColor() const;
 
-        void        SetTransparentSelection( bool bState );
-        void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
-
     private:
 
         /*-****************************************************************************************************

@@ -116,10 +116,6 @@ namespace dbtools
         OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Date toDate(sal_Int32 _nVal);
         OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Time toTime(sal_Int64 _nVal);
 
-        /** convert a double which is a date value relative to a given fixed date into a date value relative
-            to the standard db null date.
-        */
-        inline double toStandardDbDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal + toDays(_rNullDate); }
         /** convert a double which is a date value relative to the standard db null date into a date value relative
             to a given fixed date.
         */

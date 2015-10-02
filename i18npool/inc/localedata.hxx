@@ -127,7 +127,6 @@ private:
     ::std::unique_ptr< LocaleDataLookupTableItem > cachedItem;
 
     oslGenericFunction SAL_CALL getFunctionSymbol( const com::sun::star::lang::Locale& rLocale, const sal_Char* pFunction ) throw( com::sun::star::uno::RuntimeException );
-    oslGenericFunction SAL_CALL getFunctionSymbolByName( const OUString& localeName, const sal_Char* pFunction );
     sal_Unicode ** SAL_CALL getIndexArray(const com::sun::star::lang::Locale& rLocale, sal_Int16& indexCount);
     sal_Unicode ** SAL_CALL getIndexArrayForAlgorithm(const com::sun::star::lang::Locale& rLocale, const OUString& rAlgorithm);
     com::sun::star::i18n::Calendar2 ref_cal;

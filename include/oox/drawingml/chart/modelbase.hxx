@@ -83,8 +83,6 @@ public:
                  ~ModelMap() {}
 
     ModelType&   create( KeyType eKey ) { return insert( eKey, new ModelType ); }
-    template< typename Param1Type >
-    ModelType&   create( KeyType eKey, const Param1Type& rParam1 ) { return insert( eKey, new ModelType( rParam1 ) ); }
 
 private:
     ModelType&   insert( KeyType eKey, ModelType* pModel ) { (*this)[ eKey ].reset( pModel ); return *pModel; }
