@@ -29,6 +29,7 @@
 #include "smdll.hxx"
 #include "smmod.hxx"
 #include "cfgitem.hxx"
+#include <stack>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -1527,13 +1528,11 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
             else if (    TokenInGroup(TGATTRIBUT)
                      ||  TokenInGroup(TGFONTATTR))
             {
-                std::vector< SmStructureNode * > aArray;
+                std::stack<SmStructureNode *> aStack;
                 bool    bIsAttr;
-                sal_uInt16  n = 0;
                 while ( (bIsAttr = TokenInGroup(TGATTRIBUT))
                        ||  TokenInGroup(TGFONTATTR))
-                {   aArray.resize(n + 1);
-
+                {
                     if (bIsAttr)
                         DoAttribut();
                     else
@@ -1544,17 +1543,18 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                     // check if casting in following line is ok
                     OSL_ENSURE(pTmp && !pTmp->IsVisible(), "Sm : Ooops...");
 
-                    aArray[n] = static_cast<SmStructureNode *>(pTmp);
-                    n++;
+                    aStack.push(static_cast<SmStructureNode *>(pTmp));
                 }
 
                 DoPower();
 
                 SmNode *pFirstNode = popOrZero(m_aNodeStack);
-                while (n > 0)
-                {   aArray[n - 1]->SetSubNodes(0, pFirstNode);
-                    pFirstNode = aArray[n - 1];
-                    n--;
+                while (!aStack.empty())
+                {
+                    SmStructureNode *pNode = aStack.top();
+                    aStack.pop();
+                    pNode->SetSubNodes(0, pFirstNode);
+                    pFirstNode = pNode;
                 }
                 m_aNodeStack.push_front(pFirstNode);
             }
