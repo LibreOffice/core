@@ -121,7 +121,7 @@ public class FinalizedMandatoryTest
 
     /**
      * test the given service <CODE>serviceName</CODE>.
-     * For every filter a new instace was created and the tests started.
+     * For every filter a new instance was created and the tests started.
      * @param serviceName the name of the service to test
      */
     private void checkReadonlySupport(String serviceName) throws Exception

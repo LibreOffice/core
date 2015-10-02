@@ -490,7 +490,7 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // Note: Opening of the configuration layer throws some exceptions
-    // if it failed. So we dont must check any reference here ...
+    // if it failed. So we mustn't check any reference here...
     css::uno::Reference< css::container::XNameAccess > xPackage;
     css::uno::Reference< css::container::XNameAccess > xSet;
     switch(eType)
@@ -563,11 +563,11 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
         /*  Ignore exceptions for missing elements inside configuration.
             May by the following reason exists:
                 -   The item does not exists inside the new configuration package org.openoffice.TypeDetection - but
-                    we got it from the old package org.openoffice.Office/TypeDetection. We dont migrate such items
+                    we got it from the old package org.openoffice.Office/TypeDetection. We don't migrate such items
                     automatically to the new format. Because it will disturb e.g. the deinstallation of an external filter
                     package. Because such external filter can remove the old file - but not the automatically created new one ...
 
-            => mark item as FINALIZED / MANDATORY, we dont support writing to the old format
+            => mark item as FINALIZED / MANDATORY, we don't support writing to the old format
         */
         rItem[PROPNAME_FINALIZED] <<= sal_True;
         rItem[PROPNAME_MANDATORY] <<= sal_True;
@@ -734,7 +734,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
 
 
     // ii) search types matching to the given extension.
-    //     Copy every macthing type without changing its order!
+    //     Copy every matching type without changing its order!
     //     Because preferred types was added as first one during
     //     loading configuration.
     CacheItemRegistration::const_iterator pExtReg = m_lExtensions2Types.find(sExtension);
@@ -1472,7 +1472,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
     // get names of all existing sub items of this set
     // step over it and fill internal cache structures.
 
-    // But dont update optimized structures like e.g. hash
+    // But don't update optimized structures like e.g. hash
     // for mapping extensions to its types!
 
     const OUString* pItems = lItems.getConstArray();

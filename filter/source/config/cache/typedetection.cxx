@@ -472,7 +472,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
                                                       OUString&               sType      )
 {
     // a)
-    // Dont overwrite a might preselected filter!
+    // Don't overwrite a might preselected filter!
     OUString sFilter = rDescriptor.getUnpackedValueOrDefault(
                                 utl::MediaDescriptor::PROP_FILTERNAME(),
                                 OUString());
@@ -939,7 +939,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
                 continue;
             }
 
-            // dont forget to add every real asked deep detection service here.
+            // don't forget to add every real asked deep detection service here.
             // Such detectors will be ignored if may be "impl_detectTypeDeepOnly()"
             // must be called later!
             rUsedDetectors.push_back(sDetectService);
@@ -1028,7 +1028,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
     try
     {
         // start deep detection
-        // Dont forget to convert stl descriptor to its uno representation.
+        // Don't forget to convert stl descriptor to its uno representation.
 
         /* Attention!
                 You have to use an explicit instance of this uno sequence ...
@@ -1086,9 +1086,9 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
         rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INPUTSTREAM(),
         css::uno::Reference< css::io::XInputStream >());
 
-    // Dont distrub the user for "non existing files - means empty URLs" or
+    // Don't disturb the user for "non existing files - means empty URLs" or
     // if we was forced to detect a stream.
-    // Reason behind: We must be sure to ask user for "unknown contents" only ...
+    // Reason behind: we must be sure to ask user for "unknown contents" only...
     // and not for "missing files". Especially if detection is done by a stream only
     // we can't check if the stream points to an "existing content"!
     if (
