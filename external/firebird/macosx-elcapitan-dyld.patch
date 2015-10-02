@@ -1,0 +1,39 @@
+--- examples/empbuild/empbuild.e
++++ examples/empbuild/empbuild.e
+@@ -64,7 +64,7 @@
+  * Functional description
+  *
+  **************************************/
+-TEXT	cmd [140];
++TEXT	cmd [8000];
+ 
+ if (argc > 1)
+     strcpy (Db_name, argv[1]);
+@@ -94,21 +94,23 @@
+     }
+ 
+ printf ("Creating tables\n");
++char const * lp = getenv("DYLD_LIBRARY_PATH");
++if (!lp) lp = "";
+-sprintf (cmd, "isql %s -q -i empddl.sql", Db_name);
++sprintf (cmd, "DYLD_LIBRARY_PATH=%s isql %s -q -i empddl.sql", lp, Db_name);
+ if (system (cmd))
+     {
+     printf ("Couldn't create tables \n");
+     exit (FINI_ERROR);
+     }
+ 
+ printf ("Turning  off indices and triggers \n");
+-sprintf (cmd, "isql %s -i indexoff.sql", Db_name);
++sprintf (cmd, "DYLD_LIBRARY_PATH=%s isql %s -i indexoff.sql", lp, Db_name);
+ system (cmd);
+ printf ("Loading  column data\n");
+-sprintf (cmd, "isql %s -i empdml.sql", Db_name);
++sprintf (cmd, "DYLD_LIBRARY_PATH=%s isql %s -i empdml.sql", lp, Db_name);
+ system (cmd);
+ printf ("Turning  on indices and triggers \n");
+-sprintf (cmd, "isql %s -i indexon.sql", Db_name);
++sprintf (cmd, "DYLD_LIBRARY_PATH=%s isql %s -i indexon.sql", lp, Db_name);
+ system (cmd);
+ 
+ EXEC SQL CONNECT DB;
