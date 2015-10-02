@@ -99,7 +99,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
             }
 
             // prevent outside code against NoSuchElementException!
-            // But dont implement such defensive strategy for our new create handling :-)
+            // But don't implement such defensive strategy for our new create handling :-)
             if (!m_rCache->hasItem(FilterCache::E_CONTENTHANDLER, sRealHandler))
                 return css::uno::Reference< css::uno::XInterface>();
         }
