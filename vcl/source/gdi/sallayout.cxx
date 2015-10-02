@@ -1650,8 +1650,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         maFallbackRuns[n].ResetPos();
     // get the next codepoint index that needs fallback
     int nActiveCharPos = nCharPos[0];
+    int nActiveCharIndex = nActiveCharPos - mnMinCharPos;
     // get the end index of the active run
-    int nLastRunEndChar = (vRtl[nActiveCharPos - mnMinCharPos])?
+    int nLastRunEndChar = (nActiveCharIndex >= 0 && vRtl[nActiveCharIndex]) ?
         rArgs.mnEndCharPos : rArgs.mnMinCharPos - 1;
     int nRunVisibleEndChar = nCharPos[0];
     // merge the fallback levels
@@ -1800,7 +1801,8 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             if( !bLTR )
                 nOldRunAdv = -nOldRunAdv;
 #endif
-            if (vRtl[nActiveCharPos - mnMinCharPos])
+            nActiveCharIndex = nActiveCharPos - mnMinCharPos;
+            if (nActiveCharIndex >= 0 && vRtl[nActiveCharIndex])
             {
               if (nRunVisibleEndChar > mnMinCharPos && nRunVisibleEndChar <= mnEndCharPos)
                   nRunAdvance -= aMultiArgs.mpDXArray[nRunVisibleEndChar - 1 - mnMinCharPos];
