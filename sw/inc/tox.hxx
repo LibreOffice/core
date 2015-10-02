@@ -392,33 +392,33 @@ namespace nsSwTOOElements
 // Class for all indexes
 class SW_DLLPUBLIC SwTOXBase : public SwClient
 {
-    SwForm      aForm;              // description of the lines
-    OUString    aName;              // unique name
-    OUString    aTitle;             // title
+    SwForm      m_aForm;              // description of the lines
+    OUString    m_aName;              // unique name
+    OUString    m_aTitle;             // title
     OUString    m_aBookmarkName;      //Bookmark Name
     OUString    m_aEntryTypeName;   // Type name
 
-    OUString    sMainEntryCharStyle; // name of the character style applied to main index entries
+    OUString    m_sMainEntryCharStyle; // name of the character style applied to main index entries
 
-    OUString    aStyleNames[MAXLEVEL]; // (additional) style names TOX_CONTENT, TOX_USER
-    OUString    sSequenceName;      // FieldTypeName of a caption sequence
+    OUString    m_aStyleNames[MAXLEVEL]; // (additional) style names TOX_CONTENT, TOX_USER
+    OUString    m_sSequenceName;      // FieldTypeName of a caption sequence
 
-    LanguageType    eLanguage;
-    OUString        sSortAlgorithm;
+    LanguageType    m_eLanguage;
+    OUString        m_sSortAlgorithm;
 
     union {
         sal_uInt16      nLevel;             // consider outline levels
         sal_uInt16      nOptions;           // options of alphabetical index
-    } aData;
+    } m_aData;
 
-    sal_uInt16      nCreateType;        // sources to create the index from
-    sal_uInt16      nOLEOptions;        // OLE sources
-    SwCaptionDisplay eCaptionDisplay;
-    bool        bProtected : 1;         // index protected ?
-    bool        bFromChapter : 1;       // create from chapter or document
-    bool        bFromObjectNames : 1;   // create a table or object index
+    sal_uInt16      m_nCreateType;        // sources to create the index from
+    sal_uInt16      m_nOLEOptions;        // OLE sources
+    SwCaptionDisplay m_eCaptionDisplay;
+    bool        m_bProtected : 1;         // index protected ?
+    bool        m_bFromChapter : 1;       // create from chapter or document
+    bool        m_bFromObjectNames : 1;   // create a table or object index
                                     // from the names rather than the caption
-    bool        bLevelFromChapter : 1; // User index: get the level from the source chapter
+    bool        m_bLevelFromChapter : 1; // User index: get the level from the source chapter
 
 protected:
     // Add a data member, for record the TOC field expression of MS Word binary format
@@ -442,8 +442,8 @@ public:
 
     sal_uInt16              GetCreateType() const;      // creation types
 
-    OUString            GetTOXName() const {return aName;}
-    void                SetTOXName(const OUString& rSet) {aName = rSet;}
+    OUString            GetTOXName() const {return m_aName;}
+    void                SetTOXName(const OUString& rSet) {m_aName = rSet;}
 
     // for record the TOC field expression of MS Word binary format
     const OUString&     GetMSTOCExpression() const{return maMSTOCExpression;}
@@ -463,8 +463,8 @@ public:
 
     TOXTypes            GetType() const;
 
-    OUString            GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
-    void                SetMainEntryCharStyle(const OUString& rSet)  {sMainEntryCharStyle = rSet;}
+    OUString            GetMainEntryCharStyle() const {return m_sMainEntryCharStyle;}
+    void                SetMainEntryCharStyle(const OUString& rSet)  {m_sMainEntryCharStyle = rSet;}
 
     // for record the Index field expression of MS Word
     OUString         GetEntryTypeName() const;
@@ -479,53 +479,53 @@ public:
     inline void             SetOptions(sal_uInt16 nOpt);
 
     // index of objects
-    sal_uInt16      GetOLEOptions() const {return nOLEOptions;}
-    void        SetOLEOptions(sal_uInt16 nOpt) {nOLEOptions = nOpt;}
+    sal_uInt16      GetOLEOptions() const {return m_nOLEOptions;}
+    void        SetOLEOptions(sal_uInt16 nOpt) {m_nOLEOptions = nOpt;}
 
     // index of objects
 
     OUString                GetStyleNames(sal_uInt16 nLevel) const
                                 {
                                 SAL_WARN_IF( nLevel >= MAXLEVEL, "sw", "Which level?");
-                                return aStyleNames[nLevel];
+                                return m_aStyleNames[nLevel];
                                 }
     void                    SetStyleNames(const OUString& rSet, sal_uInt16 nLevel)
                                 {
                                 SAL_WARN_IF( nLevel >= MAXLEVEL, "sw", "Which level?");
-                                aStyleNames[nLevel] = rSet;
+                                m_aStyleNames[nLevel] = rSet;
                                 }
-    bool                    IsFromChapter() const { return bFromChapter;}
-    void                    SetFromChapter(bool bSet) { bFromChapter = bSet;}
+    bool                    IsFromChapter() const { return m_bFromChapter;}
+    void                    SetFromChapter(bool bSet) { m_bFromChapter = bSet;}
 
-    bool                    IsFromObjectNames() const {return bFromObjectNames;}
-    void                    SetFromObjectNames(bool bSet) {bFromObjectNames = bSet;}
+    bool                    IsFromObjectNames() const {return m_bFromObjectNames;}
+    void                    SetFromObjectNames(bool bSet) {m_bFromObjectNames = bSet;}
 
-    bool                    IsLevelFromChapter() const {return bLevelFromChapter;}
-    void                    SetLevelFromChapter(bool bSet) {bLevelFromChapter = bSet;}
+    bool                    IsLevelFromChapter() const {return m_bLevelFromChapter;}
+    void                    SetLevelFromChapter(bool bSet) {m_bLevelFromChapter = bSet;}
 
-    bool                    IsProtected() const { return bProtected; }
-    void                    SetProtected(bool bSet) { bProtected = bSet; }
+    bool                    IsProtected() const { return m_bProtected; }
+    void                    SetProtected(bool bSet) { m_bProtected = bSet; }
 
-    OUString                GetSequenceName() const {return sSequenceName;}
-    void                    SetSequenceName(const OUString& rSet) {sSequenceName = rSet;}
+    OUString                GetSequenceName() const {return m_sSequenceName;}
+    void                    SetSequenceName(const OUString& rSet) {m_sSequenceName = rSet;}
 
-    SwCaptionDisplay        GetCaptionDisplay() const { return eCaptionDisplay;}
-    void                    SetCaptionDisplay(SwCaptionDisplay eSet) {eCaptionDisplay = eSet;}
+    SwCaptionDisplay        GetCaptionDisplay() const { return m_eCaptionDisplay;}
+    void                    SetCaptionDisplay(SwCaptionDisplay eSet) {m_eCaptionDisplay = eSet;}
 
     bool                    IsTOXBaseInReadonly() const;
 
     const SfxItemSet*       GetAttrSet() const;
     void                    SetAttrSet( const SfxItemSet& );
 
-    LanguageType    GetLanguage() const {return eLanguage;}
-    void            SetLanguage(LanguageType nLang)  {eLanguage = nLang;}
+    LanguageType    GetLanguage() const {return m_eLanguage;}
+    void            SetLanguage(LanguageType nLang)  {m_eLanguage = nLang;}
 
-    OUString        GetSortAlgorithm()const {return sSortAlgorithm;}
-    void            SetSortAlgorithm(const OUString& rSet) {sSortAlgorithm = rSet;}
+    OUString        GetSortAlgorithm()const {return m_sSortAlgorithm;}
+    void            SetSortAlgorithm(const OUString& rSet) {m_sSortAlgorithm = rSet;}
     // #i21237#
     void AdjustTabStops( SwDoc & rDoc )
     {
-        aForm.AdjustTabStops( rDoc );
+        m_aForm.AdjustTabStops( rDoc );
     }
 
     SwTOXBase& operator=(const SwTOXBase& rSource);
@@ -679,10 +679,10 @@ inline const SwTOXType* SwTOXBase::GetTOXType() const
     { return static_cast<const SwTOXType*>(GetRegisteredIn()); }
 
 inline sal_uInt16 SwTOXBase::GetCreateType() const
-    { return nCreateType; }
+    { return m_nCreateType; }
 
 inline OUString SwTOXBase::GetTitle() const
-    { return aTitle; }
+    { return m_aTitle; }
 
 inline OUString SwTOXBase::GetBookmarkName() const
     { return m_aBookmarkName; }
@@ -694,13 +694,13 @@ inline OUString SwTOXBase::GetTypeName() const
     { return GetTOXType()->GetTypeName();  }
 
 inline const SwForm& SwTOXBase::GetTOXForm() const
-    { return aForm; }
+    { return m_aForm; }
 
 inline void SwTOXBase::SetCreate(sal_uInt16 nCreate)
-    { nCreateType = nCreate; }
+    { m_nCreateType = nCreate; }
 
 inline void SwTOXBase::SetTOXForm(const SwForm& rForm)
-    {  aForm = rForm; }
+    {  m_aForm = rForm; }
 
 inline TOXTypes SwTOXBase::GetType() const
     { return GetTOXType()->GetType(); }
@@ -708,25 +708,25 @@ inline TOXTypes SwTOXBase::GetType() const
 inline void SwTOXBase::SetLevel(sal_uInt16 nLev)
 {
     SAL_WARN_IF(GetTOXType()->GetType() == TOX_INDEX, "sw", "Wrong type");
-    aData.nLevel = nLev;
+    m_aData.nLevel = nLev;
 }
 
 inline sal_uInt16 SwTOXBase::GetLevel() const
 {
     SAL_WARN_IF(GetTOXType()->GetType() == TOX_INDEX, "sw", "Wrong type");
-    return aData.nLevel;
+    return m_aData.nLevel;
 }
 
 inline sal_uInt16 SwTOXBase::GetOptions() const
 {
     SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
-    return aData.nOptions;
+    return m_aData.nOptions;
 }
 
 inline void SwTOXBase::SetOptions(sal_uInt16 nOpt)
 {
     SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
-    aData.nOptions = nOpt;
+    m_aData.nOptions = nOpt;
 }
 
 #endif // INCLUDED_SW_INC_TOX_HXX

@@ -429,20 +429,20 @@ OUString SwForm::GetFormAuth()        {return OUString("<A>");}
 SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
                      sal_uInt16 nCreaType, const OUString& rTitle )
     : SwClient(const_cast<SwModify*>(static_cast<SwModify const *>(pTyp)))
-    , aForm(rForm)
-    , aTitle(rTitle)
-    , eLanguage((LanguageType)::GetAppLanguage())
-    , nCreateType(nCreaType)
-    , nOLEOptions(0)
-    , eCaptionDisplay(CAPTION_COMPLETE)
-    , bProtected( true )
-    , bFromChapter(false)
-    , bFromObjectNames(false)
-    , bLevelFromChapter(false)
+    , m_aForm(rForm)
+    , m_aTitle(rTitle)
+    , m_eLanguage((LanguageType)::GetAppLanguage())
+    , m_nCreateType(nCreaType)
+    , m_nOLEOptions(0)
+    , m_eCaptionDisplay(CAPTION_COMPLETE)
+    , m_bProtected( true )
+    , m_bFromChapter(false)
+    , m_bFromObjectNames(false)
+    , m_bLevelFromChapter(false)
     , maMSTOCExpression()
     , mbKeepExpression(true)
 {
-    aData.nOptions = 0;
+    m_aData.nOptions = 0;
 }
 
 SwTOXBase::SwTOXBase( const SwTOXBase& rSource, SwDoc* pDoc )
@@ -483,32 +483,32 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     }
     pType->Add( this );
 
-    nCreateType = rSource.nCreateType;
-    aTitle      = rSource.aTitle;
-    aForm       = rSource.aForm;
+    m_nCreateType = rSource.m_nCreateType;
+    m_aTitle      = rSource.m_aTitle;
+    m_aForm       = rSource.m_aForm;
     m_aBookmarkName = rSource.m_aBookmarkName;
     m_aEntryTypeName = rSource.m_aEntryTypeName ;
-    bProtected  = rSource.bProtected;
-    bFromChapter = rSource.bFromChapter;
-    bFromObjectNames = rSource.bFromObjectNames;
-    sMainEntryCharStyle = rSource.sMainEntryCharStyle;
-    sSequenceName = rSource.sSequenceName;
-    eCaptionDisplay = rSource.eCaptionDisplay;
-    nOLEOptions = rSource.nOLEOptions;
-    eLanguage = rSource.eLanguage;
-    sSortAlgorithm = rSource.sSortAlgorithm;
-    bLevelFromChapter = rSource.bLevelFromChapter;
+    m_bProtected  = rSource.m_bProtected;
+    m_bFromChapter = rSource.m_bFromChapter;
+    m_bFromObjectNames = rSource.m_bFromObjectNames;
+    m_sMainEntryCharStyle = rSource.m_sMainEntryCharStyle;
+    m_sSequenceName = rSource.m_sSequenceName;
+    m_eCaptionDisplay = rSource.m_eCaptionDisplay;
+    m_nOLEOptions = rSource.m_nOLEOptions;
+    m_eLanguage = rSource.m_eLanguage;
+    m_sSortAlgorithm = rSource.m_sSortAlgorithm;
+    m_bLevelFromChapter = rSource.m_bLevelFromChapter;
 
     for( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
-        aStyleNames[i] = rSource.aStyleNames[i];
+        m_aStyleNames[i] = rSource.m_aStyleNames[i];
 
     // its the same data type!
-    aData.nOptions =  rSource.aData.nOptions;
+    m_aData.nOptions =  rSource.m_aData.nOptions;
 
     if( !pDoc || pDoc->IsCopyIsMove() )
-        aName = rSource.GetTOXName();
+        m_aName = rSource.GetTOXName();
     else
-        aName = pDoc->GetUniqueTOXBaseName( *pType, rSource.GetTOXName() );
+        m_aName = pDoc->GetUniqueTOXBaseName( *pType, rSource.GetTOXName() );
 
     return *this;
 }
@@ -521,7 +521,7 @@ SwTOXBase::~SwTOXBase()
 }
 
 void SwTOXBase::SetTitle(const OUString& rTitle)
-    {   aTitle = rTitle; }
+    {   m_aTitle = rTitle; }
 
 void SwTOXBase::SetBookmarkName(const OUString& bName)
 {
@@ -535,25 +535,25 @@ void SwTOXBase::SetEntryTypeName(const OUString& sName)
 
 SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
 {
-    aForm = rSource.aForm;
-    aName = rSource.aName;
-    aTitle = rSource.aTitle;
+    m_aForm = rSource.m_aForm;
+    m_aName = rSource.m_aName;
+    m_aTitle = rSource.m_aTitle;
     m_aBookmarkName = rSource.m_aBookmarkName;
     m_aEntryTypeName = rSource.m_aEntryTypeName ;
-    sMainEntryCharStyle = rSource.sMainEntryCharStyle;
+    m_sMainEntryCharStyle = rSource.m_sMainEntryCharStyle;
     for(sal_uInt16 nLevel = 0; nLevel < MAXLEVEL; nLevel++)
-        aStyleNames[nLevel] = rSource.aStyleNames[nLevel];
-    sSequenceName = rSource.sSequenceName;
-    eLanguage = rSource.eLanguage;
-    sSortAlgorithm = rSource.sSortAlgorithm;
-    aData = rSource.aData;
-    nCreateType = rSource.nCreateType;
-    nOLEOptions = rSource.nOLEOptions;
-    eCaptionDisplay = rSource.eCaptionDisplay;
-    bProtected = rSource.bProtected;
-    bFromChapter = rSource.bFromChapter;
-    bFromObjectNames = rSource.bFromObjectNames;
-    bLevelFromChapter = rSource.bLevelFromChapter;
+        m_aStyleNames[nLevel] = rSource.m_aStyleNames[nLevel];
+    m_sSequenceName = rSource.m_sSequenceName;
+    m_eLanguage = rSource.m_eLanguage;
+    m_sSortAlgorithm = rSource.m_sSortAlgorithm;
+    m_aData = rSource.m_aData;
+    m_nCreateType = rSource.m_nCreateType;
+    m_nOLEOptions = rSource.m_nOLEOptions;
+    m_eCaptionDisplay = rSource.m_eCaptionDisplay;
+    m_bProtected = rSource.m_bProtected;
+    m_bFromChapter = rSource.m_bFromChapter;
+    m_bFromObjectNames = rSource.m_bFromObjectNames;
+    m_bLevelFromChapter = rSource.m_bLevelFromChapter;
 
     if (rSource.GetAttrSet())
         SetAttrSet(*rSource.GetAttrSet());
