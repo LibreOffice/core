@@ -130,8 +130,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
             sal_uInt16 nPgNum(0);
             aIo.GetStream().ReadUInt16( nPgNum ).ReadUInt32( nIndex )
                    .ReadInt32( nX ).ReadInt32( nY ).ReadInt32( nW ).ReadInt32( nH );
-            SwFlyCache* pFly = new SwFlyCache( nPgNum, nIndex, nX, nY, nW, nH );
-            aFlyCache.push_back( pFly );
+            m_FlyCache.push_back(SwFlyCache( nPgNum, nIndex, nX, nY, nW, nH ));
             aIo.CloseRec( SW_LAYCACHE_IO_REC_FLY );
             break;
         }

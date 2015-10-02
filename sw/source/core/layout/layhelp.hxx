@@ -22,8 +22,6 @@
 
 #include <swrect.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <vector>
 #include <deque>
 
@@ -50,19 +48,19 @@ class SvStream;
  */
 
 class SwFlyCache;
-typedef boost::ptr_vector<SwFlyCache> SwPageFlyCache;
+typedef std::vector<SwFlyCache> SwPageFlyCache;
 
 class SwLayCacheImpl
 {
     std::vector<sal_uLong> mIndices;
     std::deque<sal_Int32> aOffset;
     std::vector<sal_uInt16> aType;
-    SwPageFlyCache aFlyCache;
+    SwPageFlyCache m_FlyCache;
     bool bUseFlyCache;
     void Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset );
 
 public:
-    SwLayCacheImpl() : mIndices(), aOffset(), aType(), aFlyCache(), bUseFlyCache(false) {}
+    SwLayCacheImpl() : bUseFlyCache(false) {}
 
     size_t size() const { return mIndices.size(); }
 
@@ -72,8 +70,8 @@ public:
     sal_Int32 GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
     sal_uInt16 GetBreakType( sal_uInt16 nIdx ) const { return aType[ nIdx ]; }
 
-    size_t GetFlyCount() const { return aFlyCache.size(); }
-    SwFlyCache& GetFlyCache( size_t nIdx ) { return aFlyCache[ nIdx ]; }
+    size_t GetFlyCount() const { return m_FlyCache.size(); }
+    SwFlyCache& GetFlyCache( size_t nIdx ) { return m_FlyCache[ nIdx ]; }
 
     bool IsUseFlyCache() const { return bUseFlyCache; }
 };
