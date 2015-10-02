@@ -70,7 +70,6 @@ void SAL_CALL DragSourceHelper::DragGestureListener::disposing( const EventObjec
 void SAL_CALL DragSourceHelper::DragGestureListener::dragGestureRecognized( const DragGestureEvent& rDGE ) throw( RuntimeException, std::exception )
 {
     const SolarMutexGuard aGuard;
-
     const Point aPtPixel( rDGE.DragOriginX, rDGE.DragOriginY );
     mrParent.StartDrag( rDGE.DragAction, aPtPixel );
 }
@@ -131,7 +130,6 @@ void SAL_CALL DropTargetHelper::DropTargetListener::disposing( const EventObject
 void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEvent& rDTDE ) throw( RuntimeException, std::exception )
 {
     const SolarMutexGuard aGuard;
-
     try
     {
         AcceptDropEvent  aAcceptEvent;

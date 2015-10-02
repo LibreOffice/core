@@ -1889,6 +1889,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XToolkit \
 	XToolkit2 \
 	XToolkitExperimental \
+	XToolkitRobot \
 	XTopWindow \
 	XTopWindow2 \
 	XTopWindowListener \
