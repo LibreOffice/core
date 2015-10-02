@@ -48,6 +48,7 @@ vendor = "The Document Foundation"
 description = "Gnome integration module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-evolution libreoffice-gnome"
 End
 
 Start
@@ -95,6 +96,7 @@ vendor = "The Document Foundation"
 description = "Core module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
+provides = "libreoffice-common"
 End
 
 Start
