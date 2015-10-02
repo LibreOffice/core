@@ -486,7 +486,7 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
         // That'd be a chance to replace getStructuredFilter with something more reasonable. This method
         // has at least one other problem: for a clause like "<column> != <value>", it will return "<column>"
         // as column name, "NOT_EQUAL" as operator, and "!= <value>" as value, effectively duplicating the
-        // information about the operator, and beding all clients to manually remove the "!=" from the value
+        // information about the operator, and begging all clients to manually remove the "!=" from the value
         // string.
         // So, what really would be handy, is some
         //   XNormalizedFilter getNormalizedFilter();
@@ -1455,7 +1455,7 @@ sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection ) throw (
         SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::select: could not extract the descriptor!");
     }
 
-    // check the precense of the props we need
+    // check the presence of the props we need
     if ( !(aDescriptor.has(daDataSource) || aDescriptor.has(daDatabaseLocation)) || !aDescriptor.has(daCommand) || !aDescriptor.has(daCommandType))
         throw IllegalArgumentException(OUString(), *this, 1);
         // TODO: error message

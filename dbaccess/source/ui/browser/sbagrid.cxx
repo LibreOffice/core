@@ -1452,7 +1452,7 @@ IMPL_LINK_NOARG_TYPED(SbaGridControl, AsynchDropEvent, void*, void)
         bool bCountFinal = false;
         xDataSource->getPropertyValue(PROPERTY_ISROWCOUNTFINAL) >>= bCountFinal;
         if ( !bCountFinal )
-            setDataSource(NULL); // deattach from grid control
+            setDataSource(NULL); // dettach from grid control
         Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
         ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor, getContext());
         Reference<XEventListener> xHolder = pImExport;

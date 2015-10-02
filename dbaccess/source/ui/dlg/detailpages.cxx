@@ -507,7 +507,7 @@ namespace dbaui
 
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
 
-        // to get the correcxt value when saveValue was called by base class
+        // to get the correct value when saveValue was called by base class
         if ( m_bUseClass && m_pEDDriverClass->GetText().trim().isEmpty() )
         {
             m_pEDDriverClass->SetText(m_sDefaultJdbcDriverName);

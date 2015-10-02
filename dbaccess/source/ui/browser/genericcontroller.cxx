@@ -1376,7 +1376,7 @@ sal_uInt16 OGenericUnoController::registerCommandURL( const OUString& _rComplete
     if ( aIter != m_aSupportedFeatures.end() )
         return aIter->second.nFeatureId;
 
-    // this is a previously unkwnon command
+    // this is a previously unknown command
     sal_uInt16 nFeatureId = FIRST_USER_DEFINED_FEATURE;
     while ( isFeatureSupported( nFeatureId ) && ( nFeatureId < LAST_USER_DEFINED_FEATURE ) )
         ++nFeatureId;

@@ -56,7 +56,7 @@ namespace dbmm
         /** registers a phase of the process, which has the given weight
             in the overall process
             @precond
-                the progress is not runnig, yet
+                the progress is not running, yet
         */
         void    registerPhase( const PhaseID _nID, const PhaseWeight _nWeight );
 

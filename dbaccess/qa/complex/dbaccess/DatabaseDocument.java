@@ -538,9 +538,9 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
 
-    /** tests various aspects of database document "revenants"
+    /** Tests various aspects of database document "revenants"
      *
-     *  Well, I do not really have a good term for this ... The point is, database documents are in real
+     *  Well, I do not really have a good term for this... The point is, database documents are in real
      *  only *one* aspect of a more complex thing. The second aspect is a data source. Both, in some sense,
      *  just represent different views on the same thing. For a given database, there's at each time at most
      *  one data source, and at most one database document. Both have a independent life time, and are
@@ -945,7 +945,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     {
         if ("OnTitleChanged".equals(_Event.EventName))
         // OnTitleChanged events are notified too often. This is known, and accepted.
-        // (the deeper reason is that it's diffult to determine, in the DatabaseDocument implementatin,
+        // (the deeper reason is that it's difficult to determine, in the DatabaseDocument implementatin,
         // when the title actually changed. In particular, when we do a saveAsURL, and then ask for a
         // title *before* the TitleHelper got the document's OnSaveAsDone event, then the wrong (old)
         // title is obtained.

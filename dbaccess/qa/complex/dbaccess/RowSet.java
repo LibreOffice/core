@@ -600,7 +600,7 @@ public class RowSet extends TestCase
         assertTrue("|next| after |deleteRow| failed", m_resultSet.next());
         final int positionAfter = m_resultSet.getRow();
         assertTrue("position after |next| after |deleteRow| is not as expected", positionAfter == deletedRow);
-        // since the deleted record "vanishs" as soon as the cursor is moved away from it, the absolute position does
+        // since the deleted record "vanishes" as soon as the cursor is moved away from it, the absolute position does
         // not change with a |next| call here
 
 
@@ -877,7 +877,7 @@ public class RowSet extends TestCase
         assertTrue("XParameters and the parameters container do not properly interact",
                    "Apples".equals(firstParamValue));
 
-        // let's see whether this also survices an execute of the row set
+        // let's see whether this also survives an execute of the row set
         rowsetParams.setString(1, "Oranges");
         m_rowSet.execute();
         {

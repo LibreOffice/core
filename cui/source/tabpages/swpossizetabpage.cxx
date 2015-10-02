@@ -1274,7 +1274,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
             }
         }
     }
-    if (pLB)    // only if the hanlder has been called by a change of the controller
+    if (pLB)    // only if the handler has been called by a change of the controller
         RangeModifyHdl(*m_pWidthMF);
 
     return 0;

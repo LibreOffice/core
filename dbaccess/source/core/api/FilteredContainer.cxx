@@ -47,7 +47,7 @@ namespace dbaccess
 */
 sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vector< WildCard >& _rOut)
 {
-    // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
+    // for wildcard search : remove all table filters which are a wildcard expression and build a WildCard
     // for them
     OUString* pTableFilters = _rTableFilter.getArray();
     OUString* pEnd          = pTableFilters + _rTableFilter.getLength();
@@ -83,7 +83,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         bool bFilterMatch = ::std::find( tableFilter, tableFilterEnd, _rName ) != tableFilterEnd;
         // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
         if (!bFilterMatch && !_rWCSearch.empty())
-        {   // or if one of the wildcrad expression matches
+        {   // or if one of the wildcard expression matches
             for (   ::std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
                     aLoop != _rWCSearch.end() && !bFilterMatch;
                     ++aLoop
