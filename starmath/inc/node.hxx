@@ -1178,6 +1178,8 @@ public:
 
 
 /** Node used for alignment
+ *
+ * This node has exactly one child at index 0.
  */
 class SmAlignNode : public SmStructureNode
 {
