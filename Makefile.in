@@ -21,8 +21,6 @@ SRCDIR := @SRC_ROOT@
 BUILDDIR := @BUILDDIR@
 GIT_BUILD := $(if $(wildcard $(SRCDIR)/.git),T)
 
-include $(SRCDIR)/solenv/gbuild/shell.mk
-
 # Run autogen.sh if needed and force make to restart itself.
 # ... but there are several cases where we do not want to run
 # autogen.sh:
@@ -45,7 +43,6 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/configure.ac \
 		$(SRCDIR)/config_host/*.h.in \
 		$(SRCDIR)/android/source/AndroidManifest.xml.in \
-		$(SRCDIR)/solenv/gbuild/shell.mk.in \
 		$(BUILDDIR)/autogen.input \
 		$(BUILDDIR)/autogen.lastrun \
 		$(BUILDDIR)/autogen.sh \
@@ -60,7 +57,7 @@ gb_Side ?= host
 
 include $(BUILDDIR)/config_$(gb_Side).mk
 
-export GMAKE_OPTIONS?=-r$(if $(verbose),,s)$(value $(MAKEFLAGS)) SHELL=$(SHELL)
+export GMAKE_OPTIONS?=-r$(if $(verbose),,s)$(value $(MAKEFLAGS))
 
 PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)
 
