@@ -23,28 +23,23 @@
 
 class SwNode;
 class SwContentNode;
-class ReReadThread;
 
 class SwBaseLink : public ::sfx2::SvBaseLink
 {
-    friend long GrfNodeChanged( void* pLink, void* pCaller );
-
     SwContentNode* pContentNode;
     bool bSwapIn : 1;
     bool bNoDataFlag : 1;
     bool bIgnoreDataChanged : 1;
-    ReReadThread* m_pReReadThread;
 
 protected:
-    SwBaseLink(): m_pReReadThread(0) {}
+    SwBaseLink() {}
 
 public:
     TYPEINFO_OVERRIDE();
 
     SwBaseLink( SfxLinkUpdateMode nMode, SotClipboardFormatId nFormat, SwContentNode* pNode = 0 )
         : ::sfx2::SvBaseLink( nMode, nFormat ), pContentNode( pNode ),
-        bSwapIn( false ), bNoDataFlag( false ), bIgnoreDataChanged( false ),
-        m_pReReadThread(0)
+        bSwapIn( false ), bNoDataFlag( false ), bIgnoreDataChanged( false )
     {}
     virtual ~SwBaseLink();
 

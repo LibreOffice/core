@@ -148,10 +148,6 @@ protected:
     virtual OUString getTestName() { return OUString(); }
 
 public:
-    OUString& getFilterOptions()
-    {
-        return maFilterOptions;
-    }
     void setFilterOptions(const OUString &rFilterOptions)
     {
         maFilterOptions = rFilterOptions;

@@ -137,9 +137,6 @@ public:
     // lists the names of all known printers
     void listPrinters( std::list< OUString >& rList ) const;
 
-    // gets the number of known printers
-    int countPrinters() const { return m_aPrinters.size(); }
-
     // gets info about a named printer
     const PrinterInfo& getPrinterInfo( const OUString& rPrinter ) const;
 

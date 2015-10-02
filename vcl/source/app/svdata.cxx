@@ -282,26 +282,6 @@ bool ImplInitAccessBridge()
 }
 #endif
 
-vcl::Window* ImplFindWindow( const SalFrame* pFrame, ::Point& rSalFramePos )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    vcl::Window*     pFrameWindow = pSVData->maWinData.mpFirstFrame;
-    while ( pFrameWindow )
-    {
-        if ( pFrameWindow->ImplGetFrame() == pFrame )
-        {
-            vcl::Window* pWindow = pFrameWindow->ImplFindWindow( rSalFramePos );
-            if ( !pWindow )
-                pWindow = pFrameWindow->ImplGetWindow();
-            rSalFramePos = pWindow->ImplFrameToOutput( rSalFramePos );
-            return pWindow;
-        }
-        pFrameWindow = pFrameWindow->ImplGetFrameData()->mpNextFrame;
-    }
-
-    return NULL;
-}
-
 void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 nHint )
 {
     AllSettings::LocaleSettingsChanged( nHint );

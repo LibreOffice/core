@@ -586,11 +586,6 @@ void I18NStatus::setStatusText( const OUString& rText )
     }
 }
 
-void I18NStatus::changeIM( const OUString& rIM )
-{
-    m_aCurrentIM = rIM;
-}
-
 SalFrame* I18NStatus::getStatusFrame() const
 {
     SalFrame* pRet = NULL;

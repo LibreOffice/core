@@ -1275,14 +1275,6 @@ bool VclGrid::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-void setGridAttach(vcl::Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nWidth, sal_Int32 nHeight)
-{
-    rWidget.set_grid_left_attach(nLeft);
-    rWidget.set_grid_top_attach(nTop);
-    rWidget.set_grid_width(nWidth);
-    rWidget.set_grid_height(nHeight);
-}
-
 const vcl::Window *VclBin::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();

@@ -2751,16 +2751,7 @@ void WW8Export::WriteFkpPlcUsw()
 
     if ( pSttbfAssoc )                      // #i106057#
     {
-        ::std::vector<OUString> aStrings;
-
-        ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
-        ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
-        for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
-             aIt != aItEnd; ++aIt)
-        {
-            aStrings.push_back(aIt->getStr());
-        }
-
+        ::std::vector<OUString> aStrings(pSttbfAssoc->getStrings());
         WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
                            pFib->lcbSttbfAssoc);
     }

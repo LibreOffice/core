@@ -1545,11 +1545,6 @@ bool SdrTextObj::IsToBeChained() const
     return mbToBeChained;
 }
 
-void SdrTextObj::SetToBeChained(bool bToBeChained)
-{
-    mbToBeChained = bToBeChained;
-}
-
 TextChain *SdrTextObj::GetTextChain() const
 {
     //if (!IsChainable())

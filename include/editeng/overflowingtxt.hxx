@@ -116,13 +116,9 @@ public:
     OutlinerParaObject *InsertOverflowingText(Outliner *, OutlinerParaObject *);
     OutlinerParaObject *RemoveOverflowingText(Outliner *);
 
-    static ESelection GetInsertionPointSel();
     ESelection GetOverflowPointSel() const;
 
     bool IsLastParaInterrupted() const;
-
-protected:
-    void impSetOutlinerToEmptyTxt(Outliner *);
 
 private:
     NonOverflowingText *mpNonOverflowingTxt;

@@ -35,11 +35,6 @@ class INetBookmark
     OUString          aUrl;
     OUString          aDescr;
 
-protected:
-
-    void            SetURL( const OUString& rS )          { aUrl = rS; }
-    void            SetDescription( const OUString& rS )  { aDescr = rS; }
-
 public:
                     INetBookmark( const OUString &rUrl, const OUString &rDescr )
                         : aUrl( rUrl ), aDescr( rDescr )

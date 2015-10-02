@@ -175,11 +175,8 @@ public:
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) = 0;
     virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, Generator &rGenerator, utl::MediaDescriptor &rDescriptor) = 0;
-    virtual void doRegisterHandlers(Generator &)
-    {
-    }
+    virtual void doRegisterHandlers(Generator &) {};
 
-private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
     OUString msFilterName;

@@ -520,8 +520,6 @@ public:
 
     void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 
-    void SetToBeChained(bool bToBeChained);
-
     /** Setup given Outliner equivalently to SdrTextObj::Paint()
 
         To setup an arbitrary Outliner in the same way as the draw

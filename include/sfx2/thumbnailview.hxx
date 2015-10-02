@@ -292,8 +292,6 @@ protected:
     SFX2_DLLPRIVATE bool         ImplHasAccessibleListeners();
     DECL_DLLPRIVATE_LINK_TYPED( ImplScrollHdl, ScrollBar*, void );
 
-    DECL_LINK(OnItemSelected, ThumbnailViewItem*);
-
 protected:
 
     ThumbnailValueItemList mItemList;

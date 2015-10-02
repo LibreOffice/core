@@ -2016,12 +2016,6 @@ TextChain *SdrModel::GetTextChain() const
     return pTextChain;
 }
 
-void SdrModel::SetNextLinkInTextChain(SdrTextObj *pPrev, SdrTextObj *pNext)
-{
-    // Delegate to SdrTextObj
-    pPrev->SetNextLinkInChain(pNext);
-}
-
 const SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum) const
 {
     DBG_ASSERT(nPgNum < maMaPag.size(), "SdrModel::GetMasterPage: Access out of range (!)");

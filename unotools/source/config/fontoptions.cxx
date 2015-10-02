@@ -70,7 +70,6 @@ class SvtFontOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         bool    IsFontHistoryEnabled        (                   ) const { return m_bFontHistory;}
-        void        EnableFontHistory           ( bool bState   );
 
         bool    IsFontWYSIWYGEnabled        (                   ) const { return m_bFontWYSIWYG;}
         void        EnableFontWYSIWYG           ( bool bState   );
@@ -221,14 +220,6 @@ void SvtFontOptions_Impl::ImplCommit()
 
 //  public method
 
-void SvtFontOptions_Impl::EnableFontHistory( bool bState )
-{
-    m_bFontHistory = bState;
-    SetModified();
-}
-
-//  public method
-
 void SvtFontOptions_Impl::EnableFontWYSIWYG( bool bState )
 {
     m_bFontWYSIWYG = bState;
@@ -299,14 +290,6 @@ bool SvtFontOptions::IsFontHistoryEnabled() const
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsFontHistoryEnabled();
-}
-
-//  public method
-
-void SvtFontOptions::EnableFontHistory( bool bState )
-{
-    MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    m_pDataContainer->EnableFontHistory( bState );
 }
 
 //  public method

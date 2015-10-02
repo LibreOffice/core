@@ -287,15 +287,6 @@ namespace accessibility
             Argument maArg;
         };
 
-        /** Generic algorithm on given paragraphs
-
-            Convenience method, that already adapts the given functor with WeakChildAdapter
-        */
-        template < typename Functor > void ForEach( Functor& rFunctor )
-        {
-            ::std::for_each( begin(), end(), WeakChildAdapter< Functor >(rFunctor) );
-        }
-
     private:
         /// Set state on given child
         void SetState( sal_Int32 nChild, const sal_Int16 nStateId );

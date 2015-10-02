@@ -363,9 +363,6 @@ public:
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
-VCL_DLLPUBLIC void setGridAttach(vcl::Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
-    sal_Int32 nWidth = 1, sal_Int32 nHeight = 1);
-
 class VCL_DLLPUBLIC VclBin : public VclContainer
 {
 public:

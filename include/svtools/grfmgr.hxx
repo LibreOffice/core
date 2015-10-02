@@ -340,7 +340,6 @@ public:
     bool                    operator!=( const GraphicObject& rCacheObj ) const { return !( *this == rCacheObj ); }
 
     bool                    HasSwapStreamHdl() const { return maSwapStreamHdl.IsSet(); }
-    void                    SetSwapStreamHdl();
     void                    SetSwapStreamHdl(const Link<const GraphicObject*, SvStream*>& rHdl);
 
     void                    FireSwapInRequest();

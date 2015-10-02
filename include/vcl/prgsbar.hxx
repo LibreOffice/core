@@ -81,7 +81,6 @@ public:
     virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
     void                SetValue( sal_uInt16 nNewPercent );
-    sal_uInt16          GetValue() const { return mnPercent; }
 };
 
 #endif // INCLUDED_VCL_PRGSBAR_HXX

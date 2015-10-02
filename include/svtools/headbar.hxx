@@ -344,7 +344,6 @@ public:
     inline void         SetDragHdl( const Link<HeaderBar*,void>& rLink )           { maDragHdl = rLink; }
     inline void         SetEndDragHdl( const Link<HeaderBar*,void>& rLink )        { maEndDragHdl = rLink; }
     inline void         SetSelectHdl( const Link<HeaderBar*,void>& rLink )         { maSelectHdl = rLink; }
-    inline void         SetDoubleClickHdl( const Link<HeaderBar*,void>& rLink )    { maDoubleClickHdl = rLink; }
     inline void         SetCreateAccessibleHdl( const Link<HeaderBar*,void>& rLink ) { maCreateAccessibleHdl = rLink; }
 
     inline bool         IsDragable() const                          { return mbDragable; }

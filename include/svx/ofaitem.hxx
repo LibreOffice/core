@@ -66,10 +66,6 @@ public:
     {
         return mxRef;
     }
-    inline void SetValue( const rtl::Reference<reference_type> &xRef )
-    {
-        mxRef = xRef;
-    }
 };
 
 #endif

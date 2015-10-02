@@ -48,7 +48,6 @@ namespace dbaui
         void DisplayData( OFieldDescription* pFieldDescr );
         void SaveData( OFieldDescription* pFieldDescr );
         void SetControlText( sal_uInt16 nControlId, const OUString& rText );
-        OUString GetControlText( sal_uInt16 nControlId );
         void SetReadOnly( bool bReadOnly );
         OTableEditorCtrl* GetEditorCtrl();
 
