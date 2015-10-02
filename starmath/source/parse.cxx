@@ -1010,7 +1010,7 @@ void SmParser::DoAlign()
 
     if (pSNode)
     {
-        pSNode->SetSubNodes(popOrZero(m_aNodeStack), 0);
+        pSNode->SetSubNode(0, popOrZero(m_aNodeStack));
         m_aNodeStack.push_front(pSNode);
     }
 }
