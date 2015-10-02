@@ -784,7 +784,7 @@ void CGM::ImplDoClass4()
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xfc : /*Reounded Rectangle*/
+            case 0xfc : /*Rounded Rectangle*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();

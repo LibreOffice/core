@@ -768,7 +768,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 }
 
                                 // Not sure what this is good for, repaint or broadcast of object change.
-                                //( Thus i am adding repaint here
+                                //( Thus I am adding repaint here
                                 pO->SetChanged();
                                 pO->BroadcastObjectChange();
                             }
@@ -6336,7 +6336,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
         Size        aMtfSize100;
         bool        bMtfBLIP = false;
         bool        bZCodecCompression = false;
-        // now position it exactly at the beinning of the embedded graphic
+        // now position it exactly at the beginning of the embedded graphic
         sal_uLong nSkip = ( nInst & 0x0001 ) ? 32 : 16;
 
         switch( nInst & 0xFFFE )
