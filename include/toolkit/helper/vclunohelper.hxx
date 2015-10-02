@@ -145,11 +145,15 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
         );
 
+    static ::MouseEvent createVCLMouseEvent( const ::com::sun::star::awt::MouseEvent& _rAwtEvent );
+
     static ::com::sun::star::awt::KeyEvent
         createKeyEvent(
             const ::KeyEvent& _rVclEvent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
         );
+
+    static ::KeyEvent createVCLKeyEvent( const ::com::sun::star::awt::KeyEvent& _rAwtEvent );
 };
 
 
