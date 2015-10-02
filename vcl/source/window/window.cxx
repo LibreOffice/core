@@ -948,42 +948,42 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     if ( mpWindowImpl->mbFrame )
     {
         // create frame
-        sal_uLong nFrameStyle = 0;
+        SalFrameStyleFlags nFrameStyle = SalFrameStyleFlags::NONE;
 
         if ( nStyle & WB_MOVEABLE )
-            nFrameStyle |= SAL_FRAME_STYLE_MOVEABLE;
+            nFrameStyle |= SalFrameStyleFlags::MOVEABLE;
         if ( nStyle & WB_SIZEABLE )
-            nFrameStyle |= SAL_FRAME_STYLE_SIZEABLE;
+            nFrameStyle |= SalFrameStyleFlags::SIZEABLE;
         if ( nStyle & WB_CLOSEABLE )
-            nFrameStyle |= SAL_FRAME_STYLE_CLOSEABLE;
+            nFrameStyle |= SalFrameStyleFlags::CLOSEABLE;
         if ( nStyle & WB_APP )
-            nFrameStyle |= SAL_FRAME_STYLE_DEFAULT;
+            nFrameStyle |= SalFrameStyleFlags::DEFAULT;
         // check for undecorated floating window
         if( // 1. floating windows that are not moveable/sizeable (only closeable allowed)
-            ( !(nFrameStyle & ~SAL_FRAME_STYLE_CLOSEABLE) &&
+            ( !(nFrameStyle & ~SalFrameStyleFlags::CLOSEABLE) &&
             ( mpWindowImpl->mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) ) ) ||
             // 2. borderwindows of floaters with ownerdraw decoration
             ( ((GetType() == WINDOW_BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow && (nStyle & WB_OWNERDRAWDECORATION) ) ) )
         {
-            nFrameStyle = SAL_FRAME_STYLE_FLOAT;
+            nFrameStyle = SalFrameStyleFlags::FLOAT;
             if( nStyle & WB_OWNERDRAWDECORATION )
-                nFrameStyle |= (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_NOSHADOW);
+                nFrameStyle |= (SalFrameStyleFlags::OWNERDRAWDECORATION | SalFrameStyleFlags::NOSHADOW);
             if( nStyle & WB_NEEDSFOCUS )
-                nFrameStyle |= SAL_FRAME_STYLE_FLOAT_FOCUSABLE;
+                nFrameStyle |= SalFrameStyleFlags::FLOAT_FOCUSABLE;
         }
         else if( mpWindowImpl->mbFloatWin )
-            nFrameStyle |= SAL_FRAME_STYLE_TOOLWINDOW;
+            nFrameStyle |= SalFrameStyleFlags::TOOLWINDOW;
 
         if( nStyle & WB_INTROWIN )
-            nFrameStyle |= SAL_FRAME_STYLE_INTRO;
+            nFrameStyle |= SalFrameStyleFlags::INTRO;
         if( nStyle & WB_TOOLTIPWIN )
-            nFrameStyle |= SAL_FRAME_STYLE_TOOLTIP;
+            nFrameStyle |= SalFrameStyleFlags::TOOLTIP;
 
         if( nStyle & WB_NOSHADOW )
-            nFrameStyle |= SAL_FRAME_STYLE_NOSHADOW;
+            nFrameStyle |= SalFrameStyleFlags::NOSHADOW;
 
         if( nStyle & WB_SYSTEMCHILDWINDOW )
-            nFrameStyle |= SAL_FRAME_STYLE_SYSTEMCHILD;
+            nFrameStyle |= SalFrameStyleFlags::SYSTEMCHILD;
 
         switch (mpWindowImpl->mnType)
         {
@@ -996,7 +996,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
             case WINDOW_WARNINGBOX:
             case WINDOW_ERRORBOX:
             case WINDOW_QUERYBOX:
-                nFrameStyle |= SAL_FRAME_STYLE_DIALOG;
+                nFrameStyle |= SalFrameStyleFlags::DIALOG;
             default:
                 break;
         }
@@ -1006,7 +1006,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
             pParentFrame = pParent->mpWindowImpl->mpFrame;
         SalFrame* pFrame;
         if ( pSystemParentData )
-            pFrame = pSVData->mpDefInst->CreateChildFrame( pSystemParentData, nFrameStyle | SAL_FRAME_STYLE_PLUG );
+            pFrame = pSVData->mpDefInst->CreateChildFrame( pSystemParentData, nFrameStyle | SalFrameStyleFlags::PLUG );
         else
             pFrame = pSVData->mpDefInst->CreateFrame( pParentFrame, nFrameStyle );
         if ( !pFrame )

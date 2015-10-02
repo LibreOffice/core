@@ -46,8 +46,8 @@ public:
     WinSalInstance();
     virtual ~WinSalInstance();
 
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle ) SAL_OVERRIDE;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle ) SAL_OVERRIDE;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
     virtual void            DestroyFrame( SalFrame* pFrame ) SAL_OVERRIDE;
     virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) SAL_OVERRIDE;
     virtual void            DestroyObject( SalObject* pObject ) SAL_OVERRIDE;
@@ -85,7 +85,7 @@ public:
     static int WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo);
 };
 
-SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, sal_uIntPtr nSalFrameStyle );
+SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, SalFrameStyleFlags nSalFrameStyle );
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent );
 HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, bool bAsChild );
 void ImplSalStartTimer( sal_uIntPtr nMS, bool bMutex = false );

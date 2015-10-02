@@ -1125,7 +1125,7 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
                              m_aWMAtoms[ NET_WM_STATE ] );
         if( pFrame->mbMaximizedHorz
            && pFrame->mbMaximizedVert
-           && ! ( pFrame->nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
+           && ! ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE ) )
         {
             /*
              *  for maximizing use NorthWestGravity (including decoration)
@@ -1215,7 +1215,7 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
                          );
         if( pFrame->mbMaximizedHorz
            && pFrame->mbMaximizedVert
-           && ! ( pFrame->nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
+           && ! ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE ) )
         {
             /*
              *  for maximizing use NorthWestGravity (including decoration)
@@ -1556,7 +1556,7 @@ void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bV
     if( m_aWMAtoms[ NET_WM_STATE ]
         && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ]
         && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ]
-        && ( pFrame->nStyle_ & ~SAL_FRAME_STYLE_DEFAULT )
+        && ( pFrame->nStyle_ & ~SalFrameStyleFlags::DEFAULT )
         )
     {
         if( pFrame->bMapped_ )
@@ -1621,7 +1621,7 @@ void GnomeWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool 
     pFrame->mbMaximizedHorz = bHorizontal;
 
     if( m_aWMAtoms[ WIN_STATE ]
-        && ( pFrame->nStyle_ & ~SAL_FRAME_STYLE_DEFAULT )
+        && ( pFrame->nStyle_ & ~SalFrameStyleFlags::DEFAULT )
         )
     {
         if( pFrame->bMapped_ )
@@ -1755,7 +1755,7 @@ void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) cons
  */
 void WMAdaptor::changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferenceFrame ) const
 {
-    if( ! ( pFrame->nStyle_ & SAL_FRAME_STYLE_PLUG )
+    if( ! ( pFrame->nStyle_ & SalFrameStyleFlags::PLUG )
         && ! pFrame->IsOverrideRedirect()
         && ! pFrame->IsFloatGrabWindow()
         )
@@ -1937,7 +1937,7 @@ void NetWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
 {
     if( m_aWMAtoms[ NET_WM_STATE ]
         && m_aWMAtoms[ NET_WM_STATE_SHADED ]
-        && ( pFrame->nStyle_ & ~SAL_FRAME_STYLE_DEFAULT )
+        && ( pFrame->nStyle_ & ~SalFrameStyleFlags::DEFAULT )
         )
     {
         pFrame->mbShaded = bToShaded;

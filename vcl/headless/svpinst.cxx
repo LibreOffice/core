@@ -198,12 +198,12 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
     return bRet;
 }
 
-SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle )
+SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
     return new SvpSalFrame( this, NULL, nStyle, false, SVP_DEFAULT_BITMAP_FORMAT, pParent );
 }
 
-SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
+SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
     return new SvpSalFrame( this, pParent, nStyle, false, SVP_DEFAULT_BITMAP_FORMAT );
 }

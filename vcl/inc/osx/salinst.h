@@ -80,8 +80,8 @@ public:
     AquaSalInstance();
     virtual ~AquaSalInstance();
 
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
     virtual void            DestroyFrame( SalFrame* pFrame ) SAL_OVERRIDE;
     virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData,
                                           bool bShow = true ) SAL_OVERRIDE;
