@@ -2478,7 +2478,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             if (pOrdFile==NULL) break;
 
             // In pOrdFile all "DatGrfObj" fields were collected so that the
-            // thererin contained "Orders" are continuous and not segmented by fields.
+            // therein contained "Orders" are continuous and not segmented by fields.
             // To read them from the memory stream without having any trouble,
             // we use a  little trick:
 

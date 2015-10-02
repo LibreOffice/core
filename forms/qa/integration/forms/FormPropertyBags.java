@@ -172,7 +172,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
         assure( "persistent properties did not survive reload (1)!", ((String)textFieldModel.getPropertyValue( "SomeBoundText" )).equals( "ChangedBoundText" ) );
         assure( "persistent properties did not survive reload (2)!", ((String)textFieldModel.getPropertyValue( "SomeReadonlyText" )).equals( "InitialReadonlyText" ) );
 //        assure( "persistent properties did not survive reload (3)!", ((Integer)textFieldModel.getPropertyValue( "SomeNumericValue" )).equals( Integer.valueOf( 42 ) ) );
-            // cannot check this until the types really survice - at the moment, integers are converted to doubles ...
+            // cannot check this until the types really survive - at the moment, integers are converted to doubles...
 
         // the transient property should not have survived
         boolean caughtExpected = false;

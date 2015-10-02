@@ -937,7 +937,7 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
     // loop through codes from the input stream:
     do {
 
-        // fetch next 13 bits into nCodem but dont remove them from
+        // fetch next 13 bits into nCodem but don't remove them from
         // the input buffer:
         while (nInputBitsBufSize<13) {
             pIStream->ReadUChar( nByte );
@@ -970,7 +970,7 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
         // too much data?
         if (nDataBits>nTargetBits) {
             // Yes, could be a subsequent error cause by an invalid code
-            // Thefore continue anyhow:
+            // Therefore continue anyhow:
             nDataBits=nTargetBits;
         }
 

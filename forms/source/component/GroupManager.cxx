@@ -281,7 +281,7 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) thro
     if (evt.PropertyName == PROPERTY_NAME) {
         if (!sGroupName.isEmpty())
             return; // group hasn't changed; ignore this name change.
-        // no GroupName; use Name as GroupNme
+        // no GroupName; use Name as GroupName
         evt.OldValue >>= sGroupName;
     }
     else if (evt.PropertyName == PROPERTY_GROUP_NAME) {

@@ -674,7 +674,7 @@ protected:
         column the object is bound to, or with the external value binding, if present.<br/>
         E.g. for a text control model, this property will most probably be "Text".</p>
 
-        <p>Derived classes are stronly recommend to call this method - at least the
+        <p>Derived classes are strongly recommended to call this method - at least the
         "DataFieldProperty" (exposed in getFastPropertyValue) relies on the information
         given herein, and needs to be supplied otherwise else.</p>
 
@@ -691,7 +691,7 @@ protected:
             the handle of the property, as exposed to external components.<br/>
             Normally, this information can be obtained dynamically (e.g. from describeFixedProperties),
             but since this method is to be called from within the constructor of derived classes,
-            we prefer to be on the *really* safe side here ....
+            we prefer to be on the *really* safe side here...
 
         @see setControlValue
         @see suspendValueListening
