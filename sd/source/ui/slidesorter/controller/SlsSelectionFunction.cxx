@@ -324,7 +324,6 @@ SelectionFunction::SelectionFunction (
         rRequest),
       mrSlideSorter(rSlideSorter),
       mrController(mrSlideSorter.GetController()),
-      maInsertionMarkerBox(),
       mbProcessingMouseButtonDown(false),
       mnShiftKeySelectionAnchor(-1),
       mpModeHandler(new NormalModeHandler(rSlideSorter, *this))

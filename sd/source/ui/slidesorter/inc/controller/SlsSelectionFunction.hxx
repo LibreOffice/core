@@ -113,13 +113,6 @@ protected:
     virtual ~SelectionFunction();
 
 private:
-
-    /// The rectangle of the mouse drag selection.
-    Rectangle maDragSelectionRectangle;
-
-    /// Box of the insert marker in model coordinates.
-    Rectangle maInsertionMarkerBox;
-
     /** We use this flag to filter out the cases where MouseMotion() is called
         with a pressed mouse button but without a prior MouseButtonDown()
         call.  This is an indication that the mouse button was pressed over
