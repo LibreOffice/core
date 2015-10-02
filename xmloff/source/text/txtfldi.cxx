@@ -4111,6 +4111,16 @@ XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
     bValid = true;
 }
 
+XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_bibliography, Element),
+    sPropertyFields("Fields"),
+    aValues()
+{
+    bValid = true;
+}
+
 // TODO: this is the same map as is used in the text field export
 static SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
 {
@@ -4180,6 +4190,51 @@ void XMLBibliographyFieldImportContext::StartElement(
             else
             {
                 aAny <<= xAttrList->getValueByIndex(i);
+                aValue.Value = aAny;
+
+                aValues.push_back(aValue);
+            }
+        }
+        // else: unknown namespace -> ignore
+    }
+}
+
+void XMLBibliographyFieldImportContext::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw( RuntimeException, SAXException, std::exception )
+{
+    // iterate over attributes
+    Sequence< xml::FastAttribute > attributesSeq = xAttrList->getFastAttributes();
+    sal_Int16 nLength = attributesSeq.getLength();
+    xml::FastAttribute* attributes = attributesSeq.getArray();
+    for( sal_Int16 i=0; i < nLength; i++ )
+    {
+        xml::FastAttribute attr = attributes[i];
+
+        if( (attr.Token & (NAMESPACE | XML_NAMESPACE_TEXT)) == (NAMESPACE | XML_NAMESPACE_TEXT) )
+        {
+            PropertyValue aValue;
+            // TODO set aValue.Name
+            Any aAny;
+
+            // special treatment for bibliography type
+            // biblio vx bibilio: #96658#; also read old documents
+            if( attr.Token == (NAMESPACE | XML_NAMESPACE_TEXT | XML_bibiliographic_type) ||
+                attr.Token == (NAMESPACE | XML_NAMESPACE_TEXT | XML_bibliography_type) )
+            {
+                sal_uInt16 nTmp;
+                if( SvXMLUnitConverter::convertEnum(
+                    nTmp, attr.Value, aBibliographyDataTypeMap) )
+                {
+                    aAny <<= (sal_Int16)nTmp;
+                    aValue.Value = aAny;
+
+                    aValues.push_back(aValue);
+                }
+            }
+            else
+            {
+                aAny <<= attr.Value;
                 aValue.Value = aAny;
 
                 aValues.push_back(aValue);
