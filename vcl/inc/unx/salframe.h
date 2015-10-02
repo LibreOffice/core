@@ -181,6 +181,7 @@ public:
     ::Window                GetForeignParent() const { return mhForeignParent; }
     ::Window                GetStackingWindow() const { return mhStackingWindow; }
     long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
+              sal_uIntPtr           GetStyle() const { return nStyle_; }
 
     Cursor          GetCursor() const { return hCursor_; }
     bool            IsCaptured() const { return nCaptured_ == 1; }
