@@ -152,7 +152,7 @@ void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )
 
 namespace {
 
-class SpanBroadcaster : public sc::ColumnSpanSet::ColumnAction
+class SpanBroadcaster
 {
     ScDocument& mrDoc;
     SCTAB mnCurTab;
@@ -161,13 +161,13 @@ class SpanBroadcaster : public sc::ColumnSpanSet::ColumnAction
 public:
     SpanBroadcaster( ScDocument& rDoc ) : mrDoc(rDoc), mnCurTab(-1), mnCurCol(-1) {}
 
-    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
+    void startColumn( ScColumn* pCol )
     {
         mnCurTab = pCol->GetTab();
         mnCurCol = pCol->GetCol();
     }
 
-    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
+    void execute( SCROW nRow1, SCROW nRow2, bool bVal )
     {
         if (!bVal)
             return;
