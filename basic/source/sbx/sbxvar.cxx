@@ -34,11 +34,11 @@
 #include <com/sun/star/uno/XInterface.hpp>
 using namespace com::sun::star::uno;
 
-///////////////////////////// SbxVariable
+// SbxVariable
 
 TYPEINIT1(SbxVariable,SbxValue)
 
-///////////////////////////// SbxVariableImpl
+// SbxVariableImpl
 
 class SbxVariableImpl
 {
@@ -59,7 +59,7 @@ class SbxVariableImpl
 };
 
 
-///////////////////////////// Constructors
+// Constructors
 
 SbxVariable::SbxVariable() : SbxValue()
 {
@@ -124,7 +124,7 @@ SbxVariable::~SbxVariable()
     delete pCst;
 }
 
-////////////////////////////// Broadcasting
+// Broadcasting
 
 SfxBroadcaster& SbxVariable::GetBroadcaster()
 {
@@ -142,7 +142,7 @@ SbxArray* SbxVariable::GetParameters() const
 
 
 // Perhaps some day one could cut the parameter 0.
-// then the copying will be dropped ...
+// Then the copying will be dropped...
 
 void SbxVariable::Broadcast( sal_uInt32 nHintId )
 {
@@ -210,7 +210,7 @@ void SbxVariable::SetParameters( SbxArray* p )
 }
 
 
-/////////////////////////// Name of the variables
+// Name of the variables
 
 void SbxVariable::SetName( const OUString& rName )
 {
@@ -335,7 +335,7 @@ sal_uInt16 SbxVariable::MakeHashCode( const OUString& rName )
     for( sal_Int32 i=0; i<nLen; ++i )
     {
         sal_uInt8 c = static_cast<sal_uInt8>(rName[i]);
-        // If we have a commen sigen break!!
+        // If we have a comment sign break!!
         if( c >= 0x80 )
         {
             return 0;
@@ -345,7 +345,7 @@ sal_uInt16 SbxVariable::MakeHashCode( const OUString& rName )
     return n;
 }
 
-////////////////////////////// Operators
+// Operators
 
 SbxVariable& SbxVariable::operator=( const SbxVariable& r )
 {
@@ -368,7 +368,7 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     return *this;
 }
 
-//////////////////////////////// Conversion
+// Conversion
 
 SbxDataType SbxVariable::GetType() const
 {
@@ -469,7 +469,7 @@ void SbxVariable::ClearComListener()
 }
 
 
-////////////////////////////// Loading/Saving
+// Loading/Saving
 
 bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
@@ -637,7 +637,7 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
     }
 }
 
-////////////////////////////// SbxInfo
+// SbxInfo
 
 SbxInfo::SbxInfo()
         : aHelpFile(), nHelpId(0)
@@ -647,7 +647,7 @@ SbxInfo::SbxInfo( const OUString& r, sal_uInt32 n )
        : aHelpFile( r ), nHelpId( n )
 {}
 
-////////////////////////////// SbxAlias
+// SbxAlias
 
 SbxAlias::SbxAlias( const SbxAlias& r )
         : SvRefBase( r ), SbxVariable( r ),

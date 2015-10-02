@@ -221,7 +221,7 @@ namespace canvas
         // call. Then, we store that state locally. This prolly goes
         // in line with the problem of having sprite state available
         // for the frame before the last frame; plus, it avoids
-        // frequent locks of the object mutices
+        // frequent locks of the object mutexes
         SpriteWeakOrder aSpriteComparator;
 
         // put all sprites that have changed content into update areas

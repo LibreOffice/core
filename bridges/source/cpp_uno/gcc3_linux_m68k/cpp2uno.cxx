@@ -425,7 +425,7 @@ namespace
 {
     const int codeSnippetSize = 20;
 
-    //some m68k info : http://www2.biglobe.ne.jp/~inaba/trampolines.html
+    //some m68k info: http://www2.biglobe.ne.jp/~inaba/trampolines.html
 
     unsigned char *codeSnippet(unsigned char* code, sal_Int32 functionIndex,
         sal_Int32 vtableOffset)

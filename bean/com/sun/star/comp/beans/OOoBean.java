@@ -185,7 +185,7 @@ public class OOoBean
     }
 
     // @requirement FUNC.CON.STRT/0.4
-    /** Starts a connection to an OOo instance which is lauched if not running.
+    /** Starts a connection to an OOo instance which is launched if not running.
 
         @throws HasConnectionException
             if a connection was already established.

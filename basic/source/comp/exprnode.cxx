@@ -202,7 +202,7 @@ short SbiExprNode::GetDepth()
 // Adjustment of a tree:
 // 1. Constant Folding
 // 2. Type-Adjustment
-// 3. Conversion of the operans into Strings
+// 3. Conversion of the operands into Strings
 // 4. Lifting of the composite- and error-bits
 
 void SbiExprNode::Optimize(SbiParser* pParser)

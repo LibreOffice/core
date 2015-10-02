@@ -112,7 +112,7 @@ enum SbiOpcode {
     // Verwaltung
     _SETCLASS,          // test set + class names (+StringId)
     _TESTCLASS,         // Check TOS class (+StringId)
-    _LIB,               // set lib name for declar-procs (+StringId)
+    _LIB,               // set lib name for declare-procs (+StringId)
     _BASED,             // TOS is incremented by BASE, BASE is pushed before (+base)
     // type adjustment in the Argv
     _ARGTYP,            // convert last parameter in Argv (+type)
