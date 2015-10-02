@@ -34,6 +34,7 @@ class ImageList;
 class Bitmap;
 class SfxItemSet;
 class Color;
+struct ScCalcConfig;
 enum class SvtScriptType;
 
 #define SC_COLLATOR_IGNORES ( \
@@ -703,6 +704,117 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
     SC_DLLPUBLIC static OUString    ReplaceOrAppend( const OUString& rString,
                                                      const OUString& rPlaceholder,
                                                      const OUString& rReplacement );
+
+
+    /** Convert string content to numeric value.
+
+        In any case, if rError is set 0.0 is returned.
+
+        If nStringNoValueError is errCellNoValue, that is unconditionally
+        assigned to rError and 0.0 is returned. The caller is expected to
+        handle this situation. Used by the interpreter.
+
+        Usually errNoValue is passed as nStringNoValueError.
+
+        Otherwise, depending on the string conversion configuration different
+        approaches are taken:
+
+
+        For ScCalcConfig::StringConversion::ILLEGAL
+        The error value passed in nStringNoValueError is assigned to rError
+        (and 0.0 returned).
+
+
+        For ScCalcConfig::StringConversion::ZERO
+        A zero value is returned and no error assigned.
+
+
+        For ScCalcConfig::StringConversion::LOCALE
+
+        If the string is empty or consists only of spaces, if "treat empty
+        string as zero" is set 0.0 is returned, else nStringNoValueError
+        assigned to rError (and 0.0 returned).
+
+        Else a non-empty string is passed to the number formatter's scanner to
+        be parsed locale dependent. If that does not detect a numeric value
+        nStringNoValueError is assigned to rError (and 0.0 returned).
+
+        If no number formatter was passed, the conversion falls back to
+        UNAMBIGUOUS.
+
+
+        For ScCalcConfig::StringConversion::UNAMBIGUOUS
+
+        If the string is empty or consists only of spaces, if "treat empty
+        string as zero" is set 0.0 is returned, else nStringNoValueError
+        assigned to rError (and 0.0 returned).
+
+        If the string is not empty the following conversion rules are applied:
+
+        Converted are only integer numbers including exponent, and ISO 8601 dates
+        and times in their extended formats with separators. Anything else,
+        especially fractional numeric values with decimal separators or dates other
+        than ISO 8601 would be locale dependent and is a no-no. Leading and
+        trailing blanks are ignored.
+
+        The following ISO 8601 formats are converted:
+
+        CCYY-MM-DD
+        CCYY-MM-DDThh:mm
+        CCYY-MM-DDThh:mm:ss
+        CCYY-MM-DDThh:mm:ss,s
+        CCYY-MM-DDThh:mm:ss.s
+        hh:mm
+        hh:mm:ss
+        hh:mm:ss,s
+        hh:mm:ss.s
+
+        The century CC may not be omitted and the two-digit year setting is not
+        taken into account. Instead of the T date and time separator exactly one
+        blank may be used.
+
+        If a date is given, it must be a valid Gregorian calendar date. In this
+        case the optional time must be in the range 00:00 to 23:59:59.99999...
+        If only time is given, it may have any value for hours, taking elapsed time
+        into account; minutes and seconds are limited to the value 59 as well.
+
+        If the string can not be converted to a numeric value, the error value
+        passed in nStringNoValueError is assigned to rError.
+
+
+        @param rStr
+            The string to be converted.
+
+        @param rConfig
+            The calculation configuration.
+
+        @param rError
+            Contains the error on return, if any. If an error was set before
+            and the conversion did not result in an error, still 0.0 is
+            returned.
+
+        @param nStringNoValueError
+            The error value to be assigned to rError if string could not be
+            converted to number.
+
+        @param pFormatter
+            The number formatter to use in case of
+            ScCalcConfig::StringConversion::LOCALE. Can but should not be
+            nullptr in which case conversion falls back to
+            ScCalcConfig::StringConversion::UNAMBIGUOUS and if a date is
+            detected the null date is assumed to be the standard 1899-12-30
+            instead of the configured null date.
+
+        @param rCurFmtType
+            Can be assigned a format type in case a date or time or date+time
+            string was converted, e.g. css::util::NumberFormat::DATE or
+            css::util::NumberFormat::TIME or a combination thereof.
+
+     */
+    static double ConvertStringToValue( const OUString& rStr, const ScCalcConfig& rConfig,
+            sal_uInt16 & rError, sal_uInt16 nStringNoValueError,
+            SvNumberFormatter* pFormatter, short & rCurFmtType );
+
 };
 
 // maybe move to dbdata.hxx (?):
