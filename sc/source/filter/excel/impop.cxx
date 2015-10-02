@@ -520,13 +520,11 @@ void ImportExcel::Columndefault()
 
 void ImportExcel::Array25()
 {
-    sal_uInt16      nFirstRow, nLastRow, nFormLen;
-    sal_uInt8       nFirstCol, nLastCol;
-
-    nFirstRow = aIn.ReaduInt16();
-    nLastRow = aIn.ReaduInt16();
-    nFirstCol = aIn.ReaduInt8();
-    nLastCol = aIn.ReaduInt8();
+    sal_uInt16 nFormLen;
+    sal_uInt16 nFirstRow = aIn.ReaduInt16();
+    sal_uInt16 nLastRow = aIn.ReaduInt16();
+    sal_uInt8 nFirstCol = aIn.ReaduInt8();
+    sal_uInt8 nLastCol = aIn.ReaduInt8();
 
     if( GetBiff() == EXC_BIFF2 )
     {//                     BIFF2
@@ -539,17 +537,21 @@ void ImportExcel::Array25()
         nFormLen = aIn.ReaduInt16();
     }
 
-    if( ValidColRow( nLastCol, nLastRow ) )
+    const ScTokenArray* pErgebnis = nullptr;
+
+    if (ValidColRow(nLastCol, nLastRow))
     {
         // the read mark is now on the formula, length in nFormLen
-        const ScTokenArray* pErgebnis;
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
-        pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
+        pFormConv->Convert(pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
-        OSL_ENSURE( pErgebnis, "*ImportExcel::Array25(): ScTokenArray is NULL!" );
+        SAL_WARN_IF(!pErgebnis, "sc", "*ImportExcel::Array25(): ScTokenArray is NULL!");
+    }
 
+    if (pErgebnis)
+    {
         ScDocumentImport& rDoc = GetDocImport();
         ScRange aArrayRange(nFirstCol, nFirstRow, GetCurrScTab(), nLastCol, nLastRow, GetCurrScTab());
         rDoc.setMatrixCells(aArrayRange, *pErgebnis, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
