@@ -166,7 +166,7 @@ public class CustomizeView extends    JPanel
      * We use our internal set dispatch objects to
      * call it. This calls toogle the menu/object- or toolbar.
      * Note: Because we are listener status events too - hopefully
-     * we get a notification, if toogling was successfully or not.
+     * we get a notification, if toggling was successfully or not.
      * We use this information to update our check boxes again.
      * But such update doesn't force (hopefully) an action event. Otherwhise
      * we can produce a never ending recursion!

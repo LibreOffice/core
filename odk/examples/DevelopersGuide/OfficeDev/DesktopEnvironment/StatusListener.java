@@ -241,9 +241,9 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
             if (m_bDead)
                 return;
 
-            // enable/dsiable th control.
-            // Means: If the feature isn't available currently - we can't show an status really here.
-            // Then we should colorize it gray ...
+            // enable/disable the control.
+            // Means: if the feature isn't available currently - we can't show an status really here.
+            // Then we should colorize it gray...
             m_rControl.setEnabled(aEvent.IsEnabled);
 
             // Only if status is enabled we can look for his value!

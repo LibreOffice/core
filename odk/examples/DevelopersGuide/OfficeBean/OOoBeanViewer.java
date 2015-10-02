@@ -80,7 +80,7 @@ public class OOoBeanViewer extends java.applet.Applet
    private OOoBean aBean;
 
    /**
-    * Initialize the Appplet
+    * Initialize the Applet
     */
    public void init()
    {

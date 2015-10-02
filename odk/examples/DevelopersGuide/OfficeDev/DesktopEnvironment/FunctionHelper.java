@@ -539,7 +539,7 @@ public class FunctionHelper
                 com.sun.star.frame.FrameSearchFlag.CHILDREN,
                 lProperties);
 
-            // dont forget to restore old frame name ...
+            // don't forget to restore old frame name...
             xFrame.setName(sOldName);
         }
         catch(com.sun.star.io.IOException exIO)
@@ -746,7 +746,7 @@ public class FunctionHelper
      * It shows the possible interface to do so.
      *
      * @param xFrame
-     *          frame which should be clcosed
+     *          frame which should be closed
      *
      * @return  <TRUE/> in case frame could be closed
      *          <FALSE/> otherwise
@@ -766,7 +766,7 @@ public class FunctionHelper
             if (xCloseable!=null)
             {
                 // We deliver the ownership of this frame not to the (possible)
-                // source which throw a CloseVetoException. We whishto have it
+                // source which throw a CloseVetoException. We wish to have it
                 // under our own control.
                 try
                 {

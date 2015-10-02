@@ -1635,7 +1635,7 @@ public class TextDocuments {
     {
         try
         {
-            // Go to the end of the doucment
+            // Go to the end of the document
             mxDocCursor.gotoEnd( false );
             // insert a new paragraph
             mxDocText.insertControlCharacter (
