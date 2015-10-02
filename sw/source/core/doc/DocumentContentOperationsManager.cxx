@@ -3131,11 +3131,14 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     const SwNodeRange& rRg,
     const sal_Int32 nEndContentIndex,
     const SwNodeIndex& rInsPos,
-    const SwPaM* pCopiedPaM,
+    const std::pair<const SwPaM&, const SwPosition&>* pCopiedPaM /*and real insert pos*/,
     const bool bMakeNewFrms,
     const bool bDelRedlines,
     const bool bCopyFlyAtFly ) const
 {
+    assert(!pCopiedPaM || pCopiedPaM->first.End()->nContent == nEndContentIndex);
+    assert(!pCopiedPaM || pCopiedPaM->first.End()->nNode == rRg.aEnd);
+
     SwDoc* pDest = rInsPos.GetNode().GetDoc();
 
     _SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
@@ -3178,14 +3181,24 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     SwNodeRange aCpyRange( aSavePos, rInsPos );
 
     // Also copy all bookmarks
+    // guess this must be done before the _DelDummyNodes below as that
+    // deletes nodes so would mess up the index arithmetic
     if( m_rDoc.getIDocumentMarkAccess()->getAllMarksCount() )
     {
         SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
-        SwPaM aCpyTmp( aCpyRange.aStart, aCpyRange.aEnd );
+        SwPaM aCpyPaM(aCpyRange.aStart, aCpyRange.aEnd);
+        if (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->nNode)
+        {
+            // there is 1 (partially selected, maybe) paragraph before
+            assert(SwNodeIndex(rRg.aStart, -1) == pCopiedPaM->first.Start()->nNode);
+            // only use the passed in target SwPosition if the source PaM point
+            // is on a different node; if it was the same node then the target
+            // position was likely moved along by the copy operation and now
+            // points to the end of the range!
+            *aCpyPaM.GetPoint() = pCopiedPaM->second;
+        }
 
-        lcl_CopyBookmarks(
-            pCopiedPaM != NULL ? *pCopiedPaM : aRgTmp,
-            aCpyTmp );
+        lcl_CopyBookmarks((pCopiedPaM) ? pCopiedPaM->first : aRgTmp, aCpyPaM);
     }
 
     if( bDelRedlines && ( nsRedlineMode_t::REDLINE_DELETE_REDLINES & pDest->getIDocumentRedlineAccess().GetRedlineMode() ))
@@ -3194,6 +3207,12 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     pDest->GetNodes()._DelDummyNodes( aCpyRange );
 }
 
+// TODO: there is a limitation here in that it's not possible to pass a start
+// content index - which means that at-character anchored frames inside
+// partial 1st paragraph of redline is not copied.
+// But the DelFlyInRange() that is called from DelCopyOfSection() does not
+// delete it either, and it also does not delete those on partial last para of
+// redline, so copying those is supressed here too ...
 void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     const SwNodeRange& rRg,
     const sal_Int32 nEndContentIndex,
@@ -4390,16 +4409,26 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     pDestTextNd->ResetAttr( RES_PAGEDESC );
             }
 
+            SwPosition startPos(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1),
+                SwIndex(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1).GetNode().GetContentNode()));
+            if (bCanMoveBack)
+            {   // pCopyPam is actually 1 before the copy range so move it fwd
+                SwPaM temp(*pCopyPam->GetPoint());
+                temp.Move(fnMoveForward, fnGoContent);
+                startPos = *temp.GetPoint();
+            }
+            assert(startPos.nNode.GetNode().IsContentNode());
+            std::pair<SwPaM const&, SwPosition const&> tmp(rPam, startPos);
             if( aInsPos == pEnd->nNode )
             {
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
-                CopyWithFlyInFly( aRg, 0,aInsPos, &rPam, bMakeNewFrms, false );
+                CopyWithFlyInFly( aRg, 0, aInsPos, &tmp, bMakeNewFrms, false );
                 ++aSaveIdx;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTextNode(), 0 );
             }
             else
-                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, &rPam, bMakeNewFrms, false );
+                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, &tmp, bMakeNewFrms, false );
 
             bCopyBookmarks = false;
 

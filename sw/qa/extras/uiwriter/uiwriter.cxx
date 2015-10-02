@@ -96,6 +96,7 @@ public:
     //EDITING: undo search&replace corrupt text when searching backward
     void testReplaceBackward();
     void testRedlineFrame();
+    void testBookmarkCopy();
     void testFdo69893();
     void testFdo70807();
     void testImportRTF();
@@ -170,6 +171,7 @@ public:
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
     CPPUNIT_TEST(testRedlineFrame);
+    CPPUNIT_TEST(testBookmarkCopy);
     CPPUNIT_TEST(testFdo69893);
     CPPUNIT_TEST(testFdo70807);
     CPPUNIT_TEST(testImportRTF);
@@ -314,6 +316,61 @@ void SwUiWriterTest::testRedlineFrame()
 
     // there is still exactly one frame
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+}
+
+void SwUiWriterTest::testBookmarkCopy()
+{
+    SwDoc * pDoc(createDoc());
+
+    // add text and bookmark
+    IDocumentMarkAccess & rIDMA(*pDoc->getIDocumentMarkAccess());
+    IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwCursor aPaM(SwPosition(aIdx), nullptr, false);
+    rIDCO.InsertString(aPaM, OUString("foo"));
+    rIDCO.SplitNode(*aPaM.GetPoint(), false);
+    rIDCO.InsertString(aPaM, OUString("bar"));
+    aPaM.SetMark();
+    aPaM.MovePara(GetfnParaCurr(), GetfnParaStart());
+    rIDMA.makeMark(aPaM, OUString("Mark"), IDocumentMarkAccess::MarkType::BOOKMARK);
+    aPaM.Exchange();
+    aPaM.DeleteMark();
+    rIDCO.SplitNode(*aPaM.GetPoint(), false);
+    rIDCO.InsertString(aPaM, OUString("baz"));
+
+    // copy range
+    rIDCO.SplitNode(*aPaM.GetPoint(), false);
+    SwPosition target(*aPaM.GetPoint());
+    aPaM.Move(fnMoveBackward, fnGoContent);
+    aPaM.SetMark();
+    aPaM.SttEndDoc(true/*start*/);
+    aPaM.Move(fnMoveForward, fnGoContent); // partially select 1st para
+
+    rIDCO.CopyRange(aPaM, target, /*bCopyAll=*/false, /*bCheckPos=*/true);
+
+    // check bookmark was copied to correct position
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rIDMA.getBookmarksCount());
+    for (auto it(rIDMA.getBookmarksBegin()); it != rIDMA.getBookmarksEnd(); ++it)
+    {
+        OUString markText(SwPaM((*it)->GetMarkPos(), (*it)->GetOtherMarkPos()).GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar"), markText);
+    }
+
+    // copy 2nd time, such that bCanMoveBack is false in CopyImpl
+    SwPaM aCopyPaM(*aPaM.GetMark(), *aPaM.GetPoint());
+    aPaM.SttEndDoc(true/*start*/);
+    rIDCO.SplitNode(*aPaM.GetPoint(), false);
+    aPaM.SttEndDoc(true/*start*/);
+
+    rIDCO.CopyRange(aCopyPaM, *aPaM.GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true);
+
+    // check bookmark was copied to correct position
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rIDMA.getBookmarksCount());
+    for (auto it(rIDMA.getBookmarksBegin()); it != rIDMA.getBookmarksEnd(); ++it)
+    {
+        OUString markText(SwPaM((*it)->GetMarkPos(), (*it)->GetOtherMarkPos()).GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar"), markText);
+    }
 }
 
 void SwUiWriterTest::testFdo75110()
