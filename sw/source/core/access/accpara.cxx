@@ -1683,14 +1683,6 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
         pValues = aValues.getArray();
 
-        const SwTextNode* pTextNode( GetTextNode() );
-        PropertyValue& rValue = pValues[aValues.getLength() - 1 ];
-        rValue.Name = "NumberingPrefix";
-        OUString sNumBullet = pTextNode->GetNumString();
-        rValue.Value <<= sNumBullet;
-        rValue.Handle = -1;
-        rValue.State = PropertyState_DIRECT_VALUE;
-
         OUString strTypeName = GetFieldTypeNameAtIndex(nIndex);
         if (!strTypeName.isEmpty())
         {
@@ -2361,23 +2353,6 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 tabs[0] = ts;
             }
             rValue.Value <<= tabs;
-            continue;
-        }
-
-        //number bullet
-        if (rValue.Name == UNO_NAME_NUMBERING_RULES)
-        {
-            if ( pTextNode->HasBullet() || pTextNode->HasNumber() )
-            {
-                uno::Any aVal;
-                SwNumRule* pNumRule = pTextNode->GetNumRule();
-                if (pNumRule)
-                {
-                    uno::Reference< container::XIndexReplace >  xNum = new SwXNumberingRules(*pNumRule);
-                    aVal.setValue(&xNum, cppu::UnoType<container::XIndexReplace>::get());
-                }
-                rValue.Value <<= aVal;
-            }
             continue;
         }
 
