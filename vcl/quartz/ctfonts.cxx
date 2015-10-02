@@ -145,7 +145,9 @@ bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) 
     // XXX: this is broken if the glyph came from fallback font
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.11 kCTFontDefaultOrientation
     const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation; // TODO: horz/vert
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     const CGRect aCGRect = CTFontGetBoundingRectsForGlyphs( aCTFontRef, aFontOrientation, &nCGGlyph, NULL, 1 );
 
     rRect.Left()   = lrint( aCGRect.origin.x );
