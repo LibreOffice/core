@@ -312,7 +312,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	calc_MS_Excel_40 \
 	calc_MS_Excel_5095 \
 	calc_MS_Excel_95 \
-	filters_Vcl_Event_Document \
 	writer_MS_WinWord_5 \
 	writer_MS_WinWord_60 \
 	writer_MS_Word_95 \

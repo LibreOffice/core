@@ -55,7 +55,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Library_graphicfilter \
 	Library_t602filter \
 	Library_textfd \
-	Library_vcleventfilter \
 	Library_xmlfa \
 	Library_xmlfd \
 	Library_xsltdlg \
