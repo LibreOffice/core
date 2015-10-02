@@ -190,6 +190,24 @@ public:
         bool bStyle,                /// set data style (NumberFormat-Prop.)
         bool bValue,                /// set value with Content/Value-Prop.
         bool bPresentation);        /// set presentation from elem. content
+    XMLVarFieldImportContext(
+        // for XMLTextFieldImportContext:
+        SvXMLImport& rImport,           /// XML Import
+        XMLTextImportHelper& rHlp,      /// text import helper
+        const sal_Char* pServiceName,   /// name of SO API service
+        sal_Int32 Element,              /// element token (namespace and name)
+        // config variables for PrepareField behavior:
+        bool bFormula,              /// set Formula property
+        bool bFormulaDefault,       /// use content as default for formula
+        bool bDescription,          /// set sDescription with Hint-property
+        bool bHelp,
+        bool bHint,
+        bool bVisible,              /// set IsVisible (display attr)
+        bool bDisplayFormula,       /// set ??? (display attr.)
+        bool bType,                 /// set value type with ???-property
+        bool bStyle,                /// set data style (NumberFormat-Prop.)
+        bool bValue,                /// set value with Content/Value-Prop.
+        bool bPresentation);        /// set presentation from elem. content
 
 protected:
     /// process attribute values
@@ -224,7 +242,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
-
+    XMLVariableGetFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element);
 
 protected:
     /// prepare XTextField for insertion into document
@@ -249,6 +270,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName);     /// element name w/o prefix
+    XMLExpressionFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element);
 
 protected:
     virtual void PrepareField(
@@ -270,6 +295,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName);     /// element name w/o prefix
+    XMLTextInputFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element);
 
 protected:
     virtual void PrepareField(
@@ -315,12 +344,34 @@ public:
         bool bStyle,                /// see XMLTextFieldImportContext
         bool bValue,                /// see XMLTextFieldImportContext
         bool bPresentation);        /// see XMLTextFieldImportContext
+    XMLSetVarFieldImportContext(
+        // for XMLTextFieldImportContext:
+        SvXMLImport& rImport,           /// see XMLTextFieldImportContext
+        XMLTextImportHelper& rHlp,      /// see XMLTextFieldImportContext
+        const sal_Char* pServiceName,   /// see XMLTextFieldImportContext
+        sal_Int32 Element,              /// element token (namespace and name)
+        // for finding appropriate field master (see EndElement())
+        VarType eVarType,               /// variable type
+        // config variables:
+        bool bFormula,              /// see XMLTextFieldImportContext
+        bool bFormulaDefault,       /// see XMLTextFieldImportContext
+        bool bDescription,          /// see XMLTextFieldImportContext
+        bool bHelp,                 /// see XMLTextFieldImportContext
+        bool bHint,                 /// see XMLTextFieldImportContext
+        bool bVisible,              /// see XMLTextFieldImportContext
+        bool bDisplayFormula,       /// see XMLTextFieldImportContext
+        bool bType,                 /// see XMLTextFieldImportContext
+        bool bStyle,                /// see XMLTextFieldImportContext
+        bool bValue,                /// see XMLTextFieldImportContext
+        bool bPresentation);        /// see XMLTextFieldImportContext
 
 protected:
 
     /// create XTextField, attach master and insert into document;
     /// also calls PrepareTextField
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     /// find appropriate field master
     bool FindFieldMaster(
@@ -344,6 +395,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
+    XMLVariableSetFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element);
 
 protected:
     /// prepare XTextField for insertion into document
@@ -369,6 +424,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
+    XMLVariableInputFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element);
 
 protected:
 
@@ -393,6 +452,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
+    XMLUserFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element);
 };
 
 /** user input fields (<text:user-field-input>) */
@@ -408,6 +471,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
+    XMLUserFieldInputImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element);
 
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
@@ -436,6 +503,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
+    XMLSequenceFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element);
 
 protected:
 

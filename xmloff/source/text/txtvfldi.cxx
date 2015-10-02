@@ -140,6 +140,43 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
 {
 }
 
+XMLVarFieldImportContext::XMLVarFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    const sal_Char* pServiceName,
+    sal_Int32 Element,
+    bool bFormula, bool bFormulaDefault,
+    bool bDescription, bool bHelp, bool bHint, bool bVisible,
+    bool bIsDisplayFormula,
+    bool bType, bool bStyle, bool bValue,
+    bool bPresentation) :
+        XMLTextFieldImportContext(rImport, rHlp, pServiceName, Element),
+        sPropertyContent(sAPI_content),
+        sPropertyHint(sAPI_hint),
+        sPropertyHelp(sAPI_help),
+        sPropertyTooltip(sAPI_tooltip),
+        sPropertyIsVisible(sAPI_is_visible),
+        sPropertyIsDisplayFormula(sAPI_is_show_formula),
+        sPropertyCurrentPresentation(sAPI_current_presentation),
+        aValueHelper(rImport, rHlp, bType, bStyle, bValue, false),
+        bDisplayFormula(false),
+        bDisplayNone(false),
+        bNameOK(false),
+        bFormulaOK(false),
+        bDescriptionOK(false),
+        bHelpOK(false),
+        bHintOK(false),
+        bDisplayOK(false),
+        bSetFormula(bFormula),
+        bSetFormulaDefault(bFormulaDefault),
+        bSetDescription(bDescription),
+        bSetHelp(bHelp),
+        bSetHint(bHint),
+        bSetVisible(bVisible),
+        bSetDisplayFormula(bIsDisplayFormula),
+        bSetPresentation(bPresentation)
+{
+}
+
 void XMLVarFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
@@ -313,6 +350,22 @@ XMLSetVarFieldImportContext::XMLSetVarFieldImportContext(
 {
 }
 
+XMLSetVarFieldImportContext::XMLSetVarFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    const sal_Char* pServiceName, sal_Int32 Element,
+    VarType eVarType,
+    bool bFormula, bool bFormulaDefault,
+    bool bDescription, bool bHelp, bool bHint, bool bVisible, bool bIsDisplayFormula,
+    bool bType, bool bStyle, bool bValue, bool bPresentation) :
+        XMLVarFieldImportContext(rImport, rHlp, pServiceName,
+                                 Element,
+                                 bFormula, bFormulaDefault,
+                                 bDescription, bHelp, bHint, bVisible, bIsDisplayFormula,
+                                 bType, bStyle, bValue, bPresentation),
+        eFieldType(eVarType)
+{
+}
+
 void XMLSetVarFieldImportContext::EndElement()
 {
     // should we call PrepareField on the field, or rather on it's master?
@@ -365,6 +418,59 @@ void XMLSetVarFieldImportContext::EndElement()
     GetImportHelper().InsertString(GetContent());
 }
 
+void XMLSetVarFieldImportContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    // should we call PrepareField on the field, or rather on it's master?
+    // currently: call on field (just like superclass)
+    // possible alternatives: call on master
+    //                        call field or master depending on variable
+    //                        PrepareMaster() in addition to PrepareField()
+
+    DBG_ASSERT(!GetServiceName().isEmpty(), "no service name for element!");
+
+    if( bValid )
+    {
+        DBG_ASSERT(!GetName().isEmpty(), "variable name needed!");
+
+        // find field master
+        Reference<XPropertySet> xMaster;
+        if( FindFieldMaster(xMaster) )
+        {
+            // create field/Service
+            Reference<XPropertySet> xPropSet;
+            if( CreateField(xPropSet, sAPI_textfield_prefix + GetServiceName()) )
+            {
+                Reference<XDependentTextField> xDepTextField(xPropSet, UNO_QUERY);
+                if( xDepTextField.is() )
+                {
+                    // attach field to field master
+                    xDepTextField->attachTextFieldMaster(xMaster);
+
+                    // attach field to document
+                    Reference<XTextContent> xTextContent(xPropSet, UNO_QUERY);
+                    if( xTextContent.is() )
+                    {
+                        try {
+                        // insert, set field properties and exit!
+                        GetImportHelper().InsertTextContent(xTextContent);
+                        PrepareField(xPropSet);
+                        } catch (lang::IllegalArgumentException& /*e*/)
+                        {
+                            // ignore e: #i54023#
+                        };
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    // above: exit on success; so for all error cases we end up here!
+    // write element content
+    GetImportHelper().InsertString(GetContent());
+}
+
 bool XMLSetVarFieldImportContext::FindFieldMaster(
     Reference<XPropertySet> & xMaster)
 {
@@ -401,6 +507,24 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
         sNumFormat(OUString('1')),
         sNumFormatSync(GetXMLToken(XML_FALSE)),
         bRefNameOK(false)
+{
+}
+
+XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLSetVarFieldImportContext(rImport, rHlp, sAPI_set_expression,
+                                Element, VarTypeSequence,
+                                // formula
+                                true, true,
+                                false, false, false, false,
+                                false,
+                                false, false, false, false),
+    sPropertyNumberFormat(sAPI_number_format),
+    sPropertySequenceValue(sAPI_sequence_value),
+    sNumFormat(OUString('1')),
+    sNumFormatSync(GetXMLToken(XML_FALSE)),
+    bRefNameOK(false)
 {
 }
 
@@ -474,6 +598,22 @@ XMLVariableSetFieldImportContext::XMLVariableSetFieldImportContext(
 {
 }
 
+XMLVariableSetFieldImportContext::XMLVariableSetFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLSetVarFieldImportContext(rImport, rHlp, sAPI_set_expression,
+                                Element, VarTypeSimple,
+                                // formula, Value&type, style,
+                                // display name
+                                true, true,
+                                false, false, false,
+                                true, false,
+                                true, true, true,
+                                true),
+    sPropertySubType(sAPI_sub_type)
+{
+}
+
 void XMLVariableSetFieldImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
@@ -508,6 +648,23 @@ XMLVariableInputFieldImportContext::XMLVariableInputFieldImportContext(
                                     true),
         sPropertySubType(sAPI_sub_type),
         sPropertyIsInput(sAPI_is_input)
+{
+}
+
+XMLVariableInputFieldImportContext::XMLVariableInputFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLSetVarFieldImportContext(rImport, rHlp, sAPI_set_expression,
+                                Element, VarTypeSimple,
+                                // description, display none/formula,
+                                // value&type, style, formula
+                                true, true,
+                                true, true, true,
+                                true, false,
+                                true, true, true,
+                                true),
+    sPropertySubType(sAPI_sub_type),
+    sPropertyIsInput(sAPI_is_input)
 {
 }
 
@@ -550,7 +707,19 @@ XMLUserFieldImportContext::XMLUserFieldImportContext(
 {
 }
 
-
+XMLUserFieldImportContext::XMLUserFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLSetVarFieldImportContext(rImport, rHlp, sAPI_user,
+                                Element, VarTypeUserField,
+                                // display none/formula, style
+                                false, false,
+                                false, false, false, true,
+                                true,
+                                false, true, false,
+                                false)
+{
+}
 
 
 // user input field
@@ -570,6 +739,20 @@ XMLUserFieldInputImportContext::XMLUserFieldInputImportContext(
                                  false, false,
                                  false /*???*/, true, false,
                                  false)
+{
+}
+
+XMLUserFieldInputImportContext::XMLUserFieldInputImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLVarFieldImportContext(rImport, rHlp, sAPI_input_user,
+                             Element,
+                             // description, style
+                             false, false,
+                             true, false, false,
+                             false, false,
+                             false /*???*/, true, false,
+                             false)
 {
 }
 
@@ -602,6 +785,20 @@ XMLVariableGetFieldImportContext::XMLVariableGetFieldImportContext(
                                  false, true,
                                  true, true, false,
                                  true)
+{
+}
+
+XMLVariableGetFieldImportContext::XMLVariableGetFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element)
+:   XMLVarFieldImportContext(rImport, rHlp, sAPI_get_expression,
+                             Element,
+                             // style, display formula
+                             false, false,
+                             false, false, false,
+                             false, true,
+                             true, true, false,
+                             true)
 {
 }
 
@@ -641,6 +838,21 @@ XMLExpressionFieldImportContext::XMLExpressionFieldImportContext(
     bValid = true;  // always valid
 }
 
+XMLExpressionFieldImportContext::XMLExpressionFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element)
+:   XMLVarFieldImportContext(rImport, rHlp, sAPI_get_expression,
+                             Element,
+                             // formula, type, style, display formula
+                             true, true,
+                             false, false, false,
+                             false, true,
+                             true, true, false,
+                             true),
+    sPropertySubType(sAPI_sub_type)
+{
+    bValid = true; // always valid
+}
 
 void XMLExpressionFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
@@ -676,6 +888,22 @@ XMLTextInputFieldImportContext::XMLTextInputFieldImportContext(
         sPropertyContent(sAPI_content)
 {
     bValid = true;  // always valid
+}
+
+XMLTextInputFieldImportContext::XMLTextInputFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element)
+:   XMLVarFieldImportContext(rImport, rHlp, sAPI_input,
+                             Element,
+                             // description
+                             false, false,
+                             true, true, true,
+                             false, false,
+                             false, false, false,
+                             false),
+    sPropertyContent(sAPI_content)
+{
+    bValid = true; // always valid
 }
 
 void XMLTextInputFieldImportContext::PrepareField(
