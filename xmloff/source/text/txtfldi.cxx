@@ -4875,6 +4875,25 @@ XMLDropDownFieldImportContext::XMLDropDownFieldImportContext(
     bValid = true;
 }
 
+XMLDropDownFieldImportContext::XMLDropDownFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_drop_down, Element ),
+    aLabels(),
+    sName(),
+    nSelected( -1 ),
+    bNameOK( false ),
+    bHelpOK(false),
+    bHintOK(false),
+    sPropertyItems( "Items" ),
+    sPropertySelectedItem( "SelectedItem" ),
+    sPropertyName( "Name" ),
+    sPropertyHelp( "Help" ),
+    sPropertyToolTip( "Tooltip" )
+{
+    bValid = true;
+}
+
 static bool lcl_ProcessLabel( const SvXMLImport& rImport,
                        const Reference<XAttributeList>& xAttrList,
                        OUString& rLabel,
@@ -4907,6 +4926,29 @@ static bool lcl_ProcessLabel( const SvXMLImport& rImport,
     return bValid;
 }
 
+static bool lcl_ProcessLabel(
+    const Reference< XFastAttributeList >& xAttrList,
+    OUString& rLabel,
+    bool& rIsSelected )
+{
+    bool bValid = false;
+    if( !xAttrList.is() )
+        return bValid;
+    if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_value ) )
+    {
+        rLabel = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_value );
+        bValid = true;
+    }
+    if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_current_selected ) )
+    {
+        bool bTmp(false);
+        if( ::sax::Converter::convertBool( bTmp,
+                    xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_current_selected ) ) )
+            rIsSelected = bTmp;
+    }
+    return bValid;
+}
+
 SvXMLImportContext* XMLDropDownFieldImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -4925,6 +4967,24 @@ SvXMLImportContext* XMLDropDownFieldImportContext::CreateChildContext(
         }
     }
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+}
+
+Reference< XFastContextHandler > XMLDropDownFieldImportContext::createFastChildContext(
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_label) )
+    {
+        OUString sLabel;
+        bool bIsSelected = false;
+        if( lcl_ProcessLabel( xAttrList, sLabel, bIsSelected ) )
+        {
+            if( bIsSelected )
+                nSelected = static_cast<sal_Int32>( aLabels.size() );
+            aLabels.push_back( sLabel );
+        }
+    }
+    return new SvXMLImportContext( GetImport() );
 }
 
 void XMLDropDownFieldImportContext::ProcessAttribute(
