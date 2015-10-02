@@ -81,6 +81,7 @@
 
 #include <sfx2/request.hxx>
 #include <boost/bind.hpp>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
@@ -381,6 +382,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         svtools::ColorConfig aColorConfig;
         Color aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
+        if (comphelper::LibreOfficeKit::isActive())
+            aFillColor = COL_TRANSPARENT;
 
         if (meEditMode == EM_PAGE)
         {
