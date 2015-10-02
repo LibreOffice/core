@@ -69,7 +69,7 @@ void SvpSalFrame::enableDamageTracker( bool bOn )
 
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
-                          sal_uLong nSalFrameStyle,
+                          SalFrameStyleFlags nSalFrameStyle,
                           bool      bTopDown,
                           basebmp::Format nScanlineFormat,
                           SystemParentData* ) :
@@ -137,9 +137,9 @@ SvpSalFrame::~SvpSalFrame()
                 SvpSalFrame* pFrame = const_cast<SvpSalFrame*>(static_cast<const SvpSalFrame*>(*it));
                 if( pFrame->m_bVisible        &&
                     pFrame->m_pParent == NULL &&
-                    (pFrame->m_nStyle & (SAL_FRAME_STYLE_MOVEABLE |
-                                         SAL_FRAME_STYLE_SIZEABLE |
-                                         SAL_FRAME_STYLE_CLOSEABLE) ) != 0
+                    (pFrame->m_nStyle & (SalFrameStyleFlags::MOVEABLE |
+                                         SalFrameStyleFlags::SIZEABLE |
+                                         SalFrameStyleFlags::CLOSEABLE) )
                     )
                 {
                     pFrame->GetFocus();
@@ -155,7 +155,7 @@ void SvpSalFrame::GetFocus()
     if( s_pFocusFrame == this )
         return;
 
-    if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_FLOAT)) == 0 )
+    if( (m_nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION | SalFrameStyleFlags::FLOAT)) == SalFrameStyleFlags::NONE )
     {
         if( s_pFocusFrame )
             s_pFocusFrame->LoseFocus();

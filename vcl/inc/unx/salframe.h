@@ -87,7 +87,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
     int             nWidth_;            // client width
     int             nHeight_;           // client height
     Rectangle       maRestorePosSize;
-    sal_uIntPtr         nStyle_;
+    SalFrameStyleFlags nStyle_;
     SalExtStyle     mnExtStyle;
     bool            bAlwaysOnTop_;
     bool            bViewable_;
@@ -115,9 +115,9 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
     // icon id
     int             mnIconID;
 
-    OUString          m_aTitle;
+    OUString        m_aTitle;
 
-    OUString   m_sWMClass;
+    OUString        m_sWMClass;
 
     SystemEnvData maSystemChildData;
 
@@ -160,11 +160,11 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
 
     void            updateWMClass();
 public:
-    X11SalFrame( SalFrame* pParent, sal_uIntPtr nSalFrameStyle, SystemParentData* pSystemParent = NULL );
+    X11SalFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle, SystemParentData* pSystemParent = NULL );
     virtual ~X11SalFrame();
 
     long            Dispatch( XEvent *pEvent );
-    void            Init( sal_uIntPtr nSalFrameStyle, SalX11Screen nScreen = SalX11Screen( -1 ),
+    void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen = SalX11Screen( -1 ),
                           SystemParentData* pParentData = NULL, bool bUseGeometry = false );
 
     SalDisplay* GetDisplay() const
@@ -181,16 +181,16 @@ public:
     ::Window                GetForeignParent() const { return mhForeignParent; }
     ::Window                GetStackingWindow() const { return mhStackingWindow; }
     long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
-    sal_uIntPtr              GetStyle() const { return nStyle_; }
+    SalFrameStyleFlags      GetStyle() const { return nStyle_; }
 
-    Cursor                   GetCursor() const { return hCursor_; }
-    bool                     IsCaptured() const { return nCaptured_ == 1; }
+    Cursor                  GetCursor() const { return hCursor_; }
+    bool                    IsCaptured() const { return nCaptured_ == 1; }
 #if !defined(__synchronous_extinput__)
     void                    HandleExtTextEvent (XClientMessageEvent *pEvent);
 #endif
     bool                    IsOverrideRedirect() const;
-    bool                    IsChildWindow() const { return (nStyle_ & (SAL_FRAME_STYLE_PLUG|SAL_FRAME_STYLE_SYSTEMCHILD)) != 0; }
-    bool                    IsSysChildWindow() const { return (nStyle_ & (SAL_FRAME_STYLE_SYSTEMCHILD)) != 0; }
+    bool                    IsChildWindow() const { return bool(nStyle_ & (SalFrameStyleFlags::PLUG|SalFrameStyleFlags::SYSTEMCHILD)); }
+    bool                    IsSysChildWindow() const { return bool(nStyle_ & (SalFrameStyleFlags::SYSTEMCHILD)); }
     bool                    IsFloatGrabWindow() const;
     SalI18N_InputContext* getInputContext() const { return mpInputContext; }
     bool                    isMapped() const { return bMapped_; }

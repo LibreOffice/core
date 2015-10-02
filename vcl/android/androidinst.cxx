@@ -118,7 +118,7 @@ class AndroidSalFrame : public SvpSalFrame
 public:
     AndroidSalFrame( AndroidSalInstance *pInstance,
                      SalFrame           *pParent,
-                     sal_uLong           nSalFrameStyle,
+                     SalFrameStyleFlags  nSalFrameStyle,
                      SystemParentData   *pSysParent )
         : SvpSalFrame( pInstance, pParent, nSalFrameStyle,
                        true, basebmp::Format::ThirtyTwoBitTcMaskRGBA,
@@ -177,12 +177,12 @@ public:
     }
 };
 
-SalFrame *AndroidSalInstance::CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle )
+SalFrame *AndroidSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
     return new AndroidSalFrame( this, NULL, nStyle, pParent );
 }
 
-SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
+SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
     return new AndroidSalFrame( this, pParent, nStyle, NULL );
 }

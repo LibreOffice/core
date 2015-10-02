@@ -51,7 +51,7 @@ using namespace std;
 
 AquaSalFrame* AquaSalFrame::s_pCaptureFrame = NULL;
 
-AquaSalFrame::AquaSalFrame( SalFrame* pParent, sal_uLong salFrameStyle ) :
+AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle ) :
     mpNSWindow(nil),
     mpNSView(nil),
     mpDockMenuEntry(nil),
@@ -143,10 +143,10 @@ void AquaSalFrame::initWindowAndView()
     maGeometry.nHeight = static_cast<unsigned int>(aVisibleRect.size.height * 0.8);
 
     // calculate style mask
-    if( (mnStyle & SAL_FRAME_STYLE_FLOAT) ||
-        (mnStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+    if( (mnStyle & SalFrameStyleFlags::FLOAT) ||
+        (mnStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) )
         mnStyleMask = NSBorderlessWindowMask;
-    else if( mnStyle & SAL_FRAME_STYLE_DEFAULT )
+    else if( mnStyle & SalFrameStyleFlags::DEFAULT )
     {
         mnStyleMask = NSTitledWindowMask            |
                       NSMiniaturizableWindowMask    |
@@ -161,15 +161,15 @@ void AquaSalFrame::initWindowAndView()
     }
     else
     {
-        if( (mnStyle & SAL_FRAME_STYLE_MOVEABLE) )
+        if( (mnStyle & SalFrameStyleFlags::MOVEABLE) )
         {
             mnStyleMask |= NSTitledWindowMask;
             if( mpParent == NULL )
                 mnStyleMask |= NSMiniaturizableWindowMask;
         }
-        if( (mnStyle & SAL_FRAME_STYLE_SIZEABLE) )
+        if( (mnStyle & SalFrameStyleFlags::SIZEABLE) )
             mnStyleMask |= NSResizableWindowMask;
-        if( (mnStyle & SAL_FRAME_STYLE_CLOSEABLE) )
+        if( (mnStyle & SalFrameStyleFlags::CLOSEABLE) )
             mnStyleMask |= NSClosableWindowMask;
         // documentation says anything other than NSBorderlessWindowMask (=0)
         // should also include NSTitledWindowMask;
@@ -188,7 +188,7 @@ void AquaSalFrame::initWindowAndView()
         return;
     }
 
-    if( (mnStyle & SAL_FRAME_STYLE_TOOLTIP) )
+    if( (mnStyle & SalFrameStyleFlags::TOOLTIP) )
         [mpNSWindow setIgnoresMouseEvents: YES];
     else
         [mpNSWindow setAcceptsMouseMovedEvents: YES];
@@ -291,7 +291,7 @@ void AquaSalFrame::SetTitle(const OUString& rTitle)
     [mpNSWindow setTitle: pTitle];
 
     // create an entry in the dock menu
-    const sal_uLong nAppWindowStyle = (SAL_FRAME_STYLE_CLOSEABLE | SAL_FRAME_STYLE_MOVEABLE);
+    const SalFrameStyleFlags nAppWindowStyle = (SalFrameStyleFlags::CLOSEABLE | SalFrameStyleFlags::MOVEABLE);
     if( mpParent == NULL &&
         (mnStyle & nAppWindowStyle) == nAppWindowStyle )
     {
@@ -361,7 +361,7 @@ void AquaSalFrame::initShow()
                         nNewY - mpParent->maGeometry.nY,
                         0, 0,  SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
         }
-        else if( ! (mnStyle & SAL_FRAME_STYLE_SIZEABLE) )
+        else if( ! (mnStyle & SalFrameStyleFlags::SIZEABLE) )
         {
             // center on screen
             long nNewX = (aScreenRect.GetWidth() - maGeometry.nWidth)/2;
@@ -420,7 +420,7 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
                floaters and ownerdraw windows have not yet shown up in cases where
                we don't want the parent to become visible
             */
-            if( mpParent->mbShown || (mnStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_FLOAT) ) )
+            if( mpParent->mbShown || (mnStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION | SalFrameStyleFlags::FLOAT) ) )
             {
                 [mpParent->mpNSWindow addChildWindow: mpNSWindow ordered: NSWindowAbove];
             }

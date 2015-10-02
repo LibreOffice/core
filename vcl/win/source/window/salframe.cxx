@@ -280,7 +280,7 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
 }
 
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
-                              HWND hWndParent, sal_uLong nSalFrameStyle )
+                              HWND hWndParent, SalFrameStyleFlags nSalFrameStyle )
 {
     WinSalFrame*   pFrame = new WinSalFrame;
     HWND        hWnd;
@@ -295,17 +295,17 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     static const char* pEnvTransparentFloats = getenv("SAL_TRANSPARENT_FLOATS" );
 
     // determine creation data
-    if ( nSalFrameStyle & (SAL_FRAME_STYLE_PLUG | SAL_FRAME_STYLE_SYSTEMCHILD) )
+    if ( nSalFrameStyle & (SalFrameStyleFlags::PLUG | SalFrameStyleFlags::SYSTEMCHILD) )
     {
         nSysStyle |= WS_CHILD;
-        if( nSalFrameStyle & SAL_FRAME_STYLE_SYSTEMCHILD )
+        if( nSalFrameStyle & SalFrameStyleFlags::SYSTEMCHILD )
             nSysStyle |= WS_CLIPSIBLINGS;
     }
     else
     {
         // #i87402# commenting out WS_CLIPCHILDREN
-        // this breaks SAL_FRAME_STYLE_SYSTEMCHILD handling, which is not
-        // used currently. Probably SAL_FRAME_STYLE_SYSTEMCHILD should be
+        // this breaks SalFrameStyleFlags::SYSTEMCHILD handling, which is not
+        // used currently. Probably SalFrameStyleFlags::SYSTEMCHILD should be
         // removed again.
 
         // nSysStyle  |= WS_CLIPCHILDREN;
@@ -318,18 +318,18 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         else
         {
             // Only with WS_OVRLAPPED we get a useful default position/size
-            if ( (nSalFrameStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE)) ==
-                 (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE) )
+            if ( (nSalFrameStyle & (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::MOVEABLE)) ==
+                 (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::MOVEABLE) )
                 nSysStyle |= WS_OVERLAPPED;
             else
             {
                 nSysStyle |= WS_POPUP;
-                if ( !(nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE) )
+                if ( !(nSalFrameStyle & SalFrameStyleFlags::MOVEABLE) )
                     nExSysStyle |= WS_EX_TOOLWINDOW;    // avoid taskbar appearance, for eg splash screen
             }
         }
 
-        if ( nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
+        if ( nSalFrameStyle & SalFrameStyleFlags::MOVEABLE )
         {
             pFrame->mbCaption = TRUE;
             nSysStyle |= WS_SYSMENU | WS_CAPTION;
@@ -338,7 +338,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
             else
                 nExSysStyle |= WS_EX_DLGMODALFRAME;
 
-            if ( nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE )
+            if ( nSalFrameStyle & SalFrameStyleFlags::SIZEABLE )
             {
                 pFrame->mbSizeBorder = TRUE;
                 nSysStyle |= WS_THICKFRAME;
@@ -348,34 +348,34 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
             else
                 pFrame->mbFixBorder = TRUE;
 
-            if ( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
+            if ( nSalFrameStyle & SalFrameStyleFlags::DEFAULT )
                 nExSysStyle |= WS_EX_APPWINDOW;
         }
-        if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLWINDOW
+        if( nSalFrameStyle & SalFrameStyleFlags::TOOLWINDOW
             // #100656# toolwindows lead to bad alt-tab behaviour, if they have the focus
             // you must press it twice to leave the application
             // so toolwindows are only used for non sizeable windows
             // which are typically small, so a small caption makes sense
 
             // #103578# looked too bad - above changes reverted
-            /* && !(nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE) */ )
+            /* && !(nSalFrameStyle & SalFrameStyleFlags::SIZEABLE) */ )
         {
             pFrame->mbNoIcon = TRUE;
             nExSysStyle |= WS_EX_TOOLWINDOW;
-            if ( pEnvTransparentFloats /*&& !(nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE) */)
+            if ( pEnvTransparentFloats /*&& !(nSalFrameStyle & SalFrameStyleFlags::MOVEABLE) */)
                 nExSysStyle |= WS_EX_LAYERED;
         }
     }
-    if ( nSalFrameStyle & SAL_FRAME_STYLE_FLOAT )
+    if ( nSalFrameStyle & SalFrameStyleFlags::FLOAT )
     {
         nExSysStyle |= WS_EX_TOOLWINDOW;
         pFrame->mbFloatWin = TRUE;
 
-        if ( (pEnvTransparentFloats /* does not work remote! || (nSalFrameStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) */ )  )
+        if ( (pEnvTransparentFloats /* does not work remote! || (nSalFrameStyle & SalFrameStyleFlags::FLOAT_FOCUSABLE) */ )  )
             nExSysStyle |= WS_EX_LAYERED;
 
     }
-    if( (nSalFrameStyle & SAL_FRAME_STYLE_TOOLTIP) || (nSalFrameStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
+    if( (nSalFrameStyle & SalFrameStyleFlags::TOOLTIP) || (nSalFrameStyle & SalFrameStyleFlags::FLOAT_FOCUSABLE) )
         nExSysStyle |= WS_EX_TOPMOST;
 
     // init frame data
@@ -389,7 +389,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
             pFrame->mnShowState = SW_SHOWMAXIMIZED;
         else
         {
-            if ( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
+            if ( nSalFrameStyle & SalFrameStyleFlags::DEFAULT )
             {
                 SalData* pSalData = GetSalData();
                 pFrame->mnShowState = pSalData->mnCmdShow;
@@ -422,14 +422,14 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     LPCWSTR pClassName;
     if ( bSubFrame )
     {
-        if ( nSalFrameStyle & (SAL_FRAME_STYLE_MOVEABLE|SAL_FRAME_STYLE_NOSHADOW) ) // check if shadow not wanted
+        if ( nSalFrameStyle & (SalFrameStyleFlags::MOVEABLE|SalFrameStyleFlags::NOSHADOW) ) // check if shadow not wanted
             pClassName = SAL_SUBFRAME_CLASSNAMEW;
         else
             pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;    // undecorated floaters will get shadow on XP
     }
     else
     {
-        if ( nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
+        if ( nSalFrameStyle & SalFrameStyleFlags::MOVEABLE )
             pClassName = SAL_FRAME_CLASSNAMEW;
         else
             pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;
@@ -469,7 +469,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
                 DeleteMenu( hSysMenu, SC_SIZE, MF_BYCOMMAND );
         }
     }
-    if ( (nSysStyle & WS_SYSMENU) && !(nSalFrameStyle & SAL_FRAME_STYLE_CLOSEABLE) )
+    if ( (nSysStyle & WS_SYSMENU) && !(nSalFrameStyle & SalFrameStyleFlags::CLOSEABLE) )
     {
         HMENU hSysMenu = GetSystemMenu( hWnd, FALSE );
         if ( hSysMenu )
@@ -1145,7 +1145,7 @@ static void ImplSalShow( HWND hWnd, bool bVisible, bool bNoActivate )
         if( aDogTag.isDeleted() )
             return;
 
-        if ( aSalShlData.mbWXP && pFrame->mbFloatWin && !(pFrame->mnStyle & SAL_FRAME_STYLE_NOSHADOW))
+        if ( aSalShlData.mbWXP && pFrame->mbFloatWin && !(pFrame->mnStyle & SalFrameStyleFlags::NOSHADOW))
         {
             // erase the window immediately to improve XP shadow effect
             // otherwise the shadow may appears long time before the rest of the window
@@ -1394,10 +1394,10 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     bool bCheckOffScreen = TRUE;
 
     // but don't do this for floaters or ownerdraw windows that are currently moved interactively
-    if( (mnStyle & SAL_FRAME_STYLE_FLOAT) && !(mnStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+    if( (mnStyle & SalFrameStyleFlags::FLOAT) && !(mnStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) )
         bCheckOffScreen = FALSE;
 
-    if( mnStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION )
+    if( mnStyle & SalFrameStyleFlags::OWNERDRAWDECORATION )
     {
         // may be the window is currently being moved (mouse is captured), then no check is required
         if( mhWnd == ::GetCapture() )
@@ -1420,7 +1420,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
     UINT nPosFlags = SWP_NOACTIVATE | SWP_NOOWNERZORDER | nPosSize;
     // bring floating windows always to top
-    if( !(mnStyle & SAL_FRAME_STYLE_FLOAT) )
+    if( !(mnStyle & SalFrameStyleFlags::FLOAT) )
         nPosFlags |= SWP_NOZORDER; // do not change z-order
 
     SetWindowPos( mhWnd, HWND_TOP, nX, nY, (int)nWidth, (int)nHeight, nPosFlags  );
@@ -1986,7 +1986,7 @@ void WinSalFrame::SetAlwaysOnTop( bool bOnTop )
 static void ImplSalToTop( HWND hWnd, sal_uInt16 nFlags )
 {
     WinSalFrame* pToTopFrame = GetWindowPtr( hWnd );
-    if( pToTopFrame && (pToTopFrame->mnStyle & SAL_FRAME_STYLE_SYSTEMCHILD) != 0 )
+    if( pToTopFrame && (pToTopFrame->mnStyle & SalFrameStyleFlags::SYSTEMCHILD) )
         BringWindowToTop( hWnd );
 
     if ( nFlags & SAL_FRAME_TOTOP_FOREGROUNDTASK )

@@ -57,6 +57,7 @@ struct SystemGraphicsData;
 struct SystemWindowData;
 class Menu;
 enum class VclInputFlags;
+enum class SalFrameStyleFlags;
 
 class VCL_PLUGIN_PUBLIC SalInstance
 {
@@ -72,8 +73,8 @@ public:
 
     // Frame
     // DisplayName for Unix ???
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) = 0;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle ) = 0;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) = 0;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) = 0;
     virtual void            DestroyFrame( SalFrame* pFrame ) = 0;
 
     // Object (System Child Window)

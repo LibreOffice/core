@@ -35,6 +35,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
     // complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
 
@@ -54,33 +55,39 @@ struct SystemEnvData;
 #define SAL_FRAME_TOTOP_GRABFOCUS_ONLY       ((sal_uInt16)0x0008)
 
 // SalFrame styles
-#define SAL_FRAME_STYLE_DEFAULT             ((sal_uLong)0x00000001)
-#define SAL_FRAME_STYLE_MOVEABLE            ((sal_uLong)0x00000002)
-#define SAL_FRAME_STYLE_SIZEABLE            ((sal_uLong)0x00000004)
-#define SAL_FRAME_STYLE_CLOSEABLE           ((sal_uLong)0x00000008)
-
-// no shadow effect on Windows XP
-#define SAL_FRAME_STYLE_NOSHADOW            ((sal_uLong)0x00000010)
-// indicate tooltip windows, so they can always be topmost
-#define SAL_FRAME_STYLE_TOOLTIP             ((sal_uLong)0x00000020)
-// windows without windowmanager decoration, this typically only applies to floating windows
-#define SAL_FRAME_STYLE_OWNERDRAWDECORATION ((sal_uLong)0x00000040)
-// dialogs
-#define SAL_FRAME_STYLE_DIALOG              ((sal_uLong)0x00000080)
-// partial fullscreen: fullscreen on one monitor of a multimonitor display
-#define SAL_FRAME_STYLE_PARTIAL_FULLSCREEN  ((sal_uLong)0x00800000)
-// plugged system child window
-#define SAL_FRAME_STYLE_PLUG                ((sal_uLong)0x10000000)
-// system child window inside another SalFrame
-#define SAL_FRAME_STYLE_SYSTEMCHILD         ((sal_uLong)0x08000000)
-// floating window
-#define SAL_FRAME_STYLE_FLOAT               ((sal_uLong)0x20000000)
-// floating window that needs to be focusable
-#define SAL_FRAME_STYLE_FLOAT_FOCUSABLE     ((sal_uLong)0x04000000)
-// toolwindows should be painted with a smaller decoration
-#define SAL_FRAME_STYLE_TOOLWINDOW          ((sal_uLong)0x40000000)
-// the window containing the intro bitmap, aka splashscreen
-#define SAL_FRAME_STYLE_INTRO               ((sal_uLong)0x80000000)
+enum class SalFrameStyleFlags
+{
+    NONE                = 0x00000000,
+    DEFAULT             = 0x00000001,
+    MOVEABLE            = 0x00000002,
+    SIZEABLE            = 0x00000004,
+    CLOSEABLE           = 0x00000008,
+    // no shadow effect on Windows XP
+    NOSHADOW            = 0x00000010,
+    // indicate tooltip windows, so they can always be topmost
+    TOOLTIP             = 0x00000020,
+    // windows without windowmanager decoration, this typically only applies to floating windows
+    OWNERDRAWDECORATION = 0x00000040,
+    // dialogs
+    DIALOG              = 0x00000080,
+    // partial fullscreen: fullscreen on one monitor of a multimonitor display
+    PARTIAL_FULLSCREEN  = 0x00800000,
+    // plugged system child window
+    PLUG                = 0x10000000,
+    // system child window inside another SalFrame
+    SYSTEMCHILD         = 0x08000000,
+    // floating window
+    FLOAT               = 0x20000000,
+    // floating window that needs to be focusable
+    FLOAT_FOCUSABLE     = 0x04000000,
+    // toolwindows should be painted with a smaller decoration
+    TOOLWINDOW          = 0x40000000,
+    // the window containing the intro bitmap, aka splashscreen
+    INTRO               = 0x00000100,
+};
+namespace o3tl {
+    template<> struct typed_flags<SalFrameStyleFlags> : is_typed_flags<SalFrameStyleFlags, 0x748001ff> {};
+};
 
 // - extended frame style                 -
 // - (sal equivalent to extended WinBits) -

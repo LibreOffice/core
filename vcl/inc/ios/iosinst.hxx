@@ -40,8 +40,8 @@ public:
     virtual SalSystem* CreateSalSystem() SAL_OVERRIDE;
 
     void GetWorkArea( Rectangle& rRect );
-    SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
-    SalFrame* CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
+    SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
+    SalFrame* CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
 
     SalFrame *getFocusFrame() const;
 };

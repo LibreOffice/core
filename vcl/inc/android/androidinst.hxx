@@ -33,8 +33,8 @@ public:
 
     // frame management
     void GetWorkArea( Rectangle& rRect );
-    SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
-    SalFrame* CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
+    SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
+    SalFrame* CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle );
 
     // mainloop pieces
     virtual bool AnyInput( VclInputFlags nType );

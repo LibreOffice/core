@@ -166,12 +166,12 @@ public:
     }
 };
 
-SalFrame *IosSalInstance::CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle )
+SalFrame *IosSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
     return new IosSalFrame( this, NULL, nStyle, pParent );
 }
 
-SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
+SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
     return new IosSalFrame( this, pParent, nStyle, NULL );
 }

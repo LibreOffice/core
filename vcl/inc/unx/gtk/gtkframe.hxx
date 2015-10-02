@@ -180,7 +180,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     GdkWindow*                      m_pForeignTopLevel;
     GdkNativeWindow                 m_aForeignTopLevelWindow;
     Pixmap                          m_hBackgroundPixmap;
-    sal_uLong                       m_nStyle;
+    SalFrameStyleFlags              m_nStyle;
     SalExtStyle                     m_nExtStyle;
     GtkSalFrame*                    m_pParent;
     std::list< GtkSalFrame* >       m_aChildren;
@@ -201,8 +201,8 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWindowIsGtkPlug;
     bool                            m_bSetFocusOnMap;
-    OUString                   m_aTitle;
-    OUString                   m_sWMClass;
+    OUString                        m_aTitle;
+    OUString                        m_sWMClass;
 
     IMHandler*                      m_pIMHandler;
 
@@ -229,7 +229,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
 #endif
     guint                           m_nWatcherId;
 
-    void Init( SalFrame* pParent, sal_uLong nStyle );
+    void Init( SalFrame* pParent, SalFrameStyleFlags nStyle );
     void Init( SystemParentData* pSysData );
     void InitCommon();
     void InvalidateGraphics();
@@ -282,20 +282,20 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     bool isFloatGrabWindow() const
     {
         return
-            (m_nStyle & SAL_FRAME_STYLE_FLOAT) &&                // only a float can be floatgrab
-            !(m_nStyle & SAL_FRAME_STYLE_TOOLTIP) &&             // tool tips are not
-            !(m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) && // toolbars are also not
-            !(m_nStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE);       // focusable floats are not
+            (m_nStyle & SalFrameStyleFlags::FLOAT) &&                // only a float can be floatgrab
+            !(m_nStyle & SalFrameStyleFlags::TOOLTIP) &&             // tool tips are not
+            !(m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) && // toolbars are also not
+            !(m_nStyle & SalFrameStyleFlags::FLOAT_FOCUSABLE);       // focusable floats are not
     }
 
     bool isChild( bool bPlug = true, bool bSysChild = true )
     {
-        sal_uLong nMask = 0;
+        SalFrameStyleFlags nMask = SalFrameStyleFlags::NONE;
         if( bPlug )
-            nMask |= SAL_FRAME_STYLE_PLUG;
+            nMask |= SalFrameStyleFlags::PLUG;
         if( bSysChild )
-            nMask |= SAL_FRAME_STYLE_SYSTEMCHILD;
-        return (m_nStyle & nMask) != 0;
+            nMask |= SalFrameStyleFlags::SYSTEMCHILD;
+        return bool(m_nStyle & nMask);
     }
 
     //call gtk_window_resize if the current size differs and
@@ -327,7 +327,7 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
     basebmp::BitmapDeviceSharedPtr  m_aFrame;
 #endif
-    GtkSalFrame( SalFrame* pParent, sal_uLong nStyle );
+    GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
     GtkSalFrame( SystemParentData* pSysData );
 
     guint                           m_nMenuExportId;
