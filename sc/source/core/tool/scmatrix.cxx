@@ -2560,7 +2560,10 @@ struct COp<T, double>
 };
 
 /** A template for operations where operands are supposed to be numeric.
-    A non-numeric (string) operand leads to an errNoValue DoubleError.
+    A non-numeric (string) operand leads to the configured conversion to number
+    method being called if in interpreter context and an errNoValue DoubleError
+    if conversion was not possible, else to an unconditional errNoValue
+    DoubleError.
     An empty operand evaluates to 0.
     XXX: semantically TEmptyRes and types other than number_value_type are
     unused, but this template could serve as a basis for future enhancements.
@@ -2570,6 +2573,7 @@ struct MatOp
 {
 private:
     TOp maOp;
+    ScInterpreter* mpErrorInterpreter;
     svl::SharedString maString;
     double mfVal;
     COp<TOp, TEmptyRes> maCOp;
@@ -2579,8 +2583,10 @@ public:
     typedef TRet number_value_type;
     typedef svl::SharedString string_value_type;
 
-    MatOp( TOp aOp, double fVal = 0.0, const svl::SharedString& rString = svl::SharedString() ):
+    MatOp( TOp aOp, ScInterpreter* pErrorInterpreter,
+            double fVal = 0.0, const svl::SharedString& rString = svl::SharedString() ):
         maOp(aOp),
+        mpErrorInterpreter(pErrorInterpreter),
         maString(rString),
         mfVal(fVal)
     { }
@@ -2595,8 +2601,17 @@ public:
         return maOp((double)bVal, mfVal);
     }
 
-    double operator()(const svl::SharedString&) const
+    double operator()(const svl::SharedString& rStr) const
     {
+        if (mpErrorInterpreter)
+        {
+            sal_uInt16 nError = 0;
+            short nCurFmtType = 0;
+            double fValue = mpErrorInterpreter->ConvertStringToValue( rStr.getString(), nError, nCurFmtType);
+            if (nError)
+                return CreateDoubleError( nError);
+            return fValue;
+        }
         return CreateDoubleError( errNoValue);
     }
 
@@ -2616,21 +2631,21 @@ public:
 void ScMatrix::NotOp( ScMatrix& rMat)
 {
     auto not_ = [](double a, double){return double(a == 0.0);};
-    matop::MatOp<decltype(not_), double> aOp(not_);
+    matop::MatOp<decltype(not_), double> aOp(not_, pImpl->GetErrorInterpreter());
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
 void ScMatrix::NegOp( ScMatrix& rMat)
 {
     auto neg_ = [](double a, double){return -a;};
-    matop::MatOp<decltype(neg_), double> aOp(neg_);
+    matop::MatOp<decltype(neg_), double> aOp(neg_, pImpl->GetErrorInterpreter());
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
 void ScMatrix::AddOp( double fVal, ScMatrix& rMat)
 {
     auto add_ = [](double a, double b){return a + b;};
-    matop::MatOp<decltype(add_)> aOp(add_, fVal);
+    matop::MatOp<decltype(add_)> aOp(add_, pImpl->GetErrorInterpreter(), fVal);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
@@ -2639,13 +2654,13 @@ void ScMatrix::SubOp( bool bFlag, double fVal, ScMatrix& rMat)
     if (bFlag)
     {
         auto sub_ = [](double a, double b){return b - a;};
-        matop::MatOp<decltype(sub_)> aOp(sub_, fVal);
+        matop::MatOp<decltype(sub_)> aOp(sub_, pImpl->GetErrorInterpreter(), fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
         auto sub_ = [](double a, double b){return a - b;};
-        matop::MatOp<decltype(sub_)> aOp(sub_, fVal);
+        matop::MatOp<decltype(sub_)> aOp(sub_, pImpl->GetErrorInterpreter(), fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
 }
@@ -2653,7 +2668,7 @@ void ScMatrix::SubOp( bool bFlag, double fVal, ScMatrix& rMat)
 void ScMatrix::MulOp( double fVal, ScMatrix& rMat)
 {
     auto mul_ = [](double a, double b){return a * b;};
-    matop::MatOp<decltype(mul_)> aOp(mul_, fVal);
+    matop::MatOp<decltype(mul_)> aOp(mul_, pImpl->GetErrorInterpreter(), fVal);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
@@ -2662,13 +2677,13 @@ void ScMatrix::DivOp( bool bFlag, double fVal, ScMatrix& rMat)
     if (bFlag)
     {
         auto div_ = [](double a, double b){return sc::div(b, a);};
-        matop::MatOp<decltype(div_)> aOp(div_, fVal);
+        matop::MatOp<decltype(div_)> aOp(div_, pImpl->GetErrorInterpreter(), fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
         auto div_ = [](double a, double b){return sc::div(a, b);};
-        matop::MatOp<decltype(div_)> aOp(div_, fVal);
+        matop::MatOp<decltype(div_)> aOp(div_, pImpl->GetErrorInterpreter(), fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
 }
@@ -2678,13 +2693,13 @@ void ScMatrix::PowOp( bool bFlag, double fVal, ScMatrix& rMat)
     if (bFlag)
     {
         auto pow_ = [](double a, double b){return pow(b, a);};
-        matop::MatOp<decltype(pow_)> aOp(pow_, fVal);
+        matop::MatOp<decltype(pow_)> aOp(pow_, pImpl->GetErrorInterpreter(), fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
         auto pow_ = [](double a, double b){return pow(a, b);};
-        matop::MatOp<decltype(pow_)> aOp(pow_, fVal);
+        matop::MatOp<decltype(pow_)> aOp(pow_, pImpl->GetErrorInterpreter(), fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
 }
