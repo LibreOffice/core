@@ -2354,6 +2354,17 @@ XMLHiddenParagraphImportContext::XMLHiddenParagraphImportContext(
 {
 }
 
+XMLHiddenParagraphImportContext::XMLHiddenParagraphImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_hidden_paragraph, Element),
+    sPropertyCondition(sAPI_condition),
+    sPropertyIsHidden(sAPI_is_hidden),
+    sCondition(),
+    bIsHidden(false)
+{
+}
+
 void XMLHiddenParagraphImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
