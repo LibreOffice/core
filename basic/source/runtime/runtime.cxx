@@ -3255,7 +3255,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
                 if ( ( bVBAEnabled || CodeCompleteOptions::IsExtendedTypeDeclaration() ) && pObj->IsA( TYPE(SbUnoObject) ) )
                 {
                     SbUnoObject& rUnoObj = dynamic_cast<SbUnoObject&>(*pObj);
-                    bOk = checkUnoObjectType(&rUnoObj, aClass);
+                    bOk = checkUnoObjectType(rUnoObj, aClass);
                 }
                 else
                     bOk = false;

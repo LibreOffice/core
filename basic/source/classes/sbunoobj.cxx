@@ -1607,33 +1607,29 @@ OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Referenc
     return aRetStr.makeStringAndClear();
 }
 
-OUString getDbgObjectNameImpl( SbUnoObject* pUnoObj )
+OUString getDbgObjectNameImpl(SbUnoObject& rUnoObj)
 {
-    OUString aName;
-    if( pUnoObj )
+    OUString aName = rUnoObj.GetClassName();
+    if( aName.isEmpty() )
     {
-        aName = pUnoObj->GetClassName();
-        if( aName.isEmpty() )
+        Any aToInspectObj = rUnoObj.getUnoAny();
+        TypeClass eType = aToInspectObj.getValueType().getTypeClass();
+        Reference< XInterface > xObj;
+        if( eType == TypeClass_INTERFACE )
+            xObj = *static_cast<Reference< XInterface > const *>(aToInspectObj.getValue());
+        if( xObj.is() )
         {
-            Any aToInspectObj = pUnoObj->getUnoAny();
-            TypeClass eType = aToInspectObj.getValueType().getTypeClass();
-            Reference< XInterface > xObj;
-            if( eType == TypeClass_INTERFACE )
-                xObj = *static_cast<Reference< XInterface > const *>(aToInspectObj.getValue());
-            if( xObj.is() )
-            {
-                Reference< XServiceInfo > xServiceInfo( xObj, UNO_QUERY );
-                if( xServiceInfo.is() )
-                    aName = xServiceInfo->getImplementationName();
-            }
+            Reference< XServiceInfo > xServiceInfo( xObj, UNO_QUERY );
+            if( xServiceInfo.is() )
+                aName = xServiceInfo->getImplementationName();
         }
     }
     return aName;
 }
 
-OUString getDbgObjectName( SbUnoObject* pUnoObj )
+OUString getDbgObjectName(SbUnoObject& rUnoObj)
 {
-    OUString aName = getDbgObjectNameImpl( pUnoObj );
+    OUString aName = getDbgObjectNameImpl(rUnoObj);
     if( aName.isEmpty() )
         aName += "Unknown";
 
@@ -1650,22 +1646,23 @@ OUString getDbgObjectName( SbUnoObject* pUnoObj )
 
 OUString getBasicObjectTypeName( SbxObject* pObj )
 {
-    OUString aName;
-    if( pObj )
+    if (pObj)
     {
-        SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( pObj );
-        SbUnoStructRefObject* pUnoStructObj = dynamic_cast<SbUnoStructRefObject*>( pObj );
-        if( pUnoObj )
-            aName = getDbgObjectNameImpl( pUnoObj );
-        else if ( pUnoStructObj )
-            aName = pUnoStructObj->GetClassName();
+        if (SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>(pObj))
+        {
+            return getDbgObjectNameImpl(*pUnoObj);
+        }
+        else if (SbUnoStructRefObject* pUnoStructObj = dynamic_cast<SbUnoStructRefObject*>(pObj))
+        {
+            return pUnoStructObj->GetClassName();
+        }
     }
-    return aName;
+    return OUString();
 }
 
-bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
+bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
 {
-    Any aToInspectObj = pUnoObj->getUnoAny();
+    Any aToInspectObj = rUnoObj.getUnoAny();
     TypeClass eType = aToInspectObj.getValueType().getTypeClass();
     if( eType != TypeClass_INTERFACE )
     {
@@ -1759,9 +1756,9 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
 }
 
 // Debugging help method to readout the imlemented interfaces of an object
-OUString Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
+OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
 {
-    Any aToInspectObj = pUnoObj->getUnoAny();
+    Any aToInspectObj = rUnoObj.getUnoAny();
 
     // allow only TypeClass interface
     TypeClass eType = aToInspectObj.getValueType().getTypeClass();
@@ -1779,7 +1776,7 @@ OUString Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
         Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
 
         aRet.append( "Supported interfaces by object " );
-        aRet.append( getDbgObjectName( pUnoObj ) );
+        aRet.append(getDbgObjectName(rUnoObj));
         aRet.append( "\n" );
         if( xTypeProvider.is() )
         {
@@ -1858,17 +1855,17 @@ OUString Dbg_SbxDataType2String( SbxDataType eType )
 }
 
 // Debugging help method to display the properties of a SbUnoObjects
-OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
+OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
 {
     OUStringBuffer aRet;
     aRet.append("Properties of object ");
-    aRet.append( getDbgObjectName( pUnoObj ) );
+    aRet.append(getDbgObjectName(rUnoObj));
 
     // analyse the Uno-Infos to recognise the arrays
-    Reference< XIntrospectionAccess > xAccess = pUnoObj->getIntrospectionAccess();
+    Reference< XIntrospectionAccess > xAccess = rUnoObj.getIntrospectionAccess();
     if( !xAccess.is() )
     {
-        Reference< XInvocation > xInvok = pUnoObj->getInvocation();
+        Reference< XInvocation > xInvok = rUnoObj.getInvocation();
         if( xInvok.is() )
             xAccess = xInvok->getIntrospection();
     }
@@ -1882,7 +1879,7 @@ OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
     sal_uInt32 nUnoPropCount = props.getLength();
     const Property* pUnoProps = props.getConstArray();
 
-    SbxArray* pProps = pUnoObj->GetProperties();
+    SbxArray* pProps = rUnoObj.GetProperties();
     sal_uInt16 nPropCount = pProps->Count();
     sal_uInt16 nPropsPerLine = 1 + nPropCount / 30;
     for( sal_uInt16 i = 0; i < nPropCount; i++ )
@@ -1935,17 +1932,17 @@ OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
 }
 
 // Debugging help method to display the methods of an SbUnoObjects
-OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
+OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
 {
     OUStringBuffer aRet;
     aRet.append("Methods of object ");
-    aRet.append( getDbgObjectName( pUnoObj ) );
+    aRet.append(getDbgObjectName(rUnoObj));
 
     // XIntrospectionAccess, so that the types of the parameter could be outputted
-    Reference< XIntrospectionAccess > xAccess = pUnoObj->getIntrospectionAccess();
+    Reference< XIntrospectionAccess > xAccess = rUnoObj.getIntrospectionAccess();
     if( !xAccess.is() )
     {
-        Reference< XInvocation > xInvok = pUnoObj->getInvocation();
+        Reference< XInvocation > xInvok = rUnoObj.getInvocation();
         if( xInvok.is() )
             xAccess = xInvok->getIntrospection();
     }
@@ -1958,7 +1955,7 @@ OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
         ( MethodConcept::ALL - MethodConcept::DANGEROUS );
     const Reference< XIdlMethod >* pUnoMethods = methods.getConstArray();
 
-    SbxArray* pMethods = pUnoObj->GetMethods();
+    SbxArray* pMethods = rUnoObj.GetMethods();
     sal_uInt16 nMethodCount = pMethods->Count();
     if( !nMethodCount )
     {
@@ -2046,7 +2043,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     // Id == -1: Display implemented interfaces according the ClassProvider
                     if( nId == -1 )     // Property ID_DBG_SUPPORTEDINTERFACES"
                     {
-                        OUString aRetStr = Impl_GetSupportedInterfaces( this );
+                        OUString aRetStr = Impl_GetSupportedInterfaces(*this);
                         pVar->PutString( aRetStr );
                     }
                     // Id == -2: output properties
@@ -2054,7 +2051,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         // now all properties must be created
                         implCreateAll();
-                        OUString aRetStr = Impl_DumpProperties( this );
+                        OUString aRetStr = Impl_DumpProperties(*this);
                         pVar->PutString( aRetStr );
                     }
                     // Id == -3: output the methods
@@ -2062,7 +2059,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         // now all properties must be created
                         implCreateAll();
-                        OUString aRetStr = Impl_DumpMethods( this );
+                        OUString aRetStr = Impl_DumpMethods(*this);
                         pVar->PutString( aRetStr );
                     }
                     return;

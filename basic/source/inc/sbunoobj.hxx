@@ -410,7 +410,7 @@ css::uno::Reference< css::uno::XInterface > createComListener( const css::uno::A
                                                                                          const OUString& aPrefix,
                                                                                          SbxObjectRef xScopeObj );
 
-bool checkUnoObjectType( SbUnoObject* refVal, const OUString& aClass );
+bool checkUnoObjectType(SbUnoObject& refVal, const OUString& aClass);
 
 SbUnoObject* createOLEObject_Impl( const OUString& aType );
 
