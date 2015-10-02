@@ -53,6 +53,7 @@
 /config_build_lang.mk
 /configure
 /lo.xcent
+/solenv/gbuild/shell.mk
 /Makefile
 /NEWS
 /TODO

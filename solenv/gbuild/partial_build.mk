@@ -32,6 +32,8 @@ ifeq ($(BUILD_TYPE),)
 include $(BUILDDIR)/config_$(gb_Side).mk
 endif
 
+include $(SRCDIR)/solenv/gbuild/shell.mk
+
 gb_PARTIAL_BUILD := T
 include $(SRCDIR)/solenv/gbuild/gbuild.mk
 
