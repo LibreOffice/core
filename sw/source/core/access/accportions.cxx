@@ -148,12 +148,8 @@ void SwAccessiblePortionData::Special(
     switch( nType )
     {
         case POR_POSTITS:
-            sDisplay = OUString(sal_Unicode(0xfffc));
-            break;
         case POR_FLYCNT:
             sDisplay = OUString(sal_Unicode(0xfffc));
-            break;
-        case POR_GRFNUM:
             break;
         case POR_FLD:
         case POR_HIDDEN:
@@ -180,10 +176,11 @@ void SwAccessiblePortionData::Special(
             break;
         case POR_NUMBER:
         case POR_BULLET:
-        {
             sDisplay = rText + " ";
             break;
-        }
+        // There should probably be some special treatment to graphical bullets
+        case POR_GRFNUM:
+            break;
         // #i111768# - apply patch from kstribley:
         // Include the control characters.
         case POR_CONTROLCHAR:
