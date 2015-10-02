@@ -736,6 +736,14 @@ awt::MouseEvent VCLUnoHelper::createMouseEvent( const ::MouseEvent& _rVclEvent, 
     return aMouseEvent;
 }
 
+::MouseEvent VCLUnoHelper::createVCLMouseEvent( const awt::MouseEvent& _rAwtEvent )
+{
+    ::MouseEvent aMouseEvent( Point( _rAwtEvent.X, _rAwtEvent.Y ), _rAwtEvent.ClickCount,
+                              ::MouseEventModifiers::NONE, _rAwtEvent.Buttons, _rAwtEvent.Modifiers );
+
+    return aMouseEvent;
+}
+
 awt::KeyEvent VCLUnoHelper::createKeyEvent( const ::KeyEvent& _rVclEvent, const uno::Reference< uno::XInterface >& _rxContext )
 {
     awt::KeyEvent aKeyEvent;
@@ -756,6 +764,18 @@ awt::KeyEvent VCLUnoHelper::createKeyEvent( const ::KeyEvent& _rVclEvent, const 
     aKeyEvent.KeyFunc = ::sal::static_int_cast< sal_Int16 >( _rVclEvent.GetKeyCode().GetFunction());
 
     return aKeyEvent;
+}
+
+::KeyEvent VCLUnoHelper::createVCLKeyEvent( const awt::KeyEvent& _rAwtEvent )
+{
+    sal_Unicode nChar = _rAwtEvent.KeyChar;
+    vcl::KeyCode aKeyCode( _rAwtEvent.KeyCode, _rAwtEvent.Modifiers & awt::KeyModifier::SHIFT,
+                           _rAwtEvent.Modifiers & awt::KeyModifier::MOD1,
+                           _rAwtEvent.Modifiers & awt::KeyModifier::MOD2,
+                           _rAwtEvent.Modifiers & awt::KeyModifier::MOD3 );
+
+    return ::KeyEvent (nChar, aKeyCode);
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

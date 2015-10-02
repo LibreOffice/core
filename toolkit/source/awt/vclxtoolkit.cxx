@@ -42,6 +42,7 @@
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XToolkitExperimental.hpp>
+#include <com/sun/star/awt/XToolkitRobot.hpp>
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
 
 #include <cppuhelper/bootstrap.hxx>
@@ -149,6 +150,7 @@ protected:
 class VCLXToolkit : public VCLXToolkitMutexHelper,
                     public cppu::WeakComponentImplHelper<
                     css::awt::XToolkitExperimental,
+                    css::awt::XToolkitRobot,
                     css::lang::XServiceInfo >
 {
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
@@ -277,6 +279,23 @@ public:
     // css::awt::XReschedule:
     virtual void SAL_CALL reschedule()
         throw (css::uno::RuntimeException, std::exception) override;
+
+    // css:awt:XToolkitRobot
+    virtual void SAL_CALL keyPress( const css::awt::KeyEvent & aKeyEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    virtual void SAL_CALL keyRelease( const css::awt::KeyEvent & aKeyEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    virtual void SAL_CALL mousePress( const css::awt::MouseEvent & aMouseEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    virtual void SAL_CALL mouseRelease( const css::awt::MouseEvent & aMouseEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    virtual void SAL_CALL mouseMove( const css::awt::MouseEvent & aMouseEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
+
 };
 
 WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
@@ -650,6 +669,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 VCLXToolkit::VCLXToolkit():
     cppu::WeakComponentImplHelper<
     ::com::sun::star::awt::XToolkitExperimental,
+    ::com::sun::star::awt::XToolkitRobot,
     ::com::sun::star::lang::XServiceInfo>( GetMutex() ),
     m_aTopWindowListeners(rBHelper.rMutex),
     m_aKeyHandlers(rBHelper.rMutex),
@@ -1895,6 +1915,85 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
     SolarMutexGuard aSolarGuard;
     Scheduler::ProcessTaskScheduling(false);
 }
+
+// css:awt:XToolkitRobot
+
+void SAL_CALL VCLXToolkit::keyPress( const css::awt::KeyEvent & aKeyEvent )
+    throw (css::uno::RuntimeException, std::exception)
+{
+    css::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, css::uno::UNO_QUERY );
+    if( !xWindow.is() )
+        throw css::uno::RuntimeException( "invalid event source" );
+
+    vcl::Window * pWindow = VCLUnoHelper::GetWindow( xWindow );
+    if( !pWindow )
+        throw css::uno::RuntimeException( "invalid event source" );
+
+    ::KeyEvent aVCLKeyEvent = VCLUnoHelper::createVCLKeyEvent( aKeyEvent );
+    ::Application::PostKeyEvent( VCLEVENT_WINDOW_KEYINPUT, pWindow, &aVCLKeyEvent );
+}
+
+void SAL_CALL VCLXToolkit::keyRelease( const css::awt::KeyEvent & aKeyEvent )
+    throw (css::uno::RuntimeException, std::exception)
+{
+    css::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, css::uno::UNO_QUERY );
+    if( !xWindow.is() )
+        throw css::uno::RuntimeException( "invalid event source" );
+
+    vcl::Window * pWindow = VCLUnoHelper::GetWindow( xWindow );
+    if( !pWindow )
+        throw css::uno::RuntimeException( "invalid event source" );
+
+    ::KeyEvent aVCLKeyEvent = VCLUnoHelper::createVCLKeyEvent( aKeyEvent );
+    ::Application::PostKeyEvent( VCLEVENT_WINDOW_KEYUP, pWindow, &aVCLKeyEvent );
+}
+
+
+void SAL_CALL VCLXToolkit::mousePress( const css::awt::MouseEvent & aMouseEvent )
+    throw (css::uno::RuntimeException, std::exception)
+{
+    css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY );
+    if( !xWindow.is() )
+        throw css::uno::RuntimeException( "invalid event source" );
+
+    vcl::Window * pWindow = VCLUnoHelper::GetWindow( xWindow );
+    if( !pWindow )
+        throw css::uno::RuntimeException( "invalid event source" );
+
+    ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
+    ::Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pWindow, &aVCLMouseEvent );
+}
+
+void SAL_CALL VCLXToolkit::mouseRelease( const css::awt::MouseEvent & aMouseEvent )
+    throw (css::uno::RuntimeException, std::exception)
+{
+    css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY );
+    if( !xWindow.is() )
+        throw css::uno::RuntimeException( "invalid event source" );
+
+    vcl::Window * pWindow = VCLUnoHelper::GetWindow( xWindow );
+    if( !pWindow )
+        throw css::uno::RuntimeException( "invalid event source" );
+
+    ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
+    ::Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEBUTTONUP, pWindow, &aVCLMouseEvent );
+}
+
+void SAL_CALL VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
+    throw (css::uno::RuntimeException, std::exception)
+{
+    css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY );
+    if( !xWindow.is() )
+        throw css::uno::RuntimeException( "invalid event source" );
+
+    vcl::Window * pWindow = VCLUnoHelper::GetWindow( xWindow );
+    if( !pWindow )
+        throw css::uno::RuntimeException( "invalid event source" );
+
+    ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
+    ::Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEMOVE, pWindow, &aVCLMouseEvent );
+}
+
 
 }
 
