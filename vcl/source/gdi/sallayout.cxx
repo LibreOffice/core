@@ -1752,7 +1752,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
     int nActiveCharPos = nCharPos[0];
-    int nLastRunEndChar = (vRtl[nActiveCharPos - mnMinCharPos])?
+    int nActiveCharIndex = nActiveCharPos - mnMinCharPos;
+    // get the end index of the active run
+    int nLastRunEndChar = (nActiveCharIndex >= 0 && vRtl[nActiveCharIndex]) ?
         rArgs.mnEndCharPos : rArgs.mnMinCharPos - 1;
     int nRunVisibleEndChar = nCharPos[0];
     while( nValid[0] && (nLevel > 0))
@@ -1900,7 +1902,8 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             if( !bLTR )
                 nOldRunAdv = -nOldRunAdv;
 #endif
-            if (vRtl[nActiveCharPos - mnMinCharPos])
+            nActiveCharIndex = nActiveCharPos - mnMinCharPos;
+            if (nActiveCharIndex >= 0 && vRtl[nActiveCharIndex])
             {
               if (nRunVisibleEndChar > mnMinCharPos && nRunVisibleEndChar <= mnEndCharPos)
                   nRunAdvance -= aMultiArgs.mpDXArray[nRunVisibleEndChar - 1 - mnMinCharPos];
