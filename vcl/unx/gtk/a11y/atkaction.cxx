@@ -203,6 +203,12 @@ appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& 
 
             if( c != '\0' )
                 rBuffer.append( c );
+            else
+            {
+                // The KeyCode approach did not work, probably a non ascii character
+                // let's hope that there is a character given in KeyChar.
+                rBuffer.append( OUStringToGChar( OUString( rKeyStrokes[i].KeyChar ) ) );
+            }
         }
     }
 }
