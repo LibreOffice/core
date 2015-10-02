@@ -123,7 +123,10 @@ bool Player::create( const ::rtl::OUString& rURL )
 {
     // get the media asset
     NSString* aNSStr = [NSString stringWithCharacters:rURL.getStr() length:rURL.getLength()];
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        //TODO: 10.11 stringByAddingPercentEscapesUsingEncoding
     NSURL* aNSURL = [NSURL URLWithString: [aNSStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     // get the matching AVPlayerItem
     AVPlayerItem* pPlayerItem = [AVPlayerItem playerItemWithURL:aNSURL];
 
