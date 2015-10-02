@@ -1192,7 +1192,7 @@ static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
 static bool initialize_uno(const OUString& aAppProgramURL)
 {
 #ifdef IOS
-    // For iOS we already hardocde the inifile as "rc" in the .app directory.
+    // For iOS we already hardcode the inifile as "rc" in the .app directory.
     (void) aAppProgramURL;
 #elif defined MACOSX
     rtl::Bootstrap::setIniFilename(aAppProgramURL + "/../Resources/" SAL_CONFIGFILE("soffice"));

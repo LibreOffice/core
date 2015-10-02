@@ -588,7 +588,7 @@ static void splash_load_defaults( struct splash* splash, rtl_uString* pAppPath, 
         pos[2] =   { -1, -1 },
         size[2] =  { -1, -1 };
 
-    /* costruct the sofficerc file location */
+    /* construct the sofficerc file location */
     rtl_uString_newFromAscii( &pSettings, "file://" );
     rtl_uString_newConcat( &pSettings, pSettings, pAppPath );
     rtl_uString_newConcat( &pSettings, pSettings, pTmp );

@@ -305,7 +305,7 @@ void BackendImpl::PackageImpl:: initPackageHandler()
     else
     {
         OSL_ASSERT( false );
-        // NOT supported at the momemtn // TODO
+        // NOT supported at the moment // TODO
     }
 
     Reference< provider::XScriptProviderFactory > xFac =

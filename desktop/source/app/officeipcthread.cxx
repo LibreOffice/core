@@ -468,7 +468,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     if (comphelper::LibreOfficeKit::isActive())
     {
         // Setting nPipeMode to PIPEMODE_CREATED causes the trivial path to be taken below, starting
-        // the listeing thread. (Which will immediately finish, see the execute() function, but what
+        // the listening thread. (Which will immediately finish, see the execute() function, but what
         // the heck...)
         nPipeMode = PIPEMODE_CREATED;
     }
@@ -720,7 +720,7 @@ void OfficeIPCThread::execute()
             // if we receive a request while the office is displaying some dialog or error during
             // bootstrap, that dialogs event loop might get events that are dispatched by this thread
             // we have to wait for cReady to be set by the real main loop.
-            // only reqests that dont dispatch events may be processed before cReady is set.
+            // only requests that don't dispatch events may be processed before cReady is set.
             cReady.wait();
 
             // we might have decided to shutdown while we were sleeping

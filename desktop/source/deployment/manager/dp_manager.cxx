@@ -280,7 +280,7 @@ void PackageManagerImpl::initRegistryBackends()
                          m_xComponentContext ) );
 }
 
-// this overcomes previous rumours that the sal API is misleading
+// this overcomes previous rumors that the sal API is misleading
 // as to whether a directory is truly read-only or not
 static bool isMacroURLReadOnly( const OUString &rMacro )
 {

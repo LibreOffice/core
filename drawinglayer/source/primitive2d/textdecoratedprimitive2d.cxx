@@ -172,7 +172,7 @@ namespace drawinglayer
                 else
                 {
                     // no split, was already a single word. Continue to
-                    // decompse local entity
+                    // decompose local entity
                 }
             }
             std::vector< Primitive2DReference > aNewPrimitives;

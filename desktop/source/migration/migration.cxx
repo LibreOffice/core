@@ -455,7 +455,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
             }
         }
 
-        // exluded files...
+        // excluded files...
         if (tmpAccess->getByName("ExcludedFiles") >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
