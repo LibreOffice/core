@@ -63,7 +63,7 @@ namespace dbmm
     InteractionHandler::InteractionHandler( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
         :m_pData( new InteractionHandler_Data( _rContext ) )
     {
-        // check whether the doumentc has an own interaction handler set
+        // check whether the document has its own interaction handler set
         ::comphelper::NamedValueCollection aDocArgs( _rxDocument->getArgs() );
         m_pData->xHandler = aDocArgs.getOrDefault( "InteractionHandler", m_pData->xHandler );
     }

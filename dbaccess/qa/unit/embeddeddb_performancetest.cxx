@@ -69,7 +69,7 @@ OUString getPrintableTimeValue(const TimeValue* pTimeValue)
  * 'SAL_LOG="" DBA_PERFTEST=YES make CppunitTest_dbaccess_embeddeddb_performancetest'
  * This blocks the unnecessary exception output and show only the performance data.
  *
- * You also need to create the file dbacess/qa/unit/data/wordlist, this list cannot
+ * You also need to create the file dbaccess/qa/unit/data/wordlist, this list cannot
  * contain any unescaped apostrophes (since the words are used directly to assemble
  * sql statement), apostrophes are escaped using a double apostrophe, i.e. ''.
  * one easy way of generating a list is using:
