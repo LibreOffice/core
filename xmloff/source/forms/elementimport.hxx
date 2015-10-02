@@ -572,7 +572,17 @@ namespace xmloff
         {
         }
 
+        // SvXMLImportContext overridables
+        virtual SvXMLImportContext* CreateChildContext(
+            sal_uInt16 _nPrefix, const OUString& _rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+        virtual void EndElement();
+
     protected:
+        // OElementImport overridables
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                        createElement();
+
         // create the child context for the given control type
         virtual SvXMLImportContext* implCreateControlWrapper(
             sal_uInt16 _nPrefix, const OUString& _rLocalName) = 0;
@@ -595,6 +605,11 @@ namespace xmloff
         OColumnImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
                 OControlElement::ElementType _eType);
+
+    protected:
+        // OElementImport overridables
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                        createElement();
     };
 
     //= OColumnWrapperImport
