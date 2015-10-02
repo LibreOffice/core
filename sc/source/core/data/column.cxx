@@ -46,7 +46,6 @@
 #include <stlalgorithm.hxx>
 #include <formulagroup.hxx>
 
-#include <officecfg/Office/Common.hxx>
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
@@ -868,7 +867,6 @@ class CopyToClipHandler
     sc::ColumnBlockPosition maDestPos;
     sc::ColumnBlockPosition* mpDestPos;
     bool mbCopyNotes;
-    bool mbUseOpenCL;
 
     void setDefaultAttrsToDest(size_t nRow, size_t nSize)
     {
@@ -884,11 +882,7 @@ class CopyToClipHandler
 
 public:
     CopyToClipHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, bool bCopyNotes) :
-        mrSrcCol(rSrcCol),
-        mrDestCol(rDestCol),
-        mpDestPos(pDestPos),
-        mbCopyNotes(bCopyNotes),
-        mbUseOpenCL(officecfg::Office::Common::Misc::UseOpenCL::get())
+        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mbCopyNotes(bCopyNotes)
     {
         if (mpDestPos)
             maDestPos = *mpDestPos;
@@ -959,7 +953,7 @@ public:
                 {
                     const ScFormulaCell& rOld = **it;
                     if (rOld.GetDirty() && mrSrcCol.GetDoc().GetAutoCalc())
-                        const_cast<ScFormulaCell&>(rOld).Interpret(mbUseOpenCL);
+                        const_cast<ScFormulaCell&>(rOld).Interpret();
 
                     aCloned.push_back(new ScFormulaCell(rOld, mrDestCol.GetDoc(), aDestPos));
                 }
@@ -1063,7 +1057,6 @@ void ScColumn::CopyStaticToDocument(
     size_t nOffset = aPos.second;
     size_t nDataSize = 0;
     size_t nCurRow = nRow1;
-    const bool bUseOpenCL(officecfg::Office::Common::Misc::UseOpenCL::get());
 
     for (; it != maCells.end() && nCurRow <= static_cast<size_t>(nRow2); ++it, nOffset = 0, nCurRow += nDataSize)
     {
@@ -1129,7 +1122,7 @@ void ScColumn::CopyStaticToDocument(
 
                     ScFormulaCell& rFC = const_cast<ScFormulaCell&>(**itData);
                     if (rFC.GetDirty() && pDocument->GetAutoCalc())
-                        rFC.Interpret(bUseOpenCL);
+                        rFC.Interpret();
 
                     if (rFC.GetErrCode())
                         // Skip cells with error.
@@ -1194,7 +1187,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
         {
             ScFormulaCell* p = sc::formula_block::at(*it->data, aPos.second);
             if (p->GetDirty() && pDocument->GetAutoCalc())
-                p->Interpret(officecfg::Office::Common::Misc::UseOpenCL::get());
+                p->Interpret();
 
             ScAddress aDestPos = p->aPos;
             aDestPos.SetRow(nDestRow);
@@ -2784,13 +2777,6 @@ struct SetDirtyIfPostponedHandler
 
 struct CalcAllHandler
 {
-    bool mbUseOpenCL;
-
-    CalcAllHandler() :
-        mbUseOpenCL(officecfg::Office::Common::Misc::UseOpenCL::get())
-    {
-    }
-
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -2798,7 +2784,7 @@ struct CalcAllHandler
         double nOldVal, nNewVal;
         nOldVal = pCell->GetValue();
 #endif
-        pCell->Interpret(mbUseOpenCL);
+        pCell->Interpret();
 #if OSL_DEBUG_LEVEL > 1
         if (pCell->GetCode()->IsRecalcModeNormal())
             nNewVal = pCell->GetValue();

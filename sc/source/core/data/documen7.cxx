@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <officecfg/Office/Common.hxx>
 #include <vcl/svapp.hxx>
 
 #include "document.hxx"
@@ -457,7 +456,6 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
 
         pCell = pFormulaTree;
         ScFormulaCell* pLastNoGood = 0;
-        const bool bUseOpenCL(officecfg::Office::Common::Misc::UseOpenCL::get());
         while ( pCell )
         {
             // Interpret resets bDirty and calls Remove, also the referenced!
@@ -465,11 +463,11 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
             if ( bOnlyForced )
             {
                 if ( pCell->GetCode()->IsRecalcModeForced() )
-                    pCell->Interpret( bUseOpenCL );
+                    pCell->Interpret();
             }
             else
             {
-                pCell->Interpret( bUseOpenCL );
+                pCell->Interpret();
             }
             if ( pCell->GetPrevious() || pCell == pFormulaTree )
             {   // (IsInFormulaTree(pCell)) no Remove was called => next

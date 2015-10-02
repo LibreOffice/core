@@ -54,7 +54,6 @@
 
 #include <mdds/flat_segment_tree.hpp>
 
-#include <officecfg/Office/Common.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -93,17 +92,10 @@ void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, sal_uLong nHint 
 
 struct DirtyCellInterpreter
 {
-    bool mbUseOpenCL;
-
-    DirtyCellInterpreter() :
-        mbUseOpenCL(officecfg::Office::Common::Misc::UseOpenCL::get())
-    {
-    }
-
     void operator() (size_t, ScFormulaCell* p)
     {
         if (p->GetDirty())
-            p->Interpret(mbUseOpenCL);
+            p->Interpret();
     }
 };
 
