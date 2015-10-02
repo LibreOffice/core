@@ -330,6 +330,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName);     /// element name w/o prefix
+    XMLTimeFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element);
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -353,6 +357,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName);     /// element name w/o prefix
+    XMLDateFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Elemtn);
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,

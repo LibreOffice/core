@@ -1209,6 +1209,28 @@ XMLTimeFieldImportContext::XMLTimeFieldImportContext(
     bValid = true;  // always valid!
 }
 
+XMLTimeFieldImportContext::XMLTimeFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_date_time, Element),
+    sPropertyNumberFormat(sAPI_number_format),
+    sPropertyFixed(sAPI_is_fixed),
+    sPropertyDateTimeValue(sAPI_date_time_value),
+    sPropertyDateTime(sAPI_date_time),
+    sPropertyAdjust(sAPI_adjust),
+    sPropertyIsDate(sAPI_is_date),
+    sPropertyIsFixedLanguage(sAPI_is_fixed_language),
+    nAdjust(0),
+    nFormatKey(0),
+    bTimeOK(false),
+    bFormatOK(false),
+    bFixed(false),
+    bIsDate(false),
+    bIsDefaultLanguage( true )
+{
+    bValid = true; // always valid!
+}
+
 void XMLTimeFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken, const OUString& sAttrValue )
 {
@@ -1336,6 +1358,14 @@ XMLDateFieldImportContext::XMLDateFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName) :
         XMLTimeFieldImportContext(rImport, rHlp, nPrfx, sLocalName)
+{
+    bIsDate = true; // always a date!
+}
+
+XMLDateFieldImportContext::XMLDateFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element)
+:   XMLTimeFieldImportContext(rImport, rHlp, Element)
 {
     bIsDate = true; // always a date!
 }
