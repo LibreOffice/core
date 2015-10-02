@@ -1161,7 +1161,9 @@ namespace drawinglayer
 
                     // create color for fill
                     const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
-                    mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                    Color aFillColor(aPolygonColor);
+                    aFillColor.SetTransparency(sal_uInt8((rPrimitive.getTransparency() * 255.0) + 0.5));
+                    mpOutputDevice->SetFillColor(aFillColor);
                     mpOutputDevice->SetLineColor();
 
                     // create rectangle for fill
