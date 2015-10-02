@@ -225,6 +225,9 @@ friend class SwConnectionDisposedListener_Impl;
                                         const SwMergeDescriptor& rMergeDescriptor, vcl::Window* pParent );
     SAL_DLLPRIVATE bool          ToNextRecord(SwDSParam* pParam);
 
+    SwDBManager(SwDBManager const&) = delete;
+    SwDBManager& operator=(SwDBManager const&) = delete;
+
 public:
     SwDBManager(SwDoc* pDoc);
     ~SwDBManager();
