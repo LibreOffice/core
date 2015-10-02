@@ -2387,6 +2387,22 @@ XMLConditionalTextImportContext::XMLConditionalTextImportContext(
 {
 }
 
+XMLConditionalTextImportContext::XMLConditionalTextImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_conditional_text, Element),
+    sPropertyCondition(sAPI_condition),
+    sPropertyTrueContent(sAPI_true_content),
+    sPropertyFalseContent(sAPI_false_content),
+    sPropertyIsConditionTrue(sAPI_is_condition_true),
+    sPropertyCurrentPresentation(sAPI_current_presentation),
+    bConditionOK(false),
+    bTrueOK(false),
+    bFalseOK(false),
+    bCurrentValue(false)
+{
+}
+
 void XMLConditionalTextImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
