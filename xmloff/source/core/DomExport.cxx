@@ -257,10 +257,4 @@ void exportDom( SvXMLExport& rExport, const Reference<XDocument>& xDocument )
     visit( aDomExport, xDocument );
 }
 
-void exportDom( SvXMLExport& rExport, const Reference<XNode>& xNode )
-{
-    DomExport aDomExport( rExport );
-    visit( aDomExport, xNode );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
