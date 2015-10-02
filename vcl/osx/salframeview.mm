@@ -183,8 +183,8 @@ static AquaSalFrame* getMouseContainerFrame()
 #endif
 
     // enable OSX>=10.7 fullscreen options if available and useful
-    bool bAllowFullScreen = (0 == (mpFrame->mnStyle & (SAL_FRAME_STYLE_DIALOG | SAL_FRAME_STYLE_TOOLTIP | SAL_FRAME_STYLE_SYSTEMCHILD | SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_TOOLWINDOW | SAL_FRAME_STYLE_INTRO)));
-    bAllowFullScreen &= (0 == (~mpFrame->mnStyle & (SAL_FRAME_STYLE_SIZEABLE)));
+    bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (mpFrame->mnStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
+    bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~mpFrame->mnStyle & (SalFrameStyleFlags::SIZEABLE)));
     bAllowFullScreen &= (mpFrame->mpParent == NULL);
     const SEL setCollectionBehavior = @selector(setCollectionBehavior:);
     if( bAllowFullScreen && [pNSWindow respondsToSelector: setCollectionBehavior])
@@ -233,16 +233,16 @@ static AquaSalFrame* getMouseContainerFrame()
 -(BOOL)canBecomeKeyWindow
 {
     if( (mpFrame->mnStyle &
-            ( SAL_FRAME_STYLE_FLOAT                 |
-              SAL_FRAME_STYLE_TOOLTIP               |
-              SAL_FRAME_STYLE_INTRO
-            )) == 0 )
+            ( SalFrameStyleFlags::FLOAT                 |
+              SalFrameStyleFlags::TOOLTIP               |
+              SalFrameStyleFlags::INTRO
+            )) == SalFrameStyleFlags::NONE )
         return YES;
-    if( (mpFrame->mnStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) != 0 )
+    if( mpFrame->mnStyle & SalFrameStyleFlags::OWNERDRAWDECORATION )
         return YES;
     if( mpFrame->mbFullScreen )
         return YES;
-    if( (mpFrame->mnStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
+    if( (mpFrame->mnStyle & SalFrameStyleFlags::FLOAT_FOCUSABLE) )
         return YES;
     return [super canBecomeKeyWindow];
 }
@@ -254,9 +254,9 @@ static AquaSalFrame* getMouseContainerFrame()
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
-        static const sal_uLong nGuessDocument = SAL_FRAME_STYLE_MOVEABLE|
-                                            SAL_FRAME_STYLE_SIZEABLE|
-                                            SAL_FRAME_STYLE_CLOSEABLE;
+        static const SalFrameStyleFlags nGuessDocument = SalFrameStyleFlags::MOVEABLE|
+                                            SalFrameStyleFlags::SIZEABLE|
+                                            SalFrameStyleFlags::CLOSEABLE;
 
         if( mpFrame->mpMenu )
             mpFrame->mpMenu->setMainMenu();

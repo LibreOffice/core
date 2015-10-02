@@ -150,7 +150,7 @@
             // popup windows do not get the focus, so they don't get these either
             // simplest would be dispatch this to the key window always if it is without parent
             // however e.g. in document we want the menu shortcut if e.g. the stylist has focus
-            if( pFrame->mpParent && (pFrame->mnStyle & SAL_FRAME_STYLE_FLOAT) == 0 )
+            if( pFrame->mpParent && !(pFrame->mnStyle & SalFrameStyleFlags::FLOAT) )
             {
                 [[pKeyWin contentView] keyDown: pEvent];
                 bHandled = GetSalData()->maKeyEventAnswer[ pEvent ];

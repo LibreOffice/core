@@ -198,13 +198,13 @@ GtkInstance::~GtkInstance()
     DeInitAtkBridge();
 }
 
-SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
+SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
     EnsureInit();
     return new GtkSalFrame( pParent, nStyle );
 }
 
-SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, sal_uLong )
+SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, SalFrameStyleFlags )
 {
     EnsureInit();
     return new GtkSalFrame( pParentData );
