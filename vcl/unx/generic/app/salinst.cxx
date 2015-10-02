@@ -167,14 +167,14 @@ void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     return pDisplay ? const_cast<char *>(pDisplay) : const_cast<char *>("");
 }
 
-SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, sal_uLong nSalFrameStyle )
+SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle )
 {
     SalFrame *pFrame = new X11SalFrame( pParent, nSalFrameStyle );
 
     return pFrame;
 }
 
-SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, sal_uLong nStyle )
+SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, SalFrameStyleFlags nStyle )
 {
     SalFrame* pFrame = new X11SalFrame( NULL, nStyle, pParentData );
 

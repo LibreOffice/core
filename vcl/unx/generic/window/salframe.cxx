@@ -135,9 +135,9 @@ static void doReparentPresentationDialogues( SalDisplay* pDisplay )
 bool X11SalFrame::IsOverrideRedirect() const
 {
     return
-        ((nStyle_ & SAL_FRAME_STYLE_INTRO) && !pDisplay_->getWMAdaptor()->supportsSplash())
+        ((nStyle_ & SalFrameStyleFlags::INTRO) && !pDisplay_->getWMAdaptor()->supportsSplash())
         ||
-        (!( nStyle_ & ~SAL_FRAME_STYLE_DEFAULT ) && !pDisplay_->getWMAdaptor()->supportsFullScreen())
+        (!( nStyle_ & ~SalFrameStyleFlags::DEFAULT ) && !pDisplay_->getWMAdaptor()->supportsFullScreen())
         ;
 }
 
@@ -148,9 +148,9 @@ bool X11SalFrame::IsFloatGrabWindow() const
     return
         ( ( !pDisableGrab || !*pDisableGrab ) &&
           (
-           (nStyle_ & SAL_FRAME_STYLE_FLOAT)    &&
-           ! (nStyle_ & SAL_FRAME_STYLE_TOOLTIP)    &&
-           ! (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION)
+           (nStyle_ & SalFrameStyleFlags::FLOAT)    &&
+           ! (nStyle_ & SalFrameStyleFlags::TOOLTIP)    &&
+           ! (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION)
            )
           );
 }
@@ -324,7 +324,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
     return true;
 }
 
-void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemParentData* pParentData, bool bUseGeometry )
+void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen, SystemParentData* pParentData, bool bUseGeometry )
 {
     if( nXScreen.getXScreen() >= GetDisplay()->GetXScreenCount() )
         nXScreen = GetDisplay()->GetDefaultXScreen();
@@ -335,7 +335,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
     nStyle_     = nSalFrameStyle;
     XWMHints Hints;
     Hints.flags = InputHint;
-    Hints.input = (nSalFrameStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) ? False : True;
+    Hints.input = (nSalFrameStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) ? False : True;
     NetWmIconData netwm_icon;
 
     int x = 0, y = 0;
@@ -366,8 +366,8 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
         h = maGeometry.nHeight;
     }
 
-    if( (nSalFrameStyle & SAL_FRAME_STYLE_FLOAT) &&
-        ! (nSalFrameStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION)
+    if( (nSalFrameStyle & SalFrameStyleFlags::FLOAT) &&
+        ! (nSalFrameStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
         )
     {
         if( nShowState_ == SHOWSTATE_UNKNOWN )
@@ -377,13 +377,13 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
         }
         Attributes.override_redirect = True;
     }
-    else if( (nSalFrameStyle & SAL_FRAME_STYLE_SYSTEMCHILD ) )
+    else if( (nSalFrameStyle & SalFrameStyleFlags::SYSTEMCHILD ) )
     {
-        DBG_ASSERT( mpParent, "SAL_FRAME_STYLE_SYSTEMCHILD window without parent" );
+        DBG_ASSERT( mpParent, "SalFrameStyleFlags::SYSTEMCHILD window without parent" );
         if( mpParent )
         {
             aFrameParent = mpParent->mhWindow;
-            // FIXME: since with SAL_FRAME_STYLE_SYSTEMCHILD
+            // FIXME: since with SalFrameStyleFlags::SYSTEMCHILD
             // multiple X11SalFrame objects can have the same shell window
             // dispatching events in saldisp.cxx is unclear (the first frame)
             // wins. HTH this correctly is unclear yet
@@ -398,7 +398,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
         // process; start permanantly ignoring X errors ...
         GetGenericData()->ErrorTrapPush();
 
-        nStyle_ |= SAL_FRAME_STYLE_PLUG;
+        nStyle_ |= SalFrameStyleFlags::PLUG;
         Attributes.override_redirect = True;
         if( pParentData->nSize >= sizeof(SystemParentData) )
             m_bXEmbed = pParentData->bXEmbedSupport;
@@ -452,8 +452,8 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
             Size aScreenSize( GetDisplay()->getDataForScreen( m_nXScreen ).m_aSize );
             w = aScreenSize.Width();
             h = aScreenSize.Height();
-            if( nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE &&
-                nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
+            if( nSalFrameStyle & SalFrameStyleFlags::SIZEABLE &&
+                nSalFrameStyle & SalFrameStyleFlags::MOVEABLE )
             {
                 Size aBestFitSize(bestmaxFrameSizeForScreenSize(aScreenSize));
                 w = aBestFitSize.Width();
@@ -470,7 +470,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
                     pFrame = static_cast< const X11SalFrame* >(*it);
                     if( ! ( pFrame->mpParent
                             || pFrame->mbFullScreen
-                            || ! ( pFrame->nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+                            || ! ( pFrame->nStyle_ & SalFrameStyleFlags::SIZEABLE )
                             || ! pFrame->GetUnmirroredGeometry().nWidth
                             || ! pFrame->GetUnmirroredGeometry().nHeight
                             )
@@ -530,7 +530,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
         if( IsOverrideRedirect() )
             Attributes.override_redirect = True;
         // default icon
-        if( (nStyle_ & SAL_FRAME_STYLE_INTRO) == 0 )
+        if( !(nStyle_ & SalFrameStyleFlags::INTRO) )
         {
             bool bOk=false;
             try
@@ -556,7 +556,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
         X11SalFrame* pFrame = this;
         while( pFrame->mpParent )
             pFrame = pFrame->mpParent;
-        if( (pFrame->nStyle_ & SAL_FRAME_STYLE_PLUG ) )
+        if( (pFrame->nStyle_ & SalFrameStyleFlags::PLUG ) )
         {
             // if the top level window is a plugin window,
             // then we should place us in the same window group as
@@ -624,7 +624,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
     XSync( GetXDisplay(), False );
     setXEmbedInfo();
 
-    Time nUserTime = (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_TOOLWINDOW) ) == 0 ?
+    Time nUserTime = (nStyle_ & (SalFrameStyleFlags::OWNERDRAWDECORATION | SalFrameStyleFlags::TOOLWINDOW) ) == SalFrameStyleFlags::NONE ?
         pDisplay_->GetLastUserEventTime() : 0;
     pDisplay_->getWMAdaptor()->setUserTime( this, nUserTime );
 
@@ -637,7 +637,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
         if( pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING ) )
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING );
-        if( (nSalFrameStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+        if( (nSalFrameStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) )
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_TAKE_FOCUS );
         XSetWMProtocols( GetXDisplay(), GetShellWindow(), a, n );
 
@@ -682,13 +682,13 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
                              1
                              );
         }
-#define DECOFLAGS (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE)
+#define DECOFLAGS (SalFrameStyleFlags::MOVEABLE | SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::CLOSEABLE)
         int nDecoFlags = WMAdaptor::decoration_All;
-        if( (nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN) ||
-            (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION)
+        if( (nStyle_ & SalFrameStyleFlags::PARTIAL_FULLSCREEN) ||
+            (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION)
             )
             nDecoFlags = 0;
-        else if( (nStyle_ & DECOFLAGS ) != DECOFLAGS || (nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW) )
+        else if( (nStyle_ & DECOFLAGS ) != DECOFLAGS || (nStyle_ & SalFrameStyleFlags::TOOLWINDOW) )
         {
             if( nStyle_ & DECOFLAGS )
                 // if any decoration, then show a border
@@ -699,28 +699,28 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
             if( ! mpParent && (nStyle_ & DECOFLAGS) )
                 // don't add a min button if window should be decorationless
                 nDecoFlags |= WMAdaptor::decoration_MinimizeBtn;
-            if( nStyle_ & SAL_FRAME_STYLE_CLOSEABLE )
+            if( nStyle_ & SalFrameStyleFlags::CLOSEABLE )
                 nDecoFlags |= WMAdaptor::decoration_CloseBtn;
-            if( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+            if( nStyle_ & SalFrameStyleFlags::SIZEABLE )
             {
                 nDecoFlags |= WMAdaptor::decoration_Resize;
-                if( ! (nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW) )
+                if( ! (nStyle_ & SalFrameStyleFlags::TOOLWINDOW) )
                     nDecoFlags |= WMAdaptor::decoration_MaximizeBtn;
             }
-            if( nStyle_ & SAL_FRAME_STYLE_MOVEABLE )
+            if( nStyle_ & SalFrameStyleFlags::MOVEABLE )
                 nDecoFlags |= WMAdaptor::decoration_Title;
         }
 
         WMAdaptor::WMWindowType eType = WMAdaptor::windowType_Normal;
-        if( nStyle_ & SAL_FRAME_STYLE_INTRO )
+        if( nStyle_ & SalFrameStyleFlags::INTRO )
             eType = WMAdaptor::windowType_Splash;
-        if( (nStyle_ & SAL_FRAME_STYLE_DIALOG) && hPresentationWindow == None )
+        if( (nStyle_ & SalFrameStyleFlags::DIALOG) && hPresentationWindow == None )
             eType = WMAdaptor::windowType_ModelessDialogue;
-        if( nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW )
+        if( nStyle_ & SalFrameStyleFlags::TOOLWINDOW )
             eType = WMAdaptor::windowType_Utility;
-        if( nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION )
+        if( nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION )
             eType = WMAdaptor::windowType_Toolbar;
-        if(    (nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN)
+        if(    (nStyle_ & SalFrameStyleFlags::PARTIAL_FULLSCREEN)
             && GetDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
             eType = WMAdaptor::windowType_Dock;
 
@@ -730,12 +730,12 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
                                        nDecoFlags,
                                        hPresentationWindow ? NULL : mpParent );
 
-        if( (nStyle_ & (SAL_FRAME_STYLE_DEFAULT |
-                        SAL_FRAME_STYLE_OWNERDRAWDECORATION|
-                        SAL_FRAME_STYLE_FLOAT |
-                        SAL_FRAME_STYLE_INTRO |
-                        SAL_FRAME_STYLE_PARTIAL_FULLSCREEN) )
-             == SAL_FRAME_STYLE_DEFAULT )
+        if( (nStyle_ & (SalFrameStyleFlags::DEFAULT |
+                        SalFrameStyleFlags::OWNERDRAWDECORATION|
+                        SalFrameStyleFlags::FLOAT |
+                        SalFrameStyleFlags::INTRO |
+                        SalFrameStyleFlags::PARTIAL_FULLSCREEN) )
+             == SalFrameStyleFlags::DEFAULT )
             pDisplay_->getWMAdaptor()->maximizeFrame( this, true );
 
         if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
@@ -750,7 +750,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
     SetPointer( PointerStyle::Arrow );
 }
 
-X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle,
+X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
                           SystemParentData* pSystemParent ) :
     m_nXScreen( 0 )
 {
@@ -789,7 +789,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle,
     nShowState_                 = SHOWSTATE_UNKNOWN;
     nWidth_                     = 0;
     nHeight_                    = 0;
-    nStyle_                     = 0;
+    nStyle_                     = SalFrameStyleFlags::NONE;
     mnExtStyle                  = 0;
     bAlwaysOnTop_               = false;
 
@@ -1093,7 +1093,7 @@ void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
 {
     if( ! IsChildWindow() )
     {
-        if( GetShellWindow() && (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
+        if( GetShellWindow() && (nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT )
         {
             XSizeHints* pHints = XAllocSizeHints();
             long nSupplied = 0;
@@ -1117,7 +1117,7 @@ void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
     if( ! IsChildWindow() )
     {
-        if( GetShellWindow() && (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
+        if( GetShellWindow() && (nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT )
         {
             XSizeHints* pHints = XAllocSizeHints();
             long nSupplied = 0;
@@ -1149,7 +1149,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
     // even though transient frames should be kept above their parent
     // this does not necessarily hold true for DOCK type windows
     // so artificially set ABOVE and remove it again on hide
-    if( mpParent && (mpParent->nStyle_ & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) && pDisplay_->getWMAdaptor()->isLegacyPartialFullscreen())
+    if( mpParent && (mpParent->nStyle_ & SalFrameStyleFlags::PARTIAL_FULLSCREEN ) && pDisplay_->getWMAdaptor()->isLegacyPartialFullscreen())
         pDisplay_->getWMAdaptor()->enableAlwaysOnTop( this, bVisible );
 
     bMapped_   = bVisible;
@@ -1158,7 +1158,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
     if( bVisible )
     {
         mbInShow = true;
-        if( ! (nStyle_ & SAL_FRAME_STYLE_INTRO) )
+        if( ! (nStyle_ & SalFrameStyleFlags::INTRO) )
         {
             // hide all INTRO frames
             const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
@@ -1166,7 +1166,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
             {
                 const X11SalFrame* pFrame = static_cast< const X11SalFrame* >(*it);
                 // look for intro bit map; if present, hide it
-                if( pFrame->nStyle_ & SAL_FRAME_STYLE_INTRO )
+                if( pFrame->nStyle_ & SalFrameStyleFlags::INTRO )
                 {
                     if( pFrame->bMapped_ )
                         const_cast<X11SalFrame*>(pFrame)->Show( false );
@@ -1225,10 +1225,10 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
         }
 
         Time nUserTime = 0;
-        if( ! bNoActivate && (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) == 0 )
+        if( ! bNoActivate && !(nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION) )
             nUserTime = pDisplay_->GetLastUserEventTime( true );
         GetDisplay()->getWMAdaptor()->setUserTime( this, nUserTime );
-        if( ! bNoActivate && (nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW) )
+        if( ! bNoActivate && (nStyle_ & SalFrameStyleFlags::TOOLWINDOW) )
             m_bSetFocusOnMap = true;
 
         // actually map the window
@@ -1242,7 +1242,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
                     XMapWindow( GetXDisplay(), GetShellWindow() );
                 XSelectInput( GetXDisplay(), GetShellWindow(), CLIENT_EVENTS );
             }
-            if( nStyle_ & SAL_FRAME_STYLE_FLOAT )
+            if( nStyle_ & SalFrameStyleFlags::FLOAT )
                 XMapRaised( GetXDisplay(), GetWindow() );
             else
                 XMapWindow( GetXDisplay(), GetWindow() );
@@ -1318,7 +1318,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
          *  and have the focus. So try to set the focus
          *  to the child on Show(true)
          */
-        if( (nStyle_ & SAL_FRAME_STYLE_PLUG) && ! m_bXEmbed )
+        if( (nStyle_ & SalFrameStyleFlags::PLUG) && ! m_bXEmbed )
             XSetInputFocus( GetXDisplay(),
                             GetWindow(),
                             RevertToParent,
@@ -1342,7 +1342,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
             /*  FIXME: Is deleting the property really necessary ? It hurts
              *  owner drawn windows at least.
              */
-            if( mpParent && ! (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+            if( mpParent && ! (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION) )
                 XDeleteProperty( GetXDisplay(), GetShellWindow(), GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::WM_TRANSIENT_FOR ) );
             XWithdrawWindow( GetXDisplay(), GetShellWindow(), m_nXScreen.getXScreen() );
         }
@@ -1366,7 +1366,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
 void X11SalFrame::ToTop( sal_uInt16 nFlags )
 {
     if( ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
-        && ! ( nStyle_ & SAL_FRAME_STYLE_FLOAT )
+        && ! ( nStyle_ & SalFrameStyleFlags::FLOAT )
         && nShowState_ != SHOWSTATE_HIDDEN
         && nShowState_ != SHOWSTATE_UNKNOWN
         )
@@ -1483,7 +1483,7 @@ void X11SalFrame::Center( )
             pFrame->maGeometry.nHeight  = aRect.GetHeight();
         }
 
-        if( pFrame->nStyle_ & SAL_FRAME_STYLE_PLUG )
+        if( pFrame->nStyle_ & SalFrameStyleFlags::PLUG )
         {
             ::Window aRoot;
             unsigned int bw, depth;
@@ -1561,7 +1561,7 @@ void X11SalFrame::updateScreenNumber()
 
 void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
-    if( nStyle_ & SAL_FRAME_STYLE_PLUG )
+    if( nStyle_ & SalFrameStyleFlags::PLUG )
         return;
 
     // relative positioning in X11SalFrame::SetPosSize
@@ -1702,7 +1702,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
             {
                 SalFrameGeometry aGeom = maGeometry;
 
-                if( ! (nStyle_ & ( SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_PLUG ) ) &&
+                if( ! (nStyle_ & ( SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::PLUG ) ) &&
                     mpParent &&
                 aGeom.nLeftDecoration == 0 &&
                 aGeom.nTopDecoration == 0 )
@@ -1840,9 +1840,9 @@ void X11SalFrame::SetSize( const Size &rSize )
 {
     if( rSize.Width() > 0 && rSize.Height() > 0 )
     {
-         if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+         if( ! ( nStyle_ & SalFrameStyleFlags::SIZEABLE )
             && ! IsChildWindow()
-            && ( nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
+            && ( nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT )
          {
             XSizeHints* pHints = XAllocSizeHints();
             long nSupplied = 0;
@@ -1864,7 +1864,7 @@ void X11SalFrame::SetSize( const Size &rSize )
         XResizeWindow( GetXDisplay(), IsSysChildWindow() ? GetWindow() : GetShellWindow(), rSize.Width(), rSize.Height() );
         if( GetWindow() != GetShellWindow() )
         {
-            if( (nStyle_ & SAL_FRAME_STYLE_PLUG ) )
+            if( (nStyle_ & SalFrameStyleFlags::PLUG ) )
                 XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
             else
                 XResizeWindow( GetXDisplay(), GetWindow(), rSize.Width(), rSize.Height() );
@@ -1918,11 +1918,11 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
         // child windows
         ! IsChildWindow()
         // popups (menu, help window, etc.)
-        &&  (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT
+        &&  (nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT
         // shown, sizeable windows
         && ( nShowState_ == SHOWSTATE_UNKNOWN ||
              nShowState_ == SHOWSTATE_HIDDEN ||
-             ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+             ! ( nStyle_ & SalFrameStyleFlags::SIZEABLE )
              )
         )
     {
@@ -1933,7 +1933,7 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
                            pHints,
                            &nSupplied
                            );
-        if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
+        if( ! ( nStyle_ & SalFrameStyleFlags::SIZEABLE ) )
         {
             pHints->min_width   = rPosSize.GetWidth();
             pHints->min_height  = rPosSize.GetHeight();
@@ -1963,7 +1963,7 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
     XMoveResizeWindow( GetXDisplay(), IsSysChildWindow() ? GetWindow() : GetShellWindow(), values.x, values.y, values.width, values.height );
     if( GetShellWindow() != GetWindow() )
     {
-        if( (nStyle_ & SAL_FRAME_STYLE_PLUG ) )
+        if( (nStyle_ & SalFrameStyleFlags::PLUG ) )
             XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
         else
             XMoveResizeWindow( GetXDisplay(), GetWindow(), values.x, values.y, values.width, values.height );
@@ -2122,7 +2122,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
                 aRect = Rectangle( Point(0,0), GetDisplay()->GetScreenSize( m_nXScreen ) );
             else
                 aRect = GetDisplay()->GetXineramaScreens()[nScreen];
-            nStyle_ |= SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
+            nStyle_ |= SalFrameStyleFlags::PARTIAL_FULLSCREEN;
             bool bVisible = bMapped_;
             if( bVisible )
                 Show( false );
@@ -2144,7 +2144,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
         else
         {
             mbFullScreen = false;
-            nStyle_ &= ~SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
+            nStyle_ &= ~SalFrameStyleFlags::PARTIAL_FULLSCREEN;
             bool bVisible = bMapped_;
             Rectangle aRect = maRestorePosSize;
             maRestorePosSize = Rectangle();
@@ -2433,7 +2433,7 @@ bool X11SalFrame::PostEvent(ImplSVEvent* pData)
 
 void X11SalFrame::SetTitle( const OUString& rTitle )
 {
-    if( ! ( IsChildWindow() || (nStyle_ & SAL_FRAME_STYLE_FLOAT ) ) )
+    if( ! ( IsChildWindow() || (nStyle_ & SalFrameStyleFlags::FLOAT ) ) )
     {
         m_aTitle = rTitle;
         GetDisplay()->getWMAdaptor()->setWMName( this, rTitle );
@@ -2596,9 +2596,9 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
 
     // now init with new parent again
     if ( aParentData.aWindow != None )
-        Init( nStyle_ | SAL_FRAME_STYLE_PLUG, nXScreen, &aParentData );
+        Init( nStyle_ | SalFrameStyleFlags::PLUG, nXScreen, &aParentData );
     else
-        Init( nStyle_ & ~SAL_FRAME_STYLE_PLUG, nXScreen, NULL, true );
+        Init( nStyle_ & ~SalFrameStyleFlags::PLUG, nXScreen, NULL, true );
 
     // update graphics if necessary
     updateGraphics(false);
@@ -2809,7 +2809,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
         // let mouse events reach the correct window
         if( nVisibleFloats < 1 )
         {
-            if( ! (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+            if( ! (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION) )
                 XUngrabPointer( GetXDisplay(), CurrentTime );
         }
         else if( pEvent->type == ButtonPress )
@@ -3472,7 +3472,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
     }
 
     if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed ||
-         ( ( nStyle_ & SAL_FRAME_STYLE_PLUG ) && pEvent->window == GetShellWindow() )
+         ( ( nStyle_ & SalFrameStyleFlags::PLUG ) && pEvent->window == GetShellWindow() )
          )
     {
         if( hPresentationWindow != None && hPresentationWindow != GetShellWindow() )
@@ -3485,7 +3485,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
             ImplSVData* pSVData = ImplGetSVData();
 
             long nRet = CallCallback( SALEVENT_GETFOCUS,  0 );
-            if ((mpParent != NULL && nStyle_ == 0)
+            if ((mpParent != NULL && nStyle_ == SalFrameStyleFlags::NONE)
                 && pSVData->maWinData.mpFirstFloat )
             {
                 FloatWinPopupFlags nMode = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
@@ -3651,7 +3651,7 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
         return 1;
     }
 
-    if( ( nStyle_ & SAL_FRAME_STYLE_PLUG ) && pEvent->window == GetShellWindow() )
+    if( ( nStyle_ & SalFrameStyleFlags::PLUG ) && pEvent->window == GetShellWindow() )
     {
         // just update the children's positions
         RestackChildren();
@@ -3789,7 +3789,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     if(     hWM_Parent == pDisplay_->GetRootWindow( pDisplay_->GetDefaultXScreen() )
             ||  hWM_Parent == GetForeignParent()
             ||  pEvent->parent == pDisplay_->GetRootWindow( pDisplay_->GetDefaultXScreen() )
-            || ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
+            || ( nStyle_ & SalFrameStyleFlags::FLOAT ) )
     {
         // Reparenting before Destroy
         aPresentationReparentList.remove( GetStackingWindow() );
@@ -3883,7 +3883,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     // olwm and fvwm need this, it doesn't harm the rest
 
     // #i81311# do this only for sizable frames
-    if( (nStyle_ & SAL_FRAME_STYLE_SIZEABLE) != 0 )
+    if( nStyle_ & SalFrameStyleFlags::SIZEABLE )
     {
         Size aScreenSize = GetDisplay()->GetScreenSize( m_nXScreen );
         int nScreenWidth  = aScreenSize.Width();
@@ -3970,8 +3970,8 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
     {
         if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::NET_WM_PING ) )
             rWMAdaptor.answerPing( this, pEvent );
-        else if( ! ( nStyle_ & SAL_FRAME_STYLE_PLUG )
-              && ! (( nStyle_ & SAL_FRAME_STYLE_FLOAT ) && (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION))
+        else if( ! ( nStyle_ & SalFrameStyleFlags::PLUG )
+              && ! (( nStyle_ & SalFrameStyleFlags::FLOAT ) && (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION))
              )
         {
             if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
@@ -3984,7 +3984,7 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
                 // do nothing, we set the input focus in ToTop() if necessary
     #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "got WM_TAKE_FOCUS on %s window\n",
-                         (nStyle_&SAL_FRAME_STYLE_OWNERDRAWDECORATION) ?
+                         (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION) ?
                          "ownerdraw" : "NON OWNERDRAW" );
     #endif
             }
@@ -4076,7 +4076,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                          *  even if they are withdrawn when the respective
                          *  document is mapped.
                          */
-                        if( ! (nStyle_ & SAL_FRAME_STYLE_PLUG) )
+                        if( ! (nStyle_ & SalFrameStyleFlags::PLUG) )
                             XUnmapWindow( GetXDisplay(), GetShellWindow() );
                         break;
                     }
@@ -4091,7 +4091,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     /*  another workaround for sawfish: if a transient window for the same parent is shown
                      *  sawfish does not set the focus to it. Applies only for click to focus mode.
                      */
-                    if( ! (nStyle_ & SAL_FRAME_STYLE_FLOAT ) && mbInShow && GetDisplay()->getWMAdaptor()->getWindowManagerName() == "Sawfish" )
+                    if( ! (nStyle_ & SalFrameStyleFlags::FLOAT ) && mbInShow && GetDisplay()->getWMAdaptor()->getWindowManagerName() == "Sawfish" )
                     {
                         // don't set the focus into the IME status window
                         // since this will lead to a parent loss of focus, close status,
@@ -4195,7 +4195,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
         {
              case FocusIn:
              case FocusOut:
-                if( ( nStyle_ & SAL_FRAME_STYLE_PLUG )
+                if( ( nStyle_ & SalFrameStyleFlags::PLUG )
                     && ( pEvent->xfocus.window == GetShellWindow()
                          || pEvent->xfocus.window == GetForeignParent() )
                     )

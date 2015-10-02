@@ -1732,7 +1732,7 @@ KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nStyle ) :
 
 void KDESalFrame::Show( bool bVisible, bool bNoActivate )
 {
-    if ( !GetParent() && ! (GetStyle() & SAL_FRAME_STYLE_INTRO) )
+    if ( !GetParent() && ! (GetStyle() & SalFrameStyleFlags::INTRO) )
     {
         KDEXLib* pXLib = static_cast<KDEXLib*>(GetDisplay()->GetXLib());
         pXLib->doStartup();

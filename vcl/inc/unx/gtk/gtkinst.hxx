@@ -62,8 +62,8 @@ public:
     void    EnsureInit();
     virtual void AfterAppInit() SAL_OVERRIDE;
 
-    virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
-    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
+    virtual SalFrame*           CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
+    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
     virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) SAL_OVERRIDE;
     virtual SalSystem*          CreateSalSystem() SAL_OVERRIDE;
     virtual SalInfoPrinter*     CreateInfoPrinter(SalPrinterQueueInfo* pPrinterQueueInfo, ImplJobSetup* pJobSetup) SAL_OVERRIDE;

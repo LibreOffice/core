@@ -70,7 +70,7 @@ public:
     bool                            mbSized:1;
     bool                            mbPresentation:1;
 
-    sal_uLong                           mnStyle;
+    SalFrameStyleFlags              mnStyle;
     unsigned int                    mnStyleMask;            // our style mask from NSWindow creation
 
     sal_uInt64                      mnLastEventTime;
@@ -102,7 +102,7 @@ public:
 
         @throws std::runtime_error in case window creation fails
     */
-    AquaSalFrame( SalFrame* pParent, sal_uLong salFrameStyle );
+    AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle );
 
     virtual ~AquaSalFrame();
 

@@ -755,12 +755,12 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
     return (pEvent != NULL);
 }
 
-SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData*, sal_uLong /*nSalFrameStyle*/ )
+SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData*, SalFrameStyleFlags /*nSalFrameStyle*/ )
 {
     return NULL;
 }
 
-SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
+SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle )
 {
     SalData::ensureThreadAutoreleasePool();
 

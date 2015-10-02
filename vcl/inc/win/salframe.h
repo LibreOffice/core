@@ -52,7 +52,7 @@ public:
     int                     mnFullScreenShowState;  // fullscreen restore show state
     UINT                    mnInputLang;            // current Input Language
     UINT                    mnInputCodePage;        // current Input CodePage
-    sal_uIntPtr             mnStyle;                // style
+    SalFrameStyleFlags      mnStyle;                // style
     bool                    mbGraphics;             // is Graphics used
     bool                    mbCaption;              // has window a caption
     bool                    mbBorder;               // has window a border

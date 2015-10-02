@@ -730,7 +730,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_CREATEFRAME:
-            nRet = (LRESULT)ImplSalCreateFrame( GetSalData()->mpFirstInstance, (HWND)lParam, (sal_uLong)wParam );
+            nRet = (LRESULT)ImplSalCreateFrame( GetSalData()->mpFirstInstance, (HWND)lParam, (SalFrameStyleFlags)wParam );
             rDef = FALSE;
             break;
         case SAL_MSG_RECREATEHWND:
@@ -922,13 +922,13 @@ void SalTimer::Start( sal_uLong nMS )
         ImplSalStartTimer( nMS, FALSE );
 }
 
-SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, sal_uLong nSalFrameStyle )
+SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, SalFrameStyleFlags nSalFrameStyle )
 {
     // to switch to Main-Thread
-    return (SalFrame*)(sal_IntPtr)SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)pSystemParentData->hWnd );
+    return (SalFrame*)(sal_IntPtr)SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), (LPARAM)pSystemParentData->hWnd );
 }
 
-SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
+SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle )
 {
     // to switch to Main-Thread
     HWND hWndParent;
@@ -936,7 +936,7 @@ SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameSty
         hWndParent = static_cast<WinSalFrame*>(pParent)->mhWnd;
     else
         hWndParent = 0;
-    return (SalFrame*)(sal_IntPtr)SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)hWndParent );
+    return (SalFrame*)(sal_IntPtr)SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), (LPARAM)hWndParent );
 }
 
 void WinSalInstance::DestroyFrame( SalFrame* pFrame )
