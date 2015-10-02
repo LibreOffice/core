@@ -22,7 +22,6 @@
 #include "swdllapi.h"
 #include <fldbas.hxx>
 #include <toxe.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <sal/log.hxx>
 
 #include <memory>
@@ -56,7 +55,7 @@ struct SwTOXSortKey
 };
 
 class SwAuthorityField;
-typedef boost::ptr_vector<SwTOXSortKey> SortKeyArr;
+typedef std::vector<SwTOXSortKey> SortKeyArr;
 typedef std::vector<std::unique_ptr<SwAuthEntry>> SwAuthDataArr;
 
 class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType

@@ -436,23 +436,23 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
                 for(sal_Int32 i = 0; i < aSeq.getLength() && i < USHRT_MAX / 4; i++)
                 {
                     const PropertyValue* pValue = pValues[i].getConstArray();
-                    SwTOXSortKey* pSortKey = new SwTOXSortKey;
+                    SwTOXSortKey aSortKey;
                     for(sal_Int32 j = 0; j < pValues[i].getLength(); j++)
                     {
                         if(pValue[j].Name == UNO_NAME_SORT_KEY)
                         {
                             sal_Int16 nVal = -1; pValue[j].Value >>= nVal;
                             if(nVal >= 0 && nVal < AUTH_FIELD_END)
-                                pSortKey->eField = (ToxAuthorityField) nVal;
+                                aSortKey.eField = (ToxAuthorityField) nVal;
                             else
                                 bRet = false;
                         }
                         else if(pValue[j].Name == UNO_NAME_IS_SORT_ASCENDING)
                         {
-                            pSortKey->bSortAscending = *static_cast<sal_Bool const *>(pValue[j].Value.getValue());
+                            aSortKey.bSortAscending = *static_cast<sal_Bool const *>(pValue[j].Value.getValue());
                         }
                     }
-                    m_SortKeyArr.push_back(pSortKey);
+                    m_SortKeyArr.push_back(aSortKey);
                 }
             }
         }
@@ -488,7 +488,7 @@ void SwAuthorityFieldType::SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey aKeys[
     m_SortKeyArr.clear();
     for(sal_uInt16 i = 0; i < nKeyCount; i++)
         if(aKeys[i].eField < AUTH_FIELD_END)
-            m_SortKeyArr.push_back(new SwTOXSortKey(aKeys[i]));
+            m_SortKeyArr.push_back(SwTOXSortKey(aKeys[i]));
 }
 
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,

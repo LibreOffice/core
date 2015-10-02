@@ -58,6 +58,9 @@
 #include <misc.hrc>
 
 #include <IDocumentFieldsAccess.hxx>
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <memory>
 
 using namespace ::com::sun::star;

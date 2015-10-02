@@ -78,6 +78,10 @@
 #include <sfx2/app.hxx>
 
 #include <unomid.h>
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
