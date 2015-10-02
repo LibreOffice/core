@@ -1904,7 +1904,7 @@ bool SwTextFrm::FormatQuick( bool bForceQuickFormat )
         else
             nLoopProtection = 0;
         nStart = nNewStart;
-        const bool bWillEndlessInsert = nLoopProtection > 2;
+        const bool bWillEndlessInsert = nLoopProtection > 250;
         SAL_WARN_IF(bWillEndlessInsert, "sw", "loop detection triggered");
         if ((!bWillEndlessInsert) // Check for special case: line is invisible,
                                   // like in too thin table cell: tdf#66141
