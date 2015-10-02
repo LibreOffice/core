@@ -276,7 +276,7 @@ namespace sw
             // SwModify::Add() asserts this
             bool IsChanged() const { return m_pPosition != m_pCurrent; }
             // ensures the iterator to point at a current client
-            WriterListener* Sync() { return m_pCurrent = m_pPosition; }
+            WriterListener* Flush() { return m_pCurrent = m_pPosition; }
     };
 }
 
@@ -299,11 +299,11 @@ public:
         if(!m_pPosition)
             m_pPosition = m_rRoot.m_pWriterListeners;
         if(!m_pPosition)
-            return static_cast<TElementType*>(Sync());
+            return static_cast<TElementType*>(Flush());
         while(GetRightOfPos())
             m_pPosition = GetRightOfPos();
         if(static_cast<SwClient*>(m_pPosition)->IsA(TYPE(TElementType)))
-            return static_cast<TElementType*>(Sync());
+            return static_cast<TElementType*>(Flush());
         return Previous();
     }
     TElementType* Next()
@@ -312,14 +312,14 @@ public:
             m_pPosition = GetRightOfPos();
         while(m_pPosition && !static_cast<SwClient*>(m_pPosition)->IsA( TYPE(TElementType) ) )
             m_pPosition = GetRightOfPos();
-        return static_cast<TElementType*>(Sync());
+        return static_cast<TElementType*>(Flush());
     }
     TElementType* Previous()
     {
         m_pPosition = GetLeftOfPos();
         while(m_pPosition && !static_cast<SwClient*>(m_pPosition)->IsA( TYPE(TElementType) ) )
             m_pPosition = GetLeftOfPos();
-        return static_cast<TElementType*>(Sync());
+        return static_cast<TElementType*>(Flush());
     }
     using sw::ClientIteratorBase::IsChanged;
 };
@@ -335,7 +335,7 @@ public:
     {
         if(!IsChanged())
             m_pPosition = GetRightOfPos();
-        return static_cast<SwClient*>(Sync());
+        return static_cast<SwClient*>(Flush());
     }
     using sw::ClientIteratorBase::IsChanged;
 };
