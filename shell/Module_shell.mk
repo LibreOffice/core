@@ -108,17 +108,13 @@ $(eval $(call gb_Module_add_targets,shell,\
 
 endif
 
-ifneq ($(filter-out MACOSX WNT,$(OS)),)
-ifneq ($(ENABLE_HEADLESS),TRUE)
-
+ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
 	Library_recentfile \
 	Package_scripts \
 	Package_scripts_gnome \
 	Package_scripts_kde \
 ))
-
-endif
 endif
 
 ifneq ($(OS),WNT)
