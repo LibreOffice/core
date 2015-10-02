@@ -511,10 +511,10 @@ void SwDoc::GetAllDBNames( std::vector<OUString>& rAllDBNames )
 #else
     SwDBManager* pMgr = GetDBManager();
 
-    const SwDSParamArr& rArr = pMgr->GetDSParamArray();
-    for(const auto &aParam : rArr)
+    const SwDSParams_t& rArr = pMgr->GetDSParamArray();
+    for (const auto& pParam : rArr)
     {
-        rAllDBNames.push_back(aParam.sDataSource + OUString(DB_DELIM) + aParam.sCommand);
+        rAllDBNames.push_back(pParam->sDataSource + OUString(DB_DELIM) + pParam->sCommand);
     }
 #endif
 }

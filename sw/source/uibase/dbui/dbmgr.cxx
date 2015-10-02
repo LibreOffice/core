@@ -433,8 +433,8 @@ bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pP
             *pTemp = *pImpl->pMergeData;
         else
         {
-            SwDSParam* pInsert = new SwDSParam(*pImpl->pMergeData);
-            aDataSourceParams.push_back(pInsert);
+            std::unique_ptr<SwDSParam> pInsert(new SwDSParam(*pImpl->pMergeData));
+            m_DataSourceParams.push_back(std::move(pInsert));
             try
             {
                 uno::Reference<lang::XComponent> xComponent(pInsert->xConnection, uno::UNO_QUERY);
@@ -788,9 +788,8 @@ SwDBManager::SwDBManager(SwDoc* pDoc)
 
 SwDBManager::~SwDBManager()
 {
-    for(size_t nPos = 0; nPos < aDataSourceParams.size(); nPos++)
+    for (auto & pParam : m_DataSourceParams)
     {
-        SwDSParam* pParam = &aDataSourceParams[nPos];
         if(pParam->xConnection.is())
         {
             try
@@ -2357,10 +2356,9 @@ void    SwDBManager::CloseAll(bool bIncludingMerge)
 {
     //the only thing done here is to reset the selection index
     //all connections stay open
-    for(size_t nPos = 0; nPos < aDataSourceParams.size(); nPos++)
+    for (auto & pParam : m_DataSourceParams)
     {
-        SwDSParam* pParam = &aDataSourceParams[nPos];
-        if(bIncludingMerge || pParam != pImpl->pMergeData)
+        if(bIncludingMerge || pParam.get() != pImpl->pMergeData)
         {
             pParam->nSelectionIndex = 0;
             pParam->bAfterSelection = false;
@@ -2388,9 +2386,9 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
     }
 
     SwDSParam* pFound = 0;
-    for(sal_uInt16 nPos = aDataSourceParams.size(); nPos; nPos--)
+    for (size_t nPos = m_DataSourceParams.size(); nPos; nPos--)
     {
-        SwDSParam* pParam = &aDataSourceParams[nPos - 1];
+        SwDSParam* pParam = m_DataSourceParams[nPos - 1].get();
         if(rData.sDataSource == pParam->sDataSource &&
             rData.sCommand == pParam->sCommand &&
             (rData.nCommandType == -1 || rData.nCommandType == pParam->nCommandType ||
@@ -2410,7 +2408,7 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
         if(!pFound)
         {
             pFound = new SwDSParam(rData);
-            aDataSourceParams.push_back(pFound);
+            m_DataSourceParams.push_back(std::unique_ptr<SwDSParam>(pFound));
             try
             {
                 uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
@@ -2433,12 +2431,11 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
          return pImpl->pMergeData;
     }
     SwDSParam* pFound = 0;
-    for(size_t nPos = 0; nPos < aDataSourceParams.size(); nPos++)
+    for (auto & pParam : m_DataSourceParams)
     {
-        SwDSParam* pParam = &aDataSourceParams[nPos];
         if(rDataSource == pParam->sDataSource)
         {
-            pFound = pParam;
+            pFound = pParam.get();
             break;
         }
     }
@@ -2447,7 +2444,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
         SwDBData aData;
         aData.sDataSource = rDataSource;
         pFound = new SwDSParam(aData);
-        aDataSourceParams.push_back(pFound);
+        m_DataSourceParams.push_back(std::unique_ptr<SwDSParam>(pFound));
         try
         {
             uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
@@ -2915,10 +2912,9 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
     }
     if(pFound)
     {
-        for(size_t nPos = 0; nPos < aDataSourceParams.size(); nPos++)
+        for (auto & pParam : m_DataSourceParams)
         {
-            SwDSParam* pParam = &aDataSourceParams[nPos];
-            if(pParam == pFound)
+            if (pParam.get() == pFound)
             {
                 try
                 {
@@ -3116,14 +3112,14 @@ void SwConnectionDisposedListener_Impl::disposing( const lang::EventObject& rSou
     if (!m_pDBManager) return; // we're disposed too!
 
     uno::Reference<sdbc::XConnection> xSource(rSource.Source, uno::UNO_QUERY);
-    for (size_t nPos = m_pDBManager->aDataSourceParams.size(); nPos; nPos--)
+    for (size_t nPos = m_pDBManager->m_DataSourceParams.size(); nPos; nPos--)
     {
-        SwDSParam* pParam = &m_pDBManager->aDataSourceParams[nPos - 1];
+        SwDSParam* pParam = m_pDBManager->m_DataSourceParams[nPos - 1].get();
         if(pParam->xConnection.is() &&
                 (xSource == pParam->xConnection))
         {
-            m_pDBManager->aDataSourceParams.erase(
-                    m_pDBManager->aDataSourceParams.begin() + nPos - 1);
+            m_pDBManager->m_DataSourceParams.erase(
+                    m_pDBManager->m_DataSourceParams.begin() + nPos - 1);
         }
     }
 }

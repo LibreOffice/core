@@ -30,7 +30,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <memory>
+#include <vector>
 
 namespace com{namespace sun{namespace star{
     namespace sdbc{
@@ -136,7 +138,7 @@ struct SwDSParam : public SwDBData
                 bAfterSelection = true;
         }
 };
-typedef boost::ptr_vector<SwDSParam> SwDSParamArr;
+typedef std::vector<std::unique_ptr<SwDSParam>> SwDSParams_t;
 
 struct SwMergeDescriptor
 {
@@ -198,7 +200,7 @@ friend class SwConnectionDisposedListener_Impl;
     bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
     bool            bMergeLock : 1;     /**< prevent update of database fields while document is
                                              actually printed at the SwViewShell */
-    SwDSParamArr        aDataSourceParams;
+    SwDSParams_t    m_DataSourceParams;
     SwDBManager_Impl*    pImpl;
     const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
     /// Name of the embedded database that's included in the current document.
@@ -309,7 +311,7 @@ public:
 
     const SwDSParam* CreateDSData(const SwDBData& rData)
                         {return FindDSData(rData, true);}
-    const SwDSParamArr& GetDSParamArray() const {return aDataSourceParams;}
+    const SwDSParams_t& GetDSParamArray() const { return m_DataSourceParams; }
 
     /// close all data sources - after fields were updated
     void            CloseAll(bool bIncludingMerge = true);
