@@ -98,7 +98,6 @@ class ClientBox : public Control
     long m_nTopIndex;
     long m_nStdHeight;
     long m_nActiveHeight;
-    Size            m_aOutputSize;
 
     VclPtr<NumericBox> m_aPinBox;
     VclPtr<PushButton> m_aDeauthoriseButton;
