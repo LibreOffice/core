@@ -125,6 +125,19 @@ void SvpSalInstance::PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_u
     Wakeup();
 }
 
+#ifdef ANDROID
+bool SvpSalInstance::PostedEventsInQueue()
+{
+    bool result = false;
+    if( osl_acquireMutex( m_aEventGuard ) )
+    {
+        result = m_aUserEvents.size() > 0;
+        osl_releaseMutex( m_aEventGuard );
+    }
+    return result;
+}
+#endif
+
 void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
 {
     m_aFrames.remove( pFrame );

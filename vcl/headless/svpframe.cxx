@@ -39,7 +39,6 @@ SvpSalFrame* SvpSalFrame::s_pFocusFrame = NULL;
 #endif
 
 #ifndef IOS
-
 namespace {
     /// Decouple SalFrame lifetime from damagetracker lifetime
     struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
@@ -48,8 +47,25 @@ namespace {
         virtual void damaged( const basegfx::B2IBox& ) const SAL_OVERRIDE {}
     };
 }
-
 #endif
+
+#ifdef ANDROID
+void SvpSalFrame::enableDamageTracker( bool bOn )
+{
+    if( m_bDamageTracking == bOn )
+        return;
+    if( m_aFrame.get() )
+    {
+        if( m_bDamageTracking )
+            m_aFrame->setDamageTracker( basebmp::IBitmapDeviceDamageTrackerSharedPtr() );
+        else
+            m_aFrame->setDamageTracker(
+                basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker ) );
+    }
+    m_bDamageTracking = bOn;
+}
+#endif
+
 
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,

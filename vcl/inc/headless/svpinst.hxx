@@ -99,6 +99,10 @@ public:
 
     void                    PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent);
 
+#ifdef ANDROID
+    bool                    PostedEventsInQueue();
+#endif
+
     void                    StartTimer( sal_uLong nMS );
     void                    StopTimer();
     void                    Wakeup();

@@ -125,6 +125,11 @@ public:
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void                EndSetClipRegion() SAL_OVERRIDE;
 
+#ifdef ANDROID
+    // If enabled we can get damage notifications for regions immediately rendered to ...
+    void                        enableDamageTracker( bool bOn = true );
+#endif
+
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) SAL_OVERRIDE { (void)nScreen; }
     virtual void                SetApplicationID(const OUString &rApplicationID) SAL_OVERRIDE { (void) rApplicationID; }
