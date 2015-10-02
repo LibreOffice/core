@@ -2644,7 +2644,7 @@ void ScDocument::CopyNonFilteredFromClip(
 
 namespace {
 
-class BroadcastAction : public sc::ColumnSpanSet::ColumnAction
+class BroadcastAction
 {
     ScDocument& mrDoc;
     ScColumn* mpCol;
@@ -2652,12 +2652,12 @@ class BroadcastAction : public sc::ColumnSpanSet::ColumnAction
 public:
     BroadcastAction( ScDocument& rDoc ) : mrDoc(rDoc), mpCol(NULL) {}
 
-    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
+    void startColumn( ScColumn* pCol )
     {
         mpCol = pCol;
     }
 
-    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
+    void execute( SCROW nRow1, SCROW nRow2, bool bVal )
     {
         if (!bVal)
             return;

@@ -844,7 +844,7 @@ void expandRowRange( ScRange& rRange, SCROW nTop, SCROW nBottom )
         rRange.aEnd.SetRow(nBottom);
 }
 
-class FormulaCellCollectAction : public sc::ColumnSpanSet::ColumnAction
+class FormulaCellCollectAction
 {
     std::vector<ScFormulaCell*>& mrCells;
     ScColumn* mpCol;
@@ -853,12 +853,12 @@ public:
     FormulaCellCollectAction( std::vector<ScFormulaCell*>& rCells ) :
         mrCells(rCells), mpCol(NULL) {}
 
-    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
+    void startColumn( ScColumn* pCol )
     {
         mpCol = pCol;
     }
 
-    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
+    void execute( SCROW nRow1, SCROW nRow2, bool bVal )
     {
         assert(mpCol);
 
@@ -869,7 +869,7 @@ public:
     }
 };
 
-class ListenerStartAction : public sc::ColumnSpanSet::ColumnAction
+class ListenerStartAction
 {
     ScColumn* mpCol;
 
@@ -884,12 +884,12 @@ public:
         maStartCxt(rDoc, mpPosSet),
         maEndCxt(rDoc, mpPosSet) {}
 
-    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
+    void startColumn( ScColumn* pCol )
     {
         mpCol = pCol;
     }
 
-    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
+    void execute( SCROW nRow1, SCROW nRow2, bool bVal )
     {
         assert(mpCol);
 

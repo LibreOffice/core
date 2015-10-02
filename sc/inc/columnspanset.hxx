@@ -11,12 +11,13 @@
 #define INCLUDED_SC_INC_COLUMNSPANSET_HXX
 
 #include "address.hxx"
+#include "document.hxx"
+#include "table.hxx"
 
 #include <vector>
 #include <mdds/flat_segment_tree.hpp>
 #include <boost/noncopyable.hpp>
 
-class ScDocument;
 class ScColumn;
 class ScMarkData;
 class ScRange;
@@ -78,14 +79,6 @@ public:
         virtual void execute(const ScAddress& rPos, SCROW nLength, bool bVal) = 0;
     };
 
-    class ColumnAction
-    {
-    public:
-        virtual ~ColumnAction() = 0;
-        virtual void startColumn(ScColumn* pCol) = 0;
-        virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal) = 0;
-    };
-
     ColumnSpanSet(bool bInit);
     ~ColumnSpanSet();
 
@@ -102,7 +95,50 @@ public:
     void scan(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bVal);
 
     void executeAction(Action& ac) const;
-    void executeColumnAction(ScDocument& rDoc, ColumnAction& ac) const;
+
+    template<typename ColumnAction>
+    void executeColumnAction(ScDocument& rDoc, ColumnAction& ac) const
+    {
+        for (size_t nTab = 0; nTab < maDoc.size(); ++nTab)
+        {
+            if (!maDoc[nTab])
+                continue;
+
+            const TableType& rTab = *maDoc[nTab];
+            for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
+            {
+                if (!rTab[nCol])
+                    continue;
+
+                ScTable* pTab = rDoc.FetchTable(nTab);
+                if (!pTab)
+                    continue;
+
+                if (!ValidCol(nCol))
+                {
+                    // End the loop.
+                    nCol = rTab.size();
+                    continue;
+                }
+
+                ScColumn& rColumn = pTab->aCol[nCol];
+                ac.startColumn(&rColumn);
+                ColumnType& rCol = *rTab[nCol];
+                ColumnSpansType::const_iterator it = rCol.maSpans.begin(), itEnd = rCol.maSpans.end();
+                SCROW nRow1, nRow2;
+                nRow1 = it->first;
+                bool bVal = it->second;
+                for (++it; it != itEnd; ++it)
+                {
+                    nRow2 = it->first-1;
+                    ac.execute(nRow1, nRow2, bVal);
+
+                    nRow1 = nRow2+1; // for the next iteration.
+                    bVal = it->second;
+                }
+            }
+        }
+    }
 
     void swap( ColumnSpanSet& r );
 };

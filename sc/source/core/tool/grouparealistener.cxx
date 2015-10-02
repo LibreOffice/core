@@ -34,7 +34,7 @@ public:
     }
 };
 
-class CollectCellAction : public sc::ColumnSpanSet::ColumnAction
+class CollectCellAction
 {
     const FormulaGroupAreaListener& mrAreaListener;
     ScAddress maPos;
@@ -44,13 +44,13 @@ public:
     CollectCellAction( const FormulaGroupAreaListener& rAreaListener ) :
         mrAreaListener(rAreaListener) {}
 
-    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
+    void startColumn( ScColumn* pCol )
     {
         maPos.SetTab(pCol->GetTab());
         maPos.SetCol(pCol->GetCol());
     }
 
-    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
+    void execute( SCROW nRow1, SCROW nRow2, bool bVal )
     {
         if (!bVal)
             return;

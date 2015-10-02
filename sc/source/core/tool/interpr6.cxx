@@ -278,7 +278,7 @@ public:
     size_t getCount() const { return mnCount; }
 };
 
-class FuncCount : public sc::ColumnSpanSet::ColumnAction
+class FuncCount
 {
     sc::ColumnBlockConstPosition maPos;
     ScColumn* mpCol;
@@ -288,13 +288,13 @@ class FuncCount : public sc::ColumnSpanSet::ColumnAction
 public:
     FuncCount() : mpCol(0), mnCount(0), mnNumFmt(0) {}
 
-    virtual void startColumn(ScColumn* pCol) SAL_OVERRIDE
+    void startColumn(ScColumn* pCol)
     {
         mpCol = pCol;
         mpCol->InitBlockPosition(maPos);
     }
 
-    virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal) SAL_OVERRIDE
+    void execute(SCROW nRow1, SCROW nRow2, bool bVal)
     {
         if (!bVal)
             return;
@@ -309,7 +309,7 @@ public:
     sal_uInt32 getNumberFormat() const { return mnNumFmt; }
 };
 
-class FuncSum : public sc::ColumnSpanSet::ColumnAction
+class FuncSum
 {
     sc::ColumnBlockConstPosition maPos;
     ScColumn* mpCol;
@@ -320,13 +320,13 @@ class FuncSum : public sc::ColumnSpanSet::ColumnAction
 public:
     FuncSum() : mpCol(0), mfSum(0.0), mnError(0), mnNumFmt(0) {}
 
-    virtual void startColumn(ScColumn* pCol) SAL_OVERRIDE
+    void startColumn(ScColumn* pCol)
     {
         mpCol = pCol;
         mpCol->InitBlockPosition(maPos);
     }
 
-    virtual void execute(SCROW nRow1, SCROW nRow2, bool bVal) SAL_OVERRIDE
+    void execute(SCROW nRow1, SCROW nRow2, bool bVal)
     {
         if (!bVal)
             return;
