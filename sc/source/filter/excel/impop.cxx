@@ -662,6 +662,12 @@ void ImportExcel::DefColWidth()
     // stored as entire characters -> convert to 1/256 of characters (as in COLINFO)
     double fDefWidth = 256.0 * maStrm.ReaduInt16();
 
+    if (!pColRowBuff)
+    {
+        SAL_WARN("sc", "*ImportExcel::DefColWidth(): pColRowBuff is NULL!");
+        return;
+    }
+
     // #i3006# additional space for default width - Excel adds space depending on font size
     long nFontHt = GetFontBuffer().GetAppFontData().mnHeight;
     fDefWidth += XclTools::GetXclDefColWidthCorrection( nFontHt );
