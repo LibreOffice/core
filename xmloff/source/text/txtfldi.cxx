@@ -1859,6 +1859,22 @@ XMLSimpleDocInfoImportContext::XMLSimpleDocInfoImportContext(
     bValid = true;
 }
 
+XMLSimpleDocInfoImportContext::XMLSimpleDocInfoImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element, sal_uInt16 nToken,
+    bool bContent, bool bAuthor )
+: XMLTextFieldImportContext(rImport, rHlp, MapTokenToServiceName(nToken), Element),
+    sPropertyFixed(sAPI_is_fixed),
+    sPropertyContent(sAPI_content),
+    sPropertyAuthor(sAPI_author),
+    sPropertyCurrentPresentation(sAPI_current_presentation),
+    bFixed(false),
+    bHasAuthor(bAuthor),
+    bHasContent(bContent)
+{
+    bValid = true;
+}
+
 void XMLSimpleDocInfoImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
@@ -1997,6 +2013,15 @@ XMLRevisionDocInfoImportContext::XMLRevisionDocInfoImportContext(
     bValid = true;
 }
 
+XMLRevisionDocInfoImportContext::XMLRevisionDocInfoImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element, sal_uInt16 nToken )
+:   XMLSimpleDocInfoImportContext(rImport, rHlp, Element, nToken, false, false),
+    sPropertyRevision(sAPI_revision)
+{
+    bValid = true;
+}
+
 void XMLRevisionDocInfoImportContext::PrepareField(
     const Reference<XPropertySet> & rPropertySet)
 {
@@ -2044,6 +2069,50 @@ XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
     , bIsDate(false)
     , bHasDateTime(false)
     , bIsDefaultLanguage(true)
+{
+    // we allow processing of EDIT_DURATION here, because import of actual
+    // is not supported anyway. If it was, we'd need an extra import class
+    // because times and time durations are presented differently!
+
+    bValid = true;
+    switch (nToken)
+    {
+        case XML_TOK_TEXT_DOCUMENT_CREATION_DATE:
+        case XML_TOK_TEXT_DOCUMENT_PRINT_DATE:
+        case XML_TOK_TEXT_DOCUMENT_SAVE_DATE:
+            bIsDate = true;
+            bHasDateTime = true;
+            break;
+        case XML_TOK_TEXT_DOCUMENT_CREATION_TIME:
+        case XML_TOK_TEXT_DOCUMENT_PRINT_TIME:
+        case XML_TOK_TEXT_DOCUMENT_SAVE_TIME:
+            bIsDate = false;
+            bHasDateTime = true;
+            break;
+        case XML_TOK_TEXT_DOCUMENT_EDIT_DURATION:
+            bIsDate = false;
+            bHasDateTime = false;
+            break;
+        default:
+            OSL_FAIL(
+                "XMLDateTimeDocInfoImportContext needs date/time doc. fields");
+            bValid = false;
+            break;
+    }
+}
+
+XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element, sal_uInt16 nToken )
+:   XMLSimpleDocInfoImportContext(rImport, rHlp, Element, nToken, false, false),
+    sPropertyNumberFormat(sAPI_number_format),
+    sPropertyIsDate(sAPI_is_date),
+    sPropertyIsFixedLanguage(sAPI_is_fixed_language),
+    nFormat(0),
+    bFormatOK(false),
+    bIsDate(false),
+    bHasDateTime(false),
+    bIsDefaultLanguage(true)
 {
     // we allow processing of EDIT_DURATION here, because import of actual
     // is not supported anyway. If it was, we'd need an extra import class
@@ -2153,6 +2222,20 @@ XMLUserDocInfoImportContext::XMLUserDocInfoImportContext(
     , nFormat(0)
     , bFormatOK(false)
     , bIsDefaultLanguage( true )
+{
+    bValid = false;
+}
+
+XMLUserDocInfoImportContext::XMLUserDocInfoImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element, sal_uInt16 nToken )
+:   XMLSimpleDocInfoImportContext(rImport, rHlp, Element, nToken, false, false),
+    sPropertyName(sAPI_name),
+    sPropertyNumberFormat(sAPI_number_format),
+    sPropertyIsFixedLanguage(sAPI_is_fixed_language),
+    nFormat(0),
+    bFormatOK(false),
+    bIsDefaultLanguage( true )
 {
     bValid = false;
 }

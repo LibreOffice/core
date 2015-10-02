@@ -642,6 +642,12 @@ public:
                                   sal_uInt16 nToken,
                                   bool bContent,
                                   bool bAuthor);
+    XMLSimpleDocInfoImportContext( SvXMLImport& rImport,
+                                   XMLTextImportHelper& rHlp,
+                                   sal_Int32 Element,
+                                   sal_uInt16 nToken,
+                                   bool bContent,
+                                   bool bAuthor );
 
 protected:
     /// process attribute values
@@ -677,6 +683,10 @@ public:
                                     sal_uInt16 nPrfx,
                                     const OUString& sLocalName,
                                     sal_uInt16 nToken);
+    XMLDateTimeDocInfoImportContext(SvXMLImport& rImport,
+                                    XMLTextImportHelper& rHlp,
+                                    sal_Int32 Element,
+                                    sal_uInt16 nToken);
 
 protected:
     /// process attribute values
@@ -701,6 +711,10 @@ public:
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
                                     const OUString& sLocalName,
+                                    sal_uInt16 nToken);
+    XMLRevisionDocInfoImportContext(SvXMLImport& rImport,
+                                    XMLTextImportHelper& rHlp,
+                                    sal_Int32 Element,
                                     sal_uInt16 nToken);
 
 protected:
@@ -728,6 +742,10 @@ public:
                                 XMLTextImportHelper& rHlp,
                                 sal_uInt16 nPrfx,
                                 const OUString& sLocalName,
+                                sal_uInt16 nToken);
+    XMLUserDocInfoImportContext(SvXMLImport& rImport,
+                                XMLTextImportHelper& rHlp,
+                                sal_Int32 Element,
                                 sal_uInt16 nToken);
 
 protected:
