@@ -2138,7 +2138,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
 {
     if ( rUniString.isEmpty() )
         return;
-    if ( mnTextMode == 0 )  // using glpyh outlines
+    if ( mnTextMode == 0 )  // using glyph outlines
     {
         vcl::Font    aNotRotatedFont( maFont );
         aNotRotatedFont.SetOrientation( 0 );
