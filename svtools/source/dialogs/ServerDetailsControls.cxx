@@ -434,7 +434,7 @@ IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
     // temporary remember the password
     try
     {
-        if( xMasterPasswd->isPersistentStoringAllowed() && !sUrl.isEmpty() && !m_sUsername.isEmpty() && !m_sPassword.isEmpty() )
+        if( !sUrl.isEmpty() && !m_sUsername.isEmpty() && !m_sPassword.isEmpty() )
         {
             Reference< XInteractionHandler > xInteractionHandler(
                 InteractionHandler::createWithParent( xContext, 0 ),
