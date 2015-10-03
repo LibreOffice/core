@@ -160,7 +160,7 @@ public class FileUtilities {
         if (filename == null)
             return false;
 
-        if (byMode == ALL && byFilename == "") {
+        if (byMode == ALL && byFilename.equals("")) {
             if (filename.startsWith(".")) {//ignore hidden files
                 return false;
             }
@@ -171,7 +171,7 @@ public class FileUtilities {
             if (mExtnMap.get (getExtension (filename)) != byMode)
                 return false;
         }
-        if (byFilename != "") {
+        if (!byFilename.equals("")) {
             // FIXME return false on a non-match
         }
         return true;
