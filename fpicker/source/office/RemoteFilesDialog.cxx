@@ -1142,6 +1142,9 @@ IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, OkHdl, Button*, void )
             OpenURL( sPathNoExt );
             m_pName_ed->SetText( "" );
 
+            if( !bSelected )
+                m_pName_ed->GrabFocus();
+
             return;
         }
 
