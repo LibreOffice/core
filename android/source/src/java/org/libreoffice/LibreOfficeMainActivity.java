@@ -109,7 +109,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Underline"));
                 return true;
             case R.id.action_strikeout:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:StrikeOut"));
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Strikeout"));
                 return true;
             case R.id.action_keyboard:
                 showSoftKeyboard();

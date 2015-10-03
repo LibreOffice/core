@@ -91,7 +91,7 @@ public class InvalidationHandler implements Document.MessageCallback {
             LOKitShell.getToolbarController().onToggleStateChanged(Document.ITALIC, pressed);
         } else if (parts[0].equals(".uno:Underline")) {
             LOKitShell.getToolbarController().onToggleStateChanged(Document.UNDERLINE, pressed);
-        } else if (parts[0].equals(".uno:StrikeOut")) {
+        } else if (parts[0].equals(".uno:Strikeout")) {
             LOKitShell.getToolbarController().onToggleStateChanged(Document.STRIKEOUT, pressed);
         } else {
             Log.d(LOGTAG, "LOK_CALLBACK_STATE_CHANGED type uncatched: " + payload);
