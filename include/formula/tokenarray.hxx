@@ -330,7 +330,7 @@ class FORMULA_DLLPUBLIC FormulaTokenIterator
         Item(const FormulaTokenArray* arr, short pc, short stop);
     };
 
-    std::vector<Item> *maStack;
+    std::vector<Item> maStack;
 
 public:
     FormulaTokenIterator( const FormulaTokenArray& );
@@ -339,8 +339,8 @@ public:
     const   FormulaToken* Next();
     const   FormulaToken* PeekNextOperator();
     bool    IsEndOfPath() const;    /// if a jump or subroutine path is done
-    bool    HasStacked() const { return maStack->size() > 1; }
-    short   GetPC() const { return maStack->back().nPC; }
+    bool    HasStacked() const { return maStack.size() > 1; }
+    short   GetPC() const { return maStack.back().nPC; }
 
     /** Jump or subroutine call.
         Program counter values will be incremented before code is executed =>
