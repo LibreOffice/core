@@ -1026,17 +1026,21 @@ void ImportExcel::Array34()
     aIn.Ignore( (GetBiff() >= EXC_BIFF5) ? 6 : 2 );
     nFormLen = aIn.ReaduInt16();
 
+    const ScTokenArray* pErgebnis = nullptr;
+
     if( ValidColRow( nLastCol, nLastRow ) )
     {
         // the read mark is now on the formula, length in nFormLen
-        const ScTokenArray* pErgebnis;
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
         pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
-        OSL_ENSURE( pErgebnis, "+ImportExcel::Array34(): ScTokenArray is NULL!" );
+        SAL_WARN_IF(!pErgebnis, "sc", "+ImportExcel::Array34(): ScTokenArray is NULL!");
+    }
 
+    if (pErgebnis)
+    {
         ScDocumentImport& rDoc = GetDocImport();
         ScRange aArrayRange(nFirstCol, nFirstRow, GetCurrScTab(), nLastCol, nLastRow, GetCurrScTab());
         rDoc.setMatrixCells(aArrayRange, *pErgebnis, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
