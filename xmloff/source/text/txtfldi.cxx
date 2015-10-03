@@ -4118,6 +4118,14 @@ XMLPageNameFieldImportContext::XMLPageNameFieldImportContext(
     bValid = true;
 }
 
+XMLPageNameFieldImportContext::XMLPageNameFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_pagename, Element)
+{
+    bValid = true;
+}
+
 /// process attribute values
 void XMLPageNameFieldImportContext::ProcessAttribute( sal_uInt16,
                                    const OUString& )
