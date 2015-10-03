@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.libreoffice.android"
+      package="org.libreoffice.kit"
       android:versionCode="1"
       android:versionName="1.0">
     <application>
-        <activity android:name="org.libreoffice.android.Bootstrap" />
+        <activity android:name="org.libreoffice.kit.LibreOfficeKit" />
     </application>
 </manifest>

@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -42,7 +42,7 @@ import java.util.List;
 /**
  * Main activity of the LibreOffice App. It is started in the UI thread.
  */
-public class LibreOfficeMainActivity extends ActionBarActivity {
+public class LibreOfficeMainActivity extends AppCompatActivity {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
