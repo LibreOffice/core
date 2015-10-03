@@ -670,6 +670,252 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
     return pContext;
 }
 
+/// create the appropriate field context from
+XMLTextFieldImportContext*
+XMLTextFieldImportContext::CreateTextFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element,
+    sal_uInt16 nToken)
+{
+    XMLTextFieldImportContext* pContext = NULL;
+
+    switch (nToken)
+    {
+        case XML_TOK_TEXT_SENDER_FIRSTNAME:
+        case XML_TOK_TEXT_SENDER_LASTNAME:
+        case XML_TOK_TEXT_SENDER_INITIALS:
+        case XML_TOK_TEXT_SENDER_TITLE:
+        case XML_TOK_TEXT_SENDER_POSITION:
+        case XML_TOK_TEXT_SENDER_EMAIL:
+        case XML_TOK_TEXT_SENDER_PHONE_PRIVATE:
+        case XML_TOK_TEXT_SENDER_FAX:
+        case XML_TOK_TEXT_SENDER_COMPANY:
+        case XML_TOK_TEXT_SENDER_PHONE_WORK:
+        case XML_TOK_TEXT_SENDER_STREET:
+        case XML_TOK_TEXT_SENDER_CITY:
+        case XML_TOK_TEXT_SENDER_POSTAL_CODE:
+        case XML_TOK_TEXT_SENDER_COUNTRY:
+        case XML_TOK_TEXT_SENDER_STATE_OR_PROVINCE:
+            pContext =
+                new XMLSenderFieldImportContext( rImport, rHlp, Element, nToken );
+            break;
+
+        case XML_TOK_TEXT_AUTHOR_NAME:
+        case XML_TOK_TEXT_AUTHOR_INITIALS:
+            pContext =
+                new XMLAuthorFieldImportContext( rImport, rHlp, Element, nToken );
+            break;
+
+        case XML_TOK_TEXT_PLACEHOLDER:
+            pContext =
+                new XMLPlaceholderFieldImportContext( rImport, rHlp, Element);
+            break;
+        case XML_TOK_TEXT_SEQUENCE:
+            pContext =
+                new XMLSequenceFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_TEXT_INPUT:
+            pContext =
+                new XMLTextInputFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_EXPRESSION:
+            pContext =
+                new XMLExpressionFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_VARIABLE_SET:
+            pContext =
+                new XMLVariableSetFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_VARIABLE_INPUT:
+            pContext =
+                new XMLVariableInputFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_VARIABLE_GET:
+            pContext =
+                new XMLVariableGetFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_USER_FIELD_GET:
+            pContext = new XMLUserFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_USER_FIELD_INPUT:
+            pContext = new XMLUserFieldInputImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_TIME:
+            pContext = new XMLTimeFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_PAGE_CONTINUATION_STRING:
+        case XML_TOK_TEXT_PAGE_CONTINUATION:
+            pContext = new XMLPageContinuationImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_PAGE_NUMBER:
+            pContext = new XMLPageNumberImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_DATE:
+            pContext = new XMLDateFieldImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_DATABASE_NAME:
+            pContext = new XMLDatabaseNameImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_DATABASE_NEXT:
+            pContext = new XMLDatabaseNextImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_DATABASE_SELECT:
+            pContext = new XMLDatabaseSelectImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_DATABASE_ROW_NUMBER:
+            pContext = new XMLDatabaseNumberImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_DATABASE_DISPLAY:
+            pContext = new XMLDatabaseDisplayImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_CONDITIONAL_TEXT:
+            pContext = new XMLConditionalTextImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_HIDDEN_TEXT:
+            pContext = new XMLHiddenTextImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_HIDDEN_PARAGRAPH:
+            pContext = new XMLHiddenParagraphImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_DOCUMENT_DESCRIPTION:
+        case XML_TOK_TEXT_DOCUMENT_TITLE:
+        case XML_TOK_TEXT_DOCUMENT_SUBJECT:
+        case XML_TOK_TEXT_DOCUMENT_KEYWORDS:
+            pContext = new XMLSimpleDocInfoImportContext( rImport, rHlp,
+                                                          Element, nToken,
+                                                          true, false );
+            break;
+        case XML_TOK_TEXT_DOCUMENT_CREATION_AUTHOR:
+        case XML_TOK_TEXT_DOCUMENT_PRINT_AUTHOR:
+        case XML_TOK_TEXT_DOCUMENT_SAVE_AUTHOR:
+            pContext = new XMLSimpleDocInfoImportContext( rImport, rHlp,
+                                                          Element, nToken,
+                                                          false, true );
+            break;
+
+        case XML_TOK_TEXT_DOCUMENT_CREATION_DATE:
+        case XML_TOK_TEXT_DOCUMENT_CREATION_TIME:
+        case XML_TOK_TEXT_DOCUMENT_PRINT_DATE:
+        case XML_TOK_TEXT_DOCUMENT_PRINT_TIME:
+        case XML_TOK_TEXT_DOCUMENT_SAVE_DATE:
+        case XML_TOK_TEXT_DOCUMENT_SAVE_TIME:
+        case XML_TOK_TEXT_DOCUMENT_EDIT_DURATION:
+            pContext = new XMLDateTimeDocInfoImportContext( rImport, rHlp,
+                                                            Element, nToken );
+            break;
+
+        case XML_TOK_TEXT_DOCUMENT_REVISION:
+            pContext = new XMLRevisionDocInfoImportContext( rImport, rHlp,
+                                                            Element, nToken );
+            break;
+
+        case XML_TOK_TEXT_DOCUMENT_USER_DEFINED:
+            pContext = new XMLUserDocInfoImportContext( rImport, rHlp,
+                                                        Element, nToken );
+            break;
+
+        case XML_TOK_TEXT_FILENAME:
+            pContext = new XMLFileNameImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_CHAPTER:
+            pContext = new XMLChapterImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_TEMPLATENAME:
+            pContext = new XMLTemplateNameImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_WORD_COUNT:
+        case XML_TOK_TEXT_PARAGRAPH_COUNT:
+        case XML_TOK_TEXT_TABLE_COUNT:
+        case XML_TOK_TEXT_CHARACTER_COUNT:
+        case XML_TOK_TEXT_IMAGE_COUNT:
+        case XML_TOK_TEXT_OBJECT_COUNT:
+        case XML_TOK_TEXT_PAGE_COUNT:
+            pContext = new XMLCountFieldImportContext( rImport, rHlp,
+                                                       Element, nToken);
+            break;
+
+        case XML_TOK_TEXT_GET_PAGE_VAR:
+            pContext = new XMLPageVarGetFieldImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_SET_PAGE_VAR:
+            pContext = new XMLPageVarSetFieldImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_MACRO:
+            pContext = new XMLMacroFieldImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_DDE:
+            pContext = new XMLDdeFieldImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_REFERENCE_REF:
+        case XML_TOK_TEXT_BOOKMARK_REF:
+        case XML_TOK_TEXT_NOTE_REF:
+        case XML_TOK_TEXT_SEQUENCE_REF:
+            pContext = new XMLReferenceFieldImportContext( rImport, rHlp,
+                                                           nToken, Element );
+            break;
+
+        case XML_TOK_TEXT_SHEET_NAME:
+            pContext = new XMLSheetNameImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_PAGE_NAME:
+            pContext = new XMLPageNameFieldImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_BIBLIOGRAPHY_MARK:
+            pContext = new XMLBibliographyFieldImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_ANNOTATION:
+        case XML_TOK_TEXT_ANNOTATION_END:
+            pContext = new XMLAnnotationImportContext( rImport, rHlp,
+                                                       nToken, Element );
+            break;
+
+        case XML_TOK_TEXT_SCRIPT:
+            pContext = new XMLScriptImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_MEASURE:
+            pContext = new XMLMeasureFieldImportContext( rImport, rHlp, Element );
+            break;
+
+        case XML_TOK_TEXT_TABLE_FORMULA:
+            pContext = new XMLTableFormulaImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_TEXT_DROP_DOWN:
+            pContext = new XMLDropDownFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_DRAW_HEADER:
+            pContext = new XMLHeaderFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_DRAW_FOOTER:
+            pContext = new XMLFooterFieldImportContext( rImport, rHlp, Element );
+            break;
+        case XML_TOK_DRAW_DATE_TIME:
+            pContext = new XMLDateTimeFieldImportContext( rImport, rHlp, Element );
+            break;
+
+        default:
+            // ignore! May not even be a textfield.
+            // (Reminder: This method is called inside default:-branch)
+            pContext = NULL;
+            break;
+    }
+
+    return pContext;
+}
 
 void XMLTextFieldImportContext::ForceUpdate(
     const Reference<XPropertySet> & rPropertySet)

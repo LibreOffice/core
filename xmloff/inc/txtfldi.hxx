@@ -166,6 +166,11 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rName,
         sal_uInt16 nToken);
+    static XMLTextFieldImportContext* CreateTextFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element,
+        sal_uInt16 nToken);
 
 protected:
     /// get helper
