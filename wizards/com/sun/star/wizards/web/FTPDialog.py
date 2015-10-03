@@ -249,7 +249,7 @@ class FTPDialog(WizardDialog):
     # according to the status of the hostname, username, password text fields.
     # If one of these fields is empty, the button is disabled.
     def enableTestButton(self):
-        self.setEnabled(self.btnTestConnection, not self.isEmpty(self.host) or self.isEmpty(self.username) or self.isEmpty(self.password))
+        self.setEnabled(self.btnTestConnection, not (self.isEmpty(self.host) or self.isEmpty(self.username) or self.isEmpty(self.password)))
 
     # @param s
     # @return True if the string is None or "".
