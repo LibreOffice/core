@@ -61,6 +61,8 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/document/XUndoAction.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <vcl/msgbox.hxx>
@@ -298,6 +300,26 @@ bool ChartController::TheModelRef::is() const
     return (m_pTheModel != 0);
 }
 
+namespace {
+
+css::uno::Reference<css::chart2::XChartType> getChartType(
+        css::uno::Reference<css::chart2::XChartDocument> xChartDoc)
+{
+    Reference <chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
+
+    Reference< chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY_THROW );
+
+    Sequence< Reference< chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
+
+    Reference< chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[0], uno::UNO_QUERY_THROW );
+
+    Sequence< Reference< chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
+
+    return xChartTypeSequence[0];
+}
+
+}
+
 OUString ChartController::GetContextName()
 {
     if (m_bDisposed)
@@ -314,6 +336,8 @@ OUString ChartController::GetContextName()
         return OUString("Chart");
 
     ObjectType eObjectID = ObjectIdentifier::getObjectType(aCID);
+
+    css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(css::uno::Reference<css::chart2::XChartDocument>(getModel(), uno::UNO_QUERY_THROW));
     switch (eObjectID)
     {
         case OBJECTTYPE_DATA_SERIES:
@@ -327,6 +351,9 @@ OUString ChartController::GetContextName()
             return OUString("Axis");
         case OBJECTTYPE_GRID:
             return OUString("Grid");
+        case OBJECTTYPE_DIAGRAM:
+            if (xChartType->getChartType() == "com.sun.star.chart2.PieChartType")
+                return OUString("ChartElements");
         default:
         break;
     }

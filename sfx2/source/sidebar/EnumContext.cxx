@@ -179,6 +179,7 @@ void EnumContext::ProvideContextContainers()
         AddContext(Cell);
         AddContext(Chart);
         AddContext(Chart);
+        AddContext(ChartElements);
         AddContext(Draw);
         AddContext(DrawLine);
         AddContext(DrawPage);
