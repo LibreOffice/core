@@ -4,6 +4,7 @@
     tools:context="org.libreoffice.MainActivity">
 
     <group android:id="@+id/group_edit_actions"
+           tools:visible="true"
            android:visible="false">
         <item android:id="@+id/action_bold"
               android:title="@string/action_bold"

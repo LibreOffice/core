@@ -30,6 +30,7 @@
     <string name="menu_sort_az">Sort A-Z</string>
     <string name="menu_sort_modified">Sort by Date</string>
     <string name="menu_preferences">Preferences</string>
+    <string name="file_icon_desc">fileicon</string>
     <!-- Pref keys as resources ; Not currently used -->
     <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
     <string name="CURRENT_DIRECTORY_KEY">CURRENT_DIRECTORY</string>
@@ -66,7 +67,7 @@
 
     <!-- Feedback messages -->
     <string name="message_saved">Save complete</string>
-    <string name="message_saving">Saving the document...</string>
+    <string name="message_saving">Saving the document…</string>
     <string name="message_save_incomplete">Save incomplete. Were there any changes?</string>
 
     <!-- Document provider settings -->
