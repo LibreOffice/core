@@ -42,6 +42,7 @@ SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxI
 
     LoadConfig();
 
+
 }
 
 SvxBasicIDEOptionsPage::~SvxBasicIDEOptionsPage()
@@ -75,6 +76,8 @@ void SvxBasicIDEOptionsPage::LoadConfig()
     pAutocloseParenChk->Check( bParenClose );
     pAutoCorrectChk->Check( bCorrect );
     pUseExtendedTypesChk->Check( bExtended );
+    pUseExtendedTypesChk->SetToggleHdl( LINK( this, SvxBasicIDEOptionsPage, EnableExtType ) );
+    pCodeCompleteChk->Enable(pUseExtendedTypesChk->IsChecked());
 }
 
 bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
@@ -145,6 +148,7 @@ void SvxBasicIDEOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     pAutoCorrectChk->SaveValue();
 
     pUseExtendedTypesChk->SaveValue();
+
 }
 
 VclPtr<SfxTabPage> SvxBasicIDEOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
@@ -158,4 +162,13 @@ void SvxBasicIDEOptionsPage::FillUserData()
     SetUserData( aUserData );
 }
 
+IMPL_LINK_NOARG_TYPED(SvxBasicIDEOptionsPage, EnableExtType, CheckBox&, void)
+{
+    bool bEnable = pUseExtendedTypesChk->IsChecked();
+    pCodeCompleteChk->Enable(bEnable);
+    if (!pUseExtendedTypesChk->IsChecked())
+    {
+      pCodeCompleteChk->Check(false);
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

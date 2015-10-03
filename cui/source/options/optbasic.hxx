@@ -35,6 +35,8 @@ private:
     VclPtr<CheckBox> pUseExtendedTypesChk;
 
     void LoadConfig();
+    DECL_LINK_TYPED(    EnableExtType, CheckBox&, void );
+
 
 public:
     SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
