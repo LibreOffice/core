@@ -175,10 +175,7 @@ protected:
     void SetTransparency(sal_uInt16 nVal);
 };
 
-
 } } // end of namespace svx::sidebar
-
-
 
 #endif // INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANEL_HXX
 
