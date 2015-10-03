@@ -576,6 +576,8 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 
             if( m_eMode != REMOTEDLG_MODE_SAVE )
                 m_pName_ed->SetText( "" );
+
+            m_pFileView->GrabFocus();
         }
         else
         {
