@@ -342,7 +342,7 @@ public class LayerView extends FrameLayout {
     /** This function is invoked by Gecko (compositor thread) via JNI; be careful when modifying signature. */
     public static GLController registerCxxCompositor() {
         try {
-            LayerView layerView = LibreOfficeMainActivity.mAppContext.getLayerClient().getView();
+            LayerView layerView = LibreOfficeMainActivity.getLayerClient().getView();
             layerView.mListener.compositorCreated();
             return layerView.getGLController();
         } catch (Exception e) {

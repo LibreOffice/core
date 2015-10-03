@@ -9,8 +9,6 @@ import java.util.List;
 
 import org.libreoffice.storage.IFile;
 
-import android.util.Log;
-
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;

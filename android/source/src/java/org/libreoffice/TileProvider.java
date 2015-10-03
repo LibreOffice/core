@@ -11,7 +11,6 @@ package org.libreoffice;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.view.KeyEvent;
 
 import org.mozilla.gecko.gfx.CairoImage;

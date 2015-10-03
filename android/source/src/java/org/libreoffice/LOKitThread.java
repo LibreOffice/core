@@ -174,7 +174,7 @@ public class LOKitThread extends Thread {
             mApplication = LibreOfficeMainActivity.mAppContext;
         }
 
-        mLayerClient = mApplication.getLayerClient();
+        mLayerClient = LibreOfficeMainActivity.getLayerClient();
 
         mInvalidationHandler = new InvalidationHandler(LibreOfficeMainActivity.mAppContext);
         mTileProvider = TileProviderFactory.create(mLayerClient, mInvalidationHandler, filename);

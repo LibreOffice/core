@@ -35,7 +35,7 @@ public class TileProviderFactory {
         }
     }
 
-    private static enum TileProviderID {
+    private enum TileProviderID {
         MOCK, LOKIT
     }
 }

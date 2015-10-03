@@ -8,15 +8,11 @@
  */
 package org.libreoffice.ui;
 
-import org.libreoffice.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -100,7 +96,7 @@ public class FolderIconView extends View{
         for (File file : contents) {
             if (!FileUtilities.isThumbnail(file))
                 continue;
-            thumbs.push(factory.decodeFile(file.getAbsolutePath()));//TODO switch to push for semantics
+            thumbs.push(BitmapFactory.decodeFile(file.getAbsolutePath()));//TODO switch to push for semantics
             if (thumbs.size() > 3)
                 break;
         }

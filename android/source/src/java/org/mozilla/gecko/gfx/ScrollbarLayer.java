@@ -13,10 +13,8 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import org.libreoffice.kit.DirectBufferAllocator;
-import org.libreoffice.LibreOfficeMainActivity;
 import org.mozilla.gecko.util.FloatUtils;
 
 import java.nio.ByteBuffer;

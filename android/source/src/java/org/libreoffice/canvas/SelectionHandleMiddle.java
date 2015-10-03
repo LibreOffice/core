@@ -1,7 +1,6 @@
 package org.libreoffice.canvas;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import org.libreoffice.R;
 

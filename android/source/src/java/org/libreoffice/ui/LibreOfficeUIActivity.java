@@ -15,8 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
-import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,8 +22,8 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -68,7 +66,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {
+public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBar.OnNavigationListener {
     private String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
     private SharedPreferences prefs;
     private int filterMode = FileUtilities.ALL;
@@ -464,7 +462,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
 
-        MenuItem item = (MenuItem)menu.findItem(R.id.menu_view_toggle);
+        MenuItem item = menu.findItem(R.id.menu_view_toggle);
         if (viewMode == GRID_VIEW) {
             item.setTitle(R.string.list_view);
             item.setIcon(R.drawable.light_view_as_list);
@@ -473,21 +471,21 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
             item.setIcon(R.drawable.light_view_as_grid);
         }
 
-        item = (MenuItem)menu.findItem(R.id.menu_sort_size);
+        item = menu.findItem(R.id.menu_sort_size);
         if (sortMode == FileUtilities.SORT_LARGEST) {
             item.setTitle(R.string.sort_smallest);
         } else {
             item.setTitle(R.string.sort_largest);
         }
 
-        item = (MenuItem)menu.findItem(R.id.menu_sort_az);
+        item = menu.findItem(R.id.menu_sort_az);
         if (sortMode == FileUtilities.SORT_AZ) {
             item.setTitle(R.string.sort_za);
         } else {
             item.setTitle(R.string.sort_az);
         }
 
-        item = (MenuItem)menu.findItem(R.id.menu_sort_modified);
+        item = menu.findItem(R.id.menu_sort_modified);
         if (sortMode == FileUtilities.SORT_NEWEST) {
             item.setTitle(R.string.sort_oldest);
         } else {
@@ -721,7 +719,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
                 listItem = new View(mContext);
                 listItem = inflater.inflate(R.layout.file_list_item, null);
             } else {
-                listItem = (View) convertView;
+                listItem = convertView;
             }
             final int pos = position;
             listItem.setClickable(true);
