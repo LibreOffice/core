@@ -69,9 +69,7 @@ public class MockTileProvider implements TileProvider {
         String imageName = "d" + tileNumber;
         Bitmap bitmap = mLayerClient.getView().getDrawable(imageName);
 
-        CairoImage image = new BufferedCairoImage(bitmap);
-
-        return image;
+        return new BufferedCairoImage(bitmap);
     }
 
     @Override

@@ -10,7 +10,6 @@ import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.kit.Document;
 import org.libreoffice.overlay.DocumentOverlay;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
-import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +27,7 @@ public class InvalidationHandler implements Document.MessageCallback {
 
     public InvalidationHandler(LibreOfficeMainActivity mainActivity) {
         mDocumentOverlay = mainActivity.getDocumentOverlay();
-        mLayerClient = mainActivity.getLayerClient();
+        mLayerClient = LibreOfficeMainActivity.getLayerClient();
         mState = OverlayState.NONE;
     }
 
@@ -123,16 +122,14 @@ public class InvalidationHandler implements Document.MessageCallback {
         int width = Integer.decode(coordinates[2]);
         int height = Integer.decode(coordinates[3]);
 
-        float dpi = (float) LOKitShell.getDpi();
+        float dpi = LOKitShell.getDpi();
 
-        RectF rect = new RectF(
+        return new RectF(
                 LOKitTileProvider.twipToPixel(x, dpi),
                 LOKitTileProvider.twipToPixel(y, dpi),
                 LOKitTileProvider.twipToPixel(x + width, dpi),
                 LOKitTileProvider.twipToPixel(y + height, dpi)
         );
-
-        return rect;
     }
 
     /**

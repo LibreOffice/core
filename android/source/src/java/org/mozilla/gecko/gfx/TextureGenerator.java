@@ -35,7 +35,7 @@ public class TextureGenerator {
     public synchronized int take() {
         try {
             // Will block until one becomes available
-            return (int) mTextureIds.take();
+            return mTextureIds.take();
         } catch (InterruptedException e) {
             return 0;
         }

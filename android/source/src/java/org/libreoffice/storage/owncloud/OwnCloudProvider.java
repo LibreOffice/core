@@ -144,7 +144,7 @@ public class OwnCloudProvider implements IDocumentProvider,
      * @param file
      *            File or directory to be deleted.
      */
-    private void deleteRecursive(File file) {
+    private static void deleteRecursive(File file) {
         if (file.isDirectory()) {
             for (File child : file.listFiles())
                 deleteRecursive(child);

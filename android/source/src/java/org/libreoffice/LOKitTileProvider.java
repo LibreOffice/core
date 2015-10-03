@@ -55,7 +55,7 @@ public class LOKitTileProvider implements TileProvider {
     public LOKitTileProvider(GeckoLayerClient layerClient, Document.MessageCallback messageCallback, String input) {
         mLayerClient = layerClient;
         mMessageCallback = messageCallback;
-        mDPI = (float) LOKitShell.getDpi();
+        mDPI = LOKitShell.getDpi();
         mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
         mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
 

@@ -78,7 +78,7 @@ public class LOKitShell {
     }
 
     public static LayerView getLayerView() {
-        return LibreOfficeMainActivity.mAppContext.getLayerClient().getView();
+        return LibreOfficeMainActivity.getLayerClient().getView();
     }
 
     // EVENTS

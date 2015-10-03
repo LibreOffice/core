@@ -8,8 +8,6 @@
  */
 package org.libreoffice.ui;
 
-import org.libreoffice.R;
-
 import org.libreoffice.storage.IFile;
 
 import java.io.File;
