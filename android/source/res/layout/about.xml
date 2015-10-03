@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:orientation="vertical"
               android:padding="20dip">
 
@@ -33,7 +35,7 @@
         android:paddingTop="20dip"
         android:text="@string/app_credits"
         android:textColor="@android:color/secondary_text_light"
-        android:textSize="18dip"/>
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/about_vendor"

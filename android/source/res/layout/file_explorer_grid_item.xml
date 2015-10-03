@@ -6,6 +6,7 @@
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="10dp"
@@ -13,22 +14,24 @@
 
     <ImageView
         android:id="@+id/grid_item_image"
+        tools:src="@drawable/folder"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="fitStart"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:contentDescription="@string/file_icon_desc" >
     </ImageView>
 
     <TextView
         android:id="@+id/grid_item_label"
+        tools:text="file or dirname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@+id/label"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="10dp"
         android:layout_gravity="center"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="@android:color/secondary_text_light"
         android:maxLines="2">
