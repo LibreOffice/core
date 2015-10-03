@@ -64,7 +64,7 @@ class UCB(object):
     def copy1(self, sourceDir, targetDir, verifier):
         files = self.listFiles(sourceDir, verifier)
         for i in range(len(files)):
-          self.copy3(sourceDir, files[i], targetDir)
+          self.copy2(sourceDir, files[i], targetDir, "")
 
     def copy2(self, sourceDir, filename, targetDir, targetName):
         if (not self.fa.exists(targetDir, True)):
