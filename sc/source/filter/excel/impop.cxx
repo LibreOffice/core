@@ -1048,6 +1048,13 @@ void ImportExcel::Defrowheight345()
     sal_uInt16 nFlags, nDefHeight;
     nFlags = maStrm.ReaduInt16();
     nDefHeight = maStrm.ReaduInt16();
+
+    if (!pColRowBuff)
+    {
+        SAL_WARN("sc", "*ImportExcel::Defrowheight345(): pColRowBuff is NULL!");
+        return;
+    }
+
     pColRowBuff->SetDefHeight( nDefHeight, nFlags );
 }
 
