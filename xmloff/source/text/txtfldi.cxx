@@ -708,6 +708,19 @@ XMLSenderFieldImportContext::XMLSenderFieldImportContext(
 {
 }
 
+XMLSenderFieldImportContext::XMLSenderFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element, sal_uInt16 nToken)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_extended_user, Element),
+    nSubType(0),
+    sPropertyFixed(sAPI_is_fixed),
+    sPropertyFieldSubType(sAPI_user_data_type),
+    sPropertyContent(sAPI_content),
+    bFixed(true),
+    nElementToken(nToken)
+{
+}
+
 void XMLSenderFieldImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
@@ -765,6 +778,66 @@ void XMLSenderFieldImportContext::StartElement(
 
     // process Attributes
     XMLTextFieldImportContext::StartElement(xAttrList);
+}
+
+void XMLSenderFieldImportContext::startFastElement( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    bValid = true;
+    switch( nElementToken ) {
+    case XML_TOK_TEXT_SENDER_FIRSTNAME:
+        nSubType = UserDataPart::FIRSTNAME;
+        break;
+    case XML_TOK_TEXT_SENDER_LASTNAME:
+        nSubType = UserDataPart::NAME;
+        break;
+    case XML_TOK_TEXT_SENDER_INITIALS:
+        nSubType = UserDataPart::SHORTCUT;
+        break;
+    case XML_TOK_TEXT_SENDER_TITLE:
+        nSubType = UserDataPart::TITLE;
+        break;
+    case XML_TOK_TEXT_SENDER_POSITION:
+        nSubType = UserDataPart::POSITION;
+        break;
+    case XML_TOK_TEXT_SENDER_EMAIL:
+        nSubType = UserDataPart::EMAIL;
+        break;
+    case XML_TOK_TEXT_SENDER_PHONE_PRIVATE:
+        nSubType = UserDataPart::PHONE_PRIVATE;
+        break;
+    case XML_TOK_TEXT_SENDER_FAX:
+        nSubType = UserDataPart::FAX;
+        break;
+    case XML_TOK_TEXT_SENDER_COMPANY:
+        nSubType = UserDataPart::COMPANY;
+        break;
+    case XML_TOK_TEXT_SENDER_PHONE_WORK:
+        nSubType = UserDataPart::PHONE_COMPANY;
+        break;
+    case XML_TOK_TEXT_SENDER_STREET:
+        nSubType = UserDataPart::STREET;
+        break;
+    case XML_TOK_TEXT_SENDER_CITY:
+        nSubType = UserDataPart::CITY;
+        break;
+    case XML_TOK_TEXT_SENDER_POSTAL_CODE:
+        nSubType = UserDataPart::ZIP;
+        break;
+    case XML_TOK_TEXT_SENDER_COUNTRY:
+        nSubType = UserDataPart::COUNTRY;
+        break;
+    case XML_TOK_TEXT_SENDER_STATE_OR_PROVINCE:
+        nSubType = UserDataPart::STATE;
+        break;
+    default:
+        bValid = false;
+        break;
+    }
+
+    // process Attributes
+    XMLTextFieldImportContext::startFastElement(Element, xAttrList);
 }
 
 void XMLSenderFieldImportContext::ProcessAttribute(
@@ -836,6 +909,20 @@ XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
     SetServiceName(sServiceAuthor);
 }
 
+XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element, sal_uInt16 nToken)
+:   XMLSenderFieldImportContext(rImport, rHlp, Element, nToken),
+    bAuthorFullName(true),
+    sServiceAuthor(sAPI_author),
+    sPropertyAuthorFullName(sAPI_full_name),
+    sPropertyFixed(sAPI_is_fixed),
+    sPropertyContent(sAPI_content)
+{
+    // overwrite service name from XMLSenderFieldImportContext
+    SetServiceName(sServiceAuthor);
+}
+
 void XMLAuthorFieldImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList) {
 
@@ -844,6 +931,17 @@ void XMLAuthorFieldImportContext::StartElement(
 
     // process Attributes
     XMLTextFieldImportContext::StartElement(xAttrList);
+}
+
+void XMLAuthorFieldImportContext::startFastElement( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList)
+    throw(RuntimeException, SAXException, std::exception)
+{
+    bAuthorFullName = (XML_TOK_TEXT_AUTHOR_INITIALS != nElementToken);
+    bValid = true;
+
+    // process Attributes
+    XMLTextFieldImportContext::startFastElement(Element, xAttrList);
 }
 
 void XMLAuthorFieldImportContext::PrepareField(
