@@ -2728,6 +2728,16 @@ XMLTemplateNameImportContext::XMLTemplateNameImportContext(
     bValid = true;
 }
 
+XMLTemplateNameImportContext::XMLTemplateNameImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_template_name, Element),
+    sPropertyFileFormat(sAPI_file_format),
+    nFormat(TemplateDisplayFormat::FULL)
+{
+    bValid = true;
+}
+
 void XMLTemplateNameImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )

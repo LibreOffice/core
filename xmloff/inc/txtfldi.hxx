@@ -918,6 +918,9 @@ public:
                                  XMLTextImportHelper& rHlp,
                                  sal_uInt16 nPrfx,
                                  const OUString& sLocalName);
+    XMLTemplateNameImportContext(SvXMLImport& rImport,
+                                 XMLTextImportHelper& rHlp,
+                                 sal_Int32 Element);
 
 protected:
     /// process attribute values
