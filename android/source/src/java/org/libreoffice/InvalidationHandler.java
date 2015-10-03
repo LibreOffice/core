@@ -84,6 +84,10 @@ public class InvalidationHandler implements Document.MessageCallback {
 
     private void stateChanged(String payload) {
         String[] parts = payload.split("=");
+        if (parts.length < 2) {
+            Log.e(LOGTAG, "LOK_CALLBACK_STATE_CHANGED unexpected payload: " + payload);
+            return;
+        }
         boolean pressed = Boolean.parseBoolean(parts[1]);
         if (parts[0].equals(".uno:Bold")) {
             LOKitShell.getToolbarController().onToggleStateChanged(Document.BOLD, pressed);
