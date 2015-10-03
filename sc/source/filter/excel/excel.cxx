@@ -218,13 +218,17 @@ FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocumen
     return eRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(const OUString &rURL)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportSpreadsheet(const OUString &rURL, const OUString &rFlt)
 {
     ScDLL::Init();
     SfxMedium aMedium(rURL, StreamMode::READ);
     ScDocument aDocument;
     aDocument.MakeTable(0);
-    FltError eError = ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO);
+    FltError eError(eERR_OK);
+    if (rFlt == "xls")
+        eError = ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO);
+    else if (rFlt == "wb2")
+        eError = ScFormatFilter::Get().ScImportQuattroPro(aMedium, &aDocument);
     return eError == eERR_OK;
 }
 
