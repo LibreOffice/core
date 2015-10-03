@@ -900,6 +900,40 @@ Error_Function:
 End Function		&apos;	Forms	V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Function HtmlEncode(ByVal pvString As Variant, ByVal Optional pvLength As Variant) As String
+&apos;	Converts a string to an HTML-encoded string.
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;HtmlEncode&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+	HtmlEncode = &quot;&quot;
+
+Dim sOutput As String, l As Long, lLength As Long
+	If IsMissing(pvLength) Then pvLength = 0
+	If Not Utils._CheckArgument(pvString, 1, vbString) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvLength, 1, _AddNumeric()) Then Goto Exit_Function
+
+	sOutput = &quot;&quot;
+	lLength = CLng(pvLength)
+	If Len(pvString) &gt; 0 Then
+		For l = 1 To Len(pvString)
+			If lLength &gt; 0 And Len(sOutput) &gt; lLength Then Exit For
+			sOutput = sOutput &amp; Utils._UTF8Encode(Mid(pvString, l, 1)
+		Next l
+	End If
+
+	HtmlEncode = sOutput
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function			
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function		&apos;	HtmlEncode	V1.4.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function OpenConnection ( _
 				Optional pvComponent As Variant _
 				, ByVal Optional pvUser As Variant _
