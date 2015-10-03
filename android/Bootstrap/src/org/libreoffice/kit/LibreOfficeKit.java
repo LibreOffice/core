@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
+import java.io.File;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
@@ -54,23 +55,23 @@ public final class LibreOfficeKit
             return;
         }
 
-        String dataDir = null;
-
         ApplicationInfo applicationInfo = activity.getApplicationInfo();
-        dataDir = applicationInfo.dataDir;
+        String dataDir = applicationInfo.dataDir;
         Log.i(LOGTAG, String.format("Initializing LibreOfficeKit, dataDir=%s\n", dataDir));
 
         redirectStdio(true);
-
+        // ToDo: ugly workaround - find out why it segfaults with existing cachedir
+        deleteRecursive(activity.getApplication().getCacheDir());
         String cacheDir = activity.getApplication().getCacheDir().getAbsolutePath();
         String apkFile = activity.getApplication().getPackageResourcePath();
 
-        // If we notice that a fonts.conf file was extracted, automatically
+        // If there is a fonts.conf file in the apk that can be extracted, automatically
         // set the FONTCONFIG_FILE env var.
-        InputStream inputStream = null;
+        InputStream inputStream;
         try {
             inputStream = activity.getAssets().open("unpack/etc/fonts/fonts.conf");
         } catch (java.io.IOException exception) {
+            inputStream = null;
         }
 
         putenv("OOO_DISABLE_RECOVERY=1");
@@ -80,14 +81,27 @@ public final class LibreOfficeKit
         }
 
         // TMPDIR is used by osl_getTempDirURL()
-        putenv("TMPDIR=" + activity.getCacheDir().getAbsolutePath());
+        putenv("TMPDIR=" + cacheDir);
 
         if (!initializeNative(dataDir, cacheDir, apkFile)) {
-            Log.i(LOGTAG, "Initialize native failed!");
+            Log.e(LOGTAG, "Initialize native failed!");
             return;
         }
-
         initializeDone = true;
+    }
+    /**
+     * Deletes files and recursively deletes directories.
+     *
+     * @param file
+     *            File or directory to be deleted.
+     */
+    private static void deleteRecursive(File file) {
+        Log.d(LOGTAG, "deleting cacheDir recursively - this is only a workaround - fixme please");
+        if (file.isDirectory()) {
+            for (File child : file.listFiles())
+                deleteRecursive(child);
+        }
+        file.delete();
     }
 
     // Now with static loading we always have all native code in one native
@@ -95,8 +109,19 @@ public final class LibreOfficeKit
     // app. The library has already been unpacked into /data/data/<app
     // name>/lib at installation time by the package manager.
     static {
-        System.loadLibrary("lo-native-code");
+        NativeLibLoader.load();
     }
+}
+
+class NativeLibLoader {
+        private static boolean done = false;
+
+        protected static synchronized void load() {
+            if (done)
+                return;
+            System.loadLibrary("lo-native-code");
+            done = true;
+        }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
