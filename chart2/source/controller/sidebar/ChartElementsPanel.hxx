@@ -92,6 +92,8 @@ private:
     VclPtr<CheckBox> mpCBGridHorizontalMinor;
     VclPtr<FixedText> mpTextTitle;
     VclPtr<FixedText> mpTextSubTitle;
+    VclPtr<FixedText> mpLBAxis;
+    VclPtr<FixedText> mpLBGrid;
 
     VclPtr<ListBox> mpLBLegendPosition;
     VclPtr<VclHBox> mpBoxLegend;
