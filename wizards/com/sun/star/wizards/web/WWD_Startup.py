@@ -513,7 +513,7 @@ class WWD_Startup(WWD_General):
     Objects on the same Vector need different DataObjectBinding,
     I use this method...
     @param data the CGPublish object
-    @param i the number of the object (0 = local, 1 = ftp, 2 = zip)
+    @param i the number of the object (0 = local, 1 = zip, 2 = ftp)
     '''
 
     def mountDataAware(self, data, i):

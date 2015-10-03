@@ -51,9 +51,9 @@ from com.sun.star.ucb.OpenMode import FOLDERS
 # the members ip, username, and password (via the methods setXXX(...))
 # for details see the ui.events.DataAware classes. <br/>
 class FTPDialog(WizardDialog):
-    RES_OK = 2
-    RES_CANCEL = 3
-    RES_HELP = 4
+    RES_OK = 1
+    RES_CANCEL = 2
+    RES_HELP = 3
 
     # A Constant used for the setLabel(int) method to change the
     # status-display. "unknown" is the status when the user first
@@ -160,7 +160,7 @@ class FTPDialog(WizardDialog):
                 (0, 14, 68, 80, False, False, 14))
         self.lblStatus = self.insertLabel("lblStatus",
                 PROPNAMES_LABEL,
-                (8, self.resources.resFTPDisconnected, "lblStatus", 86, 82, 9, 99))
+                (8, self.resources.resFTPDisconnected, "lblStatus", 86, 82, 9, 130))
         self.ln3 = self.insertFixedLine("ln3",
                 PROPNAMES_LABEL,
                 (8, self.resources.resln3_value, "ln3", 6, 100, 10, 210))

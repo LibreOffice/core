@@ -434,7 +434,7 @@ class WWD_Events(WWD_Startup):
     def setFTPPublish(self):
         if self.showFTPDialog(self.getPublisher(FTP_PUBLISHER)):
             self.getPublisher(FTP_PUBLISHER).cp_Publish = True
-            self.updatePublishUI(2)
+            self.updatePublishUI(4)
 
     '''
     show the ftp dialog
