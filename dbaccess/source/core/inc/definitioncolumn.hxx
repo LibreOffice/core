@@ -29,12 +29,12 @@
 
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace dbaccess
 {
 
-    typedef ::cppu::ImplHelper1< css::container::XChild > TXChild;
+    typedef ::cppu::ImplHelper < css::container::XChild > TXChild;
     // OTableColumnDescriptor
     /**
      *  provides the properties for description. A descriptor could be used to create a new table column.

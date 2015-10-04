@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLECONTAINER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLECONTAINER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -37,7 +37,7 @@
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper1< css::container::XContainerListener> OTableContainer_Base;
+    typedef ::cppu::ImplHelper < css::container::XContainerListener> OTableContainer_Base;
 
     // OTableContainer
     class OContainerMediator;

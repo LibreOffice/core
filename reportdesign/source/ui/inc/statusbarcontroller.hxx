@@ -22,12 +22,12 @@
 #include <svtools/statusbarcontroller.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SfxStatusBarControl;
 namespace rptui
 {
-    typedef ::cppu::ImplHelper1 <   css::lang::XServiceInfo> OStatusbarController_BASE;
+    typedef ::cppu::ImplHelper < css::lang::XServiceInfo > OStatusbarController_BASE;
     class OStatusbarController : public ::svt::StatusbarController,
                                  public OStatusbarController_BASE
     {

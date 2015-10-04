@@ -21,7 +21,7 @@
 
 #include "ObjectHierarchy.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svtools/toolboxcontroller.hxx>
 
 #include <vcl/lstbox.hxx>
@@ -63,7 +63,7 @@ class SelectorListBox : public ListBox
         bool m_bReleaseFocus;
 };
 
-typedef ::cppu::ImplHelper1 < css::lang::XServiceInfo> ElementSelectorToolbarController_BASE;
+typedef ::cppu::ImplHelper < css::lang::XServiceInfo> ElementSelectorToolbarController_BASE;
 
 class ElementSelectorToolbarController : public ::svt::ToolboxController
                                                 , public ElementSelectorToolbarController_BASE

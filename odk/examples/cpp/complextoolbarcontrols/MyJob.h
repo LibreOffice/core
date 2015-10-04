@@ -23,7 +23,7 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com
 {
@@ -44,7 +44,7 @@ namespace com
     }
 }
 
-class MyJob : public cppu::WeakImplHelper2
+class MyJob : public cppu::WeakImplHelper
 <
     com::sun::star::task::XJob,
     com::sun::star::lang::XServiceInfo

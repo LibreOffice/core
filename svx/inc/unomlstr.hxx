@@ -21,11 +21,11 @@
 
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SdrObject;
 
-class SvxUnoShapeModifyListener : public ::cppu::WeakAggImplHelper1< css::util::XModifyListener >
+class SvxUnoShapeModifyListener : public ::cppu::WeakAggImplHelper< css::util::XModifyListener >
 {
     SdrObject*  mpObj;
 

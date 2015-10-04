@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_ERRORBROADCASTER_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_ERRORBROADCASTER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
@@ -31,7 +31,7 @@
 namespace frm
 {
 
-    typedef ::cppu::ImplHelper1 <   css::sdb::XSQLErrorBroadcaster
+    typedef ::cppu::ImplHelper  <   css::sdb::XSQLErrorBroadcaster
                                 >   OErrorBroadcaster_BASE;
 
     class OErrorBroadcaster : public OErrorBroadcaster_BASE

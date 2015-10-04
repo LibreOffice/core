@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEWCONTAINER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEWCONTAINER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -41,7 +41,7 @@ namespace dbtools
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper1< css::container::XContainerListener> OViewContainer_Base;
+    typedef ::cppu::ImplHelper < css::container::XContainerListener> OViewContainer_Base;
 
     // OViewContainer
     class OViewContainer :  public OFilteredContainer,

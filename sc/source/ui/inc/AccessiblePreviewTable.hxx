@@ -22,12 +22,12 @@
 
 #include "AccessibleContextBase.hxx"
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class ScPreviewShell;
 class ScPreviewTableInfo;
 
-typedef cppu::ImplHelper1< css::accessibility::XAccessibleTable>
+typedef cppu::ImplHelper < css::accessibility::XAccessibleTable >
                     ScAccessiblePreviewTableImpl;
 
 class ScAccessiblePreviewTable :

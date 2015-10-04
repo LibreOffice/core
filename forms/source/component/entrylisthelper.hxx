@@ -25,7 +25,7 @@
 #include <com/sun/star/form/binding/XListEntryListener.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
 
@@ -39,7 +39,7 @@ namespace frm
 
     //= OEntryListHelper
 
-    typedef ::cppu::ImplHelper3 <   css::form::binding::XListEntrySink
+    typedef ::cppu::ImplHelper  <   css::form::binding::XListEntrySink
                                 ,   css::form::binding::XListEntryListener
                                 ,   css::util::XRefreshable
                                 >   OEntryListHelper_BASE;

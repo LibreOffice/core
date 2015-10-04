@@ -47,7 +47,7 @@
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#include <cppuhelper/compbase12.hxx>
+#include <cppuhelper/compbase.hxx>
 #include "SStatement.hxx"
 #include "OSubComponent.hxx"
 
@@ -59,7 +59,7 @@ namespace connectivity
         /*
         **  OResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
+        typedef ::cppu::WeakComponentImplHelper  <      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
                                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                         ::com::sun::star::util::XCancellable,

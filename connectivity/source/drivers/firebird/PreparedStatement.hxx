@@ -22,7 +22,7 @@
 
 #include "Statement.hxx"
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
@@ -38,7 +38,7 @@ namespace connectivity
     {
 
         class OBoundParam;
-        typedef ::cppu::ImplHelper5<    css::sdbc::XPreparedStatement,
+        typedef ::cppu::ImplHelper <    css::sdbc::XPreparedStatement,
                                         css::sdbc::XParameters,
                                         css::sdbc::XPreparedBatchExecution,
                                         css::sdbc::XResultSetMetaDataSupplier,

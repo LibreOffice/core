@@ -24,8 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #define MYLISTENER_IMPLEMENTATIONNAME  "vnd.My.impl.NewDocListener"
 #define MYLISTENER_SERVICENAME         "vnd.My.NewDocListener"
@@ -40,7 +39,7 @@
  * @see CalcListener
  * @see WriterListener
  */
-class MyListener : public cppu::WeakImplHelper2< css::task::XJob         ,
+class MyListener : public cppu::WeakImplHelper < css::task::XJob         ,
                                                  css::lang::XServiceInfo >
 {
     private:
@@ -70,7 +69,7 @@ class MyListener : public cppu::WeakImplHelper2< css::task::XJob         ,
     static css::uno::Reference< css::uno::XInterface > st_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 };
 
-class CalcListener : public cppu::WeakImplHelper1< css::document::XEventListener >
+class CalcListener : public cppu::WeakImplHelper < css::document::XEventListener >
 {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
@@ -91,7 +90,7 @@ class CalcListener : public cppu::WeakImplHelper1< css::document::XEventListener
         throw (css::uno::RuntimeException);
 };
 
-class WriterListener : public cppu::WeakImplHelper1< css::document::XEventListener >
+class WriterListener : public cppu::WeakImplHelper < css::document::XEventListener >
 {
     private:
         css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;

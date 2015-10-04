@@ -31,15 +31,14 @@ class SvxShowCharSet;
 
 namespace svx
 {
-    typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessible
-                                >   OAccessibleHelper_Base_2;
+    typedef ::cppu::ImplHelper< css::accessibility::XAccessible > OAccessibleHelper_Base;
 
     class SvxShowCharSetAcc;
     /** The class SvxShowCharSetVirtualAcc is used as a virtual class which contains the table and the scrollbar.
         In the vcl control, the table and the scrollbar exists in one class. This is not feasible for the accessibility api.
     */
     class SvxShowCharSetVirtualAcc : public ::comphelper::OAccessibleComponentHelper,
-                                     public OAccessibleHelper_Base_2
+                                     public OAccessibleHelper_Base
     {
         VclPtr<SvxShowCharSet>     mpParent; // the vcl control
         SvxShowCharSetAcc*  m_pTable; // the table, which holds the characters shown by the vcl control
@@ -112,9 +111,9 @@ namespace svx
     };
 
 
-    typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,
-                                    css::accessibility::XAccessibleTable
-                                >   OAccessibleHelper_Base;
+    typedef ::cppu::ImplHelper <  css::accessibility::XAccessible,
+                                  css::accessibility::XAccessibleTable
+                               >  OAccessibleTableHelper_Base;
 
     // - SvxShowCharSetAcc -
 
@@ -122,7 +121,7 @@ namespace svx
     */
 
     class SvxShowCharSetAcc : public ::comphelper::OAccessibleSelectionHelper,
-                              public OAccessibleHelper_Base
+                              public OAccessibleTableHelper_Base
     {
         ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > m_aChildren;
         SvxShowCharSetVirtualAcc* m_pParent; // the virtual parent
@@ -208,14 +207,14 @@ namespace svx
 
     // - SvxShowCharSetItemAcc -
 
-    typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,
-                                    css::accessibility::XAccessibleAction
-                                >   OAccessibleHelper_Base_3;
+    typedef ::cppu::ImplHelper <  css::accessibility::XAccessible,
+                                  css::accessibility::XAccessibleAction
+                               >  OAccessibleActionHelper_Base;
 
     /** The child implementation of the table.
     */
     class SvxShowCharSetItemAcc : public ::comphelper::OAccessibleComponentHelper,
-                                  public OAccessibleHelper_Base_3
+                                  public OAccessibleActionHelper_Base
     {
     private:
         SvxShowCharSetItem* mpParent;

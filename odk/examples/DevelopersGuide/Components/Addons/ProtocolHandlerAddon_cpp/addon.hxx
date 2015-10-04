@@ -39,7 +39,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #define IMPLEMENTATION_NAME "org.openoffice.Office.addon.example"
 
@@ -65,7 +65,7 @@ namespace com
     }
 }
 
-class Addon : public cppu::WeakImplHelper4
+class Addon : public cppu::WeakImplHelper
 <
     com::sun::star::frame::XDispatchProvider,
     com::sun::star::frame::XDispatch,

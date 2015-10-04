@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTDEFINITION_HXX
 
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "ContentHelper.hxx"
 #include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -48,7 +48,7 @@ namespace dbaccess
 // ODocumentDefinition - a database "document" which is simply a link to a real
 //                   document
 
-typedef ::cppu::ImplHelper4 <   css::embed::XComponentSupplier
+typedef ::cppu::ImplHelper  <   css::embed::XComponentSupplier
                             ,   css::sdb::XSubDocument
                             ,   css::util::XCloseListener
                             ,   css::container::XHierarchicalName

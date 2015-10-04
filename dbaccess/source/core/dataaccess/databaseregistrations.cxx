@@ -21,7 +21,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
@@ -61,7 +61,7 @@ namespace dbaccess
     }
 
     // DatabaseRegistrations - declaration
-    typedef ::cppu::WeakAggImplHelper1  <   XDatabaseRegistrations
+    typedef ::cppu::WeakAggImplHelper   <   XDatabaseRegistrations
                                         >   DatabaseRegistrations_Base;
     class DatabaseRegistrations :public ::cppu::BaseMutex
                                 ,public DatabaseRegistrations_Base

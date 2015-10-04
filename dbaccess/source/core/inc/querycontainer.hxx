@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCONTAINER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCONTAINER_HXX
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -51,7 +51,7 @@ namespace dbtools
 namespace dbaccess
 {
 
-    typedef ::cppu::ImplHelper5 <   css::container::XContainerListener
+    typedef ::cppu::ImplHelper  <   css::container::XContainerListener
                                 ,   css::container::XContainerApproveListener
                                 ,   css::sdbcx::XDataDescriptorFactory
                                 ,   css::sdbcx::XAppend

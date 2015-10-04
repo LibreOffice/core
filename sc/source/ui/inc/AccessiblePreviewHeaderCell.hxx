@@ -25,7 +25,7 @@
 #include <tools/gen.hxx>
 #include "global.hxx"
 #include "address.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class ScPreviewShell;
 class ScPreviewTableInfo;
@@ -33,7 +33,7 @@ namespace accessibility {
     class AccessibleTextHelper;
 }
 
-typedef cppu::ImplHelper1< css::accessibility::XAccessibleValue>
+typedef cppu::ImplHelper < css::accessibility::XAccessibleValue >
                     ScAccessiblePreviewHeaderCellImpl;
 
 class ScAccessiblePreviewHeaderCell :

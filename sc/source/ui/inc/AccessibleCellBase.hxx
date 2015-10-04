@@ -24,9 +24,9 @@
 #include "global.hxx"
 #include "address.hxx"
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
-typedef cppu::ImplHelper1< css::accessibility::XAccessibleValue>
+typedef cppu::ImplHelper < css::accessibility::XAccessibleValue >
                     ScAccessibleCellBaseImpl;
 
 class ScAccessibleCellBase

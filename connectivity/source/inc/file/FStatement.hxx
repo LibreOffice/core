@@ -29,7 +29,7 @@
 #include <com/sun/star/util/XCancellable.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -173,7 +173,7 @@ namespace connectivity
             virtual void SAL_CALL release() throw() override;
         };
 
-        typedef ::cppu::ImplHelper2< css::sdbc::XStatement,css::lang::XServiceInfo > OStatement_XStatement;
+        typedef ::cppu::ImplHelper < css::sdbc::XStatement, css::lang::XServiceInfo > OStatement_XStatement;
         class OOO_DLLPUBLIC_FILE OStatement :
                             public OStatement_BASE2,
                             public OStatement_XStatement

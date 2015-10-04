@@ -21,7 +21,7 @@
 #define INCLUDED_SC_INC_ACCESSIBLEFILTERMENU_HXX
 
 #include "AccessibleContextBase.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
@@ -39,8 +39,7 @@ namespace com { namespace sun { namespace star {
 
 class ScMenuFloatingWindow;
 
-typedef ::cppu::ImplHelper1<
-        css::accessibility::XAccessibleSelection > ScAccessibleFilterMenu_BASE;
+typedef ::cppu::ImplHelper< css::accessibility::XAccessibleSelection > ScAccessibleFilterMenu_BASE;
 
 class ScAccessibleFilterMenu :
     public ScAccessibleContextBase,

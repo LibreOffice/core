@@ -42,7 +42,7 @@
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 
-#include <cppuhelper/implbase13.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/stl_types.hxx>
 #include <connectivity/ConnectionWrapper.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -51,7 +51,7 @@
 namespace dbaccess
 {
 
-typedef cppu::ImplHelper13  <   css::container::XChild
+typedef cppu::ImplHelper  <   css::container::XChild
                                     ,   css::sdbcx::XTablesSupplier
                                     ,   css::sdbcx::XViewsSupplier
                                     ,   css::sdbc::XConnection

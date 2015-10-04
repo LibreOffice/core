@@ -32,7 +32,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace dbaccess
 {
@@ -44,7 +44,7 @@ namespace dbaccess
     public:
     };
 
-typedef ::cppu::ImplHelper2 <   css::sdbcx::XRename,
+typedef ::cppu::ImplHelper  <   css::sdbcx::XRename,
                                 css::sdb::XQueryDefinition
                                 >   OCommandDefinition_Base;
 class OCommandDefinition;

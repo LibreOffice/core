@@ -24,12 +24,12 @@
 #include <comphelper/proparrhlp.hxx>
 #include "componentmodule.hxx"
 #include <com/sun/star/task/XJob.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace abp
 {
     class OABSPilotUno;
-    typedef ::cppu::ImplHelper1< css::task::XJob >     OABSPilotUno_JBase;
+    typedef ::cppu::ImplHelper < css::task::XJob >     OABSPilotUno_JBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< OABSPilotUno > OABSPilotUno_PBase;
     /// the UNO wrapper for the address book source pilot
     class OABSPilotUno

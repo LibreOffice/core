@@ -58,8 +58,8 @@ SvxShowCharSetVirtualAcc::~SvxShowCharSetVirtualAcc()
     delete getExternalLock();
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetVirtualAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_2 )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetVirtualAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_2 )
+IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetVirtualAcc, OAccessibleComponentHelper, OAccessibleHelper_Base )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetVirtualAcc, OAccessibleComponentHelper, OAccessibleHelper_Base )
 
 void SAL_CALL SvxShowCharSetVirtualAcc::fireEvent(
                     const sal_Int16 _nEventId,
@@ -284,8 +284,8 @@ void SAL_CALL SvxShowCharSetAcc::disposing()
 }
 
 
-IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetAcc, OAccessibleSelectionHelper, OAccessibleHelper_Base )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetAcc, OAccessibleSelectionHelper, OAccessibleHelper_Base )
+IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetAcc, OAccessibleSelectionHelper, OAccessibleTableHelper_Base )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetAcc, OAccessibleSelectionHelper, OAccessibleTableHelper_Base )
 
 bool SvxShowCharSetAcc::implIsSelected( sal_Int32 nAccessibleChildIndex ) throw (RuntimeException)
 {
@@ -590,8 +590,8 @@ SvxShowCharSetItemAcc::~SvxShowCharSetItemAcc()
     delete getExternalLock();
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
+IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleActionHelper_Base )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleActionHelper_Base )
 
 
 void SvxShowCharSetItemAcc::ParentDestroyed()

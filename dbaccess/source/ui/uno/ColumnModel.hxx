@@ -28,14 +28,14 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include "apitools.hxx"
 
 namespace dbaui
 {
 
 // OColumnControlModel
-typedef ::cppu::WeakAggComponentImplHelper4 <   css::awt::XControlModel
+typedef ::cppu::WeakAggComponentImplHelper <   css::awt::XControlModel
                                         ,   css::lang::XServiceInfo
                                         ,   css::util::XCloneable
                                         ,   css::io::XPersistObject

@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
@@ -42,7 +42,7 @@ class DialogWindow;
 
 //  class AccessibleDialogControlShape
 
-typedef ::cppu::ImplHelper3<
+typedef ::cppu::ImplHelper<
         css::accessibility::XAccessible,
         css::lang::XServiceInfo,
         css::beans::XPropertyChangeListener > AccessibleDialogControlShape_BASE;

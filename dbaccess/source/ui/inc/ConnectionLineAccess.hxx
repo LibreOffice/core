@@ -20,13 +20,13 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_CONNECTIONLINEACCESS_HXX
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace dbaui
 {
-    typedef ::cppu::ImplHelper2< css::accessibility::XAccessibleRelationSet,
+    typedef ::cppu::ImplHelper < css::accessibility::XAccessibleRelationSet,
                                  css::accessibility::XAccessible
                                             > OConnectionLineAccess_BASE;
     class OTableConnection;

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_MAIN_DUMMYXSHAPE_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_MAIN_DUMMYXSHAPE_HXX
 
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vcl/opengl/OpenGLContext.hxx>
 #include "OpenGLRender.hxx"
@@ -98,7 +98,7 @@ private:
     std::unordered_map<TextCacheKey, BitmapEx, TextCacheKeyHash> maCache;
 };
 
-class DummyXShape : public cppu::WeakAggImplHelper6<
+class DummyXShape : public cppu::WeakAggImplHelper<
                     css::drawing::XShape,
                     css::beans::XPropertySet,
                     css::beans::XMultiPropertySet,

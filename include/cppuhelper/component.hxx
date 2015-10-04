@@ -22,7 +22,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 

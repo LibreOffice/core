@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace com { namespace sun { namespace star { namespace awt {
@@ -41,9 +41,9 @@ namespace comphelper
 class SdrObject;
 namespace accessibility {
 
-    typedef ::cppu::ImplHelper4 <   css::beans::XPropertyChangeListener
+    typedef ::cppu::ImplHelper  <   css::beans::XPropertyChangeListener
                                 ,   css::util::XModeChangeListener
-                                                ,   css::container::XContainerListener
+                                ,   css::container::XContainerListener
                                 ,   css::accessibility::XAccessibleEventListener
                                 >   AccessibleControlShape_Base;
 /** @descr

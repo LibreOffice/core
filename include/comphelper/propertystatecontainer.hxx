@@ -22,7 +22,7 @@
 
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/comphelperdllapi.h>
@@ -36,7 +36,7 @@ namespace comphelper
 
     //= OPropertyStateContainer
 
-    typedef ::cppu::ImplHelper1 <   css::beans::XPropertyState
+    typedef ::cppu::ImplHelper  <   css::beans::XPropertyState
                                 >   OPropertyStateContainer_TBase;
 
     /** helper implementation for components which have properties with a default

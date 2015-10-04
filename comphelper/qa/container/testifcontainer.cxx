@@ -22,8 +22,10 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 #include <osl/mutex.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+
+#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase.hxx>
+
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 
 using namespace ::osl;

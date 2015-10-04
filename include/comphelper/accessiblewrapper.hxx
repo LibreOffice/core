@@ -32,7 +32,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
@@ -54,7 +53,7 @@ namespace comphelper
     class OWrappedAccessibleChildrenManager;
 
     struct OAccessibleWrapper_Base :
-        public ::cppu::ImplHelper1 < css::accessibility::XAccessible >
+        public ::cppu::ImplHelper < css::accessibility::XAccessible >
     {
     protected:
         ~OAccessibleWrapper_Base() {}
@@ -124,7 +123,7 @@ namespace comphelper
     //= OAccessibleContextWrapperHelper
 
 
-    typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessibleEventListener
+    typedef ::cppu::ImplHelper  <   css::accessibility::XAccessibleEventListener
                                 >   OAccessibleContextWrapperHelper_Base;
 
     /** Helper for wrapping an XAccessibleContext by aggregating a proxy for it.

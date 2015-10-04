@@ -33,7 +33,7 @@
  *
  *************************************************************************/
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -70,7 +70,7 @@ static OUString getImplementationName_MyService2Impl()
     return OUString("my_module.my_sc_implementation.MyService2");
 }
 
-class MyService2Impl : public ::cppu::WeakImplHelper3<
+class MyService2Impl : public ::cppu::WeakImplHelper <
       ::my_module::XSomething, lang::XServiceInfo, lang::XInitialization >
 {
     OUString m_sData;

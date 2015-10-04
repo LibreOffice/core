@@ -26,7 +26,7 @@
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -246,7 +246,7 @@ namespace connectivity
                 impl_getColumnRefColumnName_throw( const ::connectivity::OSQLParseNode& _rColumnRef );
         };
 
-        typedef ::cppu::ImplHelper2 <   css::lang::XServiceInfo
+        typedef ::cppu::ImplHelper  <   css::lang::XServiceInfo
                                     ,   css::sdbc::XStatement
                                     >   OStatement_IBase;
         class OStatement    :public OCommonStatement

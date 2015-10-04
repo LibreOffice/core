@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/InvalidStateException.hpp>
 #include <com/sun/star/util/NotLockedException.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -63,7 +63,7 @@ namespace dbaui
     //= UndoManager
 
     struct UndoManager_Impl;
-    typedef ::cppu::ImplHelper1< css::document::XUndoManager > UndoManager_Base;
+    typedef ::cppu::ImplHelper < css::document::XUndoManager > UndoManager_Base;
     class DBACCESS_DLLPUBLIC UndoManager : public UndoManager_Base
     {
     public:

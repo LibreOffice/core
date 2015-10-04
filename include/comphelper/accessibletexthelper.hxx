@@ -25,7 +25,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 
@@ -98,7 +98,7 @@ namespace comphelper
     // OAccessibleTextHelper
 
 
-    typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessibleText
+    typedef ::cppu::ImplHelper  <   css::accessibility::XAccessibleText
                                 >   OAccessibleTextHelper_Base;
 
     /** a helper class for implementing an AccessibleExtendedComponent which at the same time

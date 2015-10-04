@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VCOLLECTION_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VCOLLECTION_HXX
 
-#include <cppuhelper/implbase10.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -47,7 +47,7 @@ namespace connectivity
     {
 
         // the class OCollection is base class for collections :-)
-        typedef ::cppu::ImplHelper10< css::container::XNameAccess,
+        typedef ::cppu::ImplHelper  <    css::container::XNameAccess,
                                          css::container::XIndexAccess,
                                          css::container::XEnumerationAccess,
                                          css::container::XContainer,

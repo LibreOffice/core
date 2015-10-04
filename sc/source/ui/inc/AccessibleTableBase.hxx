@@ -26,15 +26,15 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleTable</code> service.
 */
 
-typedef cppu::ImplHelper2< css::accessibility::XAccessibleTable,
-                    css::accessibility::XAccessibleSelection>
+typedef cppu::ImplHelper < css::accessibility::XAccessibleTable,
+                           css::accessibility::XAccessibleSelection >
                     ScAccessibleTableBaseImpl;
 
 class ScAccessibleTableBase :

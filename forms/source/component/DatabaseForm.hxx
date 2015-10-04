@@ -70,9 +70,7 @@
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/implbase12.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star { namespace sdbc {
     class SQLException;
@@ -114,7 +112,7 @@ typedef std::vector<HtmlSuccessfulObj> HtmlSuccessfulObjList;
 
 class OGroupManager;
 class OFormSubmitResetThread;
-typedef ::cppu::ImplHelper12    <   css::form::XForm
+typedef ::cppu::ImplHelper      <   css::form::XForm
                                 ,   css::awt::XTabControllerModel
                                 ,   css::form::XLoadListener
                                 ,   css::sdbc::XRowSetListener
@@ -129,13 +127,13 @@ typedef ::cppu::ImplHelper12    <   css::form::XForm
                                 >   ODatabaseForm_BASE1;
 
 
-typedef ::cppu::ImplHelper4 <   css::lang::XServiceInfo
+typedef ::cppu::ImplHelper  <   css::lang::XServiceInfo
                             ,   css::beans::XPropertyContainer
                             ,   css::beans::XPropertyAccess
                             ,   css::sdbc::XWarningsSupplier
                             >   ODatabaseForm_BASE2;
 
-typedef ::cppu::ImplHelper7<    css::sdbc::XCloseable,
+typedef ::cppu::ImplHelper  <   css::sdbc::XCloseable,
                                 css::sdbc::XRowSet,
                                 css::sdb::XCompletedExecution,
                                 css::sdb::XRowSetApproveBroadcaster,

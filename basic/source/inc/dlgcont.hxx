@@ -25,7 +25,7 @@
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/resource/XStringResourcePersistence.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace basic
@@ -93,8 +93,8 @@ public:
 };
 
 
-typedef ::cppu::ImplHelper1 <   css::resource::XStringResourceSupplier
-                            >   SfxDialogLibrary_BASE;
+typedef ::cppu::ImplHelper <   css::resource::XStringResourceSupplier
+                           >   SfxDialogLibrary_BASE;
 
 class SfxDialogLibrary  :public SfxLibrary
                         ,public SfxDialogLibrary_BASE

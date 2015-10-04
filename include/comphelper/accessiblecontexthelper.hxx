@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_ACCESSIBLECONTEXTHELPER_HXX
 #define INCLUDED_COMPHELPER_ACCESSIBLECONTEXTHELPER_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
@@ -76,7 +76,7 @@ namespace comphelper
 
 
     class OContextHelper_Impl;
-    typedef ::cppu::WeakAggComponentImplHelper2 <   css::accessibility::XAccessibleContext,
+    typedef ::cppu::WeakAggComponentImplHelper  <   css::accessibility::XAccessibleContext,
                                                     css::accessibility::XAccessibleEventBroadcaster
                                                 >   OAccessibleContextHelper_Base;
 

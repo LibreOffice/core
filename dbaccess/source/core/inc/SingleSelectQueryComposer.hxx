@@ -25,7 +25,7 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
 #include "apitools.hxx"
@@ -42,7 +42,7 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper5<    css::sdb::XSingleSelectQueryComposer,
+    typedef ::cppu::ImplHelper <    css::sdb::XSingleSelectQueryComposer,
                                     css::sdb::XParametersSupplier,
                                     css::sdbcx::XColumnsSupplier,
                                     css::sdbcx::XTablesSupplier,

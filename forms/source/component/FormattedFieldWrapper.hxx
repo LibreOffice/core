@@ -21,7 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELDWRAPPER_HXX
 
 #include "FormComponent.hxx"
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
@@ -32,10 +32,10 @@ class OEditModel;
 
 //= OFormattedFieldWrapper
 
-typedef ::cppu::WeakAggImplHelper3  <   css::io::XPersistObject
-                                    ,   css::lang::XServiceInfo
-                                    ,   css::util::XCloneable
-                                    >   OFormattedFieldWrapper_Base;
+typedef ::cppu::WeakAggImplHelper <   css::io::XPersistObject
+                                  ,   css::lang::XServiceInfo
+                                  ,   css::util::XCloneable
+                                  >   OFormattedFieldWrapper_Base;
 
 class OFormattedFieldWrapper : public OFormattedFieldWrapper_Base
 {

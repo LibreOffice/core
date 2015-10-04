@@ -28,8 +28,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <svl/itemprop.hxx>
@@ -60,7 +59,7 @@ public:
     virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const throw (css::uno::RuntimeException, std::exception) override;
 };
 
-typedef cppu::WeakAggImplHelper4
+typedef cppu::WeakAggImplHelper
 <
     css::container::XEnumerationAccess,
     css::drawing::XDrawPage,
@@ -114,7 +113,7 @@ public:
 class SwShapeDescriptor_Impl;
 class SwXGroupShape;
 typedef
-cppu::WeakAggImplHelper6
+cppu::WeakAggImplHelper
 <
     css::beans::XPropertySet,
     css::beans::XPropertyState,

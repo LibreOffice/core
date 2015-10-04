@@ -37,8 +37,8 @@
 
 #include <svl/lstner.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase5.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 
 class Rectangle;
@@ -48,7 +48,7 @@ class Rectangle;
         <code>AccessibleContext</code> service.
 */
 
-typedef cppu::WeakAggComponentImplHelper5<
+typedef cppu::WeakAggComponentImplHelper<
                 css::accessibility::XAccessible,
                 css::accessibility::XAccessibleComponent,
                 css::accessibility::XAccessibleContext,
@@ -56,7 +56,7 @@ typedef cppu::WeakAggComponentImplHelper5<
                 css::lang::XServiceInfo
                 > ScAccessibleContextBaseWeakImpl;
 
-typedef cppu::ImplHelper1<
+typedef cppu::ImplHelper<
                 css::accessibility::XAccessibleEventListener
                 > ScAccessibleContextBaseImplEvent;
 

@@ -22,7 +22,7 @@
 
 #include "file/FResultSet.hxx"
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
@@ -30,7 +30,7 @@ namespace connectivity
     {
         class OFlatResultSet;
         // these typedef's are only necessary for the compiler
-        typedef ::cppu::ImplHelper1<  css::sdbcx::XRowLocate> OFlatResultSet_BASE;
+        typedef ::cppu::ImplHelper < css::sdbcx::XRowLocate > OFlatResultSet_BASE;
         typedef file::OResultSet                                            OFlatResultSet_BASE2;
         typedef ::comphelper::OPropertyArrayUsageHelper<OFlatResultSet>     OFlatResultSet_BASE3;
 

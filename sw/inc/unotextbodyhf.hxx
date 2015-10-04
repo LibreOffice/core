@@ -25,7 +25,6 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase2.hxx>
 
 #include <unotext.hxx>
 
@@ -33,7 +32,7 @@ class SwDoc;
 class SwFrameFormat;
 class SwXTextCursor;
 
-typedef ::cppu::WeakAggImplHelper2
+typedef ::cppu::WeakAggImplHelper
 <   css::lang::XServiceInfo
 ,   css::container::XEnumerationAccess
 > SwXBodyText_Base;

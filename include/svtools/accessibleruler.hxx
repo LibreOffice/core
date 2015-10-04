@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <vcl/vclptr.hxx>
@@ -51,7 +51,7 @@ class Ruler;
 namespace vcl { class Window; }
 
 
-typedef ::cppu::WeakAggComponentImplHelper5<
+typedef ::cppu::WeakAggComponentImplHelper<
             css::accessibility::XAccessible,
             css::accessibility::XAccessibleComponent,
             css::accessibility::XAccessibleContext,

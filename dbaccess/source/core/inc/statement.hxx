@@ -33,7 +33,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "apitools.hxx"
 
 
@@ -133,10 +133,10 @@ protected:
 
 //  OStatement
 
-typedef ::cppu::ImplHelper3 <   css::sdbc::XStatement
-                            ,   css::lang::XServiceInfo
-                            ,   css::sdbc::XBatchExecution
-                            >   OStatement_IFACE;
+typedef ::cppu::ImplHelper <   css::sdbc::XStatement
+                           ,   css::lang::XServiceInfo
+                           ,   css::sdbc::XBatchExecution
+                           >   OStatement_IFACE;
 class OStatement    :public OStatementBase
                     ,public OStatement_IFACE
 {

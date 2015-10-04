@@ -47,7 +47,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svl/lstner.hxx>
@@ -70,7 +70,7 @@ namespace rptui
     class OSectionWindow;
 
     typedef ::dbaui::DBSubComponentController   OReportController_BASE;
-    typedef ::cppu::ImplHelper5 <   css::container::XContainerListener
+    typedef ::cppu::ImplHelper  <   css::container::XContainerListener
                                 ,   css::beans::XPropertyChangeListener
                                 ,   css::view::XSelectionSupplier
                                 ,   css::util::XModeSelector

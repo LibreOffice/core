@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
@@ -47,7 +47,7 @@ class DlgEdObj;
 
 //  class AccessibleDialogWindow
 
-typedef ::cppu::ImplHelper3 <
+typedef ::cppu::ImplHelper <
     css::accessibility::XAccessible,
     css::accessibility::XAccessibleSelection,
     css::lang::XServiceInfo > AccessibleDialogWindow_BASE;

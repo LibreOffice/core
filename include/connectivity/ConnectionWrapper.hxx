@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_CONNECTIONWRAPPER_HXX
 #define INCLUDED_CONNECTIVITY_CONNECTIONWRAPPER_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -37,7 +37,7 @@ namespace connectivity
     //= OConnectionWrapper - wraps all methods to the real connection from the driver
     //= but when disposed it doesn't dispose the real connection
 
-    typedef ::cppu::ImplHelper2<        css::lang::XServiceInfo,
+    typedef ::cppu::ImplHelper <        css::lang::XServiceInfo,
                                         css::lang::XUnoTunnel
                                 > OConnection_BASE;
 

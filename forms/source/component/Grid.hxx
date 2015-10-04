@@ -32,7 +32,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace frm
@@ -49,7 +49,7 @@ class OGridColumn;
 
 // OGridControlModel
 
-typedef ::cppu::ImplHelper7 <   css::awt::XControlModel
+typedef ::cppu::ImplHelper  <   css::awt::XControlModel
                             ,   css::form::XGridColumnFactory
                             ,   css::form::XReset
                             ,   css::view::XSelectionSupplier

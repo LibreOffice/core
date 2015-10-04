@@ -23,7 +23,7 @@
 #include "commandbase.hxx"
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/sdbcx/XRename.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "datasettings.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -38,7 +38,7 @@
 namespace dbaccess
 {
 
-    typedef ::cppu::ImplHelper1< css::sdbcx::XColumnsSupplier > OComponentDefinition_BASE;
+    typedef ::cppu::ImplHelper < css::sdbcx::XColumnsSupplier > OComponentDefinition_BASE;
 
     class OComponentDefinition_Impl : public OContentHelper_Impl
                                      ,public ODataSettings_Base

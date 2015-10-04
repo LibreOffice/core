@@ -38,14 +38,14 @@
 
 #include "SConnection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
     namespace skeleton
     {
 
-        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
+        typedef ::cppu::WeakImplHelper < ::com::sun::star::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
 
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {

@@ -43,7 +43,7 @@
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include "SConnection.hxx"
 #include <list>
 #include "OSubComponent.hxx"
@@ -54,7 +54,7 @@ namespace connectivity
     namespace skeleton
     {
 
-        typedef ::cppu::WeakComponentImplHelper5<   ::com::sun::star::sdbc::XStatement,
+        typedef ::cppu::WeakComponentImplHelper <   ::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable,

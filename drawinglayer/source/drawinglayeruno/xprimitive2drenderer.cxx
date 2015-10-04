@@ -22,7 +22,7 @@
 #include <com/sun/star/graphic/XPrimitive2DRenderer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
@@ -47,7 +47,7 @@ namespace drawinglayer
     namespace unorenderer
     {
         class XPrimitive2DRenderer:
-            public cppu::WeakAggImplHelper2<
+            public cppu::WeakAggImplHelper<
                 css::graphic::XPrimitive2DRenderer, css::lang::XServiceInfo>
         {
         public:

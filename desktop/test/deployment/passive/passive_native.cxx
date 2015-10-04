@@ -44,7 +44,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -55,7 +55,7 @@
 namespace {
 
 class Provider:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::frame::XDispatchProvider >
 {
 public:
@@ -148,7 +148,7 @@ Provider::queryDispatches(
 }
 
 class Dispatch:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::frame::XDispatch >
 {
 public:

@@ -25,14 +25,14 @@
 #include <com/sun/star/sdbcx/XAlterView.hpp>
 
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace connectivity { namespace hsqldb
 {
 
     typedef ::connectivity::sdbcx::OView                   HView_Base;
-    typedef ::cppu::ImplHelper1< css::sdbcx::XAlterView >  HView_IBASE;
+    typedef ::cppu::ImplHelper < css::sdbcx::XAlterView >  HView_IBASE;
     class HView :public HView_Base
                 ,public HView_IBASE
     {

@@ -28,14 +28,14 @@
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/wintypes.hxx>
 
 
 namespace frm
 {
 
-    typedef ::cppu::ImplHelper1 <   css::frame::XDispatchProviderInterception
+    typedef ::cppu::ImplHelper  <   css::frame::XDispatchProviderInterception
                                 >   ONavigationBarControl_Base;
 
     class ONavigationBarControl

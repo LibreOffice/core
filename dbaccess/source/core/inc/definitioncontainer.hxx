@@ -26,7 +26,7 @@
 #include <vector>
 
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -81,7 +81,7 @@ private:
 
 // ODefinitionContainer -  base class of collections of database definition
 //                         documents
-typedef ::cppu::ImplHelper7 <   css::container::XIndexAccess
+typedef ::cppu::ImplHelper  <   css::container::XIndexAccess
                             ,   css::container::XNameContainer
                             ,   css::container::XEnumerationAccess
                             ,   css::container::XContainer

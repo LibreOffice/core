@@ -28,7 +28,7 @@
 class XMLEmbeddedObjectExportFilter : public cppu::WeakImplHelper<
              css::xml::sax::XExtendedDocumentHandler,
              css::lang::XServiceInfo,
-             css::lang::XInitialization>
+             css::lang::XInitialization >
 {
     css::uno::Reference< css::xml::sax::XDocumentHandler >         xHandler;
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtHandler;

@@ -22,7 +22,7 @@
 #include "file/FResultSet.hxx"
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
@@ -30,8 +30,8 @@ namespace connectivity
     {
         class ODbaseResultSet;
         // these typedef's are only necessary for the compiler
-        typedef ::cppu::ImplHelper2<  css::sdbcx::XRowLocate,
-                                      css::sdbcx::XDeleteRows> ODbaseResultSet_BASE;
+        typedef ::cppu::ImplHelper <  css::sdbcx::XRowLocate,
+                                      css::sdbcx::XDeleteRows > ODbaseResultSet_BASE;
         typedef file::OResultSet                                            ODbaseResultSet_BASE2;
         typedef ::comphelper::OPropertyArrayUsageHelper<ODbaseResultSet>    ODbaseResultSet_BASE3;
 

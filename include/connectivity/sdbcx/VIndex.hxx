@@ -31,7 +31,7 @@
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
@@ -39,7 +39,7 @@ namespace connectivity
     {
         class OCollection;
         class OIndex;
-        typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OIndex_BASE;
+        typedef ::cppu::ImplHelper < css::sdbcx::XDataDescriptorFactory > OIndex_BASE;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndex> OIndex_PROP;
 
         class OOO_DLLPUBLIC_DBTOOLS OIndex :

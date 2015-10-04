@@ -28,7 +28,6 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 class SvStream;
 
@@ -115,7 +114,7 @@ protected:
 
 //= OSeekableOutputStreamWrapper
 
-typedef ::cppu::ImplHelper1 <   css::io::XSeekable
+typedef ::cppu::ImplHelper  <   css::io::XSeekable
                             >   OSeekableOutputStreamWrapper_Base;
 /** helper class for wrapping an SvStream into an com.sun.star.io::XOutputStream
     which is seekable (i.e. supports the com.sun.star.io::XSeekable interface).

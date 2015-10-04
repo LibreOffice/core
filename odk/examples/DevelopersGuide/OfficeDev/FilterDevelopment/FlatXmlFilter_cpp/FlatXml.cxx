@@ -34,9 +34,7 @@
  *************************************************************************/
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include <uno/lbnames.h>
 
@@ -70,7 +68,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace XFlatXml {
 
-class XFlatXml : public WeakImplHelper3< XImportFilter, XExportFilter, XDocumentHandler>
+class XFlatXml : public WeakImplHelper< XImportFilter, XExportFilter, XDocumentHandler>
 {
 private:
     // the UNO ServiceFactory

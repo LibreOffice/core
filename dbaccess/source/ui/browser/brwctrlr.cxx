@@ -73,7 +73,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/app.hxx>
@@ -150,7 +150,7 @@ void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyVal
 // (we can't derive from XFormController as it's base class is XTabController and the XTabController::getModel collides
 // with the XController::getModel implemented in our base class SbaXDataBrowserController)
 class SbaXDataBrowserController::FormControllerImpl
-    : public ::cppu::WeakAggImplHelper2< css::form::runtime::XFormController,
+    : public ::cppu::WeakAggImplHelper < css::form::runtime::XFormController,
                                          css::frame::XFrameActionListener >
 {
     friend class SbaXDataBrowserController;

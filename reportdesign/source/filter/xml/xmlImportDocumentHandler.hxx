@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -34,7 +34,7 @@
 class SvXMLTokenMap;
 namespace rptxml
 {
-typedef ::cppu::WeakAggImplHelper3< css::xml::sax::XDocumentHandler
+typedef ::cppu::WeakAggImplHelper < css::xml::sax::XDocumentHandler
                                 ,   css::lang::XInitialization
                                 ,   css::lang::XServiceInfo>   ImportDocumentHandler_BASE;
 

@@ -20,13 +20,13 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_JACCESS_HXX
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace dbaui
 {
     class OJoinTableView;
-    typedef ::cppu::ImplHelper1< css::accessibility::XAccessible
+    typedef ::cppu::ImplHelper < css::accessibility::XAccessible
                                             > OJoinDesignViewAccess_BASE;
     /** the class OJoinDesignViewAccess represents the accessible object for join views
         like the QueryDesign and the RelationDesign

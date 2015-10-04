@@ -22,7 +22,7 @@
 
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -43,7 +43,7 @@ namespace calc
 
     class OCellValueBinding;
     // the base for our interfaces
-    typedef ::cppu::WeakAggComponentImplHelper5 <   css::form::binding::XValueBinding
+    typedef ::cppu::WeakAggComponentImplHelper  <   css::form::binding::XValueBinding
                                                 ,   css::lang::XServiceInfo
                                                 ,   css::util::XModifyBroadcaster
                                                 ,   css::util::XModifyListener

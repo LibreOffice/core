@@ -43,7 +43,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <unordered_map>
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -81,7 +81,7 @@ typedef std::unordered_multimap< OUString, css::uno::Reference<css::uno::XInterf
 // OInterfaceContainer
 // implements a container for form components
 
-typedef ::cppu::ImplHelper8 <   css::container::XNameContainer
+typedef ::cppu::ImplHelper  <   css::container::XNameContainer
                             ,   css::container::XIndexContainer
                             ,   css::container::XContainer
                             ,   css::container::XEnumerationAccess
@@ -272,7 +272,7 @@ private:
     void    impl_createEventAttacher_nothrow();
 };
 
-typedef ::cppu::ImplHelper1< css::form::XFormComponent> OFormComponents_BASE;
+typedef ::cppu::ImplHelper < css::form::XFormComponent> OFormComponents_BASE;
 typedef ::cppu::OComponentHelper FormComponentsBase;
     // else MSVC kills itself on some statements
 class OFormComponents   :public FormComponentsBase

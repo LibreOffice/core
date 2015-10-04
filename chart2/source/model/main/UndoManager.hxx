@@ -24,7 +24,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -34,7 +34,7 @@ namespace chart
     namespace impl
     {
         class UndoManager_Impl;
-        typedef ::cppu::ImplHelper2 <   css::document::XUndoManager
+        typedef ::cppu::ImplHelper  <   css::document::XUndoManager
                                     ,   css::util::XModifyBroadcaster
                                     >   UndoManager_Base;
     }

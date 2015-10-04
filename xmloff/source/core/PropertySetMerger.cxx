@@ -25,9 +25,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class PropertySetMergerImpl : public ::cppu::WeakAggImplHelper3< XPropertySet, XPropertyState, XPropertySetInfo >
+class PropertySetMergerImpl : public ::cppu::WeakAggImplHelper< XPropertySet, XPropertyState, XPropertySetInfo >
 {
 private:
     Reference< XPropertySet > mxPropSet1;

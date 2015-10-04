@@ -47,7 +47,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase10.hxx>
 
 class DbGridColumn;
 enum class DbGridControlNavigationBarState;
@@ -188,7 +187,7 @@ public:
 
 // FmXGridControl
 
-typedef ::cppu::ImplHelper10<   css::form::XBoundComponent,
+typedef ::cppu::ImplHelper  <   css::form::XBoundComponent,
                                 css::form::XGridControl,
                                 css::util::XModifyBroadcaster,
                                 css::container::XIndexAccess,

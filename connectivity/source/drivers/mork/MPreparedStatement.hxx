@@ -23,14 +23,14 @@
 #include "MResultSet.hxx"
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
     namespace mork
     {
 
-        typedef ::cppu::ImplHelper5<    css::sdbc::XPreparedStatement,
+        typedef ::cppu::ImplHelper <    css::sdbc::XPreparedStatement,
                                         css::sdbc::XParameters,
                                         css::sdbc::XResultSetMetaDataSupplier,
                                         css::sdbc::XMultipleResults,
