@@ -815,6 +815,11 @@ void ImportExcel::Hideobj()
 void ImportExcel::Standardwidth()
 {
     sal_uInt16 nScWidth = XclTools::GetScColumnWidth( maStrm.ReaduInt16(), GetCharWidth() );
+    if (!pColRowBuff)
+    {
+        SAL_WARN("sc", "*ImportExcel::Standardwidth(): pColRowBuff is NULL!");
+        return;
+    }
     pColRowBuff->SetDefWidth( nScWidth, true );
 }
 
