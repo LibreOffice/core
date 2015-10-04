@@ -3,6 +3,7 @@
 "FilePicker";"com::sun::star::ui::dialogs::XFilePicker";"setDisplayDirectory()"
 "FilePicker";"com::sun::star::ui::dialogs::XFilePicker";"getDisplayDirectory()"
 "FilePicker";"com::sun::star::ui::dialogs::XFilePicker";"getFiles()"
+"FilePicker";"com::sun::star::ui::dialogs::XFilePicker2";"getSelectedFiles()"
 "FilePicker";"com::sun::star::ui::dialogs::XFilePickerControlAccess#optional";"setValue()"
 "FilePicker";"com::sun::star::ui::dialogs::XFilePickerControlAccess#optional";"getValue()"
 "FilePicker";"com::sun::star::ui::dialogs::XFilePickerControlAccess#optional";"setLabel()"

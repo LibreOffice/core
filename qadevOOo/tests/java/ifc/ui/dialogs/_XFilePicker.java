@@ -20,7 +20,7 @@ package ifc.ui.dialogs;
 
 import lib.MultiMethodTest;
 
-import com.sun.star.ui.dialogs.XFilePicker;
+import com.sun.star.ui.dialogs.XFilePicker2;
 
 /**
 * Testing <code>com.sun.star.ui.XFilePicker</code>
@@ -41,7 +41,7 @@ import com.sun.star.ui.dialogs.XFilePicker;
 */
 public class _XFilePicker extends MultiMethodTest {
 
-    public XFilePicker oObj = null;
+    public XFilePicker2 oObj = null;
     private String dir = null ;
     private static final String fname = "space-metal.jpg" ;
 
@@ -133,7 +133,7 @@ public class _XFilePicker extends MultiMethodTest {
         requiredMethod("setDisplayDirectory()");
         requiredMethod("setDefaultName()");
 
-        String[] files = oObj.getFiles();
+        String[] files = oObj.getSelectedFiles();
 
         if (files.length > 0) {
             log.println("Path get : '" + files[0] + "'") ;

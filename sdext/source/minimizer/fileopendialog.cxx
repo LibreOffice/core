@@ -165,7 +165,7 @@ void FileOpenDialog::setDefaultName( const OUString& rDefaultName )
 }
 OUString FileOpenDialog::getURL() const
 {
-    Sequence< OUString > aFileSeq( mxFilePicker->getFiles() );
+    Sequence< OUString > aFileSeq( mxFilePicker->getSelectedFiles() );
     return aFileSeq.getLength() ? aFileSeq[ 0 ] : OUString();
 };
 OUString FileOpenDialog::getFilterName() const
