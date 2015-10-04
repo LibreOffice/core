@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <registry/registry.hxx>
 #include <rtl/ustring.hxx>
@@ -50,7 +50,7 @@ typedef css::uno::XInterface * SAL_CALL ImplementationConstructorFn(
 
 }
 
-typedef cppu::WeakComponentImplHelper8<
+typedef cppu::WeakComponentImplHelper <
     css::lang::XServiceInfo, css::lang::XMultiServiceFactory,
     css::lang::XMultiComponentFactory, css::container::XSet,
     css::container::XContentEnumerationAccess, css::beans::XPropertySet,

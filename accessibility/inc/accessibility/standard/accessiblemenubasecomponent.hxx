@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/link.hxx>
 
 #include <vector>
@@ -44,7 +44,7 @@ class AccessibleStateSetHelper;
 
 typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > OAccessibleMenuBaseComponent_BASE;
 

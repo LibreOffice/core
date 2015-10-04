@@ -24,13 +24,13 @@
 
 #include <svtools/transfer.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace dbaui
 {
     // OJoinExchObj: Additional data to create Joins in the JoinShell
 
-    typedef ::cppu::ImplHelper1< css::lang::XUnoTunnel > OJoinExchObj_Base;
+    typedef ::cppu::ImplHelper < css::lang::XUnoTunnel > OJoinExchObj_Base;
     class OJoinExchObj : public TransferableHelper, public OJoinExchObj_Base
     {
         static OUString         m_sJoinFormat;

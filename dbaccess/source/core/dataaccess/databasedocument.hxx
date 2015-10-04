@@ -56,7 +56,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 #include <boost/noncopyable.hpp>
@@ -146,7 +146,7 @@ typedef cppu::PartialWeakComponentImplHelper<   css::frame::XModel2
                                                 ,   css::document::XDocumentRecovery
                                                 >   ODatabaseDocument_OfficeDocument;
 
-typedef ::cppu::ImplHelper3<    css::frame::XTitle
+typedef ::cppu::ImplHelper <    css::frame::XTitle
                             ,   css::frame::XTitleChangeBroadcaster
                             ,   css::frame::XUntitledNumbers
                             >   ODatabaseDocument_Title;

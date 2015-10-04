@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessibletexthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/vclptr.hxx>
 
 class StatusBar;
@@ -40,7 +40,7 @@ class AccessibleStateSetHelper;
 
 typedef ::comphelper::OAccessibleTextHelper AccessibleTextHelper_BASE;
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > VCLXAccessibleStatusBarItem_BASE;
 

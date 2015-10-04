@@ -32,7 +32,7 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <typelib/typedescription.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -613,7 +613,7 @@ static void SAL_CALL typelib_callback(
 
 
 class EventListenerImpl
-    : public WeakImplHelper1< lang::XEventListener >
+    : public WeakImplHelper< lang::XEventListener >
 {
     Reference< container::XHierarchicalNameAccess > m_xTDMgr;
 

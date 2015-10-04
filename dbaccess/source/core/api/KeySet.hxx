@@ -22,7 +22,6 @@
 
 #include "CacheSet.hxx"
 
-#include <cppuhelper/implbase1.hxx>
 #include <memory>
 #include <map>
 #include <vector>

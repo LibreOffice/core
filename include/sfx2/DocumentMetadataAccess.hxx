@@ -28,7 +28,7 @@
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <boost/noncopyable.hpp>
 
@@ -75,7 +75,7 @@ struct DocumentMetadataAccess_Impl;
 
 class SFX2_DLLPUBLIC DocumentMetadataAccess :
     private boost::noncopyable,
-    public ::cppu::WeakImplHelper1<
+    public ::cppu::WeakImplHelper<
         ::com::sun::star::rdf::XDocumentMetadataAccess>
 {
 public:

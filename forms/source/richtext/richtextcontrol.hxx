@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <tools/wintypes.hxx>
 #include "rtattributes.hxx"
@@ -40,7 +40,7 @@ namespace frm
 
     class ORichTextFeatureDispatcher;
 
-    typedef ::cppu::ImplHelper1 <   css::frame::XDispatchProvider
+    typedef ::cppu::ImplHelper  <   css::frame::XDispatchProvider
                                 >   ORichTextControl_Base;
     class ORichTextControl  :public UnoEditControl
                             ,public ORichTextControl_Base
@@ -79,7 +79,7 @@ namespace frm
         virtual bool   requiresNewPeer( const OUString& _rPropertyName ) const override;
     };
 
-    typedef ::cppu::ImplHelper1 <   css::frame::XDispatchProvider
+    typedef ::cppu::ImplHelper  <   css::frame::XDispatchProvider
                                 >   ORichTextPeer_Base;
     class ORichTextPeer :public VCLXWindow
                         ,public ORichTextPeer_Base

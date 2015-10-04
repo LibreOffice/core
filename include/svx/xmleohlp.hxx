@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_XMLEOHLP_HXX
 #define INCLUDED_SVX_XMLEOHLP_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <map>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -50,7 +50,7 @@ class SvGlobalName;
 struct OUStringLess;
 class OutputStorageWrapper_Impl;
 
-class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper : public ::cppu::WeakComponentImplHelper2<
+class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper : public ::cppu::WeakComponentImplHelper<
     ::com::sun::star::document::XEmbeddedObjectResolver,
     ::com::sun::star::container::XNameAccess >
 {

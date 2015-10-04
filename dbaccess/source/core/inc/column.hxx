@@ -47,7 +47,7 @@
 #include <connectivity/TColumnsHelper.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <osl/diagnose.h>
 
@@ -140,7 +140,7 @@ namespace dbaccess
     };
 
     class OContainerMediator;
-    typedef ::cppu::ImplHelper1< css::container::XChild > TXChild;
+    typedef ::cppu::ImplHelper < css::container::XChild > TXChild;
     typedef connectivity::OColumnsHelper OColumns_BASE;
 
     class OColumns : public OColumns_BASE

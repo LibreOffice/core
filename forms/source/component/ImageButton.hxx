@@ -54,7 +54,7 @@ protected:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
-typedef ::cppu::ImplHelper1< css::awt::XMouseListener> OImageButtonControl_BASE;
+typedef ::cppu::ImplHelper < css::awt::XMouseListener> OImageButtonControl_BASE;
 class OImageButtonControl : public OClickableImageBaseControl,
                             public OImageButtonControl_BASE
 {

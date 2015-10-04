@@ -37,7 +37,7 @@
 #include <comphelper/asyncnotification.hxx>
 #include <connectivity/FValue.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 
@@ -241,7 +241,7 @@ private:
 
 //= OListBoxControl
 
-typedef ::cppu::ImplHelper4 <   css::awt::XFocusListener
+typedef ::cppu::ImplHelper  <   css::awt::XFocusListener
                             ,   css::awt::XItemListener
                             ,   css::awt::XListBox
                             ,   css::form::XChangeBroadcaster

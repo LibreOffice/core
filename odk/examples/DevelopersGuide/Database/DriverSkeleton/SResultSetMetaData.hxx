@@ -37,7 +37,7 @@
 #define INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SRESULTSETMETADATA_HXX
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "SConnection.hxx"
 
 namespace connectivity
@@ -45,7 +45,7 @@ namespace connectivity
     namespace skeleton
     {
 
-        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
+        typedef ::cppu::WeakImplHelper < ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
         class OResultSetMetaData :  public  OResultSetMetaData_BASE
         {

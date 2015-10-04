@@ -21,7 +21,6 @@
 
 #include <sfx2/ctrlitem.hxx>
 
-#include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <vcl/image.hxx>

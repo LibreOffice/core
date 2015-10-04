@@ -56,8 +56,6 @@
 #include <com/sun/star/util/XCancellable.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase12.hxx>
-#include <cppuhelper/implbase10.hxx>
 #include "moduledbu.hxx"
 
 namespace dbaui
@@ -78,7 +76,7 @@ namespace dbaui
                                   ,   css::sdbc::XParameters
                                   ,   css::sdbcx::XDeleteRows
                                   >   SbaXFormAdapter_BASE1;
-    typedef ::cppu::ImplHelper12    <   css::sdbc::XWarningsSupplier
+    typedef ::cppu::ImplHelper      <   css::sdbc::XWarningsSupplier
                                     ,   css::sdbc::XCloseable
                                     ,   css::form::XLoadable
                                     ,   css::sdb::XSQLErrorBroadcaster
@@ -94,7 +92,7 @@ namespace dbaui
                                     ,           css::beans::XMultiPropertySet
                                     ,           css::container::XNamed
                                     >   SbaXFormAdapter_BASE2;
-    typedef ::cppu::ImplHelper10    <           css::io::XPersistObject
+    typedef ::cppu::ImplHelper      <           css::io::XPersistObject
                                     ,           css::beans::XPropertySet
                                         // --- stardiv::one::data::DatabaseCursor ---
                                     ,       css::util::XCancellable

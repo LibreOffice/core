@@ -18,7 +18,6 @@
  */
 
 
-#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/servicedecl.hxx>

@@ -20,12 +20,12 @@
 #define INCLUDED_SW_INC_TEXTCURSORHELPER_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SwDoc;
 class SwPaM;
 
-class OTextCursorHelper : public ::cppu::ImplHelper1< ::com::sun::star::lang::XUnoTunnel>
+class OTextCursorHelper : public ::cppu::ImplHelper < ::com::sun::star::lang::XUnoTunnel >
 {
 public:
 

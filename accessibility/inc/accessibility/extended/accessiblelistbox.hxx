@@ -22,7 +22,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/vclevent.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
@@ -38,7 +38,7 @@ namespace accessibility
     class AccessibleListBoxEntry;
 
 
-    typedef ::cppu::ImplHelper2<  css::accessibility::XAccessible
+    typedef ::cppu::ImplHelper <  css::accessibility::XAccessible
                                 , css::accessibility::XAccessibleSelection> AccessibleListBox_BASE;
 
     /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry

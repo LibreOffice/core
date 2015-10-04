@@ -38,7 +38,6 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <svl/filenotation.hxx>
 #include <tools/diagnose_ex.h>

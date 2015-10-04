@@ -21,7 +21,7 @@
 #define INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
 
 #include <formula/formuladllapi.h>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -32,7 +32,7 @@
 namespace formula
 {
 
-class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public ::cppu::WeakImplHelper2<
+class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::sheet::XFormulaOpCodeMapper,
                             ::com::sun::star::lang::XServiceInfo >
 {

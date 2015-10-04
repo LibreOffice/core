@@ -29,7 +29,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -81,7 +81,7 @@ struct FmSearchProgress
  * class FmRecordCountListener - utility class for FmSearchEngine, listens at a certain cursor and provides
  *                               the differences in RecordCount
  */
-class SAL_WARN_UNUSED FmRecordCountListener : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
+class SAL_WARN_UNUSED FmRecordCountListener : public ::cppu::WeakImplHelper < ::com::sun::star::beans::XPropertyChangeListener>
 {
 // attribute
     Link<sal_Int32,void>     m_lnkWhoWantsToKnow;

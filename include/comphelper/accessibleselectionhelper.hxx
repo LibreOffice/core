@@ -22,7 +22,7 @@
 
 #include <comphelper/uno3.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <comphelper/comphelperdllapi.h>
 
@@ -82,7 +82,7 @@ namespace comphelper
     //= OAccessibleSelectionHelper
 
 
-    typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleSelection > OAccessibleSelectionHelper_Base;
+    typedef ::cppu::ImplHelper < ::com::sun::star::accessibility::XAccessibleSelection > OAccessibleSelectionHelper_Base;
 
     /** a helper class for implementing an AccessibleSelection which at the same time
         supports an XAccessibleSelection interface.

@@ -24,7 +24,7 @@
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -36,7 +36,7 @@
 namespace frm
 {
 
-    typedef ::cppu::ImplHelper1 <   css::awt::XControlModel
+    typedef ::cppu::ImplHelper  <   css::awt::XControlModel
                                 > ONavigationBarModel_BASE;
 
     class ONavigationBarModel

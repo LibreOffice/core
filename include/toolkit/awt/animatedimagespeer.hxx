@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/XAnimation.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -37,7 +37,7 @@ namespace toolkit
     //= AnimatedImagesPeer
 
     struct AnimatedImagesPeer_Data;
-    typedef ::cppu::ImplInheritanceHelper3  <   VCLXWindow
+    typedef ::cppu::ImplInheritanceHelper   <   VCLXWindow
                                             ,   ::com::sun::star::awt::XAnimation
                                             ,   ::com::sun::star::container::XContainerListener
                                             ,   ::com::sun::star::util::XModifyListener

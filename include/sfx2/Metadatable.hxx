@@ -23,7 +23,7 @@
 
 #include <sfx2/dllapi.h>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 
 #include <memory>
@@ -137,7 +137,7 @@ private:
        Metadatable.</p>
  */
 class SFX2_DLLPUBLIC MetadatableMixin :
-    public ::cppu::WeakImplHelper1<
+    public ::cppu::WeakImplHelper<
         ::com::sun::star::rdf::XMetadatable>
 {
 

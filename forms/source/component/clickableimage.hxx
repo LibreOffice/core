@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 class SfxMedium;
@@ -49,7 +49,7 @@ namespace frm
 
     // OClickableImageBaseModel
 
-    typedef ::cppu::ImplHelper3 <   css::form::XImageProducerSupplier
+    typedef ::cppu::ImplHelper  <   css::form::XImageProducerSupplier
                                 ,   css::awt::XImageProducer
                                 ,   css::form::submission::XSubmissionSupplier
                                 >   OClickableImageBaseModel_Base;
@@ -176,7 +176,7 @@ namespace frm
 
     // OClickableImageBaseControl
 
-    typedef ::cppu::ImplHelper3 <   css::form::XApproveActionBroadcaster
+    typedef ::cppu::ImplHelper  <   css::form::XApproveActionBroadcaster
                                 ,   css::form::submission::XSubmission
                                 ,   css::frame::XDispatchProviderInterception
                                 >   OClickableImageBaseControl_BASE;

@@ -39,7 +39,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/interlck.h>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <memory>
@@ -348,7 +348,7 @@ namespace pcr
 
     //= PropertyHandlerComponent
 
-    typedef ::cppu::ImplHelper1 <   css::lang::XServiceInfo
+    typedef ::cppu::ImplHelper  <   css::lang::XServiceInfo
                                 >   PropertyHandlerComponent_Base;
     /** PropertyHandler implementation which additionally supports XServiceInfo
     */

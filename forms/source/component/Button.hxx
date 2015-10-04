@@ -33,14 +33,14 @@
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 struct ImplSVEvent;
 
 namespace frm
 {
 
-typedef ::cppu::ImplHelper1 <   css::form::XReset
+typedef ::cppu::ImplHelper  <   css::form::XReset
                             >   OButtonModel_Base;
 class OButtonModel  :public OClickableImageBaseModel
                     ,public OButtonModel_Base
@@ -109,7 +109,7 @@ protected:
 
 // OButtonControl
 
-typedef ::cppu::ImplHelper3 <   css::awt::XButton
+typedef ::cppu::ImplHelper  <   css::awt::XButton
                             ,   css::awt::XActionListener
                             ,   css::beans::XPropertyChangeListener
                             >   OButtonControl_BASE;

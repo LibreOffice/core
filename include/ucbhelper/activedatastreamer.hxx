@@ -21,7 +21,7 @@
 #define INCLUDED_UCBHELPER_ACTIVEDATASTREAMER_HXX
 
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace ucbhelper
 {
@@ -35,7 +35,7 @@ namespace ucbhelper
   */
 
 class ActiveDataStreamer :
-        public cppu::WeakImplHelper1< css::io::XActiveDataStreamer >
+        public cppu::WeakImplHelper < css::io::XActiveDataStreamer >
 {
     css::uno::Reference< css::io::XStream > m_xStream;
 

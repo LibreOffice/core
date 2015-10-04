@@ -22,7 +22,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <boost/noncopyable.hpp>
 #include <com/sun/star/graphic/XPrimitive3D.hpp>
 #include <comphelper/broadcasthelper.hxx>
@@ -50,7 +50,7 @@ namespace drawinglayer { namespace geometry {
 
 namespace drawinglayer { namespace primitive3d {
     /// typedefs for basePrimitive3DImplBase, Primitive3DSequence and Primitive3DReference
-    typedef cppu::WeakComponentImplHelper1< ::com::sun::star::graphic::XPrimitive3D > BasePrimitive3DImplBase;
+    typedef cppu::WeakComponentImplHelper< ::com::sun::star::graphic::XPrimitive3D > BasePrimitive3DImplBase;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive3D > Primitive3DReference;
     typedef ::com::sun::star::uno::Sequence< Primitive3DReference > Primitive3DSequence;
 }}

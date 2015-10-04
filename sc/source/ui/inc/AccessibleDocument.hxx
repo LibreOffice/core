@@ -24,7 +24,7 @@
 #include "viewdata.hxx"
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
 #include <svx/IAccessibleViewForwarder.hxx>
@@ -44,7 +44,7 @@ namespace utl
         <code>AccessibleContext</code> service.
 */
 
-typedef cppu::ImplHelper3< ::com::sun::star::accessibility::XAccessibleSelection,
+typedef cppu::ImplHelper  < ::com::sun::star::accessibility::XAccessibleSelection,
                             ::com::sun::star::accessibility::XAccessibleExtendedAttributes,
                             ::com::sun::star::view::XSelectionChangeListener >
                     ScAccessibleDocumentImpl;

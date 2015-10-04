@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
@@ -41,8 +41,8 @@ namespace basegfx
 
 namespace canvas
 {
-    typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XParametricPolyPolygon2D,
-                                                   ::com::sun::star::lang::XServiceInfo > ParametricPolyPolygon_Base;
+    typedef ::cppu::WeakComponentImplHelper < ::com::sun::star::rendering::XParametricPolyPolygon2D,
+                                              ::com::sun::star::lang::XServiceInfo > ParametricPolyPolygon_Base;
 
     class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon : public ::comphelper::OBaseMutex,
                                   public ParametricPolyPolygon_Base,

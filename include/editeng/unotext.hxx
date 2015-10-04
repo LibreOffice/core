@@ -44,6 +44,7 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/diagnose.hxx>
@@ -484,7 +485,7 @@ public:
 
 
 
-class SvxUnoTextContentEnumeration : public ::cppu::WeakAggImplHelper1< ::com::sun::star::container::XEnumeration >
+class SvxUnoTextContentEnumeration : public ::cppu::WeakAggImplHelper < ::com::sun::star::container::XEnumeration >
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxParentText;
@@ -579,7 +580,7 @@ public:
 
 
 
-class SvxUnoTextRangeEnumeration : public ::cppu::WeakAggImplHelper1< ::com::sun::star::container::XEnumeration >
+class SvxUnoTextRangeEnumeration : public ::cppu::WeakAggImplHelper < ::com::sun::star::container::XEnumeration >
 {
 private:
     SvxEditSource*      mpEditSource;

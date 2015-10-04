@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_ACCIMPLACCESS_HXX
 #define INCLUDED_COMPHELPER_ACCIMPLACCESS_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/comphelperdllapi.h>
 
@@ -33,7 +33,7 @@ namespace comphelper
 {
     //= OAccessibleImplementationAccess
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XUnoTunnel
+    typedef ::cppu::ImplHelper  <   ::com::sun::star::lang::XUnoTunnel
                                 >   OAccImpl_Base;
     struct OAccImpl_Impl;
 

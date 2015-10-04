@@ -30,9 +30,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class SFX2_DLLPUBLIC SfxStatusListener : public ::cppu::WeakImplHelper2<
+class SFX2_DLLPUBLIC SfxStatusListener : public ::cppu::WeakImplHelper<
                           css::frame::XStatusListener,
                           css::lang::XComponent>
 {

@@ -21,14 +21,14 @@
 #define INCLUDED_SC_INC_ACCESSIBLEFILTERMENUITEM_HXX
 
 #include "AccessibleContextBase.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <vcl/vclptr.hxx>
 
 class ScMenuFloatingWindow;
 
-typedef ::cppu::ImplHelper1<
+typedef ::cppu::ImplHelper<
     ::com::sun::star::accessibility::XAccessibleAction > ScAccessibleFilterMenuItem_BASE;
 
 class ScAccessibleFilterMenuItem :

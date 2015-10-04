@@ -22,9 +22,9 @@
 
 #include <accessibility/standard/vclxaccessibletextcomponent.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
-typedef ::cppu::ImplHelper1<
+typedef ::cppu::ImplHelper<
     css::accessibility::XAccessible
     > VCLXAccessible_BASE;
 

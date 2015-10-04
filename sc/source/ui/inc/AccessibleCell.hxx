@@ -33,7 +33,7 @@
 class ScTabViewShell;
 class ScAccessibleDocument;
 
-typedef cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleExtendedAttributes>
+typedef cppu::ImplHelper< ::com::sun::star::accessibility::XAccessibleExtendedAttributes>
                     ScAccessibleCellAttributeImpl;
 
 /** @descr

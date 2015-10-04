@@ -19,7 +19,7 @@
 
 
 #include <osl/diagnose.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -71,7 +71,7 @@ static int compare_OUString_Property_Impl( const void *arg1, const void *arg2 )
  */
 
 class OPropertySetHelperInfo_Impl
-    : public WeakImplHelper1< css::beans::XPropertySetInfo >
+    : public WeakImplHelper< css::beans::XPropertySetInfo >
 {
     Sequence < Property > aInfos;
 

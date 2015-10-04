@@ -26,8 +26,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
-#include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 
@@ -35,7 +34,7 @@
 namespace sd { namespace colortoolpanel
 {
 
-    typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::ui::XToolPanel
+    typedef ::cppu::WeakComponentImplHelper     <   ::com::sun::star::ui::XToolPanel
                                                 ,   ::com::sun::star::awt::XPaintListener
                                                 >   SingleColorPanel_Base;
     class SingleColorPanel  :public ::cppu::BaseMutex
@@ -69,7 +68,7 @@ namespace sd { namespace colortoolpanel
         const sal_Int32                                                     m_nPanelColor;
     };
 
-    typedef ::cppu::WeakComponentImplHelper1    <   ::com::sun::star::ui::XUIElement
+    typedef ::cppu::WeakComponentImplHelper     <   ::com::sun::star::ui::XUIElement
                                                 >   PanelUIElement_Base;
     class PanelUIElement    :public ::cppu::BaseMutex
                             ,public PanelUIElement_Base

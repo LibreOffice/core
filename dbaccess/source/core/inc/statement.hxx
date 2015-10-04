@@ -35,7 +35,7 @@
 #include "apitools.hxx"
 #include <comphelper/broadcasthelper.hxx>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 //  OStatementBase
@@ -132,10 +132,10 @@ protected:
 
 //  OStatement
 
-typedef ::cppu::ImplHelper3 <   css::sdbc::XStatement
-                            ,   css::lang::XServiceInfo
-                            ,   css::sdbc::XBatchExecution
-                            >   OStatement_IFACE;
+typedef ::cppu::ImplHelper <   css::sdbc::XStatement
+                           ,   css::lang::XServiceInfo
+                           ,   css::sdbc::XBatchExecution
+                           >   OStatement_IFACE;
 class OStatement    :public OStatementBase
                     ,public OStatement_IFACE
 {

@@ -24,13 +24,13 @@
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace dbaccess
 {
 // OCommandContainer
 
-typedef ::cppu::ImplHelper1 <   css::lang::XSingleServiceFactory
+typedef ::cppu::ImplHelper  <   css::lang::XSingleServiceFactory
                             >   OCommandContainer_BASE;
 
 class OCommandContainer : public ODefinitionContainer

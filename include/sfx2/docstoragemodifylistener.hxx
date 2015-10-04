@@ -24,7 +24,7 @@
 
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace comphelper { class SolarMutex; }
 
@@ -51,7 +51,7 @@ namespace sfx2
 
     //= DocumentStorageModifyListener
 
-    typedef ::cppu::WeakImplHelper1 < ::com::sun::star::util::XModifyListener > DocumentStorageModifyListener_Base;
+    typedef ::cppu::WeakImplHelper < ::com::sun::star::util::XModifyListener > DocumentStorageModifyListener_Base;
 
     class SFX2_DLLPUBLIC DocumentStorageModifyListener : public DocumentStorageModifyListener_Base
     {

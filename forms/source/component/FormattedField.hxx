@@ -23,7 +23,7 @@
 #include "EditBase.hxx"
 #include <tools/link.hxx>
 #include <comphelper/propmultiplex.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "errorbroadcaster.hxx"
 
 struct ImplSVEvent;
@@ -145,7 +145,7 @@ class OFormattedModel
         void    updateFormatterNullDate();
     };
 
-    typedef ::cppu::ImplHelper1< css::awt::XKeyListener> OFormattedControl_BASE;
+    typedef ::cppu::ImplHelper < css::awt::XKeyListener> OFormattedControl_BASE;
     class OFormattedControl :    public OBoundControl
                                 ,public OFormattedControl_BASE
     {

@@ -41,8 +41,7 @@
 
 #include <comphelper/propmultiplex.hxx>
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/rtti.hxx>
 
@@ -717,10 +716,10 @@ protected:
 
 // Base class providing the access to a grid cell
 
-typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XControl
+typedef ::cppu::ImplHelper  <   ::com::sun::star::awt::XControl
                             ,   ::com::sun::star::form::XBoundControl
                             >   FmXGridCell_Base;
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XWindow
+typedef ::cppu::ImplHelper  <   ::com::sun::star::awt::XWindow
                             >   FmXGridCell_WindowBase;
 class FmXGridCell   :public ::cppu::OComponentHelper
                     ,public FmXGridCell_Base
@@ -878,7 +877,7 @@ public:
 };
 
 
-typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XTextComponent
+typedef ::cppu::ImplHelper  <   ::com::sun::star::awt::XTextComponent
                             ,   ::com::sun::star::form::XChangeBroadcaster
                             >   FmXEditCell_Base;
 class FmXEditCell : public FmXTextCell,
@@ -936,7 +935,7 @@ private:
 };
 
 
-typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XCheckBox
+typedef ::cppu::ImplHelper  <   ::com::sun::star::awt::XCheckBox
                             ,   ::com::sun::star::awt::XButton
                             >   FmXCheckBoxCell_Base;
 class FmXCheckBoxCell : public FmXDataCell,
@@ -982,7 +981,7 @@ protected:
 };
 
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XListBox
+typedef ::cppu::ImplHelper  <   ::com::sun::star::awt::XListBox
                             >   FmXListBoxCell_Base;
 class FmXListBoxCell    :public FmXTextCell
                         ,public FmXListBoxCell_Base
@@ -1036,7 +1035,7 @@ protected:
 };
 
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XComboBox
+typedef ::cppu::ImplHelper  <   ::com::sun::star::awt::XComboBox
                             >   FmXComboBoxCell_Base;
 class FmXComboBoxCell   :public FmXTextCell
                         ,public FmXComboBoxCell_Base
@@ -1079,7 +1078,7 @@ protected:
 };
 
 
-typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XTextComponent
+typedef ::cppu::ImplHelper  <   ::com::sun::star::awt::XTextComponent
                             ,   ::com::sun::star::lang::XUnoTunnel
                             >   FmXFilterCell_Base;
 class FmXFilterCell :public FmXGridCell

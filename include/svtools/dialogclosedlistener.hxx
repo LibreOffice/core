@@ -21,7 +21,7 @@
 #define INCLUDED_SVTOOLS_DIALOGCLOSEDLISTENER_HXX
 
 #include <svtools/svtdllapi.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <tools/link.hxx>
 
@@ -37,7 +37,7 @@ namespace svt
         C++ class to implement a ::com::sun::star::ui::dialogs::XDialogClosedListener
     */
     class SVT_DLLPUBLIC DialogClosedListener :
-        public ::cppu::WeakImplHelper1< ::com::sun::star::ui::dialogs::XDialogClosedListener >
+        public ::cppu::WeakImplHelper < ::com::sun::star::ui::dialogs::XDialogClosedListener >
     {
     private:
         /**

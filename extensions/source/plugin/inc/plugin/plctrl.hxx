@@ -59,7 +59,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <list>
@@ -67,7 +67,7 @@
 class SystemChildWindow;
 
 
-class PluginControl_Impl : public ::cppu::WeakAggImplHelper4<
+class PluginControl_Impl : public ::cppu::WeakAggImplHelper<
       css::awt::XControl,
       css::awt::XWindow,
       css::awt::XFocusListener,

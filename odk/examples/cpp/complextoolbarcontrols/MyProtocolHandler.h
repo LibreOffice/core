@@ -26,8 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #define MYPROTOCOLHANDLER_IMPLEMENTATIONNAME   "vnd.demo.Impl.ProtocolHandler"
 #define MYPROTOCOLHANDLER_SERVICENAME          "vnd.demo.ProtocolHandler"
@@ -49,7 +48,7 @@ namespace com
 }
 
 
-class MyProtocolHandler : public cppu::WeakImplHelper3
+class MyProtocolHandler : public cppu::WeakImplHelper
 <
     com::sun::star::frame::XDispatchProvider,
     com::sun::star::lang::XInitialization,
@@ -100,7 +99,7 @@ sal_Bool SAL_CALL MyProtocolHandler_supportsService( const ::rtl::OUString& Serv
 SAL_CALL MyProtocolHandler_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext)
     throw ( ::com::sun::star::uno::Exception );
 
-class BaseDispatch : public cppu::WeakImplHelper2
+class BaseDispatch : public cppu::WeakImplHelper
 <
     ::com::sun::star::frame::XDispatch,
     ::com::sun::star::frame::XControlNotificationListener

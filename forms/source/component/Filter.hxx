@@ -32,7 +32,7 @@
 #include <toolkit/controls/unocontrol.hxx>
 
 #include <toolkit/helper/listenermultiplexer.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <svx/ParseContext.hxx>
@@ -47,7 +47,7 @@ namespace frm
 
     // OFilterControl
 
-    typedef ::cppu::ImplHelper5 <   css::awt::XTextComponent
+    typedef ::cppu::ImplHelper  <   css::awt::XTextComponent
                                 ,   css::awt::XFocusListener
                                 ,   css::awt::XItemListener
                                 ,   css::form::XBoundComponent

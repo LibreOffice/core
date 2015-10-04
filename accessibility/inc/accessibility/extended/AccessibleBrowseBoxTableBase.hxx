@@ -22,14 +22,14 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXTABLEBASE_HXX
 
 #include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 
 
 
 namespace accessibility {
 
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleTable >
+typedef ::cppu::ImplHelper< css::accessibility::XAccessibleTable >
         AccessibleBrowseBoxTableImplHelper;
 
 /** The BrowseBox accessible table objects inherit from this base class. It

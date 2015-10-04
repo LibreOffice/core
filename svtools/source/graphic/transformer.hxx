@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_GRAPHIC_TRANSFORMER_HXX
 #define INCLUDED_SVTOOLS_SOURCE_GRAPHIC_TRANSFORMER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 
@@ -30,10 +30,10 @@ namespace unographic {
 // - GraphicTransformer -
 
 
-typedef ::cppu::WeakAggImplHelper1<
+typedef ::cppu::WeakAggImplHelper<
     ::com::sun::star::graphic::XGraphicTransformer
-    > GraphicTransformer_UnoImplHelper1;
-class GraphicTransformer : public GraphicTransformer_UnoImplHelper1
+    > GraphicTransformer_UnoImplHelper;
+class GraphicTransformer : public GraphicTransformer_UnoImplHelper
 {
     public:
 

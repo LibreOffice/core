@@ -24,14 +24,14 @@
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 
 namespace sd { namespace colortoolpanel
 {
 
-    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::ui::XUIElementFactory
+    typedef ::cppu::WeakImplHelper  <   ::com::sun::star::ui::XUIElementFactory
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     >   ToolPanelFactory_Base;
     class ToolPanelFactory   :public ::cppu::BaseMutex

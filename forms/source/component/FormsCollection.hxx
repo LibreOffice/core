@@ -22,7 +22,7 @@
 
 #include "InterfaceContainer.hxx"
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/form/XForms.hpp>
@@ -36,7 +36,7 @@ namespace frm
 // It can either represent the Context for Forms or be passed a Context.
 
 typedef ::cppu::OComponentHelper FormsCollectionComponentBase;
-typedef ::cppu::ImplHelper2<    css::form::XForms
+typedef ::cppu::ImplHelper <    css::form::XForms
                                 ,css::lang::XServiceInfo > OFormsCollection_BASE;
 
 // else MSVC kills itself on some statements

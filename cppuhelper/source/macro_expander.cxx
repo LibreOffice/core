@@ -24,7 +24,7 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -112,7 +112,7 @@ inline Sequence< OUString > const & s_get_service_names()
     return theImplNames::get().getNames();
 }
 
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
     util::XMacroExpander, lang::XServiceInfo > t_uno_impl;
 
 struct mutex_holder
