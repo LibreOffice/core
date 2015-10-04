@@ -462,7 +462,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
         }
     }
 
-    // Zeichnen
+    // paint
     sal_uInt16 nPaint = PAINT_GRID;
     switch (eCmd)
     {
@@ -2279,7 +2279,7 @@ ScUndoBorder::~ScUndoBorder()
 
 OUString ScUndoBorder::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_SELATTRLINES );     //! eigener String?
+    return ScGlobal::GetRscString( STR_UNDO_SELATTRLINES );     //! own string?
 }
 
 void ScUndoBorder::Undo()
