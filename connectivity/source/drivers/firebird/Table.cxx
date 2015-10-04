@@ -12,7 +12,7 @@
 #include "Keys.hxx"
 #include "Table.hxx"
 
-#include <TConnection.hxx>
+#include "TConnection.hxx"
 
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>

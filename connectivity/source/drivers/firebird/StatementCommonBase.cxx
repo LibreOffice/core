@@ -24,8 +24,8 @@
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <propertyids.hxx>
-#include <TConnection.hxx>
+#include "propertyids.hxx"
+#include "TConnection.hxx"
 
 using namespace ::connectivity::firebird;
 
