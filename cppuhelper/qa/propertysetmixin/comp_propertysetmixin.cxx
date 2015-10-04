@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
@@ -345,7 +345,7 @@ void Full::setFourth(sal_Int32)
 }
 
 class Supplier:
-    public cppu::WeakImplHelper1<
+    public cppu::WeakImplHelper<
     test::cppuhelper::propertysetmixin::XSupplier >
 {
 public:

@@ -33,7 +33,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlmetae.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlexp.hxx>
@@ -143,7 +143,7 @@ void SvxEditEngineSource::UpdateData()
 {
 }
 
-class SvxSimpleUnoModel : public cppu::WeakAggImplHelper4<
+class SvxSimpleUnoModel : public cppu::WeakAggImplHelper<
                                     css::frame::XModel,
                                     css::ucb::XAnyCompareFactory,
                                     css::style::XStyleFamiliesSupplier,

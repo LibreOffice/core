@@ -45,7 +45,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -81,7 +81,7 @@ css::uno::Any resolveTypedefs(css::uno::Any const & type) {
 }
 
 class SimpleTypeDescription:
-    public cppu::WeakImplHelper1< css::reflection::XTypeDescription >
+    public cppu::WeakImplHelper < css::reflection::XTypeDescription >
 {
 public:
     SimpleTypeDescription(
@@ -104,7 +104,7 @@ private:
 };
 
 class SequenceTypeDescription:
-    public cppu::WeakImplHelper1< css::reflection::XIndirectTypeDescription >
+    public cppu::WeakImplHelper < css::reflection::XIndirectTypeDescription >
 {
 public:
     SequenceTypeDescription(
@@ -133,7 +133,7 @@ private:
 };
 
 class PublishableDescription:
-    public cppu::WeakImplHelper1< css::reflection::XPublished >
+    public cppu::WeakImplHelper < css::reflection::XPublished >
 {
 protected:
     explicit PublishableDescription(bool published): published_(published) {}
@@ -148,7 +148,7 @@ private:
 };
 
 class ModuleDescription:
-    public cppu::WeakImplHelper1< css::reflection::XModuleTypeDescription >
+    public cppu::WeakImplHelper < css::reflection::XModuleTypeDescription >
 {
 public:
     ModuleDescription(
@@ -197,7 +197,7 @@ ModuleDescription::getMembers() throw (css::uno::RuntimeException, std::exceptio
     }
 }
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XEnumTypeDescription >
 EnumTypeDescription_Base;
 
@@ -258,7 +258,7 @@ css::uno::Sequence< sal_Int32 > EnumTypeDescription::getEnumValues()
     return s;
 }
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XStructTypeDescription >
 PlainStructTypeDescription_Base;
 
@@ -340,7 +340,7 @@ css::uno::Sequence< rtl::OUString > PlainStructTypeDescription::getMemberNames()
 }
 
 class ParameterizedMemberTypeDescription:
-    public cppu::WeakImplHelper1< css::reflection::XTypeDescription >
+    public cppu::WeakImplHelper < css::reflection::XTypeDescription >
 {
 public:
     explicit ParameterizedMemberTypeDescription(
@@ -361,7 +361,7 @@ private:
     rtl::OUString typeParameterName_;
 };
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XStructTypeDescription >
 PolymorphicStructTypeTemplateDescription_Base;
 
@@ -460,7 +460,7 @@ PolymorphicStructTypeTemplateDescription::getTypeParameters()
 }
 
 class InstantiatedPolymorphicStructTypeDescription:
-    public cppu::WeakImplHelper1< css::reflection::XStructTypeDescription >
+    public cppu::WeakImplHelper < css::reflection::XStructTypeDescription >
 {
 public:
     InstantiatedPolymorphicStructTypeDescription(
@@ -567,7 +567,7 @@ InstantiatedPolymorphicStructTypeDescription::getTypeArguments()
     return s;
 }
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XCompoundTypeDescription >
 ExceptionTypeDescription_Base;
 
@@ -636,7 +636,7 @@ css::uno::Sequence< rtl::OUString > ExceptionTypeDescription::getMemberNames()
 }
 
 class AttributeDescription:
-    public cppu::WeakImplHelper1<
+    public cppu::WeakImplHelper<
         css::reflection::XInterfaceAttributeTypeDescription2 >
 {
 public:
@@ -723,7 +723,7 @@ AttributeDescription::getSetExceptions() throw (css::uno::RuntimeException, std:
 }
 
 class MethodParameter:
-    public cppu::WeakImplHelper1< css::reflection::XMethodParameter >
+    public cppu::WeakImplHelper < css::reflection::XMethodParameter >
 {
 public:
     MethodParameter(
@@ -770,7 +770,7 @@ private:
 };
 
 class MethodDescription:
-    public cppu::WeakImplHelper1<
+    public cppu::WeakImplHelper<
         css::reflection::XInterfaceMethodTypeDescription >
 {
 public:
@@ -899,7 +899,7 @@ void BaseOffset::calculate(
     }
 }
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XInterfaceTypeDescription2 >
 InterfaceTypeDescription_Base;
 
@@ -1010,7 +1010,7 @@ InterfaceTypeDescription::getOptionalBaseTypes()
 }
 
 class ConstantDescription:
-    public cppu::WeakImplHelper1< css::reflection::XConstantTypeDescription >
+    public cppu::WeakImplHelper < css::reflection::XConstantTypeDescription >
 {
 public:
     ConstantDescription(
@@ -1076,7 +1076,7 @@ ConstantDescription::ConstantDescription(
     }
 }
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XConstantsTypeDescription >
 ConstantGroupDescription_Base;
 
@@ -1121,7 +1121,7 @@ ConstantGroupDescription::getConstants() throw (css::uno::RuntimeException, std:
     return s;
 }
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XIndirectTypeDescription >
 TypedefDescription_Base;
 
@@ -1155,7 +1155,7 @@ private:
 };
 
 class ConstructorParameter:
-    public cppu::WeakImplHelper1< css::reflection::XParameter >
+    public cppu::WeakImplHelper < css::reflection::XParameter >
 {
 public:
     ConstructorParameter(
@@ -1196,7 +1196,7 @@ private:
 };
 
 class ConstructorDescription:
-    public cppu::WeakImplHelper1<
+    public cppu::WeakImplHelper<
         css::reflection::XServiceConstructorDescription >
 {
 public:
@@ -1259,7 +1259,7 @@ ConstructorDescription::getExceptions() throw (css::uno::RuntimeException, std::
     return s;
 }
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XServiceTypeDescription2 >
 SingleInterfaceBasedServiceDescription_Base;
 
@@ -1370,7 +1370,7 @@ SingleInterfaceBasedServiceDescription::getConstructors()
 }
 
 class PropertyDescription:
-    public cppu::WeakImplHelper1< css::reflection::XPropertyTypeDescription >
+    public cppu::WeakImplHelper < css::reflection::XPropertyTypeDescription >
 {
 public:
     PropertyDescription(
@@ -1401,7 +1401,7 @@ private:
     unoidl::AccumulationBasedServiceEntity::Property property_;
 };
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XServiceTypeDescription2 >
 AccumulationBasedServiceDescription_Base;
 
@@ -1572,7 +1572,7 @@ AccumulationBasedServiceDescription::getProperties()
     return s;
 }
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XSingletonTypeDescription2 >
 InterfaceBasedSingletonDescription_Base;
 
@@ -1618,7 +1618,7 @@ private:
     rtl::Reference< unoidl::InterfaceBasedSingletonEntity > entity_;
 };
 
-typedef cppu::ImplInheritanceHelper1<
+typedef cppu::ImplInheritanceHelper<
     PublishableDescription, css::reflection::XSingletonTypeDescription2 >
 ServiceBasedSingletonDescription_Base;
 
@@ -1665,7 +1665,7 @@ private:
 };
 
 class Enumeration:
-    public cppu::WeakImplHelper1< css::reflection::XTypeDescriptionEnumeration >
+    public cppu::WeakImplHelper < css::reflection::XTypeDescriptionEnumeration >
 {
 public:
     Enumeration(

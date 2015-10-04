@@ -20,7 +20,7 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLTABLECELL_HXX
 
 #include <comphelper/accessibletexthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
 #include <svtools/accessibletable.hxx>
 
@@ -56,7 +56,7 @@ namespace accessibility
         AccessibleGridControlCell& operator=( const AccessibleGridControlCell& ) = delete;
     };
 
-    typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessibleText
+    typedef ::cppu::ImplHelper  <   css::accessibility::XAccessibleText
                                 ,   css::accessibility::XAccessible
                                 >   AccessibleTextHelper_BASE;
     // implementation of a table cell of GridControl

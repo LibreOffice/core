@@ -20,7 +20,7 @@
 #include <osl/mutex.hxx>
 
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 
@@ -31,7 +31,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
 
-class TestListener : public WeakImplHelper1< XVetoableChangeListener >
+class TestListener : public WeakImplHelper < XVetoableChangeListener >
 {
 public:
     // Methods

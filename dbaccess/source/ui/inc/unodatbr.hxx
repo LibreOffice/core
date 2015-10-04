@@ -33,7 +33,7 @@
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/sdb/XDatabaseRegistrationsListener.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "callbacks.hxx"
 #include <vcl/timer.hxx>
 #include <svtools/transfer.hxx>
@@ -56,7 +56,7 @@ namespace dbaui
     struct DBTreeEditedEntry;
     class ImageProvider;
 
-    typedef ::cppu::ImplHelper5 <   css::frame::XStatusListener
+    typedef ::cppu::ImplHelper  <   css::frame::XStatusListener
                                 ,   css::view::XSelectionSupplier
                                 ,   css::document::XScriptInvocationContext
                                 ,   css::ui::XContextMenuInterception

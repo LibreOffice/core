@@ -27,7 +27,7 @@
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/link.hxx>
 #include <memory>
 
@@ -41,7 +41,7 @@ namespace frm
 
     //= ORichTextModel
 
-    typedef ::cppu::ImplHelper3 <   css::awt::XControlModel
+    typedef ::cppu::ImplHelper  <   css::awt::XControlModel
                                 ,   css::lang::XUnoTunnel
                                 ,   css::util::XModifyBroadcaster
                                 >   ORichTextModel_BASE;

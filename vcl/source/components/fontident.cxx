@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::awt;
 namespace vcl
 {
 
-class FontIdentificator : public ::cppu::WeakAggImplHelper3< XMaterialHolder, XInitialization, XServiceInfo >
+class FontIdentificator : public ::cppu::WeakAggImplHelper < XMaterialHolder, XInitialization, XServiceInfo >
 {
     Font        m_aFont;
 public:

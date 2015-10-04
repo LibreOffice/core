@@ -25,8 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <tools/gen.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
 #include <vcl/vclptr.hxx>
@@ -123,7 +122,7 @@ protected:
 
 class ScCsvRuler;
 
-typedef ::cppu::ImplHelper1<
+typedef ::cppu::ImplHelper<
         ::com::sun::star::accessibility::XAccessibleText >
     ScAccessibleCsvRulerImpl;
 
@@ -293,7 +292,7 @@ private:
 
 class ScCsvGrid;
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper<
         ::com::sun::star::accessibility::XAccessibleTable,
         ::com::sun::star::accessibility::XAccessibleSelection >
     ScAccessibleCsvGridImpl;

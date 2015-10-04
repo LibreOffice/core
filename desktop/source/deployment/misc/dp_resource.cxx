@@ -24,7 +24,6 @@
 #include <osl/mutex.hxx>
 #include <tools/resmgr.hxx>
 #include <rtl/ustring.h>
-#include <cppuhelper/implbase1.hxx>
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -424,7 +424,7 @@ Property * getBasicProps()
 //  test_OPropertySetHelper_Listener
 
 class test_OPropertySetHelper_Listener
-    : public WeakImplHelper3< XPropertyChangeListener, XPropertiesChangeListener, XVetoableChangeListener >
+    : public WeakImplHelper < XPropertyChangeListener, XPropertiesChangeListener, XVetoableChangeListener >
 {
 public:
     sal_Int32           nDisposing;

@@ -34,7 +34,7 @@
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "helper/unopropertyarrayhelper.hxx"
 
@@ -45,7 +45,7 @@ using namespace css::uno;
 
 namespace {
 
-typedef ::cppu::AggImplInheritanceHelper2   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   css::awt::XAnimation
                                             ,   css::container::XContainerListener
                                             >   AnimatedImagesControl_Base;

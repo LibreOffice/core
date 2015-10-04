@@ -30,7 +30,6 @@
 #include <com/sun/star/container/XChild.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace uno {
@@ -55,9 +54,9 @@ typedef ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertySet
                                 ,   ::com::sun::star::document::XEventsSupplier
                                 ,   ::com::sun::star::lang::XServiceInfo
                                 >   ScShapeObj_Base;
-typedef ::cppu::ImplHelper1     <   ::com::sun::star::text::XText
+typedef ::cppu::ImplHelper      <   ::com::sun::star::text::XText
                                 >   ScShapeObj_TextBase;
-typedef ::cppu::ImplHelper1     <   ::com::sun::star::container::XChild
+typedef ::cppu::ImplHelper      <   ::com::sun::star::container::XChild
                                 >   ScShapeObj_ChildBase;
 class ScShapeObj    :public ScShapeObj_Base
                     ,public ScShapeObj_TextBase

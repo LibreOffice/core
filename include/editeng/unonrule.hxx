@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
 #include <editeng/editengdllapi.h>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -36,7 +36,7 @@ EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container:
 const SvxNumRule& SvxGetNumRule( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > xRule ) throw( ::com::sun::star::lang::IllegalArgumentException );
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > SvxCreateNumRuleCompare() throw();
 
-class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper5< com::sun::star::container::XIndexReplace, com::sun::star::ucb::XAnyCompare,
+class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper < com::sun::star::container::XIndexReplace, com::sun::star::ucb::XAnyCompare,
     com::sun::star::lang::XUnoTunnel, com::sun::star::util::XCloneable, com::sun::star::lang::XServiceInfo >
 {
 private:

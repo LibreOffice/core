@@ -19,7 +19,7 @@
 
 #include <sal/main.h>
 #include <cppuhelper/shlib.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppu/EnvDcp.hxx>
 
 #include "../testcmp/TestComponent.hxx"
@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 
 
-class MyKey : public cppu::WeakImplHelper1<registry::XRegistryKey>
+class MyKey : public cppu::WeakImplHelper<registry::XRegistryKey>
 
 {
 public:

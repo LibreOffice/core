@@ -58,7 +58,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <rtl/ustring.hxx>
 #include <o3tl/functional.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <limits>
 #include <unordered_map>
 

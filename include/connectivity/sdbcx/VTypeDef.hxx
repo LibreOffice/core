@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SDBCX_VTYPEDEF_HXX
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
@@ -29,7 +29,7 @@ namespace connectivity
 {
     namespace sdbcx
     {
-        typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::sdbcx::XColumnsSupplier,
+        typedef ::cppu::WeakComponentImplHelper < ::com::sun::star::sdbcx::XColumnsSupplier,
                                                   ::com::sun::star::container::XNamed,
                                                   ::com::sun::star::lang::XServiceInfo> ODescriptor_BASE;
     }

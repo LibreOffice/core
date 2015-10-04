@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
@@ -39,7 +39,7 @@ namespace connectivity
 
         typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::container::XNamed,
                                                  ::com::sun::star::lang::XServiceInfo> OColumnDescriptor_BASE;
-        typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XDataDescriptorFactory > OColumn_BASE;
+        typedef ::cppu::ImplHelper< ::com::sun::star::sdbcx::XDataDescriptorFactory > OColumn_BASE;
 
 
         class OOO_DLLPUBLIC_DBTOOLS OColumn :

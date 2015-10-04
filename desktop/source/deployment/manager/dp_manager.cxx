@@ -35,7 +35,6 @@
 #include <osl/security.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/sequence.hxx>

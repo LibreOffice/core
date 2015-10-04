@@ -30,11 +30,11 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/awt/tab/XTabPageContainer.hpp>
 #include <toolkit/helper/listenermultiplexer.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <toolkit/awt/vclxcontainer.hxx>
 
 
-typedef ::cppu::ImplInheritanceHelper2 <    VCLXContainer
+typedef ::cppu::ImplInheritanceHelper  <    VCLXContainer
                                             ,   ::com::sun::star::awt::tab::XTabPageContainer
                                             ,   ::com::sun::star::container::XContainerListener
                                              > VCLXTabPageContainer_Base;

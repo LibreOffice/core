@@ -123,7 +123,7 @@ public:
 
 typedef std::unordered_map< OUString, css::script::ModuleInfo, OUStringHash, ::std::equal_to< OUString > > ModuleInfoMap;
 
-typedef ::cppu::ImplHelper1< css::script::vba::XVBAModuleInfo > SfxScriptLibrary_BASE;
+typedef ::cppu::ImplHelper < css::script::vba::XVBAModuleInfo > SfxScriptLibrary_BASE;
 
 class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
 {

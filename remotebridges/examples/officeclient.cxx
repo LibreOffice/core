@@ -38,7 +38,7 @@
 
 #include <com/sun/star/text/XTextDocument.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -55,7 +55,7 @@ using namespace ::com::sun::star::frame;
 
 namespace remotebridges_officeclient {
 
-class OfficeClientMain : public WeakImplHelper1< XMain >
+class OfficeClientMain : public WeakImplHelper < XMain >
 {
 public:
     OfficeClientMain( const Reference< XMultiServiceFactory > &r ) :

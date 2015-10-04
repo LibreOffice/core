@@ -28,13 +28,13 @@
 #include <tools/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/rtti.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SvXMLNamespaceMap;
 class SvXMLImport;
 
 class XMLOFF_DLLPUBLIC SvXMLImportContext : public SvRefBase,
-        public ::cppu::WeakImplHelper1< ::css::xml::sax::XFastContextHandler >
+        public ::cppu::WeakImplHelper < ::css::xml::sax::XFastContextHandler >
 {
     friend class SvXMLImport;
 

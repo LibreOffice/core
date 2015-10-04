@@ -24,7 +24,6 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
-#include <cppuhelper/compbase2.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sdbcx/VTypeDef.hxx>
@@ -32,7 +31,7 @@
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
@@ -40,7 +39,7 @@ namespace connectivity
     {
         class OCollection;
         class OIndex;
-        typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XDataDescriptorFactory > OIndex_BASE;
+        typedef ::cppu::ImplHelper < ::com::sun::star::sdbcx::XDataDescriptorFactory > OIndex_BASE;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndex> OIndex_PROP;
 
         class OOO_DLLPUBLIC_DBTOOLS OIndex :

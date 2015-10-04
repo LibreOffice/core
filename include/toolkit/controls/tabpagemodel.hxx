@@ -30,7 +30,7 @@
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <list>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class UnoControlTabPageModel :  public ControlModelContainerBase
 {
@@ -58,10 +58,10 @@ public:
 
 //  class UnoTabPageControl
 
-typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
-                                            ,   ::com::sun::star::awt::tab::XTabPage
-                                            ,   ::com::sun::star::awt::XWindowListener
-                                            >   UnoControlTabPage_Base;
+typedef ::cppu::AggImplInheritanceHelper  <   ControlContainerBase
+                                          ,   ::com::sun::star::awt::tab::XTabPage
+                                          ,   ::com::sun::star::awt::XWindowListener
+                                          >   UnoControlTabPage_Base;
 class UnoControlTabPage : public UnoControlTabPage_Base
 {
 private:

@@ -37,7 +37,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
@@ -46,7 +46,7 @@ namespace svt
 {
     struct PopupMenuControllerBaseDispatchInfo;
 
-    typedef ::cppu::WeakComponentImplHelper7<
+    typedef ::cppu::WeakComponentImplHelper <
                         com::sun::star::lang::XServiceInfo            ,
                         com::sun::star::frame::XPopupMenuController ,
                         com::sun::star::lang::XInitialization         ,

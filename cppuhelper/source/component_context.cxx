@@ -40,7 +40,7 @@
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -286,7 +286,7 @@ static inline void try_dispose( Reference< lang::XComponent > const & xComp )
 }
 
 class DisposingForwarder
-    : public WeakImplHelper1< lang::XEventListener >
+    : public WeakImplHelper< lang::XEventListener >
 {
     Reference< lang::XComponent > m_xTarget;
 

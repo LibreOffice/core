@@ -22,7 +22,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
@@ -45,7 +45,7 @@ class AccessibleStateSetHelper;
 
 typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper<
 ::com::sun::star::accessibility::XAccessible,
 ::com::sun::star::lang::XServiceInfo > VCLXAccessibleHeaderBarItem_BASE;
 

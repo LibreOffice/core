@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_QUERYDESCRIPTOR_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_QUERYDESCRIPTOR_HXX
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <osl/mutex.hxx>
 
@@ -39,7 +39,7 @@ namespace dbaccess
 {
 
 // OQueryDescriptor_Base - a query descriptor (as the name suggests :)
-typedef ::cppu::ImplHelper3<
+typedef ::cppu::ImplHelper<
         css::sdbcx::XColumnsSupplier,
         css::lang::XUnoTunnel,
         css::lang::XServiceInfo >  OQueryDescriptor_BASE;

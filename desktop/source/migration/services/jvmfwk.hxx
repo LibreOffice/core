@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_JVMFWK_HXX
 #define INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_JVMFWK_HXX
 
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>

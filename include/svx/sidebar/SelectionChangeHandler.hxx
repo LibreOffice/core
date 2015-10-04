@@ -25,7 +25,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <functional>
@@ -36,7 +36,7 @@ class SdrMarkView;
 namespace svx { namespace sidebar {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::view::XSelectionChangeListener
         > SelectionChangeHandlerInterfaceBase;
 }

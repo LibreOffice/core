@@ -39,13 +39,13 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 
 namespace
 {
-    typedef ::cppu::WeakComponentImplHelper4 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::ui::XContextChangeEventListener,
         css::beans::XPropertyChangeListener,
         css::ui::XSidebar,

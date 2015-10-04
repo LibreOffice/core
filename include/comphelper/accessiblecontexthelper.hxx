@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_ACCESSIBLECONTEXTHELPER_HXX
 #define INCLUDED_COMPHELPER_ACCESSIBLECONTEXTHELPER_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -76,7 +76,7 @@ namespace comphelper
 
 
     class OContextHelper_Impl;
-    typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::accessibility::XAccessibleContext,
+    typedef ::cppu::WeakAggComponentImplHelper  <   ::com::sun::star::accessibility::XAccessibleContext,
                                                     ::com::sun::star::accessibility::XAccessibleEventBroadcaster
                                                 >   OAccessibleContextHelper_Base;
 

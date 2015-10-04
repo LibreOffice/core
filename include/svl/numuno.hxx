@@ -23,7 +23,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SvNumberFormatter;
 class SvNumFmtSuppl_Impl;
@@ -47,7 +47,7 @@ com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL
 //  SvNumberFormatsSupplierObj: aggregate to document,
 //  construct with SvNumberFormatter
 
-class SVL_DLLPUBLIC SvNumberFormatsSupplierObj : public cppu::WeakAggImplHelper2<
+class SVL_DLLPUBLIC SvNumberFormatsSupplierObj : public cppu::WeakAggImplHelper<
                                     com::sun::star::util::XNumberFormatsSupplier,
                                     com::sun::star::lang::XUnoTunnel>
 {

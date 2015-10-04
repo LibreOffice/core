@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SOURCE_TABLE_TABLECOLUMNS_HXX
 
 #include <com/sun/star/table/XTableColumns.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "tablemodel.hxx"
 
@@ -29,7 +29,7 @@
 
 namespace sdr { namespace table {
 
-class TableColumns : public ::cppu::WeakAggImplHelper1< ::com::sun::star::table::XTableColumns >
+class TableColumns : public ::cppu::WeakAggImplHelper < ::com::sun::star::table::XTableColumns >
 {
 public:
     explicit TableColumns( const TableModelRef& xTableModel );

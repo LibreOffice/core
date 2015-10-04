@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLLISTSOURCE_HXX
 
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -41,7 +41,7 @@ namespace calc
 
     class OCellListSource;
     // the base for our interfaces
-    typedef ::cppu::WeakAggComponentImplHelper4 <   ::com::sun::star::form::binding::XListEntrySource
+    typedef ::cppu::WeakAggComponentImplHelper  <   ::com::sun::star::form::binding::XListEntrySource
                                                 ,   ::com::sun::star::util::XModifyListener
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 ,   ::com::sun::star::lang::XInitialization

@@ -65,8 +65,7 @@
 #include "com/sun/star/awt/XGraphics.hpp"
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include <list>
 
@@ -280,7 +279,7 @@ public:
 };
 
 class XPluginManager_Impl :
-    public cppu::WeakAggImplHelper2< css::plugin::XPluginManager,
+    public cppu::WeakAggImplHelper< css::plugin::XPluginManager,
                                     css::lang::XServiceInfo >
 {
     Reference< css::uno::XComponentContext >     m_xContext;
@@ -337,7 +336,7 @@ public:
 
 class PluginInputStream :
     public PluginStream,
-    public cppu::WeakAggImplHelper2<
+    public cppu::WeakAggImplHelper<
                 css::io::XOutputStream,
                 css::io::XConnectable
                 >
@@ -409,7 +408,7 @@ public:
 };
 
 class PluginEventListener :
-    public cppu::WeakAggImplHelper1< css::lang::XEventListener >
+    public cppu::WeakAggImplHelper< css::lang::XEventListener >
 {
 private:
     XPlugin_Impl*   m_pPlugin;

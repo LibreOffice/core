@@ -36,8 +36,8 @@
 #include <cppuhelper/interfacecontainer.h>
 
 #include <svl/lstner.hxx>
-#include <cppuhelper/compbase5.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
@@ -48,7 +48,7 @@ class Rectangle;
         <code>AccessibleContext</code> service.
 */
 
-typedef cppu::WeakAggComponentImplHelper5<
+typedef cppu::WeakAggComponentImplHelper<
                 ::com::sun::star::accessibility::XAccessible,
                 ::com::sun::star::accessibility::XAccessibleComponent,
                 ::com::sun::star::accessibility::XAccessibleContext,
@@ -56,7 +56,7 @@ typedef cppu::WeakAggComponentImplHelper5<
                 ::com::sun::star::lang::XServiceInfo
                 > ScAccessibleContextBaseWeakImpl;
 
-typedef cppu::ImplHelper1<
+typedef cppu::ImplHelper<
                 ::com::sun::star::accessibility::XAccessibleEventListener
                 > ScAccessibleContextBaseImplEvent;
 

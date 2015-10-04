@@ -22,7 +22,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <boost/noncopyable.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <comphelper/broadcasthelper.hxx>
@@ -50,7 +50,7 @@ namespace drawinglayer { namespace geometry {
 
 namespace drawinglayer { namespace primitive2d {
     /// typedefs for basePrimitive2DImplBase, Primitive2DSequence and Primitive2DReference
-    typedef cppu::WeakComponentImplHelper1< ::com::sun::star::graphic::XPrimitive2D > BasePrimitive2DImplBase;
+    typedef cppu::WeakComponentImplHelper< ::com::sun::star::graphic::XPrimitive2D > BasePrimitive2DImplBase;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > Primitive2DReference;
     typedef ::com::sun::star::uno::Sequence< Primitive2DReference > Primitive2DSequence;
 }}

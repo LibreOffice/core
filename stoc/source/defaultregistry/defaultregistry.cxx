@@ -22,7 +22,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <registry/registry.hxx>
@@ -47,7 +46,7 @@ namespace {
 
 class NestedKeyImpl;
 
-class NestedRegistryImpl    : public WeakAggImplHelper4 < XSimpleRegistry, XInitialization, XServiceInfo, XEnumerationAccess >
+class NestedRegistryImpl    : public WeakAggImplHelper < XSimpleRegistry, XInitialization, XServiceInfo, XEnumerationAccess >
 {
 public:
     NestedRegistryImpl( );

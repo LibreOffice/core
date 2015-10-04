@@ -22,7 +22,7 @@
 
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <ucbhelper/ucbhelperdllapi.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace ucbhelper
 {
@@ -34,7 +34,7 @@ namespace ucbhelper
   */
 
 class UCBHELPER_DLLPUBLIC ActiveDataSink :
-        public cppu::WeakImplHelper1< css::io::XActiveDataSink >
+        public cppu::WeakImplHelper < css::io::XActiveDataSink >
 {
     css::uno::Reference< css::io::XInputStream > m_xStream;
 

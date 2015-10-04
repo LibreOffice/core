@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SOURCE_TABLE_CELLRANGE_HXX
 
 #include <com/sun/star/table/XCellRange.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "tablemodel.hxx"
 
@@ -29,7 +29,7 @@
 
 namespace sdr { namespace table {
 
-class CellRange : public ::cppu::WeakAggImplHelper1< ::com::sun::star::table::XCellRange >, public ICellRange
+class CellRange : public ::cppu::WeakAggImplHelper < ::com::sun::star::table::XCellRange >, public ICellRange
 {
 public:
     CellRange( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom );

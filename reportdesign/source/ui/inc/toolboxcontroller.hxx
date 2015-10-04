@@ -28,12 +28,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SfxToolBoxControl;
 namespace rptui
 {
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::lang::XServiceInfo,
+    typedef ::cppu::ImplHelper  <   ::com::sun::star::lang::XServiceInfo,
                                     ::com::sun::star::frame::XSubToolbarController> TToolboxController_BASE;
     typedef rtl::Reference<SfxToolBoxControl> TToolbarHelper;
 

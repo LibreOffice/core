@@ -32,7 +32,7 @@
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component.hxx>
 
 using namespace comphelper;
@@ -41,7 +41,7 @@ using namespace comphelper;
 namespace frm
 {
 
-typedef ::cppu::WeakAggComponentImplHelper2 <   css::lang::XUnoTunnel
+typedef ::cppu::WeakAggComponentImplHelper  <   css::lang::XUnoTunnel
                                             ,   css::util::XCloneable > OGridColumn_BASE;
 class OGridColumn   :public ::comphelper::OBaseMutex
                     ,public OGridColumn_BASE

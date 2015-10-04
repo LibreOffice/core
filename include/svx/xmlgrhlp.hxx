@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_XMLGRHLP_HXX
 #define INCLUDED_SVX_XMLGRHLP_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <svtools/grfmgr.hxx>
 #include <vector>
@@ -43,7 +43,7 @@ struct SvxGraphicHelperStream_Impl
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream;
 };
 
-class SVX_DLLPUBLIC SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper2<   ::com::sun::star::document::XGraphicObjectResolver,
+class SVX_DLLPUBLIC SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper < ::com::sun::star::document::XGraphicObjectResolver,
                                                                     ::com::sun::star::document::XBinaryStreamResolver >
 {
 private:

@@ -28,14 +28,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
 
 class SvXMLAttrContainerData;
 
 class XMLOFF_DLLPUBLIC SvUnoAttributeContainer:
-    public ::cppu::WeakAggImplHelper3<
+    public ::cppu::WeakAggImplHelper <
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XUnoTunnel,
         ::com::sun::star::container::XNameContainer >

@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <comphelper/accessiblecontexthelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/comphelperdllapi.h>
 
@@ -66,7 +66,7 @@ namespace comphelper
 
 
     struct OAccessibleComponentHelper_Base :
-        public ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleComponent >
+        public ::cppu::ImplHelper < ::com::sun::star::accessibility::XAccessibleComponent >
     {
     protected:
         ~OAccessibleComponentHelper_Base() {}
@@ -100,7 +100,7 @@ namespace comphelper
     //= OAccessibleExtendedComponentHelper
 
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleExtendedComponent
+    typedef ::cppu::ImplHelper  <   ::com::sun::star::accessibility::XAccessibleExtendedComponent
                                 >   OAccessibleExtendedComponentHelper_Base;
 
     /** a helper class for implementing an AccessibleContext which at the same time

@@ -27,7 +27,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <comphelper/propmultiplex.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace comphelper;
 
@@ -39,7 +39,7 @@ namespace frm
 
 // OImageControlModel
 
-typedef ::cppu::ImplHelper2 <   css::form::XImageProducerSupplier
+typedef ::cppu::ImplHelper  <   css::form::XImageProducerSupplier
                             ,   css::awt::XImageProducer
                             >   OImageControlModel_Base;
 
@@ -143,7 +143,7 @@ protected:
     DECL_LINK_TYPED( OnImageImportDone, ::Graphic*, void );
 };
 
-typedef ::cppu::ImplHelper2 <   css::awt::XMouseListener
+typedef ::cppu::ImplHelper  <   css::awt::XMouseListener
                             ,   css::util::XModifyBroadcaster
                             >   OImageControlControl_Base;
 class OImageControlControl  : public OBoundControl

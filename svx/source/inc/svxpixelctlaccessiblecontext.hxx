@@ -36,8 +36,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/compbase6.hxx>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/servicehelper.hxx>
 
@@ -54,7 +53,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 class SvxPixelCtl;
 
 
-typedef ::cppu::WeakAggComponentImplHelper5<
+typedef ::cppu::WeakAggComponentImplHelper<
             ::com::sun::star::accessibility::XAccessible,
             ::com::sun::star::accessibility::XAccessibleComponent,
             ::com::sun::star::accessibility::XAccessibleContext,
@@ -152,7 +151,7 @@ public:
 };
 
 
-typedef ::cppu::WeakAggComponentImplHelper6<
+typedef ::cppu::WeakAggComponentImplHelper<
             ::com::sun::star::accessibility::XAccessible,
             ::com::sun::star::accessibility::XAccessibleComponent,
             ::com::sun::star::accessibility::XAccessibleContext,

@@ -31,14 +31,14 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class UnoControlHolderList;
 
 
 //  class UnoControlContainer
 
-typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   ::com::sun::star::awt::XUnoControlContainer
                                             ,   ::com::sun::star::awt::XControlContainer
                                             ,   ::com::sun::star::container::XContainer

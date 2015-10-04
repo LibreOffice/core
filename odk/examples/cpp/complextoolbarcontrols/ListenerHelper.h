@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 typedef std::vector < com::sun::star::uno::Reference < com::sun::star::frame::XStatusListener > > StatusListeners;
 
@@ -70,7 +70,7 @@ public:
         const ::rtl::OUString& aCommand );
 };
 
-class ListenerItemEventListener : public cppu::WeakImplHelper1 < ::com::sun::star::lang::XEventListener >
+class ListenerItemEventListener : public cppu::WeakImplHelper < ::com::sun::star::lang::XEventListener >
 {
     ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxFrame;
 public:
