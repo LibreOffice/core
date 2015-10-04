@@ -320,6 +320,30 @@
             <string>oasis-drawing.icns</string>
         </dict>
 
+        <!-- Chart documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis-open.opendocument.chart</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Chart</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>odc</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>application/vnd.oasis.opendocument.chart</string>
+                </array>
+            </dict>
+        </dict>
+
         <!-- Text master documents -->
         <dict>
             <key>UTTypeIdentifier</key>
