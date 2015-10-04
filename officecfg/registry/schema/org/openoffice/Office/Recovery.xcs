@@ -128,7 +128,7 @@
         <info>
           <desc> </desc>
         </info>
-        <value>15</value>
+        <value>10</value>
       </prop>
       <prop oor:name="MinSpaceDocSave" oor:type="xs:int" oor:nillable="false">
         <info>
