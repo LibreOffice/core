@@ -36,6 +36,7 @@
 #include "Link.h"
 #include "Object.h"
 #include "OutputDev.h"
+#include "Stream.h"
 #ifndef SYSTEM_POPPLER
 #  include "parseargs.h"
 #endif
@@ -185,7 +186,7 @@ namespace pdfi
         // virtual void cvtUserToDev(double ux, double uy, int *dx, int *dy);
 
         //----- link borders
-        virtual void processLink(Link *link, Catalog *catalog);
+        virtual void processLink(AnnotLink *link, Catalog *catalog);
 
         //----- save/restore graphics state
         virtual void saveState(GfxState *state);

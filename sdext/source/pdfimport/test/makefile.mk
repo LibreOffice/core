@@ -31,6 +31,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 # --- test lib ------------------------------------------------------
 
 .IF "$(ENABLE_PDFIMPORT)" == "NO"
@@ -38,49 +44,12 @@ ENABLE_EXCEPTIONS=TRUE
         @echo "PDF Import extension disabled."
 .ENDIF
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
 .IF "$(SYSTEM_ZLIB)" == "YES"
 CFLAGS+=-DSYSTEM_ZLIB
 .ENDIF
 
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/tests.obj
-
-SHL1LIBS=\
-    $(SLB)$/pdfmisc.lib \
-    $(SLB)$/pdfparse.lib \
-    $(SLB)$/pdfsax.lib \
-    $(SLB)$/pdfparsetree.lib \
-    $(SLB)$/pdfodf.lib \
-    $(SLB)$/xpdfwrapper.lib \
-    $(SLB)$/pdfimport.lib
-
-SHL1TARGET=$(TARGET)
-SHL1STDLIBS=\
-    $(BASEGFXLIB)		\
-    $(UNOTOOLSLIB)		\
-    $(CANVASTOOLSLIB)	\
-    $(COMPHELPERLIB)	\
-    $(CPPUHELPERLIB)	\
-    $(CPPUNITLIB)		\
-        $(TESTSHL2LIB)           \
-    $(ZLIB3RDLIB)	    \
-    $(CPPULIB)			\
-    $(SALLIB)
-
-
-SHL1IMPLIB= i$(SHL1TARGET)
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map
-
-# --- pdf2xml binary ------------------------------------------------------
-
-TARGET2=pdf2xml
-
-APP1TARGET=$(TARGET2)
-APP1LIBSALCPPRT=
-APP1OBJS=$(SLO)$/pdf2xml.obj
 
 APP1LIBS=\
     $(SLB)$/pdfmisc.lib \
@@ -91,25 +60,31 @@ APP1LIBS=\
     $(SLB)$/xpdfwrapper.lib \
     $(SLB)$/pdfimport.lib
 
+APP1TARGET=$(TARGET)
 APP1STDLIBS=\
     $(BASEGFXLIB)		\
     $(UNOTOOLSLIB)		\
     $(CANVASTOOLSLIB)	\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
-    $(CPPUNITLIB)		\
+    $(GTESTLIB)		\
         $(TESTSHL2LIB)           \
     $(ZLIB3RDLIB)	    \
     $(CPPULIB)			\
     $(SALLIB)
 
-# --- pdfunzip binary ------------------------------------------------------
 
-TARGET3=pdfunzip
+APP1RPATH = NONE
+# Run explicitly below:
+APP1TEST = disabled
 
-APP2TARGET=$(TARGET3)
+# --- pdf2xml binary ------------------------------------------------------
+
+TARGET2=pdf2xml
+
+APP2TARGET=$(TARGET2)
 APP2LIBSALCPPRT=
-APP2OBJS=$(SLO)$/pdfunzip.obj
+APP2OBJS=$(SLO)$/pdf2xml.obj
 
 APP2LIBS=\
     $(SLB)$/pdfmisc.lib \
@@ -122,11 +97,40 @@ APP2LIBS=\
 
 APP2STDLIBS=\
     $(BASEGFXLIB)		\
+    $(UNOTOOLSLIB)		\
+    $(CANVASTOOLSLIB)	\
+    $(COMPHELPERLIB)	\
+    $(CPPUHELPERLIB)	\
+    $(GTESTLIB)		\
+        $(TESTSHL2LIB)           \
+    $(ZLIB3RDLIB)	    \
+    $(CPPULIB)			\
+    $(SALLIB)
+
+# --- pdfunzip binary ------------------------------------------------------
+
+TARGET3=pdfunzip
+
+APP3TARGET=$(TARGET3)
+APP3LIBSALCPPRT=
+APP3OBJS=$(SLO)$/pdfunzip.obj
+
+APP3LIBS=\
+    $(SLB)$/pdfmisc.lib \
+    $(SLB)$/pdfparse.lib \
+    $(SLB)$/pdfsax.lib \
+    $(SLB)$/pdfparsetree.lib \
+    $(SLB)$/pdfodf.lib \
+    $(SLB)$/xpdfwrapper.lib \
+    $(SLB)$/pdfimport.lib
+
+APP3STDLIBS=\
+    $(BASEGFXLIB)		\
       $(UNOTOOLSLIB)		\
       $(CANVASTOOLSLIB)	\
       $(COMPHELPERLIB)	\
       $(CPPUHELPERLIB)	\
-      $(CPPUNITLIB)		\
+      $(GTESTLIB)		\
         $(TESTSHL2LIB)           \
       $(ZLIB3RDLIB)	    \
       $(CPPULIB)			\
@@ -135,28 +139,30 @@ APP2STDLIBS=\
 # --- Targets ------------------------------------------------------
 
   .INCLUDE : target.mk
-  .INCLUDE : _cppunit.mk
 
 # --- Fake uno bootstrap & copy testfile ------------------------
 
-  $(BIN)$/pdfi_unittest_test.pdf : testinput.pdf
-      rm -f $@
-      $(GNUCOPY) testinput.pdf $@
+$(BIN)$/pdfi_unittest_test.pdf : testinput.pdf
+    rm -f $@
+    $(GNUCOPY) testinput.pdf $@
 
-  $(BIN)$/pdfi_unittest_test.ini : makefile.mk
-      rm -f $@
-      @echo UNO_SERVICES= > $@
-      @echo UNO_TYPES=$(UNOUCRRDB:s/\/\\/) >> $@
+$(BIN)$/pdfi_unittest_test.ini : makefile.mk
+    rm -f $@
+    @echo UNO_SERVICES= > $@
+    @echo UNO_TYPES=$(UNOUCRRDB:s/\/\\/) >> $@
 
 # --- Enable testshl2 execution in normal build ------------------------
 
-  $(MISC)$/pdfi_unittest_succeeded : $(SHL1TARGETN) $(BIN)$/pdfi_unittest_test.pdf $(BIN)$/pdfi_unittest_test.ini
-          rm -f $(BIN)$/pdfi_unittest_draw.xml
-          rm -f $(BIN)$/pdfi_unittest_writer.xml
-          @echo ----------------------------------------------------------
-          @echo - start unit test on library $(SHL1TARGETN)
-          @echo ----------------------------------------------------------
-          testshl2 -forward $(BIN)$/ $(SHL1TARGETN)
-           $(TOUCH) $@
+$(MISC)$/pdfi_unittest_succeeded : $(APP1TARGETN) $(BIN)$/pdfi_unittest_test.pdf $(BIN)$/pdfi_unittest_test.ini
+    rm -f $(BIN)$/pdfi_unittest_draw.xml
+    rm -f $(BIN)$/pdfi_unittest_writer.xml
+    @echo ----------------------------------------------------------
+    @echo - start unit test on $(APP1TARGETN)
+    @echo ----------------------------------------------------------
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) TESTS_FORWARD_STRING=$(BIN)$/ \
+        $(APP1TARGETN) --gtest_output="xml:$(BIN)/$(APP1TARGET)_result.xml"
+    $(TOUCH) $@
 
-#ALLTAR : $(MISC)$/pdfi_unittest_succeeded
+ALLTAR : $(MISC)$/pdfi_unittest_succeeded
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"

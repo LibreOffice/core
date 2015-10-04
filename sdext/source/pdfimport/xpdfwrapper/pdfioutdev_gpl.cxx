@@ -140,7 +140,6 @@ void writeBinaryBuffer( const OutputBuffer& rBuffer )
 void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str, bool bWithLinefeed )
 {
     // dump JPEG file as-is
-    str = ((DCTStream *)str)->getRawStream();
     str->reset();
 
     int c;
@@ -388,8 +387,6 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) 
     int nSize = 0;
 
     GooString* pFamily = gfxFont->getName();
-    if( ! pFamily )
-        pFamily = gfxFont->getOrigName();
     if( pFamily )
     {
         aNewFont.familyName.clear();
@@ -479,7 +476,7 @@ void PDFOutDev::endPage()
     printf("endPage\n");
 }
 
-void PDFOutDev::processLink(Link* link, Catalog*)
+void PDFOutDev::processLink(AnnotLink* link, Catalog*)
 {
     assert(link);
 
