@@ -29,11 +29,9 @@
  <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal_Unfilled" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="10104" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle" toolbar:helpid="10104"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.round-rectangle"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.quadrat"/>
- <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="10110" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse" toolbar:helpid="10110"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.circle"/>
  <toolbar:toolbaritem xlink:href=".uno:Arc" toolbar:helpid="10114" toolbar:visible="false"/>
