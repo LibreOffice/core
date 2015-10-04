@@ -1206,8 +1206,7 @@ static sal_Char* addLine(osl_TProfileImpl* pProfile, const sal_Char* Line)
         if (pProfile->m_Lines == NULL)
         {
             pProfile->m_MaxLines = LINES_INI;
-            pProfile->m_Lines = static_cast<sal_Char **>(malloc(pProfile->m_MaxLines * sizeof(sal_Char *)));
-            memset(pProfile->m_Lines,0,pProfile->m_MaxLines * sizeof(sal_Char *));
+            pProfile->m_Lines = static_cast<sal_Char **>(calloc(pProfile->m_MaxLines, sizeof(sal_Char *)));
         }
         else
         {
@@ -1246,8 +1245,7 @@ static sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Line, sa
         if (pProfile->m_Lines == NULL)
         {
             pProfile->m_MaxLines = LINES_INI;
-            pProfile->m_Lines = static_cast<sal_Char **>(malloc(pProfile->m_MaxLines * sizeof(sal_Char *)));
-            memset(pProfile->m_Lines,0,pProfile->m_MaxLines * sizeof(sal_Char *));
+            pProfile->m_Lines = static_cast<sal_Char **>(calloc(pProfile->m_MaxLines, sizeof(sal_Char *)));
         }
         else
         {
@@ -1420,8 +1418,7 @@ static bool addSection(osl_TProfileImpl* pProfile, int Line, const sal_Char* Sec
         if (pProfile->m_Sections == NULL)
         {
             pProfile->m_MaxSections = SECTIONS_INI;
-            pProfile->m_Sections = static_cast<osl_TProfileSection *>(malloc(pProfile->m_MaxSections * sizeof(osl_TProfileSection)));
-            memset(pProfile->m_Sections,0,pProfile->m_MaxSections * sizeof(osl_TProfileSection));
+            pProfile->m_Sections = static_cast<osl_TProfileSection *>(calloc(pProfile->m_MaxSections, sizeof(osl_TProfileSection)));
         }
         else
         {
