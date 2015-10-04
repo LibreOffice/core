@@ -1839,7 +1839,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
     } /* SAFE */
 
     // AutoSaveTimeIntervall [int] in min
-    sal_Int32 nTimeIntervall = 15;
+    sal_Int32 nTimeIntervall = 10;
     xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL)) >>= nTimeIntervall;
 
     /* SAFE */ {
