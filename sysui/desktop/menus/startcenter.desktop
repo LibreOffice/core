@@ -36,27 +36,27 @@ X-KDE-Protocols=file,http,ftp,webdav
 Actions=Writer;Calc;Impress;Draw;Base;Math;
 
 [Desktop Action Writer]
-Name=Text Document
+Name=Writer
 Exec=${UNIXBASISROOTNAME} --writer
 
 [Desktop Action Calc]
-Name=Spreadsheet
+Name=Calc
 Exec=${UNIXBASISROOTNAME} --calc
 
 [Desktop Action Impress]
-Name=Presentation
+Name=Impress
 Exec=${UNIXBASISROOTNAME} --impress
 
 [Desktop Action Draw]
-Name=Drawing
+Name=Draw
 Exec=${UNIXBASISROOTNAME} --draw
 
 [Desktop Action Base]
-Name=Database
+Name=Base
 Exec=${UNIXBASISROOTNAME} --base
 
 [Desktop Action Math]
-Name=Formula
+Name=Math
 Exec=${UNIXBASISROOTNAME} --math
 
 ##End of actions menu
