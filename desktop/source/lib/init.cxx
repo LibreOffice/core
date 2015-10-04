@@ -230,7 +230,9 @@ static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nType,
                                 int nX,
                                 int nY,
-                                int nCount);
+                                int nCount,
+                                int nButtons,
+                                int nModifier);
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
                                const char* pCommand,
                                const char* pArguments);
@@ -901,7 +903,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* /*pThis*/, const char* pC
     }
 }
 
-static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount)
+static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -910,7 +912,7 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
         return;
     }
 
-    pDoc->postMouseEvent(nType, nX, nY, nCount);
+    pDoc->postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier);
 }
 
 static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)

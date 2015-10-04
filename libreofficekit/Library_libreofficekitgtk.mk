@@ -16,6 +16,10 @@ $(eval $(call gb_Library_add_exception_objects,libreofficekitgtk,\
     libreofficekit/source/gtk/tilebuffer \
 ))
 
+$(eval $(call gb_Library_use_externals,libreofficekitgtk,\
+    boost_headers \
+))
+
 $(eval $(call gb_Library_add_cxxflags,libreofficekitgtk,\
     $$(GTK3_CFLAGS) \
 ))

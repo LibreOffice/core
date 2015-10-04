@@ -2422,7 +2422,7 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 }
 
-void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount)
+void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
@@ -2430,7 +2430,8 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount)
     if (!pViewShell)
         return;
 
-    MouseEvent aEvent(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)), nCount, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    MouseEvent aEvent(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)), nCount,
+            MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
     switch (nType)
     {

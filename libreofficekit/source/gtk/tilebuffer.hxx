@@ -202,6 +202,8 @@ struct LOEvent
     int m_nPostMouseEventX;
     int m_nPostMouseEventY;
     int m_nPostMouseEventCount;
+    int m_nPostMouseEventButton;
+    int m_nPostMouseEventModifier;
     ///@}
 
     /// @name setGraphicSelection parameters
@@ -230,6 +232,8 @@ struct LOEvent
         , m_nPostMouseEventX(0)
         , m_nPostMouseEventY(0)
         , m_nPostMouseEventCount(0)
+        , m_nPostMouseEventButton(0)
+        , m_nPostMouseEventModifier(0)
         , m_nSetGraphicSelectionType(0)
         , m_nSetGraphicSelectionX(0)
         , m_nSetGraphicSelectionY(0)

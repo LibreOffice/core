@@ -192,9 +192,9 @@ public:
      * @param nY vertical position in document coordinates
      * @param nCount number of clicks: 1 for single click, 2 for double click
      */
-    inline void postMouseEvent(int nType, int nX, int nY, int nCount)
+    inline void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
     {
-        mpDoc->pClass->postMouseEvent(mpDoc, nType, nX, nY, nCount);
+        mpDoc->pClass->postMouseEvent(mpDoc, nType, nX, nY, nCount, nButtons, nModifier);
     }
 
     /**

@@ -137,7 +137,9 @@ struct _LibreOfficeKitDocumentClass
                             int nType,
                             int nX,
                             int nY,
-                            int nCount);
+                            int nCount,
+                            int nButtons,
+                            int nModifier);
 
     /// @see lok::Document::postUnoCommand
     void (*postUnoCommand) (LibreOfficeKitDocument* pThis,
