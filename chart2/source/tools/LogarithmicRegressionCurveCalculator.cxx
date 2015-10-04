@@ -52,7 +52,7 @@ void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
             RegressionCalculationHelper::isValidAndXPositive()));
 
     const size_t nMax = aValues.first.size();
-    if( nMax == 0 )
+    if( nMax <= 1 )  // at least 2 points
     {
         ::rtl::math::setNan( & m_fSlope );
         ::rtl::math::setNan( & m_fIntercept );
@@ -134,14 +134,14 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
 {
     OUStringBuffer aBuf( "f(x) = ");
 
-    bool bHaveSlope = false;
-
     if( m_fSlope != 0.0 )
     {
         if( ::rtl::math::approxEqual( fabs( m_fSlope ), 1.0 ))
         {
-            if( m_fSlope < 0 )
+            if( m_fSlope < 0.0 )
+            {
                 aBuf.append( "-" );
+            }
         }
         else
         {
@@ -149,11 +149,7 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
             aBuf.append( " " );
         }
         aBuf.append( "ln(x)" );
-        bHaveSlope = true;
-    }
 
-    if( bHaveSlope )
-    {
         if( m_fIntercept < 0.0 )
         {
             aBuf.append( " - " );
