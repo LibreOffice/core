@@ -20,6 +20,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <rsc/rsc-vcl-shared-types.hxx>
+#include <vcl/event.hxx>
 
 #include "tilebuffer.hxx"
 
@@ -66,6 +67,10 @@ struct _LOKDocViewPrivate
     guint32 m_nLastButtonPressTime;
     /// Time of the last button release.
     guint32 m_nLastButtonReleaseTime;
+    /// Last pressed button (left, right, middle)
+    guint32 m_nLastButtonPressed;
+    /// Key modifier (ctrl, atl, shift)
+    guint32 m_nKeyModifier;
     /// Rectangles of the current text selection.
     std::vector<GdkRectangle> m_aTextSelectionRectangles;
     /// Position and size of the selection start (as if there would be a cursor caret there).
@@ -267,6 +272,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
         return FALSE;
     }
 
+    priv->m_nKeyModifier = 0;
     switch (pEvent->keyval)
     {
     case GDK_KEY_BackSpace:
@@ -296,6 +302,21 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     case GDK_KEY_Right:
         nKeyCode = com::sun::star::awt::Key::RIGHT;
         break;
+    case GDK_KEY_Shift_L:
+    case GDK_KEY_Shift_R:
+        if (pEvent->type == GDK_KEY_PRESS)
+            priv->m_nKeyModifier |= KEY_SHIFT;
+        break;
+    case GDK_KEY_Control_L:
+    case GDK_KEY_Control_R:
+        if (pEvent->type == GDK_KEY_PRESS)
+            priv->m_nKeyModifier |= KEY_MOD1;
+        break;
+    case GDK_KEY_Alt_L:
+    case GDK_KEY_Alt_R:
+        if (pEvent->type == GDK_KEY_PRESS)
+            priv->m_nKeyModifier |= KEY_MOD2;
+        break;
     default:
         if (pEvent->keyval >= GDK_KEY_F1 && pEvent->keyval <= GDK_KEY_F26)
             nKeyCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_KEY_F1);
@@ -308,7 +329,6 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     // css::awt::KeyModifier is needed in postKeyEvent().
     if (pEvent->state & GDK_SHIFT_MASK)
         nKeyCode |= KEY_SHIFT;
-
 
     if (pEvent->type == GDK_KEY_RELEASE)
     {
@@ -1060,6 +1080,20 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventCount = nCount;
+        switch (pEvent->button)
+        {
+        case 1:
+            pLOEvent->m_nPostMouseEventButton = MOUSE_LEFT;
+            break;
+        case 2:
+            pLOEvent->m_nPostMouseEventButton = MOUSE_MIDDLE;
+            break;
+        case 3:
+            pLOEvent->m_nPostMouseEventButton = MOUSE_RIGHT;
+            break;
+        }
+        pLOEvent->m_nPostMouseEventModifier = priv->m_nKeyModifier;
+        priv->m_nLastButtonPressed = pLOEvent->m_nPostMouseEventButton;
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
@@ -1078,6 +1112,20 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
         pLOEvent->m_nPostMouseEventCount = nCount;
+        switch (pEvent->button)
+        {
+        case 1:
+            pLOEvent->m_nPostMouseEventButton = MOUSE_LEFT;
+            break;
+        case 2:
+            pLOEvent->m_nPostMouseEventButton = MOUSE_MIDDLE;
+            break;
+        case 3:
+            pLOEvent->m_nPostMouseEventButton = MOUSE_RIGHT;
+            break;
+        }
+        pLOEvent->m_nPostMouseEventModifier = priv->m_nKeyModifier;
+        priv->m_nLastButtonPressed = pLOEvent->m_nPostMouseEventButton;
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
@@ -1182,6 +1230,9 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
     pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
     pLOEvent->m_nPostMouseEventCount = 1;
+    pLOEvent->m_nPostMouseEventButton = priv->m_nLastButtonPressed;
+    pLOEvent->m_nPostMouseEventModifier = priv->m_nKeyModifier;
+
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), NULL);
@@ -1218,7 +1269,9 @@ postMouseEventInThread(gpointer data)
                                               pLOEvent->m_nPostMouseEventType,
                                               pLOEvent->m_nPostMouseEventX,
                                               pLOEvent->m_nPostMouseEventY,
-                                              pLOEvent->m_nPostMouseEventCount);
+                                              pLOEvent->m_nPostMouseEventCount,
+                                              pLOEvent->m_nPostMouseEventButton,
+                                              pLOEvent->m_nPostMouseEventModifier);
 }
 
 static void

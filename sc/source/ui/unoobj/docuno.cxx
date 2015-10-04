@@ -591,7 +591,7 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 }
 
-void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount)
+void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
@@ -607,7 +607,8 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount)
     pViewData->SetZoom(Fraction(1, 1), Fraction(1, 1), true);
 
     // Calc operates in pixels...
-    MouseEvent aEvent(Point(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY()), nCount, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    MouseEvent aEvent(Point(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY()), nCount,
+            MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
     switch (nType)
     {

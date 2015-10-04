@@ -3272,12 +3272,12 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 }
 
-void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount)
+void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
-    MouseEvent aEvent(Point(nX, nY), nCount, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    MouseEvent aEvent(Point(nX, nY), nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
     switch (nType)
     {
