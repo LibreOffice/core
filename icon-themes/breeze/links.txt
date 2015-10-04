@@ -1,3 +1,19 @@
+# avmedia
+avmedia/res/av02048.svg cmd/sc_avmediaplayer.svg
+avmedia/res/av02049.svg cmd/sc_runbasic.svg
+avmedia/res/av02050.svg cmd/sc_mediapause.svg
+avmedia/res/av02051.svg cmd/sc_basicstop.svg
+avmedia/res/av02052.svg cmd/sc_mediarepeat.svg
+avmedia/res/av02053.svg cmd/sc_ok.svg
+avmedia/res/av02054.svg cmd/sc_mediamute.svg
+avmedia/res/avl02048.svg cmd/lc_avmediaplayer.svg
+avmedia/res/avl02049.svg cmd/lc_runbasic.svg
+avmedia/res/avl02050.svg cmd/lc_mediapause.svg
+avmedia/res/avl02051.svg cmd/lc_basicstop.svg
+avmedia/res/avl02052.svg cmd/lc_mediarepeat.svg
+avmedia/res/avl02053.svg cmd/lc_ok.svg
+avmedia/res/avl02054.svg cmd/lc_mediamute.svg
+
 # Open
 cmd/lc_openfromwriter.png cmd/lc_open.png
 cmd/lc_openfromcalc.png cmd/lc_open.png
@@ -129,3 +145,35 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 
 # FolderTree expanded icon
 svtools/res/folderop.png formula/res/fapopen.png
+
+# dbaccess
+dbaccess/res/all_left.svg cmd/sc_firstrecord.svg
+dbaccess/res/all_right.svg cmd/sc_lastrecord.svg
+dbaccess/res/db.svg cmd/sc_viewdatasourcebrowser.svg
+dbaccess/res/exerror.svg cmd/sc_cancel.svg
+dbaccess/res/exinfo.svg cmd/sc_helpindex.svg
+dbaccess/res/form_16.svg cmd/sc_dbformedit.svg
+dbaccess/res/forms_16.svg cmd/sc_dbformedit.svg
+dbaccess/res/forms_32.svg res/forms_32.svg
+dbaccess/res/lc036.svg cmd/lc_dbnewreport.svg
+dbaccess/res/lc037.svg cmd/lc_delete.svg
+dbaccess/res/lc038.svg cmd/lc_editdoc.svg
+dbaccess/res/lc039.svg cmd/lc_save.svg
+dbaccess/res/lc040.svg cmd/lc_reload.svg
+dbaccess/res/nu07.svg cmd/sc_ok.svg
+dbaccess/res/nu08.svg cmd/sc_cancel.svg
+dbaccess/res/one_left.svg cmd/sc_prevrecord.svg
+dbaccess/res/one_right.svg cmd/sc_nextrecord.svg
+dbaccess/res/pkey.svg jo01.svg
+dbaccess/res/queries_32.svg res/queries_32.svg
+dbaccess/res/report_16.svg cmd/sc_executereport.svg
+dbaccess/res/reports_16.svg cmd/sc_executereport.svg
+dbaccess/res/reports_32.svg res/reports_32.svg
+dbaccess/res/sc036.svg cmd/sc_executereport.svg
+dbaccess/res/sc037.svg cmd/sc_delete.svg
+dbaccess/res/sc038.svg cmd/sc_editdoc.svg
+dbaccess/res/sc039.svg cmd/sc_save.svg
+dbaccess/res/sc040.svg cmd/sc_reload.svg
+dbaccess/res/sortdown.svg cmd/sc_sortascending.svg
+dbaccess/res/sortup.svg cmd/sc_sortdescending.svg
+dbaccess/res/tables_32.svg res/tables_32.svg
