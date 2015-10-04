@@ -201,7 +201,7 @@ void ScXMLSourceDlg::SelectSourceFile()
         // File picker dialog cancelled.
         return;
 
-    uno::Sequence<OUString> aFiles = xFilePicker->getFiles();
+    uno::Sequence<OUString> aFiles = xFilePicker->getSelectedFiles();
     if (!aFiles.getLength())
         return;
 
