@@ -1574,7 +1574,7 @@ ScUndoRemoveAreaLink::~ScUndoRemoveAreaLink()
 
 OUString ScUndoRemoveAreaLink::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_REMOVELINK );   //! eigener Text ??
+    return ScGlobal::GetRscString( STR_UNDO_REMOVELINK );   //! own text ??
 }
 
 void ScUndoRemoveAreaLink::Undo()
@@ -1735,7 +1735,7 @@ void ScUndoUpdateAreaLink::Redo()
                                             aOldArea, aOldRange );
     if (pLink)
     {
-        pLink->SetSource( aNewDoc, aNewFlt, aNewOpt, aNewArea );        // neue Werte im Link
+        pLink->SetSource( aNewDoc, aNewFlt, aNewOpt, aNewArea );        // new values in link
         pLink->SetDestArea( aNewRange );
         pLink->SetRefreshDelay( nNewRefresh );
     }
