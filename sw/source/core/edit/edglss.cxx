@@ -325,8 +325,9 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
                     rBuf = OUString(p);
                 else
                 {
-                    sal_Size nLen = aStream.GetSize();
-                    rtl_uString *pStr = rtl_uString_alloc(nLen / sizeof( sal_Unicode ));
+                    const sal_uInt64 nLen = aStream.GetSize();
+                    OSL_ENSURE( nLen/sizeof( sal_Unicode )<static_cast<sal_uInt64>(SAL_MAX_INT32), "Stream can't fit in OUString" );
+                    rtl_uString *pStr = rtl_uString_alloc(static_cast<sal_Int32>(nLen / sizeof( sal_Unicode )));
                     aStream.Seek( 0 );
                     aStream.ResetError();
                     //endian specific?, yipes!

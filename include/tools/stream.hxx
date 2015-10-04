@@ -695,7 +695,7 @@ public:
     virtual void    ResetError() override;
 
     const void*    GetBuffer();
-    sal_uIntPtr     GetSize();
+    sal_uInt64     GetSize();
     sal_Size        GetEndOfData() const { return nEndOfData; }
     const void*     GetData() { Flush(); return pBuf; }
     operator const  void*() { Flush(); return pBuf; }

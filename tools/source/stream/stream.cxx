@@ -1718,7 +1718,7 @@ const void* SvMemoryStream::GetBuffer()
     return GetData();
 }
 
-sal_uIntPtr SvMemoryStream::GetSize()
+sal_uInt64 SvMemoryStream::GetSize()
 {
     Flush();
     sal_uInt64 const nTemp = Tell();

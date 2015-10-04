@@ -1080,7 +1080,9 @@ OUString HtmlExport::DocumentMetadata() const
             "  ", RTL_TEXTENCODING_UTF8,
             &aNonConvertableCharacters);
 
-    OString aData(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
+    const sal_uInt64 nLen = aStream.GetSize();
+    OSL_ENSURE(nLen < static_cast<sal_uInt64>(SAL_MAX_INT32), "Stream can't fit in OString");
+    OString aData(static_cast<const char*>(aStream.GetData()), static_cast<sal_Int32>(nLen));
 
     return OStringToOUString(aData, RTL_TEXTENCODING_UTF8);
 }

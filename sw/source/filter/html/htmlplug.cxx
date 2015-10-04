@@ -1299,7 +1299,8 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
                 aMediaDescriptor["FilterOptions"] <<= OUString("SkipHeaderFooter");
                 aMediaDescriptor["OutputStream"] <<= xOutputStream;
                 xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
-                OString aData(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
+                SAL_WARN_IF(aStream.GetSize()>=static_cast<sal_uInt64>(SAL_MAX_INT32), "sw.html", "Stream can't fit in OString");
+                OString aData(static_cast<const char*>(aStream.GetData()), static_cast<sal_Int32>(aStream.GetSize()));
                 // Wrap output in a <span> tag to avoid 'HTML parser error: Unexpected end tag: p'
                 HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span);
                 rWrt.Strm().WriteCharPtr(aData.getStr());

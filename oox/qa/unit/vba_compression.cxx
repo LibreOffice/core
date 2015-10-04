@@ -96,9 +96,9 @@ void TestVbaCompression::testSimple1()
     const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
     const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
-    size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
+    const sal_uInt64 nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
-    for (size_t i = 0; i < nSize; ++i)
+    for (sal_uInt64 i = 0; i < nSize; ++i)
     {
         CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
     }
@@ -118,9 +118,9 @@ void TestVbaCompression::testSimple2()
     const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
     const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
-    size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
+    const sal_uInt64 nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
-    for (size_t i = 0; i < nSize; ++i)
+    for (sal_uInt64 i = 0; i < nSize; ++i)
     {
         CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
     }
@@ -140,9 +140,9 @@ void TestVbaCompression::testSimple3()
     const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData()  );
     const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
-    size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
+    const sal_uInt64 nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
-    for (size_t i = 0; i < nSize; ++i)
+    for (sal_uInt64 i = 0; i < nSize; ++i)
     {
         CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
     }
@@ -162,9 +162,9 @@ void TestVbaCompression::testComplex1()
     const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
     const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
-    size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
+    const sal_uInt64 nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
-    for (size_t i = 0; i < nSize; ++i)
+    for (sal_uInt64 i = 0; i < nSize; ++i)
     {
         CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
     }
@@ -184,9 +184,9 @@ void TestVbaCompression::testSpec321()
     const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
     const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
-    size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
+    const sal_uInt64 nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
-    for (size_t i = 0; i < nSize; ++i)
+    for (sal_uInt64 i = 0; i < nSize; ++i)
     {
         CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
     }
@@ -206,9 +206,9 @@ void TestVbaCompression::testSpec322()
     const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
     const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
-    size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
+    const sal_uInt64 nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
-    for (size_t i = 0; i < nSize; ++i)
+    for (sal_uInt64 i = 0; i < nSize; ++i)
     {
         CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
     }
@@ -228,9 +228,9 @@ void TestVbaCompression::testSpec323()
     const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
     const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
-    size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
+    const sal_uInt64 nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
-    for (size_t i = 0; i < nSize; ++i)
+    for (sal_uInt64 i = 0; i < nSize; ++i)
     {
         CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
     }

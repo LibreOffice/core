@@ -255,14 +255,14 @@ namespace tools_urlobj
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != 0);
-            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(0), strm->GetSize());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), strm->GetSize());
             strm.reset();
 
             url = INetURLObject("data:,,%C3%A4%90");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != 0);
-            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(4), strm->GetSize());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt64(4), strm->GetSize());
             buf = static_cast<unsigned char const *>(strm->GetData());
             CPPUNIT_ASSERT_EQUAL(0x2C, int(buf[0]));
             CPPUNIT_ASSERT_EQUAL(0xC3, int(buf[1]));
@@ -279,21 +279,21 @@ namespace tools_urlobj
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != 0);
-            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(0), strm->GetSize());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), strm->GetSize());
             strm.reset();
 
             url = INetURLObject("data:;bAsE64,");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != 0);
-            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(0), strm->GetSize());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), strm->GetSize());
             strm.reset();
 
             url = INetURLObject("data:;base64,YWJjCg==");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != 0);
-            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(4), strm->GetSize());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt64(4), strm->GetSize());
             buf = static_cast<unsigned char const *>(strm->GetData());
             CPPUNIT_ASSERT_EQUAL(0x61, int(buf[0]));
             CPPUNIT_ASSERT_EQUAL(0x62, int(buf[1]));
@@ -315,7 +315,7 @@ namespace tools_urlobj
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != 0);
-            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(4), strm->GetSize());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt64(4), strm->GetSize());
             buf = static_cast<unsigned char const *>(strm->GetData());
             CPPUNIT_ASSERT_EQUAL(0x59, int(buf[0]));
             CPPUNIT_ASSERT_EQUAL(0x51, int(buf[1]));
