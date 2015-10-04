@@ -111,6 +111,38 @@ private:
     SvMemoryStream& mrUncompressedStream;
 };
 
+class VBAEncryption
+{
+public:
+    VBAEncryption(const sal_uInt8* pData,
+                  const sal_uInt16 nLength,
+                  SvStream& rEncryptedData
+                 );
+
+    void write();
+
+private:
+    const sal_uInt8* mpData; // an array of bytes to be obfuscated
+    const sal_uInt16 mnLength; // the length of Data
+    SvStream& mrEncryptedData; // Encrypted Data Structure
+    sal_uInt8 mnUnencryptedByte1; // the last unencrypted byte read or written
+    sal_uInt8 mnEncryptedByte1; // the last encrypted byte read or written
+    sal_uInt8 mnEncryptedByte2; // the next-to-last encrypted byte read or written
+    sal_uInt8 mnVersion; // the encrypted version
+    sal_Unicode mnProjKey; // a project-specific encryption key
+    sal_uInt8 mnIgnoredLength; // the length in bytes of IgnoredEnc
+
+    sal_uInt8 mnSeed; // the seed value
+    sal_uInt8 mnVersionEnc; // the version encoding
+
+    void writeSeed();
+    void writeVersionEnc();
+    void writeProjKeyEnc();
+    void writeIgnoredEnc();
+    void writeDataLengthEnc();
+    void writeDataEnc();
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
