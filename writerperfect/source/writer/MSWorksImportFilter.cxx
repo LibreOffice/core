@@ -42,7 +42,7 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
     std::string fileEncoding("");
     try
     {
-        if ((kind == libwps::WPS_TEXT) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
+        if ((kind == libwps::WPS_TEXT) && (creator == libwps::WPS_MSWORKS) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
         {
             const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(
                 "Import MsWorks files(libwps)", "CP850");
@@ -55,6 +55,20 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
             else if (pDlg->hasUserCalledCancel())
                 return false;
         }
+        else if ((kind == libwps::WPS_TEXT) && (creator == libwps::WPS_MSWRITE) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
+        {
+            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(
+                "Import MsWrite files(libwps)", "CP1252");
+            if (pDlg->Execute() == RET_OK)
+            {
+                if (!pDlg->GetEncoding().isEmpty())
+                    fileEncoding=pDlg->GetEncoding().toUtf8().getStr();
+            }
+            // we can fail because we are in headless mode, the user has cancelled conversion, ...
+            else if (pDlg->hasUserCalledCancel())
+                return false;
+        }
+
     }
     catch (css::uno::Exception &e)
     {
@@ -72,7 +86,14 @@ bool MSWorksImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OU
 
     if ((kind == libwps::WPS_TEXT) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT))
     {
-        rTypeName = "writer_MS_Works_Document";
+        if (creator == libwps::WPS_MSWORKS)
+        {
+            rTypeName = "writer_MS_Works_Document";
+        }
+        else
+        {
+            rTypeName = "writer_MS_Write";
+        }
         return true;
     }
 
