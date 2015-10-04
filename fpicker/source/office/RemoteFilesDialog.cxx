@@ -697,8 +697,10 @@ void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUse
 
     try
     {
-        if( m_xMasterPasswd->isPersistentStoringAllowed() &&
-            ( !bPersistent || m_xMasterPasswd->authorizateWithMasterPassword( Reference< XInteractionHandler>() ) ) )
+        if( !bPersistent ||
+            ( m_xMasterPasswd->isPersistentStoringAllowed()
+            && m_xMasterPasswd->authorizateWithMasterPassword( Reference< XInteractionHandler>() ) )
+        )
         {
             Reference< XInteractionHandler > xInteractionHandler(
                 InteractionHandler::createWithParent( m_xContext, 0 ),
