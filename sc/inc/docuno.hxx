@@ -54,6 +54,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <svl/itemprop.hxx>
+#include <vcl/event.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include "drwlayer.hxx"
 
@@ -401,7 +402,7 @@ public:
     virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) SAL_OVERRIDE;
 
     /// @see vcl::ITiledRenderable::postMouseEvent().
-    virtual void postMouseEvent(int nType, int nX, int nY, int nCount) SAL_OVERRIDE;
+    virtual void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons = MOUSE_LEFT, int nModifier = 0) SAL_OVERRIDE;
 
     /// @see vcl::ITiledRenderable::setTextSelection().
     virtual void setTextSelection(int nType, int nX, int nY) SAL_OVERRIDE;

@@ -21,6 +21,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <rsc/rsc-vcl-shared-types.hxx>
+#include <vcl/event.hxx>
 
 #if !GLIB_CHECK_VERSION(2,32,0)
 #define G_SOURCE_REMOVE FALSE
@@ -461,7 +462,7 @@ gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
         if ((pEvent->time - m_nLastButtonPressTime) < 250)
             nCount++;
         m_nLastButtonPressTime = pEvent->time;
-        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
+        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount, MOUSE_LEFT, 0);
         break;
     }
     case GDK_BUTTON_RELEASE:
@@ -470,7 +471,7 @@ gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
         if ((pEvent->time - m_nLastButtonReleaseTime) < 250)
             nCount++;
         m_nLastButtonReleaseTime = pEvent->time;
-        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
+        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount, MOUSE_LEFT, 0);
         break;
     }
     default:
@@ -552,7 +553,7 @@ gboolean LOKDocView_Impl::signalMotionImpl(GdkEventButton* pEvent)
     }
 
     // Otherwise a mouse move, as on the desktop.
-    m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEMOVE, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), 1);
+    m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEMOVE, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), 1, MOUSE_LEFT, 0);
 
     return FALSE;
 }
