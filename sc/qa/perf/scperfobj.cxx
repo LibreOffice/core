@@ -61,6 +61,7 @@ public:
     CPPUNIT_TEST(testSum);
     CPPUNIT_TEST(testFTest);
     CPPUNIT_TEST(testChiTest);
+    CPPUNIT_TEST(testSumX2PY2Test);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -75,6 +76,7 @@ private:
     void testSum();
     void testFTest();
     void testChiTest();
+    void testSumX2PY2Test();
 
 };
 
@@ -339,6 +341,30 @@ void ScPerfObj::testChiTest()
     callgrindDump("sc:chitest");
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong ChiTest result" , 0.0, xCell->getValue(), 10e-4);
+}
+
+void ScPerfObj::testSumX2PY2Test()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions2.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+
+    uno::Any rSheet = xSheets->getByName(OUString::createFromAscii("SumX2PY2Sheet"));
+
+    // query for the XSpreadsheet interface
+    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
+    uno::Reference< table::XCell > xCell = xSheet->getCellByPosition(2, 0);
+
+    callgrindStart();
+    xCell->setFormula(OUString::createFromAscii("=SUMX2PY2(A1:A10000;B1:B10000)"));
+    xCalculatable->calculate();
+    callgrindDump("sc:sumx2py2");
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong SumX2PY2 result" , 574539.0, xCell->getValue());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPerfObj);
