@@ -65,6 +65,7 @@ public:
     CPPUNIT_TEST(testTTest);
     CPPUNIT_TEST(testLcm);
     CPPUNIT_TEST(testGcd);
+    CPPUNIT_TEST(testPearson);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -83,6 +84,7 @@ private:
     void testTTest();
     void testLcm();
     void testGcd();
+    void testPearson();
 
 };
 
@@ -444,6 +446,31 @@ void ScPerfObj::testGcd()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong GCD", 3.0, xCell->getValue());
 }
+
+void ScPerfObj::testPearson()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions2.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+
+    uno::Any rSheet = xSheets->getByName(OUString::createFromAscii("PearsonSheet"));
+
+    // query for the XSpreadsheet interface
+    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
+    uno::Reference< table::XCell > xCell = xSheet->getCellByPosition(0, 0);
+
+    callgrindStart();
+    xCell->setFormula(OUString::createFromAscii("=PEARSON(B1:CV100;CW1:GQ100)"));
+    xCalculatable->calculate();
+    callgrindDump("sc:pearson");
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong Pearson result" , 0.01255, xCell->getValue(), 10e-4);
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPerfObj);
 
