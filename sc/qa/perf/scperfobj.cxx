@@ -63,6 +63,7 @@ public:
     CPPUNIT_TEST(testChiTest);
     CPPUNIT_TEST(testSumX2PY2Test);
     CPPUNIT_TEST(testTTest);
+    CPPUNIT_TEST(testLcm);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -79,6 +80,7 @@ private:
     void testChiTest();
     void testSumX2PY2Test();
     void testTTest();
+    void testLcm();
 
 };
 
@@ -391,6 +393,30 @@ void ScPerfObj::testTTest()
     callgrindDump("sc:ttest");
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong TTest result" , 0.0, xCell->getValue());
+}
+
+void ScPerfObj::testLcm()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions2.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+
+    uno::Any rSheet = xSheets->getByName(OUString::createFromAscii("LCMSheet"));
+
+    // query for the XSpreadsheet interface
+    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
+    uno::Reference< table::XCell > xCell = xSheet->getCellByPosition(1, 0);
+
+    callgrindStart();
+    xCell->setFormula(OUString::createFromAscii("=LCM(A1:A10000)"));
+    xCalculatable->calculate();
+    callgrindDump("sc:lcm");
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong LCM" , 2520.0, xCell->getValue());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPerfObj);
