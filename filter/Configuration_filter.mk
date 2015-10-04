@@ -323,6 +323,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_StarOffice_XML_Writer \
 	writer_WordPerfect_Document \
 	writer_MS_Works_Document \
+	writer_MS_Write \
 	writer_Beagle_Works \
 	writer_ClarisWorks \
 	writer_DocMaker \
@@ -385,6 +386,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	StarOffice_XML__Writer_ \
 	WordPerfect \
 	MS_Works \
+	MS_Write \
 	Beagle_Works \
 	ClarisWorks \
 	DocMaker \
