@@ -54,6 +54,20 @@ $(eval $(call gb_Library_use_externals,jvmfwk,\
     valgrind \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_cxxflags,jvmfwk,\
+    $(gb_OBJCXXFLAGS) \
+))
+
+$(eval $(call gb_Library_add_objcxxobjects,jvmfwk,\
+    jvmfwk/plugins/sunmajor/pluginlib/util_cocoa \
+))
+
+$(eval $(call gb_Library_add_libs,jvmfwk,\
+    -framework Foundation \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,jvmfwk,\
     jvmfwk/plugins/sunmajor/pluginlib/gnujre \
     jvmfwk/plugins/sunmajor/pluginlib/otherjre \
