@@ -674,8 +674,7 @@ void SmXMLContext_Helper::ApplyAttrs()
                 aToken.eType = TBOLD;
             else
                 aToken.eType = TNBOLD;
-            SmStructureNode *pFontNode = static_cast<SmStructureNode *>
-                (new SmFontNode(aToken));
+            SmFontNode *pFontNode = new SmFontNode(aToken);
             pFontNode->SetSubNodes(0,popOrZero(rNodeStack));
             rNodeStack.push_front(pFontNode);
         }
@@ -685,8 +684,7 @@ void SmXMLContext_Helper::ApplyAttrs()
                 aToken.eType = TITALIC;
             else
                 aToken.eType = TNITALIC;
-            SmStructureNode *pFontNode = static_cast<SmStructureNode *>
-                (new SmFontNode(aToken));
+            SmFontNode *pFontNode = new SmFontNode(aToken);
             pFontNode->SetSubNodes(0,popOrZero(rNodeStack));
             rNodeStack.push_front(pFontNode);
         }
@@ -935,8 +933,7 @@ void SmXMLPhantomContext_Impl::EndElement()
     aToken.nLevel = 5;
     aToken.eType = TPHANTOM;
 
-    SmStructureNode *pPhantom = static_cast<SmStructureNode *>
-        (new SmFontNode(aToken));
+    SmFontNode *pPhantom = new SmFontNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     pPhantom->SetSubNodes(0,popOrZero(rNodeStack));
     rNodeStack.push_front(pPhantom);
