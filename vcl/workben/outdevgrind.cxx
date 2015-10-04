@@ -161,141 +161,87 @@ void setupMethodStubs( functor_vector_type& res )
     /* void DrawPixel( const Point& rPt, const Color& rColor ); */
     add(res,
         "DrawPixel",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&, const Color& ))(
-                &OutputDevice::DrawPixel),
-            _1,
-            aPt1, aBlackColor ));
+        [aPt1, aBlackColor](OutputDevice *pOutDev) { return pOutDev->DrawPixel(aPt1, aBlackColor); });
 
     /* void DrawLine( const Point& rStartPt, const Point& rEndPt ); */
     add(res,
         "DrawLine",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&, const Point& ))(
-                &OutputDevice::DrawLine),
-            _1,
-            aPt1, aPt2 ));
+        [aPt1, aPt2] (OutputDevice *pOutDev) { return pOutDev->DrawLine(aPt1, aPt2); });
 
     /* void DrawLine( const Point& rStartPt, const Point& rEndPt,
                                   const LineInfo& rLineInfo );
     */
     add(res,
         "DrawLine(LineInfo)",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&, const Point&,const LineInfo& ))(
-                &OutputDevice::DrawLine),
-            _1,
-            aPt1, aPt2, aLineInfo ));
+        [aPt1, aPt2, aLineInfo] (OutputDevice *pOutDev) { return pOutDev->DrawLine(aPt1, aPt2, aLineInfo); });
 
     /* void DrawPolyLine( const Polygon& rPoly ); */
     add(res,
         "DrawPolyLine",
-        boost::bind(
-                (void (OutputDevice::*)( const tools::Polygon& ))(
-                &OutputDevice::DrawPolyLine),
-            _1,
-            aPoly ));
+        [aPoly] (OutputDevice *pOutDev) {return pOutDev->DrawPolyLine(aPoly); });
 
     /* void DrawPolyLine( const Polygon& rPoly,
                                       const LineInfo& rLineInfo );
     */
     add(res,
         "DrawPolyLine(LineInfo)",
-        boost::bind(
-                (void (OutputDevice::*)( const tools::Polygon&, const LineInfo& ))(
-                &OutputDevice::DrawPolyLine),
-            _1,
-            aPoly, aLineInfo ));
+        [aPoly, aLineInfo] (OutputDevice *pOutDev) { return pOutDev->DrawPolyLine(aPoly, aLineInfo); });
 
     /* void DrawPolygon( const Polygon& rPoly ); */
     add(res,
         "DrawPolygon",
-        boost::bind(
-                (void (OutputDevice::*)( const tools::Polygon& ))
-                &OutputDevice::DrawPolygon,
-            _1,
-            aPoly ));
+        [aPoly] (OutputDevice *pOutDev) { return pOutDev->DrawPolygon(aPoly);  });
 
     /* void DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly ); */
     add(res,
         "DrawPolyPolygon",
-        boost::bind(
-            (void (OutputDevice::*)( const tools::PolyPolygon& ))
-                &OutputDevice::DrawPolyPolygon,
-            _1,
-            aPolyPoly ));
+        [aPolyPoly] (OutputDevice *pOutDev) { return pOutDev->DrawPolyPolygon(aPolyPoly); });
 
     /* void DrawRect( const Rectangle& rRect ); */
     add(res,
         "DrawRect",
-        boost::bind(
-            (void (OutputDevice::*)( const Rectangle& ))(
-                &OutputDevice::DrawRect),
-            _1,
-            aRect ));
+        [aRect] (OutputDevice *pOutDev) { return pOutDev->DrawRect(aRect); });
 
     /* void DrawRect( const Rectangle& rRect,
                                   sal_uLong nHorzRount, sal_uLong nVertRound );
     */
     add(res,
         "DrawRect(round corners)",
-        boost::bind(
-            (void (OutputDevice::*)( const Rectangle&, sal_uLong nHorzRount, sal_uLong nVertRound ))(
-                &OutputDevice::DrawRect),
-            _1,
-            aRect2,
-            4,4));
+        [aRect2] (OutputDevice *pOutDev) { return pOutDev->DrawRect(aRect2,4,4); });
 
     /* void DrawEllipse( const Rectangle& rRect ); */
     add(res,
         "DrawEllipse",
-        boost::bind(
-            &OutputDevice::DrawEllipse,
-            _1,
-            aRect ));
+        [aRect] (OutputDevice *pOutDev) { return pOutDev->DrawEllipse(aRect); });
 
     /* void DrawArc( const Rectangle& rRect,
                                  const Point& rStartPt, const Point& rEndPt );
     */
     add(res,
         "DrawArc",
-        boost::bind(
-            &OutputDevice::DrawArc,
-            _1,
-            aRect,aPt1,aPt2 ));
+        [aRect,aPt1,aPt2] (OutputDevice *pOutDev) { return pOutDev->DrawArc(aRect,aPt1,aPt2); });
 
     /* void DrawPie( const Rectangle& rRect,
                                  const Point& rStartPt, const Point& rEndPt );
     */
     add(res,
         "DrawPie",
-        boost::bind(
-            &OutputDevice::DrawPie,
-            _1,
-            aRect2,aPt3,aPt4 ));
+        [aRect2,aPt3,aPt4] (OutputDevice *pOutDev) { return pOutDev->DrawPie(aRect2,aPt3,aPt4); });
 
     /* void DrawChord( const Rectangle& rRect,
                                    const Point& rStartPt, const Point& rEndPt );
     */
     add(res,
         "DrawChord",
-        boost::bind(
-            &OutputDevice::DrawChord,
-            _1,
-            aRect2,aPt3,aPt4 ));
+        [aRect2,aPt3,aPt4] (OutputDevice *pOutDev) { return pOutDev->DrawChord(aRect2,aPt3,aPt4); });
 
     /* void DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPt,  const Size& rSrcSize );
     */
     add(res,
         "DrawOutDev",
-        boost::bind(
-            (void (OutputDevice::*)( const Point&, const Size&,
-                                     const Point&, const Size& ))(
-                &OutputDevice::DrawOutDev),
-            _1,
-            aRect2.TopLeft(), aRect2.GetSize(),
-            aRect.TopLeft(),  aRect.GetSize()));
+        [aRect,aRect2] (OutputDevice *pOutDev) { return pOutDev->DrawOutDev(aRect2.TopLeft(), aRect2.GetSize(),
+                                                                            aRect.TopLeft(),  aRect.GetSize()); });
 
 #ifdef FIXME_VDEV
     /* void DrawOutDev( const Point& rDestPt, const Size& rDestSize,
