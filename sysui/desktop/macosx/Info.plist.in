@@ -40,12 +40,10 @@
                 <key>public.filename-extension</key>
                 <array>
                     <string>sxw</string>
-                    <string>sdw</string>
                 </array>
                 <key>public.mime-type</key>
                 <array>
                     <string>application/vnd.sun.xml.writer</string>
-                    <string>application/vnd.stardivision.writer</string>
                 </array>
             </dict>
         </dict>
@@ -110,12 +108,10 @@
                 <key>public.filename-extension</key>
                 <array>
                     <string>sxc</string>
-                    <string>sdc</string>
                 </array>
                 <key>public.mime-type</key>
                 <array>
                     <string>application/vnd.sun.xml.calc</string>
-                    <string>application/vnd.stardivision.calc</string>
                 </array>
             </dict>
         </dict>
@@ -180,14 +176,10 @@
                 <key>public.filename-extension</key>
                 <array>
                     <string>sxi</string>
-                    <string>sdd</string>
-                    <string>sdp</string>
                 </array>
                 <key>public.mime-type</key>
                 <array>
                     <string>application/vnd.sun.xml.impress</string>
-                    <string>application/vnd.stardivision.impress</string>
-                    <string>application/vnd.stardivision.impress-packed</string>
                 </array>
             </dict>
         </dict>
@@ -252,12 +244,10 @@
                 <key>public.filename-extension</key>
                 <array>
                     <string>sxd</string>
-                    <string>sda</string>
                 </array>
                 <key>public.mime-type</key>
                 <array>
                     <string>application/vnd.sun.xml.draw</string>
-                    <string>application/vnd.stardivision.draw</string>
                 </array>
             </dict>
         </dict>
@@ -368,12 +358,10 @@
                 <key>public.filename-extension</key>
                 <array>
                     <string>sxm</string>
-                    <string>smf</string>
                 </array>
                 <key>public.mime-type</key>
                 <array>
                     <string>application/vnd.sun.xml.math</string>
-                    <string>application/vnd.stardivision.math</string>
                 </array>
             </dict>
         </dict>
@@ -967,12 +955,10 @@
             <key>CFBundleTypeExtensions</key>
             <array>
                 <string>sxw</string>
-                <string>sdw</string>
             </array>
             <key>CFBundleTypeMIMETypes</key>
             <array>
                 <string>application/vnd.sun.xml.writer</string>
-                <string>application/vnd.stardivision.writer</string>
             </array>
             <key>CFBundleTypeIconFile</key>
             <string>text.icns</string>
@@ -1005,12 +991,10 @@
             <key>CFBundleTypeExtensions</key>
             <array>
                 <string>sxc</string>
-                <string>sdc</string>
             </array>
             <key>CFBundleTypeMIMETypes</key>
             <array>
                 <string>application/vnd.sun.xml.calc</string>
-                <string>application/vnd.stardivision.calc</string>
             </array>
             <key>CFBundleTypeIconFile</key>
             <string>spreadsheet.icns</string>
@@ -1043,14 +1027,10 @@
             <key>CFBundleTypeExtensions</key>
             <array>
                 <string>sxi</string>
-                <string>sdd</string>
-                <string>sdp</string>
             </array>
             <key>CFBundleTypeMIMETypes</key>
             <array>
                 <string>application/vnd.sun.xml.impress</string>
-                <string>application/vnd.stardivision.impress</string>
-                <string>application/vnd.stardivision.impress-packed</string>
             </array>
             <key>CFBundleTypeIconFile</key>
             <string>presentation.icns</string>
@@ -1083,12 +1063,10 @@
             <key>CFBundleTypeExtensions</key>
             <array>
                 <string>sxd</string>
-                <string>sda</string>
             </array>
             <key>CFBundleTypeMIMETypes</key>
             <array>
                 <string>application/vnd.sun.xml.draw</string>
-                <string>application/vnd.stardivision.draw</string>
             </array>
             <key>CFBundleTypeIconFile</key>
             <string>drawing.icns</string>
@@ -1157,12 +1135,10 @@
             <key>CFBundleTypeExtensions</key>
             <array>
                 <string>sxm</string>
-                <string>smf</string>
             </array>
             <key>CFBundleTypeMIMETypes</key>
             <array>
                 <string>application/vnd.sun.xml.math</string>
-                <string>application/vnd.stardivision.math</string>
             </array>
             <key>CFBundleTypeIconFile</key>
             <string>formula.icns</string>
