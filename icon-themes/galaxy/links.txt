@@ -30,6 +30,8 @@ cmd/sc_insertcolumnsafter.png cmd/sc_insertcolumns.png
 
 cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
 cmd/sc_templatemenu.png cmd/sc_newdoc.png
+cmd/lc_pagesetup.png cmd/lc_setdocumentproperties.png
+cmd/sc_pagesetup.png cmd/sc_setdocumentproperties.png
 
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
