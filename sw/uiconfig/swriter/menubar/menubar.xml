@@ -210,8 +210,8 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Line"/>
           <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
-          <menu:menuitem menu:id=".uno:Rect"/>
-          <menu:menuitem menu:id=".uno:Ellipse"/>
+          <menu:menuitem menu:id=".uno:BasicShapes.rectangle"/>
+          <menu:menuitem menu:id=".uno:BasicShapes.ellipse"/>
           <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
         </menu:menupopup>
       </menu:menu>
