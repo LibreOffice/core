@@ -882,9 +882,6 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
 
         if (nPgNum != SDRPAGE_NOTFOUND)
         {
-            /********************
-             * Skip to the page *
-             ********************/
             SdPage* pPage = static_cast<SdPage*>( mpDoc->GetPage(nPgNum) );
 
             PageKind eNewPageKind = pPage->GetPageKind();
@@ -963,9 +960,6 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
 
         if (nPgNum != SDRPAGE_NOTFOUND)
         {
-            /********************
-             * Skip to the page *
-             ********************/
             bFound = true;
             SdPage* pPage = static_cast<SdPage*>( mpDoc->GetPage(nPgNum) );
 
