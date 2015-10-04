@@ -28,6 +28,13 @@ $(eval $(call gb_Module_add_targets,comphelper,\
     Library_comphelp \
 ))
 
+ifeq ($(ENABLE_UNIT_TESTS),YES)
+$(eval $(call gb_Module_add_check_targets,comphelper,\
+    GoogleTest_comphelper_string \
+    GoogleTest_comphelper_weakbag \
+))
+endif
+
 ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,comphelper,\
     JunitTest_comphelper_complex \

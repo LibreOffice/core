@@ -25,7 +25,7 @@
 #include "sal/config.h"
 
 #include "comphelper/string.hxx"
-#include "testshl/simpleheader.hxx"
+#include "gtest/gtest.h"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -33,46 +33,44 @@
 
 namespace {
 
-class Test: public CppUnit::TestFixture {
+class Test: public ::testing::Test {
 public:
-    void test();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::test() {
+TEST_F(Test, test) {
     rtl::OUString s1(RTL_CONSTASCII_USTRINGPARAM("foobarbar"));
     sal_Int32 n1;
     rtl::OUString s2(
-        comphelper::string::searchAndReplace(
-            s1, RTL_CONSTASCII_STRINGPARAM("bar"),
+        comphelper::string::searchAndReplaceAsciiI(
+            s1, rtl::OString(RTL_CONSTASCII_STRINGPARAM("bar")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baaz")), 0, &n1));
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         s2 == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobaazbar")));
-    CPPUNIT_ASSERT(n1 == 3);
+    ASSERT_TRUE(n1 == 3);
     sal_Int32 n2;
     rtl::OUString s3(
-        comphelper::string::searchAndReplace(
-            s2, RTL_CONSTASCII_STRINGPARAM("bar"),
+        comphelper::string::searchAndReplaceAsciiI(
+            s2, rtl::OString(RTL_CONSTASCII_STRINGPARAM("bar")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bz")),
             n1 + RTL_CONSTASCII_LENGTH("baaz"), &n2));
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         s3 == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobaazbz")));
-    CPPUNIT_ASSERT(n2 == 7);
+    ASSERT_TRUE(n2 == 7);
     sal_Int32 n3;
     rtl::OUString s4(
-        comphelper::string::searchAndReplace(
-            s3, RTL_CONSTASCII_STRINGPARAM("bar"),
+        comphelper::string::searchAndReplaceAsciiI(
+            s3, rtl::OString(RTL_CONSTASCII_STRINGPARAM("bar")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baz")),
             n2 + RTL_CONSTASCII_LENGTH("bz"), &n3));
-    CPPUNIT_ASSERT(s4 == s3);
-    CPPUNIT_ASSERT(n3 == -1);
+    ASSERT_TRUE(s4 == s3);
+    ASSERT_TRUE(n3 == -1);
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
 
 }
 
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

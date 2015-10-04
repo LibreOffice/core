@@ -21,32 +21,31 @@
 
 
 
-PRJ := ..
-PRJNAME := comphelper
-TARGET := qa
+$(eval $(call gb_GoogleTest_GoogleTest,comphelper_string))
 
-ENABLE_EXCEPTIONS := TRUE
+$(eval $(call gb_GoogleTest_add_exception_objects,comphelper_string, \
+	comphelper/qa/test_string \
+))
 
-.INCLUDE: settings.mk
+$(eval $(call gb_GoogleTest_add_linked_libs,comphelper_string, \
+    comphelper \
+    cppuhelper \
+    cppu \
+    sal \
+    stl \
+    $(gb_STDLIBS) \
+))
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+$(eval $(call gb_GoogleTest_set_include,comphelper_string,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/formula/inc \
+	-I$(SRCDIR)/comphelper/inc/pch \
+	-I$(OUTDIR)/inc/offuh \
+	-I$(OUTDIR)/inc \
+))
 
-DLLPRE = # no leading "lib" on .so files
+$(eval $(call gb_GoogleTest_set_ldflags,comphelper_string,\
+    $$(LDFLAGS) \
+))
 
-INCPRE += $(MISC)$/$(TARGET)$/inc
-
-SHL1TARGET = $(TARGET)_weakbag
-SHL1OBJS = $(SLO)$/test_weakbag.obj
-SHL1STDLIBS = $(CPPUHELPERLIB) $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
-SHL1VERSIONMAP = version.map
-SHL1IMPLIB = i$(SHL1TARGET)
-DEF1NAME = $(SHL1TARGET)
-
-SLOFILES = $(SHL1OBJS)
-
-.INCLUDE: target.mk
-
-ALLTAR: test
-
-test .PHONY: $(SHL1TARGETN)
-    $(TESTSHL2) $(SHL1TARGETN)
+# vim: set noet sw=4 ts=4:

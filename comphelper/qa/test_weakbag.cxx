@@ -28,39 +28,39 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "comphelper/weakbag.hxx"
 #include "cppuhelper/weak.hxx"
-#include "testshl/simpleheader.hxx"
+#include "gtest/gtest.h"
 
 namespace {
 
 namespace css = com::sun::star;
 
-class Test: public CppUnit::TestFixture {
+class Test: public ::testing::Test {
 public:
-    void test() {
-        css::uno::Reference< css::uno::XInterface > ref1(new cppu::OWeakObject);
-        css::uno::Reference< css::uno::XInterface > ref2(new cppu::OWeakObject);
-        css::uno::Reference< css::uno::XInterface > ref3(new cppu::OWeakObject);
-        comphelper::WeakBag< css::uno::XInterface > bag;
-        bag.add(ref1);
-        bag.add(ref1);
-        bag.add(ref2);
-        bag.add(ref2);
-        ref1.clear();
-        bag.add(ref3);
-        ref3.clear();
-        CPPUNIT_ASSERT_MESSAGE("remove first ref2", bag.remove() == ref2);
-        CPPUNIT_ASSERT_MESSAGE("remove second ref2", bag.remove() == ref2);
-        CPPUNIT_ASSERT_MESSAGE("remove first null", !bag.remove().is());
-        CPPUNIT_ASSERT_MESSAGE("remove second null", !bag.remove().is());
-    }
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+TEST_F(Test, test) {
+    css::uno::Reference< css::uno::XInterface > ref1(new cppu::OWeakObject);
+    css::uno::Reference< css::uno::XInterface > ref2(new cppu::OWeakObject);
+    css::uno::Reference< css::uno::XInterface > ref3(new cppu::OWeakObject);
+    comphelper::WeakBag< css::uno::XInterface > bag;
+    bag.add(ref1);
+    bag.add(ref1);
+    bag.add(ref2);
+    bag.add(ref2);
+    ref1.clear();
+    bag.add(ref3);
+    ref3.clear();
+    ASSERT_TRUE(bag.remove() == ref2) << "remove first ref2";
+    ASSERT_TRUE(bag.remove() == ref2) << "remove second ref2";
+    ASSERT_TRUE(!bag.remove().is()) << "remove first null";
+    ASSERT_TRUE(!bag.remove().is()) << "remove second null";
+}
+
 
 }
 
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
