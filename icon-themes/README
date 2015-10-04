@@ -31,32 +31,6 @@ How to add a new image set:
 
 - Add its name (new_set) to WITH_THEMES variable in configure.ac
 
-- Add a vcl constant for it in vcl/inc/vcl/settings.hxx, e.g.
-  #define STYLE_SYMBOLS_NEW_SET ((ULONG)5)
-
-- Map the vcl constant to its real name in
-    ::rtl::OUString StyleSettings::ImplSymbolsStyleToName( sal_uLong nStyle ) const
-  and 
-    sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
-  both in vcl/source/app/settings.cxx, e.g.
-    case STYLE_SYMBOLS_NEW_SET: return ::rtl::OUString( "new_set" );
-  and 
-    else if ( rName == "new_set" )
-    	return STYLE_SYMBOLS_NEW_SET;
-
-- Add localized item names to 'ListBox LB_ICONSTYLE' to
-    'StringList [ de ]'
-  and 'StringList [ en-US ]', e.g.
-    < "New set" ; > ;
-  both in cui/source/options/optgdlg.src
-
-- Add the new_set to 'SymbolsStyle' property
-  in officecfg/registry/schema/org/openoffice/Office/Common.xcs.
-
-- The default theme for various desktops (KDE, GNOME, ...) is defined in
-    ULONG StyleSettings::GetCurrentSymbolsStyle() const in
-  vcl/source/app/settings.cxx
-
 - The fallback for particular icons is defined be packimages_CUSTOM_FALLBACK_1
   in packimages/CustomTarget_images.mk
 

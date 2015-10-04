@@ -11441,7 +11441,7 @@ WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        breeze|crystal|galaxy|hicontrast|human|industrial|oxygen|sifr|tango|tango_testing) real_theme="$theme" ;;
+        breeze|crystal|elementary|galaxy|hicontrast|human|industrial|oxygen|sifr|tango|tango_testing) real_theme="$theme" ;;
         default) real_theme=galaxy ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
