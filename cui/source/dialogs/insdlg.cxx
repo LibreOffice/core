@@ -127,7 +127,7 @@ IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, BrowseHdl, Button*, void)
 
     if( xFilePicker->execute() == ExecutableDialogResults::OK )
     {
-        Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
+        Sequence< OUString > aPathSeq( xFilePicker->getSelectedFiles() );
         INetURLObject aObj( aPathSeq[0] );
         m_pEdFilepath->SetText( aObj.PathToFileName() );
     }
@@ -382,7 +382,7 @@ IMPL_LINK_NOARG_TYPED(SvInsertPlugInDialog, BrowseHdl, Button*, void)
 
     if( xFilePicker->execute() == ExecutableDialogResults::OK )
     {
-        Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
+        Sequence< OUString > aPathSeq( xFilePicker->getSelectedFiles() );
         INetURLObject aObj( aPathSeq[0] );
         m_pEdFileurl->SetText(aObj.PathToFileName());
     }
