@@ -861,10 +861,9 @@ IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, AssignHdl_Impl, Button*, void)
 
 
 
-IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, SelectHdl_Impl, ListBox&, void)
 {
     EnableRemoveButton();
-    return 0;
 }
 
 
@@ -1066,10 +1065,9 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, RemoveHdl_Impl, Button*, void)
 
 
 
-IMPL_LINK_NOARG(SvxJavaClassPathDlg, SelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, SelectHdl_Impl, ListBox&, void)
 {
     EnableRemoveButton();
-    return 0;
 }
 
 
@@ -1129,7 +1127,7 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
     }
     // select first entry
     m_pPathList->SelectEntryPos(0);
-    SelectHdl_Impl( NULL );
+    SelectHdl_Impl( *m_pPathList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

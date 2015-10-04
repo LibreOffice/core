@@ -251,7 +251,7 @@ IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, AddHdl, Button*, void)
                             bCoreDataChanged = true;
                         }
 
-                        SelFmtHdl( 0 );
+                        SelFmtHdl( *m_pLbFormat.get() );
                         bOk = true;
                     }
                     else
@@ -305,11 +305,11 @@ IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, RemoveHdl, Button*, void)
             pFormat->erase(it);
             nIndex--;
 
-            SelFmtHdl( 0 );
+            SelFmtHdl( *m_pLbFormat.get() );
         }
     }
 
-    SelFmtHdl( 0 );
+    SelFmtHdl( *m_pLbFormat.get() );
 }
 
 IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, RenameHdl, Button*, void)
@@ -374,7 +374,7 @@ IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, RenameHdl, Button*, void)
                         bCoreDataChanged = true;
                     }
 
-                    SelFmtHdl( 0 );
+                    SelFmtHdl( *m_pLbFormat.get() );
                     bOk = true;
                     bFmtRenamed = true;
                 }
@@ -393,7 +393,7 @@ IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, RenameHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
+IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, SelFmtHdl, ListBox&, void)
 {
     nIndex = m_pLbFormat->GetSelectEntryPos();
     UpdateChecks();
@@ -411,8 +411,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
 
     ScAutoFormatData* p = pFormat->findByIndex(nIndex);
     m_pWndPreview->NotifyChange(p);
-
-    return 0;
 }
 
 OUString ScAutoFormatDlg::GetCurrFormatName()

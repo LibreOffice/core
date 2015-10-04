@@ -78,7 +78,7 @@ private:
     DECL_LINK_TYPED(DownHdl, Button*, void);
     DECL_LINK_TYPED(RemoveHdl, Button*, void);
 
-    DECL_LINK(SelectHdl, void*);
+    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
 
     Reference< drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
         Reference< drawing::XDrawPages > xDrawPages);

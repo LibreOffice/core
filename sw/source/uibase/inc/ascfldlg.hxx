@@ -42,7 +42,7 @@ class SwAsciiFilterDlg : public SfxModalDialog
     VclPtr<RadioButton>        m_pLF_RB;
     bool                m_bSaveLineStatus;
 
-    DECL_LINK( CharSetSelHdl, SvxTextEncodingBox* );
+    DECL_LINK_TYPED( CharSetSelHdl, ListBox&, void );
     DECL_LINK_TYPED( LineEndHdl, RadioButton&, void );
     void SetCRLF( LineEnd eEnd );
     LineEnd GetCRLF() const;

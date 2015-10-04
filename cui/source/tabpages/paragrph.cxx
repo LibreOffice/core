@@ -765,12 +765,12 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
             break;
         default: ;//prevent warning
     }
-    LineDistHdl_Impl( m_pLineDist );
+    LineDistHdl_Impl( *m_pLineDist );
 }
 
-IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
+IMPL_LINK_TYPED( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void )
 {
-    switch( pBox->GetSelectEntryPos() )
+    switch( rBox.GetSelectEntryPos() )
     {
         case LLINESPACE_1:
         case LLINESPACE_15:
@@ -832,7 +832,6 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
         break;
     }
     UpdateExample_Impl();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxStdParagraphTabPage, ModifyHdl_Impl)
@@ -1295,16 +1294,15 @@ IMPL_LINK_NOARG_TYPED(SvxParaAlignTabPage, AlignHdl_Impl, Button*, void)
     UpdateExample_Impl();
 }
 
-IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxParaAlignTabPage, LastLineHdl_Impl, ListBox&, void)
 {
     //fdo#41350 only enable 'Expand last word' if last line is also justified
     bool bLastLineIsBlock = m_pLastLineLB->GetSelectEntryPos() == 2;
     m_pExpandCB->Enable(bLastLineIsBlock);
     UpdateExample_Impl();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox&, void)
 {
     SvxFrameDirection eDir = m_pTextDirectionLB->GetSelectEntryValue();
     switch ( eDir )
@@ -1318,8 +1316,6 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl)
             SAL_WARN( "cui.tabpages", "SvxParaAlignTabPage::TextDirectionHdl_Impl(): other directions not supported" );
         }
     }
-
-    return 0;
 }
 
 void SvxParaAlignTabPage::UpdateExample_Impl()
@@ -1737,7 +1733,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
             }
         }
 
-        PageBreakPosHdl_Impl( m_pBreakPositionLB );
+        PageBreakPosHdl_Impl( *m_pBreakPositionLB );
         PageBreakHdl_Impl( m_pPageBreakBox );
     }
 
@@ -2127,9 +2123,9 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, Button*, v
     }
 }
 
-IMPL_LINK( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox *, pListBox )
+IMPL_LINK_TYPED( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox&, rListBox, void )
 {
-    if ( 0 == pListBox->GetSelectEntryPos() )
+    if ( 0 == rListBox.GetSelectEntryPos() )
     {
         m_pApplyCollBtn->Enable();
 
@@ -2143,7 +2139,7 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox *, pListBox )
             m_pPagenumEdit->Enable(bEnable);
         }
     }
-    else if ( 1 == pListBox->GetSelectEntryPos() )
+    else if ( 1 == rListBox.GetSelectEntryPos() )
     {
         m_pApplyCollBtn->SetState( TRISTATE_FALSE );
         m_pApplyCollBtn->Enable(false);
@@ -2151,14 +2147,13 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox *, pListBox )
         m_pPagenumText->Enable(false);
         m_pPagenumEdit->Enable(false);
     }
-    return 0;
 }
 
-IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox *, pListBox )
+IMPL_LINK_TYPED( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox&, rListBox, void )
 {
     //column break or break break after
     sal_Int32 nBreakPos = m_pBreakPositionLB->GetSelectEntryPos();
-    if ( pListBox->GetSelectEntryPos() == 1 || 1 == nBreakPos)
+    if ( rListBox.GetSelectEntryPos() == 1 || 1 == nBreakPos)
     {
         m_pApplyCollBtn->SetState( TRISTATE_FALSE );
         m_pApplyCollBtn->Enable(false);
@@ -2167,8 +2162,7 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox *, pListBox )
         m_pPagenumEdit->Enable(false);
     }
     else
-        PageBreakPosHdl_Impl( m_pBreakPositionLB );
-    return 0;
+        PageBreakPosHdl_Impl( *m_pBreakPositionLB );
 }
 
 void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)

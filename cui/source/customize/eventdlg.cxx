@@ -97,7 +97,7 @@ void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFra
 
     InitAndSetHandler( m_xAppEvents, m_xDocumentEvents, m_xDocumentModifiable );
 
-    SelectHdl_Impl( NULL );
+    SelectHdl_Impl( *m_pSaveInListBox );
 }
 
 SvxEventConfigPage::~SvxEventConfigPage()
@@ -167,10 +167,8 @@ void SvxEventConfigPage::ImplInitDocument()
     }
 }
 
-IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
+IMPL_LINK_NOARG_TYPED( SvxEventConfigPage, SelectHdl_Impl, ListBox&, void )
 {
-    (void)pBox;
-
     bool* bApp = static_cast<bool*>(m_pSaveInListBox->GetEntryData(
             m_pSaveInListBox->GetSelectEntryPos()));
 
@@ -209,7 +207,6 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     }
 
     mpImpl->pEventLB->SetUpdateMode( true );
-    return sal_IntPtr(true);
 }
 
 bool SvxEventConfigPage::FillItemSet( SfxItemSet* rSet )

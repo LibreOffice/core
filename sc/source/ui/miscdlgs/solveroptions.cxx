@@ -361,7 +361,7 @@ IMPL_LINK_NOARG_TYPED(ScSolverOptionsDialog, SettingsDoubleClickHdl, SvTreeListB
     return false;
 }
 
-IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl)
+IMPL_LINK_NOARG_TYPED(ScSolverOptionsDialog, EngineSelectHdl, ListBox&, void)
 {
     const sal_Int32 nSelectPos = m_pLbEngine->GetSelectEntryPos();
     if ( nSelectPos < maImplNames.getLength() )
@@ -374,7 +374,6 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl)
             FillListBox();                  // using maProperties
         }
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScSolverOptionsDialog, SettingsSelHdl, SvTreeListBox*, void)

@@ -176,7 +176,7 @@ public:
     bool select( const OUString& rsPresetId );
 
 private:
-    DECL_LINK( implSelectHdl, Control* );
+    DECL_LINK_TYPED( implSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( implDoubleClickHdl, CategoryListBox&, void );
 
     void onSelectEffect();
@@ -307,11 +307,10 @@ void CustomAnimationCreateTabPage::dispose()
     TabPage::dispose();
 }
 
-IMPL_LINK( CustomAnimationCreateTabPage, implSelectHdl, Control*, pControl )
+IMPL_LINK_TYPED( CustomAnimationCreateTabPage, implSelectHdl, ListBox&, rControl, void )
 {
-    if( pControl == mpLBEffects )
+    if( &rControl == mpLBEffects )
         onSelectEffect();
-    return 0;
 }
 
 IMPL_LINK_TYPED( CustomAnimationCreateTabPage, implDoubleClickHdl, CategoryListBox&, rControl, void )

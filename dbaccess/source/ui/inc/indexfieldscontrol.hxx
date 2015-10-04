@@ -84,7 +84,7 @@ namespace dbaui
 
         bool isNewField() const { return GetCurRow() >= (sal_Int32)m_aFields.size(); }
 
-        DECL_LINK( OnListEntrySelected, ListBox* );
+        DECL_LINK( OnListEntrySelected, void* );
 
     private:
         using ::svt::EditBrowseBox::Init;

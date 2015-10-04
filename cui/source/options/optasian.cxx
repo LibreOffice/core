@@ -139,7 +139,7 @@ SvxAsianLayoutPage::SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& 
     get(m_pEndED, "end");
     get(m_pHintFT, "hintft");
 
-    LanguageHdl(m_pLanguageLB);
+    LanguageHdl(*m_pLanguageLB);
     m_pLanguageLB->SetSelectHdl(LINK(this, SvxAsianLayoutPage, LanguageHdl));
     m_pStandardCB->SetClickHdl(LINK(this, SvxAsianLayoutPage, ChangeStandardHdl));
     Link<> aLk(LINK(this, SvxAsianLayoutPage, ModifyHdl));
@@ -310,10 +310,10 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
             eLastUsedLanguageTypeForForbiddenCharacters = LANGUAGE_CHINESE_TRADITIONAL;
     }
     m_pLanguageLB->SelectLanguage( eLastUsedLanguageTypeForForbiddenCharacters );
-    LanguageHdl(m_pLanguageLB);
+    LanguageHdl(*m_pLanguageLB);
 }
 
-IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
+IMPL_LINK_NOARG_TYPED(SvxAsianLayoutPage, LanguageHdl, ListBox&, void)
 {
     //set current value
     LanguageType eSelectLanguage = m_pLanguageLB->GetSelectLanguage();
@@ -374,8 +374,6 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
     m_pEndFT->Enable(bAvail);
     m_pStartED->SetText(sStart);
     m_pEndED->SetText(sEnd);
-
-    return 0;
 }
 
 IMPL_LINK_TYPED(SvxAsianLayoutPage, ChangeStandardHdl, Button*, pBox, void)

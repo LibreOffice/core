@@ -91,8 +91,8 @@ class SwNumPositionTabPage : public SfxTabPage
 
     void                InitControls();
 
-    DECL_LINK( LevelHdl, ListBox * );
-    DECL_LINK(EditModifyHdl, void *);
+    DECL_LINK_TYPED( LevelHdl, ListBox&, void );
+    DECL_LINK_TYPED(EditModifyHdl, ListBox&, void);
     DECL_LINK( DistanceHdl, MetricField * );
     DECL_LINK_TYPED( DistanceLoseFocusHdl, Control&, void );
     DECL_LINK_TYPED( RelativeHdl, Button*, void );
@@ -101,7 +101,7 @@ class SwNumPositionTabPage : public SfxTabPage
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
 
-    DECL_LINK(LabelFollowedByHdl_Impl, void *);
+    DECL_LINK_TYPED(LabelFollowedByHdl_Impl, ListBox&, void);
     DECL_LINK( ListtabPosHdl_Impl, MetricField* );
     DECL_LINK( AlignAtHdl_Impl, MetricField* );
     DECL_LINK( IndentAtHdl_Impl, MetricField* );

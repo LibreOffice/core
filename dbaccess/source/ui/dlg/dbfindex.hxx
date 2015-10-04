@@ -89,7 +89,7 @@ protected:
     DECL_LINK_TYPED( AddAllClickHdl, Button*, void );
     DECL_LINK_TYPED( RemoveAllClickHdl, Button*, void );
     DECL_LINK_TYPED( OKClickHdl, Button*, void );
-    DECL_LINK( OnListEntrySelected, ListBox* );
+    DECL_LINK_TYPED( OnListEntrySelected, ListBox&, void );
 
     OUString            m_aDSN;
     TableInfoList       m_aTableInfoList;

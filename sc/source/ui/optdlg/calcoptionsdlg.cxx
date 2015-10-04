@@ -222,18 +222,15 @@ IMPL_LINK_TYPED(ScCalcOptionsDialog, AsZeroModifiedHdl, Button*, pCheckBox, void
     maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero = static_cast<CheckBox*>(pCheckBox)->IsChecked();
 }
 
-IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox*, pConv )
+IMPL_LINK_TYPED(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox&, rConv, void )
 {
-
-    maConfig.meStringConversion = (ScCalcConfig::StringConversion)pConv->GetSelectEntryPos();
+    maConfig.meStringConversion = (ScCalcConfig::StringConversion)rConv.GetSelectEntryPos();
     CoupleEmptyAsZeroToStringConversion();
-    return 0;
 }
 
-IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox*, pSyntax)
+IMPL_LINK_TYPED(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox&, rSyntax, void)
 {
-    maConfig.SetStringRefSyntax(toAddressConvention(pSyntax->GetSelectEntryPos()));
-    return 0;
+    maConfig.SetStringRefSyntax(toAddressConvention(rSyntax.GetSelectEntryPos()));
 }
 
 IMPL_LINK_TYPED(ScCalcOptionsDialog, CBUseOpenCLHdl, Button*, pCheckBox, void)

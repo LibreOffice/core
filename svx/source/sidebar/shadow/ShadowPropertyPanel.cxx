@@ -124,9 +124,8 @@ void ShadowPropertyPanel::Initialize()
     mpLBShadowColor->Fill(pColorList);
     mpShowShadow->SetState( TRISTATE_FALSE );
     mpShowShadow->SetClickHdl( LINK(this, ShadowPropertyPanel, ClickShadowHdl ) );
-    Link<> aLink = LINK( this, ShadowPropertyPanel, ModifyShadowColorHdl );
     mpShadowTransMetric->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransMetricHdl) );
-    mpLBShadowColor->SetSelectHdl( aLink );
+    mpLBShadowColor->SetSelectHdl( LINK( this, ShadowPropertyPanel, ModifyShadowColorHdl ) );
     mpShadowAngle->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
     mpShadowDistance->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
     mpShadowTransSlider->SetRange(Range(0,100));
@@ -150,11 +149,10 @@ IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ClickShadowHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowColorHdl)
+IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowColorHdl, ListBox&, void)
 {
     XColorItem aItem(makeSdrShadowColorItem(mpLBShadowColor->GetSelectEntryColor()));
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_SHADOW_COLOR, SfxCallMode::RECORD, &aItem,  0L);
-    return 0;
 }
 
 IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransMetricHdl)

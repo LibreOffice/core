@@ -971,7 +971,7 @@ IMPL_LINK_TYPED( SdPublishingDlg, DesignHdl, Button *, pButton, void )
 }
 
 // Clickhandler for the choice of one design
-IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl)
+IMPL_LINK_NOARG_TYPED(SdPublishingDlg, DesignSelectHdl, ListBox&, void)
 {
     const sal_Int32 nPos = pPage1_Designs->GetSelectEntryPos();
     m_pDesign = &m_aDesignList[nPos];
@@ -981,8 +981,6 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl)
         SetDesign(m_pDesign);
 
     UpdatePage();
-
-    return 0;
 }
 
 // Clickhandler for the delete of one design

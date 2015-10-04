@@ -235,7 +235,7 @@ private:
     DECL_LINK_TYPED( CommandHdl_Impl, Button*, void );
     DECL_LINK_TYPED(TemplateHdl_Impl, Button*, void);
     DECL_LINK_TYPED( FocusHdl_Impl, Control&, void );
-    DECL_LINK( LBSelectHdl_Impl, Control* );
+    DECL_LINK_TYPED( LBSelectHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED(LoseFocusHdl_Impl, Control&, void);
     DECL_LINK_TYPED(FormatHdl_Impl, Button*, void);
     DECL_LINK_TYPED(NoFormatHdl_Impl, Button*, void);

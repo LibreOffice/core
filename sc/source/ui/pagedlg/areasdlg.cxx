@@ -539,8 +539,9 @@ IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_GetFocusHdl, Control&, rCtrl, void )
     }
 }
 
-IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_SelectHdl, ListBox&, rLb, void )
 {
+    ListBox* pLb = &rLb;
     const sal_Int32 nSelPos = pLb->GetSelectEntryPos();
     Edit* pEd = NULL;
 
@@ -562,7 +563,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
     else if( pLb == pLbRepeatRow )
         pEd = pEdRepeatRow;
     else
-        return 0;
+        return;
 
     // fill edit field according to list box selection
     if( (nSelPos == 0) || (nSelPos == nAllSheetPos) )
@@ -571,8 +572,6 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
         pLb->SelectEntryPos( 0 );
     else if( nSelPos >= nFirstCustomPos )
         pEd->SetText( *static_cast< OUString* >( pLb->GetEntryData( nSelPos ) ) );
-
-    return 0;
 }
 
 IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )

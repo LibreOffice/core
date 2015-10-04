@@ -182,7 +182,7 @@ private:
     DECL_LINK_TYPED( LastPageHdl, Button*, void );
 
     DECL_LINK_TYPED( DesignHdl, Button*, void );
-    DECL_LINK( DesignSelectHdl, void * );
+    DECL_LINK_TYPED( DesignSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( DesignDeleteHdl, Button*, void );
     DECL_LINK_TYPED( BaseHdl, Button*, void );
     DECL_LINK_TYPED( ContentHdl, Button*, void );

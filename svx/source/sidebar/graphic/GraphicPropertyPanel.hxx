@@ -89,7 +89,7 @@ private:
     DECL_LINK( ModifyBrightnessHdl, void * );
     DECL_LINK( ModifyContrastHdl, void * );
     DECL_LINK( ModifyTransHdl, void * );
-    DECL_LINK( ClickColorModeHdl, void * );
+    DECL_LINK_TYPED( ClickColorModeHdl, ListBox&, void );
     DECL_LINK( RedHdl, void*);
     DECL_LINK( GreenHdl, void*);
     DECL_LINK( BlueHdl, void*);

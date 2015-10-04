@@ -66,7 +66,7 @@ private:
 
     DECL_LINK_TYPED(AddHdl_Impl, Button*, void);
     DECL_LINK_TYPED(DelHdl_Impl, Button*, void);
-    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK_TYPED(SelectHdl_Impl, ListBox&, void);
 
 public:
     SvxPathSelectDialog(vcl::Window* pParent);

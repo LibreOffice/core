@@ -149,7 +149,7 @@ private:
     bool mbEnableDrawingLayerFillStyles : 1;
 
     void                Init_Impl();
-    DECL_LINK(          LayoutHdl_Impl, void *);
+    DECL_LINK_TYPED(    LayoutHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(    PaperBinHdl_Impl, Control&, void);
     DECL_LINK_TYPED(    SwapOrientation_Impl, Button*, void );
     void                SwapFirstValues_Impl( bool bSet );
@@ -158,10 +158,10 @@ private:
     DECL_LINK_TYPED(    CenterHdl_Impl, Button*, void);
     void                UpdateExample_Impl( bool bResetbackground = false );
 
-    DECL_LINK(          PaperSizeSelect_Impl, ListBox* );
+    DECL_LINK_TYPED(    PaperSizeSelect_Impl, ListBox&, void );
     DECL_LINK(          PaperSizeModify_Impl, void *);
 
-    DECL_LINK(          FrameDirectionModify_Impl, ListBox* );
+    DECL_LINK_TYPED(    FrameDirectionModify_Impl, ListBox&, void );
 
     void                ResetBackground_Impl( const SfxItemSet& rSet );
 

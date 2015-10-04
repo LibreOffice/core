@@ -146,8 +146,7 @@ private:
     bool            mbHandoutMode;
 
     DECL_LINK_TYPED( UpdateOnClickHdl, Button*, void );
-
-    DECL_LINK( LanguageChangeHdl, void * );
+    DECL_LINK_TYPED( LanguageChangeHdl, ListBox&, void );
 
     void FillFormatList(int eFormat);
     void GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet );
@@ -477,11 +476,9 @@ void HeaderFooterTabPage::dispose()
     TabPage::dispose();
 }
 
-IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)
+IMPL_LINK_NOARG_TYPED(HeaderFooterTabPage, LanguageChangeHdl, ListBox&, void)
 {
     FillFormatList( (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetSelectEntryData()) );
-
-    return 0L;
 }
 
 void HeaderFooterTabPage::FillFormatList( int eFormat )

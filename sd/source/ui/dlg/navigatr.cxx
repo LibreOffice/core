@@ -425,7 +425,7 @@ IMPL_LINK_NOARG_TYPED(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
     return false;
 }
 
-IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
+IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectDocumentHdl, ListBox&, void)
 {
     OUString aStrLb = maLbDocs->GetSelectEntry();
     long   nPos = maLbDocs->GetSelectEntryPos();
@@ -465,8 +465,6 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
         meDragType = NAVIGATOR_DRAGTYPE_EMBEDDED;
         SetDragImage();
     }
-
-    return 0L;
 }
 
 /**

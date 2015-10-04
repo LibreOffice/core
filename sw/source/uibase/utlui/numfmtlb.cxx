@@ -366,14 +366,14 @@ sal_uLong NumFormatListBox::GetFormat() const
     return reinterpret_cast<sal_uLong>(GetEntryData(nPos));
 }
 
-IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
+IMPL_LINK_TYPED( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
 {
-    const sal_Int32 nPos = pBox->GetSelectEntryPos();
+    const sal_Int32 nPos = rBox.GetSelectEntryPos();
     OUString sDefine(SW_RES( STR_DEFINE_NUMBERFORMAT ));
     SwView *pView = GetView();
 
-    if( pView && nPos == pBox->GetEntryCount() - 1 &&
-        pBox->GetEntry( nPos ) == sDefine )
+    if( pView && nPos == rBox.GetEntryCount() - 1 &&
+        rBox.GetEntry( nPos ) == sDefine )
     {
         SwWrtShell &rSh = pView->GetWrtShell();
         SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
@@ -442,7 +442,6 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         else
             SetDefFormat(nFormat);
     }
-    return 0;
 }
 
 double NumFormatListBox::GetDefValue(const short nFormatType) const

@@ -60,10 +60,11 @@ class SwFieldRefPage : public SwFieldPage
     // fallback, if previously selected text node doesn't exist anymore
     size_t mnSavedSelectedPos;
 
-    DECL_LINK(TypeHdl, void *);
-    DECL_LINK(SubTypeHdl, void * = 0);
+    DECL_LINK_TYPED(TypeHdl, ListBox&, void);
+    DECL_LINK_TYPED(SubTypeListBoxHdl, ListBox&, void);
     DECL_LINK_TYPED(SubTypeTreeListBoxHdl, SvTreeListBox*, void);
     DECL_LINK(ModifyHdl, void * = 0);
+    void SubTypeHdl();
 
     void                UpdateSubType();
     sal_Int32               FillFormatLB(sal_uInt16 nTypeId);

@@ -30,6 +30,7 @@
 
 class NotifyEvent;
 class Control;
+class ListBox;
 
 namespace pcr
 {
@@ -86,7 +87,8 @@ namespace pcr
         virtual vcl::Window* getVclWindow() = 0;
 
         /// may be used by derived classes, they forward the event to the PropCtrListener
-        DECL_LINK( ModifiedHdl, vcl::Window* );
+        DECL_LINK( ModifiedHdl, void* );
+        DECL_LINK_TYPED( SelectHdl, ListBox&, void );
         DECL_LINK_TYPED( GetFocusHdl, Control&, void );
         DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
     };

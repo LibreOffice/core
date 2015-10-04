@@ -82,6 +82,8 @@ namespace dbaui
 
         // <method>OGenericAdministrationPage::fillWindows</method>
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+    private:
+        DECL_LINK_TYPED(CharsetSelectHdl, ListBox&, void);
     };
 
     // ODbaseDetailsPage

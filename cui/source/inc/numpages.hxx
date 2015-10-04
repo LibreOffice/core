@@ -320,19 +320,20 @@ class SvxNumOptionsTabPage : public SfxTabPage
     void                SwitchNumberType( sal_uInt8 nType, bool bBmp = false );
     void                CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
-        DECL_LINK( NumberTypeSelectHdl_Impl, ListBox * );
-        DECL_LINK( LevelHdl_Impl, ListBox * );
+        DECL_LINK_TYPED( NumberTypeSelectHdl_Impl, ListBox&, void );
+        DECL_LINK_TYPED( LevelHdl_Impl, ListBox&, void );
         DECL_LINK_TYPED( PopupActivateHdl_Impl, Menu *, bool);
         DECL_LINK_TYPED( GraphicHdl_Impl, MenuButton *, void );
         DECL_LINK_TYPED( BulletHdl_Impl, Button*, void);
         DECL_LINK( SizeHdl_Impl, MetricField * );
         DECL_LINK_TYPED( RatioHdl_Impl, Button*, void );
-        DECL_LINK( CharFmtHdl_Impl, void *);
-        DECL_LINK( EditModifyHdl_Impl, Edit * );
+        DECL_LINK_TYPED( CharFmtHdl_Impl, ListBox&, void );
+        DECL_LINK( EditModifyHdl_Impl, Edit* );
+        DECL_LINK_TYPED( EditListBoxHdl_Impl, ListBox&, void );
         DECL_LINK( AllLevelHdl_Impl, NumericField * );
-        DECL_LINK( OrientHdl_Impl, ListBox * );
+        DECL_LINK_TYPED( OrientHdl_Impl, ListBox&, void );
         DECL_LINK_TYPED( SameLevelHdl_Impl, Button*, void );
-        DECL_LINK( BulColorHdl_Impl, ColorListBox* );
+        DECL_LINK_TYPED( BulColorHdl_Impl, ListBox&, void );
         DECL_LINK( BulRelSizeHdl_Impl, MetricField *);
         DECL_LINK_TYPED( PreviewInvalidateHdl_Impl, Timer *, void);
 
@@ -426,8 +427,8 @@ class SvxNumPositionTabPage : public SfxTabPage
 
     void                InitControls();
 
-    DECL_LINK( LevelHdl_Impl, ListBox * );
-    DECL_LINK( EditModifyHdl_Impl, void *);
+    DECL_LINK_TYPED( LevelHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( EditModifyHdl_Impl, ListBox&, void);
     DECL_LINK( DistanceHdl_Impl, MetricField * );
     DECL_LINK_TYPED( DistanceFocusHdl_Impl, Control&, void );
     DECL_LINK_TYPED( RelativeHdl_Impl, Button*, void );
@@ -436,7 +437,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
 
-    DECL_LINK(LabelFollowedByHdl_Impl, void *);
+    DECL_LINK_TYPED(LabelFollowedByHdl_Impl, ListBox&, void);
     DECL_LINK( ListtabPosHdl_Impl, MetricField* );
     DECL_LINK( AlignAtHdl_Impl, MetricField* );
     DECL_LINK( IndentAtHdl_Impl, MetricField* );

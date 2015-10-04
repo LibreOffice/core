@@ -569,9 +569,9 @@ IMPL_LINK_NOARG_TYPED(SvxRubyDialog, ApplyHdl_Impl, Button*, void)
     if (!aRubyValues.getLength())
     {
         AssertOneEntry();
-        PositionHdl_Impl(m_pPositionLB);
-        AdjustHdl_Impl(m_pAdjustLB);
-        CharStyleHdl_Impl(m_pCharStyleLB);
+        PositionHdl_Impl(*m_pPositionLB);
+        AdjustHdl_Impl(*m_pAdjustLB);
+        CharStyleHdl_Impl(*m_pCharStyleLB);
     }
     GetRubyText();
     //reset all edit fields - SaveValue is called
@@ -608,10 +608,10 @@ IMPL_LINK_NOARG_TYPED(SvxRubyDialog, StylistHdl_Impl, Button*, void)
     delete pState;
 }
 
-IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
+IMPL_LINK_TYPED(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
 {
     AssertOneEntry();
-    sal_Int16 nAdjust = pBox->GetSelectEntryPos();
+    sal_Int16 nAdjust = rBox.GetSelectEntryPos();
     Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
     for (sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
     {
@@ -625,13 +625,12 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
         SetModified(true);
     }
     m_pPreviewWin->Invalidate();
-    return 0;
 }
 
-IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
+IMPL_LINK_TYPED(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
 {
     AssertOneEntry();
-    sal_Bool bAbove = !pBox->GetSelectEntryPos();
+    sal_Bool bAbove = !rBox.GetSelectEntryPos();
     const Type& rType = cppu::UnoType<bool>::get();
     Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
     for (sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
@@ -646,10 +645,9 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
         SetModified(true);
     }
     m_pPreviewWin->Invalidate();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxRubyDialog, CharStyleHdl_Impl, ListBox&, void)
 {
     AssertOneEntry();
     OUString sStyleName;
@@ -669,7 +667,6 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl)
         }
         SetModified(true);
     }
-    return 0;
 }
 
 IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)

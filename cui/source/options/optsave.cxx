@@ -185,7 +185,7 @@ SvxSaveTabPage::SvxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
         pImpl->aDefaultReadonlyArr[APP_WRITER_GLOBAL] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::WRITERGLOBAL);
     }
 
-    Link<> aLink = LINK( this, SvxSaveTabPage, ODFVersionHdl_Impl );
+    Link<ListBox&,void> aLink = LINK( this, SvxSaveTabPage, ODFVersionHdl_Impl );
     aODFVersionLB->SetSelectHdl( aLink );
     aLink = LINK( this, SvxSaveTabPage, FilterHdl_Impl );
     aDocTypeLB->SetSelectHdl( aLink );
@@ -460,7 +460,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
                 }
             }
             aDocTypeLB->SelectEntryPos(0);
-            FilterHdl_Impl(aDocTypeLB);
+            FilterHdl_Impl(*aDocTypeLB);
         }
         catch(Exception& e)
         {
@@ -497,7 +497,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     aODFVersionLB->SelectEntryPos( aODFVersionLB->GetEntryPos( pDefaultVersion ) );
 
     AutoClickHdl_Impl( aAutoSaveCB );
-    ODFVersionHdl_Impl( aODFVersionLB );
+    ODFVersionHdl_Impl( *aODFVersionLB );
 
     aDocInfoCB->SaveValue();
     aBackupCB->SaveValue();
@@ -558,7 +558,7 @@ static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties)
     return sName;
 }
 
-IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
+IMPL_LINK_TYPED( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
 {
     const sal_Int32 nCurPos = aDocTypeLB->GetSelectEntryPos();
 
@@ -568,7 +568,7 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 
     if ( nData >= 0 && nData < APP_COUNT )
     {
-        if(aDocTypeLB == pBox)
+        if(aDocTypeLB == &rBox)
         {
             aSaveAsLB->Clear();
             const OUString* pFilters = pImpl->aFilterArr[nData].getConstArray();
@@ -604,7 +604,7 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
         }
         else
         {
-            OUString sSelect = pBox->GetSelectEntry();
+            OUString sSelect = rBox.GetSelectEntry();
             const OUString* pFilters = pImpl->aFilterArr[nData].getConstArray();
             OUString* pUIFilters = pImpl->aUIFilterArr[nData].getArray();
             for(int i = 0; i < pImpl->aUIFilterArr[nData].getLength(); i++)
@@ -618,11 +618,10 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
         }
     }
 
-    ODFVersionHdl_Impl( aSaveAsLB );
-    return 0;
+    ODFVersionHdl_Impl( *aSaveAsLB );
 };
 
-IMPL_LINK_NOARG(SvxSaveTabPage, ODFVersionHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxSaveTabPage, ODFVersionHdl_Impl, ListBox&, void)
 {
     sal_IntPtr nVersion = sal_IntPtr( aODFVersionLB->GetSelectEntryData() );
     bool bShown = SvtSaveOptions::ODFDefaultVersion( nVersion ) != SvtSaveOptions::ODFVER_LATEST;
@@ -645,8 +644,6 @@ IMPL_LINK_NOARG(SvxSaveTabPage, ODFVersionHdl_Impl)
 
     aODFWarningFI->Show( bShown );
     aODFWarningFT->Show( bShown );
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

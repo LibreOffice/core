@@ -65,8 +65,8 @@ private:
 
     void            SetupAnsatz_Impl( sal_uInt16 nType );
     void            SetupType_Impl( sal_uInt16 nType );
-    DECL_LINK( AnsatzSelectHdl_Impl, ListBox * );
-    DECL_LINK( AnsatzRelSelectHdl_Impl, ListBox * );
+    DECL_LINK_TYPED( AnsatzSelectHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( AnsatzRelSelectHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( LineOptHdl_Impl, Button *, void );
     DECL_LINK_TYPED( SelectCaptTypeHdl_Impl, ValueSet*, void );
 

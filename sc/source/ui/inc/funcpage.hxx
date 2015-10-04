@@ -61,8 +61,8 @@ private:
 
     const ScFuncDesc*   aLRUList[LRU_MAX];
 
-                    DECL_LINK( SelHdl, ListBox* );
-                    DECL_LINK( DblClkHdl, ListBox* );
+                    DECL_LINK_TYPED( SelHdl, ListBox&, void );
+                    DECL_LINK_TYPED( DblClkHdl, ListBox&, void );
 
 protected:
 

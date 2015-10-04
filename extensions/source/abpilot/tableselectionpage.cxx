@@ -93,10 +93,9 @@ namespace abp
     }
 
 
-    IMPL_LINK( TableSelectionPage, OnTableSelected, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG_TYPED( TableSelectionPage, OnTableSelected, ListBox&, void )
     {
         updateDialogTravelUI();
-        return 0L;
     }
 
 

@@ -493,10 +493,9 @@ IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
     {}
 }
 
-IMPL_LINK_NOARG( CmisDetailsContainer, SelectRepoHdl  )
+IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, SelectRepoHdl, ListBox&, void )
 {
     selectRepository( );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

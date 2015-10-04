@@ -176,7 +176,7 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
     m_pListItemED->SetReturnActionLink(LINK(this, SwFieldFuncPage, ListModifyReturnActionHdl));
     Link<> aListEnableLk = LINK(this, SwFieldFuncPage, ListEnableHdl);
     m_pListItemED->SetModifyHdl(aListEnableLk);
-    m_pListItemsLB->SetSelectHdl(aListEnableLk);
+    m_pListItemsLB->SetSelectHdl(LINK(this, SwFieldFuncPage, ListEnableListBoxHdl));
 
     if( !IsRefresh() )
     {
@@ -196,7 +196,7 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
             }
         }
     }
-    TypeHdl(0);
+    TypeHdl(*m_pTypeLB);
 
     m_pTypeLB->SetUpdateMode(true);
 
@@ -210,7 +210,7 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
     }
 }
 
-IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldFuncPage, TypeHdl, ListBox&, void)
 {
     // save old ListBoxPos
     const sal_Int32 nOld = GetTypeSel();
@@ -401,23 +401,19 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl)
 
         EnableInsert( bInsert );
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwFieldFuncPage, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldFuncPage, SelectHdl, ListBox&, void)
 {
     const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     if( TYP_MACROFLD == nTypeId )
         m_pNameED->SetText( m_pSelectionLB->GetSelectEntry() );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwFieldFuncPage, InsertMacroHdl, ListBox&, void)
 {
-    SelectHdl(NULL);
+    SelectHdl(*m_pSelectionLB);
     InsertHdl(nullptr);
 }
 
@@ -475,6 +471,10 @@ void SwFieldFuncPage::ListModifyHdl(Control* pControl)
     ListEnableHdl(0);
 }
 
+IMPL_LINK_NOARG_TYPED(SwFieldFuncPage, ListEnableListBoxHdl, ListBox&, void)
+{
+    ListEnableHdl(0);
+}
 IMPL_LINK_NOARG(SwFieldFuncPage, ListEnableHdl)
 {
     //enable "Add" button when text is in the Edit that's not already member of the box

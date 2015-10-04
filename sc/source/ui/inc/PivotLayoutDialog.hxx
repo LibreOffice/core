@@ -94,7 +94,8 @@ private:
     DECL_LINK_TYPED(LoseFocusHandler,    Control&, void);
     DECL_LINK_TYPED(ToggleSource,        RadioButton&, void);
     DECL_LINK_TYPED(ToggleDestination,   RadioButton&, void);
-    DECL_LINK(SourceEditModified, void*);
+    DECL_LINK_TYPED(SourceListSelected,  ListBox&, void);
+    DECL_LINK(SourceEditModified,  void*);
     void ToggleSource();
     void ToggleDestination();
     virtual bool Close() SAL_OVERRIDE;

@@ -2647,10 +2647,9 @@ IMPL_LINK_NOARG_TYPED(CodeCompleteListBox, ImplDoubleClickHdl, ListBox&, void)
     InsertSelectedEntry();
 }
 
-IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectHdl)
+IMPL_LINK_NOARG_TYPED(CodeCompleteListBox, ImplSelectHdl, ListBox&, void)
 {//give back the focus to the parent
     pCodeCompleteWindow->pParent->GrabFocus();
-    return 0;
 }
 
 ExtTextView* CodeCompleteListBox::GetParentEditView()

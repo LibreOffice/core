@@ -69,7 +69,7 @@ private:
     DECL_LINK_TYPED(AddHdl, Button*, void);
     DECL_LINK_TYPED(DeleteHdl, Button*, void);
     DECL_LINK_TYPED(MakeDefHdl, Button*, void);
-    DECL_LINK(SelectHdl, void *);
+    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
 
 public:
     ManageLanguageDialog( vcl::Window* pParent, std::shared_ptr<LocalizationMgr> _pLMgr );

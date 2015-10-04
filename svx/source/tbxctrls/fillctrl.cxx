@@ -582,7 +582,7 @@ void FillControl::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_LINK(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox *, pToolBox)
+IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
 
@@ -747,137 +747,127 @@ IMPL_LINK(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox *, pToolBox)
 
         if(drawing::FillStyle_NONE != eXFS)
         {
-            if(pToolBox)
-            {
-                mpLbFillType->Selected();
-            }
+            mpLbFillType->Selected();
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox *, pToolBox)
+IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
     const XFillStyleItem aXFillStyleItem(eXFS);
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
-    if(pToolBox)
+    // #i122676# dependent from bFillStyleChange, do execute a single or two
+    // changes in one Execute call
+    const bool bFillStyleChange((drawing::FillStyle) meLastXFS != eXFS);
+
+    switch(eXFS)
     {
-        // #i122676# dependent from bFillStyleChange, do execute a single or two
-        // changes in one Execute call
-        const bool bFillStyleChange((drawing::FillStyle) meLastXFS != eXFS);
-
-        switch(eXFS)
+        case drawing::FillStyle_SOLID:
         {
-            case drawing::FillStyle_SOLID:
+            if(bFillStyleChange)
             {
-                if(bFillStyleChange)
-                {
-                    // #i122676# Single FillStyle change call needed here
-                    SfxViewFrame::Current()->GetDispatcher()->Execute(SID_ATTR_FILL_STYLE, SfxCallMode::RECORD, &aXFillStyleItem, 0L);
-                }
-                break;
+                // #i122676# Single FillStyle change call needed here
+                SfxViewFrame::Current()->GetDispatcher()->Execute(SID_ATTR_FILL_STYLE, SfxCallMode::RECORD, &aXFillStyleItem, 0L);
             }
-            case drawing::FillStyle_GRADIENT:
-            {
-                sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
-
-                if(LISTBOX_ENTRY_NOTFOUND == nPos)
-                {
-                    nPos = mnLastPosGradient;
-                }
-
-                if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_GRADIENT_LIST))
-                {
-                    const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
-
-                    if(nPos < aItem.GetGradientList()->Count())
-                    {
-                        const XGradient aGradient = aItem.GetGradientList()->GetGradient(nPos)->GetGradient();
-                        const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(), aGradient);
-
-                        // #i122676# Change FillStale and Gradinet in one call
-                        SfxViewFrame::Current()->GetDispatcher()->Execute(
-                            SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD, &aXFillGradientItem,
-                            bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
-                    }
-                }
-
-                if(LISTBOX_ENTRY_NOTFOUND != nPos)
-                {
-                    mnLastPosGradient = nPos;
-                }
-                break;
-            }
-            case drawing::FillStyle_HATCH:
-            {
-                sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
-
-                if(LISTBOX_ENTRY_NOTFOUND == nPos)
-                {
-                    nPos = mnLastPosHatch;
-                }
-
-                if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_HATCH_LIST))
-                {
-                    const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
-
-                    if(nPos < aItem.GetHatchList()->Count())
-                    {
-                        const XHatch aHatch = aItem.GetHatchList()->GetHatch(nPos)->GetHatch();
-                        const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectEntry(), aHatch);
-
-                        // #i122676# Change FillStale and Hatch in one call
-                        SfxViewFrame::Current()->GetDispatcher()->Execute(
-                            SID_ATTR_FILL_HATCH, SfxCallMode::RECORD, &aXFillHatchItem,
-                            bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
-                    }
-                }
-
-                if(LISTBOX_ENTRY_NOTFOUND != nPos)
-                {
-                    mnLastPosHatch = nPos;
-                }
-                break;
-            }
-            case drawing::FillStyle_BITMAP:
-            {
-                sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
-
-                if(LISTBOX_ENTRY_NOTFOUND == nPos)
-                {
-                    nPos = mnLastPosBitmap;
-                }
-
-                if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_BITMAP_LIST))
-                {
-                    const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
-
-                    if(nPos < aItem.GetBitmapList()->Count())
-                    {
-                        const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
-                        const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
-
-                        // #i122676# Change FillStale and Bitmap in one call
-                        SfxViewFrame::Current()->GetDispatcher()->Execute(
-                            SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD, &aXFillBitmapItem,
-                            bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
-                    }
-                }
-
-                if(LISTBOX_ENTRY_NOTFOUND != nPos)
-                {
-                    mnLastPosBitmap = nPos;
-                }
-                break;
-            }
-            default: break;
+            break;
         }
-    }
+        case drawing::FillStyle_GRADIENT:
+        {
+            sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
 
-    return 0;
+            if(LISTBOX_ENTRY_NOTFOUND == nPos)
+            {
+                nPos = mnLastPosGradient;
+            }
+
+            if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_GRADIENT_LIST))
+            {
+                const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
+
+                if(nPos < aItem.GetGradientList()->Count())
+                {
+                    const XGradient aGradient = aItem.GetGradientList()->GetGradient(nPos)->GetGradient();
+                    const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(), aGradient);
+
+                    // #i122676# Change FillStale and Gradinet in one call
+                    SfxViewFrame::Current()->GetDispatcher()->Execute(
+                        SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD, &aXFillGradientItem,
+                        bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
+                }
+            }
+
+            if(LISTBOX_ENTRY_NOTFOUND != nPos)
+            {
+                mnLastPosGradient = nPos;
+            }
+            break;
+        }
+        case drawing::FillStyle_HATCH:
+        {
+            sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
+
+            if(LISTBOX_ENTRY_NOTFOUND == nPos)
+            {
+                nPos = mnLastPosHatch;
+            }
+
+            if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_HATCH_LIST))
+            {
+                const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
+
+                if(nPos < aItem.GetHatchList()->Count())
+                {
+                    const XHatch aHatch = aItem.GetHatchList()->GetHatch(nPos)->GetHatch();
+                    const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectEntry(), aHatch);
+
+                    // #i122676# Change FillStale and Hatch in one call
+                    SfxViewFrame::Current()->GetDispatcher()->Execute(
+                        SID_ATTR_FILL_HATCH, SfxCallMode::RECORD, &aXFillHatchItem,
+                        bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
+                }
+            }
+
+            if(LISTBOX_ENTRY_NOTFOUND != nPos)
+            {
+                mnLastPosHatch = nPos;
+            }
+            break;
+        }
+        case drawing::FillStyle_BITMAP:
+        {
+            sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
+
+            if(LISTBOX_ENTRY_NOTFOUND == nPos)
+            {
+                nPos = mnLastPosBitmap;
+            }
+
+            if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_BITMAP_LIST))
+            {
+                const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+
+                if(nPos < aItem.GetBitmapList()->Count())
+                {
+                    const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
+                    const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
+
+                    // #i122676# Change FillStale and Bitmap in one call
+                    SfxViewFrame::Current()->GetDispatcher()->Execute(
+                        SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD, &aXFillBitmapItem,
+                        bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
+                }
+            }
+
+            if(LISTBOX_ENTRY_NOTFOUND != nPos)
+            {
+                mnLastPosBitmap = nPos;
+            }
+            break;
+        }
+        default: break;
+    }
 }
 
 void FillControl::Resize()

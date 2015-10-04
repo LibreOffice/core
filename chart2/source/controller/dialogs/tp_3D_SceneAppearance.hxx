@@ -44,7 +44,7 @@ public:
     virtual void ActivatePage() SAL_OVERRIDE;
 
 private:
-    DECL_LINK( SelectSchemeHdl, void* );
+    DECL_LINK_TYPED( SelectSchemeHdl, ListBox&, void );
     DECL_LINK_TYPED( SelectShading, CheckBox&, void );
     DECL_LINK_TYPED( SelectRoundedEdgeOrObjectLines, CheckBox&, void );
 

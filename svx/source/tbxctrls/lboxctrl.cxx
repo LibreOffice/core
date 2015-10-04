@@ -198,7 +198,7 @@ void SvxListBoxControl::Impl_SetInfo( sal_Int32 nCount )
 }
 
 
-IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SvxListBoxControl, SelectHdl, ListBox&, void)
 {
     if (pPopupWin)
     {
@@ -213,7 +213,6 @@ IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl)
             pPopupWin->EndPopupMode();
         }
     }
-    return 0;
 }
 
 

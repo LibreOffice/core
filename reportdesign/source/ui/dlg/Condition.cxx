@@ -398,17 +398,15 @@ void Condition::GetFocus()
         m_pCondLHS->GrabFocus();
 }
 
-IMPL_LINK( Condition, OnTypeSelected, ListBox*, /*_pNotInterestedIn*/ )
+IMPL_LINK_NOARG_TYPED( Condition, OnTypeSelected, ListBox&, void )
 {
     impl_layoutOperands();
-    return 0L;
 }
 
 
-IMPL_LINK( Condition, OnOperationSelected, ListBox*, /*_pNotInterestedIn*/ )
+IMPL_LINK_NOARG_TYPED( Condition, OnOperationSelected, ListBox&, void )
 {
     impl_layoutOperands();
-    return 0L;
 }
 
 void Condition::impl_layoutOperands()

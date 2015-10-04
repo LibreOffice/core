@@ -1504,9 +1504,10 @@ void CustomPropertiesWindow::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_STATIC_LINK(
-    CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
+IMPL_STATIC_LINK_TYPED(
+    CustomPropertiesWindow, TypeHdl, ListBox&, rListBox, void )
 {
+    CustomPropertiesTypeBox* pBox = static_cast<CustomPropertiesTypeBox*>(&rListBox);
     long nType = reinterpret_cast<long>( pBox->GetSelectEntryData() );
     CustomPropertyLine* pLine = pBox->GetLine();
     pLine->m_aValueEdit->Show( (CUSTOM_TYPE_TEXT == nType) || (CUSTOM_TYPE_NUMBER  == nType) );
@@ -1529,8 +1530,6 @@ IMPL_STATIC_LINK(
         pLine->m_bIsDate = false;
         pLine->m_aDateField->SetSizePixel( pLine->m_aTimeField->GetSizePixel() );
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( CustomPropertiesWindow, RemoveHdl, Button*, pBtn, void )
@@ -1878,7 +1877,7 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
         pNewLine->m_aTypeBox->SelectEntryPos( m_aTypeBox->GetEntryPos( reinterpret_cast<void*>(nType) ) );
     }
 
-    TypeHdl( nullptr, pNewLine->m_aTypeBox.get() );
+    TypeHdl( nullptr, *pNewLine->m_aTypeBox.get() );
     pNewLine->m_aNameBox->GrabFocus();
 }
 

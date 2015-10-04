@@ -75,10 +75,9 @@ void SwCustomizeAddressListDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl, ListBox&, void)
 {
     UpdateButtons();
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwCustomizeAddressListDialog, AddRenameHdl_Impl, Button*, pButton, void)

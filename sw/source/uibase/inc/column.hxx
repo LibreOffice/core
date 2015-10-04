@@ -60,8 +60,9 @@ class SwColumnDlg : public SfxModalDialog
     bool                bSelSectionChanged : 1;
     bool                bFrameChanged : 1;
 
-    DECL_LINK(ObjectHdl, ListBox*);
+    DECL_LINK_TYPED(ObjectListBoxHdl, ListBox&, void);
     DECL_LINK_TYPED(OkHdl, Button*, void);
+    void ObjectHdl(ListBox*);
 
 public:
     SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh);
@@ -147,6 +148,7 @@ class SwColumnPage : public SfxTabPage
     DECL_LINK_TYPED(Up, Button *, void);
     DECL_LINK_TYPED(Down, Button *, void);
     DECL_LINK( UpdateColMgr, void* );
+    DECL_LINK_TYPED( UpdateColMgrListBox, ListBox&, void );
     void Timeout();
 
     void            Update(MetricField *pInteractiveField);

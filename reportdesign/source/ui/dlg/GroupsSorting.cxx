@@ -1177,18 +1177,18 @@ IMPL_LINK_NOARG_TYPED( OGroupsSortingDialog, OnFormatAction, ToolBox*, void )
     }
 }
 
-IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox*, pListBox )
+IMPL_LINK_TYPED( OGroupsSortingDialog, LBChangeHdl, ListBox&, rListBox, void )
 {
-    if ( pListBox->IsValueChangedFromSaved() )
+    if ( rListBox.IsValueChangedFromSaved() )
     {
         sal_Int32 nRow = m_pFieldExpression->GetCurRow();
         sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(nRow);
-        if (pListBox != m_pHeaderLst && pListBox != m_pFooterLst)
+        if (&rListBox != m_pHeaderLst && &rListBox != m_pFooterLst)
         {
-            if ( pListBox->IsValueChangedFromSaved() )
+            if ( rListBox.IsValueChangedFromSaved() )
                 SaveData(nRow);
-            if ( pListBox == m_pGroupOnLst )
-                m_pGroupIntervalEd->Enable( pListBox->GetSelectEntryPos() != 0 );
+            if ( &rListBox == m_pGroupOnLst )
+                m_pGroupIntervalEd->Enable( rListBox.GetSelectEntryPos() != 0 );
         }
         else if ( nGroupPos != NO_GROUP )
         {
@@ -1197,17 +1197,16 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox*, pListBox )
             aArgs[1].Name = PROPERTY_GROUP;
             aArgs[1].Value <<= xGroup;
 
-            if ( m_pHeaderLst  == pListBox )
+            if ( m_pHeaderLst  == &rListBox )
                 aArgs[0].Name = PROPERTY_HEADERON;
             else
                 aArgs[0].Name = PROPERTY_FOOTERON;
 
-            aArgs[0].Value <<= pListBox->GetSelectEntryPos() == 0;
-            m_pController->executeChecked(m_pHeaderLst  == pListBox ? SID_GROUPHEADER : SID_GROUPFOOTER,aArgs);
+            aArgs[0].Value <<= rListBox.GetSelectEntryPos() == 0;
+            m_pController->executeChecked(m_pHeaderLst  == &rListBox ? SID_GROUPHEADER : SID_GROUPFOOTER, aArgs);
             m_pFieldExpression->InvalidateHandleColumn();
         }
     }
-    return 1L;
 }
 
 void OGroupsSortingDialog::showHelpText(sal_uInt16 _nResId)

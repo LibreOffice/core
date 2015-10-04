@@ -145,7 +145,7 @@ private:
     ScQueryItem*    GetOutputItem   ();
 
     // Handler:
-    DECL_LINK( LbSelectHdl,  ListBox* );
+    DECL_LINK_TYPED( LbSelectHdl,  ListBox&, void );
     DECL_LINK( ValModifyHdl, ComboBox* );
     DECL_LINK_TYPED( CheckBoxHdl,  Button*, void );
     DECL_LINK_TYPED( EndDlgHdl,    Button*, void );
@@ -213,7 +213,7 @@ private:
                                     const ScRange& rSource );
 
     // Handler
-    DECL_LINK( FilterAreaSelHdl, ListBox* );
+    DECL_LINK_TYPED( FilterAreaSelHdl, ListBox&, void );
     DECL_LINK( FilterAreaModHdl, formula::RefEdit* );
     DECL_LINK_TYPED( EndDlgHdl,  Button*, void );
 

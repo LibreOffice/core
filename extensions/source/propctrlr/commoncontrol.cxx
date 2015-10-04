@@ -95,12 +95,11 @@ namespace pcr
     }
 
 
-    IMPL_LINK( CommonBehaviourControlHelper, ModifiedHdl, vcl::Window*, /*_pWin*/ )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, ModifiedHdl )
     {
         setModified();
         return 0;
     }
-
 
     IMPL_LINK_NOARG_TYPED( CommonBehaviourControlHelper, GetFocusHdl, Control&, void )
     {

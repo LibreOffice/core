@@ -285,10 +285,9 @@ namespace dbp
     }
 
 
-    IMPL_LINK( ORadioSelectionPage, OnEntrySelected, ListBox*, /*_pList*/ )
+    IMPL_LINK_NOARG_TYPED( ORadioSelectionPage, OnEntrySelected, ListBox&, void )
     {
         implCheckMoveButtons();
-        return 0L;
     }
 
 
@@ -408,10 +407,9 @@ namespace dbp
         OGBWPage::dispose();
     }
 
-    IMPL_LINK( OOptionValuesPage, OnOptionSelected, ListBox*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG_TYPED( OOptionValuesPage, OnOptionSelected, ListBox&, void )
     {
         implTraveledOptions();
-        return 0L;
     }
 
 

@@ -177,7 +177,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 public:
-    void SetLinks (Link<Button*,void> const&, Link<> const&, Link<Control&,void> const&);
+    void SetLinks (Link<Button*,void> const&, Link<ListBox&,void> const&, Link<Control&,void> const&);
     unsigned GetEntryHeight () const { return vEntries[0]->GetHeight(); }
     void Update (EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ScrollHdl(const ScrollBar&);
@@ -219,7 +219,7 @@ private:
         void SetAppearance(Wallpaper const& aTextWall, ColorListBox const& aSampleList);
         void SetTextColor (Color C) { m_pText->SetTextColor(C); }
     public:
-        void SetLinks (Link<Button*,void> const&, Link<> const&, Link<Control&,void> const&);
+        void SetLinks (Link<Button*,void> const&, Link<ListBox&,void> const&, Link<Control&,void> const&);
         void Update (ColorConfigEntry, ColorConfigValue const&);
         void Update (ExtendedColorConfigValue const&);
         void ColorChanged (ColorConfigEntry, ColorConfigValue&);
@@ -414,7 +414,7 @@ void ColorConfigWindow_Impl::Entry::SetAppearance(
 
 // SetLinks()
 void ColorConfigWindow_Impl::Entry::SetLinks(
-    Link<Button*,void> const& aCheckLink, Link<> const& aColorLink,
+    Link<Button*,void> const& aCheckLink, Link<ListBox&,void> const& aColorLink,
     Link<Control&,void> const& aGetFocusLink)
 {
     m_pColorList->SetSelectHdl(aColorLink);
@@ -689,7 +689,7 @@ void ColorConfigWindow_Impl::Init(ScrollBar *pVScroll, HeaderBar *pHeaderHB)
 
 // SetLinks()
 void ColorConfigWindow_Impl::SetLinks (
-    Link<Button*,void> const& aCheckLink, Link<> const& aColorLink, Link<Control&,void> const& aGetFocusLink
+    Link<Button*,void> const& aCheckLink, Link<ListBox&,void> const& aColorLink, Link<Control&,void> const& aGetFocusLink
 ) {
     for (unsigned i = 0; i != vEntries.size(); ++i)
         vEntries[i]->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
@@ -846,7 +846,7 @@ class ColorConfigCtrl_Impl : public VclVBox
 
     DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
     DECL_LINK_TYPED(ClickHdl, Button*, void);
-    DECL_LINK(ColorHdl, ColorListBox*);
+    DECL_LINK_TYPED(ColorHdl, ListBox&, void);
     DECL_LINK_TYPED(ControlFocusHdl, Control&, void);
 
     virtual bool PreNotify (NotifyEvent& rNEvt) SAL_OVERRIDE;
@@ -900,7 +900,7 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
     m_pVScroll->SetEndScrollHdl(aScrollLink);
 
     Link<Button*,void> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
-    Link<> aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
+    Link<ListBox&,void> aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
     Link<Control&,void> aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
     m_pScrollWindow->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
 
@@ -1006,12 +1006,10 @@ IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ClickHdl, Button*, pBox, void)
 }
 
 // a color list has changed
-IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
+IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ColorHdl, ListBox&, rBox, void)
 {
     DBG_ASSERT(pColorConfig, "Configuration not set" );
-    if (pBox)
-        m_pScrollWindow->ColorHdl(pColorConfig, pExtColorConfig, pBox);
-    return 0;
+    m_pScrollWindow->ColorHdl(pColorConfig, pExtColorConfig, static_cast<ColorListBox*>(&rBox));
 }
 IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
 {
@@ -1175,12 +1173,11 @@ void SvxColorOptionsTabPage::UpdateColorConfig()
     m_pColorConfigCT->Update();
 }
 
-IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, ListBox*, pBox)
+IMPL_LINK_TYPED(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, ListBox&, rBox, void)
 {
-    pColorConfig->LoadScheme(pBox->GetSelectEntry());
-    pExtColorConfig->LoadScheme(pBox->GetSelectEntry());
+    pColorConfig->LoadScheme(rBox.GetSelectEntry());
+    pExtColorConfig->LoadScheme(rBox.GetSelectEntry());
     UpdateColorConfig();
-    return 0;
 }
 
 IMPL_LINK_TYPED(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, void )
@@ -1205,7 +1202,7 @@ IMPL_LINK_TYPED(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, vo
             pExtColorConfig->AddScheme(sName);
             m_pColorSchemeLB->InsertEntry(sName);
             m_pColorSchemeLB->SelectEntry(sName);
-            m_pColorSchemeLB->GetSelectHdl().Call(m_pColorSchemeLB);
+            m_pColorSchemeLB->GetSelectHdl().Call(*m_pColorSchemeLB);
         }
     }
     else
@@ -1218,7 +1215,7 @@ IMPL_LINK_TYPED(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, vo
             OUString sDeleteScheme(m_pColorSchemeLB->GetSelectEntry());
             m_pColorSchemeLB->RemoveEntry(m_pColorSchemeLB->GetSelectEntryPos());
             m_pColorSchemeLB->SelectEntryPos(0);
-            m_pColorSchemeLB->GetSelectHdl().Call(m_pColorSchemeLB);
+            m_pColorSchemeLB->GetSelectHdl().Call(*m_pColorSchemeLB);
             //first select the new scheme and then delete the old one
             pColorConfig->DeleteScheme(sDeleteScheme);
             pExtColorConfig->DeleteScheme(sDeleteScheme);

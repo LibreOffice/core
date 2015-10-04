@@ -165,13 +165,13 @@ private:
 
     void Initialize();
 
-    DECL_LINK(ChangeLineStyleHdl, void*);
+    DECL_LINK_TYPED(ChangeLineStyleHdl, ListBox&, void);
     DECL_LINK_TYPED(ToolboxWidthSelectHdl, ToolBox*, void);
     DECL_LINK(ChangeTransparentHdl , void *);
-    DECL_LINK(ChangeStartHdl, void *);
-    DECL_LINK(ChangeEndHdl, void *);
-    DECL_LINK(ChangeEdgeStyleHdl, void *);
-    DECL_LINK(ChangeCapStyleHdl, void *);
+    DECL_LINK_TYPED(ChangeStartHdl, ListBox&, void);
+    DECL_LINK_TYPED(ChangeEndHdl, ListBox&, void);
+    DECL_LINK_TYPED(ChangeEdgeStyleHdl, ListBox&, void);
+    DECL_LINK_TYPED(ChangeCapStyleHdl, ListBox&, void);
 
     VclPtr<PopupControl> CreateLineWidthPopupControl (PopupContainer* pParent);
 };

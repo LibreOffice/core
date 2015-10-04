@@ -370,7 +370,7 @@ namespace svx
         , m_bInSelectionUpdate( false )
     {
         m_aValueSet->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionValueSetHdl ) );
-        m_aListBox->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionHdl ) );
+        m_aListBox->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionListBoxHdl ) );
 
         m_aValueSet->SetLineCount( LINE_CNT );
         m_aValueSet->SetStyle( m_aValueSet->GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
@@ -483,10 +483,14 @@ namespace svx
     {
         SelectSuggestionHdl(pControl);
     }
-    IMPL_LINK( SuggestionDisplay, SelectSuggestionHdl, Control*, pControl )
+    IMPL_LINK_TYPED( SuggestionDisplay, SelectSuggestionListBoxHdl, ListBox&, rControl, void )
+    {
+        SelectSuggestionHdl(&rControl);
+    }
+    void SuggestionDisplay::SelectSuggestionHdl( Control* pControl )
     {
         if( m_bInSelectionUpdate )
-            return 0L;
+            return;
 
         m_bInSelectionUpdate = true;
         if( pControl == m_aListBox.get() )
@@ -501,7 +505,6 @@ namespace svx
         }
         m_bInSelectionUpdate = false;
         m_aSelectLink.Call( *this );
-        return 0L;
     }
 
     void SuggestionDisplay::SetSelectHdl( const Link<SuggestionDisplay&,void>& rLink )
@@ -1535,10 +1538,9 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK_NOARG( HangulHanjaEditDictDialog, BookLBSelectHdl )
+    IMPL_LINK_NOARG_TYPED( HangulHanjaEditDictDialog, BookLBSelectHdl, ListBox&, void )
     {
         InitEditDictDialog( m_aBookLB->GetSelectEntryPos() );
-        return 0;
     }
 
     IMPL_LINK_NOARG_TYPED( HangulHanjaEditDictDialog, NewPBPushHdl, Button*, void )

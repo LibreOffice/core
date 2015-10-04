@@ -768,11 +768,10 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwDropCapsPage, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SwDropCapsPage, SelectHdl, ListBox&, void)
 {
     m_pPict->UpdatePaintSettings();
     bModified = true;
-    return 0;
 }
 
 void SwDropCapsPage::FillSet( SfxItemSet &rSet )

@@ -46,7 +46,7 @@ private:
     DECL_LINK_TYPED( ResetToDefaults, Button *, void );
     DECL_LINK_TYPED( AddChartColor, Button *, void );
     DECL_LINK_TYPED( RemoveChartColor, Button *, void );
-    DECL_LINK( ListClickedHdl, ColorLB * );
+    DECL_LINK_TYPED( ListClickedHdl, ListBox&, void );
     DECL_LINK_TYPED(BoxClickedHdl, ValueSet*, void);
 
     void FillColorBox();

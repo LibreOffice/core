@@ -573,11 +573,10 @@ IMPL_LINK_TYPED(ChartElementsPanel, CheckBoxHdl, Button*, pButton, void)
         setGridVisible(mxModel, GridType::HOR_MINOR, bChecked);
 }
 
-IMPL_LINK_NOARG(ChartElementsPanel, LegendPosHdl)
+IMPL_LINK_NOARG_TYPED(ChartElementsPanel, LegendPosHdl, ListBox&, void)
 {
     sal_Int32 nPos = mpLBLegendPosition->GetSelectEntryPos();
     setLegendPos(mxModel, nPos);
-    return 0;
 }
 
 void ChartElementsPanel::setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible)

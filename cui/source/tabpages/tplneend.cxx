@@ -168,7 +168,7 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
             if( *pPosLineEndLb != LISTBOX_ENTRY_NOTFOUND )
             {
                 m_pLbLineEnds->SelectEntryPos( *pPosLineEndLb );
-                SelectLineEndHdl_Impl( this );
+                SelectLineEndHdl_Impl( *m_pLbLineEnds );
             }
             INetURLObject   aURL( pLineEndList->GetPath() );
 
@@ -285,7 +285,7 @@ VclPtr<SfxTabPage> SvxLineEndDefTabPage::Create( vcl::Window* pWindow, const Sfx
 
 
 
-IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, ListBox&, void)
 {
     if( pLineEndList->Count() > 0 )
     {
@@ -307,7 +307,6 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
         // if there is an entry selected in the ListBox
         *pPageType = 3;
     }
-    return 0L;
 }
 
 
@@ -489,7 +488,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
 
                 *pnLineEndListState |= ChangeType::MODIFIED;
 
-                SelectLineEndHdl_Impl( this );
+                SelectLineEndHdl_Impl( *m_pLbLineEnds );
             }
             else
             {
@@ -530,7 +529,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
             m_pLbLineEnds->RemoveEntry( nPos );
             m_pLbLineEnds->SelectEntryPos( 0 );
 
-            SelectLineEndHdl_Impl( this );
+            SelectLineEndHdl_Impl( *m_pLbLineEnds );
             *pPageType = 0; // LineEnd shall not be taken over
 
             *pnLineEndListState |= ChangeType::MODIFIED;

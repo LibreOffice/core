@@ -117,8 +117,8 @@ private:
     std::set<sal_Int16> maUsedBorderStyles;
 
     // Handler
-    DECL_LINK( SelStyleHdl_Impl, ListBox* );
-    DECL_LINK( SelColHdl_Impl, ListBox* );
+    DECL_LINK_TYPED( SelStyleHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( SelColHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( SelPreHdl_Impl, ValueSet*, void );
     DECL_LINK_TYPED( SelSdwHdl_Impl, ValueSet*, void );
     DECL_LINK_TYPED( LinesChanged_Impl, LinkParamNone*, void );

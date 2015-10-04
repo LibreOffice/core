@@ -183,7 +183,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
     TypeHdl(0);
 
     m_pTypeLB->SetUpdateMode(true);
-    m_pTypeLB->SetSelectHdl(LINK(this, SwFieldDBPage, TypeHdl));
+    m_pTypeLB->SetSelectHdl(LINK(this, SwFieldDBPage, TypeListBoxHdl));
     m_pTypeLB->SetDoubleClickHdl(LINK(this, SwFieldDBPage, ListBoxInsertHdl));
 
     if (IsFieldEdit())
@@ -275,7 +275,12 @@ sal_uInt16 SwFieldDBPage::GetGroup()
     return GRP_DB;
 }
 
-IMPL_LINK( SwFieldDBPage, TypeHdl, ListBox *, pBox )
+IMPL_LINK_TYPED( SwFieldDBPage, TypeListBoxHdl, ListBox&, rBox, void )
+{
+    TypeHdl(&rBox);
+}
+
+void SwFieldDBPage::TypeHdl( ListBox* pBox )
 {
     // save old ListBoxPos
     const sal_Int32 nOld = GetTypeSel();
@@ -393,16 +398,12 @@ IMPL_LINK( SwFieldDBPage, TypeHdl, ListBox *, pBox )
 
         CheckInsert();
     }
-
-    return 0;
 }
 
-IMPL_LINK( SwFieldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
+IMPL_LINK_TYPED( SwFieldDBPage, NumSelectHdl, ListBox&, rLB, void )
 {
     m_pNewFormatRB->Check();
-    m_aOldNumSelectHdl.Call(pLB);
-
-    return 0;
+    m_aOldNumSelectHdl.Call(rLB);
 }
 
 void SwFieldDBPage::CheckInsert()
@@ -502,7 +503,7 @@ void SwFieldDBPage::ActivateMailMergeAddress()
 {
     sal_uLong nData = TYP_DBFLD;
     m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos( reinterpret_cast<const void*>( nData ) ));
-    m_pTypeLB->GetSelectHdl().Call(m_pTypeLB);
+    m_pTypeLB->GetSelectHdl().Call(*m_pTypeLB);
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
     m_pDatabaseTLB->Select(rData.sDataSource, rData.sCommand, aEmptyOUStr);
 }

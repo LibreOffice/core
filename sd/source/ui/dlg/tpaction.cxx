@@ -136,7 +136,7 @@ SdTPAction::SdTPAction(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
     set_width_request(aSize.Width());
     set_height_request(aSize.Height());
 
-    ClickActionHdl( this );
+    ClickActionHdl( *m_pLbAction );
 }
 
 SdTPAction::~SdTPAction()
@@ -359,7 +359,7 @@ void SdTPAction::Reset( const SfxItemSet* rAttrs )
         default:
         break;
     }
-    ClickActionHdl( this );
+    ClickActionHdl( *m_pLbAction );
 
     m_pLbAction->SaveValue();
     m_pEdtSound->SaveValue();
@@ -476,7 +476,7 @@ IMPL_LINK_NOARG_TYPED(SdTPAction, ClickSearchHdl, Button*, void)
     OpenFileDialog();
 }
 
-IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
+IMPL_LINK_NOARG_TYPED(SdTPAction, ClickActionHdl, ListBox&, void)
 {
     presentation::ClickAction eCA = GetActualClickAction();
 
@@ -646,8 +646,6 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
         default:
             break;
     }
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED(SdTPAction, SelectTreeHdl, SvTreeListBox*, void)

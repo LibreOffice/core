@@ -219,7 +219,7 @@ public:
     VclPtr<Edit> mpDevice;
     VclPtr<Edit> mpDriverVersion;
 
-    DECL_LINK(OSSelectHdl, ListBox*);
+    DECL_LINK_TYPED(OSSelectHdl, ListBox&, void);
     DECL_LINK(EditModifiedHdl, Edit*);
 
     ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplMatcher& rEntry, const OString& rTag);
@@ -274,17 +274,15 @@ ListEntryDialog::ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplM
     SetText(get<FixedText>(rTag + "title")->GetText());
 }
 
-IMPL_LINK(ListEntryDialog, OSSelectHdl, ListBox*, pListBox)
+IMPL_LINK_TYPED(ListEntryDialog, OSSelectHdl, ListBox&, rListBox, void)
 {
-    if (pListBox == mpOS)
+    if (&rListBox == mpOS)
     {
         if (mpOS->GetSelectEntryPos() == 0)
             maEntry.maOS.clear();
         else
             maEntry.maOS = mpOS->GetSelectEntry();
     }
-
-    return 0;
 }
 
 IMPL_LINK(ListEntryDialog, EditModifiedHdl, Edit*, pEdit)

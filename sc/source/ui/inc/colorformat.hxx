@@ -50,8 +50,8 @@ private:
     ScAddress   maPos;
 
     DECL_LINK_TYPED(OkBtnHdl, Button*, void);
-    DECL_LINK(TypeSelectHdl, void*);
-    DECL_LINK(PosSelectHdl, void*);
+    DECL_LINK_TYPED(TypeSelectHdl, ListBox&, void);
+    DECL_LINK_TYPED(PosSelectHdl, ListBox&, void);
 
     void Init();
 

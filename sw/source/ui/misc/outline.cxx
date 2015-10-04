@@ -64,7 +64,7 @@ class SwNumNamesDlg : public ModalDialog
     VclPtr<OKButton> m_pOKBtn;
 
     DECL_LINK( ModifyHdl, Edit * );
-    DECL_LINK( SelectHdl, ListBox * );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
     DECL_LINK_TYPED( DoubleClickHdl, ListBox&, void );
 
 public:
@@ -91,11 +91,10 @@ void SwNumNamesDlg::dispose()
 
 
 // remember selected entry
-IMPL_LINK( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
+IMPL_LINK_TYPED( SwNumNamesDlg, SelectHdl, ListBox&, rBox, void )
 {
-    m_pFormEdit->SetText(pBox->GetSelectEntry());
+    m_pFormEdit->SetText(rBox.GetSelectEntry());
     m_pFormEdit->SetSelection(Selection(0, SELECTION_MAX));
-    return 0;
 }
 
 /** set user defined names
@@ -116,7 +115,7 @@ void SwNumNamesDlg::SetUserNames(const OUString *pList[])
         }
     }
     m_pFormBox->SelectEntryPos(nSelect);
-    SelectHdl(m_pFormBox);
+    SelectHdl(*m_pFormBox);
 }
 
 // unlock OK-Button when text is in Edit
@@ -143,7 +142,7 @@ SwNumNamesDlg::SwNumNamesDlg(vcl::Window *pParent)
     m_pFormEdit->SetModifyHdl(LINK(this, SwNumNamesDlg, ModifyHdl));
     m_pFormBox->SetSelectHdl(LINK(this, SwNumNamesDlg, SelectHdl));
     m_pFormBox->SetDoubleClickHdl(LINK(this, SwNumNamesDlg, DoubleClickHdl));
-    SelectHdl(m_pFormBox);
+    SelectHdl(*m_pFormBox);
 }
 
 static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
@@ -564,10 +563,10 @@ void    SwOutlineSettingsTabPage::Update()
     SetModified();
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, LevelHdl, ListBox *, pBox )
+IMPL_LINK_TYPED( SwOutlineSettingsTabPage, LevelHdl, ListBox&, rBox, void )
 {
     nActLevel = 0;
-    if(pBox->IsEntryPosSelected( MAXLEVEL ))
+    if(rBox.IsEntryPosSelected( MAXLEVEL ))
     {
         nActLevel = 0xFFFF;
     }
@@ -576,13 +575,12 @@ IMPL_LINK( SwOutlineSettingsTabPage, LevelHdl, ListBox *, pBox )
         sal_uInt16 nMask = 1;
         for( sal_uInt16 i = 0; i < MAXLEVEL; i++ )
         {
-            if(pBox->IsEntryPosSelected( i ))
+            if(rBox.IsEntryPosSelected( i ))
                 nActLevel |= nMask;
             nMask <<= 1;
         }
     }
     Update();
-    return 0;
 }
 
 IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pField )
@@ -603,11 +601,11 @@ IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pField )
     return 0;
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
+IMPL_LINK_TYPED( SwOutlineSettingsTabPage, CollSelect, ListBox&, rBox, void )
 {
     sal_uInt8 i;
 
-    const OUString aCollName(pBox->GetSelectEntry());
+    const OUString aCollName(rBox.GetSelectEntry());
     //0xFFFF not allowed here (disable)
     sal_uInt16 nTmpLevel = lcl_BitToLevel(nActLevel);
     OUString sOldName( pCollNames[nTmpLevel] );
@@ -643,7 +641,6 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
             }
 
     SetModified();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, CollSelectGetFocus, Control&, void)
@@ -652,10 +649,10 @@ IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, CollSelectGetFocus, Control&, vo
         aSaveCollNames[i] =  pCollNames[i];
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBox )
+IMPL_LINK_TYPED( SwOutlineSettingsTabPage, NumberSelect, ListBox&, rBox, void )
 {
     sal_uInt16 nMask = 1;
-    sal_Int16 nNumberType = pBox->GetSelectedNumberingType();
+    sal_Int16 nNumberType = static_cast<SwNumberingTypeListBox&>(rBox).GetSelectedNumberingType();
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         if(nActLevel & nMask)
@@ -668,7 +665,6 @@ IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBo
         nMask <<= 1;
     }
     SetModified();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwOutlineSettingsTabPage, DelimModify)
@@ -706,7 +702,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pField )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFormatHdl)
+IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, CharFormatHdl, ListBox&, void)
 {
     OUString sEntry = m_pCharFormatLB->GetSelectEntry();
     sal_uInt16 nMask = 1;
@@ -749,7 +745,6 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFormatHdl)
         }
         nMask <<= 1;
     }
-    return RET_OK;
 }
 
 SwOutlineSettingsTabPage::~SwOutlineSettingsTabPage()
@@ -838,7 +833,7 @@ void SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& )
         m_pLevelLB->SelectEntryPos(lcl_BitToLevel(nActLevel));
     else
         m_pLevelLB->SelectEntryPos(MAXLEVEL);
-    LevelHdl(m_pLevelLB);
+    LevelHdl(*m_pLevelLB);
 }
 
 SfxTabPage::sfxpg SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet*)

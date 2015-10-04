@@ -351,16 +351,15 @@ IMPL_LINK_TYPED( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn, void )
     }
 }
 
-IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, ListBox*, pLB )
+IMPL_LINK_TYPED( SvxThesaurusDialog, LanguageHdl_Impl, ListBox&, rLB, void )
 {
-    OUString aLangText( pLB->GetSelectEntry() );
+    OUString aLangText( rLB.GetSelectEntry() );
     LanguageType nLang = SvtLanguageTable::GetLanguageType( aLangText );
     DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
     if (xThesaurus->hasLocale( LanguageTag::convertToLocale( nLang ) ))
         nLookUpLanguage = nLang;
     SetWindowTitle( nLang );
     LookUp_Impl();
-    return 0;
 }
 
 void SvxThesaurusDialog::LookUp_Impl()

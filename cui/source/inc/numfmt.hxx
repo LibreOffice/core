@@ -153,9 +153,10 @@ private:
     // Handler
     DECL_LINK_TYPED( LostFocusHdl_Impl, Control&, void );
     DECL_LINK_TYPED( DoubleClickHdl_Impl, SvTreeListBox*, bool );
-    DECL_LINK( SelFormatHdl_Impl, void * );
-    DECL_LINK_TYPED( SelFormatListBoxHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK_TYPED( SelFormatListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( SelFormatTreeListBoxHdl_Impl, SvTreeListBox*, void );
     DECL_LINK_TYPED( SelFormatClickHdl_Impl, Button*, void );
+    void SelFormatHdl_Impl(void*);
     DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
     DECL_LINK( EditHdl_Impl, Edit* );
     DECL_LINK( OptHdl_Impl, void * );

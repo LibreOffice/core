@@ -116,11 +116,12 @@ private:
     bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const ::com::sun::star::uno::Any& rValue );
     void UpdateLook();
 
-    DECL_LINK( implControlHdl, Control* );
+    DECL_LINK_TYPED( implControlListBoxHdl, ListBox&, void );
     DECL_LINK_TYPED( implClickHdl, Button*, void );
     DECL_LINK(implPropertyHdl, void *);
     DECL_LINK_TYPED(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
     DECL_LINK_TYPED(lateInitCallback, Timer *, void);
+    void implControlHdl(Control*);
 
 private:
     ViewShellBase& mrBase;

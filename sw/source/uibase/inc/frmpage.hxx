@@ -134,8 +134,8 @@ class SwFrmPage: public SfxTabPage
     DECL_LINK_TYPED(RangeModifyClickHdl, Button*, void);
     void RangeModifyHdl();
     DECL_LINK_TYPED(AnchorTypeHdl, Button*, void);
-    DECL_LINK( PosHdl, ListBox * );
-    DECL_LINK( RelHdl, ListBox * );
+    DECL_LINK_TYPED( PosHdl, ListBox&, void );
+    DECL_LINK_TYPED( RelHdl, ListBox&, void );
     void            InitPos(RndStdIds eId, sal_Int16 nH, sal_Int16 nHRel,
                             sal_Int16 nV, sal_Int16 nVRel,
                             long   nX,  long   nY);
@@ -305,7 +305,7 @@ class SwFrmAddPage : public SfxTabPage
     bool      bNew;
 
     DECL_LINK(EditModifyHdl, void *);
-    DECL_LINK(ChainModifyHdl, ListBox*);
+    DECL_LINK_TYPED(ChainModifyHdl, ListBox&, void);
 
     static const sal_uInt16 aAddPgRg[];
 

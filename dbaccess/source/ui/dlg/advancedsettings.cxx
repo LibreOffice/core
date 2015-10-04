@@ -120,7 +120,7 @@ namespace dbaui
             get(m_pBooleanComparisonModeLabel, "comparisonft");
             get(m_pBooleanComparisonMode, "comparison");
             m_pBooleanComparisonMode->SetDropDownLineCount( 4 );
-            m_pBooleanComparisonMode->SetSelectHdl( getControlModifiedLink() );
+            m_pBooleanComparisonMode->SetSelectHdl( LINK(this, SpecialSettingsPage, BooleanComparisonSelectHdl) );
             m_pBooleanComparisonModeLabel->Show();
             m_pBooleanComparisonMode->Show();
         }
@@ -134,6 +134,11 @@ namespace dbaui
             m_pMaxRowScanLabel->Show();
             m_pMaxRowScan->Show();
         }
+    }
+
+    IMPL_LINK_TYPED(SpecialSettingsPage, BooleanComparisonSelectHdl, ListBox&, rListBox, void)
+    {
+        getControlModifiedLink().Call(&rListBox);
     }
 
     SpecialSettingsPage::~SpecialSettingsPage()

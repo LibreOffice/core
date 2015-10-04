@@ -611,11 +611,10 @@ IMPL_LINK_TYPED( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox, void )
         CheckButtons();
 }
 
-IMPL_LINK( LibPage, BasicSelectHdl, ListBox *, /*pBox*/ )
+IMPL_LINK_NOARG_TYPED( LibPage, BasicSelectHdl, ListBox&, void )
 {
     SetCurLib();
     CheckButtons();
-    return 0;
 }
 
 IMPL_LINK_TYPED( LibPage, ButtonHdl, Button *, pButton, void )

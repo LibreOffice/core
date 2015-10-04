@@ -50,7 +50,7 @@ private:
     sal_uLong                   m_nSavedOptions;
 
     // handler
-    DECL_LINK(SelectHdl, void *);
+    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
     DECL_LINK_TYPED(UseAsDefaultHdl, Button*, void);
 
     // private methods

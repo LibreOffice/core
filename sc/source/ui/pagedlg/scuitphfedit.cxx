@@ -771,9 +771,9 @@ void ScHFEditPage::ClearTextAreas()
 
 // Handler:
 
-IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
+IMPL_LINK_TYPED( ScHFEditPage, ListHdl_Impl, ListBox&, rList, void )
 {
-    if ( pList && pList == m_pLbDefined )
+    if ( &rList == m_pLbDefined )
     {
         ScHFEntryId eSel = static_cast<ScHFEntryId>(m_pLbDefined->GetSelectEntryPos());
         if(!m_pLbDefined->IsTravelSelect())
@@ -789,7 +789,6 @@ IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
             ProcessDefinedListSel(eSel, true);
         }
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScHFEditPage, ClickHdl, Button*, pBtn, void )

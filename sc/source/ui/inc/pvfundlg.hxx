@@ -74,7 +74,7 @@ private:
     /** Searches for a listbox entry, starts search at specified position. */
     sal_Int32 FindBaseItemPos( const OUString& rEntry, sal_Int32 nStartPos ) const;
 
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
     DECL_LINK_TYPED( DblClickHdl, ListBox&, void );
 
 private:
@@ -153,7 +153,7 @@ private:
 
     DECL_LINK_TYPED( RadioClickHdl, Button*, void );
     DECL_LINK_TYPED( CheckHdl, Button*, void );
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
 
 private:
     VclPtr<ListBox>            m_pLbSortBy;

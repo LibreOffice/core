@@ -108,10 +108,10 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     DECL_LINK_TYPED(CopyToHdl_Impl, Button*, void);
     DECL_LINK_TYPED(SaveStartHdl_Impl, Button*, void );
     DECL_LINK_TYPED(SaveOutputHdl_Impl, Button* , void);
-    DECL_LINK(PrinterChangeHdl_Impl, ListBox* );
+    DECL_LINK_TYPED(PrinterChangeHdl_Impl, ListBox&,void );
     DECL_LINK_TYPED(PrintHdl_Impl, Button*, void);
     DECL_LINK_TYPED(PrinterSetupHdl_Impl, Button*, void );
-    DECL_LINK(SendTypeHdl_Impl, ListBox*);
+    DECL_LINK_TYPED(SendTypeHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(SendAsHdl_Impl, Button*, void);
     DECL_LINK_TYPED(SendDocumentsHdl_Impl, Button*, void);
     DECL_LINK_TYPED(DocumentSelectionHdl_Impl, Button*, void);

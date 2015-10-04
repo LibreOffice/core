@@ -1517,11 +1517,11 @@ void PrintDialog::updateNup()
     preparePreview( true, true );
 }
 
-IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
+IMPL_LINK_TYPED( PrintDialog, SelectHdl, ListBox&, rBox, void )
 {
-    if(  pBox == maJobPage.mpPrinters )
+    if(  &rBox == maJobPage.mpPrinters )
     {
-        OUString aNewPrinter( pBox->GetSelectEntry() );
+        OUString aNewPrinter( rBox.GetSelectEntry() );
         // set new printer
         maPController->setPrinter( VclPtrInstance<Printer>( aNewPrinter ) );
         maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );
@@ -1529,18 +1529,16 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         updatePrinterText();
         preparePreview( true );
     }
-    else if( pBox == maNUpPage.mpNupOrientationBox || pBox == maNUpPage.mpNupOrderBox )
+    else if( &rBox == maNUpPage.mpNupOrientationBox || &rBox == maNUpPage.mpNupOrderBox )
     {
         updateNup();
     }
-    else if( pBox == maNUpPage.mpNupPagesBox )
+    else if( &rBox == maNUpPage.mpNupPagesBox )
     {
         if( !maNUpPage.mpPagesBtn->IsChecked() )
             maNUpPage.mpPagesBtn->Check();
         updateNupFromPages();
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( PrintDialog, ToggleRadioHdl, RadioButton&, rButton, void )
@@ -1796,14 +1794,14 @@ IMPL_LINK_TYPED( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )
     }
 }
 
-IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox*, i_pBox )
+IMPL_LINK_TYPED( PrintDialog, UIOption_SelectHdl, ListBox&, i_rBox, void )
 {
-    PropertyValue* pVal = getValueForWindow( i_pBox );
+    PropertyValue* pVal = getValueForWindow( &i_rBox );
     if( pVal )
     {
-        makeEnabled( i_pBox );
+        makeEnabled( &i_rBox );
 
-        sal_Int32 nVal( i_pBox->GetSelectEntryPos() );
+        sal_Int32 nVal( i_rBox.GetSelectEntryPos() );
         pVal->Value <<= nVal;
 
         //If we are in impress we start in print slides mode and get a
@@ -1819,7 +1817,6 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox*, i_pBox )
         // update preview and page settings
         preparePreview();
     }
-    return 0;
 }
 
 IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )

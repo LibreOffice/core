@@ -658,7 +658,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     setupControls();
 
     // Size
-    mpLbSizeX->SetSelectHdl( LINK( this, ExportDialog, SelectHdl ) );
+    mpLbSizeX->SetSelectHdl( LINK( this, ExportDialog, SelectListBoxHdl ) );
 
     if (mpSbCompression)
         mpSbCompression->SetScrollHdl(LINK(this, ExportDialog, SbCompressionUpdateHdl));
@@ -669,9 +669,9 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     mpMfSizeY->SetModifyHdl( LINK( this, ExportDialog, UpdateHdlMtfSizeY ) );
 
     mpNfResolution->SetModifyHdl( LINK( this, ExportDialog, UpdateHdlNfResolution ) );
-    mpLbResolution->SetSelectHdl( LINK( this, ExportDialog, SelectHdl ) );
+    mpLbResolution->SetSelectHdl( LINK( this, ExportDialog, SelectListBoxHdl ) );
 
-    mpLbColorDepth->SetSelectHdl( LINK( this, ExportDialog, SelectHdl ) );
+    mpLbColorDepth->SetSelectHdl( LINK( this, ExportDialog, SelectListBoxHdl ) );
 
     mpCbInterlaced->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
@@ -1030,8 +1030,12 @@ void ExportDialog::dispose()
 \************************************************************************/
 IMPL_LINK_NOARG(ExportDialog, SelectHdl)
 {
-    UpdateHdl(NULL);
+    updateControls();
     return 0;
+}
+IMPL_LINK_NOARG_TYPED(ExportDialog, SelectListBoxHdl, ListBox&, void)
+{
+    updateControls();
 }
 IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdl, Button*, void)
 {

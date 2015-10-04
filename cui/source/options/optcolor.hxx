@@ -41,7 +41,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
     svtools::EditableColorConfig* pColorConfig;
     svtools::EditableExtendedColorConfig* pExtColorConfig;
 
-    DECL_LINK(SchemeChangedHdl_Impl, ListBox*);
+    DECL_LINK_TYPED(SchemeChangedHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(SaveDeleteHdl_Impl, Button*, void);
     DECL_LINK_TYPED(CheckNameHdl_Impl, AbstractSvxNameDialog&, bool);
     void UpdateColorConfig();

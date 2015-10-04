@@ -508,10 +508,9 @@ void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
     m_pFaxLB->SelectEntryPos(0);
 }
 
-IMPL_LINK_NOARG(SwAddPrinterTabPage, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SwAddPrinterTabPage, SelectHdl, ListBox&, void)
 {
     bAttrModified=true;
-    return 0;
 }
 
 void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
@@ -1785,7 +1784,7 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
     pDeletedLB->RemoveEntry(4);
     pDeletedLB->RemoveEntry(3);
 
-    Link<> aLk = LINK(this, SwRedlineOptionsTabPage, AttribHdl);
+    Link<ListBox&,void> aLk = LINK(this, SwRedlineOptionsTabPage, AttribHdl);
     pInsertLB->SetSelectHdl( aLk );
     pDeletedLB->SetSelectHdl( aLk );
     pChangedLB->SetSelectHdl( aLk );
@@ -2066,27 +2065,27 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     pMarkPosLB->SelectEntryPos(nPos);
 
     // show settings in preview
-    AttribHdl(pInsertLB);
-    ColorHdl(pInsertColorLB);
-    AttribHdl(pDeletedLB);
-    ColorHdl(pInsertColorLB);
-    AttribHdl(pChangedLB);
-    ColorHdl(pChangedColorLB);
+    AttribHdl(*pInsertLB);
+    ColorHdl(*pInsertColorLB);
+    AttribHdl(*pDeletedLB);
+    ColorHdl(*pInsertColorLB);
+    AttribHdl(*pChangedLB);
+    ColorHdl(*pChangedColorLB);
 
-    ChangedMaskPrevHdl();
+    ChangedMaskPrevHdl(*pMarkPosLB);
 }
 
-IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
+IMPL_LINK_TYPED( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
 {
     SvxFontPrevWindow *pPrev = 0;
     ColorListBox *pColorLB;
 
-    if (pLB == pInsertLB)
+    if (&rLB == pInsertLB)
     {
         pColorLB = pInsertColorLB;
         pPrev = pInsertedPreviewWN;
     }
-    else if (pLB == pDeletedLB)
+    else if (&rLB == pDeletedLB)
     {
         pColorLB = pDeletedColorLB;
         pPrev = pDeletedPreviewWN;
@@ -2130,11 +2129,11 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
             break;
     }
 
-    nPos = pLB->GetSelectEntryPos();
+    nPos = rLB.GetSelectEntryPos();
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
 
-    CharAttr*   pAttr = static_cast<CharAttr*>(pLB->GetEntryData( nPos ));
+    CharAttr*   pAttr = static_cast<CharAttr*>(rLB.GetEntryData( nPos ));
     //switch off preview background color
     pPrev->ResetColor();
     switch (pAttr->nItemId)
@@ -2179,12 +2178,11 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
     }
 
     pPrev->Invalidate();
-
-    return 0;
 }
 
-IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, ColorListBox *, pColorLB )
+IMPL_LINK_TYPED( SwRedlineOptionsTabPage, ColorHdl, ListBox&, rListBox, void )
 {
+    ColorListBox* pColorLB = static_cast<ColorListBox*>(&rListBox);
     SvxFontPrevWindow *pPrev = 0;
     ListBox* pLB;
 
@@ -2245,18 +2243,14 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, ColorListBox *, pColorLB )
     }
 
     pPrev->Invalidate();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwRedlineOptionsTabPage, ChangedMaskPrevHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox&, void)
 {
     pMarkPreviewWN->SetMarkPos(pMarkPosLB->GetSelectEntryPos());
     pMarkPreviewWN->SetColor(pMarkColorLB->GetSelectEntryColor().GetColor());
 
     pMarkPreviewWN->Invalidate();
-
-    return 0;
 }
 
 void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)

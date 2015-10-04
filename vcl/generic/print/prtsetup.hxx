@@ -89,7 +89,7 @@ class RTSPaperPage : public TabPage
     VclPtr<FixedText>          m_pSlotText;
     VclPtr<ListBox>            m_pSlotBox;
 
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
 public:
     explicit RTSPaperPage( RTSDialog* );
     virtual ~RTSPaperPage();
@@ -115,7 +115,7 @@ class RTSDevicePage : public TabPage
 
     void FillValueBox( const ::psp::PPDKey* );
 
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
     DECL_LINK( ModifyHdl, Edit* );
 public:
     explicit RTSDevicePage( RTSDialog* );

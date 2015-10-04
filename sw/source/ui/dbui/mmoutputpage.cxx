@@ -519,7 +519,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, voi
             m_pMailToLB->SelectEntry(sEMailColumn);
             // HTML format pre-selected
             m_pSendAsLB->SelectEntryPos(3);
-            SendTypeHdl_Impl(m_pSendAsLB);
+            SendTypeHdl_Impl(*m_pSendAsLB);
         }
     }
     m_pFromRB->GetClickHdl().Call(m_pFromRB->IsChecked() ? m_pFromRB.get() : 0);
@@ -815,14 +815,14 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SaveOutputHdl_Impl, Button*, pButton, voi
     m_pWizard->enableButtons(WizardButtonFlags::FINISH, true);
 }
 
-IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox&, rBox, void)
 {
     SwView *const pTargetView = m_pWizard->GetConfigItem().GetTargetView();
     SfxPrinter *const pDocumentPrinter = pTargetView->GetWrtShell()
         .getIDocumentDeviceAccess().getPrinter(true);
-    if (pDocumentPrinter && pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+    if (pDocumentPrinter && rBox.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {
-        const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectEntry(), false );
+        const QueueInfo* pInfo = Printer::GetQueueInfo( rBox.GetSelectEntry(), false );
 
         if( pInfo )
         {
@@ -853,9 +853,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
     }
     else
         m_pPrinterSettingsPB->Disable();
-    m_pWizard->GetConfigItem().SetSelectedPrinter( pBox->GetSelectEntry() );
-
-    return 0;
+    m_pWizard->GetConfigItem().SetSelectedPrinter( rBox.GetSelectEntry() );
 }
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeOutputPage, PrintHdl_Impl, Button*, void)
@@ -918,14 +916,14 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeOutputPage, PrintHdl_Impl, Button*, void)
 IMPL_LINK_TYPED(SwMailMergeOutputPage, PrinterSetupHdl_Impl, Button*, pButton, void)
 {
     if( !m_pTempPrinter )
-        PrinterChangeHdl_Impl(m_pPrinterLB);
+        PrinterChangeHdl_Impl(*m_pPrinterLB);
     if(m_pTempPrinter)
         m_pTempPrinter->Setup(pButton);
 }
 
-IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox&, rBox, void)
 {
-    sal_uLong nDocType = reinterpret_cast<sal_uLong>(pBox->GetSelectEntryData());
+    sal_uLong nDocType = reinterpret_cast<sal_uLong>(rBox.GetSelectEntryData());
     bool bEnable = MM_DOCTYPE_HTML != nDocType && MM_DOCTYPE_TEXT != nDocType;
     m_pSendAsPB->Enable( bEnable );
     m_pAttachmentGroup->Enable( bEnable );
@@ -946,7 +944,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
             m_pAttachmentED->SetText(sAttach);
         }
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwMailMergeOutputPage, SendAsHdl_Impl, Button*, pButton, void)

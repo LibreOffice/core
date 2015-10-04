@@ -84,7 +84,7 @@ private:
     bool                        m_bHasFilename;
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
 
-    DECL_LINK( FilterSelectHdl_Impl, void* );
+    DECL_LINK_TYPED(            FilterSelectHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED(            FilterSelectTimerHdl_Impl, Timer*, void );
     DECL_LINK_TYPED(            NewFolderHdl_Impl, Button*, void );
     DECL_LINK_TYPED(            OpenUrlHdl_Impl, SvtURLBox*, void );

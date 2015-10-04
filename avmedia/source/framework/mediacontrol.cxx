@@ -560,30 +560,25 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
 
 
 
-IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox*, p )
+IMPL_LINK_TYPED( MediaControl, implZoomSelectHdl, ListBox&, p, void )
 {
-    if( p )
+    MediaItem aExecItem;
+    css::media::ZoomLevel eLevel;
+
+    switch( p.GetSelectEntryPos() )
     {
-        MediaItem aExecItem;
-        css::media::ZoomLevel eLevel;
+        case( AVMEDIA_ZOOMLEVEL_50 ): eLevel = css::media::ZoomLevel_ZOOM_1_TO_2; break;
+        case( AVMEDIA_ZOOMLEVEL_100 ): eLevel = css::media::ZoomLevel_ORIGINAL; break;
+        case( AVMEDIA_ZOOMLEVEL_200 ): eLevel = css::media::ZoomLevel_ZOOM_2_TO_1; break;
+        case( AVMEDIA_ZOOMLEVEL_FIT ): eLevel = css::media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT; break;
+        case( AVMEDIA_ZOOMLEVEL_SCALED ): eLevel = css::media::ZoomLevel_FIT_TO_WINDOW; break;
 
-        switch( p->GetSelectEntryPos() )
-        {
-            case( AVMEDIA_ZOOMLEVEL_50 ): eLevel = css::media::ZoomLevel_ZOOM_1_TO_2; break;
-            case( AVMEDIA_ZOOMLEVEL_100 ): eLevel = css::media::ZoomLevel_ORIGINAL; break;
-            case( AVMEDIA_ZOOMLEVEL_200 ): eLevel = css::media::ZoomLevel_ZOOM_2_TO_1; break;
-            case( AVMEDIA_ZOOMLEVEL_FIT ): eLevel = css::media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT; break;
-            case( AVMEDIA_ZOOMLEVEL_SCALED ): eLevel = css::media::ZoomLevel_FIT_TO_WINDOW; break;
-
-            default: eLevel = css::media::ZoomLevel_NOT_AVAILABLE; break;
-        }
-
-        aExecItem.setZoom( eLevel );
-        execute( aExecItem );
-        update();
+        default: eLevel = css::media::ZoomLevel_NOT_AVAILABLE; break;
     }
 
-    return 0;
+    aExecItem.setZoom( eLevel );
+    execute( aExecItem );
+    update();
 }
 
 

@@ -247,13 +247,13 @@ void SwEnvPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
+IMPL_LINK_TYPED( SwEnvPage, DatabaseHdl, ListBox&, rListBox, void )
 {
     SwWait aWait( *pSh->GetView().GetDocShell(), true );
 
-    if (pListBox == m_pDatabaseLB)
+    if (&rListBox == m_pDatabaseLB)
     {
-        sActDBName = pListBox->GetSelectEntry();
+        sActDBName = rListBox.GetSelectEntry();
         pSh->GetDBManager()->GetTableNames(m_pTableLB, sActDBName);
         sActDBName += OUString(DB_DELIM);
     }
@@ -263,7 +263,6 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
     }
     pSh->GetDBManager()->GetColumnNames(m_pDBFieldLB, m_pDatabaseLB->GetSelectEntry(),
                                        m_pTableLB->GetSelectEntry());
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwEnvPage, FieldHdl, Button*, void)

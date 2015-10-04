@@ -240,7 +240,7 @@ namespace vcl
         virtual void Command( const CommandEvent& ) SAL_OVERRIDE;
         virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
 
-        DECL_LINK( SelectHdl, ListBox* );
+        DECL_LINK_TYPED( SelectHdl, ListBox&, void );
         DECL_LINK_TYPED( ClickHdl, Button*, void );
         DECL_LINK_TYPED( ToggleHdl, CheckBox&, void );
         DECL_LINK_TYPED( ToggleRadioHdl, RadioButton&, void );
@@ -248,7 +248,7 @@ namespace vcl
 
         DECL_LINK_TYPED( UIOption_CheckHdl, CheckBox&, void );
         DECL_LINK_TYPED( UIOption_RadioHdl, RadioButton&, void );
-        DECL_LINK( UIOption_SelectHdl, ListBox* );
+        DECL_LINK_TYPED( UIOption_SelectHdl, ListBox&, void );
         DECL_LINK( UIOption_ModifyHdl, Edit* );
 
     public:

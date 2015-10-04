@@ -272,7 +272,7 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
 #endif
     }
     m_pNumCountBox->SelectEntry(sSelect);
-    NumCountHdl(m_pNumCountBox);
+    NumCountHdl(*m_pNumCountBox);
 }
 
 int SwEndNoteOptionPage::GetNumbering() const
@@ -310,7 +310,7 @@ IMPL_LINK_NOARG_TYPED(SwEndNoteOptionPage, PosPageHdl, Button*, void)
     m_pPageTemplBox->Enable(false);
 }
 
-IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl)
+IMPL_LINK_NOARG_TYPED(SwEndNoteOptionPage, NumCountHdl, ListBox&, void)
 {
     bool bEnable = true;
     if( m_pNumCountBox->GetEntryCount() - 1 != m_pNumCountBox->GetSelectEntryPos() )
@@ -320,7 +320,6 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl)
     }
     m_pOffsetLbl->Enable(bEnable);
     m_pOffsetField->Enable(bEnable);
-    return 0;
 }
 
 // Handler behind the button to collect the footnote at the chapter or end of

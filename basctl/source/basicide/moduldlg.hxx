@@ -230,7 +230,7 @@ protected:
     LibraryLocation     m_eCurLocation;
 
     DECL_LINK_TYPED( TreeListHighlightHdl, SvTreeListBox *, void );
-    DECL_LINK( BasicSelectHdl, ListBox * );
+    DECL_LINK_TYPED( BasicSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( ButtonHdl, Button *, void );
     DECL_LINK_TYPED( CheckPasswordHdl, SvxPasswordDialog *, bool );
     void                CheckButtons();

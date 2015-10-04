@@ -716,12 +716,11 @@ IMPL_LINK_NOARG(ScOptSolverDlg, CondModifyHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, SelectHdl)
+IMPL_LINK_NOARG_TYPED(ScOptSolverDlg, SelectHdl, ListBox&, void)
 {
     // select handler for operator list boxes, just to enable/disable "delete" buttons
     ReadConditions();
     EnableButtons();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScOptSolverDlg, ScrollHdl, ScrollBar*, void)

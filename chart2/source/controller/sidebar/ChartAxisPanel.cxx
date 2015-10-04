@@ -343,14 +343,12 @@ IMPL_LINK_TYPED(ChartAxisPanel, CheckBoxHdl, Button*, pButton, void)
         setReverse(mxModel, aCID, bChecked);
 }
 
-IMPL_LINK_NOARG(ChartAxisPanel, ListBoxHdl)
+IMPL_LINK_NOARG_TYPED(ChartAxisPanel, ListBoxHdl, ListBox&, void)
 {
     OUString aCID = getCID(mxModel);
     sal_Int32 nPos = mpLBLabelPos->GetSelectEntryPos();
 
     setLabelPosition(mxModel, aCID, nPos);
-
-    return 0;
 }
 
 }} // end of namespace ::chart::sidebar

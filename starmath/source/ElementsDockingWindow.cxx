@@ -725,19 +725,18 @@ void SmElementsDockingWindow::SelectClickHandler( SmElement* pElement )
     }
 }
 
-IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, ListBox*, pList)
+IMPL_LINK_TYPED( SmElementsDockingWindow, ElementSelectedHandle, ListBox&, rList, void)
 {
     for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aCategories) ; i++)
     {
         sal_uInt16 aCurrentCategory = aCategories[i];
         OUString aCurrentCategoryString = SM_RESSTR(aCurrentCategory);
-        if (aCurrentCategoryString == pList->GetSelectEntry())
+        if (aCurrentCategoryString == rList.GetSelectEntry())
         {
             mpElementsControl->setElementSetId(aCurrentCategory);
-            return 0;
+            return;
         }
     }
-    return 0;
 }
 
 SmViewShell* SmElementsDockingWindow::GetView()

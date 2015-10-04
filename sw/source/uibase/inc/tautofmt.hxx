@@ -75,7 +75,7 @@ class SwAutoFormatDlg : public SfxModalDialog
     DECL_LINK_TYPED( AddHdl, Button*, void );
     DECL_LINK_TYPED( RemoveHdl, Button*, void );
     DECL_LINK_TYPED( RenameHdl, Button*, void );
-    DECL_LINK( SelFormatHdl, void * );
+    DECL_LINK_TYPED( SelFormatHdl, ListBox&, void );
 
 public:
     SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,

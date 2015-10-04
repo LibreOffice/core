@@ -548,8 +548,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
             m_pFrameSel->SelectAllVisibleBorders();
 
         // set the current style and color (caches style in control even if nothing is selected)
-        SelStyleHdl_Impl(m_pLbLineStyle);
-        SelColHdl_Impl(m_pLbLineColor);
+        SelStyleHdl_Impl(*m_pLbLineStyle);
+        SelColHdl_Impl(*m_pLbLineColor);
     }
 
     bool bEnable = m_pWndShadows->GetSelectItemId() > 1 ;
@@ -565,7 +565,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
     if ( m_pLbLineStyle->GetSelectEntryPos() == 0 )
     {
         m_pLbLineStyle->SelectEntryPos( 1 );
-        SelStyleHdl_Impl(m_pLbLineStyle);
+        SelStyleHdl_Impl(*m_pLbLineStyle);
     }
 
     const SfxPoolItem* pItem;
@@ -836,8 +836,8 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
             m_pLbLineStyle->SelectEntryPos( 1 );
 
         // set current style to all previously selected lines
-        SelStyleHdl_Impl(m_pLbLineStyle);
-        SelColHdl_Impl(m_pLbLineColor);
+        SelStyleHdl_Impl(*m_pLbLineStyle);
+        SelColHdl_Impl(*m_pLbLineColor);
     }
 
     // Presets ValueSet does not show a selection (used as push buttons).
@@ -859,17 +859,15 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
 
 
 
-IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
+IMPL_LINK_TYPED( SvxBorderTabPage, SelColHdl_Impl, ListBox&, rLb, void )
 {
-    ColorListBox* pColLb = static_cast<ColorListBox*>(pLb);
+    ColorListBox* pColLb = static_cast<ColorListBox*>(&rLb);
 
-    if (pLb == m_pLbLineColor)
+    if (&rLb == m_pLbLineColor)
     {
         m_pFrameSel->SetColorToSelection( pColLb->GetSelectEntryColor() );
         m_pLbLineStyle->SetColor( pColLb->GetSelectEntryColor() );
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl)
@@ -888,9 +886,9 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl)
 
 
 
-IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
+IMPL_LINK_TYPED( SvxBorderTabPage, SelStyleHdl_Impl, ListBox&, rLb, void )
 {
-    if (pLb == m_pLbLineStyle)
+    if (&rLb == m_pLbLineStyle)
     {
         sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                     m_pLineWidthMF->GetValue( ),
@@ -899,8 +897,6 @@ IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
         m_pFrameSel->SetStyleToSelection ( nVal,
             SvxBorderStyle( m_pLbLineStyle->GetSelectEntryStyle() ) );
     }
-
-    return 0;
 }
 
 

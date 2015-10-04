@@ -95,10 +95,9 @@ IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwFootNotePage, LineColorSelected_Impl)
+IMPL_LINK_NOARG_TYPED(SwFootNotePage, LineColorSelected_Impl, ListBox&, void)
 {
     m_pLineTypeBox->SetColor( m_pLineColorBox->GetSelectEntryColor() );
-    return 0;
 }
 
 SwFootNotePage::SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet)

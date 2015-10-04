@@ -88,7 +88,7 @@ namespace dbaui
         DECL_LINK_TYPED( OnExecute, Button*, void );
         DECL_LINK_TYPED( OnClose, void*, void );
         DECL_LINK_TYPED( OnCloseClick, Button*, void );
-        DECL_LINK( OnListEntrySelected, void* );
+        DECL_LINK_TYPED( OnListEntrySelected, ListBox&, void );
         DECL_LINK( OnStatementModified, void* );
 
     private:

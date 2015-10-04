@@ -129,7 +129,7 @@ private:
 
     DECL_LINK(ModifyHdl_Impl, void *);
     DECL_LINK_TYPED(AssignHdl_Impl, Button*, void);
-    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK_TYPED(SelectHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(DblClickHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(RemoveHdl_Impl, Button*, void);
 
@@ -165,7 +165,7 @@ private:
     DECL_LINK_TYPED(AddArchiveHdl_Impl, Button*, void);
     DECL_LINK_TYPED(AddPathHdl_Impl, Button*, void);
     DECL_LINK_TYPED(RemoveHdl_Impl, Button*, void);
-    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK_TYPED(SelectHdl_Impl, ListBox&, void);
 
     bool                    IsPathDuplicate( const OUString& _rPath );
     inline void             EnableRemoveButton()

@@ -64,10 +64,9 @@ IMPL_LINK_NOARG_TYPED(SwBreakDlg, ClickHdl, Button*, void)
     CheckEnable();
 }
 
-IMPL_LINK_NOARG(SwBreakDlg, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SwBreakDlg, SelectHdl, ListBox&, void)
 {
     CheckEnable();
-    return 0;
 }
 
 // Handler for Change Page Number

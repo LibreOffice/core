@@ -186,7 +186,7 @@ private:
                     , const OUString& rPassword, bool bPersistent );
 
     DECL_LINK_TYPED ( AddServiceHdl, Button*, void );
-    DECL_LINK ( SelectServiceHdl, void * );
+    DECL_LINK_TYPED ( SelectServiceHdl, ListBox&, void );
     DECL_LINK_TYPED ( EditServiceMenuHdl, MenuButton *, void );
 
     DECL_LINK_TYPED( DoubleClickHdl, SvTreeListBox*, bool );
@@ -197,7 +197,7 @@ private:
 
     DECL_LINK_TYPED( SplitHdl, Splitter*, void );
 
-    DECL_LINK( SelectFilterHdl, void * );
+    DECL_LINK_TYPED( SelectFilterHdl, ListBox&, void );
 
     DECL_LINK_TYPED( TreeSelectHdl, SvTreeListBox*, void );
 

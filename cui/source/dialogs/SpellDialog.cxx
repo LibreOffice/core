@@ -783,7 +783,7 @@ LanguageType SpellDialog::GetSelectedLang_Impl() const
 }
 
 
-IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
+IMPL_LINK_TYPED(SpellDialog, LanguageSelectHdl, ListBox&, rBox, void)
 {
     //If selected language changes, then add->list should be regenerated to
     //match
@@ -795,7 +795,7 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
     m_pSuggestionLB->Clear();
     if(!sError.isEmpty())
     {
-        LanguageType eLanguage = pBox->GetSelectLanguage();
+        LanguageType eLanguage = static_cast<SvxLanguageBox*>(&rBox)->GetSelectLanguage();
         Reference <XSpellAlternatives> xAlt = xSpell->spell( sError, eLanguage,
                                             Sequence< PropertyValue >() );
         if( xAlt.is() )
@@ -809,7 +809,6 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
          m_pSentenceED->AddUndoAction(new SpellUndoAction_Impl(SPELLUNDO_CHANGE_LANGUAGE, aDialogUndoLink));
     }
     SpellDialog::UpdateBoxes_Impl();
-    return 0;
 }
 
 

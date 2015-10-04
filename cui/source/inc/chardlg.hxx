@@ -134,6 +134,7 @@ private:
 
     DECL_LINK_TYPED(UpdateHdl_Impl, Idle *, void);
     DECL_LINK(          FontModifyHdl_Impl, void* );
+    DECL_LINK_TYPED(FontModifyListBoxHdl_Impl, ListBox&, void);
 
 public:
     using SfxTabPage::ActivatePage;
@@ -215,11 +216,12 @@ private:
     void                ResetColor_Impl( const SfxItemSet& rSet );
     bool                FillItemSetColor_Impl( SfxItemSet& rSet );
 
-    DECL_LINK(          SelectHdl_Impl, ListBox* );
+    void SelectHdl_Impl(ListBox*);
+    DECL_LINK_TYPED(SelectListBoxHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(CbClickHdl_Impl, Button*, void);
     DECL_LINK_TYPED(TristClickHdl_Impl, Button*, void);
-    DECL_LINK(UpdatePreview_Impl, void *);
-    DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
+    DECL_LINK_TYPED(UpdatePreview_Impl, ListBox&, void);
+    DECL_LINK_TYPED(ColorBoxSelectHdl_Impl, ListBox&, void);
 
 public:
     virtual ~SvxCharEffectsPage();
@@ -297,7 +299,7 @@ private:
     DECL_LINK(          FontModifyHdl_Impl, void *);
     DECL_LINK_TYPED(    AutoPositionHdl_Impl, Button*, void );
     DECL_LINK_TYPED(    FitToLineHdl_Impl, Button*, void );
-    DECL_LINK(          KerningSelectHdl_Impl, void *);
+    DECL_LINK_TYPED(    KerningSelectHdl_Impl, ListBox&, void);
     DECL_LINK(          KerningModifyHdl_Impl, void *);
     DECL_LINK_TYPED(    LoseFocusHdl_Impl, Control&, void );
     DECL_LINK(          ScaleWidthModifyHdl_Impl, void *);
@@ -348,7 +350,7 @@ private:
     void                SetBracket( sal_Unicode cBracket, bool bStart );
 
     DECL_LINK_TYPED(TwoLinesHdl_Impl, Button*, void);
-    DECL_LINK(          CharacterMapHdl_Impl, ListBox* );
+    DECL_LINK_TYPED(CharacterMapHdl_Impl, ListBox&, void );
 
 public:
     virtual ~SvxCharTwoLinesPage();
