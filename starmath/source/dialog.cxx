@@ -214,7 +214,7 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
     else
         nPrintSize = PRINT_SIZE_ZOOMED;
 
-    rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTSIZE), (sal_uInt16) nPrintSize));
+    rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTSIZE), nPrintSize));
     rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), (sal_uInt16) m_pZoom->GetValue()));
     rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTITLE), m_pTitle->IsChecked()));
     rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTEXT), m_pText->IsChecked()));
@@ -228,7 +228,7 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
 
 void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 {
-    SmPrintSize ePrintSize = (SmPrintSize)static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_PRINTSIZE))).GetValue();
+    SmPrintSize ePrintSize = static_cast<SmPrintSize>(static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_PRINTSIZE))).GetValue());
 
     m_pSizeNormal->Check(ePrintSize == PRINT_SIZE_NORMAL);
     m_pSizeScaled->Check(ePrintSize == PRINT_SIZE_SCALED);
