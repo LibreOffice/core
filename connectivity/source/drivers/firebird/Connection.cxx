@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Catalog.hxx"
-#include "Connection.hxx"
-#include "DatabaseMetaData.hxx"
-#include "Driver.hxx"
-#include "PreparedStatement.hxx"
-#include "Statement.hxx"
-#include "Tables.hxx"
-#include "Util.hxx"
+#include <Catalog.hxx>
+#include <Connection.hxx>
+#include <DatabaseMetaData.hxx>
+#include <Driver.hxx>
+#include <PreparedStatement.hxx>
+#include <Statement.hxx>
+#include <Tables.hxx>
+#include <Util.hxx>
 
 #include <stdexcept>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_STATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_STATEMENT_HXX
 
-#include "StatementCommonBase.hxx"
+#include <StatementCommonBase.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 

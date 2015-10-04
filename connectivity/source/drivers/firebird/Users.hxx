@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USERS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USERS_HXX
 
-#include "DatabaseMetaData.hxx"
+#include <DatabaseMetaData.hxx>
 
 #include <connectivity/sdbcx/VCollection.hxx>
 

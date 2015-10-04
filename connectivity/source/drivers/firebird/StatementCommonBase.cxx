@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Driver.hxx"
-#include "ResultSet.hxx"
-#include "StatementCommonBase.hxx"
-#include "Util.hxx"
+#include <Driver.hxx>
+#include <ResultSet.hxx>
+#include <StatementCommonBase.hxx>
+#include <Util.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>

@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "Catalog.hxx"
-#include "Tables.hxx"
-#include "Users.hxx"
+#include <Catalog.hxx>
+#include <Tables.hxx>
+#include <Users.hxx>
 
 using namespace ::connectivity::firebird;
 using namespace ::com::sun::star;

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_TABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_TABLE_HXX
 
-#include "Tables.hxx"
+#include <Tables.hxx>
 
 #include <connectivity/TTableHelper.hxx>
 

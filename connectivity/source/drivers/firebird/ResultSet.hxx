@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_RESULTSET_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_RESULTSET_HXX
 
-#include "Statement.hxx"
+#include <Statement.hxx>
 
 #include <ibase.h>
 

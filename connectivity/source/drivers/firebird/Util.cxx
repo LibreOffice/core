@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "Util.hxx"
+#include <Util.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::connectivity;

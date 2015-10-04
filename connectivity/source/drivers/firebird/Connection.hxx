@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CONNECTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CONNECTION_HXX
 
-#include "Blob.hxx"
-#include "SubComponent.hxx"
+#include <Blob.hxx>
+#include <SubComponent.hxx>
 
 #include <ibase.h>
 

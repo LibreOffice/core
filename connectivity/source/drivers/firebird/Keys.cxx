@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "Keys.hxx"
-#include "Table.hxx"
+#include <Keys.hxx>
+#include <Table.hxx>
 
 #include <connectivity/dbtools.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DatabaseMetaData.hxx"
-#include "Util.hxx"
+#include <DatabaseMetaData.hxx>
+#include <Util.hxx>
 
 #include <ibase.h>
 #include <rtl/ustrbuf.hxx>

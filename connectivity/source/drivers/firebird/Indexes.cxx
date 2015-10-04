@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "Indexes.hxx"
+#include <Indexes.hxx>
 
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;

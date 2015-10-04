@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_COLUMNS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_COLUMNS_HXX
 
-#include "Table.hxx"
+#include <Table.hxx>
 
 #include <connectivity/TColumnsHelper.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Connection.hxx"
-#include "Driver.hxx"
+#include <Connection.hxx>
+#include <Driver.hxx>
 
 #include <connectivity/dbexception.hxx>
 #include <resource/common_res.hrc>

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Connection.hxx"
-#include "Driver.hxx"
-#include "ResultSet.hxx"
-#include "Statement.hxx"
-#include "Util.hxx"
+#include <Connection.hxx>
+#include <Driver.hxx>
+#include <ResultSet.hxx>
+#include <Statement.hxx>
+#include <Util.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>

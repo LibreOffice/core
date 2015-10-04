@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ResultSetMetaData.hxx"
-#include "Util.hxx"
+#include <ResultSetMetaData.hxx>
+#include <Util.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 

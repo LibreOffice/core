@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_INDEXES_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_INDEXES_HXX
 
-#include "Table.hxx"
+#include <Table.hxx>
 
 #include <connectivity/TIndexes.hxx>
 
