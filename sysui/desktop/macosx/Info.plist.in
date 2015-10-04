@@ -46,6 +46,8 @@
                     <string>application/vnd.sun.xml.writer</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -68,6 +70,8 @@
                     <string>application/vnd.oasis.opendocument.text</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-text.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -90,6 +94,8 @@
                     <string>application/vnd.oasis.opendocument.text-flat-xml</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-text.icns</string>
         </dict>
 
         <!-- Calc documents -->
@@ -114,6 +120,8 @@
                     <string>application/vnd.sun.xml.calc</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -136,6 +144,8 @@
                     <string>application/vnd.oasis.opendocument.spreadsheet</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -158,6 +168,8 @@
                     <string>application/vnd.oasis.opendocument.spreadsheet-flat-xml</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-spreadsheet.icns</string>
         </dict>
 
         <!-- Impress documents -->
@@ -182,6 +194,8 @@
                     <string>application/vnd.sun.xml.impress</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>presentation.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -204,6 +218,8 @@
                     <string>application/vnd.oasis.opendocument.presentation</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-presentation.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -226,6 +242,8 @@
                     <string>application/vnd.oasis.opendocument.presentation-flat-xml</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-presentation.icns</string>
         </dict>
 
         <!-- Draw documents -->
@@ -250,6 +268,8 @@
                     <string>application/vnd.sun.xml.draw</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -272,6 +292,8 @@
                     <string>application/vnd.oasis.opendocument.graphics</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -294,6 +316,8 @@
                     <string>application/vnd.oasis.opendocument.graphics-flat-xml</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-drawing.icns</string>
         </dict>
 
         <!-- Text master documents -->
@@ -318,6 +342,8 @@
                     <string>application/vnd.sun.xml.writer.global</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>master-document.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -340,6 +366,8 @@
                     <string>application/vnd.oasis.opendocument.text-master</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-master-document.icns</string>
         </dict>
 
         <!-- Math documents -->
@@ -364,6 +392,8 @@
                     <string>application/vnd.sun.xml.math</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>formula.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -386,6 +416,8 @@
                     <string>application/vnd.oasis.opendocument.formula</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-formula.icns</string>
         </dict>
 
         <!-- Text template documents -->
@@ -410,6 +442,8 @@
                     <string>application/vnd.sun.xml.writer.template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -432,6 +466,8 @@
                     <string>application/vnd.oasis.opendocument.text-template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-text-template.icns</string>
         </dict>
 
         <!-- Writer master document templates -->
@@ -456,6 +492,8 @@
                     <string>application/vnd.oasis.opendocument.text-master-template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-master-document-template.icns</string>
         </dict>
 
         <!-- Spreadsheet template documents -->
@@ -480,6 +518,8 @@
                     <string>application/vnd.sun.xml.calc.template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -502,6 +542,8 @@
                     <string>application/vnd.oasis.opendocument.spreadsheet-template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-spreadsheet-template.icns</string>
         </dict>
 
         <!-- Presentation template documents -->
@@ -526,6 +568,8 @@
                     <string>application/vnd.sun.xml.impress.template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>presentation-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -548,6 +592,8 @@
                     <string>application/vnd.oasis.opendocument.presentation-template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-presentation-template.icns</string>
         </dict>
 
         <!-- Drawing template documents -->
@@ -572,6 +618,8 @@
                     <string>application/vnd.sun.xml.draw.template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>drawing-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeIdentifier</key>
@@ -594,6 +642,8 @@
                     <string>application/vnd.oasis.opendocument.graphics-template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-drawing-template.icns</string>
         </dict>
 
         <!-- Base documents -->
@@ -618,6 +668,8 @@
                     <string>application/vnd.oasis.opendocument.database</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>oasis-database.icns</string>
         </dict>
 
         <!-- Extensions -->
@@ -642,6 +694,8 @@
                     <string>application/vnd.openofficeorg.extension</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>extension.icns</string>
         </dict>
     </array>
 
