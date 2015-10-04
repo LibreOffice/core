@@ -54,6 +54,9 @@
 #include "sunjre.hxx"
 #include "vendorlist.hxx"
 #include "diagnostics.h"
+#ifdef MACOSX
+#include "util_cocoa.hxx"
+#endif
 
 using namespace osl;
 using namespace std;
@@ -435,6 +438,8 @@ bool getJavaProps(const OUString & exePath,
     }
 
 #ifdef MACOSX
+    if (!JvmfwkUtil_isLoadableJVM(exePath))
+        return false;
     if (sClassPath.endsWith("/"))
         sClassPath += "../Resources/java/";
     else
@@ -1194,21 +1199,36 @@ void addJavaInfosDirScan(
     getAndAddJREInfoByPath("file:////usr/jdk/latest", allInfos, addedInfos);
 }
 
-#elif defined MACOSX && defined X86_64
-
-void addJavaInfosDirScan(
-    std::vector<rtl::Reference<VendorBase>> & allInfos,
-    std::vector<rtl::Reference<VendorBase>> & addedInfos)
-{
-    // Oracle Java 7
-    getAndAddJREInfoByPath("file:///Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home", allInfos, addedInfos);
-}
-
 #else
 void addJavaInfosDirScan(
     std::vector<rtl::Reference<VendorBase>> & allInfos,
     std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
+#ifdef MACOSX
+    // Ignore all but Oracle's JDK as loading Apple's Java and Oracle's JRE
+    // will cause OS X's JavaVM framework to display a dialog and invoke
+    // exit() when loaded via JNI on OS X 10.10
+    Directory aDir("file:///Library/Java/JavaVirtualMachines");
+    if (aDir.open() == File::E_None)
+    {
+        DirectoryItem aItem;
+        while (aDir.getNextItem(aItem) == File::E_None)
+        {
+            FileStatus aStatus(osl_FileStatus_Mask_FileURL);
+            if (aItem.getFileStatus(aStatus) == File::E_None)
+            {
+                OUString aItemURL( aStatus.getFileURL() );
+                if (aItemURL.getLength())
+                {
+                    aItemURL += "/Contents/Home";
+                    if (DirectoryItem::get(aItemURL, aItem) == File::E_None)
+                        getAndAddJREInfoByPath(aItemURL, allInfos, addedInfos);
+                }
+            }
+        }
+        aDir.close();
+    }
+#else // MACOSX
     OUString excMessage = "[Java framework] sunjavaplugin: "
                           "Error in function addJavaInfosDirScan in util.cxx.";
     int cJavaNames= sizeof(g_arJavaNames) / sizeof(char*);
@@ -1322,6 +1342,7 @@ void addJavaInfosDirScan(
             }
         }
     }
+#endif // MACOSX
 }
 #endif // ifdef SOLARIS
 #endif // ifdef UNX

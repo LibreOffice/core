@@ -54,6 +54,10 @@
 #include "vendorlist.hxx"
 #include "diagnostics.h"
 
+#ifdef MACOSX
+#include "util_cocoa.hxx"
+#endif
+
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
 #else
@@ -655,7 +659,16 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     //Check if the Vendor (pInfo->sVendor) is supported by this plugin
     if ( ! isVendorSupported(pInfo->sVendor))
         return JFW_PLUGIN_E_WRONG_VENDOR;
+#ifdef MACOSX
+    rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath( OUString( pInfo->sLocation ) );
+    if ( !aVendorInfo.is() || aVendorInfo->compareVersions( OUString( pInfo->sVersion ) ) < 0 )
+        return JFW_PLUGIN_E_VM_CREATION_FAILED;
+#endif
     OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
+#ifdef MACOSX
+    if ( !JvmfwkUtil_isLoadableJVM( sRuntimeLib ) )
+        return JFW_PLUGIN_E_VM_CREATION_FAILED;
+#endif
     JFW_TRACE2("Using Java runtime library: " << sRuntimeLib);
 
 #ifndef ANDROID
