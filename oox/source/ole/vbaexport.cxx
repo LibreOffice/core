@@ -47,6 +47,11 @@
 #define VBA_USE_ORIGINAL_PROJECT_STREAM 0
 #define VBA_USE_ORIGINAL_VBA_PROJECT 0
 
+#define VBA_ENCRYPTION 0
+/* Enable to see VBA Encryption work. For now the input data and length values
+ * for encryption correspond to the case when the VBA macro is not protected.
+ */
+
 namespace {
 
 void exportString(SvStream& rStrm, const OUString& rString)
@@ -335,6 +340,105 @@ void VBACompression::write()
         bStreamNotEnded = nRemainingSize != 0;
     }
 }
+
+// section 2.4.3
+#if VBA_ENCRYPTION
+
+VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, SvStream& rEncryptedData)
+    :mpData(pData)
+    ,mnLength(length)
+    ,mrEncryptedData(rEncryptedData)
+    ,mnEncryptedByte1(0)
+    ,mnEncryptedByte2(0)
+    ,mnVersion(2)
+    ,mnProjKey(0)
+    ,mnIgnoredLength(0)
+    ,mnSeed(0)
+    ,mnVersionEnc(0)
+{
+}
+
+void VBAEncryption::writeSeed()
+{
+    mnSeed = 0xBE; // sample seed value TODO:Generate random seed values
+    mrEncryptedData.WriteUInt8(mnSeed);
+}
+
+void VBAEncryption::writeVersionEnc()
+{
+    mnVersionEnc = mnSeed ^ mnVersion;
+    mrEncryptedData.WriteUInt8(mnVersionEnc);
+}
+
+void VBAEncryption::writeProjKeyEnc()
+{
+    OUString mrProjectCLSID = "{9F10AB9C-89AC-4C0F-8AFB-8E9B96D5F170}"; //TODO:Find the real ProjectId.ProjectClSID
+    sal_Int32 n = mrProjectCLSID.getLength();
+    const sal_Unicode* pString = mrProjectCLSID.getStr();
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        sal_Unicode character = pString[i];
+        mnProjKey += character;
+    }
+    sal_uInt8 nProjKeyEnc = mnSeed ^ mnProjKey;
+    mrEncryptedData.WriteUInt8(nProjKeyEnc);
+    mnUnencryptedByte1 = mnProjKey;
+    mnEncryptedByte1 = nProjKeyEnc; // ProjKeyEnc
+    mnEncryptedByte2 = mnVersionEnc; // VersionEnc
+}
+
+void VBAEncryption::writeIgnoredEnc()
+{
+    mnIgnoredLength = (mnSeed & 6) / 2;
+    for(sal_Int32 i = 1; i <= mnIgnoredLength; ++i)
+    {
+        sal_uInt8 nTempValue = 0xBE; // TODO:Generate a random value
+        sal_uInt8 nByteEnc = nTempValue ^ (mnEncryptedByte2 + mnUnencryptedByte1);
+        mrEncryptedData.WriteUInt8(nByteEnc);
+        mnEncryptedByte2 = mnEncryptedByte1;
+        mnEncryptedByte1 = nByteEnc;
+        mnUnencryptedByte1 = nTempValue;
+    }
+}
+
+void VBAEncryption::writeDataLengthEnc()
+{
+    sal_uInt16 temp = mnLength;
+    for(sal_Int8 i = 0; i < 2; ++i)
+    {
+        sal_uInt8 nByte = temp & 0xFF;
+        sal_uInt8 nByteEnc = nByte ^ (mnEncryptedByte2 + mnUnencryptedByte1);
+        mrEncryptedData.WriteUInt8(nByteEnc);
+        mnEncryptedByte2 = mnEncryptedByte1;
+        mnEncryptedByte1 = nByteEnc;
+        mnUnencryptedByte1 = nByte;
+        temp >>= 8;
+    }
+}
+
+void VBAEncryption::writeDataEnc()
+{
+    for(sal_Int8 i = 0; i < mnLength; i++)
+    {
+        sal_uInt8 nByteEnc = mpData[i] ^ (mnEncryptedByte2 + mnUnencryptedByte1);
+        mrEncryptedData.WriteUInt8(nByteEnc);
+        mnEncryptedByte2 = mnEncryptedByte1;
+        mnEncryptedByte1 = nByteEnc;
+        mnUnencryptedByte1 = mpData[i];
+    }
+}
+
+void VBAEncryption::write()
+{
+    writeSeed();
+    writeVersionEnc();
+    writeProjKeyEnc();
+    writeIgnoredEnc();
+    writeDataLengthEnc();
+    writeDataEnc();
+}
+
+#endif
 
 VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
     mxModel(xModel)
@@ -768,13 +872,43 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
     exportString(rStrm, "VersionCompatible32=\"393222000\"\r\n");
 
     // section 2.3.1.15 ProjectProtectionState
+#if VBA_ENCRYPTION
+    exportString(rStrm, "CMG=\"");
+    SvMemoryStream aProtectedStream(4096, 4096);
+    aProtectedStream.WriteUInt32(0x00000000);
+    const sal_uInt8* pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
+    VBAEncryption aProtectionState(pData, 4, rStrm);
+    aProtectionState.write();
+    exportString(rStrm, "\"\r\n");
+#else
     exportString(rStrm, "CMG=\"BEBC9256EEAAA8AEA8AEA8AEA8AE\"\r\n");
+#endif
 
     // section 2.3.1.16 ProjectPassword
+#if VBA_ENCRYPTION
+    exportString(rStrm, "DPB=\"");
+    aProtectedStream.Seek(0);
+    aProtectedStream.WriteUInt8(0x00);
+    pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
+    VBAEncryption aProjectPassword(pData, 1, rStrm);
+    aProjectPassword.write();
+    exportString(rStrm, "\"\r\n");
+#else
     exportString(rStrm, "DPB=\"7C7E5014B0D3B1D3B1D3\"\r\n");
+#endif
 
     // section 2.3.1.17 ProjectVisibilityState
+#if VBA_ENCRYPTION
+    exportString(rStrm, "GC=\"");
+    aProtectedStream.Seek(0);
+    aProtectedStream.WriteUInt8(0xFF);
+    pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
+    VBAEncryption aVisibilityState(pData, 1, rStrm);
+    aVisibilityState.write();
+    exportString(rStrm, "\"\r\n\r\n");
+#else
     exportString(rStrm, "GC=\"3A3816DAD5DBD5DB2A\"\r\n\r\n");
+#endif
 
     // section 2.3.1.18 HostExtenders
     exportString(rStrm, "[Host Extender Info]\r\n"
