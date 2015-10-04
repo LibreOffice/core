@@ -160,7 +160,7 @@ class OfaLanguagesTabPage : public SfxTabPage
     bool            m_bDatePatternsValid;
 
     DECL_LINK_TYPED(  SupportHdl, Button*, void ) ;
-    DECL_LINK(  LocaleSettingHdl, SvxLanguageBox* ) ;
+    DECL_LINK_TYPED(  LocaleSettingHdl, ListBox&, void ) ;
     DECL_LINK(  DatePatternsHdl, Edit* ) ;
 
 public:

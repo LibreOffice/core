@@ -204,7 +204,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     m_pApplyToLB->SelectEntryPos(0);
     ObjectHdl(0);
 
-    m_pApplyToLB->SetSelectHdl(LINK(this, SwColumnDlg, ObjectHdl));
+    m_pApplyToLB->SetSelectHdl(LINK(this, SwColumnDlg, ObjectListBoxHdl));
     OKButton *pOK = get<OKButton>("ok");
     pOK->SetClickHdl(LINK(this, SwColumnDlg, OkHdl));
     //#i80458# if no columns can be set then disable OK
@@ -230,7 +230,11 @@ void SwColumnDlg::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwColumnDlg, ObjectListBoxHdl, ListBox&, rBox, void)
+{
+    ObjectHdl(&rBox);
+}
+void SwColumnDlg::ObjectHdl(ListBox* pBox)
 {
     SfxItemSet* pSet = 0;
     switch(nOldSelection)
@@ -290,7 +294,6 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
     pTabPage->SetPageWidth(nWidth);
     if( pSet )
         pTabPage->Reset(pSet);
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwColumnDlg, OkHdl, Button*, void)
@@ -497,11 +500,12 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pAutoWidthBox->SetClickHdl(LINK(this, SwColumnPage, AutoWidthHdl));
 
     aLk = LINK( this, SwColumnPage, UpdateColMgr );
-    m_pLineTypeDLB->SetSelectHdl( aLk );
+    Link<ListBox&,void> aLk2 = LINK( this, SwColumnPage, UpdateColMgrListBox );
+    m_pLineTypeDLB->SetSelectHdl( aLk2 );
     m_pLineWidthEdit->SetModifyHdl( aLk );
-    m_pLineColorDLB->SetSelectHdl( aLk );
+    m_pLineColorDLB->SetSelectHdl( aLk2 );
     m_pLineHeightEdit->SetModifyHdl( aLk );
-    m_pLinePosDLB->SetSelectHdl( aLk );
+    m_pLinePosDLB->SetSelectHdl( aLk2 );
 
     // Separator line
     m_pLineTypeDLB->SetUnit( FUNIT_POINT );
@@ -695,6 +699,10 @@ bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
 }
 
 // update ColumnManager
+IMPL_LINK_NOARG_TYPED( SwColumnPage, UpdateColMgrListBox, ListBox&, void )
+{
+    UpdateColMgr(0);
+}
 IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr )
 {
     long nGutterWidth = pColMgr->GetGutterWidth();

@@ -75,7 +75,7 @@ namespace dbaui
         VclPtr<ListBox>        m_aColumnList[DOG_ROWS];
         VclPtr<ListBox>        m_aValueList[DOG_ROWS];
 
-        DECL_LINK( FieldListSelectHdl, ListBox * );
+        DECL_LINK_TYPED( FieldListSelectHdl, ListBox&, void );
         void            EnableLines();
 
     public:

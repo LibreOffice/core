@@ -138,7 +138,7 @@ class SmElementsDockingWindow : public SfxDockingWindow
     SmViewShell* GetView();
 
     void SelectClickHandler(SmElement* pElement);
-    DECL_LINK(ElementSelectedHandle, ListBox*);
+    DECL_LINK_TYPED(ElementSelectedHandle, ListBox&, void);
 
 public:
 

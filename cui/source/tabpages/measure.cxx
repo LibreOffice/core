@@ -145,7 +145,7 @@ SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs
     m_pTsbBelowRefEdge->SetClickHdl( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl ) );
     m_pTsbParallel->SetClickHdl( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl ) );
     m_pTsbShowUnit->SetClickHdl( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl ) );
-    m_pLbUnit->SetSelectHdl( aLink );
+    m_pLbUnit->SetSelectHdl( LINK( this, SvxMeasurePage, ChangeAttrListBoxHdl_Impl ) );
 }
 
 SvxMeasurePage::~SvxMeasurePage()
@@ -664,9 +664,12 @@ IMPL_LINK_TYPED( SvxMeasurePage, ChangeAttrClickHdl_Impl, Button*, p, void )
 {
     ChangeAttrHdl_Impl(p);
 }
+IMPL_LINK_TYPED( SvxMeasurePage, ChangeAttrListBoxHdl_Impl, ListBox&, rBox, void )
+{
+    ChangeAttrHdl_Impl(&rBox);
+}
 IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 {
-
     if( p == m_pMtrFldLineDist )
     {
         sal_Int32 nValue = GetCoreValue( *m_pMtrFldLineDist, eUnit );

@@ -79,7 +79,7 @@ private:
     DECL_LINK( InputRangeModified, void* );
     DECL_LINK( Parameter1ValueModified, void* );
     DECL_LINK( Parameter2ValueModified, void* );
-    DECL_LINK( DistributionChanged, void* );
+    DECL_LINK_TYPED( DistributionChanged, ListBox&, void );
     DECL_LINK_TYPED( CheckChanged, CheckBox&, void );
 
 };

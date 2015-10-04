@@ -1232,7 +1232,7 @@ void SvtFileDialog::EnableAutocompletion( bool _bEnable )
 
 
 
-IMPL_LINK_NOARG( SvtFileDialog, FilterSelectHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SvtFileDialog, FilterSelectHdl_Impl, ListBox&, void )
 {
     OUString sSelectedFilterDisplayName;
     SvtFileDialogFilter_Impl* pSelectedFilter = _pImp->GetSelectedFilterEntry( sSelectedFilterDisplayName );
@@ -1302,8 +1302,6 @@ IMPL_LINK_NOARG( SvtFileDialog, FilterSelectHdl_Impl )
             }
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*, void)

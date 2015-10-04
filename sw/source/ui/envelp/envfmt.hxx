@@ -46,7 +46,7 @@ class SwEnvFormatPage : public SfxTabPage
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
     DECL_LINK_TYPED( EditHdl, MenuButton *, void );
-    DECL_LINK(FormatHdl, void *);
+    DECL_LINK_TYPED(FormatHdl, ListBox&, void);
 
     void SetMinMax();
 

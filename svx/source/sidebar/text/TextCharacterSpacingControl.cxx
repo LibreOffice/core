@@ -64,10 +64,8 @@ TextCharacterSpacingControl::TextCharacterSpacingControl (
 {
     initial();
     FreeResource();
-    Link<> aLink = LINK(this, TextCharacterSpacingControl, KerningSelectHdl);
-    maLBKerning->SetSelectHdl(aLink);
-    aLink =LINK(this, TextCharacterSpacingControl, KerningModifyHdl);
-    maEditKerning->SetModifyHdl(aLink);
+    maLBKerning->SetSelectHdl(LINK(this, TextCharacterSpacingControl, KerningSelectHdl));
+    maEditKerning->SetModifyHdl(LINK(this, TextCharacterSpacingControl, KerningModifyHdl));
 
 }
 
@@ -379,7 +377,7 @@ IMPL_LINK_TYPED(TextCharacterSpacingControl, VSSelHdl, ValueSet*, pControl, void
     }
 }
 
-IMPL_LINK(TextCharacterSpacingControl, KerningSelectHdl, ListBox*,)
+IMPL_LINK_NOARG_TYPED(TextCharacterSpacingControl, KerningSelectHdl, ListBox&, void)
 {
     if ( maLBKerning->GetSelectEntryPos() > 0 )
     {
@@ -403,7 +401,6 @@ IMPL_LINK(TextCharacterSpacingControl, KerningSelectHdl, ListBox*,)
         maVSSpacing->StartSelection();
     }
     KerningModifyHdl( NULL );
-    return 0;
 }
 
 IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*,)

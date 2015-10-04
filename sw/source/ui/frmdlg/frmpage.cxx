@@ -1441,7 +1441,7 @@ sal_Int32 SwFrmPage::FillPosLB(const FrmMap* _pMap,
     if (!_rLB.GetSelectEntryCount())
         _rLB.SelectEntryPos(0);
 
-    PosHdl(&_rLB);
+    PosHdl(_rLB);
 
     return GetMapPos(_pMap, _rLB);
 }
@@ -1621,7 +1621,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
     _rLB.Enable( bEnable );
     _rFT.Enable( bEnable );
 
-    RelHdl(&_rLB);
+    RelHdl(_rLB);
 
     return nLBRelations;
 }
@@ -1940,23 +1940,23 @@ IMPL_LINK_NOARG_TYPED(SwFrmPage, AnchorTypeHdl, Button*, void)
 
     if(bHtmlMode)
     {
-        PosHdl(m_pHorizontalDLB);
-        PosHdl(m_pVerticalDLB);
+        PosHdl(*m_pHorizontalDLB);
+        PosHdl(*m_pVerticalDLB);
     }
 
     EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
             && FLY_AS_CHAR == eId) );
 }
 
-IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
+IMPL_LINK_TYPED( SwFrmPage, PosHdl, ListBox&, rLB, void )
 {
-    bool bHori = pLB == m_pHorizontalDLB;
+    bool bHori = &rLB == m_pHorizontalDLB;
     ListBox *pRelLB = bHori ? m_pHoriRelationLB : m_pVertRelationLB;
     FixedText *pRelFT = bHori ? m_pHoriRelationFT : m_pVertRelationFT;
     FrmMap *pMap = bHori ? pHMap : pVMap;
 
-    const sal_Int32 nMapPos = GetMapPos(pMap, *pLB);
-    const sal_Int16 nAlign = GetAlignment(pMap, nMapPos, *pLB, *pRelLB);
+    const sal_Int32 nMapPos = GetMapPos(pMap, rLB);
+    const sal_Int16 nAlign = GetAlignment(pMap, nMapPos, rLB, *pRelLB);
 
     if (bHori)
     {
@@ -1974,7 +1974,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
     RangeModifyHdl();
 
     sal_Int16 nRel = 0;
-    if (pLB->GetSelectEntryCount())
+    if (rLB.GetSelectEntryCount())
     {
 
         if (pRelLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
@@ -2020,7 +2020,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
                 bSet = true;
             }
             if(bSet)
-                PosHdl(m_pVerticalDLB);
+                PosHdl(*m_pVerticalDLB);
         }
         else
         {
@@ -2043,17 +2043,16 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
                 m_pHoriRelationLB->SelectEntryPos(0) ;
             }
             if(bSet)
-                PosHdl(m_pHorizontalDLB);
+                PosHdl(*m_pHorizontalDLB);
         }
 
     }
-    return 0;
 }
 
 //  horizontal Pos
-IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
+IMPL_LINK_TYPED( SwFrmPage, RelHdl, ListBox&, rLB, void )
 {
-    bool bHori = pLB == m_pHoriRelationLB;
+    bool bHori = &rLB == m_pHoriRelationLB;
 
     UpdateExample();
 
@@ -2077,10 +2076,7 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
             }
         }
     }
-    if (pLB)    // Only when Handler was called by changing of the controller
-        RangeModifyHdl();
-
-    return 0;
+    RangeModifyHdl();
 }
 
 IMPL_LINK_NOARG_TYPED(SwFrmPage, RealSizeHdl, Button*, void)
@@ -3056,7 +3052,7 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
             }
             else
                 pNextLB->SelectEntryPos(0);
-            Link<> aLink(LINK(this, SwFrmAddPage, ChainModifyHdl));
+            Link<ListBox&,void> aLink(LINK(this, SwFrmAddPage, ChainModifyHdl));
             pPrevLB->SetSelectHdl(aLink);
             pNextLB->SetSelectHdl(aLink);
         }
@@ -3214,7 +3210,7 @@ void SwFrmAddPage::SetFormatUsed(bool bFormatUsed)
     }
 }
 
-IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwFrmAddPage, ChainModifyHdl, ListBox&, rBox, void)
 {
     OUString sCurrentPrevChain, sCurrentNextChain;
     if(pPrevLB->GetSelectEntryPos())
@@ -3224,7 +3220,7 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
     SwFrameFormat* pFormat = pWrtSh->GetFlyFrameFormat();
     if (pFormat)
     {
-        bool bNextBox = pNextLB == pBox;
+        bool bNextBox = pNextLB == &rBox;
         ListBox& rChangeLB = bNextBox ? *pPrevLB : *pNextLB;
         for(sal_Int32 nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
             rChangeLB.RemoveEntry(nEntry - 1);
@@ -3244,7 +3240,6 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
             rChangeLB.SelectEntryPos(0);
 
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

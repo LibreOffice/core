@@ -87,8 +87,8 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pRemovePB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveClickHdl ));
     m_pAssignPB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveClickHdl ));
     m_pTbLinks->SetSelectHdl(      LINK(this, SwCondCollPage, SelectTreeListBoxHdl));
-    m_pStyleLB->SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
-    m_pFilterLB->SetSelectHdl(     LINK(this, SwCondCollPage, SelectHdl));
+    m_pStyleLB->SetSelectHdl(      LINK(this, SwCondCollPage, SelectListBoxHdl));
+    m_pFilterLB->SetSelectHdl(     LINK(this, SwCondCollPage, SelectListBoxHdl));
 
     m_pTbLinks->SetStyle(m_pTbLinks->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     m_pTbLinks->SetSelectionMode( SINGLE_SELECTION );
@@ -272,7 +272,11 @@ IMPL_LINK_TYPED( SwCondCollPage, SelectTreeListBoxHdl, SvTreeListBox*, pBox, voi
 {
     SelectHdl(pBox);
 }
-IMPL_LINK( SwCondCollPage, SelectHdl, void*, pBox)
+IMPL_LINK_TYPED( SwCondCollPage, SelectListBoxHdl, ListBox&, rBox, void)
+{
+    SelectHdl(&rBox);
+}
+void SwCondCollPage::SelectHdl(void* pBox)
 {
     if (pBox == m_pFilterLB)
     {
@@ -306,7 +310,6 @@ IMPL_LINK( SwCondCollPage, SelectHdl, void*, pBox)
         if(pBox != m_pStyleLB)
             m_pRemovePB->Enable( m_pConditionCB->IsChecked() && !sTbEntry.isEmpty() );
     }
-    return 0;
 }
 
 void SwCondCollPage::SetCollection(SwFormat* pFormat, bool bNew)

@@ -81,7 +81,7 @@ private:
     bool            doScan;
 
     DECL_LINK_TYPED( ClickBtnHdl, Button*, void );
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
     DECL_LINK( ModifyHdl, Edit* );
     DECL_LINK_TYPED( ReloadSaneOptionsHdl, Sane&, void );
     DECL_LINK_TYPED( OptionsBoxSelectHdl, SvTreeListBox*, void );

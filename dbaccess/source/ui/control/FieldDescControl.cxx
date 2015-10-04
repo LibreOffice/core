@@ -517,7 +517,7 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& r
                 OUString sOld = pBoolDefault->GetSelectEntry();
                 pBoolDefault->SelectEntry(rText);
                 if (sOld != rText)
-                    LINK(this, OFieldDescControl, ChangeHdl).Call(pBoolDefault);
+                    LINK(this, OFieldDescControl, ChangeHdl).Call(*pBoolDefault);
             }
             break;
         case FIELD_PROPERTY_DEFAULT:
@@ -549,7 +549,7 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& r
                 OUString sOld = pAutoIncrement->GetSelectEntry();
                 pAutoIncrement->SelectEntry(rText);
                 if (sOld != rText)
-                    LINK(this, OFieldDescControl, ChangeHdl).Call(pAutoIncrement);
+                    LINK(this, OFieldDescControl, ChangeHdl).Call(*pAutoIncrement);
             }
             break;
 
@@ -622,16 +622,16 @@ void OFieldDescControl::SetModified(bool /*bModified*/)
 {
 }
 
-IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
+IMPL_LINK_TYPED( OFieldDescControl, ChangeHdl, ListBox&, rListBox, void )
 {
     if ( !pActFieldDescr )
-        return 0;
+        return;
 
-    if ( pListBox->IsValueChangedFromSaved() )
+    if ( rListBox.IsValueChangedFromSaved() )
         SetModified(true);
 
     // Special treatment for Bool fields
-    if(pListBox == pRequired && pBoolDefault )
+    if(&rListBox == pRequired && pBoolDefault )
     {
         // If pRequired = sal_True then the sal_Bool field must NOT contain <<none>>
         OUString sDef = BoolStringUI(::comphelper::getString(pActFieldDescr->GetControlDefault()));
@@ -652,9 +652,9 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     }
 
     // A special treatment only for AutoIncrement
-    if (pListBox == pAutoIncrement)
+    if (&rListBox == pAutoIncrement)
     {
-        if(pListBox->GetSelectEntryPos() == 1)
+        if(rListBox.GetSelectEntryPos() == 1)
         { // no
             DeactivateAggregate( tpAutoIncrementValue );
             if(pActFieldDescr->IsPrimaryKey())
@@ -682,7 +682,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
         ArrangeAggregates();
     }
 
-    if(pListBox == m_pType)
+    if(&rListBox == m_pType)
     {
         TOTypeInfoSP pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
         pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false); // SetType(pTypeInfo);
@@ -690,8 +690,6 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
         DisplayData(pActFieldDescr);
         CellModified(-1, m_pType->GetPos());
     }
-
-    return 0;
 }
 
 // Rearrange all Controls, such that they are in fixed order and really on top

@@ -576,7 +576,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, RemoveHdl, Button*, void)
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
 {
     OUString* pData = static_cast<OUString*>(pImagesLst->GetSelectEntryData());
     OUString sImgUrl = pData ? OUString(*pData) : "";
@@ -633,7 +633,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
         pImg->SetImage(Image());
     }
     EnableDisableButtons();
-    return 0;
 }
 
 Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aLayout,

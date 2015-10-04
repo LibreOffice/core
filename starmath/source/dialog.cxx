@@ -1450,10 +1450,9 @@ void SmSymbolDialog::FillSymbolSets(bool bDeleteText)
 }
 
 
-IMPL_LINK_NOARG( SmSymbolDialog, SymbolSetChangeHdl )
+IMPL_LINK_NOARG_TYPED( SmSymbolDialog, SymbolSetChangeHdl, ListBox&, void )
 {
     SelectSymbolSet(m_pSymbolSets->GetSelectEntry());
-    return 0;
 }
 
 
@@ -1843,21 +1842,19 @@ IMPL_LINK( SmSymDefineDialog, ModifyHdl, ComboBox *, pComboBox )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox *, pListBox )
+IMPL_LINK_TYPED( SmSymDefineDialog, FontChangeHdl, ListBox&, rListBox, void )
 {
-    (void) pListBox;
+    (void) rListBox;
 #if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(pListBox == pFonts, "Sm : wrong argument");
+    OSL_ENSURE(&rListBox == pFonts, "Sm : wrong argument");
 #endif
 
     SelectFont(pFonts->GetSelectEntry());
-    return 0;
 }
 
 
-IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, pListBox )
+IMPL_LINK_NOARG_TYPED( SmSymDefineDialog, SubsetChangeHdl, ListBox&, void )
 {
-    (void) pListBox;
     sal_Int32 nPos = pFontsSubsetLB->GetSelectEntryPos();
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
     {
@@ -1867,7 +1864,6 @@ IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, pListBox )
             pCharsetDisplay->SelectCharacter( pSubset->GetRangeMin() );
         }
     }
-    return 0;
 }
 
 

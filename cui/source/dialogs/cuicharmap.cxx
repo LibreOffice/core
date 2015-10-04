@@ -359,7 +359,7 @@ void SvxCharacterMap::init()
         m_pFontLB->SelectEntry( aDefStr );
     else if ( m_pFontLB->GetEntryCount() )
         m_pFontLB->SelectEntryPos(0);
-    FontSelectHdl(m_pFontLB);
+    FontSelectHdl(*m_pFontLB);
 
     m_pOKBtn->SetClickHdl( LINK( this, SvxCharacterMap, OKHdl ) );
     m_pFontLB->SetSelectHdl( LINK( this, SvxCharacterMap, FontSelectHdl ) );
@@ -388,7 +388,7 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
 
     m_pFontLB->SelectEntry( aTmp.GetName() );
     aFont = aTmp;
-    FontSelectHdl(m_pFontLB);
+    FontSelectHdl(*m_pFontLB);
 
     // for compatibility reasons
     ModalDialog::SetFont( aFont );
@@ -424,7 +424,7 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
 
 
 
-IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
+IMPL_LINK_NOARG_TYPED(SvxCharacterMap, FontSelectHdl, ListBox&, void)
 {
     const sal_Int32 nPos = m_pFontLB->GetSelectEntryPos();
     const sal_uInt16 nFont = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos ));
@@ -473,13 +473,11 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
 
     m_pSubsetText->Enable(bNeedSubset);
     m_pSubsetLB->Enable(bNeedSubset);
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl)
+IMPL_LINK_NOARG_TYPED(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
 {
     const sal_Int32 nPos = m_pSubsetLB->GetSelectEntryPos();
     const Subset* pSubset = static_cast<const Subset*> (m_pSubsetLB->GetEntryData(nPos));
@@ -489,7 +487,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl)
         m_pShowSet->SelectCharacter( cFirst );
     }
     m_pSubsetLB->SelectEntryPos( nPos );
-    return 0;
 }
 
 

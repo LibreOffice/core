@@ -95,6 +95,7 @@ class SwCaptionDialog : public SvxStandardDialog
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >         xNamed;
 
     DECL_LINK(SelectHdl, void *);
+    DECL_LINK_TYPED(SelectListBoxHdl, ListBox&, void);
     DECL_LINK(ModifyHdl, void *);
     DECL_LINK_TYPED(OptionHdl, Button *, void);
     DECL_LINK_TYPED(CaptionHdl, Button *, void);

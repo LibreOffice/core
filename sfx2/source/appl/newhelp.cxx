@@ -1588,11 +1588,9 @@ IMPL_LINK_TYPED( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtr
     pTabCtrl->SetTabPage( nId, pPage );
 }
 
-IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, SelectHdl, ListBox&, void)
 {
     aIdle.Start();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, InitHdl, Idle *, void)

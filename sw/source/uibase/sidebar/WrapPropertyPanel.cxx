@@ -231,9 +231,9 @@ IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, EnableContourHdl, Button*, void)
     mpBindings->GetDispatcher()->Execute(FN_FRAME_WRAP_CONTOUR, SfxCallMode::RECORD, &aItem, 0l);
 }
 
-IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(WrapPropertyPanel, SpacingLBHdl, ListBox&, rBox, void)
 {
-    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(pBox->GetSelectEntryData());
+    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(rBox.GetSelectEntryData());
 
     SvxLRSpaceItem aLRItem(nVal, nVal, 0, 0, RES_LR_SPACE);
     SvxULSpaceItem aULItem(nVal, nVal, RES_UL_SPACE);
@@ -241,8 +241,6 @@ IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, ListBox*, pBox)
     nTop = nBottom = nLeft = nRight = nVal;
     mpBindings->GetDispatcher()->Execute(SID_ATTR_LRSPACE, SfxCallMode::RECORD, &aLRItem, 0l);
     mpBindings->GetDispatcher()->Execute(SID_ATTR_ULSPACE, SfxCallMode::RECORD, &aULItem, 0l);
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, WrapTypeHdl, Button*, void)

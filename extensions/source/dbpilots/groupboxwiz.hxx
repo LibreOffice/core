@@ -101,7 +101,7 @@ namespace dbp
         virtual bool        canAdvance() const SAL_OVERRIDE;
 
         DECL_LINK_TYPED( OnMoveEntry, Button*, void );
-        DECL_LINK( OnEntrySelected, ListBox* );
+        DECL_LINK_TYPED( OnEntrySelected, ListBox&, void );
         DECL_LINK( OnNameModified, Edit* );
 
         void implCheckMoveButtons();
@@ -152,7 +152,7 @@ namespace dbp
 
         void implTraveledOptions();
 
-        DECL_LINK( OnOptionSelected, ListBox* );
+        DECL_LINK_TYPED( OnOptionSelected, ListBox&, void );
     };
 
     class OOptionDBFieldPage : public ODBFieldPage

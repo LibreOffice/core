@@ -132,15 +132,16 @@ IMPL_LINK_NOARG_TYPED(SwVisitingCardPage, FrameControlInitializedHdl, SwOneExamp
     }
 }
 
-IMPL_LINK_TYPED( SwVisitingCardPage, AutoTextSelectTreeListBoxHdl, SvTreeListBox*, pBox, void )
+IMPL_LINK_NOARG_TYPED( SwVisitingCardPage, AutoTextSelectTreeListBoxHdl, SvTreeListBox*, void )
 {
-    AutoTextSelectHdl(pBox);
+    if(m_xAutoText.is() && pExampleFrame->IsInitialized())
+        pExampleFrame->ClearDocument( true );
 }
-IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
+IMPL_LINK_TYPED( SwVisitingCardPage, AutoTextSelectHdl, ListBox&, rBox, void )
 {
     if(m_xAutoText.is())
     {
-        if (m_pAutoTextGroupLB == pBox)
+        if (m_pAutoTextGroupLB == &rBox)
         {
             const OUString *pGroup( static_cast<const OUString*>(m_pAutoTextGroupLB->GetSelectEntryData()));
             uno::Any aGroup = m_xAutoText->getByName(*pGroup);
@@ -158,7 +159,6 @@ IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
         if(pExampleFrame->IsInitialized())
             pExampleFrame->ClearDocument( true );
     }
-    return 0;
 }
 
 void SwVisitingCardPage::UpdateFields()

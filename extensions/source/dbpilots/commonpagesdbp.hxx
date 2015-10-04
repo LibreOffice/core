@@ -54,7 +54,7 @@ namespace dbp
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
     protected:
-        DECL_LINK( OnListboxSelection, ListBox* );
+        DECL_LINK_TYPED( OnListboxSelection, ListBox&, void );
         DECL_LINK_TYPED( OnListboxDoubleClicked, ListBox&, void );
         DECL_LINK_TYPED( OnSearchClicked, Button*, void );
 

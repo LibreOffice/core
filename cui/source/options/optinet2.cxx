@@ -525,9 +525,9 @@ void SvxProxyTabPage::EnableControls_Impl(bool bEnable)
 
 
 
-IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
+IMPL_LINK_TYPED( SvxProxyTabPage, ProxyHdl_Impl, ListBox&, rBox, void )
 {
-    sal_Int32 nPos = pBox->GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectEntryPos();
 
     // Restore original system values
     if( nPos == 1 )
@@ -536,7 +536,6 @@ IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
     }
 
     EnableControls_Impl(nPos == 2);
-    return 0;
 }
 
 

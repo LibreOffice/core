@@ -1002,10 +1002,9 @@ bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
     return bRet;
 }
 
-IMPL_LINK_NOARG(TabControl, ImplListBoxSelectHdl)
+IMPL_LINK_NOARG_TYPED(TabControl, ImplListBoxSelectHdl, ListBox&, void)
 {
     SelectTabPage( GetPageId( mpTabCtrlData->mpListBox->GetSelectEntryPos() ) );
-    return 0;
 }
 
 IMPL_LINK_TYPED( TabControl, ImplWindowEventListener, VclWindowEvent&, rEvent, void )

@@ -108,7 +108,7 @@ private:
     DECL_LINK_TYPED( EdModifyCheckBoxHdl, CheckBox&, void );
     DECL_LINK_TYPED( AssignGetFocusHdl, Control&, void );
     DECL_LINK_TYPED( SelectionChangedHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK( ScopeChangedHdl, void* );
+    DECL_LINK_TYPED( ScopeChangedHdl, ListBox&, void );
 
 protected:
     virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;

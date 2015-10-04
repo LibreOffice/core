@@ -462,10 +462,9 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
     return bResult;
 }
 
-IMPL_LINK( BibToolBar, SelHdl, ListBox*, /*pLb*/ )
+IMPL_LINK_NOARG_TYPED( BibToolBar, SelHdl, ListBox&, void )
 {
     aIdle.Start();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( BibToolBar, SendSelHdl, Idle*, void )

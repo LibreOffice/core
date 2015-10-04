@@ -59,7 +59,7 @@ class ImplErrorDialog : public MessageDialog
     VclPtr<ListBox>        m_pErrors;
     VclPtr<FixedText>      m_pExplanation;
 
-    DECL_LINK(SelectHdl, void *);
+    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
     public:
     explicit ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
     virtual ~ImplErrorDialog();

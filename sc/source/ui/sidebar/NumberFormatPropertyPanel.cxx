@@ -87,13 +87,12 @@ void NumberFormatPropertyPanel::dispose()
 
 void NumberFormatPropertyPanel::Initialize()
 {
-    Link<> aLink = LINK(this, NumberFormatPropertyPanel, NumFormatSelectHdl);
-    mpLbCategory->SetSelectHdl ( aLink );
+    mpLbCategory->SetSelectHdl ( LINK(this, NumberFormatPropertyPanel, NumFormatSelectHdl) );
     mpLbCategory->SelectEntryPos(0);
     mpLbCategory->SetAccessibleName(OUString( "Category"));
     mpLbCategory->SetDropDownLineCount(mpLbCategory->GetEntryCount());
 
-    aLink = LINK(this, NumberFormatPropertyPanel, NumFormatValueHdl);
+    Link<> aLink = LINK(this, NumberFormatPropertyPanel, NumFormatValueHdl);
 
     mpEdDecimals->SetModifyHdl( aLink );
     mpEdLeadZeroes->SetModifyHdl( aLink );
@@ -106,16 +105,15 @@ void NumberFormatPropertyPanel::Initialize()
     mpTBCategory->SetAccessibleRelationLabeledBy(mpTBCategory);
 }
 
-IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )
+IMPL_LINK_TYPED( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox&, rBox, void )
 {
-    const sal_Int32 nVal = pBox->GetSelectEntryPos();
+    const sal_Int32 nVal = rBox.GetSelectEntryPos();
     if( nVal != mnCategorySelected )
     {
         SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nVal );
         GetBindings()->GetDispatcher()->Execute(SID_NUMBER_TYPE_FORMAT, SfxCallMode::RECORD, &aItem, 0L);
         mnCategorySelected = nVal;
     }
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED( NumberFormatPropertyPanel, NumFormatValueClickHdl, Button*, void )

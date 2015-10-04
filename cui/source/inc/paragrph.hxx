@@ -90,7 +90,7 @@ private:
     void                    Init_Impl();
     void                    UpdateExample_Impl();
 
-    DECL_LINK( LineDistHdl_Impl, ListBox* );
+    DECL_LINK_TYPED( LineDistHdl_Impl, ListBox&, void );
     DECL_LINK(ModifyHdl_Impl, void *);
     DECL_LINK_TYPED( AutoHdl_Impl, Button*, void );
 
@@ -154,8 +154,8 @@ class SvxParaAlignTabPage : public SfxTabPage
     VclPtr<svx::FrameDirectionListBox>  m_pTextDirectionLB;
 
     DECL_LINK_TYPED(AlignHdl_Impl, Button*, void);
-    DECL_LINK(LastLineHdl_Impl, void *);
-    DECL_LINK(TextDirectionHdl_Impl, void *);
+    DECL_LINK_TYPED(LastLineHdl_Impl, ListBox&, void);
+    DECL_LINK_TYPED(TextDirectionHdl_Impl, ListBox&, void);
 
     void                    UpdateExample_Impl();
 
@@ -262,8 +262,8 @@ private:
     DECL_LINK_TYPED(OrphanHdl_Impl, Button*, void);
     DECL_LINK_TYPED(HyphenClickHdl_Impl, Button*, void);
     DECL_LINK_TYPED(ApplyCollClickHdl_Impl, Button*, void);
-    DECL_LINK( PageBreakPosHdl_Impl, ListBox* );
-    DECL_LINK( PageBreakTypeHdl_Impl, ListBox* );
+    DECL_LINK_TYPED( PageBreakPosHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( PageBreakTypeHdl_Impl, ListBox&, void );
 
     virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };

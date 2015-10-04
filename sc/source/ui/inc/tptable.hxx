@@ -75,7 +75,7 @@ private:
     // Handler:
     DECL_LINK_TYPED(PageDirHdl, Button*, void);
     DECL_LINK_TYPED( PageNoHdl, Button*, void );
-    DECL_LINK(ScaleHdl, void *);
+    DECL_LINK_TYPED(ScaleHdl, ListBox&, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPTABLE_HXX

@@ -106,7 +106,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     bool bPreview;
 
     DECL_LINK_TYPED(AutoClickHdl, Button*, void);
-    DECL_LINK(SelectHdl, void *);
+    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
 
 public:
     SwAddPrinterTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
@@ -340,9 +340,9 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     OUString             sAuthor;
     OUString             sNone;
 
-    DECL_LINK(AttribHdl, ListBox*);
-    DECL_LINK(ChangedMaskPrevHdl, void* = 0);
-    DECL_LINK(ColorHdl, ColorListBox*);
+    DECL_LINK_TYPED(AttribHdl, ListBox&, void);
+    DECL_LINK_TYPED(ChangedMaskPrevHdl, ListBox&, void);
+    DECL_LINK_TYPED(ColorHdl, ListBox&, void);
 
     static void InitFontStyle(SvxFontPrevWindow& rExampleWin);
 

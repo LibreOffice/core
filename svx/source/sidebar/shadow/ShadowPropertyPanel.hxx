@@ -81,7 +81,7 @@ private:
     void SetTransparencyValue(long);
     void UpdateControls();
     DECL_LINK_TYPED(ClickShadowHdl, Button*, void);
-    DECL_LINK(ModifyShadowColorHdl, void*);
+    DECL_LINK_TYPED(ModifyShadowColorHdl, ListBox&, void);
     DECL_LINK(ModifyShadowTransMetricHdl, void*);
     DECL_LINK(ModifyShadowDistanceHdl, void*);
     DECL_LINK_TYPED(ModifyShadowTransSliderHdl, Slider*, void);

@@ -124,9 +124,9 @@ static void lcl_UnSelectFrm(SwWrtShell *pSh)
 
 // Select the document view
 
-IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox *, pBox )
+IMPL_LINK_TYPED( SwNavigationPI, DocListBoxSelectHdl, ListBox&, rBox, void )
 {
-    int nEntryIdx = pBox->GetSelectEntryPos();
+    int nEntryIdx = rBox.GetSelectEntryPos();
     SwView *pView ;
     pView = SwModule::GetFirstView();
     while (nEntryIdx-- && pView)
@@ -144,7 +144,6 @@ IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox *, pBox )
     {
         aContentTree->SetConstantShell(pView->GetWrtShellPtr());
     }
-    return 0;
 }
 
 // Filling of the list box for outline view or documents

@@ -64,7 +64,7 @@ class SwEndNoteOptionPage : public SfxTabPage
 
     DECL_LINK_TYPED(PosPageHdl, Button*, void);
     DECL_LINK_TYPED(PosChapterHdl, Button*, void);
-    DECL_LINK(NumCountHdl, void *);
+    DECL_LINK_TYPED(NumCountHdl, ListBox&, void);
 
 public:
     SwEndNoteOptionPage( vcl::Window *pParent, bool bEndNote,

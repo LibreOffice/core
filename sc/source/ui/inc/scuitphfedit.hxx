@@ -97,7 +97,7 @@ private:
     bool IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj);
     static bool IsDateEntry(EditTextObject* pTextObj);
     static bool IsExtFileNameEntry(EditTextObject* pTextObj);
-    DECL_LINK( ListHdl_Impl, ListBox* );
+    DECL_LINK_TYPED( ListHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED( ClickHdl, Button*, void );
     DECL_STATIC_LINK_TYPED( ScHFEditPage, MenuHdl, ScExtIButton&, void );
 };

@@ -326,7 +326,7 @@ private:
     bool                                bInitialised;
     SaveInData*                         pCurrentSaveInData;
 
-    DECL_LINK(  SelectSaveInLocation, ListBox * );
+    DECL_LINK_TYPED(  SelectSaveInLocation, ListBox&, void );
     DECL_LINK_TYPED( AsyncInfoMsg, void*, void );
 
 protected:
@@ -440,7 +440,7 @@ class SvxMenuConfigPage : public SvxConfigPage
 {
 private:
 
-    DECL_LINK( SelectMenu, ListBox * );
+    DECL_LINK_TYPED( SelectMenu, ListBox&, void );
     DECL_LINK_TYPED( SelectMenuEntry, SvTreeListBox *, void );
     DECL_LINK_TYPED( NewMenuHdl, Button *, void );
     DECL_LINK_TYPED( MenuSelectHdl, MenuButton *, void );
@@ -532,7 +532,7 @@ class SvxToolbarConfigPage : public SvxConfigPage
 {
 private:
 
-    DECL_LINK( SelectToolbar, ListBox * );
+    DECL_LINK_TYPED( SelectToolbar, ListBox&, void );
     DECL_LINK_TYPED( SelectToolbarEntry, SvTreeListBox*, void );
     DECL_LINK_TYPED( ToolbarSelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );

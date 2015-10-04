@@ -48,7 +48,7 @@ class SvxAsianLayoutPage : public SfxTabPage
 
     SvxAsianLayoutPage_Impl* pImpl;
 
-    DECL_LINK(LanguageHdl, void *);
+    DECL_LINK_TYPED(LanguageHdl, ListBox&, void);
     DECL_LINK_TYPED(ChangeStandardHdl, Button*, void);
     DECL_LINK(ModifyHdl, Edit*);
 

@@ -79,8 +79,9 @@ namespace svx
         virtual void LoseFocus() SAL_OVERRIDE;
         virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-        DECL_LINK( SelectSuggestionHdl, Control* );
+        DECL_LINK_TYPED( SelectSuggestionListBoxHdl, ListBox&, void );
         DECL_LINK_TYPED( SelectSuggestionValueSetHdl, ValueSet*, void );
+        void SelectSuggestionHdl(Control*);
 
         void SetHelpIds();
 
@@ -297,7 +298,7 @@ namespace svx
         DECL_LINK( EditModifyHdl3, Edit* );
         DECL_LINK( EditModifyHdl4, Edit* );
 
-        DECL_LINK( BookLBSelectHdl, void* );
+        DECL_LINK_TYPED( BookLBSelectHdl, ListBox&, void );
         DECL_LINK_TYPED( NewPBPushHdl, Button*, void );
         DECL_LINK_TYPED( DeletePBPushHdl, Button*, void );
 

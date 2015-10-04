@@ -209,7 +209,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     m_pLangLB->SelectLanguage( nLang );
 
     LanguageHdl( 0 );
-    m_pLangLB->SetSelectHdl( LINK( this, SwSortDlg, LanguageHdl ));
+    m_pLangLB->SetSelectHdl( LINK( this, SwSortDlg, LanguageListBoxHdl ));
 
     m_pSortUp1RB->Check(bAsc1);
     m_pSortDn1RB->Check(!bAsc1);
@@ -440,7 +440,12 @@ IMPL_LINK_TYPED( SwSortDlg, CheckHdl, Button*, pControl, void )
         static_cast<CheckBox *>(pControl)->Check();
 }
 
-IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
+IMPL_LINK_TYPED( SwSortDlg, LanguageListBoxHdl, ListBox&, rLBox, void )
+{
+    LanguageHdl(&rLBox);
+}
+
+void SwSortDlg::LanguageHdl(ListBox* pLBox)
 {
     Sequence < OUString > aSeq( GetAppCollator().listCollatorAlgorithms(
                 LanguageTag( m_pLangLB->GetSelectLanguage()).getLocale() ));
@@ -489,7 +494,6 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
         else if( LISTBOX_ENTRY_NOTFOUND == pL->GetSelectEntryPos() )
             pL->SelectEntryPos( 0 );
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

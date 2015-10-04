@@ -61,7 +61,7 @@ public:
 
 private:
     DECL_LINK_TYPED( ClickLightSourceButtonHdl, Button*, void );
-    DECL_LINK( SelectColorHdl, ColorLB* );
+    DECL_LINK_TYPED( SelectColorHdl, ListBox&, void );
     DECL_LINK_TYPED( ColorDialogHdl, Button*, void );
     DECL_LINK_TYPED( PreviewChangeHdl, SvxLightCtl3D*, void );
     DECL_LINK_TYPED( PreviewSelectHdl, SvxLightCtl3D*, void );

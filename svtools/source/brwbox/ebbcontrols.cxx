@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -175,6 +174,7 @@ namespace svt
     ListBoxCellController::ListBoxCellController(ListBoxControl* pWin)
                              :CellController(pWin)
     {
+        GetListBox().SetSelectHdl(LINK(this, ListBoxCellController, ListBoxSelectHdl));
     }
 
 
@@ -217,7 +217,12 @@ namespace svt
 
     void ListBoxCellController::SetModifyHdl(const Link<>& rLink)
     {
-        GetListBox().SetSelectHdl(rLink);
+        maModifyHdl = rLink;
+    }
+
+    IMPL_LINK_TYPED(ListBoxCellController, ListBoxSelectHdl, ListBox&, rListBox, void)
+    {
+        maModifyHdl.Call(&rListBox);
     }
 
 

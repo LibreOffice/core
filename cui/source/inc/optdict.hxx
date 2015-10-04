@@ -129,8 +129,8 @@ private:
     bool            bDoNothing;
     bool                bDicIsReadonly;
 
-    DECL_LINK(SelectBookHdl_Impl, void *);
-    DECL_LINK(SelectLangHdl_Impl, void *);
+    DECL_LINK_TYPED(SelectBookHdl_Impl, ListBox&, void);
+    DECL_LINK_TYPED(SelectLangHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
     DECL_LINK_TYPED(NewDelActionHdl, SvxDictEdit&, bool);

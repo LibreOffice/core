@@ -126,7 +126,7 @@ namespace svt
         void    loadConfiguration();
 
         DECL_LINK_TYPED(OnFieldScroll, ScrollBar*, void);
-        DECL_LINK(OnFieldSelect, ListBox*);
+        DECL_LINK_TYPED(OnFieldSelect, ListBox&, void);
         DECL_LINK_TYPED(OnAdministrateDatasources, Button*, void);
         DECL_STATIC_LINK_TYPED(AddressBookSourceDialog, OnComboGetFocus, Control&, void);
         DECL_LINK_TYPED(OnComboLoseFocus, Control&, void);

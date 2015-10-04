@@ -540,7 +540,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
 
     m_pED_Term->SetModifyHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
     m_pED_Mapping->SetModifyHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
-    m_pLB_Property->SetSelectHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
+    m_pLB_Property->SetSelectHdl( LINK( this, ChineseDictionaryDialog, EditFieldsListBoxHdl ) );
 
     m_pRB_To_Simplified->SetClickHdl( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
     m_pRB_To_Traditional->SetClickHdl( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
@@ -620,6 +620,10 @@ void ChineseDictionaryDialog::updateAfterDirectionChange()
     updateButtons();
 }
 
+IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, EditFieldsListBoxHdl, ListBox&, void)
+{
+    updateButtons();
+}
 IMPL_LINK_NOARG(ChineseDictionaryDialog, EditFieldsHdl)
 {
     updateButtons();

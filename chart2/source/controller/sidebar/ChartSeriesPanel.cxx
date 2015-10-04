@@ -482,14 +482,12 @@ IMPL_LINK_NOARG_TYPED(ChartSeriesPanel, RadioBtnHdl, RadioButton&, void)
     setAttachedAxisType(mxModel, aCID, bChecked);
 }
 
-IMPL_LINK_NOARG(ChartSeriesPanel, ListBoxHdl)
+IMPL_LINK_NOARG_TYPED(ChartSeriesPanel, ListBoxHdl, ListBox&, void)
 {
     OUString aCID = getCID(mxModel);
 
     sal_Int32 nPos = mpLBLabelPlacement->GetSelectEntryPos();
     setDataLabelPlacement(mxModel, aCID, nPos);
-
-    return 0;
 }
 
 }} // end of namespace ::chart::sidebar

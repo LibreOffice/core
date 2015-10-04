@@ -114,7 +114,8 @@ class SwIndexMarkPane
     DECL_LINK_TYPED(NextSameHdl, Button*, void);
     DECL_LINK_TYPED(PrevHdl, Button*, void);
     DECL_LINK_TYPED(PrevSameHdl, Button*, void);
-    DECL_LINK( ModifyHdl, ListBox* pBox );
+    DECL_LINK_TYPED( ModifyListBoxHdl, ListBox&, void );
+    DECL_LINK( ModifyHdl, void* );
     DECL_LINK( KeyDCBModifyHdl, ComboBox * );
     DECL_LINK_TYPED(NewUserIdxHdl, Button*, void);
     DECL_LINK_TYPED( SearchTypeHdl, Button*, void);
@@ -208,7 +209,7 @@ class SwAuthorMarkPane
     DECL_LINK_TYPED(InsertHdl, Button*, void);
     DECL_LINK_TYPED(CloseHdl, Button*, void);
     DECL_LINK_TYPED(CreateEntryHdl, Button*, void);
-    DECL_LINK(CompEntryHdl, ListBox*);
+    DECL_LINK_TYPED(CompEntryHdl, ListBox&, void);
     DECL_LINK_TYPED(ChangeSourceHdl, Button*, void);
     DECL_LINK_TYPED(IsEntryAllowedHdl, Edit*, bool);
     DECL_LINK(EditModifyHdl, Edit*);

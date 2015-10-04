@@ -705,10 +705,9 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
     return 0;
 }
 
-IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
+IMPL_LINK_TYPED( ScImportAsciiDlg, CharSetHdl, ListBox&, rListBox, void )
 {
-    OSL_ENSURE( pCharSetBox, "ScImportAsciiDlg::CharSetHdl - missing sender" );
-
+    SvxTextEncodingBox* pCharSetBox = static_cast<SvxTextEncodingBox*>(&rListBox);
     if( (pCharSetBox == pLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
     {
         SetPointer( Pointer( PointerStyle::Wait ) );
@@ -721,7 +720,6 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
         mpTableBox->Execute( CSVCMD_NEWCELLTEXTS );
         SetPointer( Pointer( PointerStyle::Arrow ) );
     }
-    return 0;
 }
 
 IMPL_LINK( ScImportAsciiDlg, FirstRowHdl, NumericField*, pNumField )
@@ -731,12 +729,10 @@ IMPL_LINK( ScImportAsciiDlg, FirstRowHdl, NumericField*, pNumField )
     return 0;
 }
 
-IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox*, pListBox )
+IMPL_LINK_TYPED( ScImportAsciiDlg, LbColTypeHdl, ListBox&, rListBox, void )
 {
-    OSL_ENSURE( pListBox, "ScImportAsciiDlg::LbColTypeHdl - missing sender" );
-    if( pListBox == pLbType )
-        mpTableBox->Execute( CSVCMD_SETCOLUMNTYPE, pListBox->GetSelectEntryPos() );
-    return 0;
+    if( &rListBox == pLbType )
+        mpTableBox->Execute( CSVCMD_SETCOLUMNTYPE, rListBox.GetSelectEntryPos() );
 }
 
 IMPL_LINK_NOARG_TYPED(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
@@ -774,8 +770,8 @@ IMPL_LINK_TYPED( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox&, rTableBox, void )
     pFtType->Enable( bEnable );
     pLbType->Enable( bEnable );
 
-    Link<> aSelHdl = pLbType->GetSelectHdl();
-    pLbType->SetSelectHdl( Link<>() );
+    Link<ListBox&,void> aSelHdl = pLbType->GetSelectHdl();
+    pLbType->SetSelectHdl( Link<ListBox&,void>() );
     if( bEmpty )
         pLbType->SetNoSelection();
     else if( bEnable )

@@ -74,7 +74,7 @@ protected:
     void commitToModel( const ChartTypeParameter& rParameter );
     void selectMainType();
 
-    DECL_LINK( SelectMainTypeHdl, void* );
+    DECL_LINK_TYPED( SelectMainTypeHdl, ListBox&, void );
     DECL_LINK_TYPED( SelectSubTypeHdl, ValueSet*, void );
 
 protected:

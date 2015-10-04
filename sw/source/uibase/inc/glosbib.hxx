@@ -95,6 +95,7 @@ protected:
     DECL_LINK_TYPED(NewHdl, Button *, void);
     DECL_LINK_TYPED( DeleteHdl, Button*, void  );
     DECL_LINK(ModifyHdl, void *);
+    DECL_LINK_TYPED(ModifyListBoxHdl, ListBox&, void);
     DECL_LINK_TYPED(RenameHdl, Button *, void);
 
 public:

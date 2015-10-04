@@ -95,7 +95,7 @@ private:
                                   const ScRefAddress& rEndPos );
 
     // Handler:
-    DECL_LINK( LbSelectHdl,     ListBox* );
+    DECL_LINK_TYPED( LbSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( BtnClickHdl, Button*, void );
     DECL_LINK( EdEntriesModHdl, VclMultiLineEdit* );
 };

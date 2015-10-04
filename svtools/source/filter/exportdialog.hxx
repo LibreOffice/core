@@ -143,6 +143,7 @@ private:
 
 
                         DECL_LINK_TYPED( UpdateHdl, Button*, void );
+                        DECL_LINK_TYPED( SelectListBoxHdl, ListBox&, void );
                         DECL_LINK( SelectHdl, void* );
                         DECL_LINK( UpdateHdlMtfSizeX, void* );
                         DECL_LINK( UpdateHdlMtfSizeY, void* );

@@ -172,10 +172,10 @@ static bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
     return false;
 }
 
-IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(OfaAutoCorrDlg, SelectLanguageHdl, ListBox&, rBox, void)
 {
-    sal_Int32 nPos = pBox->GetSelectEntryPos();
-    void* pVoid = pBox->GetEntryData(nPos);
+    sal_Int32 nPos = rBox.GetSelectEntryPos();
+    void* pVoid = rBox.GetEntryData(nPos);
     LanguageType eNewLang = (LanguageType)reinterpret_cast<sal_IntPtr>(pVoid);
     // save old settings and fill anew
     if(eNewLang != eLastDialogLanguage)
@@ -186,7 +186,6 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
         else if (m_nExceptionsPageId == nPageId)
             static_cast<OfaAutocorrExceptPage*>(GetTabPage( nPageId ))->SetLanguage(eNewLang);
     }
-    return 0;
 }
 
 OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(vcl::Window* pParent, const SfxItemSet& rSet)
@@ -1728,21 +1727,20 @@ bool OfaAutocorrExceptPage::NewDelHdl(void* pBtn)
     return false;
 }
 
-IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(OfaAutocorrExceptPage, SelectHdl, ListBox&, rBox, void)
 {
-    if (pBox == m_pAbbrevLB)
+    if (&rBox == m_pAbbrevLB)
     {
-        m_pAbbrevED->SetText(pBox->GetSelectEntry());
+        m_pAbbrevED->SetText(rBox.GetSelectEntry());
         m_pNewAbbrevPB->Enable(false);
         m_pDelAbbrevPB->Enable();
     }
     else
     {
-        m_pDoubleCapsED->SetText(pBox->GetSelectEntry());
+        m_pDoubleCapsED->SetText(rBox.GetSelectEntry());
         m_pNewDoublePB->Enable(false);
         m_pDelDoublePB->Enable();
     }
-    return 0;
 }
 
 IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)

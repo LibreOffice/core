@@ -124,7 +124,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     aFiFuncDesc->SetFont(aFont);
     aFiFuncDesc->SetBackground( GetBackground() );       //! never transparent?
 
-    Link<> aLink=LINK( this, ScFunctionDockWin, SelHdl);
+    Link<ListBox&,void> aLink=LINK( this, ScFunctionDockWin, SelHdl);
     aCatBox->SetSelectHdl(aLink);
     aFuncList->SetSelectHdl(aLink);
     aDDFuncList->SetSelectHdl(aLink);
@@ -148,7 +148,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     Range aYRange(3*aTxtSize.Height()+aFuncList->GetPosPixel().Y(),
                 GetOutputSizePixel().Height()-2*aTxtSize.Height());
     aPrivatSplit->SetYRange(aYRange);
-    SelHdl(aCatBox.get());
+    SelHdl(*aCatBox.get());
     bInit = true;
 }
 
@@ -276,7 +276,7 @@ void ScFunctionDockWin::SetSize()
                             aFuncList->Disable();
                             aFuncList->Hide();
                             pAllFuncList=aDDFuncList.get();
-                            SelHdl(aCatBox.get());
+                            SelHdl(*aCatBox.get());
                             aDDFuncList->SelectEntryPos(nSelEntry);
                         }
                         break;
@@ -294,7 +294,7 @@ void ScFunctionDockWin::SetSize()
                             aFuncList->Enable();
                             aFuncList->Show();
                             pAllFuncList=aFuncList.get();
-                            SelHdl(aCatBox.get());
+                            SelHdl(*aCatBox.get());
                             aFuncList->SelectEntryPos(nSelEntry);
                         }
                         break;
@@ -922,21 +922,18 @@ void ScFunctionDockWin::DoEnter()
 #*
 #************************************************************************/
 
-IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( ScFunctionDockWin, SelHdl, ListBox&, rLb, void )
 {
-    if ( pLb == aCatBox.get() )
+    if ( &rLb == aCatBox.get() )
     {
         UpdateFunctionList();
         SetDescription();
     }
 
-    if ( pLb == aFuncList.get() || pLb == aDDFuncList.get() )
+    if ( &rLb == aFuncList.get() || &rLb == aDDFuncList.get() )
     {
         SetDescription();
     }
-
-    //SetSize();
-    return 0;
 }
 
 /*************************************************************************
@@ -1053,7 +1050,7 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
         aStr = aStr.copy( n1+1 );
         sal_Int32 nSelPos = aStr.toInt32();
         aCatBox->SelectEntryPos(nSelPos);
-        SelHdl(aCatBox.get());
+        SelHdl(*aCatBox.get());
 
         //  if the window has already been shown (from SfxDockingWindow::Initialize if docked),
         //  set the splitter position now, otherwise it is set in StateChanged with type INITSHOW

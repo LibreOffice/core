@@ -434,7 +434,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
             SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
         }
     }
-    GridModifyHdl(0);
+    GridModifyHdl(*m_pColorLB);
     return 0;
 }
 
@@ -490,7 +490,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
         }
         //rubySize is disabled
     }
-    GridModifyHdl(0);
+    GridModifyHdl(*m_pColorLB);
     return 0;
 }
 
@@ -517,7 +517,7 @@ IMPL_LINK_TYPED(SwTextGridPage, GridTypeHdl, Button*, pButton, void)
         m_pCharWidthMF->Enable(false);
     }
 
-    GridModifyHdl(0);
+    GridModifyHdl(*m_pColorLB);
 }
 
 IMPL_LINK_NOARG_TYPED(SwTextGridPage, DisplayGridHdl, Button*, void)
@@ -529,9 +529,9 @@ IMPL_LINK_NOARG_TYPED(SwTextGridPage, DisplayGridHdl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SwTextGridPage, GridModifyClickHdl, Button*, void)
 {
-    GridModifyHdl(0);
+    GridModifyHdl(*m_pColorLB);
 }
-IMPL_LINK_NOARG(SwTextGridPage, GridModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwTextGridPage, GridModifyHdl, ListBox&, void)
 {
     const SfxItemSet& rOldSet = GetItemSet();
     SfxItemSet aSet(rOldSet);
@@ -540,7 +540,6 @@ IMPL_LINK_NOARG(SwTextGridPage, GridModifyHdl)
         aSet.Put(*pExSet);
     PutGridItem(aSet);
     m_pExampleWN->UpdateExample(aSet);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

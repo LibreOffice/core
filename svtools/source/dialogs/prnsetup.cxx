@@ -310,12 +310,11 @@ IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplPropertiesHdl, Button*, void)
 
 
 
-IMPL_LINK_NOARG(PrinterSetupDialog, ImplChangePrinterHdl)
+IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplChangePrinterHdl, ListBox&, void)
 {
     mpTempPrinter = ImplPrnDlgListBoxSelect(m_pLbName, m_pBtnProperties,
                                              mpPrinter, mpTempPrinter );
     ImplSetInfo();
-    return 0;
 }
 
 

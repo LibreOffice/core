@@ -677,9 +677,9 @@ IMPL_LINK_TYPED( SaneDlg, ClickBtnHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
+IMPL_LINK_TYPED( SaneDlg, SelectHdl, ListBox&, rListBox, void )
 {
-    if( pListBox == mpDeviceBox && Sane::IsSane() && Sane::CountDevices() )
+    if( &rListBox == mpDeviceBox && Sane::IsSane() && Sane::CountDevices() )
     {
         int nNewNumber = mpDeviceBox->GetSelectEntryPos();
         int nOldNumber = mrSane.GetDeviceNumber();
@@ -693,19 +693,18 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
     }
     if( mrSane.IsOpen() )
     {
-        if( pListBox == mpQuantumRangeBox )
+        if( &rListBox == mpQuantumRangeBox )
         {
             OString aValue(OUStringToOString(mpQuantumRangeBox->GetSelectEntry(),
                 osl_getThreadTextEncoding()));
             double fValue = atof(aValue.getStr());
             mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
         }
-        else if( pListBox == mpStringRangeBox )
+        else if( &rListBox == mpStringRangeBox )
         {
             mrSane.SetOptionValue( mnCurrentOption, mpStringRangeBox->GetSelectEntry() );
         }
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox, void )

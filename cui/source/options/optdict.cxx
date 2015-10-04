@@ -433,7 +433,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 
 
 
-IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox&, void)
 {
     sal_Int32 nPos = pAllDictsLB->GetSelectEntryPos();
 
@@ -453,12 +453,11 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
         pLangFT->Enable( bEnable );
         pLangLB->Enable( bEnable );
     }
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, void)
 {
     sal_Int32 nDicPos = pAllDictsLB->GetSelectEntryPos();
     sal_Int32 nLang = pLangLB->GetSelectLanguage();
@@ -488,7 +487,6 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
         else
             SetLanguage_Impl( nOldLang );
     }
-    return 1;
 }
 
 

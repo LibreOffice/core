@@ -794,11 +794,10 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)
                                             &aStartItem, &aShadowXItem, &aShadowYItem, 0L );
 }
 
-IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, ColorSelectHdl_Impl, ListBox&, void)
 {
     XFormTextShadowColorItem aItem( "", m_pShadowColorLB->GetSelectEntryColor() );
     GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHDWCOLOR, SfxCallMode::RECORD, &aItem, 0L );
-    return 0;
 }
 
 void SvxFontWorkDialog::SetColorList(const XColorListRef &pList)

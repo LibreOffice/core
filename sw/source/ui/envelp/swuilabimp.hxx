@@ -48,11 +48,11 @@ class SwLabPage : public SfxTabPage
     bool        m_bLabel;
 
     DECL_LINK_TYPED(AddrHdl, Button*, void);
-    DECL_LINK(DatabaseHdl, ListBox * );
+    DECL_LINK_TYPED(DatabaseHdl, ListBox&, void );
     DECL_LINK_TYPED(FieldHdl, Button *, void);
     DECL_LINK_TYPED(PageHdl, Button *, void);
-    DECL_LINK(MakeHdl, void *);
-    DECL_LINK(TypeHdl, void *);
+    DECL_LINK_TYPED(MakeHdl, ListBox&, void);
+    DECL_LINK_TYPED(TypeHdl, ListBox&, void);
 
     void DisplayFormat  ();
     SwLabRec* GetSelectedEntryPos();
@@ -98,7 +98,7 @@ class SwVisitingCardPage : public SfxTabPage
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextContainer2 > m_xAutoText;
 
     DECL_LINK_TYPED( AutoTextSelectTreeListBoxHdl, SvTreeListBox*, void );
-    DECL_LINK( AutoTextSelectHdl, void* );
+    DECL_LINK_TYPED( AutoTextSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( FrameControlInitializedHdl, SwOneExampleFrame&, void );
 
     void            InitFrameControl();

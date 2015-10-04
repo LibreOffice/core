@@ -149,7 +149,7 @@ public:
 class SmFontPickListBox : public SmFontPickList, public ListBox
 {
 protected:
-    DECL_LINK(SelectHdl, ListBox *);
+    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
 
 public:
     SmFontPickListBox(vcl::Window* pParent, WinBits nBits);

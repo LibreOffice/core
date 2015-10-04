@@ -340,10 +340,9 @@ void ErrorBarResources::UpdateControlStates()
     }
 }
 
-IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen2 )
+IMPL_LINK_NOARG_TYPED( ErrorBarResources, CategoryChosen2, ListBox&, void )
 {
    CategoryChosen(NULL);
-   return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( ErrorBarResources, CategoryChosen, Button*, void )

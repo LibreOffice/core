@@ -69,7 +69,7 @@ private:
     /// Set the entry and update the metric fields.
     void SelectEntryPos(sal_Int32 nPos);
 
-    DECL_LINK(LineSPDistHdl_Impl, ListBox*);
+    DECL_LINK_TYPED(LineSPDistHdl_Impl, ListBox&, void);
     DECL_LINK(LineSPDistAtHdl_Impl, void*);
     DECL_LINK_TYPED(PredefinedValuesHandler, Button*, void);
 };

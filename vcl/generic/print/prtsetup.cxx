@@ -262,37 +262,36 @@ void RTSPaperPage::update()
     }
 }
 
-IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
+IMPL_LINK_TYPED( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
 {
     const PPDKey* pKey = NULL;
-    if( pBox == m_pPaperBox )
+    if( &rBox == m_pPaperBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "PageSize" ) );
     }
-    else if( pBox == m_pDuplexBox )
+    else if( &rBox == m_pDuplexBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "Duplex" ) );
     }
-    else if( pBox == m_pSlotBox )
+    else if( &rBox == m_pSlotBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "InputSlot" ) );
     }
-    else if( pBox == m_pOrientBox )
+    else if( &rBox == m_pOrientBox )
     {
         m_pParent->m_aJobData.m_eOrientation = m_pOrientBox->GetSelectEntryPos() == 0 ? orientation::Portrait : orientation::Landscape;
     }
     if( pKey )
     {
-        PPDValue* pValue = static_cast<PPDValue*>(pBox->GetSelectEntryData());
+        PPDValue* pValue = static_cast<PPDValue*>(rBox.GetSelectEntryData());
         m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
         update();
     }
 
     m_pParent->SetDataModified( true );
-    return 0;
 }
 
 /*
@@ -451,14 +450,14 @@ IMPL_LINK(RTSDevicePage, ModifyHdl, Edit*,  pEdit)
     return 0;
 }
 
-IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
+IMPL_LINK_TYPED( RTSDevicePage, SelectHdl, ListBox&, rBox, void )
 {
-    if( pBox == m_pPPDKeyBox )
+    if( &rBox == m_pPPDKeyBox )
     {
         const PPDKey* pKey = static_cast<PPDKey*>(m_pPPDKeyBox->GetSelectEntryData());
         FillValueBox( pKey );
     }
-    else if( pBox == m_pPPDValueBox )
+    else if( &rBox == m_pPPDValueBox )
     {
         const PPDKey* pKey = static_cast<PPDKey*>(m_pPPDKeyBox->GetSelectEntryData());
         const PPDValue* pValue = static_cast<PPDValue*>(m_pPPDValueBox->GetSelectEntryData());
@@ -469,7 +468,6 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
         }
     }
     m_pParent->SetDataModified( true );
-    return 0;
 }
 
 void RTSDevicePage::FillValueBox( const PPDKey* pKey )

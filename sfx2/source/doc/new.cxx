@@ -147,8 +147,8 @@ class SfxNewFileDialog_Impl
 
     DECL_LINK_TYPED( Update, Idle *, void );
 
-    DECL_LINK(RegionSelect, ListBox*);
-    DECL_LINK(TemplateSelect, void*);
+    DECL_LINK_TYPED(RegionSelect, ListBox&, void);
+    DECL_LINK_TYPED(TemplateSelect, ListBox&, void);
     DECL_LINK_TYPED(DoubleClick, ListBox&, void);
     DECL_LINK_TYPED(Expand, VclExpander&, void);
     DECL_LINK_TYPED(LoadFile, Button*, void);
@@ -238,12 +238,12 @@ IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle*, void)
     }
 }
 
-IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox*, pBox )
+IMPL_LINK_TYPED( SfxNewFileDialog_Impl, RegionSelect, ListBox&, rBox, void )
 {
     if (xDocShell.Is() && xDocShell->GetProgress())
-        return 0;
+        return;
 
-    const sal_uInt16 nRegion = pBox->GetSelectEntryPos();
+    const sal_uInt16 nRegion = rBox.GetSelectEntryPos();
     const sal_uInt16 nCount = aTemplates.GetRegionCount()? aTemplates.GetCount(nRegion): 0;
     m_pTemplateLb->SetUpdateMode(false);
     m_pTemplateLb->Clear();
@@ -259,27 +259,25 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox*, pBox )
     m_pTemplateLb->SetUpdateMode(true);
     m_pTemplateLb->Invalidate();
     m_pTemplateLb->Update();
-    TemplateSelect(m_pTemplateLb);
-    return 0;
+    TemplateSelect(*m_pTemplateLb);
 }
 
 IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Expand, VclExpander&, void)
 {
-    TemplateSelect(m_pTemplateLb);
+    TemplateSelect(*m_pTemplateLb);
 }
 
-IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
+IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, TemplateSelect, ListBox&, void)
 {
     // Still loading
     if ( xDocShell && xDocShell->GetProgress() )
-        return 0;
+        return;
 
     if (!m_pMoreBt->get_expanded())
         // Dialog is not opened
-        return 0;
+        return;
 
     aPrevIdle.Start();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( SfxNewFileDialog_Impl, DoubleClick, ListBox&, void )
@@ -418,7 +416,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     aPrevIdle.SetIdleHdl( LINK( this, SfxNewFileDialog_Impl, Update));
 
     m_pRegionLb->SelectEntryPos(0);
-    RegionSelect(m_pRegionLb);
+    RegionSelect(*m_pRegionLb);
 }
 
 SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()

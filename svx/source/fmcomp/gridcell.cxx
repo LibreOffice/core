@@ -4045,7 +4045,7 @@ void FmXListBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    m_pBox->SetSelectHdl( Link<>() );
+    m_pBox->SetSelectHdl( Link<ListBox&,void>() );
     m_pBox->SetDoubleClickHdl( Link<ListBox&,void>() );
     m_pBox = NULL;
 

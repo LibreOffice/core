@@ -240,7 +240,7 @@ void SwAutoFormatDlg::Init( const SwTableAutoFormat* pSelFormat )
     }
 
     m_pLbFormat->SelectEntryPos( 255 != nIndex ? (nDfltStylePos + nIndex) : 0 );
-    SelFormatHdl( 0 );
+    SelFormatHdl( *m_pLbFormat );
 }
 
 void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFormat& rFormat, bool bEnable )
@@ -347,7 +347,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, AddHdl, Button*, void)
                         bCoreDataChanged = true;
                     }
 
-                    SelFormatHdl( 0 );
+                    SelFormatHdl( *m_pLbFormat );
                     bOk = true;
                 }
             }
@@ -395,7 +395,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RemoveHdl, Button*, void)
     }
     pBox.reset();
 
-    SelFormatHdl( 0 );
+    SelFormatHdl( *m_pLbFormat );
 }
 
 IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RenameHdl, Button*, void)
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RenameHdl, Button*, void)
                         bCoreDataChanged = true;
                     }
 
-                    SelFormatHdl( 0 );
+                    SelFormatHdl( *m_pLbFormat );
                     bOk = true;
                     bFormatRenamed = true;
                 }
@@ -461,7 +461,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RenameHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl)
+IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, SelFormatHdl, ListBox&, void)
 {
     bool bBtnEnable = false;
     sal_uInt8 nSelPos = (sal_uInt8) m_pLbFormat->GetSelectEntryPos(), nOldIdx = nIndex;
@@ -491,8 +491,6 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl)
 
     m_pBtnRemove->Enable( bBtnEnable );
     m_pBtnRename->Enable( bBtnEnable );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, OkHdl, Button*, void)

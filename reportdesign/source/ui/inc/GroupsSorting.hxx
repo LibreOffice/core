@@ -84,7 +84,7 @@ class OGroupsSortingDialog :    public FloatingWindow
 private:
     DECL_LINK_TYPED( OnControlFocusLost, Control&, void );
     DECL_LINK_TYPED( OnControlFocusGot, Control&, void );
-    DECL_LINK( LBChangeHdl, ListBox* );
+    DECL_LINK_TYPED( LBChangeHdl, ListBox&, void );
     DECL_LINK_TYPED( OnFormatAction, ToolBox*, void );
 
     /** returns the groups

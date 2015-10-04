@@ -278,7 +278,7 @@ void SvxColorTabPage::Update(bool bLoaded)
             XColorEntry* pEntry = pColorList->GetColor( nPos );
             ChangeColor(pEntry->GetColor());
         }
-        SelectColorLBHdl_Impl( this );
+        SelectColorLBHdl_Impl( *m_pLbColor );
     }
 
     UpdateModified();
@@ -499,7 +499,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
             }
 
             // so that the possibly changed color is discarded
-            SelectColorLBHdl_Impl( this );
+            SelectColorLBHdl_Impl( *m_pLbColor );
 
             *pPageType = PT_COLOR;
             *pPos = LISTBOX_ENTRY_NOTFOUND;
@@ -641,7 +641,7 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
     m_pLbColorModel->SelectEntryPos( aStr.toInt32() );
 
     ChangeColor(aNewColor);
-    SelectColorModelHdl_Impl( this );
+    SelectColorModelHdl_Impl( *m_pLbColorModel );
 
     m_pCtlPreviewOld->Invalidate();
     UpdateModified();
@@ -762,7 +762,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
 
         *pnColorListState |= ChangeType::MODIFIED;
 
-        SelectColorLBHdl_Impl( this );
+        SelectColorLBHdl_Impl( *m_pLbColor );
     }
 
     UpdateModified();
@@ -900,7 +900,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
 
             // positioning
             m_pLbColor->SelectEntryPos( nPos );
-            SelectColorLBHdl_Impl( this );
+            SelectColorLBHdl_Impl( *m_pLbColor );
 
             m_pCtlPreviewOld->Invalidate();
 
@@ -912,7 +912,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
 
 
 
-IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectColorLBHdl_Impl, ListBox&, void)
 {
     sal_Int32 nPos = m_pLbColor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -931,7 +931,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
         XColorEntry* pEntry = pColorList->GetColor(nPos);
         ChangeColor(pEntry->GetColor());
     }
-    return 0;
 }
 
 
@@ -980,7 +979,7 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
     }
 }
 
-IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectColorModelHdl_Impl, ListBox&, void)
 {
     int nPos = m_pLbColorModel->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1008,8 +1007,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
         ChangeColor(aCurrentColor);
 
     }
-
-    return 0;
 }
 
 

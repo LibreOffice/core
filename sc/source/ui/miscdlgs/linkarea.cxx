@@ -197,10 +197,9 @@ void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rF
     UpdateEnable();
 }
 
-IMPL_LINK_NOARG(ScLinkedAreaDlg, RangeHdl)
+IMPL_LINK_NOARG_TYPED(ScLinkedAreaDlg, RangeHdl, ListBox&, void)
 {
     UpdateEnable();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScLinkedAreaDlg, ReloadHdl, Button*, void)

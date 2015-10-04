@@ -420,7 +420,7 @@ IMPL_LINK_NOARG_TYPED(TakeProgress, CleanUpHdl, void*, void)
     aRemainingVector.clear();
 
     mpBrowser->m_pLbxFound->SetUpdateMode( true );
-    mpBrowser->SelectFoundHdl( NULL );
+    mpBrowser->SelectFoundHdl( *mpBrowser->m_pLbxFound );
     GetParent()->LeaveWait();
 
     EndDialog( RET_OK );
@@ -1172,7 +1172,7 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickTakeAllHdl, Button*, void)
 
 
 
-IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl)
+IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, SelectFoundHdl, ListBox&, void)
 {
     if( bInputAllowed )
     {
@@ -1199,8 +1199,6 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl)
         if( bPreviewPossible && m_pCbxPreview->IsChecked() )
             aPreviewTimer.Start();
     }
-
-    return 0;
 }
 
 

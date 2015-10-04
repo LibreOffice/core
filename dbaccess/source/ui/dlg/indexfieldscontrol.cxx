@@ -406,8 +406,9 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK( IndexFieldsControl, OnListEntrySelected, ListBox*, _pBox )
+    IMPL_LINK( IndexFieldsControl, OnListEntrySelected, void*, p )
     {
+        ListBox* _pBox = static_cast<ListBox*>(p);
         if (!_pBox->IsTravelSelect() && m_aModifyHdl.IsSet())
             m_aModifyHdl.Call(this);
 

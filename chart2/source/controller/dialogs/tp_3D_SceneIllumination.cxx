@@ -444,12 +444,13 @@ IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pBut
             if(pInfo)
                 applyLightSourceToModel( nL );
         }
-        SelectColorHdl( pListBox );
+        SelectColorHdl( *pListBox );
     }
 }
 
-IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ColorLB*, pListBox )
+IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ListBox&, rBox, void )
 {
+    ColorLB* pListBox = static_cast<ColorLB*>(&rBox);
     if(pListBox==m_pLB_AmbientLight)
     {
         m_bInCommitToModel = true;
@@ -475,7 +476,6 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ColorLB*, pListBox 
         }
     }
     this->updatePreview();
-    return 0;
 }
 
 IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, Button*, pBtn, void )

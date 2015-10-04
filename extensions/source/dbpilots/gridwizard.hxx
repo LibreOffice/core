@@ -96,7 +96,7 @@ namespace dbp
     protected:
         DECL_LINK_TYPED(OnMoveOneEntry, Button*, void);
         DECL_LINK_TYPED(OnMoveAllEntries, Button*, void);
-        DECL_LINK(OnEntrySelected, ListBox*);
+        DECL_LINK_TYPED(OnEntrySelected, ListBox&, void);
         DECL_LINK_TYPED(OnEntryDoubleClicked, ListBox&, void);
 
         void implCheckButtons();

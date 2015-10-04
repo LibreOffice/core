@@ -114,7 +114,7 @@ public:
     static OString processCommand( const OString& rCommand );
 
     DECL_LINK_TYPED( ListHdl, Button*, void );
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
     DECL_STATIC_LINK_TYPED( MyWin, QuitHdl, Button*, void );
 };
 
@@ -240,7 +240,7 @@ IMPL_STATIC_LINK_NOARG_TYPED( MyWin, QuitHdl, Button*, void)
     processCommand( "quit" );
 }
 
-IMPL_LINK( MyWin, SelectHdl, ListBox*, )
+IMPL_LINK_NOARG_TYPED( MyWin, SelectHdl, ListBox&, void)
 {
     OUString aEntry = m_aSvpBitmaps->GetSelectEntry();
     sal_Int32 nPos = aEntry.indexOf( ": " );
@@ -267,7 +267,6 @@ IMPL_LINK( MyWin, SelectHdl, ListBox*, )
         m_aImage->SetSizePixel( aFixedSize );
         m_aImage->SetImage( Image( BitmapEx( aBitmap ) ) );
     }
-    return 0;
 }
 
 void MyWin::MouseMove( const MouseEvent& rMEvt )

@@ -77,7 +77,7 @@ private:
 
     bool                HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 nWhich ) const;
 
-    DECL_LINK( UpdateEnableHdl, void* );
+    DECL_LINK_TYPED( UpdateEnableHdl, ListBox&, void );
     DECL_LINK_TYPED( UpdateEnableClickHdl, Button*, void );
 
 private:

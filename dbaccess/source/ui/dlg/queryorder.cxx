@@ -143,10 +143,9 @@ void DlgOrderCrit::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK( DlgOrderCrit, FieldListSelectHdl, ListBox *, /*pListBox*/ )
+IMPL_LINK_NOARG_TYPED( DlgOrderCrit, FieldListSelectHdl, ListBox&, void )
 {
     EnableLines();
-    return 0;
 }
 
 void DlgOrderCrit::impl_initializeOrderList_nothrow()

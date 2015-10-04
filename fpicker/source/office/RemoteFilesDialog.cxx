@@ -367,7 +367,7 @@ short RemoteFilesDialog::Execute()
     if( m_pServices_lb->GetEntryCount() > 0 )
     {
         Show();
-        SelectServiceHdl( NULL );
+        SelectServiceHdl( *m_pServices_lb );
     }
     if( !m_bIsConnected )
     {
@@ -749,7 +749,7 @@ IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, AddServiceHdl, Button*, void )
             m_pServices_lb->InsertEntry( sPrefix + newService->GetName() );
             m_pServices_lb->SelectEntryPos( m_pServices_lb->GetEntryCount() - 1 );
             m_pAddService_btn->SetPopupMenu( m_pAddMenu );
-            SelectServiceHdl( NULL );
+            SelectServiceHdl( *m_pServices_lb );
 
             m_bIsUpdated = true;
 
@@ -763,7 +763,7 @@ IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, AddServiceHdl, Button*, void )
     };
 }
 
-IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
+IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, SelectServiceHdl, ListBox&, void )
 {
     int nPos = GetSelectedServicePos();
 
@@ -775,8 +775,6 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
         m_bServiceChanged = true;
         OpenURL( sURL );
     }
-
-    return 1;
 }
 
 IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
@@ -1020,7 +1018,7 @@ IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, SplitHdl, Splitter*, void )
     m_pSplitter->SetPosPixel( Point( placeSize.Width(), m_pSplitter->GetPosPixel().Y() ) );
 }
 
-IMPL_LINK_NOARG ( RemoteFilesDialog, SelectFilterHdl )
+IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, SelectFilterHdl, ListBox&, void )
 {
     unsigned int nPos = m_pFilter_lb->GetSelectEntryPos();
 
@@ -1033,8 +1031,6 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectFilterHdl )
         if( !sCurrentURL.isEmpty() && m_bIsConnected )
             OpenURL( sCurrentURL );
     }
-
-    return 1;
 }
 
 IMPL_LINK_TYPED( RemoteFilesDialog, TreeSelectHdl, SvTreeListBox *, pBox, void )

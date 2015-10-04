@@ -454,7 +454,7 @@ namespace dbaui
 
         lateUIInit();
 
-        Link<> aLink(LINK(this, OTableListBoxControl, OnTableChanged));
+        Link<ListBox&,void> aLink(LINK(this, OTableListBoxControl, OnTableChanged));
         m_pLeftTable->SetSelectHdl(aLink);
         m_pRightTable->SetSelectHdl(aLink);
     }
@@ -514,9 +514,9 @@ namespace dbaui
         m_pLeftTable->GrabFocus();
     }
 
-    IMPL_LINK( OTableListBoxControl, OnTableChanged, ListBox*, pListBox )
+    IMPL_LINK_TYPED( OTableListBoxControl, OnTableChanged, ListBox&, rListBox, void )
     {
-        OUString strSelected(pListBox->GetSelectEntry());
+        OUString strSelected(rListBox.GetSelectEntry());
         OTableWindow* pLeft     = NULL;
         OTableWindow* pRight    = NULL;
 
@@ -524,7 +524,7 @@ namespace dbaui
         if ( m_pTableMap->size() == 2 )
         {
             ListBox* pOther;
-            if (pListBox == m_pLeftTable)
+            if (&rListBox == m_pLeftTable)
                 pOther = m_pRightTable;
             else
                 pOther = m_pLeftTable;
@@ -555,7 +555,7 @@ namespace dbaui
                 pLoop = aFind->second;
             OSL_ENSURE(pLoop != NULL, "ORelationDialog::OnTableChanged: invalid ListBox entry!");
                 // We need to find strSelect, because we filled the ListBoxes with the table names with which we compare now
-            if (pListBox == m_pLeftTable)
+            if (&rListBox == m_pLeftTable)
             {
                 // Insert the previously selected Entry on the left side on the right side
                 m_pRightTable->InsertEntry(m_strCurrentLeft);
@@ -588,12 +588,11 @@ namespace dbaui
             }
         }
 
-        pListBox->GrabFocus();
+        rListBox.GrabFocus();
 
         m_pRC_Tables->setWindowTables(pLeft,pRight);
 
         NotifyCellChange();
-        return 0;
     }
 
     void OTableListBoxControl::NotifyCellChange()

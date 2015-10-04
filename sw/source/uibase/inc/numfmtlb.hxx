@@ -38,7 +38,7 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
                                               //to be shown in the number format dialog
     bool                bUseAutomaticLanguage;//determine whether language is automatically assigned
 
-    DECL_DLLPRIVATE_LINK( SelectHdl, ListBox * );
+    DECL_DLLPRIVATE_LINK_TYPED( SelectHdl, ListBox&, void );
 
     SAL_DLLPRIVATE double          GetDefValue(const short nFormatType) const;
     SAL_DLLPRIVATE void            Init(short nFormatType, bool bUsrFormats);

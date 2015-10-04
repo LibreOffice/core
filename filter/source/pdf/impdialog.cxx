@@ -1629,11 +1629,10 @@ void ImplErrorDialog::dispose()
     MessageDialog::dispose();
 }
 
-IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
+IMPL_LINK_NOARG_TYPED(ImplErrorDialog, SelectHdl, ListBox&, void)
 {
     OUString* pStr = static_cast<OUString*>(m_pErrors->GetSelectEntryData());
     m_pExplanation->SetText( pStr ? *pStr : OUString() );
-    return 0;
 }
 
 

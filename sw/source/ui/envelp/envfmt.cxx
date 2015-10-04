@@ -247,7 +247,7 @@ IMPL_LINK( SwEnvFormatPage, ModifyHdl, Edit *, pEdit )
             lUserH = lHeight;
         }
 
-        m_pSizeFormatBox->GetSelectHdl().Call(m_pSizeFormatBox);
+        m_pSizeFormatBox->GetSelectHdl().Call(*m_pSizeFormatBox);
     }
     else
     {
@@ -384,7 +384,7 @@ SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl* pColl, bool bSende
     return pAddrSet;
 }
 
-IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl)
+IMPL_LINK_NOARG_TYPED(SwEnvFormatPage, FormatHdl, ListBox&, void)
 {
     long lWidth;
     long lHeight;
@@ -423,7 +423,6 @@ IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl)
 
     FillItem(GetParentSwEnvDlg()->aEnvItem);
     m_pPreview->Invalidate();
-    return 0;
 }
 
 void SwEnvFormatPage::SetMinMax()

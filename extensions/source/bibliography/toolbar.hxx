@@ -128,7 +128,7 @@ class BibToolBar:   public ToolBox
         sal_Int16               nOutStyle;
 
         BibDataManager*         pDatMan;
-        DECL_LINK( SelHdl, ListBox* );
+        DECL_LINK_TYPED( SelHdl, ListBox&, void );
         DECL_LINK_TYPED( SendSelHdl, Idle*, void );
         DECL_LINK_TYPED( MenuHdl, ToolBox*, void );
         DECL_LINK_TYPED( OptionsChanged_Impl, LinkParamNone*, void );

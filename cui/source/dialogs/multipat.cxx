@@ -48,13 +48,12 @@ IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, SelectHdl_Impl, SvTreeListBox*, void)
     m_pDelBtn->Enable(bEnable && bIsSelected);
 }
 
-IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPathSelectDialog, SelectHdl_Impl, ListBox&, void)
 {
     sal_uLong nCount = m_pPathLB->GetEntryCount();
     bool bIsSelected = m_pPathLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
     bool bEnable = nCount > 1;
     m_pDelBtn->Enable(bEnable && bIsSelected);
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxMultiPathDialog, CheckHdl_Impl, SvTreeListBox*, pBox, void )
@@ -125,7 +124,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathSelectDialog, AddHdl_Impl, Button*, void)
             m_pPathLB->SetEntryData( nPos, new OUString( aURL ) );
         }
 
-        SelectHdl_Impl( NULL );
+        SelectHdl_Impl( *m_pPathLB );
     }
 }
 
@@ -170,7 +169,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathSelectDialog, DelHdl_Impl, Button*, void)
         m_pPathLB->SelectEntryPos( nPos );
     }
 
-    SelectHdl_Impl( NULL );
+    SelectHdl_Impl( *m_pPathLB );
 }
 
 SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
@@ -216,7 +215,7 @@ SvxPathSelectDialog::SvxPathSelectDialog(vcl::Window* pParent)
     m_pAddBtn->SetClickHdl( LINK( this, SvxPathSelectDialog, AddHdl_Impl ) );
     m_pDelBtn->SetClickHdl( LINK( this, SvxPathSelectDialog, DelHdl_Impl ) );
 
-    SelectHdl_Impl( NULL );
+    SelectHdl_Impl( *m_pPathLB );
 }
 
 SvxMultiPathDialog::~SvxMultiPathDialog()
@@ -354,7 +353,7 @@ void SvxPathSelectDialog::SetPath(const OUString& rPath)
         while (nIndex >= 0);
     }
 
-    SelectHdl_Impl( NULL );
+    SelectHdl_Impl( *m_pPathLB );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

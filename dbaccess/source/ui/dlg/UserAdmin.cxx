@@ -275,13 +275,12 @@ IMPL_LINK_TYPED( OUserAdmin, UserHdl, Button *, pButton, void )
     }
 }
 
-IMPL_LINK( OUserAdmin, ListDblClickHdl, ListBox *, /*pListBox*/ )
+IMPL_LINK_NOARG_TYPED( OUserAdmin, ListDblClickHdl, ListBox&, void )
 {
     m_TableCtrl->setUserName(GetUser());
     m_TableCtrl->UpdateTables();
     m_TableCtrl->DeactivateCell();
     m_TableCtrl->ActivateCell(m_TableCtrl->GetCurRow(),m_TableCtrl->GetCurColumnId());
-    return 0;
 }
 
 OUString OUserAdmin::GetUser()

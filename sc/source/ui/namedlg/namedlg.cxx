@@ -524,10 +524,9 @@ IMPL_LINK_NOARG_TYPED(ScNameDlg, SelectionChangedHdl_Impl, SvTreeListBox*, void)
     SelectionChanged();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, ScopeChangedHdl)
+IMPL_LINK_NOARG_TYPED(ScNameDlg, ScopeChangedHdl, ListBox&, void)
 {
     ScopeChanged();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

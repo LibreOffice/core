@@ -79,7 +79,8 @@ class SwSortDlg : public SvxStandardDialog
 
     DECL_LINK_TYPED( CheckHdl, Button*, void );
     DECL_LINK_TYPED( DelimHdl, Button*, void );
-    DECL_LINK( LanguageHdl, ListBox* );
+    DECL_LINK_TYPED( LanguageListBoxHdl, ListBox&, void );
+    void LanguageHdl(ListBox*);
     DECL_LINK_TYPED(DelimCharHdl, Button*,void);
 
 public:

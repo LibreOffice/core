@@ -86,7 +86,7 @@ private:
     DECL_LINK_TYPED ( DelHdl, Button *, void );
     DECL_LINK_TYPED ( EditHdl, DetailsContainer*, void );
     DECL_LINK ( ModifyHdl, void* );
-    DECL_LINK ( SelectTypeHdl, void * );
+    DECL_LINK_TYPED ( SelectTypeHdl, ListBox&, void );
     DECL_LINK ( EditLabelHdl, void * );
     DECL_LINK ( EditUsernameHdl, void * );
 

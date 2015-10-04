@@ -183,24 +183,22 @@ SvxLineTabPage::SvxLineTabPage
     m_ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
     m_pLbLineStyle->SetSelectHdl( LINK( this, SvxLineTabPage, ClickInvisibleHdl_Impl ) );
-    m_pLbColor->SetSelectHdl( LINK( this, SvxLineTabPage, ChangePreviewHdl_Impl ) );
-    m_pMtrLineWidth->SetModifyHdl( LINK( this, SvxLineTabPage, ChangePreviewHdl_Impl ) );
+    m_pLbColor->SetSelectHdl( LINK( this, SvxLineTabPage, ChangePreviewListBoxHdl_Impl ) );
+    m_pMtrLineWidth->SetModifyHdl( LINK( this, SvxLineTabPage, ChangePreviewModifyHdl_Impl ) );
     m_pMtrTransparent->SetModifyHdl( LINK( this, SvxLineTabPage, ChangeTransparentHdl_Impl ) );
 
-    Link<> aStart = LINK( this, SvxLineTabPage, ChangeStartHdl_Impl );
-    Link<> aEnd = LINK( this, SvxLineTabPage, ChangeEndHdl_Impl );
-    m_pLbStartStyle->SetSelectHdl( aStart );
-    m_pLbEndStyle->SetSelectHdl( aEnd );
-    m_pMtrStartWidth->SetModifyHdl( aStart );
-    m_pMtrEndWidth->SetModifyHdl( aEnd );
+    m_pLbStartStyle->SetSelectHdl( LINK( this, SvxLineTabPage, ChangeStartListBoxHdl_Impl ) );
+    m_pLbEndStyle->SetSelectHdl( LINK( this, SvxLineTabPage, ChangeEndListBoxHdl_Impl ) );
+    m_pMtrStartWidth->SetModifyHdl( LINK( this, SvxLineTabPage, ChangeStartModifyHdl_Impl ) );
+    m_pMtrEndWidth->SetModifyHdl( LINK( this, SvxLineTabPage, ChangeEndModifyHdl_Impl ) );
     m_pTsbCenterStart->SetClickHdl( LINK( this, SvxLineTabPage, ChangeStartClickHdl_Impl ) );
     m_pTsbCenterEnd->SetClickHdl( LINK( this, SvxLineTabPage, ChangeEndClickHdl_Impl ) );
 
-    Link<> aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
+    Link<ListBox&,void> aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
     m_pLBEdgeStyle->SetSelectHdl( aEdgeStyle );
 
     // LineCaps
-    Link<> aCapStyle = LINK( this, SvxLineTabPage, ChangeCapStyleHdl_Impl );
+    Link<ListBox&,void> aCapStyle = LINK( this, SvxLineTabPage, ChangeCapStyleHdl_Impl );
     m_pLBCapStyle->SetSelectHdl( aCapStyle );
 
     // Symbols on a line (eg star charts), MB-handler set
@@ -643,13 +641,13 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             if( m_nPageType == 2 ) // 1
             {
                 m_pLbLineStyle->SelectEntryPos( *m_pPosDashLb + 2 ); // +2 due to SOLID and INVLISIBLE
-                ChangePreviewHdl_Impl( this );
+                ChangePreviewHdl_Impl( nullptr );
             }
             if( m_nPageType == 3 )
             {
                 m_pLbStartStyle->SelectEntryPos( *m_pPosLineEndLb + 1 );// +1 due to SOLID
                 m_pLbEndStyle->SelectEntryPos( *m_pPosLineEndLb + 1 );// +1 due to SOLID
-                ChangePreviewHdl_Impl( this );
+                ChangePreviewHdl_Impl( nullptr );
             }
         }
 
@@ -670,7 +668,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
                 else
                     m_pLbColor->SelectEntryPos( nColorPos );
 
-                ChangePreviewHdl_Impl( this );
+                ChangePreviewHdl_Impl( nullptr );
             }
 
         m_nPageType = 0;
@@ -1510,7 +1508,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     // LineCaps
     m_pLBCapStyle->SaveValue();
 
-    ClickInvisibleHdl_Impl( this );
+    ClickInvisibleHdl_Impl( *m_pLbLineStyle );
 
     ChangePreviewHdl_Impl( NULL );
 }
@@ -1524,8 +1522,16 @@ VclPtr<SfxTabPage> SvxLineTabPage::Create( vcl::Window* pWindow,
 }
 
 
-
-IMPL_LINK( SvxLineTabPage, ChangePreviewHdl_Impl, void *, pCntrl )
+IMPL_LINK_TYPED( SvxLineTabPage, ChangePreviewListBoxHdl_Impl, ListBox&, rListBox, void )
+{
+    ChangePreviewHdl_Impl(&rListBox);
+}
+IMPL_LINK( SvxLineTabPage, ChangePreviewModifyHdl_Impl, void *, pCntrl )
+{
+    ChangePreviewHdl_Impl(pCntrl);
+    return 0;
+}
+void SvxLineTabPage::ChangePreviewHdl_Impl(void * pCntrl )
 {
     if(pCntrl == m_pMtrLineWidth)
     {
@@ -1582,8 +1588,6 @@ IMPL_LINK( SvxLineTabPage, ChangePreviewHdl_Impl, void *, pCntrl )
     const bool bHasLineEnd = m_pLbEndStyle->GetSelectEntryPos() != 0;
 
     m_pBoxEnd->Enable(bHasLineEnd && bHasLineStyle);
-
-    return 0L;
 }
 
 
@@ -1592,7 +1596,16 @@ IMPL_LINK_TYPED( SvxLineTabPage, ChangeStartClickHdl_Impl, Button*, p, void )
 {
     ChangeStartHdl_Impl(p);
 }
-IMPL_LINK( SvxLineTabPage, ChangeStartHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxLineTabPage, ChangeStartListBoxHdl_Impl, ListBox&, rListBox, void )
+{
+    ChangeStartHdl_Impl(&rListBox);
+}
+IMPL_LINK( SvxLineTabPage, ChangeStartModifyHdl_Impl, void *, p )
+{
+    ChangeStartHdl_Impl(p);
+    return 0;
+}
+void SvxLineTabPage::ChangeStartHdl_Impl( void * p )
 {
     if( m_pCbxSynchronize->IsChecked() )
     {
@@ -1604,32 +1617,26 @@ IMPL_LINK( SvxLineTabPage, ChangeStartHdl_Impl, void *, p )
             m_pTsbCenterEnd->SetState( m_pTsbCenterStart->GetState() );
     }
 
-    ChangePreviewHdl_Impl( this );
-
-    return 0L;
+    ChangePreviewHdl_Impl( nullptr );
 }
 
 
 
-IMPL_LINK_NOARG(SvxLineTabPage, ChangeEdgeStyleHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ChangeEdgeStyleHdl_Impl, ListBox&, void)
 {
-    ChangePreviewHdl_Impl( this );
-
-    return 0L;
+    ChangePreviewHdl_Impl( nullptr );
 }
 
 
 // fdo#43209
 
-IMPL_LINK_NOARG( SvxLineTabPage, ChangeCapStyleHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SvxLineTabPage, ChangeCapStyleHdl_Impl, ListBox&, void )
 {
-    ChangePreviewHdl_Impl( this );
-
-    return 0L;
+    ChangePreviewHdl_Impl( nullptr );
 }
 
 
-IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ClickInvisibleHdl_Impl, ListBox&, void)
 {
     if( m_pLbLineStyle->GetSelectEntryPos() == 0 ) // invisible
     {
@@ -1658,9 +1665,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
             m_pGridEdgeCaps->Enable();
         }
     }
-    ChangePreviewHdl_Impl( NULL );
-
-    return 0L;
+    ChangePreviewHdl_Impl( nullptr );
 }
 
 
@@ -1669,7 +1674,16 @@ IMPL_LINK_TYPED( SvxLineTabPage, ChangeEndClickHdl_Impl, Button*, p, void )
 {
     ChangeEndHdl_Impl(p);
 }
-IMPL_LINK( SvxLineTabPage, ChangeEndHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxLineTabPage, ChangeEndListBoxHdl_Impl, ListBox&, rListBox, void )
+{
+    ChangeEndHdl_Impl(&rListBox);
+}
+IMPL_LINK( SvxLineTabPage, ChangeEndModifyHdl_Impl, void *, p )
+{
+    ChangeEndHdl_Impl(p);
+    return 0;
+}
+void SvxLineTabPage::ChangeEndHdl_Impl( void * p )
 {
     if( m_pCbxSynchronize->IsChecked() )
     {
@@ -1681,9 +1695,7 @@ IMPL_LINK( SvxLineTabPage, ChangeEndHdl_Impl, void *, p )
             m_pTsbCenterStart->SetState( m_pTsbCenterEnd->GetState() );
     }
 
-    ChangePreviewHdl_Impl( this );
-
-    return 0L;
+    ChangePreviewHdl_Impl( nullptr );
 }
 
 

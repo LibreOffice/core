@@ -117,10 +117,11 @@ SvxHatchTabPage::SvxHatchTabPage
     m_pLbHatchings->SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl_Impl ) );
 
     Link<> aLink = LINK( this, SvxHatchTabPage, ModifiedHdl_Impl );
+    Link<ListBox&,void> aLink2 = LINK( this, SvxHatchTabPage, ModifiedListBoxHdl_Impl );
     m_pMtrDistance->SetModifyHdl( aLink );
     m_pMtrAngle->SetModifyHdl( aLink );
-    m_pLbLineType->SetSelectHdl( aLink );
-    m_pLbLineColor->SetSelectHdl( aLink );
+    m_pLbLineType->SetSelectHdl( aLink2 );
+    m_pLbLineColor->SetSelectHdl( aLink2 );
 
     m_pBtnAdd->SetClickHdl( LINK( this, SvxHatchTabPage, ClickAddHdl_Impl ) );
     m_pBtnModify->SetClickHdl(
@@ -221,7 +222,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
                 m_pLbHatchings->SelectEntryPos( *m_pPos );
             }
             // colors could have been deleted
-            ChangeHatchHdl_Impl( this );
+            ChangeHatchHdl_Impl( *m_pLbHatchings );
 
             *m_pPageType = PT_HATCH;
             *m_pPos = LISTBOX_ENTRY_NOTFOUND;
@@ -334,7 +335,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 
 void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 {
-    ChangeHatchHdl_Impl( this );
+    ChangeHatchHdl_Impl( *m_pLbHatchings );
 
     // determine button state
     if( m_pHatchingList->Count() )
@@ -366,6 +367,10 @@ VclPtr<SfxTabPage> SvxHatchTabPage::Create( vcl::Window* pWindow,
 
 
 
+IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
+{
+    ModifiedHdl_Impl(&rListBox);
+}
 IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
 {
     if( p == m_pMtrAngle )
@@ -399,7 +404,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
 
 
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ChangeHatchHdl_Impl, ListBox&, void)
 {
     std::unique_ptr<XHatch> pHatch;
     int nPos = m_pLbHatchings->GetSelectEntryPos();
@@ -466,8 +471,6 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
     m_pLbLineType->SaveValue();
     m_pLbLineColor->SaveValue();
     m_pLbHatchings->SaveValue();
-
-    return 0L;
 }
 
 
@@ -554,7 +557,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 
         *m_pnHatchingListState |= ChangeType::MODIFIED;
 
-        ChangeHatchHdl_Impl( this );
+        ChangeHatchHdl_Impl( *m_pLbHatchings );
     }
 
     // determine button state
@@ -651,7 +654,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickDeleteHdl_Impl, Button*, void)
 
             m_pCtlPreview->Invalidate();
 
-            ChangeHatchHdl_Impl( this );
+            ChangeHatchHdl_Impl( *m_pLbHatchings );
 
             *m_pnHatchingListState |= ChangeType::MODIFIED;
         }

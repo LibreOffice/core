@@ -79,7 +79,7 @@ private:
     ::std::vector< long >   aVerbVector;
 
     DECL_LINK_TYPED( ClickSearchHdl, Button*, void );
-    DECL_LINK( ClickActionHdl, void * );
+    DECL_LINK_TYPED( ClickActionHdl, ListBox&, void );
     DECL_LINK_TYPED( SelectTreeHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( CheckFileHdl, Control&, void );
 

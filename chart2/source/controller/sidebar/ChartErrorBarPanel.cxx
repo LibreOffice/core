@@ -412,14 +412,12 @@ IMPL_LINK_NOARG_TYPED(ChartErrorBarPanel, RadioBtnHdl, RadioButton&, void)
     setShowNegativeError(mxModel, aCID, bNeg);
 }
 
-IMPL_LINK_NOARG(ChartErrorBarPanel, ListBoxHdl)
+IMPL_LINK_NOARG_TYPED(ChartErrorBarPanel, ListBoxHdl, ListBox&, void)
 {
     OUString aCID = getCID(mxModel);
     sal_Int32 nPos = mpLBType->GetSelectEntryPos();
 
     setTypePos(mxModel, aCID, nPos);
-
-    return 0;
 }
 
 IMPL_LINK(ChartErrorBarPanel, NumericFieldHdl, NumericField*, pMetricField)

@@ -52,8 +52,9 @@ private:
     void            CheckState();
 
     DECL_LINK_TYPED( ClickButtonHdl, Button*, void );
-    DECL_LINK( SelectHdl, void* );
+    DECL_LINK_TYPED( SelectListBoxHdl, ListBox&, void );
     DECL_LINK_TYPED( StartShowHdl, Button*, void );
+    void SelectHdl(void*);
 
 public:
                 SdCustomShowDlg( vcl::Window* pWindow, SdDrawDocument& rDrawDoc );
@@ -86,6 +87,7 @@ private:
     DECL_LINK_TYPED( ClickButtonHdl, Button*, void );
     DECL_LINK( ClickButtonHdl2, void* );
     DECL_LINK_TYPED( ClickButtonHdl3, SvTreeListBox*, void );
+    DECL_LINK_TYPED( ClickButtonHdl4, ListBox&, void );
     DECL_LINK_TYPED( OKHdl, Button*, void );
 
 public:

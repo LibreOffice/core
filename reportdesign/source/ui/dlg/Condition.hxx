@@ -167,8 +167,8 @@ namespace rptui
         void    impl_setCondition( const OUString& _rConditionFormula );
 
     private:
-        DECL_LINK( OnTypeSelected, ListBox* );
-        DECL_LINK( OnOperationSelected, ListBox* );
+        DECL_LINK_TYPED( OnTypeSelected, ListBox&, void );
+        DECL_LINK_TYPED( OnOperationSelected, ListBox&, void );
     };
 
 

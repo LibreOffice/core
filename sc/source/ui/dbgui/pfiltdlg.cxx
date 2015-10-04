@@ -429,13 +429,14 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 
 // Handler:
 
-IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( ScPivotFilterDlg, LbSelectHdl, ListBox&, rLb, void )
 {
 
     /*
      * Handling the enable/disable logic based on which ListBox was touched:
      */
-    if (pLb == m_pLbConnect1)
+
+    if (&rLb == m_pLbConnect1)
     {
         if ( !m_pLbField2->IsEnabled() )
         {
@@ -444,7 +445,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
             m_pEdVal2->Enable();
         }
     }
-    else if (pLb == m_pLbConnect2)
+    else if (&rLb == m_pLbConnect2)
     {
         if ( !m_pLbField3->IsEnabled() )
         {
@@ -453,7 +454,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
             m_pEdVal3->Enable();
         }
     }
-    else if (pLb == m_pLbField1)
+    else if (&rLb == m_pLbField1)
     {
         if ( m_pLbField1->GetSelectEntryPos() == 0 )
         {
@@ -485,7 +486,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
             }
         }
     }
-    else if (pLb == m_pLbField2)
+    else if (&rLb == m_pLbField2)
     {
         if ( m_pLbField2->GetSelectEntryPos() == 0 )
         {
@@ -509,14 +510,12 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
             }
         }
     }
-    else if (pLb == m_pLbField3)
+    else if (&rLb == m_pLbField3)
     {
         ( m_pLbField3->GetSelectEntryPos() == 0 )
             ? ClearValueList( 3 )
             : UpdateValueList( 3 );
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScPivotFilterDlg, CheckBoxHdl, Button*, pBox, void )

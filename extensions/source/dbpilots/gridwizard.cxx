@@ -401,10 +401,9 @@ namespace dbp
     }
 
 
-    IMPL_LINK(OGridFieldsSelection, OnEntrySelected, ListBox*, /*NOTINTERESTEDIN*/)
+    IMPL_LINK_NOARG_TYPED(OGridFieldsSelection, OnEntrySelected, ListBox&, void)
     {
         implCheckButtons();
-        return 0L;
     }
 
 

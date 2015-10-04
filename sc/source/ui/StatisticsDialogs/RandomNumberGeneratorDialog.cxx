@@ -129,7 +129,7 @@ void ScRandomNumberGeneratorDialog::Init()
     mpEnableSeed->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
     mpEnableRounding->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
 
-    DistributionChanged(NULL);
+    DistributionChanged(*mpDistributionCombo.get());
     CheckChanged(*mpEnableSeed);
 }
 
@@ -420,7 +420,7 @@ IMPL_LINK_NOARG_TYPED(ScRandomNumberGeneratorDialog, CheckChanged, CheckBox&, vo
     mpDecimalPlaces->Enable(mpEnableRounding->IsChecked());
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)
+IMPL_LINK_NOARG_TYPED(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, void)
 {
     sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
     sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
@@ -514,7 +514,6 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)
             break;
         }
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

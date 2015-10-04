@@ -138,7 +138,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
 
     aLk = LINK(this, SwCaptionDialog, SelectHdl);
     m_pCategoryBox->SetSelectHdl( aLk );
-    m_pFormatBox->SetSelectHdl( aLk );
+    m_pFormatBox->SetSelectHdl( LINK(this, SwCaptionDialog, SelectListBoxHdl) );
     m_pOptionButton->SetClickHdl( LINK( this, SwCaptionDialog, OptionHdl ) );
     m_pAutoCaptionButton->SetClickHdl(LINK(this, SwCaptionDialog, CaptionHdl));
 
@@ -302,6 +302,10 @@ IMPL_LINK_TYPED( SwCaptionDialog, OptionHdl, Button*, pButton, void )
     DrawSample();
 }
 
+IMPL_LINK_NOARG_TYPED(SwCaptionDialog, SelectListBoxHdl, ListBox&, void)
+{
+    DrawSample();
+}
 IMPL_LINK_NOARG(SwCaptionDialog, SelectHdl)
 {
     DrawSample();

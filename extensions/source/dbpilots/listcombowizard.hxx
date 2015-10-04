@@ -114,7 +114,7 @@ namespace dbp
 
     protected:
         DECL_LINK_TYPED( OnTableDoubleClicked, ListBox&, void );
-        DECL_LINK( OnTableSelected, ListBox* );
+        DECL_LINK_TYPED( OnTableSelected, ListBox&, void );
     };
 
     class OContentFieldSelection : public OLCPage
@@ -131,7 +131,7 @@ namespace dbp
         virtual void dispose() SAL_OVERRIDE;
 
     protected:
-        DECL_LINK( OnFieldSelected, ListBox* );
+        DECL_LINK_TYPED( OnFieldSelected, ListBox&, void );
         DECL_LINK_TYPED( OnTableDoubleClicked, ListBox&, void );
 
         // TabPage overridables

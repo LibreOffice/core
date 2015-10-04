@@ -1374,7 +1374,7 @@ namespace svxform
         get(m_pInstanceBtn, "instances");
 
         // handler
-        m_pModelsBox->SetSelectHdl( LINK( this, DataNavigatorWindow, ModelSelectHdl ) );
+        m_pModelsBox->SetSelectHdl( LINK( this, DataNavigatorWindow, ModelSelectListBoxHdl ) );
         Link<MenuButton *, void> aLink1 = LINK( this, DataNavigatorWindow, MenuSelectHdl );
         m_pModelBtn->SetSelectHdl( aLink1 );
         m_pInstanceBtn->SetSelectHdl( aLink1 );
@@ -1455,7 +1455,11 @@ namespace svxform
     }
 
 
-    IMPL_LINK( DataNavigatorWindow, ModelSelectHdl, ListBox *, pBox )
+    IMPL_LINK_TYPED( DataNavigatorWindow, ModelSelectListBoxHdl, ListBox&, rBox, void )
+    {
+        ModelSelectHdl(&rBox);
+    }
+    void DataNavigatorWindow::ModelSelectHdl(ListBox* pBox)
     {
         sal_Int32 nPos = m_pModelsBox->GetSelectEntryPos();
         // pBox == NULL, if you want to force a new fill.
@@ -1466,8 +1470,6 @@ namespace svxform
             InitPages();
             SetPageModel();
         }
-
-        return 0;
     }
 
     IMPL_LINK_TYPED( DataNavigatorWindow, MenuSelectHdl, MenuButton *, pBtn, void )

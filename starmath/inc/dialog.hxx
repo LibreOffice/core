@@ -364,7 +364,7 @@ class SmSymbolDialog : public ModalDialog
 
     VclPtr<OutputDevice> pFontListDev;
 
-    DECL_LINK(SymbolSetChangeHdl, void*);
+    DECL_LINK_TYPED(SymbolSetChangeHdl, ListBox&, void);
     DECL_LINK_TYPED(SymbolChangeHdl, SmShowSymbolSetWindow&, void);
     DECL_LINK_TYPED(SymbolDblClickHdl, SmShowSymbol&, void);
     DECL_LINK_TYPED(SymbolDblClickHdl2, SmShowSymbolSetWindow&, void);
@@ -437,8 +437,8 @@ class SmSymDefineDialog : public ModalDialog
     DECL_LINK(OldSymbolChangeHdl, ComboBox *);
     DECL_LINK(OldSymbolSetChangeHdl, ComboBox *);
     DECL_LINK(ModifyHdl, ComboBox *);
-    DECL_LINK(FontChangeHdl, ListBox *);
-    DECL_LINK(SubsetChangeHdl, ListBox*);
+    DECL_LINK_TYPED(FontChangeHdl, ListBox&, void);
+    DECL_LINK_TYPED(SubsetChangeHdl, ListBox&, void);
     DECL_LINK(StyleChangeHdl, ComboBox *);
     DECL_LINK_TYPED(CharHighlightHdl, SvxShowCharSet*, void);
     DECL_LINK_TYPED(AddClickHdl, Button *, void);

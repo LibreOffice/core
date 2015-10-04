@@ -328,7 +328,7 @@ namespace dbaui
         executeCurrent();
     }
 
-    IMPL_LINK_NOARG( DirectSQLDialog, OnListEntrySelected )
+    IMPL_LINK_NOARG_TYPED( DirectSQLDialog, OnListEntrySelected, ListBox&, void )
     {
         if (!m_pSQLHistory->IsTravelSelect())
         {
@@ -336,7 +336,6 @@ namespace dbaui
             if (LISTBOX_ENTRY_NOTFOUND != nSelected)
                 switchToHistory(nSelected, false);
         }
-        return 0L;
     }
 
 }   // namespace dbaui

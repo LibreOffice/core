@@ -163,13 +163,13 @@ private:
 
     DECL_LINK(OnSearchTextModified, void *);
 
-    DECL_LINK( OnPositionSelected, ListBox* );
-    DECL_LINK( OnFieldSelected, ListBox* );
+    DECL_LINK_TYPED( OnPositionSelected, ListBox&, void );
+    DECL_LINK_TYPED( OnFieldSelected, ListBox&, void );
 
     DECL_LINK_TYPED( OnFocusGrabbed, Control&, void );
     DECL_LINK_TYPED( OnCheckBoxToggled, CheckBox&, void );
 
-    DECL_LINK( OnContextSelection, ListBox* );
+    DECL_LINK_TYPED( OnContextSelection, ListBox&, void );
 
     DECL_LINK_TYPED( OnSearchProgress, const FmSearchProgress*, void );
 
@@ -184,7 +184,7 @@ inline void FmSearchDialog::SetActiveField(const OUString& strField)
     if (nInitialField == LISTBOX_ENTRY_NOTFOUND)
         nInitialField = 0;
     m_plbField->SelectEntryPos(nInitialField);
-    LINK(this, FmSearchDialog, OnFieldSelected).Call(m_plbField);
+    LINK(this, FmSearchDialog, OnFieldSelected).Call(*m_plbField);
 }
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUIFMSEARCH_HXX

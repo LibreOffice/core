@@ -130,8 +130,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     mpLbAxisCol->SelectEntry(rData.maAxisColor);
     mpCbOnlyBar->Check(rData.mbOnlyBar);
 
-    TypeSelectHdl(NULL);
-    PosSelectHdl(NULL);
+    TypeSelectHdl(*mpLbTypeMin.get());
+    PosSelectHdl(*mpLbTypeMin.get());
 }
 
 ScDataBarSettingsDlg::~ScDataBarSettingsDlg()
@@ -308,7 +308,7 @@ IMPL_LINK_NOARG_TYPED( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
     }
 }
 
-IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
+IMPL_LINK_NOARG_TYPED( ScDataBarSettingsDlg, TypeSelectHdl, ListBox&, void )
 {
     sal_Int32 nSelectMin = mpLbTypeMin->GetSelectEntryPos();
     if( nSelectMin <= COLORSCALE_MAX)
@@ -339,10 +339,9 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
                 mpEdMax->SetText(OUString::number(0));
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG( ScDataBarSettingsDlg, PosSelectHdl )
+IMPL_LINK_NOARG_TYPED( ScDataBarSettingsDlg, PosSelectHdl, ListBox&, void )
 {
     sal_Int32 axisPos = mpLbAxisPos->GetSelectEntryPos();
     if(axisPos != 2 && axisPos != 1) // disable if axis vertical position is automatic
@@ -360,7 +359,6 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, PosSelectHdl )
             mpLenMax->SetText(OUString::number(100));
         }
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

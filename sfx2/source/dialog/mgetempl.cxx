@@ -342,7 +342,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     m_pDescFt->SetText( pStyle->GetDescription( eUnit ) );
 }
 
-IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, ListBox&, void )
 {
     OUString aTemplName(m_pFollowLb->GetSelectEntry());
     OUString aEditTemplName(m_pNameRo->GetText());
@@ -350,7 +350,6 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl )
         m_pEditStyleBtn->Enable();
     else
         m_pEditStyleBtn->Disable();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void )
@@ -361,14 +360,13 @@ IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void
     }
 }
 
-IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl, ListBox&, void )
 {
     sal_Int32 linkSelectPos = m_pBaseLb->GetSelectEntryPos();
     if ( linkSelectPos == 0 )
         m_pEditLinkStyleBtn->Disable();
     else
         m_pEditLinkStyleBtn->Enable();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl, Button*, void )

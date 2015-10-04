@@ -100,12 +100,12 @@ private:
     void                        UpdateVertical();
     inline bool                 Seek( sal_uLong nPos ); // synced to and from mnStreamPos
 
-                                DECL_LINK( CharSetHdl, SvxTextEncodingBox* );
+                                DECL_LINK_TYPED( CharSetHdl, ListBox&, void );
                                 DECL_LINK( FirstRowHdl, NumericField* );
                                 DECL_LINK_TYPED( RbSepFixHdl, Button*, void );
                                 DECL_LINK( SeparatorHdl, Control* );
                                 DECL_LINK_TYPED( SeparatorClickHdl, Button*, void );
-                                DECL_LINK( LbColTypeHdl, ListBox* );
+                                DECL_LINK_TYPED( LbColTypeHdl, ListBox&, void );
                                 DECL_LINK_TYPED( UpdateTextHdl, ScCsvTableBox&, void );
                                 DECL_LINK_TYPED( ColTypeHdl, ScCsvTableBox&, void );
 };

@@ -887,14 +887,14 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
     Link<> aModifyLk = LINK(this, SwTOXSelectTabPage, ModifyHdl);
     m_pTitleED->SetModifyHdl(aModifyLk);
     m_pLevelNF->SetModifyHdl(aModifyLk);
-    m_pSortAlgorithmLB->SetSelectHdl(aModifyLk);
+    m_pSortAlgorithmLB->SetSelectHdl(LINK(this, SwTOXSelectTabPage, ModifyListBoxHdl));
 
     aLk =  LINK(this, SwTOXSelectTabPage, RadioButtonHdl);
     m_pFromCaptionsRB->SetClickHdl(aLk);
     m_pFromObjectNamesRB->SetClickHdl(aLk);
     RadioButtonHdl(m_pFromCaptionsRB);
 
-    m_pLanguageLB->SetSelectHdl(LINK(this, SwTOXSelectTabPage, LanguageHdl));
+    m_pLanguageLB->SetSelectHdl(LINK(this, SwTOXSelectTabPage, LanguageListBoxHdl));
     m_pTypeLB->SelectEntryPos(0);
     m_pTitleED->SaveValue();
 }
@@ -1005,7 +1005,7 @@ void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
     m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos(reinterpret_cast<void*>(nData)));
     m_pTypeFT->Enable(false);
     m_pTypeLB->Enable(false);
-    TOXTypeHdl(m_pTypeLB);
+    TOXTypeHdl(*m_pTypeLB);
 }
 
 static CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
@@ -1293,7 +1293,7 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet* )
     }
     m_bWaitingInitialSettings = false;
 
-    TOXTypeHdl(m_pTypeLB);
+    TOXTypeHdl(*m_pTypeLB);
     CheckBoxHdl(m_pAddStylesCB);
 }
 
@@ -1316,11 +1316,11 @@ VclPtr<SfxTabPage> SwTOXSelectTabPage::Create( vcl::Window* pParent, const SfxIt
     return VclPtr<SwTOXSelectTabPage>::Create(pParent, *rAttrSet);
 }
 
-IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
+IMPL_LINK_TYPED(SwTOXSelectTabPage, TOXTypeHdl, ListBox&, rBox, void)
 {
     SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetTabDialog());
     const sal_uInt16 nType =  sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(
-                                pBox->GetSelectEntryData()));
+                                rBox.GetSelectEntryData()));
     CurTOXType eCurType = lcl_UserData2TOXTypes(nType);
     pTOXDlg->SetCurrentTOXType(eCurType);
 
@@ -1380,9 +1380,12 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
         ApplyTOXDescription();
     }
     ModifyHdl(0);
-    return 0;
 }
 
+IMPL_LINK_NOARG_TYPED(SwTOXSelectTabPage, ModifyListBoxHdl, ListBox&, void)
+{
+    ModifyHdl(0);
+}
 IMPL_LINK_NOARG(SwTOXSelectTabPage, ModifyHdl)
 {
     if(!m_bWaitingInitialSettings)
@@ -1433,7 +1436,11 @@ IMPL_LINK_NOARG_TYPED(SwTOXSelectTabPage, RadioButtonHdl, Button*, void)
     ModifyHdl(0);
 }
 
-IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwTOXSelectTabPage, LanguageListBoxHdl, ListBox&, rBox, void)
+{
+    LanguageHdl(&rBox);
+}
+void SwTOXSelectTabPage::LanguageHdl( ListBox* pBox )
 {
     lang::Locale aLcl( LanguageTag( m_pLanguageLB->GetSelectLanguage() ).getLocale() );
     Sequence< OUString > aSeq = pIndexEntryWrapper->GetAlgorithmList( aLcl );
@@ -1470,7 +1477,6 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 
     if(pBox)
         ModifyHdl(0);
-    return 0;
 };
 
 IMPL_LINK_TYPED(SwTOXSelectTabPage, AddStylesHdl, Button*, pButton, void)
@@ -2534,10 +2540,10 @@ IMPL_LINK_TYPED(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
     }
 }
 
-IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwTOXEntryTabPage, StyleSelectHdl, ListBox&, rBox, void)
 {
-    OUString sEntry = pBox->GetSelectEntry();
-    const sal_uInt16 nId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(pBox->GetSelectEntryData());
+    OUString sEntry = rBox.GetSelectEntry();
+    const sal_uInt16 nId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rBox.GetSelectEntryData());
     const bool bEqualsNoCharStyle = sEntry == sNoCharStyle;
     m_pEditStylePB->Enable(!bEqualsNoCharStyle);
     if (bEqualsNoCharStyle)
@@ -2553,12 +2559,11 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
 
     }
     ModifyHdl(0);
-    return 0;
 }
 
-IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwTOXEntryTabPage, ChapterInfoHdl, ListBox&, rBox, void)
 {
-    sal_Int32 nPos = pBox->GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         Control* pCtrl = m_pTokenWIN->GetActiveControl();
@@ -2568,7 +2573,6 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox*, pBox)
 
         ModifyHdl(0);
     }
-    return 0;
 }
 
 IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, NumericField*, pField)
@@ -2584,9 +2588,9 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, NumericField*, pField)
     return 0;
 }
 
-IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwTOXEntryTabPage, NumberFormatHdl, ListBox&, rBox, void)
 {
-    const sal_Int32 nPos = pBox->GetSelectEntryPos();
+    const sal_Int32 nPos = rBox.GetSelectEntryPos();
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
@@ -2598,7 +2602,6 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
         }
         ModifyHdl(0);
     }
-    return 0;
 }
 
 IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, MetricField*, pField)
@@ -3721,7 +3724,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
             m_pParaLayLB->InsertEntry( aStr );
     }
 
-    EnableSelectHdl(m_pParaLayLB);
+    EnableSelectHdl(*m_pParaLayLB);
 }
 
 SfxTabPage::sfxpg SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
@@ -3799,7 +3802,7 @@ IMPL_LINK_NOARG_TYPED(SwTOXStylesTabPage, DoubleClickHdl, ListBox&, void)
 }
 
 // enable only when selected
-IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)
+IMPL_LINK_NOARG_TYPED(SwTOXStylesTabPage, EnableSelectHdl, ListBox&, void)
 {
     m_pStdBT->Enable(m_pLevelLB->GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
 
@@ -3809,7 +3812,6 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)
                      LISTBOX_ENTRY_NOTFOUND != m_pLevelLB->GetSelectEntryPos() &&
        (m_pLevelLB->GetSelectEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)));
     m_pEditStyleBT->Enable(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
-    return 0;
 }
 
 void SwTOXStylesTabPage::Modify()

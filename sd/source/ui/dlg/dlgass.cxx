@@ -225,22 +225,22 @@ public:
     static OUString GetUiTextForCommand (const OUString& aCommandURL);
     static Image GetUiIconForCommand (const OUString& aCommandURL);
 
-    DECL_LINK( SelectFileHdl, void * );
-    DECL_LINK( SelectRegionHdl, ListBox * );
+    DECL_LINK_TYPED( SelectFileHdl, ListBox&, void );
+    DECL_LINK_TYPED( SelectRegionHdl, ListBox&, void );
     DECL_LINK_TYPED( UpdatePreviewHdl, Idle *, void );
     DECL_LINK_TYPED( UpdatePageListHdl, Idle *, void );
     DECL_LINK_TYPED( StartTypeHdl, Button *, void );
-    DECL_LINK( SelectTemplateHdl, void * );
+    DECL_LINK_TYPED( SelectTemplateHdl, ListBox&, void);
     DECL_LINK_TYPED( NextPageHdl, Button*, void );
     DECL_LINK_TYPED( LastPageHdl, Button*, void );
     DECL_LINK_TYPED( PreviewFlagHdl, Button*, void );
     DECL_LINK_TYPED( EffectPreviewIdleHdl, Idle *, void );
     DECL_LINK_TYPED( EffectPreviewClickHdl, SdDocPreviewWin&, void );
-    DECL_LINK( SelectLayoutHdl, void * );
+    DECL_LINK_TYPED( SelectLayoutHdl, ListBox&, void );
     DECL_LINK_TYPED( PageSelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( PresTypeHdl, Button*, void );
     DECL_LINK( UpdateUserDataHdl, void * );
-    DECL_LINK( SelectEffectHdl, void* );
+    DECL_LINK_TYPED( SelectEffectHdl, ListBox&, void);
     DECL_LINK_TYPED( OpenButtonHdl, Button *, void );
 
     OUString            maCreateStr;
@@ -639,7 +639,7 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,vo
             mpPage1RegionLB->SelectEntry( pStandardTemplateDir->msRegion );
             SelectTemplateRegion( pStandardTemplateDir->msRegion );
             mpPage1TemplateLB->SelectEntry( pStandardTemplateEntry->msTitle );
-            SelectTemplateHdl(mpPage1TemplateLB);
+            SelectTemplateHdl(*mpPage1TemplateLB);
         }
     }
 }
@@ -1079,26 +1079,23 @@ void AssistentDlgImpl::UpdatePage()
 // UI-Handler
 // ********************************************************************
 
-IMPL_LINK( AssistentDlgImpl, SelectRegionHdl, ListBox *, pLB )
+IMPL_LINK_TYPED( AssistentDlgImpl, SelectRegionHdl, ListBox&, rLB, void )
 {
-    if( pLB == mpPage1RegionLB )
+    if( &rLB == mpPage1RegionLB )
     {
-        SelectTemplateRegion( pLB->GetSelectEntry() );
+        SelectTemplateRegion( rLB.GetSelectEntry() );
         SetStartType( ST_TEMPLATE );
         mpPage2Medium5RB->Check();
     }
     else
     {
-        SelectLayoutRegion( pLB->GetSelectEntry() );
+        SelectLayoutRegion( rLB.GetSelectEntry() );
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, SelectEffectHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, SelectEffectHdl, ListBox&, void)
 {
     maEffectPrevIdle.Start();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( AssistentDlgImpl, OpenButtonHdl, Button*, void )
@@ -1142,26 +1139,23 @@ IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, PreviewFlagHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, SelectTemplateHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, SelectTemplateHdl, ListBox&, void)
 {
     SetStartType( ST_TEMPLATE );
     mpPage2Medium5RB->Check();
     mpPage2LayoutLB->SelectEntryPos(0);
     maPrevIdle.Start();
-    return 0;
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, SelectLayoutHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, SelectLayoutHdl, ListBox&, void)
 {
     maPrevIdle.Start();
-    return 0;
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, SelectFileHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, SelectFileHdl, ListBox&, void)
 {
     SetStartType( ST_OPEN );
     maPrevIdle.Start();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, PageSelectHdl, SvTreeListBox*, void)
@@ -1274,7 +1268,7 @@ void AssistentDlgImpl::SelectTemplateRegion( const OUString& rRegion )
             if(GetStartType() == ST_TEMPLATE)
             {
                 mpPage1TemplateLB->SelectEntryPos( 0 );
-                SelectTemplateHdl(NULL);
+                SelectTemplateHdl(*mpPage1TemplateLB);
             }
             break;
         }

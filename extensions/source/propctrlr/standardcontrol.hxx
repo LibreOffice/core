@@ -58,11 +58,24 @@ namespace pcr
         ListLikeControlWithModifyHandler( vcl::Window* _pParent, WinBits _nStyle )
             : TListboxWindow( _pParent, _nStyle )
         {
+            TListboxWindow::SetSelectHdl( LINK(this, ListLikeControlWithModifyHandler, OnSelect) );
         }
 
-        void SetModifyHdl( const Link<>& _rLink ) { TListboxWindow::SetSelectHdl( _rLink ); }
+        void SetModifyHdl( const Link<>& _rLink ) { aModifyHdl = _rLink;; }
+    private:
+        DECL_LINK_TYPED(OnSelect, ListBox&, void);
+        Link<> aModifyHdl;
     };
 
+    template< class LISTBOX_WINDOW >
+    void ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::LinkStubOnSelect(void * instance, ListBox& data) {
+        return static_cast<ListLikeControlWithModifyHandler< LISTBOX_WINDOW > *>(instance)->OnSelect(data);
+    }
+    template< class LISTBOX_WINDOW >
+    void ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::OnSelect(ListBox& rListBox)
+    {
+        aModifyHdl.Call(&rListBox);
+    }
 
     //= OTimeControl
 

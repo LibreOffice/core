@@ -288,7 +288,7 @@ SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     }
 
     m_pMakeBox->SelectEntryPos( nLstGroup );
-    m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
+    m_pMakeBox->GetSelectHdl().Call(*m_pMakeBox);
 }
 
 SwLabPage::~SwLabPage()
@@ -336,17 +336,16 @@ IMPL_LINK_NOARG_TYPED(SwLabPage, AddrHdl, Button*, void)
     m_pWritingEdit->GrabFocus();
 }
 
-IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
+IMPL_LINK_TYPED( SwLabPage, DatabaseHdl, ListBox&, rListBox, void )
 {
     sActDBName = m_pDatabaseLB->GetSelectEntry();
 
     WaitObject aObj( GetParentSwLabDlg() );
 
-    if (pListBox == m_pDatabaseLB)
+    if (&rListBox == m_pDatabaseLB)
         GetDBManager()->GetTableNames(m_pTableLB, sActDBName);
 
     GetDBManager()->GetColumnNames(m_pDBFieldLB, sActDBName, m_pTableLB->GetSelectEntry());
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwLabPage, FieldHdl, Button*, void)
@@ -363,10 +362,10 @@ IMPL_LINK_NOARG_TYPED(SwLabPage, FieldHdl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SwLabPage, PageHdl, Button*, void)
 {
-    m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
+    m_pMakeBox->GetSelectHdl().Call(*m_pMakeBox);
 }
 
-IMPL_LINK_NOARG(SwLabPage, MakeHdl)
+IMPL_LINK_NOARG_TYPED(SwLabPage, MakeHdl, ListBox&, void)
 {
     WaitObject aWait( GetParentSwLabDlg() );
 
@@ -416,15 +415,13 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
         m_pTypeBox->SelectEntry(aItem.aLstType);
     else
         m_pTypeBox->SelectEntryPos(0);
-    m_pTypeBox->GetSelectHdl().Call(m_pTypeBox);
-    return 0;
+    m_pTypeBox->GetSelectHdl().Call(*m_pTypeBox);
 }
 
-IMPL_LINK_NOARG(SwLabPage, TypeHdl)
+IMPL_LINK_NOARG_TYPED(SwLabPage, TypeHdl, ListBox&, void)
 {
     DisplayFormat();
     aItem.aType = m_pTypeBox->GetSelectEntry();
-    return 0;
 }
 
 void SwLabPage::DisplayFormat()
@@ -542,7 +539,7 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
     m_pMakeBox->SelectEntry( aItem.aMake );
     //save the current type
     OUString sType(aItem.aType);
-    m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
+    m_pMakeBox->GetSelectHdl().Call(*m_pMakeBox);
     aItem.aType = sType;
     //#102806# a newly added make may not be in the type ListBox already
     if (m_pTypeBox->GetEntryPos(aItem.aType) == LISTBOX_ENTRY_NOTFOUND && !aItem.aMake.isEmpty())
@@ -550,12 +547,12 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
     if (m_pTypeBox->GetEntryPos(aItem.aType) != LISTBOX_ENTRY_NOTFOUND)
     {
         m_pTypeBox->SelectEntry(aItem.aType);
-        m_pTypeBox->GetSelectHdl().Call(m_pTypeBox);
+        m_pTypeBox->GetSelectHdl().Call(*m_pTypeBox);
     }
     if (m_pDatabaseLB->GetEntryPos(sDBName) != LISTBOX_ENTRY_NOTFOUND)
     {
         m_pDatabaseLB->SelectEntry(sDBName);
-        m_pDatabaseLB->GetSelectHdl().Call(m_pDatabaseLB);
+        m_pDatabaseLB->GetSelectHdl().Call(*m_pDatabaseLB);
     }
 
     if (aItem.bCont)
@@ -718,7 +715,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
         if(m_pAutoTextGroupLB->GetSelectEntryPos() != i)
         {
             m_pAutoTextGroupLB->SelectEntryPos(i);
-            AutoTextSelectHdl(m_pAutoTextGroupLB);
+            AutoTextSelectHdl(*m_pAutoTextGroupLB);
         }
         if(lcl_FindBlock(*m_pAutoTextLB, aLabItem.sGlossaryBlockName))
         {
@@ -727,7 +724,8 @@ void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
                 *static_cast<OUString*>(pSelEntry->GetUserData()) != aLabItem.sGlossaryBlockName)
             {
                 lcl_SelectBlock(*m_pAutoTextLB, aLabItem.sGlossaryBlockName);
-                AutoTextSelectHdl(m_pAutoTextLB);
+                if(m_xAutoText.is() && pExampleFrame->IsInitialized())
+                    pExampleFrame->ClearDocument( true );
             }
         }
     }
