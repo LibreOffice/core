@@ -235,7 +235,7 @@ void FileControl::ImplBrowseFile( )
 
         if ( xFilePicker->execute() )
         {
-            Sequence < OUString > aPathSeq = xFilePicker->getFiles();
+            Sequence < OUString > aPathSeq = xFilePicker->getSelectedFiles();
 
             if ( aPathSeq.getLength() )
             {
