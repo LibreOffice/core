@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 using namespace com::sun::star;
@@ -42,7 +42,7 @@ struct ContainerStats {
     ContainerStats() : m_nAlive(0), m_nDisposed(0) {}
 };
 
-class ContainerListener : public ::cppu::WeakImplHelper1< XEventListener >
+class ContainerListener : public ::cppu::WeakImplHelper < XEventListener >
 {
     ContainerStats *m_pStats;
 public:

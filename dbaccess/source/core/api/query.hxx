@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_QUERY_HXX
 
 #include "querydescriptor.hxx"
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -39,7 +39,7 @@ namespace dbaccess
 {
 
 // OQuery - an object implementing the sdb.Query service
-typedef ::cppu::ImplHelper3 <   css::sdbcx::XDataDescriptorFactory,
+typedef ::cppu::ImplHelper  <   css::sdbcx::XDataDescriptorFactory,
                                 css::beans::XPropertyChangeListener,
                                 css::sdbcx::XRename
                             >   OQuery_Base;

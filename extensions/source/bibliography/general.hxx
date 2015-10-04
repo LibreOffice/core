@@ -33,7 +33,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/scrbar.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "bibshortcuthandler.hxx"
 
 
@@ -45,7 +45,7 @@ class BibDataManager;
   * We need to split off the listener because both it and the vcl::Window baseclass are ref-counted
   */
 class BibGeneralPage;
-class BibGeneralPageFocusListener : public cppu::WeakAggImplHelper1 < css::awt::XFocusListener >
+class BibGeneralPageFocusListener : public cppu::WeakAggImplHelper < css::awt::XFocusListener >
 {
 private:
     VclPtr<BibGeneralPage> mpBibGeneralPage;

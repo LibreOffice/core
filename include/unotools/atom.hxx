@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/util/XAtomServer.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <list>
 #include <unordered_map>
 

@@ -48,7 +48,6 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
-#include <cppuhelper/implbase1.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/processfactory.hxx>

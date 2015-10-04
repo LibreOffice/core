@@ -43,9 +43,8 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase5.hxx>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -60,7 +59,7 @@ enum FilterType
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class FilterDetect : public cppu::WeakImplHelper3 <com::sun::star::document::XExtendedFilterDetection,
+class FilterDetect : public cppu::WeakImplHelper <com::sun::star::document::XExtendedFilterDetection,
                      com::sun::star::lang::XInitialization,
                      com::sun::star::lang::XServiceInfo>
 {

@@ -25,7 +25,7 @@
 #include <com/sun/star/xml/Attribute.hpp>
 #include <com/sun/star/xml/FastAttribute.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <sax/saxdllapi.h>
 
 #include <map>
@@ -71,7 +71,7 @@ class SAX_DLLPUBLIC FastTokenHandlerBase
                          const char *pStr, size_t nLength = 0 );
 };
 
-class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastAttributeList >
+class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper < ::com::sun::star::xml::sax::XFastAttributeList >
 {
 public:
     FastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xTokenHandler,

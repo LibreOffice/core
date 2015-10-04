@@ -51,14 +51,14 @@
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace com::sun::star::io;
 using namespace com::sun::star::frame;
 
 namespace ext_plug {
 
-class FileSink : public ::cppu::WeakAggImplHelper1< css::io::XOutputStream >
+class FileSink : public ::cppu::WeakAggImplHelper < css::io::XOutputStream >
 {
 private:
     Reference< css::uno::XComponentContext >   m_xContext;
@@ -83,7 +83,7 @@ public:
 }
 using namespace ext_plug;
 
-class XPluginContext_Impl : public ::cppu::WeakAggImplHelper1< css::plugin::XPluginContext >
+class XPluginContext_Impl : public ::cppu::WeakAggImplHelper < css::plugin::XPluginContext >
 {
     Reference< css::uno::XComponentContext >   m_xContext;
     rtl_TextEncoding                           m_aEncoding;

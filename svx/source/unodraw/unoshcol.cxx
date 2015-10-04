@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
@@ -42,7 +42,7 @@ public:
 };
 
 class SvxShapeCollection :
-    public cppu::WeakAggImplHelper3<drawing::XShapes, lang::XServiceInfo, lang::XComponent>,
+    public cppu::WeakAggImplHelper<drawing::XShapes, lang::XServiceInfo, lang::XComponent>,
     public SvxShapeCollectionMutex
 {
 private:

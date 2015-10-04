@@ -31,7 +31,7 @@ class SvxShowCharSet;
 
 namespace svx
 {
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessible
+    typedef ::cppu::ImplHelper  <   ::com::sun::star::accessibility::XAccessible
                                 >   OAccessibleHelper_Base_2;
 
     class SvxShowCharSetAcc;
@@ -114,7 +114,7 @@ namespace svx
 
 
 
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::ImplHelper  <   ::com::sun::star::accessibility::XAccessible,
                                     ::com::sun::star::accessibility::XAccessibleTable
                                 >   OAccessibleHelper_Base;
 
@@ -210,7 +210,7 @@ namespace svx
 
     // - SvxShowCharSetItemAcc -
 
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::ImplHelper  <   ::com::sun::star::accessibility::XAccessible,
                                     ::com::sun::star::accessibility::XAccessibleAction
                                 >   OAccessibleHelper_Base_3;
 

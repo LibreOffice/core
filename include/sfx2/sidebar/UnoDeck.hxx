@@ -16,7 +16,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XPanels.hpp>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
@@ -24,7 +24,7 @@
 
 /** get the decks
 */
-class SfxUnoDeck : public ::cppu::WeakImplHelper1< css::ui::XDeck >
+class SfxUnoDeck : public ::cppu::WeakImplHelper < css::ui::XDeck >
 {
 
 public:

@@ -22,7 +22,7 @@
 
 #include <accessibility/standard/accessiblemenubasecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
@@ -31,7 +31,7 @@
 
 typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 
-typedef ::cppu::ImplHelper1<
+typedef ::cppu::ImplHelper<
     css::accessibility::XAccessibleSelection > OAccessibleMenuComponent_BASE;
 
 class OAccessibleMenuComponent : public OAccessibleMenuBaseComponent,

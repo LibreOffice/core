@@ -33,7 +33,7 @@ class TabControl;
 //  class VCLXAccessibleTabControl
 
 
-typedef ::cppu::ImplHelper1 <
+typedef ::cppu::ImplHelper <
     css::accessibility::XAccessibleSelection > VCLXAccessibleTabControl_BASE;
 
 class VCLXAccessibleTabControl :    public VCLXAccessibleComponent,

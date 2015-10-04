@@ -64,11 +64,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
@@ -147,10 +143,10 @@ namespace frm
 //= OControl
 //= base class for form layer controls
 
-typedef ::cppu::ImplHelper3 <   css::awt::XControl
-                            ,   css::lang::XEventListener
-                            ,   css::lang::XServiceInfo
-                            > OControl_BASE;
+typedef ::cppu::ImplHelper <   css::awt::XControl
+                           ,   css::lang::XEventListener
+                           ,   css::lang::XServiceInfo
+                           > OControl_BASE;
 
 class OControl  :public ::cppu::OComponentHelper
                 ,public OControl_BASE
@@ -261,8 +257,8 @@ private:
 };
 
 // a form control implementing the XBoundControl interface
-typedef ::cppu::ImplHelper1 <   css::form::XBoundControl
-                            >  OBoundControl_BASE;
+typedef ::cppu::ImplHelper <   css::form::XBoundControl
+                           >  OBoundControl_BASE;
 class OBoundControl :public OControl
                     ,public OBoundControl_BASE
 {
@@ -313,7 +309,7 @@ protected:
 //added for exporting OCX control
 #define INVALID_OBJ_ID_IN_MSO     0xFFFF
 
-typedef ::cppu::ImplHelper7 <   css::form::XFormComponent
+typedef ::cppu::ImplHelper  <   css::form::XFormComponent
                             ,   css::io::XPersistObject
                             ,   css::container::XNamed
                             ,   css::lang::XServiceInfo
@@ -542,7 +538,7 @@ public:
 //= OBoundControlModel
 //= model of a form layer control which is bound to a data source field
 
-typedef ::cppu::ImplHelper4 <   css::form::XLoadListener
+typedef ::cppu::ImplHelper  <   css::form::XLoadListener
                             ,   css::form::XReset
                             ,   css::beans::XPropertyChangeListener
                             ,   css::sdb::XRowSetChangeListener
@@ -550,16 +546,16 @@ typedef ::cppu::ImplHelper4 <   css::form::XLoadListener
 
 // separated into an own base class since derivees can disable the support for this
 // interface, thus we want to easily exclude it in the queryInterface and getTypes
-typedef ::cppu::ImplHelper1 <   css::form::XBoundComponent
+typedef ::cppu::ImplHelper  <   css::form::XBoundComponent
                             >   OBoundControlModel_COMMITTING;
 
 // dito
-typedef ::cppu::ImplHelper2 <   css::form::binding::XBindableValue
+typedef ::cppu::ImplHelper  <   css::form::binding::XBindableValue
                             ,   css::util::XModifyListener
                             >   OBoundControlModel_BINDING;
 
 // dito
-typedef ::cppu::ImplHelper2 <   css::form::validation::XValidityConstraintListener
+typedef ::cppu::ImplHelper  <   css::form::validation::XValidityConstraintListener
                             ,   css::form::validation::XValidatableFormComponent
                             >   OBoundControlModel_VALIDATION;
 

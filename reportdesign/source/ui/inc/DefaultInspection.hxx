@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -35,7 +35,7 @@ namespace rptui
 
     //= DefaultComponentInspectorModel
 
-    typedef ::cppu::WeakAggImplHelper3  <   ::com::sun::star::inspection::XObjectInspectorModel
+    typedef ::cppu::WeakAggImplHelper   <   ::com::sun::star::inspection::XObjectInspectorModel
                                         ,   ::com::sun::star::lang::XServiceInfo
                                         ,   ::com::sun::star::lang::XInitialization
                                         >   DefaultComponentInspectorModel_Base;

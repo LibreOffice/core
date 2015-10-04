@@ -19,7 +19,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -50,7 +50,7 @@ typedef css::uno::Sequence< OUString >         OUStringList;   // can be transpo
 
 // class SvtFilePicker ---------------------------------------------------
 
-typedef ::cppu::ImplHelper5 <   css::ui::dialogs::XFilePicker3
+typedef ::cppu::ImplHelper  <   css::ui::dialogs::XFilePicker3
                             ,   css::ui::dialogs::XFilePickerControlAccess
                             ,   css::ui::dialogs::XFilePreview
                             ,   css::lang::XServiceInfo

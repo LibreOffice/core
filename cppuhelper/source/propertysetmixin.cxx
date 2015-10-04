@@ -66,7 +66,7 @@
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -275,7 +275,7 @@ css::uno::Reference< css::reflection::XTypeDescription > Data::resolveTypedefs(
     return t;
 }
 
-class Info: public cppu::WeakImplHelper1< css::beans::XPropertySetInfo > {
+class Info: public cppu::WeakImplHelper < css::beans::XPropertySetInfo > {
 public:
     explicit Info(Data * data): m_data(data) {}
 

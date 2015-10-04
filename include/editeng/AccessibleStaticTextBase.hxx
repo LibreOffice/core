@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <tools/gen.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -40,7 +40,7 @@ namespace accessibility
 
     class AccessibleStaticTextBase_Impl;
 
-    typedef ::cppu::ImplHelper2<
+    typedef ::cppu::ImplHelper<
         ::com::sun::star::accessibility::XAccessibleText,
         ::com::sun::star::accessibility::XAccessibleTextAttributes > AccessibleStaticTextBase_BASE;
 

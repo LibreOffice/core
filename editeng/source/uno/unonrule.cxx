@@ -492,7 +492,7 @@ css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( const Svx
     }
 }
 
-class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< XAnyCompare >
+class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper < XAnyCompare >
 {
 public:
     virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException, std::exception) override;

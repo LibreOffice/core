@@ -137,7 +137,7 @@ struct OUStringLess
 };
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
-    WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
+    WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
     maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
     maReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 ),
     mpDocPersist( 0 ),
@@ -147,7 +147,7 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
 }
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHelper& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
-    WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
+    WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
     maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
     maReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 ),
     mpDocPersist( 0 ),

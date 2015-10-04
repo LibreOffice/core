@@ -23,7 +23,7 @@
 #include "EditBase.hxx"
 
 #include <tools/link.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace dbtools { class FormattedColumnValue; }
 struct ImplSVEvent;
@@ -117,7 +117,7 @@ private:
 
 //= OEditControl
 
-typedef ::cppu::ImplHelper3<    css::awt::XFocusListener,
+typedef ::cppu::ImplHelper <    css::awt::XFocusListener,
                                 css::awt::XKeyListener,
                                 css::form::XChangeBroadcaster > OEditControl_BASE;
 

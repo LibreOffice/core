@@ -37,7 +37,7 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <sot/storage.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -68,7 +68,7 @@ namespace dbaui
     class OLinkedDocumentsAccess;
     class SelectionNotifier;
 
-    typedef ::cppu::ImplHelper5 <   css::container::XContainerListener
+    typedef ::cppu::ImplHelper  <   css::container::XContainerListener
                                 ,   css::beans::XPropertyChangeListener
                                 ,   css::sdb::application::XDatabaseDocumentUI
                                 ,   css::ui::XContextMenuInterception

@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <cppuhelper/implbase1.hxx>
+
 #include <svx/dbaexchange.hxx>
 #include <comphelper/uno3.hxx>
 #include <vector>

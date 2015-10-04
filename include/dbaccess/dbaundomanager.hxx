@@ -24,7 +24,7 @@
 
 #include <com/sun/star/document/XUndoManager.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -39,7 +39,7 @@ namespace dbaui
     //= UndoManager
 
     struct UndoManager_Impl;
-    typedef ::cppu::ImplHelper1< ::com::sun::star::document::XUndoManager > UndoManager_Base;
+    typedef ::cppu::ImplHelper < ::com::sun::star::document::XUndoManager > UndoManager_Base;
     class DBACCESS_DLLPUBLIC UndoManager : public UndoManager_Base
     {
     public:

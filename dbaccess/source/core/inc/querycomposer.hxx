@@ -26,7 +26,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
 #include "apitools.hxx"
@@ -37,7 +37,7 @@
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper5<    css::sdb::XSQLQueryComposer,
+    typedef ::cppu::ImplHelper <    css::sdb::XSQLQueryComposer,
                                     css::sdb::XParametersSupplier,
                                     css::sdbcx::XTablesSupplier,
                                     css::sdbcx::XColumnsSupplier,

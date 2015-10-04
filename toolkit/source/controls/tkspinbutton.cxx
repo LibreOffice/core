@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
@@ -66,7 +66,7 @@ public:
 //= UnoSpinButtonControl
 
 
-typedef ::cppu::ImplHelper2 <   css::awt::XAdjustmentListener
+typedef ::cppu::ImplHelper  <   css::awt::XAdjustmentListener
                             ,   css::awt::XSpinValue
                             >   UnoSpinButtonControl_Base;
 

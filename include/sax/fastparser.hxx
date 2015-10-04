@@ -22,7 +22,7 @@
 
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sax/fastsaxdllapi.h>
 
@@ -42,7 +42,7 @@ class FastSaxParserImpl;
 
 // This class implements the external Parser interface
 class FASTSAX_DLLPUBLIC FastSaxParser
-    : public ::cppu::WeakImplHelper2<
+    : public ::cppu::WeakImplHelper<
                 ::com::sun::star::xml::sax::XFastParser,
                 ::com::sun::star::lang::XServiceInfo >
 {

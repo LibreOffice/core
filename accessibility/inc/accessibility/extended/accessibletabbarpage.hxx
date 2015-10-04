@@ -22,7 +22,7 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "accessibility/extended/accessibletabbarbase.hxx"
 
 #include <vector>
@@ -40,7 +40,7 @@ namespace accessibility
     //  class AccessibleTabBarPage
 
 
-    typedef ::cppu::ImplHelper2<
+    typedef ::cppu::ImplHelper<
         css::accessibility::XAccessible,
         css::lang::XServiceInfo > AccessibleTabBarPage_BASE;
 

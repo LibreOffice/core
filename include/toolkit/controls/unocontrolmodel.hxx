@@ -37,7 +37,7 @@
 
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <list>
@@ -49,7 +49,7 @@ typedef std::map<sal_uInt16, ::com::sun::star::uno::Any> ImplPropertyTable;
 //  class UnoControlModel
 
 
-typedef ::cppu::WeakAggImplHelper7  <   ::com::sun::star::awt::XControlModel
+typedef ::cppu::WeakAggImplHelper   <   ::com::sun::star::awt::XControlModel
                                     ,   ::com::sun::star::beans::XPropertyState
                                     ,   ::com::sun::star::io::XPersistObject
                                     ,   ::com::sun::star::lang::XComponent
@@ -101,7 +101,7 @@ protected:
 
 protected:
 #ifdef _MSC_VER
-    UnoControlModel() //do not use! needed by MSVC at compile time to satisfy WeakAggImplHelper7
+    UnoControlModel() //do not use! needed by MSVC at compile time to satisfy WeakAggImplHelper
         : UnoControlModel_Base()
         , MutexAndBroadcastHelper()
         , OPropertySetHelper( BrdcstHelper )

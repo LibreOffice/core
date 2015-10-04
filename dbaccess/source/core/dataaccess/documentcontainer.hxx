@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTCONTAINER_HXX
 
 #include "definitioncontainer.hxx"
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
@@ -33,7 +33,7 @@
 
 namespace dbaccess
 {
-typedef ::cppu::ImplHelper5 <   css::frame::XComponentLoader
+typedef ::cppu::ImplHelper  <   css::frame::XComponentLoader
                             ,   css::lang::XMultiServiceFactory
                             ,   css::container::XHierarchicalNameContainer
                             ,   css::container::XHierarchicalName

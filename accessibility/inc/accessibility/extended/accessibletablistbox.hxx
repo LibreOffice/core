@@ -21,7 +21,7 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETABLISTBOX_HXX
 
 #include "AccessibleBrowseBox.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <svtools/accessibletableprovider.hxx>
 
@@ -33,7 +33,7 @@ namespace accessibility {
 
 class AccessibleBrowseBoxTable;
 
-typedef ::cppu::ImplHelper1  <   css::accessibility::XAccessible
+typedef ::cppu::ImplHelper  <   css::accessibility::XAccessible
                             >   AccessibleTabListBox_Base;
 
 /** !!! */

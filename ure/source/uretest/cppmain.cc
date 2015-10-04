@@ -55,7 +55,7 @@
 #include "com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.hpp"
 #include "com/sun/star/util/theMacroExpander.hpp"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/unourl.hxx"
@@ -77,7 +77,8 @@
 
 namespace {
 
-class Service: public ::cppu::WeakImplHelper1< css::lang::XMain > {
+class Service: public ::cppu::WeakImplHelper < css::lang::XMain >
+{
 public:
     explicit Service(
         css::uno::Reference< css::uno::XComponentContext > const & context):

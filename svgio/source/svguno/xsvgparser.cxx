@@ -23,7 +23,7 @@
 #include <com/sun/star/graphic/XSvgParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -39,7 +39,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        class XSvgParser : public ::cppu::WeakAggImplHelper2< graphic::XSvgParser, lang::XServiceInfo >, private boost::noncopyable
+        class XSvgParser : public ::cppu::WeakAggImplHelper < graphic::XSvgParser, lang::XServiceInfo >, private boost::noncopyable
         {
         private:
             uno::Reference< uno::XComponentContext > context_;

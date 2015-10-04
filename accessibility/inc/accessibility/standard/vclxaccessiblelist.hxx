@@ -28,9 +28,9 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper<
     css::accessibility::XAccessible,
     css::accessibility::XAccessibleSelection
     > VCLXAccessibleList_BASE;

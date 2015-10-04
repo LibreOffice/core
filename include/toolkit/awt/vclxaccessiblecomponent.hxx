@@ -27,8 +27,8 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/compbase3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 
@@ -52,7 +52,7 @@ class AccessibleStateSetHelper;
 
 typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 
-typedef ::cppu::ImplHelper1<
+typedef ::cppu::ImplHelper<
     ::com::sun::star::lang::XServiceInfo > VCLXAccessibleComponent_BASE;
 
 class VCLExternalSolarLock;

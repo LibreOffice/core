@@ -28,15 +28,14 @@
 #include <unordered_map>
 #include <vector>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace sdr { namespace table {
 
 typedef std::vector< ::com::sun::star::beans::Property > PropertyVector;
 typedef std::unordered_map< OUString, ::sal_uInt32, OUStringHash, std::equal_to< OUString > > PropertyMap;
 
-class FastPropertySetInfo : public ::cppu::WeakAggImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
+class FastPropertySetInfo : public ::cppu::WeakAggImplHelper < ::com::sun::star::beans::XPropertySetInfo >
 {
 public:
     explicit FastPropertySetInfo( const PropertyVector& rProps );
@@ -59,7 +58,7 @@ private:
 
 
 
-class FastPropertySet : public ::cppu::WeakAggImplHelper3<  ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XMultiPropertySet, ::com::sun::star::beans::XFastPropertySet >
+class FastPropertySet : public ::cppu::WeakAggImplHelper <  ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XMultiPropertySet, ::com::sun::star::beans::XFastPropertySet >
 {
 public:
     explicit FastPropertySet( const rtl::Reference< FastPropertySetInfo >& xInfo );

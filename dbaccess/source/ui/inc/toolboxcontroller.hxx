@@ -21,7 +21,7 @@
 
 #include <svtools/toolboxcontroller.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "apitools.hxx"
 #include "moduledbu.hxx"
 
@@ -31,7 +31,7 @@
 class PopupMenu;
 namespace dbaui
 {
-    typedef ::cppu::ImplHelper1 <   css::lang::XServiceInfo> TToolboxController_BASE;
+    typedef ::cppu::ImplHelper <   css::lang::XServiceInfo> TToolboxController_BASE;
 
     class OToolboxController : public ::svt::ToolboxController
                               ,public TToolboxController_BASE

@@ -39,8 +39,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/compbase6.hxx>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <svx/rectenum.hxx>
@@ -59,7 +58,7 @@ class SvxRectCtlChildAccessibleContext;
 namespace vcl { class Window; }
 
 
-typedef ::cppu::WeakAggComponentImplHelper6<
+typedef ::cppu::WeakAggComponentImplHelper<
             ::com::sun::star::accessibility::XAccessible,
             ::com::sun::star::accessibility::XAccessibleComponent,
             ::com::sun::star::accessibility::XAccessibleContext,
@@ -290,7 +289,7 @@ inline bool SvxRectCtlAccessibleContext::IsNotAlive() const
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }
 
-typedef ::cppu::WeakAggComponentImplHelper7<
+typedef ::cppu::WeakAggComponentImplHelper<
             ::com::sun::star::accessibility::XAccessible,
             ::com::sun::star::accessibility::XAccessibleComponent,
             ::com::sun::star::accessibility::XAccessibleContext,

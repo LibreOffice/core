@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -126,12 +126,11 @@ namespace comphelper
         calls which your derived class gets to the dispose method of this class.</p>
     */
 
-    class COMPHELPER_DLLPUBLIC OComponentProxyAggregationHelper :public ::cppu::ImplHelper1 <   com::sun::star::lang::XEventListener
-                                                                        >
+    class COMPHELPER_DLLPUBLIC OComponentProxyAggregationHelper :public ::cppu::ImplHelper < com::sun::star::lang::XEventListener >
                                             ,private OProxyAggregation
     {
     private:
-        typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XEventListener
+        typedef ::cppu::ImplHelper  <   ::com::sun::star::lang::XEventListener
                                     >   BASE;   // prevents some MSVC problems
 
     protected:

@@ -53,7 +53,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 using namespace com::sun::star::uno;
@@ -66,7 +66,7 @@ struct MRCListenerMultiplexerHelper_Mutex
 class MRCListenerMultiplexerHelper  :
     public MRCListenerMultiplexerHelper_Mutex,
 
-    public ::cppu::WeakAggImplHelper7<
+    public ::cppu::WeakAggImplHelper<
       css::awt::XFocusListener,
       css::awt::XWindowListener,
       css::awt::XKeyListener,

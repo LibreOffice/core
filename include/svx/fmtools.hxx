@@ -66,7 +66,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <set>
 
@@ -173,7 +173,7 @@ protected:
     void setAdapter(FmXDisposeMultiplexer* pAdapter);
 };
 
-class SAL_WARN_UNUSED FmXDisposeMultiplexer : public ::cppu::WeakImplHelper1< css::lang::XEventListener>
+class SAL_WARN_UNUSED FmXDisposeMultiplexer : public ::cppu::WeakImplHelper < css::lang::XEventListener >
 {
     css::uno::Reference< css::lang::XComponent>       m_xObject;
     FmXDisposeListener* m_pListener;

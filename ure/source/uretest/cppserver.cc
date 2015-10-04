@@ -27,7 +27,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
 #include "rtl/ustring.h"
@@ -40,7 +40,8 @@
 
 namespace {
 
-class Service: public ::cppu::WeakImplHelper1< ::test::types::XServer > {
+class Service: public ::cppu::WeakImplHelper < ::test::types::XServer >
+{
 public:
     Service() {}
 

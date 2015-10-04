@@ -30,8 +30,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
@@ -435,7 +434,7 @@ rtl::OUString Parser::getNameAttribute() {
 }
 
 class ContentEnumeration:
-    public cppu::WeakImplHelper1< css::container::XEnumeration >,
+    public cppu::WeakImplHelper< css::container::XEnumeration >,
     private boost::noncopyable
 {
 public:
@@ -487,7 +486,7 @@ css::beans::Property getDefaultContextProperty() {
 }
 
 class SingletonFactory:
-    public cppu::WeakImplHelper1<css::lang::XSingleComponentFactory>,
+    public cppu::WeakImplHelper<css::lang::XSingleComponentFactory>,
     private boost::noncopyable
 {
 public:
@@ -539,7 +538,7 @@ SingletonFactory::createInstanceWithArgumentsAndContext(
 }
 
 class ImplementationWrapper:
-    public cppu::WeakImplHelper3<
+    public cppu::WeakImplHelper<
         css::lang::XSingleComponentFactory, css::lang::XSingleServiceFactory,
         css::lang::XServiceInfo >,
     private boost::noncopyable

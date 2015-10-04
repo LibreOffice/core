@@ -30,7 +30,7 @@
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -74,7 +74,7 @@ static OUString impl1_getImplementationName()
 
 
 class ServiceImpl0
-    : public WeakImplHelper2< lang::XServiceInfo, lang::XInitialization >
+    : public WeakImplHelper < lang::XServiceInfo, lang::XInitialization >
 {
     Reference< XComponentContext > m_xContext;
 

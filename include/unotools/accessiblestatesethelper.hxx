@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 
 class AccessibleStateSetHelperImpl;
@@ -44,7 +44,7 @@ namespace utl
         <code>AccessibleStateSet</code> service.
 */
 class UNOTOOLS_DLLPUBLIC AccessibleStateSetHelper
-    :   public cppu::WeakImplHelper1<
+    :   public cppu::WeakImplHelper<
         ::com::sun::star::accessibility::XAccessibleStateSet
         >
 {

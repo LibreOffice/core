@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "featuredispatcher.hxx"
 #include <vector>
 #include <map>
@@ -43,7 +43,7 @@ namespace frm
 
     //= OFormNavigationHelper
 
-    typedef ::cppu::ImplHelper2 <   css::frame::XDispatchProviderInterception
+    typedef ::cppu::ImplHelper  <   css::frame::XDispatchProviderInterception
                                 ,   css::frame::XStatusListener
                                 >   OFormNavigationHelper_Base;
 

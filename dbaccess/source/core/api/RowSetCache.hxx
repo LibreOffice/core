@@ -35,9 +35,7 @@
 #include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#include <cppuhelper/compbase11.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <cppuhelper/implbase5.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "RowSetRow.hxx"
 #include "RowSetCacheIterator.hxx"

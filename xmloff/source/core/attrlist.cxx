@@ -77,7 +77,7 @@ sal_Int16 SAL_CALL SvXMLAttributeList::getLength() throw( ::com::sun::star::uno:
 
 
 SvXMLAttributeList::SvXMLAttributeList( const SvXMLAttributeList &r ) :
-    cppu::WeakImplHelper3<com::sun::star::xml::sax::XAttributeList, com::sun::star::util::XCloneable, com::sun::star::lang::XUnoTunnel>(r),
+    cppu::WeakImplHelper<com::sun::star::xml::sax::XAttributeList, com::sun::star::util::XCloneable, com::sun::star::lang::XUnoTunnel>(r),
     m_pImpl( new SvXMLAttributeList_Impl( *r.m_pImpl ) )
 {
 }

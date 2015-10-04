@@ -22,7 +22,7 @@
 
 #include "AccessibleBrowseBoxTable.hxx"
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 class SvHeaderTabListBox;
@@ -31,7 +31,7 @@ class SvHeaderTabListBox;
 
 namespace accessibility {
 
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
+typedef ::cppu::ImplHelper< css::accessibility::XAccessibleSelection >
             AccessibleTabListBoxTableImplHelper;
 
 class AccessibleTabListBoxTable : public AccessibleBrowseBoxTable, public AccessibleTabListBoxTableImplHelper

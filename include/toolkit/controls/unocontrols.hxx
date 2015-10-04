@@ -48,10 +48,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <vcl/bitmapex.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <list>
@@ -108,7 +105,7 @@ public:
 
 //  class UnoEditControl
 
-typedef ::cppu::ImplHelper4  <   ::com::sun::star::awt::XTextComponent
+typedef ::cppu::ImplHelper   <   ::com::sun::star::awt::XTextComponent
                              ,   ::com::sun::star::awt::XTextListener
                              ,   ::com::sun::star::awt::XLayoutConstrains
                              ,   ::com::sun::star::awt::XTextLayoutConstrains
@@ -291,7 +288,7 @@ public:
 
 //  class UnoButtonControl
 
-typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   ::com::sun::star::awt::XButton
                                             ,   ::com::sun::star::awt::XToggleButton
                                             ,   ::com::sun::star::awt::XLayoutConstrains
@@ -380,7 +377,7 @@ public:
 
 //  class UnoImageControlControl
 
-typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   ::com::sun::star::awt::XLayoutConstrains
                                             >   UnoImageControlControl_Base;
 class UnoImageControlControl : public UnoImageControlControl_Base
@@ -444,7 +441,7 @@ public:
 
 //  class UnoRadioButtonControl
 
-typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   ::com::sun::star::awt::XButton
                                             ,   ::com::sun::star::awt::XRadioButton
                                             ,   ::com::sun::star::awt::XItemListener
@@ -529,7 +526,7 @@ public:
 
 //  class UnoCheckBoxControl
 
-typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   ::com::sun::star::awt::XButton
                                             ,   ::com::sun::star::awt::XCheckBox
                                             ,   ::com::sun::star::awt::XItemListener
@@ -782,7 +779,7 @@ public:
 //  class UnoControlListBoxModel
 
 struct UnoControlListBoxModel_Data;
-typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlModel
                                             ,   ::com::sun::star::awt::XItemList
                                             >   UnoControlListBoxModel_Base;
 class TOOLKIT_DLLPUBLIC UnoControlListBoxModel : public UnoControlListBoxModel_Base
@@ -885,7 +882,7 @@ protected:
 
 //  class UnoListBoxControl
 
-typedef ::cppu::AggImplInheritanceHelper5   <   UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper    <   UnoControlBase
                                             ,   ::com::sun::star::awt::XListBox
                                             ,   ::com::sun::star::awt::XItemListener
                                             ,   ::com::sun::star::awt::XLayoutConstrains

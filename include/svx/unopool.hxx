@@ -22,7 +22,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/propertysethelper.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svx/svxdllapi.h>
 
 class SdrModel;

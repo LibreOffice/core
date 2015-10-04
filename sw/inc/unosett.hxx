@@ -28,9 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
 
 class SwDoc;
@@ -39,7 +37,7 @@ class SwDocShell;
 class SwNumRule;
 class SwNumFormat;
 
-class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
+class SwXFootnoteProperties : public cppu::WeakAggImplHelper
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::lang::XServiceInfo
@@ -69,7 +67,7 @@ public:
     void            Invalidate() {pDoc = 0;}
 };
 
-class SwXEndnoteProperties : public cppu::WeakAggImplHelper2
+class SwXEndnoteProperties : public cppu::WeakAggImplHelper
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::lang::XServiceInfo
@@ -99,7 +97,7 @@ public:
     void            Invalidate() {pDoc = 0;}
 };
 
-class SwXLineNumberingProperties : public cppu::WeakAggImplHelper2
+class SwXLineNumberingProperties : public cppu::WeakAggImplHelper
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::lang::XServiceInfo
@@ -129,7 +127,7 @@ public:
     void            Invalidate() {pDoc = 0;}
 };
 
-class SwXNumberingRules : public cppu::WeakAggImplHelper5
+class SwXNumberingRules : public cppu::WeakAggImplHelper
 <
     ::com::sun::star::container::XIndexReplace,
     ::com::sun::star::lang::XUnoTunnel,
@@ -236,7 +234,7 @@ public:
 
 };
 
-class SwXTextColumns : public cppu::WeakAggImplHelper4
+class SwXTextColumns : public cppu::WeakAggImplHelper
 <
 
     ::com::sun::star::lang::XUnoTunnel,

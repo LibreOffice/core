@@ -47,7 +47,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase10.hxx>
 
 class DbGridColumn;
 
@@ -187,7 +186,7 @@ public:
 
 // FmXGridControl
 
-typedef ::cppu::ImplHelper10<   ::com::sun::star::form::XBoundComponent,
+typedef ::cppu::ImplHelper  <   ::com::sun::star::form::XBoundComponent,
                                 ::com::sun::star::form::XGridControl,
                                 ::com::sun::star::util::XModifyBroadcaster,
                                 ::com::sun::star::container::XIndexAccess,

@@ -16,7 +16,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
@@ -27,7 +27,7 @@
 
 /** get the Panel
 */
-class SfxUnoPanel : public ::cppu::WeakImplHelper1< css::ui::XPanel >
+class SfxUnoPanel : public ::cppu::WeakImplHelper < css::ui::XPanel >
 {
 
 public:

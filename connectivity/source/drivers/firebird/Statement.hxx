@@ -22,14 +22,14 @@
 
 #include "StatementCommonBase.hxx"
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
     namespace firebird
     {
 
-        typedef ::cppu::ImplHelper1< ::com::sun::star::sdbc::XStatement >
+        typedef ::cppu::ImplHelper < ::com::sun::star::sdbc::XStatement >
             OStatement_Base;
 
         class OStatement :  public OStatementCommonBase,

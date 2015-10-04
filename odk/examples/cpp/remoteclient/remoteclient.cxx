@@ -50,7 +50,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -64,7 +64,7 @@ using namespace ::com::sun::star::io;
 
 namespace remotebridges_officeclient {
 
-class PipeClientMain : public WeakImplHelper1< XMain >
+class PipeClientMain : public WeakImplHelper < XMain >
 {
 public:
     PipeClientMain( const Reference< XMultiServiceFactory > &r ) :

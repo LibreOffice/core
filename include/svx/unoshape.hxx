@@ -57,8 +57,7 @@
 
 #include <comphelper/servicehelper.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase12.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <svx/unoprov.hxx>
 
@@ -94,7 +93,7 @@ com::sun::star::uno::Any SVX_DLLPUBLIC SvxItemPropertySet_getPropertyValue( cons
 
 // WARNING: if you update the supported interfaces,
 //          also update SvxShape::_getTypes()
-typedef ::cppu::WeakAggImplHelper12<
+typedef ::cppu::WeakAggImplHelper<
     ::com::sun::star::drawing::XShape,
     ::com::sun::star::lang::XComponent,
     ::com::sun::star::beans::XPropertySet,
@@ -813,11 +812,11 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-typedef ::cppu::WeakAggImplHelper1<
+typedef ::cppu::WeakAggImplHelper<
     ::com::sun::star::drawing::XEnhancedCustomShapeDefaulter
-    > SvxShape_UnoImplHelper1;
+    > SvxShape_UnoEnhancedCustomShapeHelper;
 
-class SVX_DLLPUBLIC SvxCustomShape : public SvxShapeText, public SvxShape_UnoImplHelper1
+class SVX_DLLPUBLIC SvxCustomShape : public SvxShapeText, public SvxShape_UnoEnhancedCustomShapeHelper
 {
 private:
     rtl::Reference< SvxDrawPage > mxPage;
