@@ -2214,18 +2214,16 @@
           <constraints>
             <minInclusive oor:value="1">
               <info>
-                <desc>Specifies that the minimum time interval is 1
-                minute.</desc>
+                <desc>Specifies that the minimum time interval is 1 minute.</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="60">
               <info>
-                <desc>Specifies that the maximum time interval is 60
-                minutes.</desc>
+                <desc>Specifies that the maximum time interval is 60 minutes.</desc>
               </info>
             </maxInclusive>
           </constraints>
-          <value>15</value>
+          <value>10</value>
         </prop>
         <prop oor:name="ViewInfo" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: General/Restore -->
