@@ -71,7 +71,7 @@ friend class SwDropCapsPict;
 
     DECL_LINK_TYPED(ClickHdl, Button*, void);
     DECL_LINK( ModifyHdl, Edit * );
-    DECL_LINK(SelectHdl, void *);
+    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
     DECL_LINK_TYPED(WholeWordHdl, Button*, void);
 
     using SfxTabPage::ActivatePage;

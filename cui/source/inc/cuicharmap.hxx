@@ -82,8 +82,8 @@ private:
     const SubsetMap* pSubsetMap;
 
     DECL_LINK_TYPED(OKHdl, Button*, void);
-    DECL_LINK(FontSelectHdl, void *);
-    DECL_LINK(SubsetSelectHdl, void *);
+    DECL_LINK_TYPED(FontSelectHdl, ListBox&, void);
+    DECL_LINK_TYPED(SubsetSelectHdl, ListBox&, void);
     DECL_LINK_TYPED(CharDoubleClickHdl, SvxShowCharSet*,void);
     DECL_LINK_TYPED(CharSelectHdl, SvxShowCharSet*, void);
     DECL_LINK_TYPED(CharHighlightHdl, SvxShowCharSet*, void);

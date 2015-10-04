@@ -496,7 +496,7 @@ public:
     void InsertSelectedEntry(); //insert the selected entry
 
     DECL_LINK_TYPED(ImplDoubleClickHdl, ListBox&, void);
-    DECL_LINK(ImplSelectHdl, void*);
+    DECL_LINK_TYPED(ImplSelectHdl, ListBox&, void);
 
 protected:
     virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;

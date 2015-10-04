@@ -38,7 +38,7 @@ public:
     sal_Int32 GetSelectEntryPos() const;
     void SelectEntryPos(sal_Int32 nPos);
 
-    void SetSelectHdl( const Link<>& rLink );
+    void SetSelectHdl( const Link<ListBox&,void>& rLink );
 
 private:
     VclPtr<FixedText> m_pFT_Geometry;

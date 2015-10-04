@@ -126,7 +126,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     SwInsDBColumns  aDBColumns;
     const SwDBData  aDBData;
 
-    Link<>          aOldNumFormatLnk;
+    Link<ListBox&,void>    aOldNumFormatLnk;
     OUString        sNoTmpl;
 
     SwView*         pView;
@@ -141,7 +141,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     DECL_LINK_TYPED( TableFormatHdl, Button*, void );
     DECL_LINK_TYPED( DBFormatHdl, Button*, void );
     DECL_LINK_TYPED( TableToFromHdl, Button*, void );
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
     DECL_LINK_TYPED( DblClickHdl, ListBox&, void );
     DECL_LINK_TYPED( HeaderHdl, Button*, void );
 

@@ -54,10 +54,10 @@ class SwParagraphNumTabPage : public SfxTabPage
     bool                    bCurNumrule : 1;
 
     DECL_LINK_TYPED(NewStartHdl_Impl, Button*, void);
-    DECL_LINK( StyleHdl_Impl, ListBox* );
+    DECL_LINK_TYPED( StyleHdl_Impl, ListBox&,void );
     DECL_LINK_TYPED(LineCountHdl_Impl, Button*, void);
     DECL_LINK_TYPED(EditNumStyleHdl_Impl, Button*, void);
-    DECL_LINK(EditNumStyleSelectHdl_Impl, void *);
+    DECL_LINK_TYPED(EditNumStyleSelectHdl_Impl, ListBox&, void);
 
     static const sal_uInt16 aPageRg[];
 

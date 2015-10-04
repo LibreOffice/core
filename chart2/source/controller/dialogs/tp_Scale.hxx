@@ -99,7 +99,7 @@ private:
 
     void EnableControls();
 
-    DECL_LINK( SelectAxisTypeHdl, void* );
+    DECL_LINK_TYPED( SelectAxisTypeHdl, ListBox&, void );
     DECL_LINK_TYPED( EnableValueHdl, Button*, void );
     DECL_STATIC_LINK( ScaleTabPage, FmtFieldModifiedHdl, FormattedField* );
 

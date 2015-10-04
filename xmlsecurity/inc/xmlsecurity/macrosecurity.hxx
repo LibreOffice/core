@@ -132,7 +132,7 @@ private:
     DECL_LINK_TYPED(    AddLocPBHdl, Button*, void );
     DECL_LINK_TYPED(    RemoveLocPBHdl, Button*, void );
     DECL_LINK_TYPED(    TrustCertLBSelectHdl, SvTreeListBox*, void );
-    DECL_LINK(          TrustFileLocLBSelectHdl, void* );
+    DECL_LINK_TYPED(    TrustFileLocLBSelectHdl, ListBox&, void );
 
     void                FillCertLB();
     void                ImplCheckButtons();

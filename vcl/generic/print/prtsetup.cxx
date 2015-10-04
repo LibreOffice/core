@@ -262,7 +262,7 @@ void RTSPaperPage::update()
     }
 }
 
-IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
+IMPL_LINK_TYPED( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
 {
     const PPDKey* pKey = NULL;
     if( pBox == m_pPaperBox )
@@ -451,7 +451,7 @@ IMPL_LINK(RTSDevicePage, ModifyHdl, Edit*,  pEdit)
     return 0;
 }
 
-IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
+IMPL_LINK_TYPED( RTSDevicePage, SelectHdl, ListBox&, rBox, void )
 {
     if( pBox == m_pPPDKeyBox )
     {

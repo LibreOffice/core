@@ -51,7 +51,7 @@ class SwFieldDokInfPage : public SwFieldPage
     OUString     m_sOldCustomFieldName;
 
     DECL_LINK_TYPED(TypeHdl, SvTreeListBox*, void);
-    DECL_LINK(SubTypeHdl, void * = 0);
+    DECL_LINK_TYPED(SubTypeHdl, ListBox&, void);
 
     sal_Int32               FillSelectionLB(sal_uInt16 nSubTypeId);
 

@@ -69,7 +69,7 @@ ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
     get(pOutlineCB,"outline");
 
     SetExchangeSupport();
-    Link<> aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
+    Link<ListBox&,void> aSelObjHdl(LINK( this, ScTpContentOptions, SelLbObjHdl ) );
     pObjGrfLB->  SetSelectHdl(aSelObjHdl);
     pDiagramLB-> SetSelectHdl(aSelObjHdl);
     pDrawLB->    SetSelectHdl(aSelObjHdl);
@@ -244,20 +244,18 @@ SfxTabPage::sfxpg ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
     return SfxTabPage::LEAVE_PAGE;
 }
 
-IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( ScTpContentOptions, SelLbObjHdl, ListBox&, rLb, void )
 {
-    const sal_Int32 nSelPos = pLb->GetSelectEntryPos();
+    const sal_Int32 nSelPos = rLb.GetSelectEntryPos();
     ScVObjMode  eMode   = ScVObjMode(nSelPos);
     ScVObjType  eType   = VOBJ_TYPE_OLE;
 
-    if ( pLb == pDiagramLB )
+    if ( &rLb == pDiagramLB )
         eType = VOBJ_TYPE_CHART;
-    else if ( pLb == pDrawLB )
+    else if ( &rLb == pDrawLB )
         eType = VOBJ_TYPE_DRAW;
 
     pLocalOptions->SetObjMode( eType, eMode );
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScTpContentOptions, CBHdl, Button*, pBtn, void )
@@ -358,9 +356,9 @@ void ScTpContentOptions::InitGridOpt()
         pColorLB->SelectEntryPos( pColorLB->InsertEntry( aCol, aName ) );
 }
 
-IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( ScTpContentOptions, GridHdl, ListBox&, rLb, void )
 {
-    sal_Int32   nSelPos = pLb->GetSelectEntryPos();
+    sal_Int32   nSelPos = rLb.GetSelectEntryPos();
     bool    bGrid = ( nSelPos <= 1 );
     bool    bGridOnTop = ( nSelPos == 1 );
 
@@ -368,7 +366,6 @@ IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
     pColorLB->Enable(bGrid);
     pLocalOptions->SetOption( VOPT_GRID, bGrid );
     pLocalOptions->SetOption( VOPT_GRID_ONTOP, bGridOnTop );
-    return 0;
 }
 
 ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
@@ -681,7 +678,7 @@ SfxTabPage::sfxpg ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
     return SfxTabPage::LEAVE_PAGE;
 }
 
-IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl)
+IMPL_LINK_NOARG_TYPED(ScTpLayoutOptions, MetricHdl, ListBox&, void)
 {
     const sal_Int32 nMPos = m_pUnitLB->GetSelectEntryPos();
     if(nMPos != LISTBOX_ENTRY_NOTFOUND)
@@ -692,8 +689,6 @@ IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl)
         ::SetFieldUnit( *m_pTabMF, eFieldUnit );
         m_pTabMF->SetValue( m_pTabMF->Normalize( nVal ), FUNIT_TWIP );
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScTpLayoutOptions, AlignHdl, Button*, pBox, void )

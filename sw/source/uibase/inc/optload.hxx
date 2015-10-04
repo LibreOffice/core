@@ -59,7 +59,7 @@ private:
     sal_uInt16       m_nLastTab;
     sal_Int32        m_nOldLinkMode;
 
-    DECL_LINK(MetricHdl, void *);
+    DECL_LINK_TYPED(MetricHdl, ListBox&, void);
     DECL_LINK_TYPED(StandardizedPageCountCheckHdl, Button*, void);
 
 public:
@@ -154,8 +154,9 @@ private:
     bool bHTMLMode;
 
     DECL_LINK(SelectHdl, void *);
+    DECL_LINK_TYPED(SelectListBoxHdl, ListBox&, void);
     DECL_LINK(ModifyHdl, void * = 0);
-    DECL_LINK( OrderHdl, ListBox* );
+    DECL_LINK_TYPED( OrderHdl, ListBox&, void );
     DECL_LINK_TYPED(ShowEntryHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(SaveEntryHdl, SvTreeListBox*, void);
 

@@ -28,7 +28,7 @@ BarGeometryResources::BarGeometryResources(VclBuilderContainer* pWindow)
     pWindow->get(m_pLB_Geometry, "shape");
 }
 
-void BarGeometryResources::SetSelectHdl( const Link<>& rLink )
+void BarGeometryResources::SetSelectHdl( const Link<ListBox&,void>& rLink )
 {
     m_pLB_Geometry->SetSelectHdl( rLink );
 }

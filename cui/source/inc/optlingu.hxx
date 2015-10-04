@@ -78,10 +78,11 @@ class SvxEditModulesDlg : public ModalDialog
     DECL_LINK_TYPED(UpDownHdl_Impl, Button*, void);
     DECL_LINK_TYPED(ClickHdl_Impl, Button*, void);
     DECL_LINK_TYPED(BackHdl_Impl, Button*, void);
-    DECL_LINK( LangSelectHdl_Impl, ListBox* );
+    DECL_LINK_TYPED( LangSelectListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void );
     DECL_LINK_TYPED( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
     DECL_LINK(OpenURLHdl_Impl, void *);
+    void LangSelectHdl_Impl(ListBox*);
 
 public:
     SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rData);

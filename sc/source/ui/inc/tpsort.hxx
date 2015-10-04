@@ -94,7 +94,7 @@ private:
     void    SetLastSortKey( sal_uInt16 nItem );
 
     // Handler ------------------------
-    DECL_LINK( SelectHdl, ListBox * );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
 };
 
 // Sort Options
@@ -165,10 +165,10 @@ private:
 
     // Handler ------------------------
     DECL_LINK_TYPED( EnableHdl, Button*, void );
-    DECL_LINK( SelOutPosHdl, ListBox * );
+    DECL_LINK_TYPED( SelOutPosHdl, ListBox&, void );
     void EdOutPosModHdl ( Edit* pEd );
     DECL_LINK_TYPED( SortDirHdl, Button *, void );
-    DECL_LINK( FillAlgorHdl, void * );
+    DECL_LINK_TYPED( FillAlgorHdl, ListBox&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPSORT_HXX

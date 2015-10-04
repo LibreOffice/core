@@ -117,7 +117,7 @@ private:
     static OUString        GetScale( sal_Int32 nX, sal_Int32 nY );
     static bool            SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY );
 
-    DECL_LINK( SelectMetricHdl_Impl, void * );
+    DECL_LINK_TYPED( SelectMetricHdl_Impl, ListBox&, void );
 
     /** Enable or disable the controls in the compatibility section of the
         'general' tab page depending on whether there is at least one

@@ -160,8 +160,8 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     //aCtlXRectPreview.SetFillAttr( aXFillAttr );
 
     m_pTsbShowShadow->SetClickHdl( LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl ) );
+    m_pLbShadowColor->SetSelectHdl( LINK( this, SvxShadowTabPage, SelectShadowHdl_Impl ) );
     Link<> aLink = LINK( this, SvxShadowTabPage, ModifyShadowHdl_Impl );
-    m_pLbShadowColor->SetSelectHdl( aLink );
     m_pMtrTransparent->SetModifyHdl( aLink );
     m_pMtrDistance->SetModifyHdl( aLink );
 }
@@ -509,6 +509,10 @@ IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ClickShadowHdl_Impl, Button*, void)
 
 
 
+IMPL_LINK_TYPED(SvxShadowTabPage, SelectShadowHdl_Impl, ListBox&, rListBox, void)
+{
+    ModifyShadowHdl_Impl(&rListBox);
+}
 IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
 {
     if( m_pTsbShowShadow->GetState() == TRISTATE_TRUE )

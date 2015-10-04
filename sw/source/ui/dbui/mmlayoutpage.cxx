@@ -660,13 +660,13 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExample
     m_pTopMF->SetMax(rPageSize.GetHeight() - DEFAULT_TOP_DISTANCE);
 }
 
-IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox&, rBox, void)
 {
     if(m_pExampleWrtShell)
     {
         sal_Int16 eType = DocumentZoomType::BY_VALUE;
         short nZoom = 50;
-        switch(pBox->GetSelectEntryPos())
+        switch(rBox.GetSelectEntryPos())
         {
             case 0 : eType = DocumentZoomType::ENTIRE_PAGE; break;
             case 1 : nZoom = 50; break;
@@ -680,7 +680,6 @@ IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
         m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_VALUE, aZoom);
 
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, ChangeAddressLoseFocusHdl_Impl, Control&, void)

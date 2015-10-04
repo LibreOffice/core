@@ -67,7 +67,6 @@ static bool lcl_PutBoolItem( sal_uInt16            nWhich,
 
 #define PAGENO_HDL          LINK(this,ScTablePage,PageNoHdl)
 #define PAGEDIR_HDL         LINK(this,ScTablePage,PageDirHdl)
-#define SCALE_HDL           LINK(this,ScTablePage,ScaleHdl)
 
 #define WAS_DEFAULT(w,s)    (SfxItemState::DEFAULT==(s).GetItemState((w),true))
 #define GET_BOOL(sid,set)   static_cast<const SfxBoolItem&>((set).Get(GetWhich((sid)))).GetValue()
@@ -112,7 +111,7 @@ ScTablePage::ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs ) :
     m_pBtnPageNo->SetClickHdl( PAGENO_HDL );
     m_pBtnTopDown->SetClickHdl( PAGEDIR_HDL );
     m_pBtnLeftRight->SetClickHdl( PAGEDIR_HDL );
-    m_pLbScaleMode->SetSelectHdl( SCALE_HDL );
+    m_pLbScaleMode->SetSelectHdl( LINK(this,ScTablePage,ScaleHdl) );
 
 }
 
@@ -228,7 +227,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
     }
 
     PageDirHdl( NULL );
-    ScaleHdl( NULL );
+    ScaleHdl( *m_pLbScaleMode.get() );
 
     // remember for FillItemSet
     m_pBtnFormulas->SaveValue();
@@ -376,7 +375,7 @@ IMPL_LINK_TYPED( ScTablePage, PageNoHdl, Button*, pBtn, void )
         m_pEdPageNo->Disable();
 }
 
-IMPL_LINK_NOARG(ScTablePage, ScaleHdl)
+IMPL_LINK_NOARG_TYPED(ScTablePage, ScaleHdl, ListBox&, void)
 {
     // controls for Box "Reduce/enlarge"
     m_pBxScaleAll->Show(m_pLbScaleMode->GetSelectEntryPos() == SC_TPTABLE_SCALE_PERCENT);
@@ -386,8 +385,6 @@ IMPL_LINK_NOARG(ScTablePage, ScaleHdl)
 
     // controls for Box "Scale to pages"
     m_pBxScalePageNum->Show(m_pLbScaleMode->GetSelectEntryPos() == SC_TPTABLE_SCALE_TO_PAGES);
-
-    return 0;
 }
 
 // Helper functions for FillItemSet:

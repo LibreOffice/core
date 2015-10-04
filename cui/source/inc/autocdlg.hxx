@@ -49,7 +49,7 @@ class OfaAutoCorrDlg : public SfxTabDialog
     sal_uInt16 m_nReplacePageId;
     sal_uInt16 m_nExceptionsPageId;
 
-    DECL_LINK(SelectLanguageHdl, ListBox*);
+    DECL_LINK_TYPED(SelectLanguageHdl, ListBox&, void);
 public:
 
     OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet *pSet);
@@ -317,7 +317,7 @@ private:
 
     DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
     DECL_LINK_TYPED(NewDelActionHdl, AutoCorrEdit&, bool);
-    DECL_LINK(SelectHdl, ListBox*);
+    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
     DECL_LINK(ModifyHdl, Edit*);
     bool NewDelHdl(void*);
                     /// Box filled with new language

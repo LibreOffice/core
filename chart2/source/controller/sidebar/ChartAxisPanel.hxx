@@ -93,7 +93,7 @@ private:
     void Initialize();
 
     DECL_LINK_TYPED(CheckBoxHdl, Button*, void);
-    DECL_LINK(ListBoxHdl, void*);
+    DECL_LINK_TYPED(ListBoxHdl, ListBox&, void);
 };
 
 } } // end of namespace ::chart::sidebar

@@ -286,10 +286,9 @@ IMPL_LINK_NOARG_TYPED(ScInsertTableDlg, BrowseHdl_Impl, Button*, void)
     pDocInserter->StartExecuteModal( LINK( this, ScInsertTableDlg, DialogClosedHdl ) );
 }
 
-IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(ScInsertTableDlg, SelectHdl_Impl, ListBox&, void)
 {
     DoEnable_Impl();
-    return 0;
 }
 
 void ScInsertTableDlg::DoEnable_Impl()

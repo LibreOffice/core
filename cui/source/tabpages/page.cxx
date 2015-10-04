@@ -494,7 +494,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     // alignment
     m_pLayoutBox->SelectEntryPos( ::PageUsageToPos_Impl( nUse ) );
     m_pBspWin->SetUsage( nUse );
-    LayoutHdl_Impl( 0 );
+    LayoutHdl_Impl( *m_pLayoutBox );
 
     //adjust numeration type of the page style
     //Get the Position of the saved NumType
@@ -927,7 +927,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPageDescPage, LayoutHdl_Impl, ListBox&, void)
 {
     // switch inside outside
     const sal_uInt16 nPos = PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() );
@@ -947,7 +947,6 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl)
         m_pOutsideLbl->Hide();
     }
     UpdateExample_Impl( true );
-    return 0;
 }
 
 
@@ -987,9 +986,9 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
 
 
 
-IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
+IMPL_LINK_TYPED( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
 {
-    const sal_Int32 nPos = pBox->GetSelectEntryPos();
+    const sal_Int32 nPos = rBox.GetSelectEntryPos();
     Paper ePaper = (Paper)reinterpret_cast<sal_uLong>(m_pPaperSizeBox->GetEntryData( nPos ));
 
     if ( ePaper != PAPER_USER )
@@ -1054,7 +1053,6 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
             UpdateExample_Impl( true );
         }
     }
-    return 0;
 }
 
 
@@ -1103,7 +1101,7 @@ IMPL_LINK_TYPED( SvxPageDescPage, SwapOrientation_Impl, Button *, pBtn, void )
         // recalculate margins if necessary
         CalcMargin_Impl();
 
-        PaperSizeSelect_Impl( m_pPaperSizeBox );
+        PaperSizeSelect_Impl( *m_pPaperSizeBox );
         RangeHdl_Impl( *m_pPaperWidthEdit );
         SwapFirstValues_Impl( bBorderModified );
         UpdateExample_Impl( true );
@@ -1694,11 +1692,10 @@ void SvxPageDescPage::DisableVerticalPageDir()
     }
 }
 
-IMPL_LINK( SvxPageDescPage, FrameDirectionModify_Impl, ListBox*,)
+IMPL_LINK_NOARG_TYPED( SvxPageDescPage, FrameDirectionModify_Impl, ListBox&, void)
 {
     m_pBspWin->SetFrameDirection( (sal_uInt32) m_pTextFlowBox->GetSelectEntryValue() );
     m_pBspWin->Invalidate();
-    return 0;
 }
 
 bool SvxPageDescPage::IsPrinterRangeOverflow(

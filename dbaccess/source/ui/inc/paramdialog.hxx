@@ -95,10 +95,11 @@ namespace dbaui
     private:
         DECL_LINK_TYPED(OnVisitedTimeout, Timer*, void);
         DECL_LINK(OnValueModified, Control*);
-        DECL_LINK(OnEntrySelected, ListBox*);
+        DECL_LINK_TYPED(OnEntryListBoxSelected, ListBox&, void);
         DECL_LINK_TYPED(OnButtonClicked, Button*, void);
         DECL_LINK_TYPED(OnValueLoseFocusHdl, Control&, void);
         bool OnValueLoseFocus();
+        bool OnEntrySelected();
     };
 
 }   // namespace dbaui

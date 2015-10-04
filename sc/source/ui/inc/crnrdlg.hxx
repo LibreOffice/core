@@ -81,7 +81,7 @@ private:
     DECL_LINK_TYPED( OkBtnHdl, Button*, void );
     DECL_LINK_TYPED( AddBtnHdl, Button*, void );
     DECL_LINK_TYPED( RemoveBtnHdl, Button*, void );
-    DECL_LINK( Range1SelectHdl, void * );
+    DECL_LINK_TYPED( Range1SelectHdl, ListBox&, void );
     DECL_LINK( Range1DataModifyHdl, void * );
     DECL_LINK_TYPED( ColClickHdl, Button*, void );
     DECL_LINK_TYPED( RowClickHdl, Button*, void );

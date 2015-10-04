@@ -243,10 +243,9 @@ IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, RemoveAllClickHdl, Button*, void )
     checkButtons();
 }
 
-IMPL_LINK( ODbaseIndexDialog, OnListEntrySelected, ListBox*, /*NOTINTERESTEDIN*/ )
+IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, OnListEntrySelected, ListBox&, void )
 {
     checkButtons();
-    return 0;
 }
 
 IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )

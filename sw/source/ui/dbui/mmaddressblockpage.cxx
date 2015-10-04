@@ -810,7 +810,7 @@ class SwAssignFieldsControl : public Control
     long                        m_nFirstYPos;
 
     DECL_LINK_TYPED(ScrollHdl_Impl, ScrollBar*, void);
-    DECL_LINK(MatchHdl_Impl, ListBox*);
+    DECL_LINK_TYPED(MatchHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(GotFocusHdl_Impl, Control&, void);
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -881,7 +881,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
     //each position in this sequence matches the position in the header array rHeaders
     //if no assignment is available an empty sequence will be returned
     uno::Sequence< OUString> aAssignments = rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
-    Link<> aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
+    Link<ListBox&,void> aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
     Link<Control&,void> aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
 
     //fill the controls
@@ -1098,9 +1098,9 @@ IMPL_LINK_TYPED(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll, void
     SetUpdateMode(true);
 }
 
-IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwAssignFieldsControl, MatchHdl_Impl, ListBox&, rBox, void)
 {
-    const OUString sColumn = pBox->GetSelectEntry();
+    const OUString sColumn = rBox.GetSelectEntry();
     uno::Reference< XColumnsSupplier > xColsSupp( m_rConfigItem->GetResultSet(), uno::UNO_QUERY);
     uno::Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
     OUString sPreview;
@@ -1123,14 +1123,13 @@ IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)
     sal_Int32 nIndex = 0;
     for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter, ++nIndex)
     {
-        if(*aLBIter == pBox)
+        if(*aLBIter == &rBox)
         {
             m_aPreviews[nIndex]->SetText(sPreview);
             break;
         }
     }
     m_aModifyHdl.Call(0);
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwAssignFieldsControl, GotFocusHdl_Impl, Control&, rControl, void)

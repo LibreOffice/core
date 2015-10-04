@@ -43,7 +43,7 @@ class SwCustomizeAddressListDialog : public SfxModalDialog
     DECL_LINK_TYPED(AddRenameHdl_Impl, Button*, void);
     DECL_LINK_TYPED(DeleteHdl_Impl, Button*, void);
     DECL_LINK_TYPED(UpDownHdl_Impl, Button*, void);
-    DECL_LINK(ListBoxSelectHdl_Impl, void *);
+    DECL_LINK_TYPED(ListBoxSelectHdl_Impl, ListBox&, void);
 
     void UpdateButtons();
 public:

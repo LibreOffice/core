@@ -300,10 +300,9 @@ namespace dbp
     }
 
 
-    IMPL_LINK( OContentTableSelection, OnTableSelected, ListBox*, /*_pListBox*/ )
+    IMPL_LINK_NOARG_TYPED( OContentTableSelection, OnTableSelected, ListBox&, void )
     {
         updateDialogTravelUI();
-        return 0L;
     }
 
 
@@ -409,11 +408,10 @@ namespace dbp
     }
 
 
-    IMPL_LINK( OContentFieldSelection, OnFieldSelected, ListBox*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG_TYPED( OContentFieldSelection, OnFieldSelected, ListBox&, void )
     {
         updateDialogTravelUI();
         m_pDisplayedField->SetText(m_pSelectTableField->GetSelectEntry());
-        return 0L;
     }
 
 

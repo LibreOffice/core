@@ -55,7 +55,7 @@ class SwGlossDecideDlg : public ModalDialog
     VclPtr<ListBox>  m_pListLB;
 
     DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
-    DECL_LINK(SelectHdl, void*);
+    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
 
 public:
     explicit SwGlossDecideDlg(vcl::Window* pParent);
@@ -93,10 +93,9 @@ IMPL_LINK_NOARG_TYPED(SwGlossDecideDlg, DoubleClickHdl, ListBox&, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SwGlossDecideDlg, SelectHdl, ListBox&, void)
 {
     m_pOk->Enable(LISTBOX_ENTRY_NOTFOUND != m_pListLB->GetSelectEntryPos());
-    return 0;
 }
 
 SwGlossaryList::SwGlossaryList() :

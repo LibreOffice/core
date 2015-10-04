@@ -155,6 +155,10 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl)
     return 0L;
 }
 
+IMPL_LINK_TYPED(SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl, ListBox&, rListBox, void)
+{
+    ModifiedTrgrHdl_Impl(&rListBox);
+}
 IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrHdl_Impl, void *, pControl)
 {
     if(pControl == m_pLbTrgrGradientType || pControl == this)
@@ -288,7 +292,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
     m_pMtrTrgrEndValue->SetValue( 100 );
     m_pMtrTrgrStartValue->SetValue( 0 );
     Link<> aLink = LINK( this, SvxTransparenceTabPage, ModifiedTrgrHdl_Impl);
-    m_pLbTrgrGradientType->SetSelectHdl( aLink );
+    m_pLbTrgrGradientType->SetSelectHdl( LINK( this, SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl) );
     m_pMtrTrgrCenterX->SetModifyHdl( aLink );
     m_pMtrTrgrCenterY->SetModifyHdl( aLink );
     m_pMtrTrgrAngle->SetModifyHdl( aLink );
@@ -879,7 +883,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     m_pLbBitmap->SelectEntryPos( 0 );
                 else
                     m_pLbBitmap->SelectEntryPos( _nPos );
-                ModifyBitmapHdl_Impl( this );
+                ModifyBitmapHdl_Impl( *m_pLbBitmap );
             }
 
             if( *m_pnHatchingListState != ChangeType::NONE )
@@ -898,9 +902,9 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     m_pLbHatching->SelectEntryPos( 0 );
                 else
                     m_pLbHatching->SelectEntryPos( _nPos );
-                ModifyHatchingHdl_Impl( this );
+                ModifyHatchingHdl_Impl( *m_pLbHatching );
 
-                ModifyHatchBckgrdColorHdl_Impl( this );
+                ModifyHatchBckgrdColorHdl_Impl( *m_pLbHatchBckgrdColor );
             }
 
             if( *m_pnGradientListState != ChangeType::NONE )
@@ -919,7 +923,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     m_pLbGradient->SelectEntryPos( 0 );
                 else
                     m_pLbGradient->SelectEntryPos( _nPos );
-                ModifyGradientHdl_Impl( this );
+                ModifyGradientHdl_Impl( *m_pLbGradient );
             }
 
             if( *m_pnColorListState != ChangeType::NONE )
@@ -938,7 +942,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                 else
                     m_pLbColor->SelectEntryPos( _nPos );
 
-                ModifyColorHdl_Impl( this );
+                ModifyColorHdl_Impl( *m_pLbColor );
 
                 // Backgroundcolor of hatch
                 _nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
@@ -952,7 +956,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                 else
                     m_pLbHatchBckgrdColor->SelectEntryPos( _nPos );
 
-                ModifyHatchBckgrdColorHdl_Impl( this );
+                ModifyHatchBckgrdColorHdl_Impl( *m_pLbHatchBckgrdColor );
             }
 
             // evaluate if any other Tabpage set another filltype
@@ -1848,7 +1852,7 @@ VclPtr<SfxTabPage> SvxAreaTabPage::Create( vcl::Window* pWindow,
 
 
 
-IMPL_LINK_NOARG(SvxAreaTabPage, SelectDialogTypeHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, SelectDialogTypeHdl_Impl, ListBox&, void)
 {
     switch( (drawing::FillStyle)m_pTypeLB->GetSelectEntryPos() )
     {
@@ -1859,8 +1863,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, SelectDialogTypeHdl_Impl)
         case drawing::FillStyle_HATCH: ClickHatchingHdl_Impl(); break;
         case drawing::FillStyle_BITMAP: ClickBitmapHdl_Impl(); break;
     }
-
-    return 0;
 }
 
 void SvxAreaTabPage::ClickInvisibleHdl_Impl()
@@ -1906,12 +1908,12 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
     // Controls for Hatch-Background
     m_pFlHatchBckgrd->Hide();
 
-    ModifyColorHdl_Impl( this );
+    ModifyColorHdl_Impl( *m_pLbColor );
 }
 
 
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyColorHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = NULL;
     sal_Int32 _nPos = m_pLbColor->GetSelectEntryPos();
@@ -1933,8 +1935,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
 
     m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
-
-    return 0L;
 }
 
 
@@ -1961,13 +1961,13 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
     // Controls for Hatch-Background
     m_pFlHatchBckgrd->Hide();
 
-    ModifyGradientHdl_Impl( this );
+    ModifyGradientHdl_Impl( *m_pLbGradient );
     ModifyStepCountHdl_Impl( m_pTsbStepCount );
 }
 
 
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyGradientHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = NULL;
     sal_Int32 _nPos = m_pLbGradient->GetSelectEntryPos();
@@ -1989,8 +1989,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
 
     m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
-
-    return 0L;
 }
 
 
@@ -2016,14 +2014,14 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
     m_pCbxHatchBckgrd->Enable();
     m_pLbHatchBckgrdColor->Enable();
 
-    ModifyHatchingHdl_Impl( this );
-    ModifyHatchBckgrdColorHdl_Impl( this );
+    ModifyHatchingHdl_Impl( *m_pLbHatching );
+    ModifyHatchBckgrdColorHdl_Impl( *m_pLbHatchBckgrdColor );
     ToggleHatchBckgrdColorHdl_Impl( *m_pCbxHatchBckgrd );
 }
 
 
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = NULL;
     sal_Int32 _nPos = m_pLbHatching->GetSelectEntryPos();
@@ -2045,13 +2043,11 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
 
     m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
-
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = NULL;
     sal_Int32 _nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
@@ -2070,8 +2066,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
 
     m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
-
-    return 0L;
 }
 
 
@@ -2140,13 +2134,13 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
 
     m_pBxBitmap->Show();
 
-    ModifyBitmapHdl_Impl( this );
+    ModifyBitmapHdl_Impl( *m_pLbBitmap );
     ModifyTileHdl_Impl( m_pTsbOriginal );
 }
 
 
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyBitmapHdl_Impl, ListBox&, void)
 {
     //UUUU
     mbDirectGraphicSet = false;
@@ -2173,8 +2167,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
 
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->Invalidate();
-
-    return 0L;
 }
 
 

@@ -90,7 +90,7 @@ private:
     sal_uInt16  GetFieldSelPos  ( SCCOL nField );
 
     // Handler:
-    DECL_LINK( LbSelectHdl, ListBox* );
+    DECL_LINK_TYPED( LbSelectHdl, ListBox&, void );
     DECL_LINK( ValModifyHdl, ComboBox* );
     DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
 };

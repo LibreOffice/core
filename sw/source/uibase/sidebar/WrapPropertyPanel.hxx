@@ -98,7 +98,7 @@ namespace sw { namespace sidebar {
         DECL_LINK_TYPED(WrapTypeHdl, Button*, void);
         DECL_LINK_TYPED(EnableContourHdl, Button*, void);
         DECL_LINK_TYPED(EditContourHdl, Button*, void);
-        DECL_LINK(SpacingLBHdl, ListBox*);
+        DECL_LINK_TYPED(SpacingLBHdl, ListBox&, void);
     };
 
 } } // end of namespace ::sw::sidebar

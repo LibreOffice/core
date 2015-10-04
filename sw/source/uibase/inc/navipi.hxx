@@ -101,7 +101,7 @@ class SwNavigationPI : public vcl::Window,
     void FillBox();
     void MakeMark();
 
-    DECL_LINK( DocListBoxSelectHdl, ListBox * );
+    DECL_LINK_TYPED( DocListBoxSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( ToolBoxSelectHdl, ToolBox *, void );
     DECL_LINK_TYPED( ToolBoxClickHdl, ToolBox *, void );
     DECL_LINK_TYPED( ToolBoxDropdownClickHdl, ToolBox*, void );

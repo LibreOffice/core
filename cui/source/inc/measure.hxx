@@ -62,6 +62,7 @@ private:
 
     DECL_LINK_TYPED( ClickAutoPosHdl_Impl, Button*, void );
     DECL_LINK( ChangeAttrHdl_Impl, void * );
+    DECL_LINK_TYPED( ChangeAttrListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ChangeAttrClickHdl_Impl, Button*, void );
 
 public:

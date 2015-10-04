@@ -68,7 +68,7 @@ private:
     DECL_LINK_TYPED( DefaultPersona, Button*, void );
 
     /// Handle the Personas installed through extensions selection
-    DECL_LINK( SelectInstalledPersona, ListBox* );
+    DECL_LINK_TYPED( SelectInstalledPersona, ListBox&, void );
 };
 
 /** Dialog that will allow the user to choose a Persona to use.

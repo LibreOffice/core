@@ -149,7 +149,7 @@ class CmisDetailsContainer : public DetailsContainer
     private:
         void selectRepository( );
         DECL_LINK_TYPED ( RefreshReposHdl, Button*, void );
-        DECL_LINK ( SelectRepoHdl, void * );
+        DECL_LINK_TYPED ( SelectRepoHdl, ListBox&, void );
 };
 
 #endif

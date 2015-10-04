@@ -431,11 +431,11 @@ void SvxCharNamePage::Initialize()
     m_pEastFontNameLB->SetModifyHdl( aLink );
     m_pEastFontStyleLB->SetModifyHdl( aLink );
     m_pEastFontSizeLB->SetModifyHdl( aLink );
-    m_pEastFontLanguageLB->SetSelectHdl( aLink );
+    m_pEastFontLanguageLB->SetSelectHdl( LINK( this, SvxCharNamePage, FontModifyListBoxHdl_Impl ) );
     m_pCTLFontNameLB->SetModifyHdl( aLink );
     m_pCTLFontStyleLB->SetModifyHdl( aLink );
     m_pCTLFontSizeLB->SetModifyHdl( aLink );
-    m_pCTLFontLanguageLB->SetSelectHdl( aLink );
+    m_pCTLFontLanguageLB->SetSelectHdl( LINK( this, SvxCharNamePage, FontModifyListBoxHdl_Impl ) );
 
     m_pImpl->m_aUpdateIdle.SetIdleHdl( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
 }
@@ -1183,6 +1183,10 @@ IMPL_LINK_NOARG_TYPED(SvxCharNamePage, UpdateHdl_Impl, Idle *, void)
 
 
 
+IMPL_LINK_TYPED( SvxCharNamePage, FontModifyListBoxHdl_Impl, ListBox&, rBox, void )
+{
+    FontModifyHdl_Impl(&rBox);
+}
 IMPL_LINK( SvxCharNamePage, FontModifyHdl_Impl, void*, pNameBox )
 {
     m_pImpl->m_aUpdateIdle.Start();
@@ -1482,7 +1486,7 @@ void SvxCharEffectsPage::Initialize()
     m_pFontColorLB->SetSelectHdl( LINK( this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl ) );
 
     // handler
-    Link<> aLink = LINK( this, SvxCharEffectsPage, SelectHdl_Impl );
+    Link<ListBox&,void> aLink = LINK( this, SvxCharEffectsPage, SelectListBoxHdl_Impl );
     m_pUnderlineLB->SetSelectHdl( aLink );
     m_pUnderlineColorLB->SetSelectHdl( aLink );
     m_pOverlineLB->SetSelectHdl( aLink );
@@ -1701,7 +1705,11 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
 
 
 
-IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
+IMPL_LINK_TYPED( SvxCharEffectsPage, SelectListBoxHdl_Impl, ListBox&, rBox, void )
+{
+    SelectHdl_Impl(&rBox);
+}
+void SvxCharEffectsPage::SelectHdl_Impl( ListBox* pBox )
 {
     if ( m_pEmphasisLB == pBox )
     {
@@ -1730,12 +1738,11 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
         m_pIndividualWordsBtn->Enable( bUEnable || bOEnable || ( nSPos > 0 && nSPos != LISTBOX_ENTRY_NOTFOUND ) );
     }
     UpdatePreview_Impl();
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl)
+IMPL_LINK_NOARG_TYPED(SvxCharEffectsPage, UpdatePreview_Impl, ListBox&, void)
 {
     bool bEnable = ( ( m_pUnderlineLB->GetSelectEntryPos() > 0 ) ||
                      ( m_pOverlineLB->GetSelectEntryPos()  > 0 ) ||
@@ -1743,7 +1750,6 @@ IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl)
     m_pIndividualWordsBtn->Enable( bEnable );
 
     UpdatePreview_Impl();
-    return 0;
 }
 
 
@@ -1762,8 +1768,9 @@ IMPL_LINK_NOARG_TYPED(SvxCharEffectsPage, TristClickHdl_Impl, Button*, void)
 
 
 
-IMPL_LINK( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
+IMPL_LINK_TYPED( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ListBox&, rListBox, void )
 {
+    ColorListBox* pBox = static_cast<ColorListBox*>(&rListBox);
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
     SvxFont& rCTLFont = GetPreviewCTLFont();
@@ -1778,7 +1785,6 @@ IMPL_LINK( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
     rCTLFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
 
     m_pPreviewWin->Invalidate();
-    return 0;
 }
 
 
@@ -2028,20 +2034,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     }
 
     // the select handler for the underline/overline/strikeout list boxes
-//  SelectHdl_Impl( NULL );
     DBG_ASSERT(m_pUnderlineLB->GetSelectHdl() == m_pOverlineLB->GetSelectHdl(),
         "SvxCharEffectsPage::Reset: inconsistence (1)!");
     DBG_ASSERT(m_pUnderlineLB->GetSelectHdl() == m_pStrikeoutLB->GetSelectHdl(),
         "SvxCharEffectsPage::Reset: inconsistence (1)!");
-    m_pUnderlineLB->GetSelectHdl().Call(NULL);
+    m_pUnderlineLB->GetSelectHdl().Call(*m_pUnderlineLB);
         // don't call SelectHdl_Impl directly!
         // in DisableControls, we may have re-routed the select handler
 
     // the select handler for the emphasis listbox
-//  SelectHdl_Impl( m_pEmphasisLB );
-    DBG_ASSERT(m_pEmphasisLB->GetSelectHdl() == LINK(this, SvxCharEffectsPage, SelectHdl_Impl),
+    DBG_ASSERT(m_pEmphasisLB->GetSelectHdl() == LINK(this, SvxCharEffectsPage, SelectListBoxHdl_Impl),
         "SvxCharEffectsPage::Reset: inconsistence (2)!");
-    m_pEmphasisLB->GetSelectHdl().Call( m_pEmphasisLB );
+    m_pEmphasisLB->GetSelectHdl().Call( *m_pEmphasisLB );
         // this is for consistency only. Here it would be allowed to call SelectHdl_Impl directly ...
 
     // Effects
@@ -2704,7 +2708,7 @@ void SvxCharPositionPage::Initialize()
     m_pNormalPosBtn->Check();
     PositionHdl_Impl( m_pNormalPosBtn );
     m_pKerningLB->SelectEntryPos( 0 );
-    KerningSelectHdl_Impl( NULL );
+    KerningSelectHdl_Impl( *m_pKerningLB );
 
     Link<Button*,void> aLink2 = LINK( this, SvxCharPositionPage, PositionHdl_Impl );
     m_pHighPosBtn->SetClickHdl( aLink2 );
@@ -2853,7 +2857,7 @@ IMPL_LINK_TYPED( SvxCharPositionPage, FitToLineHdl_Impl, Button*, pBox, void )
 
 
 
-IMPL_LINK_NOARG(SvxCharPositionPage, KerningSelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, KerningSelectHdl_Impl, ListBox&, void)
 {
     if ( m_pKerningLB->GetSelectEntryPos() > LW_NORMAL )
     {
@@ -2882,8 +2886,6 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningSelectHdl_Impl)
     }
 
     KerningModifyHdl_Impl( NULL );
-
-    return 0;
 }
 
 
@@ -3126,7 +3128,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
             m_pKerningLB->SelectEntryPos( LW_NORMAL );
         }
         //enable/disable and set min/max of the Edit
-        KerningSelectHdl_Impl(m_pKerningLB);
+        KerningSelectHdl_Impl(*m_pKerningLB);
         //the attribute value must be displayed also if it's above the maximum allowed value
         long nVal = static_cast<long>(m_pKerningMF->GetMax());
         if(nVal < nKerning)
@@ -3431,7 +3433,7 @@ void SvxCharTwoLinesPage::Initialize()
 
     m_pTwoLinesBtn->SetClickHdl( LINK( this, SvxCharTwoLinesPage, TwoLinesHdl_Impl ) );
 
-    Link<> aLink = LINK( this, SvxCharTwoLinesPage, CharacterMapHdl_Impl );
+    Link<ListBox&,void> aLink = LINK( this, SvxCharTwoLinesPage, CharacterMapHdl_Impl );
     m_pStartBracketLB->SetSelectHdl( aLink );
     m_pEndBracketLB->SetSelectHdl( aLink );
 
@@ -3512,21 +3514,20 @@ IMPL_LINK_NOARG_TYPED(SvxCharTwoLinesPage, TwoLinesHdl_Impl, Button*, void)
 
 
 
-IMPL_LINK( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox*, pBox )
+IMPL_LINK_TYPED( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox&, rBox, void )
 {
-    sal_Int32 nPos = pBox->GetSelectEntryPos();
-    if ( CHRDLG_ENCLOSE_SPECIAL_CHAR == reinterpret_cast<sal_uLong>(pBox->GetEntryData( nPos )) )
-        SelectCharacter( pBox );
+    sal_Int32 nPos = rBox.GetSelectEntryPos();
+    if ( CHRDLG_ENCLOSE_SPECIAL_CHAR == reinterpret_cast<sal_uLong>(rBox.GetEntryData( nPos )) )
+        SelectCharacter( &rBox );
     else
     {
-        bool bStart = pBox == m_pStartBracketLB;
+        bool bStart = &rBox == m_pStartBracketLB;
         if( bStart )
             m_nStartBracketPosition = nPos;
         else
             m_nEndBracketPosition = nPos;
     }
     UpdatePreview_Impl();
-    return 0;
 }
 
 

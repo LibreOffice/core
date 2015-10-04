@@ -133,12 +133,12 @@ private:
     void                ResetFromWallpaperItem( const SfxItemSet& rSet );
 
     DECL_LINK_TYPED( LoadIdleHdl_Impl, Idle*, void );
-    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK_TYPED(SelectHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED(BrowseHdl_Impl, Button*, void);
     DECL_LINK_TYPED( RadioClickHdl_Impl, Button*, void );
     DECL_LINK_TYPED( FileClickHdl_Impl, Button*, void );
     DECL_LINK_TYPED(BackgroundColorHdl_Impl, ValueSet*, void);
-    DECL_LINK( TblDestinationHdl_Impl, ListBox* );
+    DECL_LINK_TYPED( TblDestinationHdl_Impl, ListBox&, void );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX

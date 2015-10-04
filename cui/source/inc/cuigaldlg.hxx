@@ -282,7 +282,7 @@ class TPGalleryThemeProperties : public SfxTabPage
                         DECL_LINK_TYPED( ClickSearchHdl, Button*, void );
                         DECL_LINK_TYPED( ClickTakeHdl, Button*, void );
                         DECL_LINK_TYPED( ClickTakeAllHdl, Button*, void );
-                        DECL_LINK( SelectFoundHdl, void* );
+                        DECL_LINK_TYPED( SelectFoundHdl, ListBox&, void );
                         DECL_LINK( SelectFileTypeHdl, void* );
                         DECL_LINK_TYPED( DClickFoundHdl, ListBox&, void );
                         DECL_LINK_TYPED( PreviewTimerHdl, Timer*, void );

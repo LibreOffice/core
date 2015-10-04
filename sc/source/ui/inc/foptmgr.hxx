@@ -78,7 +78,7 @@ private:
 
     // Handler:
     DECL_LINK( EdAreaModifyHdl,     Edit* );
-    DECL_LINK( LbAreaSelHdl,        ListBox* );
+    DECL_LINK_TYPED( LbAreaSelHdl,        ListBox&, void );
     DECL_LINK_TYPED( BtnCopyResultHdl,    CheckBox&, void );
 };
 

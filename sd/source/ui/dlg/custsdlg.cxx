@@ -58,7 +58,7 @@ SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,
     m_pBtnRemove->SetClickHdl( aLink );
     m_pBtnCopy->SetClickHdl( aLink );
     m_pCbxUseCustomShow->SetClickHdl( aLink );
-    m_pLbCustomShows->SetSelectHdl( LINK( this, SdCustomShowDlg, SelectHdl ) );
+    m_pLbCustomShows->SetSelectHdl( LINK( this, SdCustomShowDlg, SelectListBoxHdl ) );
 
     m_pBtnStartShow->SetClickHdl( LINK( this, SdCustomShowDlg, StartShowHdl ) ); // for test
 
@@ -121,10 +121,12 @@ IMPL_LINK_TYPED( SdCustomShowDlg, ClickButtonHdl, Button *, p, void )
 {
     SelectHdl(p);
 }
-/**
- * ButtonHdl()
- */
-IMPL_LINK( SdCustomShowDlg, SelectHdl, void *, p )
+IMPL_LINK_TYPED( SdCustomShowDlg, SelectListBoxHdl, ListBox&, rListBox, void )
+{
+    SelectHdl(&rListBox);
+}
+
+void SdCustomShowDlg::SelectHdl(void *p)
 {
     // new CustomShow
     if( p == m_pBtnNew )
@@ -261,8 +263,6 @@ IMPL_LINK( SdCustomShowDlg, SelectHdl, void *, p )
     }
 
     CheckState();
-
-    return 0L;
 }
 
 // StartShow-Hdl
@@ -295,11 +295,10 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
     get( m_pBtnHelp, "help" );
 
     Link<Button*,void> aLink = LINK( this, SdDefineCustomShowDlg, ClickButtonHdl );
-    Link<> aLink2= LINK( this, SdDefineCustomShowDlg, ClickButtonHdl2 );
     m_pBtnAdd->SetClickHdl( aLink );
     m_pBtnRemove->SetClickHdl( aLink );
-    m_pEdtName->SetModifyHdl( aLink2 );
-    m_pLbPages->SetSelectHdl( aLink2 ); // because of status
+    m_pEdtName->SetModifyHdl( LINK( this, SdDefineCustomShowDlg, ClickButtonHdl2 ) );
+    m_pLbPages->SetSelectHdl( LINK( this, SdDefineCustomShowDlg, ClickButtonHdl4 ) ); // because of status
     m_pLbCustomPages->SetSelectHdl( LINK( this, SdDefineCustomShowDlg, ClickButtonHdl3 ) ); // because of status
 
     m_pBtnOK->SetClickHdl( LINK( this, SdDefineCustomShowDlg, OKHdl ) );
@@ -390,6 +389,10 @@ IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonHdl, Button*, p, void )
 IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonHdl3, SvTreeListBox*, p, void )
 {
     ClickButtonHdl2(p);
+}
+IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonHdl4, ListBox&, rListBox, void )
+{
+    ClickButtonHdl2(&rListBox);
 }
 // ButtonHdl()
 IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl2, void *, p )

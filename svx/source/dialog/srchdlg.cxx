@@ -1104,10 +1104,9 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 
 
 
-IMPL_LINK( SvxSearchDialog, LBSelectHdl_Impl, Control *, pCtrl )
+IMPL_LINK_TYPED( SvxSearchDialog, LBSelectHdl_Impl, ListBox&, rCtrl, void )
 {
-    ClickHdl_Impl(pCtrl);
-    return 0;
+    ClickHdl_Impl(&rCtrl);
 }
 
 IMPL_LINK_TYPED( SvxSearchDialog, FlagHdl_Impl, Button *, pCtrl, void )

@@ -236,7 +236,7 @@ void ScCondFormatList::DoScroll(long nDelta)
     mpScrollBar->SetPosPixel(aNewPoint);
 }
 
-IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
 {
     EntryContainer::iterator itr = maEntries.begin();
     for(; itr != maEntries.end(); ++itr)
@@ -245,35 +245,35 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
             break;
     }
     if(itr == maEntries.end())
-        return 0;
+        return;
 
-    sal_Int32 nPos = pBox->GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectEntryPos();
     switch(nPos)
     {
         case 0:
             if((*itr)->GetType() == condformat::entry::COLORSCALE2)
-                return 0;
+                return;
 
             itr->disposeAndClear();
             *itr = VclPtr<ScColorScale2FrmtEntry>::Create( this, mpDoc, maPos );
             break;
         case 1:
             if((*itr)->GetType() == condformat::entry::COLORSCALE3)
-                return 0;
+                return;
 
             itr->disposeAndClear();
             *itr = VclPtr<ScColorScale3FrmtEntry>::Create( this, mpDoc, maPos );
             break;
         case 2:
             if((*itr)->GetType() == condformat::entry::DATABAR)
-                return 0;
+                return;
 
             itr->disposeAndClear();
             *itr = VclPtr<ScDataBarFrmtEntry>::Create( this, mpDoc, maPos );
             break;
         case 3:
             if((*itr)->GetType() == condformat::entry::ICONSET)
-                return 0;
+                return;
 
             itr->disposeAndClear();
             *itr = VclPtr<ScIconSetFrmtEntry>::Create( this, mpDoc, maPos );
@@ -284,17 +284,15 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
     mpDialogParent->InvalidateRefData();
     (*itr)->SetActive();
     RecalcAll();
-    return 0;
 }
 
-IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(ScCondFormatList, TypeListHdl, ListBox&, rBox, void)
 {
     //Resolves: fdo#79021 At this point we are still inside the ListBox Select.
     //If we call maEntries.replace here then the pBox will be deleted before it
     //has finished Select and will crash on accessing its deleted this. So Post
     //to do the real work after the Select has completed
-    Application::PostUserEvent(LINK(this, ScCondFormatList, AfterTypeListHdl), pBox, true);
-    return 0;
+    Application::PostUserEvent(LINK(this, ScCondFormatList, AfterTypeListHdl), &rBox, true);
 }
 
 IMPL_LINK_TYPED(ScCondFormatList, AfterTypeListHdl, void*, p, void)

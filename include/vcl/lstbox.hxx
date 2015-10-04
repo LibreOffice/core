@@ -44,7 +44,7 @@ private:
     sal_uInt16                  mnDDHeight;
     sal_Int32                   mnSaveValue;
     sal_Int32                   m_nMaxWidthChars;
-    Link<>                      maSelectHdl;
+    Link<ListBox&,void>          maSelectHdl;
     Link<ListBox&,void>         maDoubleClickHdl;
     sal_uInt16                  mnLineCount;
 
@@ -191,8 +191,8 @@ public:
 
     void                DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false );
 
-    void                SetSelectHdl( const Link<>& rLink )     { maSelectHdl = rLink; }
-    const Link<>&       GetSelectHdl() const                    { return maSelectHdl; }
+    void                SetSelectHdl( const Link<ListBox&,void>& rLink )     { maSelectHdl = rLink; }
+    const Link<ListBox&,void>& GetSelectHdl() const                    { return maSelectHdl; }
     void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink ) { maDoubleClickHdl = rLink; }
     const Link<ListBox&,void>& GetDoubleClickHdl() const               { return maDoubleClickHdl; }
 

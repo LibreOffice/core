@@ -308,13 +308,11 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     m_pFormattingLB->SetDropDownLineCount( m_pFormattingLB->GetEntryCount() );
 }
 
-IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SwCompatibilityOptPage, SelectHdl, ListBox&, void)
 {
     const sal_Int32 nPos = m_pFormattingLB->GetSelectEntryPos();
     sal_uLong nOptions = reinterpret_cast<sal_uLong>(m_pFormattingLB->GetEntryData( nPos ));
     SetCurrentOptions( nOptions );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwCompatibilityOptPage, UseAsDefaultHdl, Button*, void)

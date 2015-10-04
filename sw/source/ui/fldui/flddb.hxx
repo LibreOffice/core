@@ -52,13 +52,14 @@ class SwFieldDBPage : public SwFieldPage
     OUString            m_sOldColumnName;
     sal_uLong           m_nOldFormat;
     sal_uInt16          m_nOldSubType;
-    Link<>              m_aOldNumSelectHdl;
+    Link<ListBox&,void> m_aOldNumSelectHdl;
 
-    DECL_LINK( TypeHdl, ListBox* );
-    DECL_LINK( NumSelectHdl, NumFormatListBox* );
+    DECL_LINK_TYPED( TypeListBoxHdl, ListBox&, void );
+    DECL_LINK_TYPED( NumSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( TreeSelectHdl, SvTreeListBox*, void );
     DECL_LINK(ModifyHdl, void *);
     DECL_LINK_TYPED(AddDBHdl, Button*, void);
+    void TypeHdl(ListBox*);
 
     void                CheckInsert();
 

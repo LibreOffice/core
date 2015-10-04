@@ -483,19 +483,19 @@ IMPL_LINK_TYPED( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( ScConsolidateDlg, SelectHdl, ListBox&, rLb, void )
 {
-    if ( pLb == pLbConsAreas )
+    if ( &rLb == pLbConsAreas )
     {
         if ( pLbConsAreas->GetSelectEntryCount() > 0 )
             pBtnRemove->Enable();
         else
             pBtnRemove->Disable();
     }
-    else if ( (pLb == pLbDataArea) || (pLb == pLbDestArea) )
+    else if ( (&rLb == pLbDataArea) || (&rLb == pLbDestArea) )
     {
-        Edit*   pEd = (pLb == pLbDataArea) ? pEdDataArea : pEdDestArea;
-        const sal_Int32 nSelPos = pLb->GetSelectEntryPos();
+        Edit*   pEd = (&rLb == pLbDataArea) ? pEdDataArea : pEdDestArea;
+        const sal_Int32 nSelPos = rLb.GetSelectEntryPos();
 
         if (    pRangeUtil
             && (nSelPos > 0)
@@ -506,7 +506,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
             {
                 OUString aString( pAreaData[nSelPos-1].aStrArea );
 
-                if ( pLb == pLbDestArea )
+                if ( &rLb == pLbDestArea )
                     ScRangeUtil::CutPosString( aString, aString );
 
                 pEd->SetText( aString );
@@ -522,7 +522,6 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
                 pBtnAdd->Enable();
         }
     }
-    return 0;
 }
 
 IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )

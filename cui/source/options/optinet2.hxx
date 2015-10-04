@@ -95,7 +95,7 @@ private:
     void ReadConfigDefaults_Impl();
     void RestoreConfigDefaults_Impl();
 
-    DECL_LINK( ProxyHdl_Impl, ListBox * );
+    DECL_LINK_TYPED( ProxyHdl_Impl, ListBox&, void );
     DECL_STATIC_LINK_TYPED( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, void );
 
 public:

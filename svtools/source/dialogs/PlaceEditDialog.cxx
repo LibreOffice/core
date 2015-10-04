@@ -102,7 +102,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
             }
 
             m_pLBServerType->SelectEntryPos( i );
-            SelectTypeHdl( m_pLBServerType );
+            SelectTypeHdl( *m_pLBServerType );
         }
     }
 
@@ -210,7 +210,7 @@ void PlaceEditDialog::InitDetails( )
     if ( m_pLBServerType->GetSelectEntry() == "--------------------" )
         m_pLBServerType->SelectEntryPos( 1 );
 
-    SelectTypeHdl( m_pLBServerType );
+    SelectTypeHdl( *m_pLBServerType );
 }
 
 void PlaceEditDialog::UpdateLabel( )
@@ -317,7 +317,7 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl )
     return 1;
 }
 
-IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
+IMPL_LINK_NOARG_TYPED( PlaceEditDialog, SelectTypeHdl, ListBox&, void )
 {
     if ( m_pLBServerType->GetSelectEntry() == "--------------------" )
     {
@@ -326,7 +326,7 @@ IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
         else
             m_pLBServerType->SetNoSelection();
 
-        return 0;
+        return;
     }
 
     if (m_xCurrentDetails.get())
@@ -345,8 +345,6 @@ IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
     SetSizePixel(GetOptimalSize());
 
     EditHdl(NULL);
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

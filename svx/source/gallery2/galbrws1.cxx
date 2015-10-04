@@ -311,7 +311,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
         if ( bCreateNew )
         {
             mpThemes->SelectEntry( mpExchangeData->pTheme->GetName() );
-            SelectThemeHdl( NULL );
+            SelectThemeHdl( *mpThemes );
         }
     }
 
@@ -472,7 +472,7 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
             if( nCurSelectPos == nRenameEntryPos )
             {
                 mpThemes->SelectEntry( rGalleryHint.GetStringData() );
-                SelectThemeHdl( NULL );
+                SelectThemeHdl( *mpThemes );
             }
         }
         break;
@@ -497,7 +497,7 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 else
                     mpThemes->SetNoSelection();
 
-                SelectThemeHdl( NULL );
+                SelectThemeHdl( *mpThemes );
             }
         }
         break;
@@ -614,11 +614,10 @@ IMPL_LINK_TYPED( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu, bool )
     return false;
 }
 
-IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl)
+IMPL_LINK_NOARG_TYPED(GalleryBrowser1, SelectThemeHdl, ListBox&, void)
 {
     if (maThemeSlectionHandler)
         maThemeSlectionHandler();
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED(GalleryBrowser1, ClickNewThemeHdl, Button*, void)

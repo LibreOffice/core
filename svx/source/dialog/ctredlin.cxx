@@ -586,8 +586,8 @@ SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
     Link<> a3Link=LINK( this, SvxTPFilter, ModifyHdl);
     m_pEdRange->SetModifyHdl(a3Link);
     m_pEdComment->SetModifyHdl(a3Link);
-    m_pLbAction->SetSelectHdl(a3Link);
-    m_pLbAuthor->SetSelectHdl(a3Link);
+    m_pLbAction->SetSelectHdl(LINK( this, SvxTPFilter, ModifyListBoxHdl));
+    m_pLbAuthor->SetSelectHdl(LINK( this, SvxTPFilter, ModifyListBoxHdl));
 
     RowEnableHdl(m_pCbDate);
     RowEnableHdl(m_pCbAuthor);
@@ -756,7 +756,7 @@ void SvxTPFilter::SetLastTime(const tools::Time &aTime)
 void SvxTPFilter::SetDateMode(sal_uInt16 nMode)
 {
     m_pLbDate->SelectEntryPos(nMode);
-    SelDateHdl(m_pLbDate);
+    SelDateHdl(*m_pLbDate);
 }
 
 SvxRedlinDateMode SvxTPFilter::GetDateMode()
@@ -907,11 +907,10 @@ void SvxTPFilter::ShowAction(bool bShow)
 }
 
 
-IMPL_LINK( SvxTPFilter, SelDateHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( SvxTPFilter, SelDateHdl, ListBox&, rLb, void )
 {
     ShowDateFields(static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectEntryPos()));
-    ModifyHdl(pLb);
-    return 0;
+    ModifyHdl(&rLb);
 }
 
 IMPL_LINK_TYPED( SvxTPFilter, RowEnableHdl, Button*, pButton, void )
@@ -923,7 +922,7 @@ IMPL_LINK_TYPED( SvxTPFilter, RowEnableHdl, Button*, pButton, void )
         m_pLbDate->Invalidate();
         EnableDateLine1(false);
         EnableDateLine2(false);
-        if(m_pCbDate->IsChecked()) SelDateHdl(m_pLbDate);
+        if(m_pCbDate->IsChecked()) SelDateHdl(*m_pLbDate);
     }
     else if (pCB == m_pCbAuthor)
     {
@@ -974,6 +973,10 @@ IMPL_LINK( SvxTPFilter, ModifyHdl, void*, pCtr)
         bModified=true;
     }
     return 0;
+}
+IMPL_LINK_NOARG_TYPED( SvxTPFilter, ModifyListBoxHdl, ListBox&, void)
+{
+    bModified=true;
 }
 
 void SvxTPFilter::DeactivatePage()

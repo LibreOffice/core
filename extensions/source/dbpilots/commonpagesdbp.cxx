@@ -213,7 +213,7 @@ namespace dbp
             sDataSourceName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
             m_pDatasource->InsertEntry(sDataSourceName);
             m_pDatasource->SelectEntry(sDataSourceName);
-            LINK(this, OTableSelectionPage, OnListboxSelection).Call(m_pDatasource);
+            LINK(this, OTableSelectionPage, OnListboxSelection).Call(*m_pDatasource);
         }
     }
 
@@ -224,16 +224,14 @@ namespace dbp
     }
 
 
-    IMPL_LINK( OTableSelectionPage, OnListboxSelection, ListBox*, _pBox )
+    IMPL_LINK_TYPED( OTableSelectionPage, OnListboxSelection, ListBox&, _rBox, void )
     {
-        if (m_pDatasource == _pBox)
+        if (m_pDatasource == &_rBox)
         {   // new data source selected
             implFillTables();
         }
 
         updateDialogTravelUI();
-
-        return 0L;
     }
 
 

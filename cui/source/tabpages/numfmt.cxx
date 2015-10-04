@@ -335,15 +335,15 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pCbSourceFormat->Disable();
     m_pCbSourceFormat->Hide();
 
-    Link<> aLink = LINK( this, SvxNumberFormatTabPage, SelFormatHdl_Impl );
+    Link<ListBox&,void> aLink2 = LINK( this, SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl );
 
-    m_pLbCategory->SetSelectHdl( aLink );
-    m_pLbFormat->SetSelectHdl( LINK( this, SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl ) );
-    m_pLbLanguage->SetSelectHdl( aLink );
-    m_pLbCurrency->SetSelectHdl( aLink );
+    m_pLbCategory->SetSelectHdl( aLink2 );
+    m_pLbFormat->SetSelectHdl( LINK( this, SvxNumberFormatTabPage, SelFormatTreeListBoxHdl_Impl ) );
+    m_pLbLanguage->SetSelectHdl( aLink2 );
+    m_pLbCurrency->SetSelectHdl( aLink2 );
     m_pCbSourceFormat->SetClickHdl( LINK( this, SvxNumberFormatTabPage, SelFormatClickHdl_Impl ) );
 
-    aLink = LINK( this, SvxNumberFormatTabPage, OptHdl_Impl );
+    Link<> aLink = LINK( this, SvxNumberFormatTabPage, OptHdl_Impl );
 
     m_pEdDecimals->SetModifyHdl( aLink );
     m_pEdLeadZeroes->SetModifyHdl( aLink );
@@ -356,9 +356,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pIbInfo->SetClickHdl( HDL( ClickHdl_Impl ) );
     UpdateThousandEngineeringText();
 
-    Link<Control&,void> aLink2 = LINK( this, SvxNumberFormatTabPage, LostFocusHdl_Impl);
-
-    m_pEdComment->SetLoseFocusHdl( aLink2);
+    m_pEdComment->SetLoseFocusHdl( LINK( this, SvxNumberFormatTabPage, LostFocusHdl_Impl) );
     aResetWinTimer.SetTimeoutHdl(LINK( this, SvxNumberFormatTabPage, TimeHdl_Impl));
     aResetWinTimer.SetTimeout( 10);
 
@@ -1194,17 +1192,21 @@ IMPL_LINK_TYPED( SvxNumberFormatTabPage, SelFormatClickHdl_Impl, Button*, pLb, v
 {
     SelFormatHdl_Impl(pLb);
 }
-IMPL_LINK_TYPED( SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl, SvTreeListBox*, pLb, void )
+IMPL_LINK_TYPED( SvxNumberFormatTabPage, SelFormatTreeListBoxHdl_Impl, SvTreeListBox*, pLb, void )
 {
     SelFormatHdl_Impl(pLb);
 }
-IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
+IMPL_LINK_TYPED( SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl, ListBox&, rLb, void )
+{
+    SelFormatHdl_Impl(&rLb);
+}
+void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
 {
     if (pLb == m_pCbSourceFormat)
     {
         EnableBySourceFormat_Impl();    // enable/disable everything else
         if ( m_pCbSourceFormat->IsChecked() )
-            return 0;   // just disabled everything else
+            return;   // just disabled everything else
 
         // Reinit options enable/disable for current selection.
 
@@ -1280,7 +1282,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         }
         UpdateOptions_Impl( false );
 
-        return 0;
+        return;
     }
 
 
@@ -1291,7 +1293,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         EditHdl_Impl( NULL );
         UpdateOptions_Impl( false );
 
-        return 0;
+        return;
     }
 
 
@@ -1301,9 +1303,8 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         UpdateFormatListBox_Impl( false, true );
         EditHdl_Impl(m_pEdFormat);
 
-        return 0;
+        return;
     }
-    return 0;
 }
 
 

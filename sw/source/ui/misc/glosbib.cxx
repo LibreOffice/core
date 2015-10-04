@@ -73,7 +73,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
     m_pNewPB->SetClickHdl(LINK(this, SwGlossaryGroupDlg, NewHdl));
     m_pDelPB->SetClickHdl(LINK(this, SwGlossaryGroupDlg, DeleteHdl));
     m_pNameED->SetModifyHdl(LINK(this, SwGlossaryGroupDlg, ModifyHdl));
-    m_pPathLB->SetSelectHdl(LINK(this, SwGlossaryGroupDlg, ModifyHdl));
+    m_pPathLB->SetSelectHdl(LINK(this, SwGlossaryGroupDlg, ModifyListBoxHdl));
     m_pRenamePB->SetClickHdl(LINK(this, SwGlossaryGroupDlg, RenameHdl));
 
     for (size_t i = 0; i < rPathArr.size(); ++i)
@@ -320,6 +320,10 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, RenameHdl, Button*, void)
     m_pGroupTLB->GetModel()->Resort();
 }
 
+IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, ModifyListBoxHdl, ListBox&, void)
+{
+    ModifyHdl(0);
+}
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
 {
     OUString sEntry(m_pNameED->GetText());

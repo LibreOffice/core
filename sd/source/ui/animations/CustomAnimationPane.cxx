@@ -190,8 +190,8 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     mpPBAddEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpPBChangeEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpPBRemoveEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
-    mpLBStart->SetSelectHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-    mpCBSpeed->SetSelectHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
+    mpLBStart->SetSelectHdl( LINK( this, CustomAnimationPane, implControlListBoxHdl ) );
+    mpCBSpeed->SetSelectHdl( LINK( this, CustomAnimationPane, implControlListBoxHdl ) );
     mpPBPropertyMore->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpPBMoveUp->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpPBMoveDown->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
@@ -2020,9 +2020,13 @@ IMPL_LINK_TYPED( CustomAnimationPane, implClickHdl, Button*, pBtn, void )
 {
     implControlHdl(pBtn);
 }
+IMPL_LINK_TYPED( CustomAnimationPane, implControlListBoxHdl, ListBox&, rListBox, void )
+{
+    implControlHdl(&rListBox);
+}
 
 /// this link is called when one of the controls is modified
-IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
+void CustomAnimationPane::implControlHdl(Control* pControl )
 {
     if( pControl == mpPBAddEffect )
         onChange(true);
@@ -2049,8 +2053,6 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
     }
 
     updateControls();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, lateInitCallback, Timer *, void)

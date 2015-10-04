@@ -128,7 +128,7 @@ SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rI
     m_pMtrFldLine1->SetModifyHdl( aLink );
     m_pMtrFldLine2->SetModifyHdl( aLink );
     m_pMtrFldLine3->SetModifyHdl( aLink );
-    m_pLbType->SetSelectHdl( aLink );
+    m_pLbType->SetSelectHdl( LINK( this, SvxConnectionPage, ChangeAttrListBoxHdl_Impl ) );
 }
 
 SvxConnectionPage::~SvxConnectionPage()
@@ -396,6 +396,10 @@ VclPtr<SfxTabPage> SvxConnectionPage::Create( vcl::Window* pWindow,
     return VclPtr<SvxConnectionPage>::Create( pWindow, *rAttrs );
 }
 
+IMPL_LINK_TYPED( SvxConnectionPage, ChangeAttrListBoxHdl_Impl, ListBox&, r, void )
+{
+    ChangeAttrHdl_Impl(&r);
+}
 IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
 {
     if( p == m_pMtrFldHorz1 )

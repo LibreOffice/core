@@ -291,10 +291,10 @@ void ThreeD_SceneAppearance_TabPage::updateScheme()
     }
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, ListBox&, void)
 {
     if( !m_bUpdateOtherControls )
-        return 0;
+        return;
 
     {
         // locked controllers
@@ -314,7 +314,6 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl)
 
     // update other controls
     initControlsFromModel();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ThreeD_SceneAppearance_TabPage, SelectShading, CheckBox&, void)

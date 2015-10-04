@@ -43,8 +43,8 @@ public:
     DECL_LINK( EditModifiedHdl, Edit * );
     DECL_STATIC_LINK_TYPED( ScCalcOptionsDialog, TestClickHdl, Button*, void );
     DECL_LINK_TYPED( AsZeroModifiedHdl, Button*, void);
-    DECL_LINK( ConversionModifiedHdl, ListBox*);
-    DECL_LINK( SyntaxModifiedHdl, ListBox*);
+    DECL_LINK_TYPED( ConversionModifiedHdl, ListBox&, void);
+    DECL_LINK_TYPED( SyntaxModifiedHdl, ListBox&, void);
     DECL_LINK_TYPED( CBUseOpenCLHdl, Button*, void);
     DECL_LINK( SpinOpenCLMinSizeHdl, NumericField*);
 

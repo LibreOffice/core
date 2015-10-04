@@ -209,9 +209,9 @@ bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 
 // Handler:
 
-IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( ScFilterOptionsMgr, LbAreaSelHdl, ListBox&, rLb, void )
 {
-    if ( pLb == pLbCopyArea )
+    if ( &rLb == pLbCopyArea )
     {
         OUString aString;
         const sal_Int32 nSelPos = pLbCopyArea->GetSelectEntryPos();
@@ -221,8 +221,6 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
 
         pEdCopyArea->SetText( aString );
     }
-
-    return 0;
 }
 
 IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )

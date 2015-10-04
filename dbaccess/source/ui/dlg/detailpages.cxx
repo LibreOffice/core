@@ -90,8 +90,13 @@ namespace dbaui
             m_pCharsetLabel->Show();
             m_pCharset = get<CharSetListBox>("charset");
             m_pCharset->Show();
-            m_pCharset->SetSelectHdl(getControlModifiedLink());
+            m_pCharset->SetSelectHdl(LINK(this, OCommonBehaviourTabPage, CharsetSelectHdl));
         }
+    }
+
+    IMPL_LINK_TYPED(OCommonBehaviourTabPage, CharsetSelectHdl, ListBox&, rListBox, void)
+    {
+        getControlModifiedLink().Call(&rListBox);
     }
 
     OCommonBehaviourTabPage::~OCommonBehaviourTabPage()

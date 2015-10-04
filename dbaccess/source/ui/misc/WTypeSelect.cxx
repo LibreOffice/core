@@ -281,7 +281,7 @@ OUString OWizTypeSelect::GetTitle() const
     return ModuleRes(STR_WIZ_TYPE_SELECT_TITEL);
 }
 
-IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
+IMPL_LINK_NOARG_TYPED( OWizTypeSelect, ColumnSelectHdl, ListBox&, void )
 {
     OUString aColumnName( m_pColumnNames->GetSelectEntry() );
 
@@ -290,7 +290,6 @@ IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
         m_pTypeControl->DisplayData(pField);
 
     m_pTypeControl->Enable(m_pColumnNames->GetSelectEntryCount() == 1 );
-    return 0;
 }
 
 void OWizTypeSelect::Reset()
@@ -324,7 +323,7 @@ void OWizTypeSelect::ActivatePage( )
 
     m_pColumnNames->SelectEntryPos(static_cast<sal_uInt16>(m_nDisplayRow));
     m_nDisplayRow = 0;
-    m_pColumnNames->GetSelectHdl().Call(m_pColumnNames);
+    m_pColumnNames->GetSelectHdl().Call(*m_pColumnNames);
 }
 
 bool OWizTypeSelect::LeavePage()
@@ -444,7 +443,7 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
                             }
                         }
                     }
-                    GetSelectHdl().Call(this);
+                    GetSelectHdl().Call(*this);
                 }
                 break;
             }

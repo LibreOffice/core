@@ -65,7 +65,7 @@ private:
     FieldUnit           eFUnit;
     SfxMapUnit          eUnit;
 
-    DECL_LINK( SelectEffectHdl_Impl, void * );
+    DECL_LINK_TYPED( SelectEffectHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ClickEndlessHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickAutoHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickPixelHdl_Impl, Button*, void );

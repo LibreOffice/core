@@ -519,7 +519,7 @@ bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
             break;
             case KEY_TAB:
                 bRelease = false;
-                GetSelectHdl().Call( this );
+                GetSelectHdl().Call( *this );
                 bRelease = true;
             break;
             case KEY_ESCAPE:

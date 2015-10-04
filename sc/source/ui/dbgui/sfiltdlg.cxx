@@ -425,9 +425,9 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle, void )
     pIdle->Start();
 }
 
-IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox&, rLb, void )
 {
-    if ( pLb == pLbFilterArea )
+    if ( &rLb == pLbFilterArea )
     {
         OUString  aString;
         const sal_Int32 nSelPos = pLbFilterArea->GetSelectEntryPos();
@@ -437,8 +437,6 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 
         pEdFilterArea->SetText( aString );
     }
-
-    return 0;
 }
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )

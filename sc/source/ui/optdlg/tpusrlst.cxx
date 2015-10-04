@@ -457,9 +457,9 @@ void ScTpUserLists::RemoveList( size_t nList )
 
 // Handler:
 
-IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( ScTpUserLists, LbSelectHdl, ListBox&, rLb, void )
 {
-    if ( pLb == mpLbLists )
+    if ( &rLb == mpLbLists )
     {
         sal_Int32 nSelPos = mpLbLists->GetSelectEntryPos();
         if ( nSelPos != LISTBOX_ENTRY_NOTFOUND )
@@ -476,8 +476,6 @@ IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
             UpdateEntries( nSelPos );
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
@@ -515,7 +513,7 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
             if ( mpLbLists->GetEntryCount() > 0 )
             {
                 mpLbLists->SelectEntryPos( nCancelPos );
-                LbSelectHdl( mpLbLists );
+                LbSelectHdl( *mpLbLists.get() );
                 mpFtLists->Enable();
                 mpLbLists->Enable();
             }
@@ -552,7 +550,7 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
                 AddNewList( theEntriesStr );
                 UpdateUserListBox();
                 mpLbLists->SelectEntryPos( mpLbLists->GetEntryCount()-1 );
-                LbSelectHdl( mpLbLists );
+                LbSelectHdl( *mpLbLists.get() );
                 mpFtLists->Enable();
                 mpLbLists->Enable();
             }
@@ -561,7 +559,7 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
                 if ( mpLbLists->GetEntryCount() > 0 )
                 {
                     mpLbLists->SelectEntryPos( nCancelPos );
-                    LbSelectHdl( mpLbLists );
+                    LbSelectHdl( *mpLbLists.get() );
                     mpLbLists->Enable();
                     mpLbLists->Enable();
                 }
@@ -589,7 +587,7 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
             else
             {
                 mpLbLists->SelectEntryPos( 0 );
-                LbSelectHdl( mpLbLists );
+                LbSelectHdl( *mpLbLists.get() );
             }
 
             mpBtnNew->Show();
@@ -636,7 +634,7 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
                         ( nRemovePos >= mpLbLists->GetEntryCount() )
                             ? mpLbLists->GetEntryCount()-1
                             : nRemovePos );
-                    LbSelectHdl( mpLbLists );
+                    LbSelectHdl( *mpLbLists.get() );
                 }
                 else
                 {
@@ -693,7 +691,7 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
             CopyListFromArea( theStartPos, theEndPos );
             UpdateUserListBox();
             mpLbLists->SelectEntryPos( mpLbLists->GetEntryCount()-1 );
-            LbSelectHdl( mpLbLists );
+            LbSelectHdl( *mpLbLists.get() );
             mpEdCopyFrom->SetText( theAreaStr );
             mpEdCopyFrom->Disable();
             mpBtnCopy->Disable();

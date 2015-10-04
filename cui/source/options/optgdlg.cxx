@@ -1473,7 +1473,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     // let LocaleSettingHdl enable/disable checkboxes for CJK/CTL support
     // #i15812# must be done *before* the configured currency is set
     // and update the decimal separator used for the given locale
-    LocaleSettingHdl(m_pLocaleSettingLB);
+    LocaleSettingHdl(*m_pLocaleSettingLB);
 
     // configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default
     OUString aAbbrev;
@@ -1651,8 +1651,9 @@ namespace
     }
 }
 
-IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
+IMPL_LINK_TYPED( OfaLanguagesTabPage, LocaleSettingHdl, ListBox&, rListBox, void )
 {
+    SvxLanguageBox* pBox = static_cast<SvxLanguageBox*>(&rListBox);
     LanguageType eLang = pBox->GetSelectLanguage();
     SvtScriptType nType = SvtLanguageOptions::GetScriptTypeOfLanguage(eLang);
     // first check if CTL must be enabled
@@ -1697,8 +1698,6 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     OUString aDatePatternsString = lcl_getDatePatternsConfigString( aLocaleWrapper);
     m_bDatePatternsValid = true;
     m_pDatePatternsED->SetText( aDatePatternsString);
-
-    return 0;
 }
 
 IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )

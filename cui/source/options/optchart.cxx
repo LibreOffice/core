@@ -115,7 +115,7 @@ void SvxDefaultColorOptPage::Construct()
     FillColorBox();
 
     m_pLbChartColors->SelectEntryPos( 0 );
-    ListClickedHdl(m_pLbChartColors);
+    ListClickedHdl(*m_pLbChartColors);
 }
 
 
@@ -135,7 +135,7 @@ bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet* rOutAttrs )
 void SvxDefaultColorOptPage::Reset( const SfxItemSet* )
 {
     m_pLbChartColors->SelectEntryPos( 0 );
-    ListClickedHdl(m_pLbChartColors);
+    ListClickedHdl(*m_pLbChartColors);
 }
 
 void SvxDefaultColorOptPage::FillColorBox()
@@ -247,9 +247,9 @@ IMPL_LINK_TYPED( SvxDefaultColorOptPage, RemoveChartColor, Button*, pButton, voi
     }
 }
 
-IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ColorLB*, _pColorList )
+IMPL_LINK_TYPED( SvxDefaultColorOptPage, ListClickedHdl, ListBox&, _rBox, void )
 {
-    Color aCol = _pColorList->GetSelectEntryColor();
+    Color aCol = static_cast<ColorLB&>(_rBox).GetSelectEntryColor();
 
     long nIndex = GetColorIndex( aCol );
 
@@ -257,8 +257,6 @@ IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ColorLB*, _pColorList )
         m_pValSetColorBox->SetNoSelection();
     else
         m_pValSetColorBox->SelectItem( nIndex + 1 );       // ValueSet is 1-based
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, void)

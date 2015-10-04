@@ -221,7 +221,7 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 /**
  * enables and selects end color LB
  */
-IMPL_LINK_NOARG(CopyDlg, SelectColorHdl)
+IMPL_LINK_NOARG_TYPED(CopyDlg, SelectColorHdl, ListBox&, void)
 {
     sal_Int32 nPos = m_pLbStartColor->GetSelectEntryPos();
 
@@ -232,7 +232,6 @@ IMPL_LINK_NOARG(CopyDlg, SelectColorHdl)
         m_pLbEndColor->Enable();
         m_pFtEndColor->Enable();
     }
-    return 0;
 }
 
 /**

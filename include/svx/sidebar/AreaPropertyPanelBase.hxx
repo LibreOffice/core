@@ -159,9 +159,9 @@ protected:
 
     sfx2::sidebar::SidebarController* mpSidebarController;
 
-    DECL_LINK(SelectFillTypeHdl, ListBox* );
-    DECL_LINK(SelectFillAttrHdl, ListBox* );
-    DECL_LINK(ChangeTrgrTypeHdl_Impl, void*);
+    DECL_LINK_TYPED(SelectFillTypeHdl, ListBox&, void );
+    DECL_LINK_TYPED(SelectFillAttrHdl, ListBox&, void );
+    DECL_LINK_TYPED(ChangeTrgrTypeHdl_Impl, ListBox&, void);
     DECL_LINK(ModifyTransparentHdl_Impl, void*);
     DECL_LINK_TYPED(ModifyTransSliderHdl, Slider*, void);
 

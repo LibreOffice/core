@@ -401,7 +401,7 @@ void ScTPValidationValue::Init()
     m_pLbAllow->SelectEntryPos( SC_VALIDDLG_ALLOW_ANY );
     m_pLbValue->SelectEntryPos( SC_VALIDDLG_DATA_EQUAL );
 
-    SelectHdl( NULL );
+    SelectHdl( *m_pLbAllow.get() );
     CheckHdl( NULL );
 }
 
@@ -449,7 +449,7 @@ void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetSecondFormula( aFmlaStr );
 
-    SelectHdl( NULL );
+    SelectHdl( *m_pLbAllow.get() );
     CheckHdl( NULL );
 }
 
@@ -598,7 +598,7 @@ IMPL_LINK_TYPED( ScTPValidationValue, KillFocusHdl, Control&, rControl, void )
                 }
 }
 
-IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
+IMPL_LINK_NOARG_TYPED(ScTPValidationValue, SelectHdl, ListBox&, void)
 {
     const sal_Int32 nLbPos = m_pLbAllow->GetSelectEntryPos();
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
@@ -657,7 +657,6 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
     m_pEdMax->Show( bShowMax );
     m_pFtHint->Show( bRange );
     m_pBtnRef->Show( bRange );  // cell range picker
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScTPValidationValue, CheckHdl, Button*, void)
@@ -779,7 +778,7 @@ void ScTPValidationError::Init()
     m_pLbAction->SelectEntryPos( 0 );
     m_pTsbShow->EnableTriState( false );
 
-    SelectActionHdl( NULL );
+    SelectActionHdl( *m_pLbAction.get() );
 }
 
 VclPtr<SfxTabPage> ScTPValidationError::Create( vcl::Window*    pParent,
@@ -812,7 +811,7 @@ void ScTPValidationError::Reset( const SfxItemSet* rArgSet )
     else
         m_pEdError->SetText( EMPTY_OUSTRING );
 
-    SelectActionHdl( NULL );
+    SelectActionHdl( *m_pLbAction.get() );
 }
 
 bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
@@ -825,7 +824,7 @@ bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
     return true;
 }
 
-IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
+IMPL_LINK_NOARG_TYPED(ScTPValidationError, SelectActionHdl, ListBox&, void)
 {
     ScValidErrorStyle eStyle = (ScValidErrorStyle) m_pLbAction->GetSelectEntryPos();
     bool bMacro = ( eStyle == SC_VALERR_MACRO );
@@ -833,8 +832,6 @@ IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
     m_pBtnSearch->Enable( bMacro );
     m_pFtError->Enable( !bMacro );
     m_pEdError->Enable( !bMacro );
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED(ScTPValidationError, ClickSearchHdl, Button*, void)

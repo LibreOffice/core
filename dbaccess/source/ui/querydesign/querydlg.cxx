@@ -153,10 +153,10 @@ void DlgQryJoin::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
+IMPL_LINK_NOARG_TYPED( DlgQryJoin, LBChangeHdl, ListBox&, void )
 {
     if (m_pLB_JoinType->GetSelectEntryPos() == m_pLB_JoinType->GetSavedValue() )
-        return 1;
+        return;
 
     m_pLB_JoinType->SaveValue();
     m_pML_HelpText->SetText(OUString());
@@ -237,7 +237,6 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     }
 
     m_pML_HelpText->SetText( sHelpText );
-    return 1;
 }
 
 IMPL_LINK_NOARG_TYPED( DlgQryJoin, OKClickHdl, Button*, void )
@@ -325,7 +324,7 @@ void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
         }
     }
 
-    LBChangeHdl(m_pLB_JoinType);
+    LBChangeHdl(*m_pLB_JoinType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

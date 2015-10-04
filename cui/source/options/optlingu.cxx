@@ -1901,7 +1901,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rD
     if(!m_pLanguageLB->IsLanguageSelected( eSysLang ) )
         m_pLanguageLB->SelectEntryPos(0);
 
-    m_pLanguageLB->SetSelectHdl( LINK( this, SvxEditModulesDlg, LangSelectHdl_Impl ));
+    m_pLanguageLB->SetSelectHdl( LINK( this, SvxEditModulesDlg, LangSelectListBoxHdl_Impl ));
     LangSelectHdl_Impl(m_pLanguageLB);
 }
 
@@ -2010,7 +2010,12 @@ IMPL_LINK_NOARG_TYPED( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox 
     }
 }
 
-IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
+IMPL_LINK_TYPED( SvxEditModulesDlg, LangSelectListBoxHdl_Impl, ListBox&, rBox, void )
+{
+    LangSelectHdl_Impl(&rBox);
+}
+
+void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox* pBox)
 {
     LanguageType  eCurLanguage = m_pLanguageLB->GetSelectLanguage();
     static Locale aLastLocale;
@@ -2262,7 +2267,6 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         }
     }
     aLastLocale = aCurLocale;
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxEditModulesDlg, UpDownHdl_Impl, Button *, pBtn, void )

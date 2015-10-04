@@ -124,7 +124,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mpSourceButton->SetLoseFocusHdl(aLink);
 
     mpSourceEdit->SetModifyHdl(LINK(this, ScPivotLayoutDialog, SourceEditModified));
-    mpSourceListBox->SetSelectHdl(LINK(this, ScPivotLayoutDialog, SourceEditModified));
+    mpSourceListBox->SetSelectHdl(LINK(this, ScPivotLayoutDialog, SourceListSelected));
 
     // Destination UI
     aLink2 = LINK(this, ScPivotLayoutDialog, ToggleDestination);
@@ -675,6 +675,11 @@ IMPL_LINK_TYPED(ScPivotLayoutDialog, GetFocusHandler, Control&, rCtrl, void)
 IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, LoseFocusHandler, Control&, void)
 {
     mbDialogLostFocus = !IsActive();
+}
+
+IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, SourceListSelected, ListBox&, void)
+{
+    UpdateSourceRange();
 }
 
 IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceEditModified)

@@ -198,7 +198,7 @@ private:
     DECL_LINK_TYPED( CursorDownHdl, ScCursorRefEdit&, void );
     DECL_LINK( CondModifyHdl, void* );
     DECL_LINK( TargetModifyHdl, void* );
-    DECL_LINK( SelectHdl, void* );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
 };
 
 class ScSolverProgressDialog : public ModelessDialog

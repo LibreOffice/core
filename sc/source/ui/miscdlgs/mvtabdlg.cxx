@@ -211,7 +211,7 @@ void ScMoveTableDlg::Init()
     pEdTabName->Enable(false);
     pFtWarn->Hide();
     InitDocListBox();
-    SelHdl( pLbDoc );
+    SelHdl( *pLbDoc.get() );
 }
 
 void ScMoveTableDlg::InitDocListBox()
@@ -294,9 +294,9 @@ IMPL_LINK_NOARG_TYPED(ScMoveTableDlg, OkHdl, Button*, void)
     EndDialog( RET_OK );
 }
 
-IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
+IMPL_LINK_TYPED( ScMoveTableDlg, SelHdl, ListBox&, rLb, void )
 {
-    if ( pLb == pLbDoc )
+    if ( &rLb == pLbDoc )
     {
         ScDocument* pDoc = GetSelectedDoc();
         OUString aName;
@@ -317,8 +317,6 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
         pLbTable->SelectEntryPos( 0 );
         ResetRenameInput();
     }
-
-    return 0;
 }
 
 IMPL_LINK( ScMoveTableDlg, CheckNameHdl, Edit *, pEdt )

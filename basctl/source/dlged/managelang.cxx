@@ -70,7 +70,7 @@ ManageLanguageDialog::ManageLanguageDialog(vcl::Window* pParent, std::shared_ptr
 
     Init();
     FillLanguageBox();
-    SelectHdl( NULL );
+    SelectHdl( *m_pLanguageLB );
 }
 
 ManageLanguageDialog::~ManageLanguageDialog()
@@ -193,7 +193,7 @@ IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, DeleteHdl, Button*, void)
         if ( nCount <= nPos )
             nPos = nCount - 1;
         m_pLanguageLB->SelectEntryPos( nPos );
-        SelectHdl( NULL );
+        SelectHdl( *m_pLanguageLB );
     }
 }
 
@@ -210,11 +210,11 @@ IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, MakeDefHdl, Button*, void)
         FillLanguageBox();
         // reset selection
         m_pLanguageLB->SelectEntryPos( nPos );
-        SelectHdl( NULL );
+        SelectHdl( *m_pLanguageLB );
     }
 }
 
-IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl)
+IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, SelectHdl, ListBox&, void)
 {
     const sal_Int32 nCount = m_pLanguageLB->GetEntryCount();
     bool bEmpty = ( !nCount ||
@@ -224,8 +224,6 @@ IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl)
 
     m_pDeletePB->Enable(bEnable);
     m_pMakeDefPB->Enable(bEnable && nCount > 1 && m_pLanguageLB->GetSelectEntryCount() == 1);
-
-    return 1;
 }
 
 // class SetDefaultLanguageDialog -----------------------------------------------

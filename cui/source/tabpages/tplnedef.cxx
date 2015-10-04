@@ -131,7 +131,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
     m_pNumFldNumber1->SetModifyHdl( LINK( this, SvxLineDefTabPage, ChangeNumber1Hdl_Impl ) );
     m_pNumFldNumber2->SetModifyHdl( LINK( this, SvxLineDefTabPage, ChangeNumber2Hdl_Impl ) );
-    m_pLbLineStyles->SetSelectHdl( LINK( this, SvxLineDefTabPage, SelectLinestyleHdl_Impl ) );
+    m_pLbLineStyles->SetSelectHdl( LINK( this, SvxLineDefTabPage, SelectLinestyleListBoxHdl_Impl ) );
 
     // #i122042# switch off default adding of 'none' and 'solid' entries
     // for this ListBox; we want to select only editable/dashed styles
@@ -141,13 +141,13 @@ SvxLineDefTabPage::SvxLineDefTabPage
     m_pCbxSynchronize->SetClickHdl(  LINK( this, SvxLineDefTabPage, ChangeMetricHdl_Impl ) );
 
     // preview must be updated when there's something changed
-    Link<> aLink = LINK( this, SvxLineDefTabPage, SelectTypeHdl_Impl );
+    Link<ListBox&, void> aLink = LINK( this, SvxLineDefTabPage, SelectTypeListBoxHdl_Impl );
     m_pLbType1->SetSelectHdl( aLink );
     m_pLbType2->SetSelectHdl( aLink );
-    aLink = LINK( this, SvxLineDefTabPage, ChangePreviewHdl_Impl );
-    m_pMtrLength1->SetModifyHdl( aLink );
-    m_pMtrLength2->SetModifyHdl( aLink );
-    m_pMtrDistance->SetModifyHdl( aLink );
+    Link<> aLink2 = LINK( this, SvxLineDefTabPage, ChangePreviewHdl_Impl );
+    m_pMtrLength1->SetModifyHdl( aLink2 );
+    m_pMtrLength2->SetModifyHdl( aLink2 );
+    m_pMtrDistance->SetModifyHdl( aLink2 );
 
     pDashList = NULL;
 }
@@ -198,7 +198,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
                 m_pLbLineStyles->SelectEntryPos( *pPosDashLb );
             }
             // so that a possibly existing line style is discarded
-            SelectLinestyleHdl_Impl( this );
+            SelectLinestyleHdl_Impl( nullptr );
 
             // determining (and possibly cutting) the name
             // and displaying it in the GroupBox
@@ -355,7 +355,12 @@ VclPtr<SfxTabPage> SvxLineDefTabPage::Create( vcl::Window* pWindow, const SfxIte
 
 
 
-IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxLineDefTabPage, SelectLinestyleListBoxHdl_Impl, ListBox&, rListBox, void )
+{
+    SelectLinestyleHdl_Impl(&rListBox);
+}
+
+void SvxLineDefTabPage::SelectLinestyleHdl_Impl(ListBox* p)
 {
     if(pDashList->Count())
     {
@@ -384,7 +389,6 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
         if( p )
             *pPageType = 2;
     }
-    return 0L;
 }
 
 
@@ -506,7 +510,12 @@ IMPL_LINK_TYPED( SvxLineDefTabPage, ChangeMetricHdl_Impl, Button*, p, void )
 
 
 
-IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxLineDefTabPage, SelectTypeListBoxHdl_Impl, ListBox&, rListBox, void )
+{
+    SelectTypeHdl_Impl(&rListBox);
+}
+
+void  SvxLineDefTabPage::SelectTypeHdl_Impl(ListBox* p)
 {
     if ( p == m_pLbType1 || !p )
     {
@@ -536,7 +545,6 @@ IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
         }
     }
     ChangePreviewHdl_Impl( p );
-    return 0L;
 }
 
 
@@ -715,7 +723,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
             m_pLbLineStyles->RemoveEntry( nPos );
             m_pLbLineStyles->SelectEntryPos( 0 );
 
-            SelectLinestyleHdl_Impl( this );
+            SelectLinestyleHdl_Impl( nullptr );
             *pPageType = 0; // style should not be taken
 
             *pnDashListState |= ChangeType::MODIFIED;

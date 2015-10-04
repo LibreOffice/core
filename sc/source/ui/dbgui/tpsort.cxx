@@ -442,23 +442,23 @@ void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
 
 // Handler:
 
-IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
+IMPL_LINK_TYPED( ScTabPageSortFields, SelectHdl, ListBox&, rLb, void )
 {
-    OUString aSelEntry = pLb->GetSelectEntry();
+    OUString aSelEntry = rLb.GetSelectEntry();
     ScSortKeyItems::iterator pIter;
 
     // If last listbox is enabled add one item
-    if ( maSortKeyItems.back().m_pLbSort == pLb )
+    if ( maSortKeyItems.back().m_pLbSort == &rLb )
         if ( aSelEntry != aStrUndefined )
         {
             SetLastSortKey( nSortKeyCount );
-            return 0;
+            return;
         }
 
     // Find selected listbox
     for ( pIter = maSortKeyItems.begin(); pIter != maSortKeyItems.end(); ++pIter )
     {
-        if ( pIter->m_pLbSort == pLb ) break;
+        if ( pIter->m_pLbSort == &rLb ) break;
     }
 
     // If not selecting the last Listbox, modify the succeeding ones
@@ -481,7 +481,6 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
                     pIter->EnableField();
         }
      }
-    return 0;
 }
 
 // Sort option Tab Page:
@@ -678,7 +677,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = LANGUAGE_SYSTEM;
     m_pLbLanguage->SelectLanguage( eLang );
-    FillAlgorHdl(m_pLbLanguage);               // get algorithms, select default
+    FillAlgorHdl(*m_pLbLanguage.get());               // get algorithms, select default
     if ( !aSortData.aCollatorAlgorithm.isEmpty() )
         m_pLbAlgorithm->SelectEntry( pColRes->GetTranslation( aSortData.aCollatorAlgorithm ) );
 
@@ -876,9 +875,9 @@ IMPL_LINK_TYPED( ScTabPageSortOptions, EnableHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
+IMPL_LINK_TYPED( ScTabPageSortOptions, SelOutPosHdl, ListBox&, rLb, void )
 {
-    if (pLb == m_pLbOutPos)
+    if (&rLb == m_pLbOutPos)
     {
         OUString  aString;
         const sal_Int32 nSelPos = m_pLbOutPos->GetSelectEntryPos();
@@ -888,7 +887,6 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
 
         m_pEdOutPos->SetText( aString );
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScTabPageSortOptions, SortDirHdl, Button *, pBtn, void )
@@ -930,7 +928,7 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
     }
 }
 
-IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
+IMPL_LINK_NOARG_TYPED(ScTabPageSortOptions, FillAlgorHdl, ListBox&, void)
 {
     m_pLbAlgorithm->SetUpdateMode( false );
     m_pLbAlgorithm->Clear();
@@ -963,7 +961,6 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
     }
 
     m_pLbAlgorithm->SetUpdateMode( true );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

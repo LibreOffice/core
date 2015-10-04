@@ -276,7 +276,7 @@ private:
     VclPtr<LineListBox> m_aLineStyleLb;
     bool                m_bIsWriter;
 
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;
@@ -1381,13 +1381,12 @@ IMPL_LINK_TYPED(SvxColorWindow_Impl, SelectHdl, ValueSet*, pColorSet, void)
     maColorSelectFunction(maCommand, aColor);
 }
 
-IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl)
+IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, SelectPaletteHdl, ListBox&, void)
 {
     sal_Int32 nPos = mpPaletteListBox->GetSelectEntryPos();
     mrPaletteManager.SetPalette( nPos );
     mrPaletteManager.ReloadColorSet(*mpColorSet);
     mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, AutoColorClickHdl, Button*, void)
@@ -1900,7 +1899,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     m_aLineStyleLb->Show();
 }
 
-IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
 {
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
     SvxBorderStyle  nStyle = SvxBorderStyle( m_aLineStyleLb->GetSelectEntryStyle() );
@@ -1927,7 +1926,6 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                  OUString( ".uno:LineStyle" ),
                                  aArgs );
-    return 0;
 }
 
 void SvxLineWindow_Impl::Resize()

@@ -117,13 +117,18 @@ namespace pcr
     }
 
 
-    IMPL_LINK( ControlHelper, ModifiedHdl, vcl::Window*, /*_pWin*/ )
+    IMPL_LINK_NOARG( ControlHelper, ModifiedHdl )
     {
         if ( m_pModifyListener )
             m_pModifyListener->modified();
         return 0;
     }
 
+    IMPL_LINK_NOARG_TYPED( ControlHelper, SelectHdl, ListBox&, void )
+    {
+        if ( m_pModifyListener )
+            m_pModifyListener->modified();
+    }
 
     IMPL_LINK_NOARG_TYPED( ControlHelper, GetFocusHdl, Control&, void )
     {

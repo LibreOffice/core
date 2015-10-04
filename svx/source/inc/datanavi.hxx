@@ -349,12 +349,12 @@ namespace svxform
         XFrame_ref                  m_xFrame;
         XFrameModel_ref             m_xFrameModel;
 
-        DECL_LINK(                  ModelSelectHdl, ListBox * );
+        DECL_LINK_TYPED(            ModelSelectListBoxHdl, ListBox&, void );
         DECL_LINK_TYPED(            MenuSelectHdl, MenuButton *, void );
         DECL_LINK_TYPED(            MenuActivateHdl, MenuButton *, void );
         DECL_LINK_TYPED(            ActivatePageHdl, TabControl*, void);
         DECL_LINK_TYPED(            UpdateHdl, Timer *, void);
-
+        void ModelSelectHdl(ListBox*);
         XFormsPage*                 GetCurrentPage( sal_uInt16& rCurId );
         void                        LoadModels();
         void                        SetPageModel();

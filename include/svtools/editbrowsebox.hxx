@@ -389,6 +389,9 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const SAL_OVERRIDE;
         virtual void SetModifyHdl(const Link<>& rLink) SAL_OVERRIDE;
+    private:
+        Link<> maModifyHdl;
+        DECL_LINK_TYPED(ListBoxSelectHdl, ListBox&, void);
     };
 
 

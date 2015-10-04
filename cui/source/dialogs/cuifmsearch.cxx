@@ -409,19 +409,16 @@ IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnFocusGrabbed, Control&, void)
     m_pcmbSearchText->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 }
 
-IMPL_LINK(FmSearchDialog, OnPositionSelected, ListBox*, pBox)
+IMPL_LINK_TYPED(FmSearchDialog, OnPositionSelected, ListBox&, rBox, void)
 {
-    (void) pBox; // avoid warning
-    DBG_ASSERT(pBox->GetSelectEntryCount() == 1, "FmSearchDialog::OnMethodSelected : unerwartet : nicht genau ein Eintrag selektiert !");
+    DBG_ASSERT(rBox.GetSelectEntryCount() == 1, "FmSearchDialog::OnMethodSelected : unerwartet : nicht genau ein Eintrag selektiert !");
 
     m_pSearchEngine->SetPosition(m_plbPosition->GetSelectEntryPos());
-    return 0;
 }
 
-IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
+IMPL_LINK_TYPED(FmSearchDialog, OnFieldSelected, ListBox&, rBox, void)
 {
-    (void) pBox; // avoid warning
-    DBG_ASSERT(pBox->GetSelectEntryCount() == 1, "FmSearchDialog::OnFieldSelected : unerwartet : nicht genau ein Eintrag selektiert !");
+    DBG_ASSERT(rBox.GetSelectEntryCount() == 1, "FmSearchDialog::OnFieldSelected : unerwartet : nicht genau ein Eintrag selektiert !");
 
     m_pSearchEngine->RebuildUsedFields(m_prbAllFields->IsChecked() ? -1 : (sal_Int16)m_plbField->GetSelectEntryPos());
         // calls m_pSearchEngine->InvalidatePreviousLoc too
@@ -429,7 +426,6 @@ IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
     sal_Int32 nCurrentContext = m_plbForm->GetSelectEntryPos();
     if (nCurrentContext != LISTBOX_ENTRY_NOTFOUND)
         m_arrContextFields[nCurrentContext] = OUString(m_plbField->GetSelectEntry());
-    return 0;
 }
 
 IMPL_LINK_TYPED(FmSearchDialog, OnCheckBoxToggled, CheckBox&, rBox, void)
@@ -557,10 +553,9 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     m_pftRecord->SetText(OUString::number(fmscContext.xCursor->getRow()));
 }
 
-IMPL_LINK( FmSearchDialog, OnContextSelection, ListBox*, pBox)
+IMPL_LINK_TYPED( FmSearchDialog, OnContextSelection, ListBox&, rBox, void)
 {
-    InitContext(pBox->GetSelectEntryPos());
-    return 0L;
+    InitContext(rBox.GetSelectEntryPos());
 }
 
 void FmSearchDialog::EnableSearchUI(bool bEnable)
@@ -776,7 +771,7 @@ void FmSearchDialog::LoadParams()
     if (nInitialField == LISTBOX_ENTRY_NOTFOUND)
         nInitialField = 0;
     m_plbField->SelectEntryPos(nInitialField);
-    LINK(this, FmSearchDialog, OnFieldSelected).Call(m_plbField);
+    LINK(this, FmSearchDialog, OnFieldSelected).Call(*m_plbField);
     // all fields/single field (AFTER selecting the field because OnClickedFieldRadios expects a valid value there)
     if (aParams.bAllFields)
     {
@@ -793,7 +788,7 @@ void FmSearchDialog::LoadParams()
     }
 
     m_plbPosition->SelectEntryPos(aParams.nPosition);
-    LINK(this, FmSearchDialog, OnPositionSelected).Call(m_plbPosition);
+    LINK(this, FmSearchDialog, OnPositionSelected).Call(*m_plbPosition);
 
     // field formatting/case sensitivity/direction
     m_pcbUseFormat->Check(aParams.bUseFormatter);

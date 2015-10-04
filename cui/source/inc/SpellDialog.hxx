@@ -183,7 +183,7 @@ private:
     DECL_LINK_TYPED(UndoHdl, Button*, void);
     DECL_LINK_TYPED( AddToDictSelectHdl, MenuButton*, void );
     DECL_LINK_TYPED( AddToDictClickHdl, Button*, void );
-    DECL_LINK( LanguageSelectHdl, SvxLanguageBox* );
+    DECL_LINK_TYPED( LanguageSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( DialogUndoHdl, SpellUndoAction_Impl&, void );
     DECL_LINK( HandleHyperlink, FixedHyperlink * );
 

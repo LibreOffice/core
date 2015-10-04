@@ -202,17 +202,18 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     bool            m_bWaitingInitialSettings;
 
-    DECL_LINK(TOXTypeHdl,   ListBox* );
+    DECL_LINK_TYPED(TOXTypeHdl,   ListBox&, void );
     DECL_LINK_TYPED(AddStylesHdl, Button*, void );
     DECL_LINK_TYPED(MenuEnableHdl, Menu*, bool);
     DECL_LINK_TYPED(MenuExecuteHdl, Menu*, bool);
-    DECL_LINK(LanguageHdl, ListBox*);
-
+    DECL_LINK_TYPED(LanguageListBoxHdl, ListBox&, void);
+    void LanguageHdl(ListBox*);
     DECL_LINK_TYPED(CheckBoxHdl, Button*, void );
     DECL_LINK_TYPED(RadioButtonHdl, Button*, void);
     DECL_LINK(ModifyHdl, void*);
+    DECL_LINK_TYPED(ModifyListBoxHdl, ListBox&, void);
 
-      void  ApplyTOXDescription();
+    void  ApplyTOXDescription();
     void    FillTOXDescription();
 
     using SfxTabPage::ActivatePage;
@@ -410,7 +411,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     CurTOXType      aLastTOXType;
     bool            bInLevelHdl;
 
-    DECL_LINK(StyleSelectHdl, ListBox*);
+    DECL_LINK_TYPED(StyleSelectHdl, ListBox&, void);
     DECL_LINK_TYPED(EditStyleHdl, Button*, void);
     DECL_LINK_TYPED(InsertTokenHdl, Button*, void);
     DECL_LINK_TYPED(LevelHdl, SvTreeListBox*, void);
@@ -420,9 +421,9 @@ class SwTOXEntryTabPage : public SfxTabPage
     DECL_LINK(FillCharHdl, ComboBox*);
     DECL_LINK_TYPED(RemoveInsertAuthHdl, Button*, void);
     DECL_LINK_TYPED(SortKeyHdl, Button*, void);
-    DECL_LINK(ChapterInfoHdl, ListBox*);
+    DECL_LINK_TYPED(ChapterInfoHdl, ListBox&, void);
     DECL_LINK(ChapterInfoOutlineHdl, NumericField*);
-    DECL_LINK(NumberFormatHdl, ListBox*);
+    DECL_LINK_TYPED(NumberFormatHdl, ListBox&, void);
 
     DECL_LINK_TYPED(AllLevelsHdl, Button*, void);
 
@@ -467,7 +468,7 @@ class SwTOXStylesTabPage : public SfxTabPage
 
     DECL_LINK_TYPED( EditStyleHdl, Button *, void );
     DECL_LINK_TYPED( StdHdl, Button*, void );
-    DECL_LINK(EnableSelectHdl, void *);
+    DECL_LINK_TYPED(EnableSelectHdl, ListBox&, void);
     DECL_LINK_TYPED( DoubleClickHdl, ListBox&, void );
     DECL_LINK_TYPED( AssignHdl, Button*, void );
     void Modify();

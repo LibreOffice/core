@@ -588,7 +588,7 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
     m_pIndentAtMF->SetUnit( eMetric );
 }
 
-IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwNumPositionTabPage, EditModifyHdl, ListBox&, void)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -611,32 +611,31 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl)
         nMask <<= 1;
     }
     SetModified();
-    return 0;
 }
 
-IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox *, pBox )
+IMPL_LINK_TYPED( SwNumPositionTabPage, LevelHdl, ListBox&, rBox, void )
 {
     sal_uInt16 nSaveNumLvl = nActNumLvl;
     nActNumLvl = 0;
-    if(pBox->IsEntryPosSelected( MAXLEVEL ) &&
-            (pBox->GetSelectEntryCount() == 1 || nSaveNumLvl != 0xffff))
+    if(rBox.IsEntryPosSelected( MAXLEVEL ) &&
+            (rBox.GetSelectEntryCount() == 1 || nSaveNumLvl != 0xffff))
     {
         nActNumLvl = 0xFFFF;
-        pBox->SetUpdateMode(false);
+        rBox.SetUpdateMode(false);
         for( sal_uInt16 i = 0; i < MAXLEVEL; i++ )
-            pBox->SelectEntryPos( i, false );
-        pBox->SetUpdateMode(true);
+            rBox.SelectEntryPos( i, false );
+        rBox.SetUpdateMode(true);
     }
-    else if(pBox->GetSelectEntryCount())
+    else if(rBox.GetSelectEntryCount())
     {
         sal_uInt16 nMask = 1;
         for( sal_uInt16 i = 0; i < MAXLEVEL; i++ )
         {
-            if(pBox->IsEntryPosSelected( i ))
+            if(rBox.IsEntryPosSelected( i ))
                 nActNumLvl |= nMask;
             nMask <<= 1;
         }
-        pBox->SelectEntryPos( MAXLEVEL, false );
+        rBox.SelectEntryPos( MAXLEVEL, false );
     }
     else
     {
@@ -646,7 +645,7 @@ IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox *, pBox )
         {
             if(nActNumLvl & nMask)
             {
-                pBox->SelectEntryPos(i);
+                rBox.SelectEntryPos(i);
                 break;
             }
             nMask <<=1;
@@ -657,7 +656,6 @@ IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox *, pBox )
     InitPosAndSpaceMode();
     ShowControlsDependingOnPosAndSpaceMode();
     InitControls();
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwNumPositionTabPage, DistanceLoseFocusHdl, Control&, rControl, void )
@@ -762,7 +760,7 @@ IMPL_LINK_TYPED( SwNumPositionTabPage, RelativeHdl, Button *, pBox, void )
     bLastRelative = bOn;
 }
 
-IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, void)
 {
     // determine value to be set at the chosen list levels
     SvxNumberFormat::LabelFollowedBy eLabelFollowedBy = SvxNumberFormat::LISTTAB;
@@ -819,8 +817,6 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
     }
 
     SetModified();
-
-    return 0;
 }
 
 IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, MetricField*, pField )

@@ -110,7 +110,7 @@ private:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
                             DECL_LINK_TYPED( ClickNewThemeHdl, Button*, void );
-                            DECL_LINK( SelectThemeHdl, void* );
+                            DECL_LINK_TYPED( SelectThemeHdl, ListBox&, void );
                             DECL_LINK_TYPED( ShowContextMenuHdl, void*, void );
                             DECL_LINK_TYPED( PopupMenuHdl, Menu*, bool );
                             DECL_LINK( EndNewThemePropertiesDlgHdl, VclAbstractDialog2* );
@@ -127,7 +127,7 @@ public:
                             virtual ~GalleryBrowser1();
     virtual void            dispose() SAL_OVERRIDE;
 
-    void                    SelectTheme( sal_uIntPtr nThemePos ) { mpThemes->SelectEntryPos( (sal_uInt16) nThemePos ); SelectThemeHdl( NULL ); }
+    void                    SelectTheme( sal_uInt16 nThemePos ) { mpThemes->SelectEntryPos( nThemePos ); SelectThemeHdl( *mpThemes ); }
     OUString                GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetSelectEntry() : OUString(); }
 
     void                    ShowContextMenu();

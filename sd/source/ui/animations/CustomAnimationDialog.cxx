@@ -109,18 +109,24 @@ public:
 private:
     std::map< sal_uInt16, OUString > maPropertyValues;
     VclPtr<ListBox> mpControl;
+    DECL_LINK_TYPED(OnSelect, ListBox&, void);
+    Link<> maModifyLink;
 };
 
 PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link<>& rModifyHdl )
-: PropertySubControl( nControlType )
+: PropertySubControl( nControlType ), maModifyLink(rModifyHdl)
 {
     mpControl = VclPtr<ListBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
-    mpControl->SetSelectHdl( rModifyHdl );
+    mpControl->SetSelectHdl( LINK(this, PresetPropertyBox, OnSelect) );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_PRESETPROPERTYBOX );
 
     setValue( rValue, aPresetId );
+}
 
+IMPL_LINK_TYPED(PresetPropertyBox, OnSelect, ListBox&, rListBox, void)
+{
+    maModifyLink.Call(&rListBox);
 }
 
 void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
@@ -185,14 +191,16 @@ public:
 
 private:
     VclPtr<ColorListBox> mpControl;
+    DECL_LINK_TYPED(OnSelect, ListBox&, void);
+    Link<> maModifyLink;
 };
 
 ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<>& rModifyHdl )
-: PropertySubControl( nControlType )
+: PropertySubControl( nControlType ), maModifyLink(rModifyHdl)
 {
     mpControl = VclPtr<ColorListBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
-    mpControl->SetSelectHdl( rModifyHdl );
+    mpControl->SetSelectHdl( LINK(this, ColorPropertyBox, OnSelect) );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX );
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -216,6 +224,11 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent
         if( pEntry->GetColor().GetRGBColor() == (sal_uInt32)nColor )
             mpControl->SelectEntryPos( nPos );
     }
+}
+
+IMPL_LINK_TYPED(ColorPropertyBox, OnSelect, ListBox&, rListBox, void)
+{
+    maModifyLink.Call(&rListBox);
 }
 
 ColorPropertyBox::~ColorPropertyBox()
@@ -988,8 +1001,9 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     void update( STLPropertySet* pSet );
-    DECL_LINK( implSelectHdl, Control* );
+    DECL_LINK_TYPED( implSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( implClickHdl, Button*, void );
+    void implHdl(Control*);
 
 private:
     void updateControlStates();
@@ -1301,10 +1315,14 @@ void CustomAnimationEffectTabPage::updateControlStates()
 
 IMPL_LINK_TYPED( CustomAnimationEffectTabPage, implClickHdl, Button*, pBtn, void )
 {
-    implSelectHdl(pBtn);
+    implHdl(pBtn);
+}
+IMPL_LINK_TYPED( CustomAnimationEffectTabPage, implSelectHdl, ListBox&, rListBox, void )
+{
+    implHdl(&rListBox);
 }
 
-IMPL_LINK( CustomAnimationEffectTabPage, implSelectHdl, Control*, pControl )
+void CustomAnimationEffectTabPage::implHdl(Control* pControl )
 {
     if( pControl == mpLBAfterEffect )
     {
@@ -1334,7 +1352,6 @@ IMPL_LINK( CustomAnimationEffectTabPage, implSelectHdl, Control*, pControl )
     }
 
     updateControlStates();
-    return 0;
 }
 
 void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
@@ -1591,8 +1608,9 @@ public:
 
     void update( STLPropertySet* pSet );
 
-    DECL_LINK( implControlHdl, Control* );
+    DECL_LINK_TYPED( implControlHdl, ListBox&, void );
     DECL_LINK_TYPED( implClickHdl, Button*, void );
+    void implHdl(Control*);
 
 private:
     const STLPropertySet* mpSet;
@@ -1808,18 +1826,20 @@ void CustomAnimationDurationTabPage::dispose()
 
 IMPL_LINK_TYPED( CustomAnimationDurationTabPage, implClickHdl, Button*, pBtn, void )
 {
-    implControlHdl(pBtn);
+    implHdl(pBtn);
+}
+IMPL_LINK_TYPED( CustomAnimationDurationTabPage, implControlHdl, ListBox&, rListBox, void )
+{
+    implHdl(&rListBox);
 }
 
-IMPL_LINK( CustomAnimationDurationTabPage, implControlHdl, Control*, pControl )
+void CustomAnimationDurationTabPage::implHdl( Control* pControl )
 {
     if( pControl == mpLBTrigger )
     {
         mpRBClickSequence->Check( false );
         mpRBInteractive->Check();
     }
-
-    return 0;
 }
 
 void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
@@ -1984,7 +2004,7 @@ public:
     void update( STLPropertySet* pSet );
 
     void updateControlStates();
-    DECL_LINK(implSelectHdl, void *);
+    DECL_LINK_TYPED(implSelectHdl, ListBox&, void);
 
 private:
     VclPtr<FixedText>   maFTGroupText;
@@ -2168,10 +2188,9 @@ void CustomAnimationTextAnimTabPage::updateControlStates()
     }
 }
 
-IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl)
+IMPL_LINK_NOARG_TYPED(CustomAnimationTextAnimTabPage, implSelectHdl, ListBox&, void)
 {
     updateControlStates();
-    return 0;
 }
 
 CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySet* pSet, const OString& sPage)

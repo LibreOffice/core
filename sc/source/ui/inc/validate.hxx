@@ -100,7 +100,7 @@ private:
     void                        SetFirstFormula( const OUString& rFmlaStr );
     void                        SetSecondFormula( const OUString& rFmlaStr );
 
-                                DECL_LINK(SelectHdl, void *);
+                                DECL_LINK_TYPED(SelectHdl, ListBox&, void);
                                 DECL_LINK_TYPED(CheckHdl, Button*, void);
 
     VclPtr<ListBox>                    m_pLbAllow;
@@ -272,9 +272,6 @@ private:
 
     void    Init();
 
-    // Handler ------------------------
-    // DECL_LINK( SelectHdl, ListBox * );
-
 public:
             ScTPValidationHelp( vcl::Window* pParent, const SfxItemSet& rArgSet );
             virtual ~ScTPValidationHelp();
@@ -298,7 +295,7 @@ private:
     void    Init();
 
     // Handler ------------------------
-    DECL_LINK(SelectActionHdl, void *);
+    DECL_LINK_TYPED(SelectActionHdl, ListBox&, void);
     DECL_LINK_TYPED(ClickSearchHdl, Button*, void);
 
 public:

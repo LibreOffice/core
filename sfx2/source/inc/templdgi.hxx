@@ -219,7 +219,7 @@ protected:
     bool m_bWantHierarchical :1;
     bool bBindingUpdate :1;
 
-    DECL_LINK( FilterSelectHdl, ListBox* );
+    DECL_LINK_TYPED( FilterSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( FmtSelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( ApplyHdl, LinkParamNone*, void );
     DECL_LINK_TYPED( TreeListApplyHdl, SvTreeListBox*, bool );

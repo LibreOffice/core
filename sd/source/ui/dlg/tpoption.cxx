@@ -535,7 +535,7 @@ VclPtr<SfxTabPage> SdTpOptionsMisc::Create( vcl::Window* pWindow,
     return VclPtr<SdTpOptionsMisc>::Create( pWindow, *rAttrs );
 }
 
-IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SdTpOptionsMisc, SelectMetricHdl_Impl, ListBox&, void)
 {
     sal_Int32 nPos = m_pLbMetric->GetSelectEntryPos();
 
@@ -547,7 +547,6 @@ IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
         SetFieldUnit( *m_pMtrFldTabstop, eUnit );
         m_pMtrFldTabstop->SetValue( m_pMtrFldTabstop->Normalize( nVal ), FUNIT_TWIP );
     }
-    return 0;
 }
 
 void SdTpOptionsMisc::SetImpressMode()

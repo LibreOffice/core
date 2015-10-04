@@ -500,7 +500,7 @@ IMPL_LINK_TYPED( SvxPersonalizationTabPage, DefaultPersona, Button*, pButton, vo
     }
 }
 
-IMPL_LINK( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox*, )
+IMPL_LINK_NOARG_TYPED( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox&, void)
 {
     m_pOwnPersona->Check();
 
@@ -519,8 +519,6 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox*, )
     aFilter.ImportGraphic( aGraphic, aURLObj );
     Bitmap aBmp = aGraphic.GetBitmap();
     m_pExtensionPersonaPreview->SetModeImage( Image( aBmp ) );
-
-    return 0;
 }
 
 /// Find the value on the Persona page, and convert it to a usable form.

@@ -91,9 +91,9 @@ public:
     DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry* );
 
-    DECL_LINK( TypeListHdl, ListBox*);
-    DECL_LINK_TYPED( AfterTypeListHdl, void*, void);
-    DECL_LINK( ColFormatTypeHdl, ListBox*);
+    DECL_LINK_TYPED( TypeListHdl, ListBox&, void );
+    DECL_LINK_TYPED( AfterTypeListHdl, void*, void );
+    DECL_LINK_TYPED( ColFormatTypeHdl, ListBox&, void );
 };
 
 class ScCondFormatDlg : public ScAnyRefDlg

@@ -141,7 +141,7 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     m_pPrevSameBT->SetClickHdl(LINK(this,SwIndexMarkPane,   PrevSameHdl));
     m_pNextBT->SetClickHdl(LINK(this,SwIndexMarkPane,       NextHdl));
     m_pNextSameBT->SetClickHdl(LINK(this,SwIndexMarkPane,   NextSameHdl));
-    m_pTypeDCB->SetSelectHdl(LINK(this,SwIndexMarkPane,     ModifyHdl));
+    m_pTypeDCB->SetSelectHdl(LINK(this,SwIndexMarkPane,     ModifyListBoxHdl));
     m_pKey1DCB->SetModifyHdl(LINK(this,SwIndexMarkPane,      KeyDCBModifyHdl));
     m_pKey2DCB->SetModifyHdl(LINK(this,SwIndexMarkPane,     KeyDCBModifyHdl));
     m_pCloseBT->SetClickHdl(LINK(this,SwIndexMarkPane,     CloseHdl));
@@ -623,7 +623,11 @@ IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, CloseHdl, Button*, void)
 }
 
 // select index type only when inserting
-IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
+IMPL_LINK_TYPED( SwIndexMarkPane, ModifyListBoxHdl, ListBox&, rBox, void )
+{
+    ModifyHdl(&rBox);
+}
+IMPL_LINK( SwIndexMarkPane, ModifyHdl, void*, pBox )
 {
     if (m_pTypeDCB == pBox)
     {
@@ -990,7 +994,7 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
 
     DECL_LINK(IdentifierHdl, ComboBox*);
     DECL_LINK(ShortNameHdl, Edit*);
-    DECL_LINK(EnableHdl, ListBox*);
+    DECL_LINK_TYPED(EnableHdl, ListBox&, void);
 
 public:
     SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
@@ -1127,9 +1131,9 @@ static OUString lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int
     return OUString();
 }
 
-IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
+IMPL_LINK_TYPED( SwAuthorMarkPane, CompEntryHdl, ListBox&, rBox, void)
 {
-    const OUString sEntry(pBox->GetSelectEntry());
+    const OUString sEntry(rBox.GetSelectEntry());
     if(bIsFromComponent)
     {
         if(xBibAccess.is() && !sEntry.isEmpty())
@@ -1162,14 +1166,13 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
                             pEntry->GetAuthorField((ToxAuthorityField)i) : OUString();
         }
     }
-    if (pBox->GetSelectEntry().isEmpty())
+    if (rBox.GetSelectEntry().isEmpty())
     {
         for(int i = 0; i < AUTH_FIELD_END; i++)
             m_sFields[i].clear();
     }
     m_pAuthorFI->SetText(m_sFields[AUTH_FIELD_AUTHOR]);
     m_pTitleFI->SetText(m_sFields[AUTH_FIELD_TITLE]);
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, InsertHdl, Button*, void)
@@ -1327,7 +1330,7 @@ IMPL_LINK_TYPED(SwAuthorMarkPane, ChangeSourceHdl, Button*, pButton, void)
             m_pEntryLB->InsertEntry(m_sCreatedEntry[AUTH_FIELD_IDENTIFIER]);
     }
     m_pEntryLB->SelectEntryPos(0);
-    CompEntryHdl(m_pEntryLB);
+    CompEntryHdl(*m_pEntryLB);
 }
 
 IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit*, pEdit)
@@ -1503,7 +1506,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
             ++nRightRow;
         bLeft = !bLeft;
     }
-    EnableHdl(pTypeListBox);
+    EnableHdl(*pTypeListBox);
 }
 
 SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
@@ -1588,10 +1591,9 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit*, pEdit)
     return 0;
 }
 
-IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox&, rBox, void)
 {
-    m_pOKBT->Enable(m_bNameAllowed && pBox->GetSelectEntryCount());
-    return 0;
+    m_pOKBT->Enable(m_bNameAllowed && rBox.GetSelectEntryCount());
 };
 
 SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,

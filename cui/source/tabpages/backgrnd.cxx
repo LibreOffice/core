@@ -551,7 +551,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             }
             pTableBck_Impl->nTableWhich = SID_ATTR_BRUSH_TABLE;
 
-            TblDestinationHdl_Impl(m_pTblLBox);
+            TblDestinationHdl_Impl(*m_pTblLBox);
             m_pTblLBox->SaveValue();
         }
         else if( bHighlighting )
@@ -1139,7 +1139,7 @@ IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, 
     m_pPreviewWin1->NotifyChange( aBgdColor );
 }
 
-IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, SelectHdl_Impl, ListBox&, void)
 {
     if ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) )
     {
@@ -1149,7 +1149,6 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
     {
         ShowBitmapUI_Impl();
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxBackgroundTabPage, FileClickHdl_Impl, Button*, pBox, void )
@@ -1313,9 +1312,9 @@ void SvxBackgroundTabPage::ShowTblControl()
     m_pAsGrid->Show();
 }
 
-IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
+IMPL_LINK_TYPED( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox&, rBox, void )
 {
-    sal_Int32 nSelPos = pBox->GetSelectEntryPos();
+    sal_Int32 nSelPos = rBox.GetSelectEntryPos();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
     {
         std::unique_ptr<SvxBrushItem> xItemHolder;
@@ -1398,7 +1397,6 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
         }
         FillControls_Impl(*pActItem, aUserData);
     }
-    return 0;
 }
 
 void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,

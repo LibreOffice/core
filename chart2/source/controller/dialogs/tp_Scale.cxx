@@ -258,7 +258,7 @@ enum AxisTypeListBoxEntry
     TYPE_DATE=2
 };
 
-IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl)
+IMPL_LINK_NOARG_TYPED(ScaleTabPage, SelectAxisTypeHdl, ListBox&, void)
 {
     const sal_Int32 nPos = m_pLB_AxisType->GetSelectEntryPos();
     if( nPos==TYPE_DATE )
@@ -269,7 +269,6 @@ IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl)
         m_pCbxLogarithm->Check(false);
     EnableControls();
     SetNumFormat();
-    return 0;
 }
 
 VclPtr<SfxTabPage> ScaleTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)

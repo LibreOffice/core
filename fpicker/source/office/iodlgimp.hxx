@@ -197,7 +197,7 @@ public:
     // access to the filter listbox only as Control* - we want to maintain the entries/userdata ourself
             Control*        GetFilterListControl()          { return _pLbFilter; }
             const Control*  GetFilterListControl() const    { return _pLbFilter; }
-    inline  void            SetFilterListSelectHdl( const Link<>& _rHandler );
+    inline  void            SetFilterListSelectHdl( const Link<ListBox&,void>& _rHandler );
 
     // inits the listbox for the filters from the filter list (_pFilter)
             void            ClearFilterList( );
@@ -217,7 +217,7 @@ public:
                 void                                SetCurFilter( SvtFileDialogFilter_Impl* _pFilter, const OUString& _rDisplayName );
 };
 
-inline void SvtExpFileDlg_Impl::SetFilterListSelectHdl( const Link<>& _rHandler )
+inline void SvtExpFileDlg_Impl::SetFilterListSelectHdl( const Link<ListBox&,void>& _rHandler )
 {
     _pLbFilter->SetSelectHdl( _rHandler );
 }

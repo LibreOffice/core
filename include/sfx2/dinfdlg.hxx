@@ -426,7 +426,7 @@ private:
     Idle                                m_aBoxLoseFocusIdle;
     Link<void*,void>                    m_aRemovedHdl;
 
-    DECL_STATIC_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox* );
+    DECL_STATIC_LINK_TYPED( CustomPropertiesWindow, TypeHdl, ListBox&, void );
     DECL_LINK_TYPED(  RemoveHdl, Button*, void );
     DECL_LINK_TYPED(  EditLoseFocusHdl, Control&, void );
     DECL_LINK_TYPED(  BoxLoseFocusHdl, Control&, void );

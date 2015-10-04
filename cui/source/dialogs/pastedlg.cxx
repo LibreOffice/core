@@ -69,17 +69,14 @@ void SvPasteObjectDialog::SelectObject()
     if (m_pLbInsertList->GetEntryCount())
     {
         m_pLbInsertList->SelectEntryPos(0);
-        SelectHdl(m_pLbInsertList);
+        SelectHdl(*m_pLbInsertList);
     }
 }
 
-IMPL_LINK( SvPasteObjectDialog, SelectHdl, ListBox *, pListBox )
+IMPL_LINK_NOARG_TYPED( SvPasteObjectDialog, SelectHdl, ListBox&, void )
 {
-    (void)pListBox;
-
     if ( !m_pOKButton->IsEnabled() )
         m_pOKButton->Enable();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( SvPasteObjectDialog, DoubleClickHdl, ListBox&, void )

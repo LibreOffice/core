@@ -145,6 +145,7 @@ class SvxTransparenceTabPage : public SvxTabPage
     DECL_LINK_TYPED(ClickTransGradientHdl_Impl, Button*, void );
     DECL_LINK(ModifyTransparentHdl_Impl, void*);
     DECL_LINK(ModifiedTrgrHdl_Impl, void*);
+    DECL_LINK_TYPED(ModifiedTrgrListBoxHdl_Impl, ListBox&, void);
 
     void ActivateLinear(bool bActivate);
     void ActivateGradient(bool bActivate);
@@ -263,13 +264,13 @@ private:
     OUString            maDirectName;
     VclPtr<PushButton>         m_pBtnImport;
 
-    DECL_LINK(SelectDialogTypeHdl_Impl, void *);
-    DECL_LINK( ModifyColorHdl_Impl, void * );
-    DECL_LINK( ModifyHatchBckgrdColorHdl_Impl, void * );
-    DECL_LINK( ModifyGradientHdl_Impl, void * );
-    DECL_LINK( ModifyHatchingHdl_Impl, void * );
+    DECL_LINK_TYPED(SelectDialogTypeHdl_Impl, ListBox&, void);
+    DECL_LINK_TYPED( ModifyColorHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ModifyHatchBckgrdColorHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ModifyGradientHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ModifyHatchingHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ToggleHatchBckgrdColorHdl_Impl, CheckBox&, void );
-    DECL_LINK( ModifyBitmapHdl_Impl, void * );
+    DECL_LINK_TYPED( ModifyBitmapHdl_Impl, ListBox&, void );
     DECL_LINK( ModifyStepCountHdl_Impl, void* );
     DECL_LINK_TYPED( ModifyStepCountClickHdl_Impl, Button*, void );
 
@@ -353,6 +354,7 @@ private:
 
     DECL_LINK_TYPED( ClickShadowHdl_Impl, Button*, void );
     DECL_LINK( ModifyShadowHdl_Impl, void * );
+    DECL_LINK_TYPED( SelectShadowHdl_Impl, ListBox&, void );
 
 public:
     SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
@@ -425,8 +427,9 @@ private:
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
-    DECL_LINK( ChangeGradientHdl_Impl, void * );
+    DECL_LINK_TYPED( ChangeGradientHdl_Impl, ListBox&, void );
     DECL_LINK( ModifiedHdl_Impl, void * );
+    DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
 
@@ -500,8 +503,9 @@ private:
 
     SfxMapUnit          m_ePoolUnit;
 
-    DECL_LINK( ChangeHatchHdl_Impl, void * );
+    DECL_LINK_TYPED( ChangeHatchHdl_Impl, ListBox&, void );
     DECL_LINK( ModifiedHdl_Impl, void * );
+    DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
@@ -588,9 +592,9 @@ private:
     DECL_LINK_TYPED( ClickImportHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
-    DECL_LINK( ChangeBitmapHdl_Impl, void * );
-    DECL_LINK( ChangePixelColorHdl_Impl, void * );
-    DECL_LINK( ChangeBackgrndColorHdl_Impl, void * );
+    DECL_LINK_TYPED( ChangeBitmapHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ChangePixelColorHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ChangeBackgrndColorHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
 
@@ -721,9 +725,9 @@ private:
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickWorkOnHdl_Impl, Button*, void );
 
-    DECL_LINK( SelectColorLBHdl_Impl, void * );
+    DECL_LINK_TYPED( SelectColorLBHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( SelectValSetHdl_Impl, ValueSet*, void );
-    DECL_LINK( SelectColorModelHdl_Impl, void * );
+    DECL_LINK_TYPED( SelectColorModelHdl_Impl, ListBox&, void );
     void ChangeColor(const Color &rNewColor);
     DECL_LINK( ModifiedHdl_Impl, void * );
 

@@ -70,9 +70,10 @@ private:
     sal_uInt16          GetFieldSelPos  ( SCCOL nField );
 
     // Handler ------------------------
-    DECL_LINK( SelectHdl, void* );
+    DECL_LINK_TYPED( SelectListBoxHdl, ListBox&, void );
     DECL_LINK_TYPED( SelectTreeListBoxHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( CheckHdl, SvTreeListBox*, void );
+    void SelectHdl(void *);
 };
 
 class ScTpSubTotalGroup1 : public ScTpSubTotalGroup

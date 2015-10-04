@@ -66,7 +66,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  m_xViewProperties;
 
     DECL_LINK_TYPED(PreviewLoadedHdl_Impl, SwOneExampleFrame&, void);
-    DECL_LINK(ZoomHdl_Impl, ListBox*);
+    DECL_LINK_TYPED(ZoomHdl_Impl, ListBox&, void);
     DECL_LINK(ChangeAddressHdl_Impl, void *);
     DECL_LINK_TYPED(ChangeAddressLoseFocusHdl_Impl, Control&, void);
     DECL_LINK_TYPED(GreetingsHdl_Impl, Button*, void);
