@@ -158,7 +158,7 @@ child_spawn ( Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus )
 
     if ( nError != osl_Process_E_None )
     {
-        fprintf( stderr, "ERROR %d forking process", nError );
+        fprintf( stderr, "ERROR %d forking process\n", nError );
         ustr_debug( "", pApp );
         rtl_uString_release( pApp );
         _exit (1);
@@ -497,7 +497,7 @@ send_args( int fd, rtl_uString *pCwdPath )
              ( RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
                | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR ) ) )
     {
-        fprintf( stderr, "ERROR: cannot convert arguments to UTF-8" );
+        fprintf( stderr, "ERROR: cannot convert arguments to UTF-8\n" );
         exit( 1 );
     }
 
@@ -594,7 +594,7 @@ system_checks( void )
     /* check proc is mounted - lots of things fail otherwise */
     if ( stat( "/proc/version", &buf ) != 0 )
     {
-        fprintf( stderr, "ERROR: /proc not mounted - LibreOffice is unlikely to work well if at all" );
+        fprintf( stderr, "ERROR: /proc not mounted - LibreOffice is unlikely to work well if at all\n" );
         exit( 1 );
     }
 #endif
