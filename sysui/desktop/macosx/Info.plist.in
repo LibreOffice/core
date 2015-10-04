@@ -1517,6 +1517,8 @@
     <string>main.icns</string>
     <key>CFBundleShortVersionString</key>
     <string>@MACOSX_BUNDLE_SHORTVERSION@</string>
+    <key>CFBundleVersion</key>
+    <string>@MACOSX_BUNDLE_SHORTVERSION@</string>
     <key>CFBundleIdentifier</key>
     <string>@MACOSX_BUNDLE_IDENTIFIER@</string>
     <key>CFBundleInfoDictionaryVersion</key>
