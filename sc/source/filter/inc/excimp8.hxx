@@ -22,8 +22,6 @@
 
 #include <string.h>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include "imp_op.hxx"
 #include "root.hxx"
 #include "excscen.hxx"
@@ -123,8 +121,8 @@ public:
     XclImpAutoFilterData*       GetByTab( SCTAB nTab );
 
 private:
-
-    boost::ptr_vector<XclImpAutoFilterData> maFilters;
+    typedef std::shared_ptr<XclImpAutoFilterData> XclImpAutoFilterSharePtr;
+    std::vector<XclImpAutoFilterSharePtr> maFilters;
 };
 
 #endif

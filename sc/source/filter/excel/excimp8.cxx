@@ -846,7 +846,7 @@ void XclImpAutoFilterData::EnableRemoveFilter()
 void XclImpAutoFilterBuffer::Insert( RootData* pRoot, const ScRange& rRange)
 {
     if( !GetByTab( rRange.aStart.Tab() ) )
-        maFilters.push_back( new XclImpAutoFilterData( pRoot, rRange) );
+        maFilters.push_back( XclImpAutoFilterSharePtr(new XclImpAutoFilterData( pRoot, rRange) ));
 }
 
 void XclImpAutoFilterBuffer::AddAdvancedRange( const ScRange& rRange )
@@ -865,17 +865,16 @@ void XclImpAutoFilterBuffer::AddExtractPos( const ScRange& rRange )
 
 void XclImpAutoFilterBuffer::Apply()
 {
-    std::for_each(maFilters.begin(),maFilters.end(),
-        boost::bind(&XclImpAutoFilterData::Apply,_1));
+    for( const auto& rFilterPtr : maFilters )
+        rFilterPtr->Apply();
 }
 
 XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( SCTAB nTab )
 {
-    boost::ptr_vector<XclImpAutoFilterData>::iterator it;
-    for( it = maFilters.begin(); it != maFilters.end(); ++it )
+    for( const auto& rFilterPtr : maFilters )
     {
-        if( it->Tab() == nTab )
-            return &(*it);
+        if( rFilterPtr->Tab() == nTab )
+            return rFilterPtr.get();
     }
     return NULL;
 }
