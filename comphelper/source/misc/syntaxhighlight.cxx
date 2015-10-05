@@ -375,8 +375,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                         sal_Unicode cPeek = *pos;
                         while( cPeek != 0 && !testCharFlags( cPeek, CHAR_EOL ) )
                         {
-                            c = *pos++;
-                            cPeek = *pos;
+                            cPeek = *++pos;
                         }
 
                         reType = TT_COMMENT;
