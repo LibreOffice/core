@@ -113,41 +113,20 @@ namespace o3tl
 namespace
 {
 
-    //= ITimeoutHandler
-
-    class CallbackTimer;
-    class ITimeoutHandler
-    {
-    public:
-        virtual void onTimeout( CallbackTimer* _pInstigator ) = 0;
-
-    protected:
-        ~ITimeoutHandler() {}
-    };
-
-
     //= CallbackTimer
 
     class CallbackTimer : public ::salhelper::Timer
     {
     protected:
-        ITimeoutHandler* m_pTimeoutHandler;
+        SvtFileView_Impl* m_pTimeoutHandler;
 
     public:
-        CallbackTimer( ITimeoutHandler* _pHandler ) : m_pTimeoutHandler( _pHandler ) { }
+        CallbackTimer( SvtFileView_Impl* _pHandler ) : m_pTimeoutHandler( _pHandler ) { }
 
     protected:
         virtual void SAL_CALL onShot() SAL_OVERRIDE;
     };
 
-
-    void SAL_CALL CallbackTimer::onShot()
-    {
-        OSL_ENSURE( m_pTimeoutHandler, "CallbackTimer::onShot: nobody interested in?" );
-        ITimeoutHandler* pHandler( m_pTimeoutHandler );
-        if ( pHandler )
-            pHandler->onTimeout( this );
-    }
 
 }
 
@@ -330,7 +309,6 @@ public:
 
 
 class SvtFileView_Impl  :public ::svt::IEnumerationResultHandler
-                        ,public ITimeoutHandler
 {
 protected:
     VclPtr<SvtFileView>                 mpAntiImpl;
@@ -417,16 +395,14 @@ public:
 
     inline void             EndEditing( bool _bCancel );
 
+    void                    onTimeout();
+
 protected:
     DECL_LINK_TYPED( SelectionMultiplexer, SvTreeListBox*, void );
 
-protected:
     // IEnumerationResultHandler overridables
     virtual void        enumerationDone( ::svt::EnumerationResult eResult ) SAL_OVERRIDE;
             void        implEnumerationSuccess();
-
-    // ITimeoutHandler
-    virtual void onTimeout( CallbackTimer* _pInstigator ) SAL_OVERRIDE;
 };
 
 inline void SvtFileView_Impl::EnableDelete( bool bEnable )
@@ -1835,7 +1811,7 @@ void SvtFileView_Impl::CancelRunningAsyncAction()
 }
 
 
-void SvtFileView_Impl::onTimeout( CallbackTimer* )
+void SvtFileView_Impl::onTimeout()
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( maMutex );
@@ -2260,6 +2236,16 @@ void QueryDeleteDlg_Impl::dispose()
     MessageDialog::dispose();
 }
 
+}
+
+namespace {
+    void SAL_CALL CallbackTimer::onShot()
+    {
+        OSL_ENSURE( m_pTimeoutHandler, "CallbackTimer::onShot: nobody interested in?" );
+        SvtFileView_Impl* pHandler( m_pTimeoutHandler );
+        if ( pHandler )
+            pHandler->onTimeout();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
