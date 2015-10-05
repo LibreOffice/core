@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_d12504af",
+        "filename": "icon-themes/breeze/links.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-10-05T06:38:32Z",
+      "side": 1,
+      "message": "Do we really support svg for icons?",
+      "revId": "969da75fb8825721623814e5b1bf789346f5b1c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
