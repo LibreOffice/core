@@ -20,31 +20,34 @@
 #**************************************************************
 
 
-
-$(eval $(call gb_Module_Module,svl))
-
-$(eval $(call gb_Module_add_targets,svl,\
-    AllLangResTarget_svl \
-    Library_fsstorage \
-    Library_passwordcontainer \
-    Library_svl \
-    Package_inc \
+$(eval $(call gb_GoogleTest_GoogleTest,svl_urihelper))
+ 
+$(eval $(call gb_GoogleTest_add_exception_objects,svl_urihelper, \
+	svl/qa/test_URIHelper \
+))
+ 
+$(eval $(call gb_GoogleTest_add_linked_libs,svl_urihelper, \
+    cppu \
+    cppuhelper \
+    sal \
+    svl \
+    stl \
+    tl \
+    utl \
+    $(gb_STDLIBS) \
 ))
 
-ifeq ($(ENABLE_UNIT_TESTS),YES)
-$(eval $(call gb_Module_add_check_targets,svl,\
-    GoogleTest_svl_urihelper \
+
+$(eval $(call gb_GoogleTest_set_include,svl_urihelper,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/svl/inc \
+	-I$(SRCDIR)/svl/inc/svl \
+	-I$(SRCDIR)/svl/inc/pch \
+	-I$(OUTDIR)/inc/offuh \
 ))
-endif
-
-ifneq ($(OOO_JUNIT_JAR),)
-$(eval $(call gb_Module_add_subsequentcheck_targets,svl,\
-    JunitTest_svl_complex \
+ 
+$(eval $(call gb_GoogleTest_set_ldflags,svl_urihelper,\
+    $$(LDFLAGS) \
 ))
-endif
 
-#todo: dde platform dependent
-#todo: package_inc
-#todo: map file
-
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:
