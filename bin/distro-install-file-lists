@@ -250,7 +250,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     add_used_directories mono_list.txt common_list.txt
     # add the files from GAC if it was installed
     test -f mono_gac && cat mono_gac >>mono_list.txt
-    
+
     # postgresql subpackage
     test -f $DESTDIR/gid_Module_Optional_PostgresqlSdbc && cp $DESTDIR/gid_Module_Optional_PostgresqlSdbc postgresql_list.txt || :
 
@@ -351,7 +351,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         # don't use remove_file as we don't want them removed from the buildroot.
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_crystal.zip
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_hicontrast.zip
-        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_industrial.zip
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_tango.zip
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images.zip
     fi
