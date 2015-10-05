@@ -287,7 +287,7 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window* /* pParent */,
     // add filter for all types
     aDlg.AddFilter( AVMEDIA_RESSTR( AVMEDIA_STR_ALL_FILES ), OUString( "*.*"  ) );
 
-    uno::Reference<ui::dialogs::XFilePicker> const xFP(aDlg.GetFilePicker());
+    uno::Reference<ui::dialogs::XFilePicker2> const xFP(aDlg.GetFilePicker());
     uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,
             uno::UNO_QUERY_THROW);
     if (o_pbLink)

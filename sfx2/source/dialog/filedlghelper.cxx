@@ -804,7 +804,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
     return nRet;
 }
 
-static bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker >& _rxFP )
+static bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker2 >& _rxFP )
 {
     try
     {
@@ -1330,7 +1330,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
     // b) the olde way ... non optional.
     else
     {
-        uno::Reference< XFilePicker > xPickOld(xPicker, UNO_QUERY_THROW);
+        uno::Reference< XFilePicker2 > xPickOld(xPicker, UNO_QUERY_THROW);
         Sequence< OUString > lFiles = xPickOld->getFiles();
         ::sal_Int32          nFiles = lFiles.getLength();
         if ( nFiles == 1 )
@@ -2539,7 +2539,7 @@ void FileDialogHelper::SetCurrentFilter( const OUString& rFilter )
     mpImp->setFilter( sFilter );
 }
 
-uno::Reference < XFilePicker > FileDialogHelper::GetFilePicker() const
+uno::Reference < XFilePicker2 > FileDialogHelper::GetFilePicker() const
 {
     return mpImp->mxFileDlg;
 }

@@ -35,7 +35,7 @@
 #include <dbui.hrc>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 
 using namespace ::com::sun::star::ui::dialogs;
@@ -136,7 +136,7 @@ IMPL_LINK_TYPED(SwMailMergeDocSelectPage, FileSelectHdl, Button*, pButton, void)
     if(!bTemplate)
     {
         sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
-        Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+        Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
         xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
@@ -162,7 +162,7 @@ IMPL_LINK_TYPED(SwMailMergeDocSelectPage, FileSelectHdl, Button*, pButton, void)
 
         if( ERRCODE_NONE == aDlgHelper.Execute() )
         {
-            m_sLoadFileName = xFP->getFiles().getConstArray()[0];
+            m_sLoadFileName = xFP->getSelectedFiles().getConstArray()[0];
         }
     }
     m_pWizard->UpdateRoadmap();

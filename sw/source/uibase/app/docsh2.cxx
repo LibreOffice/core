@@ -105,7 +105,7 @@
 #include <app.hrc>
 #include <poolfmt.hrc>
 #include <globals.hrc>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -503,7 +503,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if(RET_TEMPLATE_LOAD == nRet)
                     {
                         FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
-                        uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+                        uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
@@ -549,7 +549,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                         if( !bError && ERRCODE_NONE == aDlgHelper.Execute() )
                         {
-                            aFileName = xFP->getFiles().getConstArray()[0];
+                            aFileName = xFP->getSelectedFiles().getConstArray()[0];
                         }
                     }
                     else if( RET_OK == nRet)
@@ -916,7 +916,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                     const char** pHelpIds = bCreateHtml ? aHTMLHelpIds : aMasterHelpIds;
                     aDlgHelper.SetControlHelpIds( nControlIds, pHelpIds );
-                    uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+                    uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
                     const SfxFilter* pFlt;
                     sal_uInt16 nStrId;
@@ -1016,7 +1016,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
                         if( ERRCODE_NONE == aDlgHelper.Execute())
                         {
-                            aFileName = xFP->getFiles().getConstArray()[0];
+                            aFileName = xFP->getSelectedFiles().getConstArray()[0];
                             Any aTemplateValue = xCtrlAcc->getValue(
                                 ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
                                 ListboxControlActions::GET_SELECTED_ITEM );

@@ -37,7 +37,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <svtools/indexentryres.hxx>
 #include <editeng/unolingu.hxx>
@@ -100,7 +100,7 @@ static OUString lcl_CreateAutoMarkFileDlg( const OUString& rURL,
 
     FileDialogHelper aDlgHelper( bOpen ?
                 TemplateDescription::FILEOPEN_SIMPLE : TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
-    uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+    uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
     uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( rFileString, "*.sdi" );
@@ -119,7 +119,7 @@ static OUString lcl_CreateAutoMarkFileDlg( const OUString& rURL,
 
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
-        sRet = xFP->getFiles().getConstArray()[0];
+        sRet = xFP->getSelectedFiles().getConstArray()[0];
     }
     rLastSaveDir = sSaveDir;
     return sRet;

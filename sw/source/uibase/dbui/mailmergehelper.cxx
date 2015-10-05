@@ -30,7 +30,7 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/mail/MailServiceProvider.hpp>
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <comphelper/processfactory.hxx>
@@ -64,8 +64,8 @@ OUString CallSaveAsDialog(OUString& rFilter)
     }
 
     rFilter = aDialog.GetRealFilter();
-    uno::Reference < ui::dialogs::XFilePicker > xFP = aDialog.GetFilePicker();
-    return xFP->getFiles().getConstArray()[0];
+    uno::Reference < ui::dialogs::XFilePicker2 > xFP = aDialog.GetFilePicker();
+    return xFP->getSelectedFiles().getConstArray()[0];
 }
 
 /*
