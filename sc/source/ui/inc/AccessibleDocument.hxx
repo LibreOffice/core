@@ -63,6 +63,8 @@ public:
         ScTabViewShell* pViewShell,
         ScSplitPos eSplitPos);
 
+    void PreInit();
+
     virtual void Init() SAL_OVERRIDE;
 
     DECL_LINK_TYPED( WindowChildEventListener, VclWindowEvent&, void );

@@ -462,6 +462,7 @@ com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
     ScAccessibleDocument* pAccessibleDocument =
         new ScAccessibleDocument(GetAccessibleParentWindow()->GetAccessible(),
             pViewData->GetViewShell(), eWhich);
+    pAccessibleDocument->PreInit();
 
     xAcc = pAccessibleDocument;
     SetAccessible(xAcc);

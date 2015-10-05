@@ -1415,7 +1415,7 @@ ScAccessibleDocument::ScAccessibleDocument(
     maVisArea = GetVisibleArea_Impl();
 }
 
-void ScAccessibleDocument::Init()
+void ScAccessibleDocument::PreInit()
 {
     if (mpViewShell)
     {
@@ -1442,6 +1442,10 @@ void ScAccessibleDocument::Init()
             AddChild(xAcc, false);
         }
     }
+}
+
+void ScAccessibleDocument::Init()
+{
     if(!mpChildrenShapes)
         mpChildrenShapes = new ScChildrenShapes(this, mpViewShell, meSplitPos);
 }
