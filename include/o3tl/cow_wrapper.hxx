@@ -22,7 +22,7 @@
 
 #include <osl/interlck.h>
 
-#include <algorithm>
+#include <memory>
 
 namespace o3tl
 {
@@ -200,7 +200,7 @@ int cow_wrapper_client::queryUnmodified() const
         {
             if( m_pimpl && !MTPolicy::decrementCount(m_pimpl->m_ref_count) )
             {
-                delete m_pimpl;
+                ::std::default_delete< impl_t >()( m_pimpl );
                 m_pimpl = nullptr;
             }
         }
