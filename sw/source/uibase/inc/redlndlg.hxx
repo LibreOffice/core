@@ -111,6 +111,9 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SAL_DLLPRIVATE OUString      GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0);
     SAL_DLLPRIVATE sal_uInt16    GetRedlinePos( const SvTreeListEntry& rEntry) const;
 
+    SwRedlineAcceptDlg(SwRedlineAcceptDlg const&) = delete;
+    SwRedlineAcceptDlg& operator=(SwRedlineAcceptDlg const&) = delete;
+
 public:
     SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder, vcl::Window *pContentArea, bool bAutoFormat = false);
     virtual ~SwRedlineAcceptDlg();
