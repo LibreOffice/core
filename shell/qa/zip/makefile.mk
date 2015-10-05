@@ -30,32 +30,23 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
-
-@all:
-.IF "$(GUI)" == "OS2"
-    @echo "Skipping, cppunit broken."
-.ELIF "$(WITH_CPPUNIT)" != "YES"
-    @echo "cppunit disabled. nothing do do."
-.END
-
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+ 
 .ELSE
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-SHL1OBJS = $(SLOFILES)
-SHL1RPATH = NONE
-SHL1STDLIBS = $(SALLIB) $(CPPUNITLIB)  
-SHL1LIBS = $(SLB)$/..$/lib$/iqa_zipimpl.lib
-SHL1TARGET = $(TARGET)
-SHL1VERSIONMAP = $(PRJ)/qa/zip/export.map
-DEF1NAME=$(SHL1TARGET)
-SLOFILES=$(SLO)$/ziptest.obj  
+APP1OBJS = $(SLO)$/ziptest.obj
+APP1RPATH = NONE
+APP1STDLIBS = $(SALLIB) $(GTESTLIB)  
+APP1LIBS = $(SLB)$/..$/lib$/iqa_zipimpl.lib
+APP1TARGET = $(TARGET)
+APP1TEST = enabled
 
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE: _cppunit.mk
 
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"

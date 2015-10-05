@@ -23,33 +23,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include "gtest/gtest.h"
 #include <string>
 #include "testimpl/testzipimpl.hxx"
 using namespace std;
 
-class Test : public CppUnit::TestFixture
+class Test : public ::testing::Test
 {
-        private:
+        protected:
                 string documentName;
         public:
                 Test();
-                void setUp() {}
-                void tearDown() {}
-                void test_directory();
-                void test_hasContentCaseInSensitive();
-                void test_getContent();
-                CPPUNIT_TEST_SUITE(Test);
-                CPPUNIT_TEST(test_directory);
-                CPPUNIT_TEST(test_hasContentCaseInSensitive);
-                CPPUNIT_TEST(test_getContent);
-                CPPUNIT_TEST_SUITE_END();
+                void SetUp() {}
+                void TearDown() {}
 };
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 Test::Test() :
         documentName("simpledocument.odt")
@@ -57,31 +44,31 @@ Test::Test() :
 }
 
 //------------------------------------------------
-void Test::test_directory()
+TEST_F(Test, test_directory)
 {
         TestZipImpl testImpl(documentName.c_str());
         bool isPassed = testImpl.test_directory();
-        CPPUNIT_ASSERT_MESSAGE("Content does not match with expected directory names.", isPassed);
+        ASSERT_TRUE(isPassed) << "Content does not match with expected directory names.";
 }
 
 //------------------------------------------------
-void Test::test_hasContentCaseInSensitive()
+TEST_F(Test, test_hasContentCaseInSensitive)
 {
         TestZipImpl testImpl(documentName.c_str());
         bool isPassed = testImpl.test_hasContentCaseInSensitive();
-        CPPUNIT_ASSERT_MESSAGE("Content in zip file was not found.", isPassed);
+        ASSERT_TRUE(isPassed) << "Content in zip file was not found.";
 }
 
 //------------------------------------------------
-void Test::test_getContent()
+TEST_F(Test, test_getContent)
 {
         TestZipImpl testImpl(documentName.c_str());
         bool isPassed = testImpl.test_getContent();
-        CPPUNIT_ASSERT_MESSAGE("Couldn't receive content buffer form zipfile.", isPassed);
+        ASSERT_TRUE(isPassed) << "Couldn't receive content buffer form zipfile.";
 }
 
-//#####################################
-// register test suites
-
-CPPUNIT_PLUGIN_IMPLEMENT();
-
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
