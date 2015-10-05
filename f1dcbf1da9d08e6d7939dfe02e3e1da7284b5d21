@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_91fc2c40",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-05T17:43:10Z",
+      "side": 1,
+      "message": "An important difference being, the old lcl_internalizeSeries captured bConnectToModel before the loop. If we wanted to do that, we could easily make a private struct functor and do the same thing here.",
+      "revId": "f1dcbf1da9d08e6d7939dfe02e3e1da7284b5d21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
