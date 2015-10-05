@@ -1,3 +1,19 @@
+# avmedia
+avmedia/res/av02048.png cmd/sc_avmediaplayer.png
+avmedia/res/av02049.png cmd/sc_runbasic.png
+avmedia/res/av02050.png cmd/sc_mediapause.png
+avmedia/res/av02051.png cmd/sc_basicstop.png
+avmedia/res/av02052.png cmd/sc_mediarepeat.png
+avmedia/res/av02053.png cmd/sc_ok.png
+avmedia/res/av02054.png cmd/sc_mediamute.png
+avmedia/res/avl02048.png cmd/lc_avmediaplayer.png
+avmedia/res/avl02049.png cmd/lc_runbasic.png
+avmedia/res/avl02050.png cmd/lc_mediapause.png
+avmedia/res/avl02051.png cmd/lc_basicstop.png
+avmedia/res/avl02052.png cmd/lc_mediarepeat.png
+avmedia/res/avl02053.png cmd/lc_ok.png
+avmedia/res/avl02054.png cmd/lc_mediamute.png
+
 # Open
 cmd/lc_openfromwriter.png cmd/lc_open.png
 cmd/lc_openfromcalc.png cmd/lc_open.png
@@ -129,3 +145,35 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 
 # FolderTree expanded icon
 svtools/res/folderop.png formula/res/fapopen.png
+
+# dbaccess
+dbaccess/res/all_left.png cmd/sc_firstrecord.png
+dbaccess/res/all_right.png cmd/sc_lastrecord.png
+dbaccess/res/db.png cmd/sc_viewdatasourcebrowser.png
+dbaccess/res/exerror.png cmd/sc_cancel.png
+dbaccess/res/exinfo.png cmd/sc_helpindex.png
+dbaccess/res/form_16.png cmd/sc_dbformedit.png
+dbaccess/res/forms_16.png cmd/sc_dbformedit.png
+dbaccess/res/forms_32.png res/forms_32.png
+dbaccess/res/lc036.png cmd/lc_dbnewreport.png
+dbaccess/res/lc037.png cmd/lc_delete.png
+dbaccess/res/lc038.png cmd/lc_editdoc.png
+dbaccess/res/lc039.png cmd/lc_save.png
+dbaccess/res/lc040.png cmd/lc_reload.png
+dbaccess/res/nu07.png cmd/sc_ok.png
+dbaccess/res/nu08.png cmd/sc_cancel.png
+dbaccess/res/one_left.png cmd/sc_prevrecord.png
+dbaccess/res/one_right.png cmd/sc_nextrecord.png
+dbaccess/res/pkey.png jo01.png
+dbaccess/res/queries_32.png res/queries_32.png
+dbaccess/res/report_16.png cmd/sc_executereport.png
+dbaccess/res/reports_16.png cmd/sc_executereport.png
+dbaccess/res/reports_32.png res/reports_32.png
+dbaccess/res/sc036.png cmd/sc_executereport.png
+dbaccess/res/sc037.png cmd/sc_delete.png
+dbaccess/res/sc038.png cmd/sc_editdoc.png
+dbaccess/res/sc039.png cmd/sc_save.png
+dbaccess/res/sc040.png cmd/sc_reload.png
+dbaccess/res/sortdown.png cmd/sc_sortascending.png
+dbaccess/res/sortup.png cmd/sc_sortdescending.png
+dbaccess/res/tables_32.png res/tables_32.png
