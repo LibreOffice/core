@@ -3838,7 +3838,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                                 sURL += "#" + *aPartIt;
                             }
-                            else if ( *aPartIt == "\\m" || *aPartIt == "\\n" )
+                            else if (*aPartIt == "\\m" || *aPartIt == "\\n" || *aPartIt == "\\h")
                             {
                             }
                             else if ( *aPartIt == "\\o" || *aPartIt == "\\t" )
