@@ -303,7 +303,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         SFXWB_GRAPHIC ));
     pFileDlg->SetTitle(SW_RESSTR(STR_INSERT_GRAPHIC ));
     pFileDlg->SetContext( FileDialogHelper::SW_INSERT_GRAPHIC );
-    uno::Reference < XFilePicker > xFP = pFileDlg->GetFilePicker();
+    uno::Reference < XFilePicker2 > xFP = pFileDlg->GetFilePicker();
     uno::Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
     if(nHtmlMode & HTMLMODE_ON)
     {

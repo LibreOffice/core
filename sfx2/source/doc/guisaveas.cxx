@@ -927,7 +927,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
         pFileDlg->CreateMatcher( aDocServiceName );
 
-        uno::Reference< ui::dialogs::XFilePicker > xFilePicker = pFileDlg->GetFilePicker();
+        uno::Reference< ui::dialogs::XFilePicker2 > xFilePicker = pFileDlg->GetFilePicker();
         uno::Reference< ui::dialogs::XFilePickerControlAccess > xControlAccess =
         uno::Reference< ui::dialogs::XFilePickerControlAccess >( xFilePicker, uno::UNO_QUERY );
 

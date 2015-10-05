@@ -39,7 +39,7 @@
 #include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/text/AutoTextContainer.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <svl/urihelper.hxx>
@@ -574,7 +574,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     {
         // call the FileOpenDialog do find WinWord - Files with templates
         FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
-        uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+        uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
         SvtPathOptions aPathOpt;
         xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
@@ -597,7 +597,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
 
         if( aDlgHelper.Execute() == ERRCODE_NONE )
         {
-            if( pGlossaryHdl->ImportGlossaries( xFP->getFiles().getConstArray()[0] ))
+            if( pGlossaryHdl->ImportGlossaries( xFP->getSelectedFiles().getConstArray()[0] ))
                 Init();
             else
             {
