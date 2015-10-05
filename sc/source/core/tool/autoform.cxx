@@ -903,7 +903,7 @@ bool DefaultFirstEntry::operator() (const OUString& left, const OUString& right)
         return true;
     if ( ScGlobal::GetpTransliteration()->isEqual( right, aStrStandard ) )
         return false;
-    return left < right;
+    return ScGlobal::GetCollator()->compareString( left, right) < 0;
 }
 
 ScAutoFormat::ScAutoFormat(const ScAutoFormat& r) :
