@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_06446472",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-05T02:12:18Z",
+      "side": 1,
+      "message": "This is a little complex and hard to read. I\u0027ll try to come back to this and improve readability.",
+      "revId": "ddec2b92c7c7885e5ad1d6c9f7972518eb051607",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
