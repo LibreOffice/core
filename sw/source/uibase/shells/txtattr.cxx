@@ -637,6 +637,12 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                         vFontHeight = rSh.GetItemWithPaM( RES_CHRATR_FONTSIZE );
                     for ( std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM>>& pIt : vFontHeight )
                     {
+                        if (!pIt.first)
+                        {
+                            rSet.DisableItem(FN_GROW_FONT_SIZE);
+                            rSet.DisableItem(FN_SHRINK_FONT_SIZE);
+                            break;
+                        }
                         pSize = static_cast<const SvxFontHeightItem*>( pIt.first );
                         sal_uInt32 nSize = pSize->GetHeight();
                         if( nSize == nFontMaxSz )
