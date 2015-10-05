@@ -39,7 +39,6 @@ AccessibleChartShape::AccessibleChartShape(
         const AccessibleElementInfo& rAccInfo,
         bool bMayHaveChildren, bool bAlwaysTransparent )
     :impl::AccessibleChartShape_Base( rAccInfo, bMayHaveChildren, bAlwaysTransparent )
-    ,m_pAccShape( NULL )
 {
     if ( rAccInfo.m_aOID.isAdditionalShape() )
     {
@@ -63,9 +62,8 @@ AccessibleChartShape::AccessibleChartShape(
 
         ::accessibility::ShapeTypeHandler& rShapeHandler = ::accessibility::ShapeTypeHandler::Instance();
         m_pAccShape = rShapeHandler.CreateAccessibleObject( aShapeInfo, m_aShapeTreeInfo );
-        if ( m_pAccShape )
+        if ( m_pAccShape.is() )
         {
-            m_pAccShape->acquire();
             m_pAccShape->Init();
         }
     }
@@ -75,10 +73,9 @@ AccessibleChartShape::~AccessibleChartShape()
 {
     OSL_ASSERT( CheckDisposeState( false /* don't throw exceptions */ ) );
 
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         m_pAccShape->dispose();
-        m_pAccShape->release();
     }
 }
 
@@ -94,7 +91,7 @@ sal_Int32 AccessibleChartShape::getAccessibleChildCount()
     throw (RuntimeException, std::exception)
 {
     sal_Int32 nCount(0);
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         nCount = m_pAccShape->getAccessibleChildCount();
     }
@@ -105,7 +102,7 @@ Reference< XAccessible > AccessibleChartShape::getAccessibleChild( sal_Int32 i )
     throw (lang::IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     Reference< XAccessible > xChild;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         xChild = m_pAccShape->getAccessibleChild( i );
     }
@@ -116,7 +113,7 @@ sal_Int16 AccessibleChartShape::getAccessibleRole()
     throw (RuntimeException, std::exception)
 {
     sal_Int16 nRole(0);
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         nRole = m_pAccShape->getAccessibleRole();
     }
@@ -127,7 +124,7 @@ OUString AccessibleChartShape::getAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString aDescription;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         aDescription = m_pAccShape->getAccessibleDescription();
     }
@@ -138,7 +135,7 @@ OUString AccessibleChartShape::getAccessibleName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString aName;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         aName = m_pAccShape->getAccessibleName();
     }
@@ -150,7 +147,7 @@ sal_Bool AccessibleChartShape::containsPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException, std::exception)
 {
     bool bReturn = false;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         bReturn = m_pAccShape->containsPoint( aPoint );
     }
@@ -161,7 +158,7 @@ Reference< XAccessible > AccessibleChartShape::getAccessibleAtPoint( const awt::
     throw (uno::RuntimeException, std::exception)
 {
     Reference< XAccessible > xResult;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         xResult.set( m_pAccShape->getAccessibleAtPoint( aPoint ) );
     }
@@ -172,7 +169,7 @@ awt::Rectangle AccessibleChartShape::getBounds()
     throw (uno::RuntimeException, std::exception)
 {
     awt::Rectangle aBounds;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         aBounds = m_pAccShape->getBounds();
     }
@@ -183,7 +180,7 @@ awt::Point AccessibleChartShape::getLocation()
     throw (uno::RuntimeException, std::exception)
 {
     awt::Point aLocation;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         aLocation = m_pAccShape->getLocation();
     }
@@ -194,7 +191,7 @@ awt::Point AccessibleChartShape::getLocationOnScreen()
     throw (uno::RuntimeException, std::exception)
 {
     awt::Point aLocation;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         aLocation = m_pAccShape->getLocationOnScreen();
     }
@@ -205,7 +202,7 @@ awt::Size AccessibleChartShape::getSize()
     throw (uno::RuntimeException, std::exception)
 {
     awt::Size aSize;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         aSize = m_pAccShape->getSize();
     }
@@ -222,7 +219,7 @@ sal_Int32 AccessibleChartShape::getForeground()
     throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nColor(0);
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         nColor = m_pAccShape->getForeground();
     }
@@ -233,7 +230,7 @@ sal_Int32 AccessibleChartShape::getBackground()
     throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nColor(0);
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         nColor = m_pAccShape->getBackground();
     }
@@ -245,7 +242,7 @@ Reference< awt::XFont > AccessibleChartShape::getFont()
     throw (uno::RuntimeException, std::exception)
 {
     Reference< awt::XFont > xFont;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         xFont.set( m_pAccShape->getFont() );
     }
@@ -256,7 +253,7 @@ OUString AccessibleChartShape::getTitledBorderText()
     throw (uno::RuntimeException, std::exception)
 {
     OUString aText;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         aText = m_pAccShape->getTitledBorderText();
     }
@@ -267,7 +264,7 @@ OUString AccessibleChartShape::getToolTipText()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString aText;
-    if ( m_pAccShape )
+    if ( m_pAccShape.is() )
     {
         aText = m_pAccShape->getToolTipText();
     }

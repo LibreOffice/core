@@ -168,16 +168,14 @@ uno::Reference<XAccessible>
                         mnNewNameIndex++);
             // Create accessible object that corresponds to the descriptor's
             // shape.
-            AccessibleShape* pShape =
+            rtl::Reference<AccessibleShape> pShape(
                 ShapeTypeHandler::Instance().CreateAccessibleObject (
                     aShapeInfo,
-                    maShapeTreeInfo);
+                    maShapeTreeInfo));
             rChildDescriptor.mxAccessibleShape = uno::Reference<XAccessible> (
-                static_cast<uno::XWeak*>(pShape),
+                static_cast<uno::XWeak*>(pShape.get()),
                 uno::UNO_QUERY);
-            // Now that there is a reference to the new accessible shape we
-            // can safely call its Init() method.
-            if ( pShape != NULL )
+            if ( pShape.is() )
             {
                 pShape->Init();
                 pShape->setIndexInParent(_nIndex);
@@ -802,12 +800,11 @@ bool ChildrenManagerImpl::ReplaceChild (
 {
     AccessibleShapeInfo aShapeInfo( _rxShape, pCurrentChild->getAccessibleParent(), this, _nIndex );
     // create the new child
-    AccessibleShape* pNewChild = ShapeTypeHandler::Instance().CreateAccessibleObject (
+    rtl::Reference<AccessibleShape> pNewChild(ShapeTypeHandler::Instance().CreateAccessibleObject (
         aShapeInfo,
         _rShapeTreeInfo
-    );
-    Reference< XAccessible > xNewChild( pNewChild );    // keep this alive (do this before calling Init!)
-    if ( pNewChild )
+    ));
+    if ( pNewChild.is() )
         pNewChild->Init();
 
     bool bResult = false;
@@ -831,7 +828,7 @@ bool ChildrenManagerImpl::ReplaceChild (
 
             // Replace with replacement and send an event about existence
             // of the new child.
-            I->mxAccessibleShape = pNewChild;
+            I->mxAccessibleShape = pNewChild.get();
             mrContext.CommitChange (
                 AccessibleEventId::CHILD,
                 uno::makeAny (I->mxAccessibleShape),

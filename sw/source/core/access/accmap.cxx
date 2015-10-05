@@ -2028,7 +2028,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
 
             if( !xAcc.is() && bCreate )
             {
-                ::accessibility::AccessibleShape *pAcc = nullptr;
+                rtl::Reference< ::accessibility::AccessibleShape> pAcc;
                 uno::Reference < drawing::XShape > xShape(
                     const_cast< SdrObject * >( pObj )->getUnoShape(),
                     uno::UNO_QUERY );
@@ -2043,7 +2043,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
                     pAcc = rShapeTypeHandler.CreateAccessibleObject(
                                 aShapeInfo, mpShapeMap->GetInfo() );
                 }
-                xAcc = pAcc;
+                xAcc = pAcc.get();
 
                 OSL_ENSURE( xAcc.is(), "unknown shape type" );
                 if( xAcc.is() )
@@ -3204,11 +3204,11 @@ bool SwAccessibleMap::ReplaceChild (
                         ::accessibility::ShapeTypeHandler::Instance();
         ::accessibility::AccessibleShapeInfo aShapeInfo(
                                             xShape, xParent, this );
-        ::accessibility::AccessibleShape* pReplacement =
+        rtl::Reference< ::accessibility::AccessibleShape> pReplacement(
             rShapeTypeHandler.CreateAccessibleObject (
-                aShapeInfo, mpShapeMap->GetInfo() );
+                aShapeInfo, mpShapeMap->GetInfo() ));
 
-        uno::Reference < XAccessible > xAcc( pReplacement );
+        uno::Reference < XAccessible > xAcc( pReplacement.get() );
         if( xAcc.is() )
         {
             pReplacement->Init();

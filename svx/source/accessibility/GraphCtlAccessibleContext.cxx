@@ -145,7 +145,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
         if( iter != mxShapes.end() )
         {
             // if we already have one, return it
-            xAccessibleShape = (*iter).second;
+            xAccessibleShape = (*iter).second.get();
         }
         else
         {
@@ -154,14 +154,11 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
 
             AccessibleShapeInfo aShapeInfo (xShape,mxParent);
             // Create accessible object that corresponds to the descriptor's shape.
-            AccessibleShape* pAcc = ShapeTypeHandler::Instance().CreateAccessibleObject(
-                aShapeInfo, maTreeInfo);
-            xAccessibleShape = pAcc;
-            if (pAcc != NULL)
+            rtl::Reference<AccessibleShape> pAcc(ShapeTypeHandler::Instance().CreateAccessibleObject(
+                aShapeInfo, maTreeInfo));
+            xAccessibleShape = pAcc.get();
+            if (pAcc.is())
             {
-                pAcc->acquire();
-                // Now that we acquired the new accessible shape we can
-                // safely call its Init() method.
                 pAcc->Init ();
             }
             mxShapes[pObj] = pAcc;
@@ -704,12 +701,10 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
 
         for (I=mxShapes.begin(); I!=mxShapes.end(); ++I)
         {
-            XAccessible* pAcc = (*I).second;
-            Reference< XComponent > xComp( pAcc, UNO_QUERY );
+            rtl::Reference<XAccessible> pAcc((*I).second.get());
+            Reference< XComponent > xComp( pAcc.get(), UNO_QUERY );
             if( xComp.is() )
                 xComp->dispose();
-
-            (*I).second->release();
         }
 
         mxShapes.clear();
@@ -782,9 +777,9 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
                     if( iter != mxShapes.end() )
                     {
                         // if we already have one, return it
-                        AccessibleShape* pShape = (*iter).second;
+                        rtl::Reference<AccessibleShape> pShape((*iter).second);
 
-                        if( NULL != pShape )
+                        if( pShape.is() )
                             pShape->CommitChange( AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any() );
                     }
                 }

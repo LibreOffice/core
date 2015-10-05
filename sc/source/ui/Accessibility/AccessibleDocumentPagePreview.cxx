@@ -566,13 +566,12 @@ Size ScIAccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 struct ScShapeChild
 {
     ScShapeChild()
-        : mpAccShape(NULL)
-        , mnRangeId(0)
+        : mnRangeId(0)
     {
     }
     ScShapeChild(const ScShapeChild& rOld);
     ~ScShapeChild();
-    mutable ::accessibility::AccessibleShape* mpAccShape;
+    mutable rtl::Reference< ::accessibility::AccessibleShape > mpAccShape;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
     sal_Int32 mnRangeId;
 };
@@ -582,17 +581,13 @@ ScShapeChild::ScShapeChild(const ScShapeChild& rOld)
 mpAccShape(rOld.mpAccShape),
 mxShape(rOld.mxShape),
 mnRangeId(rOld.mnRangeId)
-{
-    if (mpAccShape)
-        mpAccShape->acquire();
-}
+{}
 
 ScShapeChild::~ScShapeChild()
 {
-    if (mpAccShape)
+    if (mpAccShape.is())
     {
         mpAccShape->dispose();
-        mpAccShape->release();
     }
 }
 
@@ -816,7 +811,7 @@ namespace
         ScVisAreaChanged(const ScIAccessibleViewForwarder* pViewForwarder) : mpViewForwarder(pViewForwarder) {}
         void operator() (const ScShapeChild& rAccShapeData) const
         {
-            if (rAccShapeData.mpAccShape)
+            if (rAccShapeData.mpAccShape.is())
             {
                 rAccShapeData.mpAccShape->ViewForwarderChanged(::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA, mpViewForwarder);
             }
@@ -1015,7 +1010,7 @@ uno::Reference<XAccessible> ScShapeChildren::GetBackgroundShapeAt(const awt::Poi
 
 ::accessibility::AccessibleShape* ScShapeChildren::GetAccShape(const ScShapeChild& rShape) const
 {
-    if (!rShape.mpAccShape)
+    if (!rShape.mpAccShape.is())
     {
         ::accessibility::ShapeTypeHandler& rShapeHandler = ::accessibility::ShapeTypeHandler::Instance();
         ::accessibility::AccessibleShapeInfo aShapeInfo(rShape.mxShape, mpAccDoc, const_cast<ScShapeChildren*>(this));
@@ -1028,14 +1023,13 @@ uno::Reference<XAccessible> ScShapeChildren::GetBackgroundShapeAt(const awt::Poi
             aShapeTreeInfo.SetWindow(mpViewShell->GetWindow());
             aShapeTreeInfo.SetViewForwarder(&(maShapeRanges[rShape.mnRangeId].maViewForwarder));
             rShape.mpAccShape = rShapeHandler.CreateAccessibleObject(aShapeInfo, aShapeTreeInfo);
-            if (rShape.mpAccShape)
+            if (rShape.mpAccShape.is())
             {
-                rShape.mpAccShape->acquire();
                 rShape.mpAccShape->Init();
             }
         }
     }
-    return rShape.mpAccShape;
+    return rShape.mpAccShape.get();
 }
 
 ::accessibility::AccessibleShape* ScShapeChildren::GetAccShape(const ScShapeChildVec& rShapes, sal_Int32 nIndex) const

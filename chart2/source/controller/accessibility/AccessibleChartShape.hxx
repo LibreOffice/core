@@ -86,7 +86,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ::accessibility::AccessibleShape* m_pAccShape;
+    rtl::Reference<accessibility::AccessibleShape> m_pAccShape;
     ::accessibility::AccessibleShapeTreeInfo m_aShapeTreeInfo;
 };
 

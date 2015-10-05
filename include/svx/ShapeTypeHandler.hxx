@@ -118,7 +118,7 @@ public:
              <code>XAccessible</code> interface.  This pointer may be NULL
              if the specified shape is of unknown type.
      */
-    AccessibleShape*
+    rtl::Reference<AccessibleShape>
         CreateAccessibleObject (
             const AccessibleShapeInfo& rShapeInfo,
             const AccessibleShapeTreeInfo& rShapeTreeInfo) const;

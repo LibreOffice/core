@@ -113,17 +113,17 @@ ShapeTypeId ShapeTypeHandler::GetTypeId (const uno::Reference<drawing::XShape>& 
     given shape, then calls the descriptor's create function, and finally
     initializes the new object.
 */
-AccessibleShape*
+rtl::Reference<AccessibleShape>
     ShapeTypeHandler::CreateAccessibleObject (
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo) const
 {
     ShapeTypeId nSlotId (GetSlotId (rShapeInfo.mxShape));
-    AccessibleShape* pShape =
+    rtl::Reference<AccessibleShape> pShape(
         maShapeTypeDescriptorList[nSlotId].maCreateFunction (
             rShapeInfo,
             rShapeTreeInfo,
-            maShapeTypeDescriptorList[nSlotId].mnShapeTypeId);
+            maShapeTypeDescriptorList[nSlotId].mnShapeTypeId));
     return pShape;
 }
 
