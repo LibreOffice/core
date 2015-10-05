@@ -183,22 +183,22 @@ void VCLXAccessibleList::notifyVisibleStates(bool _bSetNew )
     }
 }
 
-void VCLXAccessibleList::UpdateSelection_Acc (const ::rtl::OUString& sTextOfSelectedItem, bool b_IsDropDownList)
+void VCLXAccessibleList::UpdateSelection_Acc (const ::rtl::OUString& /*sTextOfSelectedItem*/, bool b_IsDropDownList)
 {
     if ( m_aBoxType == COMBOBOX )
     {
-        VclPtr< ComboBox > pBox = GetAs< ComboBox >();
-        if ( pBox )
-        {
-            // Find the index of the selected item inside the VCL control...
-            sal_Int32 nIndex = pBox->GetEntryPos(sTextOfSelectedItem);
-            // ...and then find the associated accessibility object.
-            if ( nIndex == LISTBOX_ENTRY_NOTFOUND )
-                nIndex = 0;
-            /* FIXME: is there something missing here? nIndex is unused. Looks 
-             * like copy-paste from VCLXAccessibleList::UpdateSelection() */
-            UpdateSelection_Impl_Acc(b_IsDropDownList);
-        }
+        /* FIXME: is there something missing here? nIndex is unused. Looks like
+         * copy-paste from VCLXAccessibleList::UpdateSelection() */
+        // VclPtr< ComboBox > pBox = GetAs< ComboBox >();
+        // if ( pBox )
+        // {
+        //     // Find the index of the selected item inside the VCL control...
+        //     sal_Int32 nIndex = pBox->GetEntryPos(sTextOfSelectedItem);
+        //     // ...and then find the associated accessibility object.
+        //     if ( nIndex == LISTBOX_ENTRY_NOTFOUND )
+        //         nIndex = 0;
+               UpdateSelection_Impl_Acc(b_IsDropDownList);
+        // }
     }
 }
 
