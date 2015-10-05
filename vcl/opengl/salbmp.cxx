@@ -515,25 +515,31 @@ bool OpenGLSalBitmap::ReadTexture()
 
         sal_uInt8* pCurrent = pBuffer;
 
-        for (size_t i = 0; i < aBuffer.size(); i += 3)
+        for (int y = 0; y < mnHeight; ++y)
         {
-            sal_uInt8 nR = *pCurrent++;
-            sal_uInt8 nG = *pCurrent++;
-            sal_uInt8 nB = *pCurrent++;
+            for (int x = 0; x < mnWidth; ++x)
+            {
+                if (nShift < 0)
+                {
+                    nShift = 7;
+                    nIndex++;
+                    pData[nIndex] = 0;
+                }
 
-            if (nR > 0 && nG > 0 && nB > 0)
-            {
-                pData[nIndex] |= (1 << nShift);
+                sal_uInt8 nR = *pCurrent++;
+                sal_uInt8 nG = *pCurrent++;
+                sal_uInt8 nB = *pCurrent++;
+
+                if (nR > 0 && nG > 0 && nB > 0)
+                {
+                    pData[nIndex] |= (1 << nShift);
+                }
+                nShift--;
             }
-            nShift--;
-            if (nShift < 0)
-            {
-                nShift = 7;
-                nIndex++;
-                pData[nIndex] = 0;
-            }
+            nShift = 7;
+            nIndex++;
+            pData[nIndex] = 0;
         }
-
         mnBufWidth = mnWidth;
         mnBufHeight = mnHeight;
         return true;
