@@ -767,179 +767,158 @@ namespace osl_FileBase
 
     class getAbsoluteFileURL:public ::testing::Test
     {
-        //::osl::FileBase       aFileBase;
-            ::rtl::OUString     aResultURL1, aResultURL2, aResultURL3, aResultURL4, aResultURL5, aResultURL6;
-            // ::osl::FileBase::RC  nError;
+    protected:
+        ::osl::FileBase     aFileBase;
+        ::rtl::OUString     aResultURL1, aResultURL2, aResultURL3, aResultURL4, aResultURL5, aResultURL6;
+        ::osl::FileBase::RC nError;
         sal_Bool        bOk;
 
         public:
-
+            void SetUp();
+            void TearDown();
             void check_getAbsoluteFileURL( rtl::OUString const& _suBaseURL,  rtl::OString const& _sRelativeURL, ::osl::FileBase::RC _nAssumeError, rtl::OUString const& _suAssumeResultStr );
-
-      void getAbsoluteFileURL_001_1();
-      void getAbsoluteFileURL_001_2();
-      void getAbsoluteFileURL_001_3();
-      void getAbsoluteFileURL_001_4();
-      void getAbsoluteFileURL_001_5();
-      void getAbsoluteFileURL_001_6();
-      void getAbsoluteFileURL_001_7();
-      void getAbsoluteFileURL_001_8();
-      void getAbsoluteFileURL_002();
-      void getAbsoluteFileURL_003();
-      void getAbsoluteFileURL_004();
     }; //class getAbsoluteFileURL
 
-/* use coding format as same as getSystemPathFromFileURL
-        // initialization
-        void setUp( )
-        {
-            sal_Char pResultURL1[]  = "/relative/file1";
-            sal_Char pResultURL2[]  = "/relative/file2";
-            sal_Char pResultURL3[]  = "/file3";
-            sal_Char pResultURL4[]  = "/file4";
-            sal_Char pResultURL5[]  = "/canonical.name";
-            sal_Char pResultURL6[]  = "/relative/";
-            aResultURL1 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL1 ) );
-            aResultURL2 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL2 ) );
-            aResultURL3 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL3 ) );
-            aResultURL4 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL4 ) );
-            aResultURL5 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL5 ) );
-            aResultURL6 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL6 ) );
-        }
+/* use coding format as same as getSystemPathFromFileURL*/
+    // initialization
+    void getAbsoluteFileURL::SetUp( )
+    {
+        sal_Char pResultURL1[]  = "/relative/file1";
+        sal_Char pResultURL2[]  = "/relative/file2";
+        sal_Char pResultURL3[]  = "/file3";
+        sal_Char pResultURL4[]  = "/file4";
+        sal_Char pResultURL5[]  = "/canonical.name";
+        sal_Char pResultURL6[]  = "/relative/";
+        aResultURL1 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL1 ) );
+        aResultURL2 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL2 ) );
+        aResultURL3 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL3 ) );
+        aResultURL4 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL4 ) );
+        aResultURL5 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL5 ) );
+        aResultURL6 = aUserDirectoryURL.concat( rtl::OUString::createFromAscii( pResultURL6 ) );
+    }
 
-        void tearDown( )
-        {
-        }
+    void getAbsoluteFileURL::TearDown( )
+    {
+    }
 
-        // test code
-        void getAbsoluteFileURL_001( )
-        {
-            ::rtl::OUString aUStr_AbsURL;
+    // test code
+    TEST_F(getAbsoluteFileURL, getAbsoluteFileURL_001)
+    {
+        ::rtl::OUString aUStr_AbsURL;
 
-            ::osl::FileBase::RC nError11 = aFileBase.getAbsoluteFileURL( aUserDirectoryURL,  aRelURL1, aUStr_AbsURL );
-            ::rtl::OUString suError = ::rtl::OUString::createFromAscii("test for getAbsoluteFileURL(' ");
-            suError += aUserDirectoryURL;
-            suError += ::rtl::OUString::createFromAscii("', '");
-            suError += aRelURL1;
-            suError += ::rtl::OUString::createFromAscii("', '");
-            suError += aUStr_AbsURL;
-            suError += outputError( aUStr_AbsURL, aResultURL1, "' ),");
+        ::osl::FileBase::RC nError11 = aFileBase.getAbsoluteFileURL( aUserDirectoryURL,  aRelURL1, aUStr_AbsURL );
+        ::rtl::OUString suError = ::rtl::OUString::createFromAscii("test for getAbsoluteFileURL(' ");
+        suError += aUserDirectoryURL;
+        suError += ::rtl::OUString::createFromAscii("', '");
+        suError += aRelURL1;
+        suError += ::rtl::OUString::createFromAscii("', '");
+        suError += aUStr_AbsURL;
+        suError += outputError( aUStr_AbsURL, aResultURL1, "' ),");
 
-            sal_Bool nError12 = aUStr_AbsURL.equals( aResultURL1 );
-            ::osl::FileBase::RC nError21 = aFileBase.getAbsoluteFileURL( aUserDirectoryURL,  aRelURL2, aUStr_AbsURL );
-            sal_Bool nError22 = aUStr_AbsURL.equals( aResultURL2 );
-            ::osl::FileBase::RC nError31 = aFileBase.getAbsoluteFileURL( aUserDirectoryURL,  aRelURL3, aUStr_AbsURL );
-            sal_Bool nError32 = aUStr_AbsURL.equals( aResultURL3 );
-            ::osl::FileBase::RC nError41 = aFileBase.getAbsoluteFileURL( aUserDirectoryURL,  aRelURL4, aUStr_AbsURL );
-            sal_Bool nError42 = aUStr_AbsURL.equals( aResultURL4 );
-            ::osl::FileBase::RC nError61 = aFileBase.getAbsoluteFileURL( aUserDirectoryURL,  aRelURL6, aUStr_AbsURL );
-            sal_Bool nError62 = aUStr_AbsURL.equals( aResultURL6 );
-            printFileName( aUStr_AbsURL );
-            printFileName( aResultURL6 );
+        sal_Bool nError12 = aUStr_AbsURL.equals( aResultURL1 );
+        ::osl::FileBase::RC nError21 = aFileBase.getAbsoluteFileURL( aUserDirectoryURL,  aRelURL2, aUStr_AbsURL );
+        sal_Bool nError22 = aUStr_AbsURL.equals( aResultURL2 );
+        ::osl::FileBase::RC nError31 = aFileBase.getAbsoluteFileURL( aUserDirectoryURL,  aRelURL3, aUStr_AbsURL );
+        sal_Bool nError32 = aUStr_AbsURL.equals( aResultURL3 );
+        ::osl::FileBase::RC nError41 = aFileBase.getAbsoluteFileURL( aUserDirectoryURL,  aRelURL4, aUStr_AbsURL );
+        sal_Bool nError42 = aUStr_AbsURL.equals( aResultURL4 );
+        printFileName( aUStr_AbsURL );
+        printFileName( aResultURL6 );
 
-            ASSERT_TRUE(( ::osl::FileBase::E_None == nError11 ) && ( sal_True == nError12 ) &&
-                                     ( ::osl::FileBase::E_None == nError21 ) && ( sal_True == nError22 ) &&
-                                     ( ::osl::FileBase::E_None == nError31 ) && ( sal_True == nError32 ) &&
-                                     ( ::osl::FileBase::E_None == nError41 ) && ( sal_True == nError42 ) &&
-                                     ( ::osl::FileBase::E_None == nError61 ) && ( sal_True == nError62 )) << "test for getAbsoluteFileURL function: valid file name with valid directory";
-        }
+        ASSERT_TRUE(( ::osl::FileBase::E_None == nError11 ) && ( sal_True == nError12 ) &&
+                                ( ::osl::FileBase::E_None == nError21 ) && ( sal_True == nError22 ) &&
+                                ( ::osl::FileBase::E_None == nError31 ) && ( sal_True == nError32 ) &&
+                                ( ::osl::FileBase::E_None == nError41 ) && ( sal_True == nError42 )) << "test for getAbsoluteFileURL function: valid file name with valid directory";
+    }
 
 
 #if ( defined UNX ) || ( defined OS2 )  //Link is not defined in Windows
-        void getAbsoluteFileURL_002( )
-        {
-            ::rtl::OUString aUStr_AbsURL, aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
-            ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID( ) ) += ::rtl::OUString::createFromAscii("/link.file");
-            ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID( ) ) += ::rtl::OUString::createFromAscii("/canonical.name");
+    TEST_F(getAbsoluteFileURL, getAbsoluteFileURL_002_1)
+    {
+        ::rtl::OUString aUStr_AbsURL, aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
+        ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID( ) ) += ::rtl::OUString::createFromAscii("/link.file");
+        ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID( ) ) += ::rtl::OUString::createFromAscii("/canonical.name");
 
-                rtl::OString strLinkFileName, strSrcFileName;
-                strLinkFileName = OUStringToOString( aUStr_LnkFileSys, RTL_TEXTENCODING_ASCII_US );
-                strSrcFileName =  OUStringToOString( aUStr_SrcFileSys, RTL_TEXTENCODING_ASCII_US );
+            rtl::OString strLinkFileName, strSrcFileName;
+            strLinkFileName = OUStringToOString( aUStr_LnkFileSys, RTL_TEXTENCODING_ASCII_US );
+            strSrcFileName =  OUStringToOString( aUStr_SrcFileSys, RTL_TEXTENCODING_ASCII_US );
 
-            createTestFile( aCanURL1 );
-                sal_Int32 fd = symlink( strSrcFileName.getStr(), strLinkFileName.getStr() );
-            ASSERT_TRUE( fd == 0 );
+        createTestFile( aCanURL1 );
+            sal_Int32 fd = symlink( strSrcFileName.getStr(), strLinkFileName.getStr() );
+        ASSERT_TRUE( fd == 0 );
 
-            nError = aFileBase.getAbsoluteFileURL( aUserDirectoryURL, aLnkURL1, aUStr_AbsURL );
-            bOk = aUStr_AbsURL.equals( aResultURL5 );
+        nError = aFileBase.getAbsoluteFileURL( aUserDirectoryURL, aLnkURL1, aUStr_AbsURL );
+        bOk = aUStr_AbsURL.equals( aResultURL5 );
 
-            ::rtl::OUString suError = ::rtl::OUString::createFromAscii("test for getAbsoluteFileURL(' ");
-            suError += aUserDirectoryURL;
-            suError += ::rtl::OUString::createFromAscii("', '");
-            suError += aLnkURL1;
-            suError += ::rtl::OUString::createFromAscii("', '");
-            suError += aUStr_AbsURL;
-            suError += outputError( aUStr_AbsURL, aResultURL5, "' ),");
-            //printFileName(suError);
+        ::rtl::OUString suError = ::rtl::OUString::createFromAscii("test for getAbsoluteFileURL(' ");
+        suError += aUserDirectoryURL;
+        suError += ::rtl::OUString::createFromAscii("', '");
+        suError += aLnkURL1;
+        suError += ::rtl::OUString::createFromAscii("', '");
+        suError += aUStr_AbsURL;
+        suError += outputError( aUStr_AbsURL, aResultURL5, "' ),");
+        //printFileName(suError);
 
-            deleteTestFile( aCanURL1 );
-                fd = remove( strLinkFileName.getStr() );
-            ASSERT_TRUE( fd == 0 );
+        deleteTestFile( aCanURL1 );
+            fd = remove( strLinkFileName.getStr() );
+        ASSERT_TRUE( fd == 0 );
 
-            ASSERT_TRUE(( ::osl::FileBase::E_None == nError ) && ( sal_True == bOk )) << "test for getAbsoluteFileURL function: URL contain link( Solaris version )";
-        }
+        ASSERT_TRUE(( ::osl::FileBase::E_None == nError ) && ( sal_True == bOk )) << "test for getAbsoluteFileURL function: URL contain link( Solaris version )";
+    }
 #else       //Windows version
-        void getAbsoluteFileURL_002( )
-        {
-            ASSERT_TRUE(1) << "test for getAbsoluteFileURL function: URL contain link( Windows version )";
-        }
+    TEST_F(getAbsoluteFileURL, getAbsoluteFileURL_002_1)
+    {
+        ASSERT_TRUE(1) << "test for getAbsoluteFileURL function: URL contain link( Windows version )";
+    }
 #endif
 
-        void getAbsoluteFileURL_003( )
-        {
+    TEST_F(getAbsoluteFileURL, getAbsoluteFileURL_003_1)
+    {
 // LLA: may be a wrong test, aTmpName1 not a real URL
 #if 0
-            ::rtl::OUString aUStr_AbsURL;
+        ::rtl::OUString aUStr_AbsURL;
 
-            nError = aFileBase.getAbsoluteFileURL( aTmpName1,  aRelURL1, aUStr_AbsURL );    //base dir invalid error
-            ::rtl::OUString suError = ::rtl::OUString::createFromAscii("test for getAbsoluteFileURL('");
-            suError += aTmpName1;
-            suError += ::rtl::OUString::createFromAscii("', '");
-            suError += aRelURL1;
-            suError += ::rtl::OUString::createFromAscii("', '");
-            suError += aUStr_AbsURL;
-            suError += ::rtl::OUString::createFromAscii("' ),Parameter is invalid. it ignore the invalid base in Windows, did not pass in (W32), the reason maybe caused by the similar bug with getSystemPathFromFileURL() ");
+        nError = aFileBase.getAbsoluteFileURL( aTmpName1,  aRelURL1, aUStr_AbsURL );    //base dir invalid error
+        ::rtl::OUString suError = ::rtl::OUString::createFromAscii("test for getAbsoluteFileURL('");
+        suError += aTmpName1;
+        suError += ::rtl::OUString::createFromAscii("', '");
+        suError += aRelURL1;
+        suError += ::rtl::OUString::createFromAscii("', '");
+        suError += aUStr_AbsURL;
+        suError += ::rtl::OUString::createFromAscii("' ),Parameter is invalid. it ignore the invalid base in Windows, did not pass in (W32), the reason maybe caused by the similar bug with getSystemPathFromFileURL() ");
 
-            ASSERT_TRUE(( ::osl::FileBase::E_INVAL == nError )) << suError;
+        ASSERT_TRUE(( ::osl::FileBase::E_INVAL == nError )) << suError;
 #endif
-        }
+    }
 
-        //use ".." in relartive path, the BasePath must exist on the file system
-        void getAbsoluteFileURL_004( )
-        {
-            //create two level directories under $Temp/PID/
-            ::rtl::OUString aUStrUpBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1");
-            createTestDirectory( aUStrUpBase );
-            ::rtl::OUString aUStrBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1/dir1");
-            createTestDirectory( aUStrBase );
+    //use ".." in relartive path, the BasePath must exist on the file system
+    TEST_F(getAbsoluteFileURL, getAbsoluteFileURL_004_1)
+    {
+        //create two level directories under $Temp/PID/
+        ::rtl::OUString aUStrUpBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1");
+        createTestDirectory( aUStrUpBase );
+        ::rtl::OUString aUStrBase = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/test1/dir1");
+        createTestDirectory( aUStrBase );
 
-            ::rtl::OUString aUStrRelar = ::rtl::OUString::createFromAscii("../../mytestfile");
-            ::rtl::OUString aUStr_AbsURL;
-            ::rtl::OUString aResultURL6 = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/mytestfile");
+        ::rtl::OUString aUStrRelar = ::rtl::OUString::createFromAscii("../../mytestfile");
+        ::rtl::OUString aUStr_AbsURL;
+        ::rtl::OUString aResultURL6 = aUserDirectoryURL + ::rtl::OUString::createFromAscii("/mytestfile");
 
-            nError = aFileBase.getAbsoluteFileURL( aUStrBase,  aUStrRelar, aUStr_AbsURL );
-            bOk = aUStr_AbsURL.equals( aResultURL6 );
-            ::rtl::OUString suError = ::rtl::OUString::createFromAscii("test for getAbsoluteFileURL('");
-            suError += aUStrBase;
-            suError += ::rtl::OUString::createFromAscii("', '");
-            suError += aUStrRelar;
-            suError += ::rtl::OUString::createFromAscii("', '");
-            suError += aUStr_AbsURL;
-            suError += outputError( aUStr_AbsURL, aResultURL6, "' ), did not pass on Win32 ");
+        nError = aFileBase.getAbsoluteFileURL( aUStrBase,  aUStrRelar, aUStr_AbsURL );
+        bOk = aUStr_AbsURL.equals( aResultURL6 );
+        ::rtl::OUString suError = ::rtl::OUString::createFromAscii("test for getAbsoluteFileURL('");
+        suError += aUStrBase;
+        suError += ::rtl::OUString::createFromAscii("', '");
+        suError += aUStrRelar;
+        suError += ::rtl::OUString::createFromAscii("', '");
+        suError += aUStr_AbsURL;
+        suError += outputError( aUStr_AbsURL, aResultURL6, "' ), did not pass on Win32 ");
 
-            deleteTestDirectory( aUStrBase );
-            deleteTestDirectory( aUStrUpBase );
+        deleteTestDirectory( aUStrBase );
+        deleteTestDirectory( aUStrUpBase );
 
-            ASSERT_TRUE(( ::osl::FileBase::E_None == nError ) && ( sal_True == bOk )) << suError;
-        }
-
-        CPPUNIT_TEST_SUITE( getAbsoluteFileURL );
-        CPPUNIT_TEST( getAbsoluteFileURL_001 );
-        CPPUNIT_TEST( getAbsoluteFileURL_002 );
-        CPPUNIT_TEST( getAbsoluteFileURL_003 );
-        CPPUNIT_TEST( getAbsoluteFileURL_004 );
-        CPPUNIT_TEST_SUITE_END( );
-    };// class getAbsoluteFileURL*/
+        ASSERT_TRUE(( ::osl::FileBase::E_None == nError ) && ( sal_True == bOk )) << suError.pData;
+    }
 
     void getAbsoluteFileURL::check_getAbsoluteFileURL( rtl::OUString const& _suBaseURL,  rtl::OString const& _sRelativeURL, ::osl::FileBase::RC _nAssumeError, rtl::OUString const& _suAssumeResultStr )
     {
@@ -4649,8 +4628,7 @@ namespace osl_File
 #if defined ( WNT )
         //Unfortunately there is no way to get the creation time of a file under Unix (its a Windows only feature).
         //That means the flag osl_FileStatus_Mask_CreationTime should be deprecated under Unix.
-        CPPUNIT_ASSERT_MESSAGE( "test for setTime function: set creation time then get it. ",
-            sal_True == t_compareTime( pTV_creation, pTV_current, delta ) ) ;
+        ASSERT_TRUE( sal_True == t_compareTime( pTV_creation, pTV_current, delta ) ) << "test for setTime function: set creation time then get it. ";
 #endif
         ASSERT_TRUE(sal_True == t_compareTime( pTV_modify, pTV_current, delta )) << "test for setTime function: set modify time then get it. ";
         free( pTV_current );
