@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XOutline > ScVbaOutline_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XOutline > ScVbaOutline_BASE;
 
 class ScVbaOutline :  public ScVbaOutline_BASE
 {

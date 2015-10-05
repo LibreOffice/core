@@ -23,11 +23,10 @@
 #include <ooo/vba/word/XAutoTextEntries.hpp>
 #include <ooo/vba/word/XAutoTextEntry.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/word/XRange.hpp>
 #include <com/sun/star/text/XAutoTextEntry.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XAutoTextEntry > SwVbaAutoTextEntry_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XAutoTextEntry > SwVbaAutoTextEntry_BASE;
 
 class SwVbaAutoTextEntry : public SwVbaAutoTextEntry_BASE
 {

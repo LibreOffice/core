@@ -25,7 +25,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbafillformat.hxx"
 
-typedef InheritedHelperInterfaceImpl1< ov::msforms::XColorFormat > ScVbaColorFormat_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XColorFormat > ScVbaColorFormat_BASE;
 
 class ColorFormatType
 {

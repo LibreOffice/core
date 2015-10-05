@@ -21,12 +21,11 @@
 
 #include <ooo/vba/word/XColumn.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/table/XTableColumns.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XColumn > SwVbaColumn_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XColumn > SwVbaColumn_BASE;
 
 class SwVbaColumn : public SwVbaColumn_BASE
 {

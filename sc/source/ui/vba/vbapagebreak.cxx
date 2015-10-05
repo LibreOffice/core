@@ -22,8 +22,8 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-template< typename Ifc1 >
-ScVbaPageBreak<Ifc1>::ScVbaPageBreak( const uno::Reference< XHelperInterface >& xParent,
+template< typename... Ifc >
+ScVbaPageBreak< Ifc... >::ScVbaPageBreak( const uno::Reference< XHelperInterface >& xParent,
                     const uno::Reference< uno::XComponentContext >& xContext,
                     uno::Reference< beans::XPropertySet >& xProps,
                     sheet::TablePageBreakData aTablePageBreakData) throw (uno::RuntimeException):
@@ -33,8 +33,8 @@ ScVbaPageBreak<Ifc1>::ScVbaPageBreak( const uno::Reference< XHelperInterface >& 
 {
 }
 
-template< typename Ifc1 >
-sal_Int32 ScVbaPageBreak<Ifc1>::getType() throw (uno::RuntimeException)
+template< typename... Ifc >
+sal_Int32 ScVbaPageBreak< Ifc... >::getType() throw (uno::RuntimeException)
 {
     uno::Any aValue = mxRowColPropertySet->getPropertyValue("IsStartOfNewPage");
     bool hasPageBreak = false;
@@ -49,8 +49,8 @@ sal_Int32 ScVbaPageBreak<Ifc1>::getType() throw (uno::RuntimeException)
     return excel::XlPageBreak::xlPageBreakAutomatic;
 }
 
-template< typename Ifc1 >
-void ScVbaPageBreak<Ifc1>::setType(sal_Int32 type) throw (uno::RuntimeException)
+template< typename... Ifc >
+void ScVbaPageBreak< Ifc... >::setType(sal_Int32 type) throw (uno::RuntimeException)
 {
     if( (type != excel::XlPageBreak::xlPageBreakNone) &&
         (type != excel::XlPageBreak::xlPageBreakManual) &&
@@ -72,14 +72,14 @@ void ScVbaPageBreak<Ifc1>::setType(sal_Int32 type) throw (uno::RuntimeException)
         maTablePageBreakData.ManualBreak = false;
 }
 
-template< typename Ifc1 >
-void ScVbaPageBreak<Ifc1>::Delete() throw ( script::BasicErrorException, uno::RuntimeException)
+template< typename... Ifc >
+void ScVbaPageBreak< Ifc... >::Delete() throw ( script::BasicErrorException, uno::RuntimeException)
 {
     mxRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::makeAny(sal_False));
 }
 
-template< typename Ifc1 >
-uno::Reference< excel::XRange> ScVbaPageBreak<Ifc1>::Location() throw ( script::BasicErrorException, uno::RuntimeException)
+template< typename... Ifc >
+uno::Reference< excel::XRange> ScVbaPageBreak< Ifc... >::Location() throw ( script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< table::XCellRange > xRange( mxRowColPropertySet, uno::UNO_QUERY_THROW );
     return new ScVbaRange( ScVbaPageBreak_BASE::getParent(), ScVbaPageBreak_BASE::mxContext, xRange);

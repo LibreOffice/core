@@ -22,7 +22,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <ooo/vba/XGlobalsBase.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ov::XGlobalsBase > Globals_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::XGlobalsBase > Globals_BASE;
 class VBAHELPER_DLLPUBLIC VbaGlobalsBase : public Globals_BASE
 {
 protected:

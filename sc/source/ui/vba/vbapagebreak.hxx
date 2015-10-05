@@ -29,10 +29,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-template< typename Ifc1 >
-class ScVbaPageBreak : public InheritedHelperInterfaceImpl1< Ifc1 >
+template< typename... Ifc >
+class ScVbaPageBreak : public InheritedHelperInterfaceWeakImpl< Ifc... >
 {
-typedef InheritedHelperInterfaceImpl1< Ifc1 > ScVbaPageBreak_BASE;
+typedef InheritedHelperInterfaceWeakImpl< Ifc... > ScVbaPageBreak_BASE;
 protected:
     css::uno::Reference< css::beans::XPropertySet > mxRowColPropertySet;
     css::sheet::TablePageBreakData maTablePageBreakData;

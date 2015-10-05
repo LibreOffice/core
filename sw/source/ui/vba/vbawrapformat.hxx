@@ -23,7 +23,7 @@
 #include <ooo/vba/word/XWrapFormat.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XWrapFormat > SwVbaWrapFormat_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XWrapFormat > SwVbaWrapFormat_BASE;
 
 class SwVbaWrapFormat : public SwVbaWrapFormat_BASE
 {

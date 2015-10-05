@@ -35,7 +35,7 @@ using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel;
 
 typedef ::cppu::WeakImplHelper<container::XIndexAccess > RangeBorders_Base;
-typedef InheritedHelperInterfaceImpl1<excel::XBorder > ScVbaBorder_Base;
+typedef InheritedHelperInterfaceWeakImpl<excel::XBorder > ScVbaBorder_Base;
 
 // #TODO sort these indexes to match the order in which Excel iterates over the
 // borders, the enumeration will match the order in this list

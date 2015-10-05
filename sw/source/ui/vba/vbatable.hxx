@@ -25,7 +25,7 @@
 #include <ooo/vba/word/XRange.hpp>
 #include <ooo/vba/word/XTable.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XTable > SwVbaTable_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XTable > SwVbaTable_BASE;
 
 class SwVbaTable : public SwVbaTable_BASE
 {

@@ -23,7 +23,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1<ov::excel::XValidation > ValidationImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl<ov::excel::XValidation > ValidationImpl_BASE;
 
 class ScVbaValidation : public ValidationImpl_BASE
 {

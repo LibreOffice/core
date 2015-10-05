@@ -26,11 +26,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/msforms/XShape.hpp>
 #include <ooo/vba/msforms/XLineFormat.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef  ::cppu::WeakImplHelper2< ov::msforms::XShape, css::lang::XEventListener > ListeningShape;
+typedef  ::cppu::WeakImplHelper< ov::msforms::XShape, css::lang::XEventListener > ListeningShape;
 
 typedef InheritedHelperInterfaceImpl< ListeningShape > ScVbaShape_BASE;
 

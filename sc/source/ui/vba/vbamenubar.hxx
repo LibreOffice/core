@@ -13,7 +13,7 @@
 #include <ooo/vba/XCommandBar.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XMenuBar > MenuBar_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XMenuBar > MenuBar_BASE;
 
 class ScVbaMenuBar : public MenuBar_BASE
 {

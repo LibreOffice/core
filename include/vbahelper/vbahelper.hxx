@@ -30,7 +30,6 @@
 #include <com/sun/star/awt/XUnitConversion.hpp>
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>

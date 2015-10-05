@@ -31,7 +31,7 @@
 #include <ooo/vba/word/XHeaderFooter.hpp>
 #include "wordvbahelper.hxx"
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XSelection > SwVbaSelection_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XSelection > SwVbaSelection_BASE;
 
 class SwVbaSelection : public SwVbaSelection_BASE
 {

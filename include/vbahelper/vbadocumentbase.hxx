@@ -23,7 +23,7 @@
 #include <ooo/vba/XDocumentBase.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::XDocumentBase > VbaDocumentBase_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::XDocumentBase > VbaDocumentBase_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaDocumentBase : public VbaDocumentBase_BASE
 {

@@ -25,7 +25,7 @@
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbapalette.hxx"
-typedef InheritedHelperInterfaceImpl1< ov::excel::XCharacters > ScVbaCharacters_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XCharacters > ScVbaCharacters_BASE;
 
 class ScVbaCharacters : public ScVbaCharacters_BASE
 {

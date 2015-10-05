@@ -21,11 +21,10 @@
 
 #include <ooo/vba/word/XOptions.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <vbahelper/vbapropvalue.hxx>
 #include <comphelper/processfactory.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XOptions > SwVbaOptions_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XOptions > SwVbaOptions_BASE;
 
 class SwVbaOptions : public SwVbaOptions_BASE,
                     public PropListener

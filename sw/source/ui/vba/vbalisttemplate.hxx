@@ -21,11 +21,10 @@
 
 #include <ooo/vba/word/XListTemplate.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include "vbalisthelper.hxx"
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XListTemplate > SwVbaListTemplate_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XListTemplate > SwVbaListTemplate_BASE;
 
 class SwVbaListTemplate : public SwVbaListTemplate_BASE
 {

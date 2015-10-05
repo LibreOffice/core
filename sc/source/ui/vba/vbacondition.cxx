@@ -28,15 +28,15 @@ using namespace ::com::sun::star;
 
 const sal_Int32 ISFORMULA = 98765432;
 
-template< typename Ifc1 >
-ScVbaCondition< Ifc1 >::ScVbaCondition(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetCondition >& _xSheetCondition ) : ScVbaCondition_BASE( xParent, xContext ), mxSheetCondition( _xSheetCondition )
+template< typename... Ifc >
+ScVbaCondition< Ifc... >::ScVbaCondition(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetCondition >& _xSheetCondition ) : ScVbaCondition_BASE( xParent, xContext ), mxSheetCondition( _xSheetCondition )
 {
     mxAddressable.set( xParent, uno::UNO_QUERY_THROW );
 }
 
-template< typename Ifc1 >
+template< typename... Ifc >
 sheet::ConditionOperator
-ScVbaCondition< Ifc1 >::retrieveAPIOperator( const uno::Any& _aOperator) throw ( script::BasicErrorException )
+ScVbaCondition< Ifc... >::retrieveAPIOperator( const uno::Any& _aOperator) throw ( script::BasicErrorException )
 {
     sheet::ConditionOperator aRetAPIOperator = sheet::ConditionOperator_NONE;
     sal_Int32 nOperator = 0;
@@ -76,23 +76,23 @@ ScVbaCondition< Ifc1 >::retrieveAPIOperator( const uno::Any& _aOperator) throw (
     return aRetAPIOperator;
 }
 
-template< typename Ifc1 >
+template< typename... Ifc >
 OUString
-ScVbaCondition< Ifc1 >::Formula1( ) throw ( script::BasicErrorException, uno::RuntimeException )
+ScVbaCondition< Ifc... >::Formula1( ) throw ( script::BasicErrorException, uno::RuntimeException )
 {
      return mxSheetCondition->getFormula1();
 }
 
-template< typename Ifc1 >
+template< typename... Ifc >
 OUString
-ScVbaCondition< Ifc1 >::Formula2( ) throw ( script::BasicErrorException, uno::RuntimeException )
+ScVbaCondition< Ifc... >::Formula2( ) throw ( script::BasicErrorException, uno::RuntimeException )
 {
      return mxSheetCondition->getFormula2();
 }
 
-template< typename Ifc1 >
+template< typename... Ifc >
 void
-ScVbaCondition< Ifc1 >::setFormula1( const uno::Any& _aFormula1) throw ( script::BasicErrorException )
+ScVbaCondition< Ifc... >::setFormula1( const uno::Any& _aFormula1) throw ( script::BasicErrorException )
 {
     OUString sFormula;
     if ( (_aFormula1 >>= sFormula ))
@@ -104,9 +104,9 @@ ScVbaCondition< Ifc1 >::setFormula1( const uno::Any& _aFormula1) throw ( script:
     }
 }
 
-template< typename Ifc1 >
+template< typename... Ifc >
 void
-ScVbaCondition< Ifc1 >::setFormula2( const uno::Any& _aFormula2) throw ( script::BasicErrorException )
+ScVbaCondition< Ifc... >::setFormula2( const uno::Any& _aFormula2) throw ( script::BasicErrorException )
 {
     OUString sFormula2;
     // #TODO surely this can't be right?
@@ -115,9 +115,9 @@ ScVbaCondition< Ifc1 >::setFormula2( const uno::Any& _aFormula2) throw ( script:
         mxSheetCondition->setFormula1(sFormula2);
 }
 
-template< typename Ifc1 >
+template< typename... Ifc >
 sal_Int32
-ScVbaCondition< Ifc1 >::Operator(bool _bIncludeFormulaValue) throw ( script::BasicErrorException )
+ScVbaCondition< Ifc... >::Operator(bool _bIncludeFormulaValue) throw ( script::BasicErrorException )
 {
     sal_Int32 retvalue = -1;
     sheet::ConditionOperator aConditionalOperator =  mxSheetCondition->getOperator();

@@ -30,7 +30,7 @@
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
-//typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XApplication > SwVbaApplication_BASE;
+//typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XApplication > SwVbaApplication_BASE;
 typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplication > SwVbaApplication_BASE;
 
 class SwVbaApplication : public SwVbaApplication_BASE

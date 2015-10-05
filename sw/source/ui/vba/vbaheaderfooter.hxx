@@ -22,9 +22,8 @@
 #include <ooo/vba/word/XHeaderFooter.hpp>
 #include <ooo/vba/word/XRange.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XHeaderFooter > SwVbaHeaderFooter_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XHeaderFooter > SwVbaHeaderFooter_BASE;
 
 class SwVbaHeaderFooter : public SwVbaHeaderFooter_BASE
 {

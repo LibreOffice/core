@@ -29,7 +29,7 @@
 
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XComment > ScVbaComment_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XComment > ScVbaComment_BASE;
 
 class ScVbaComment : public ScVbaComment_BASE
 {

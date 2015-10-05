@@ -21,11 +21,10 @@
 
 #include <ooo/vba/word/XBookmark.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XBookmark > SwVbaBookmark_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XBookmark > SwVbaBookmark_BASE;
 
 class SwVbaBookmark : public SwVbaBookmark_BASE
 {

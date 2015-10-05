@@ -28,7 +28,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbacommandbarhelper.hxx"
 
-typedef InheritedHelperInterfaceImpl1< ov::XCommandBar > CommandBar_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::XCommandBar > CommandBar_BASE;
 
 class ScVbaCommandBar : public CommandBar_BASE
 {

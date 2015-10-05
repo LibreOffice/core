@@ -21,11 +21,10 @@
 
 #include <ooo/vba/word/XRow.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XRow > SwVbaRow_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XRow > SwVbaRow_BASE;
 
 class SwVbaRow : public SwVbaRow_BASE
 {

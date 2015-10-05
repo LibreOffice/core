@@ -19,13 +19,11 @@
 #ifndef INCLUDED_VBAHELPER_VBAFONTBASE_HXX
 #define INCLUDED_VBAHELPER_VBAFONTBASE_HXX
 
-#include <cppuhelper/implbase1.hxx>
-
 #include <ooo/vba/XFontBase.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef  InheritedHelperInterfaceImpl1< ov::XFontBase > VbaFontBase_BASE;
+typedef  InheritedHelperInterfaceWeakImpl< ov::XFontBase > VbaFontBase_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaFontBase : public VbaFontBase_BASE
 {

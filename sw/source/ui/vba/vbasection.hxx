@@ -21,9 +21,8 @@
 
 #include <ooo/vba/word/XSection.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XSection > SwVbaSection_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XSection > SwVbaSection_BASE;
 
 class SwVbaSection : public SwVbaSection_BASE
 {

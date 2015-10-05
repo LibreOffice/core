@@ -28,7 +28,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbacontrol.hxx"
 
-//typedef InheritedHelperInterfaceImpl1< ov::msforms::XUserForm > ScVbaUserForm_BASE;
+//typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XUserForm > ScVbaUserForm_BASE;
 typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XUserForm > ScVbaUserForm_BASE;
 
 class ScVbaUserForm : public ScVbaUserForm_BASE

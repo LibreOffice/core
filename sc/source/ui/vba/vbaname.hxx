@@ -27,7 +27,7 @@
 #include <formula/grammar.hxx>
 class ScDocument;
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XName > NameImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XName > NameImpl_BASE;
 
 class ScVbaName : public NameImpl_BASE
 {

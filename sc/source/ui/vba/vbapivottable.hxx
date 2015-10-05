@@ -24,7 +24,7 @@
 #include "excelvbahelper.hxx"
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XPivotTable >  PivotTableImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XPivotTable >  PivotTableImpl_BASE;
 
 class ScVbaPivotTable : public PivotTableImpl_BASE
 {

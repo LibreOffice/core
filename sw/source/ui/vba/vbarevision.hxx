@@ -21,9 +21,8 @@
 
 #include <ooo/vba/word/XRevision.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XRevision > SwVbaRevision_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XRevision > SwVbaRevision_BASE;
 
 class SwVbaRevision : public SwVbaRevision_BASE
 {
