@@ -1100,7 +1100,7 @@ void Content::lock()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "lock" );
+    aCommand.Name     = "lock";
     aCommand.Handle   = -1; // n/a
 
     m_xImpl->executeCommand( aCommand );
@@ -1112,7 +1112,7 @@ void Content::unlock()
 {
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "unlock" );
+    aCommand.Name     = "unlock";
     aCommand.Handle   = -1; // n/a
 
     m_xImpl->executeCommand( aCommand );
