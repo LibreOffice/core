@@ -598,12 +598,12 @@ IMPL_LINK_TYPED( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameD
     const OUString sCurrentName = pObj->GetName();
     OUString sNewName;
     rNameDialog.GetName(sNewName);
-    bool nRet = false;
+    bool bRet = false;
     if (sNewName.isEmpty() || sCurrentName == sNewName)
-        nRet = true;
+        bRet = true;
     else
     {
-        nRet = true;
+        bRet = true;
         SwDrawModel* pModel = rSh.getIDocumentDrawModelAccess().GetDrawModel();
         SdrObjListIter aIter( *(pModel->GetPage(0)), IM_DEEPWITHGROUPS );
         while( aIter.IsMore() )
@@ -611,12 +611,12 @@ IMPL_LINK_TYPED( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameD
             SdrObject* pTempObj = aIter.Next();
             if ( pObj != pTempObj && pTempObj->GetName().equals(sNewName) )
             {
-                nRet = false;
+                bRet = false;
                 break;
             }
         }
     }
-    return nRet;
+    return bRet;
 }
 
 void SwDrawBaseShell::GetState(SfxItemSet& rSet)
