@@ -235,7 +235,7 @@ void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
     else
     {
         pTable->Clear();
-        aRedlineChildren.clear();
+        m_RedlineChildren.clear();
         m_RedlineParents.erase(m_RedlineParents.begin() + nStart, m_RedlineParents.end());
     }
 
@@ -504,13 +504,15 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
             if (pBackupData->pTLBChild)
                 pTable->RemoveEntry(pBackupData->pTLBChild);
 
-            for( SwRedlineDataChildArr::iterator it = aRedlineChildren.begin();
-                 it != aRedlineChildren.end(); ++it)
-                if (&*it == pBackupData)
+            for (SwRedlineDataChildArr::iterator it = m_RedlineChildren.begin();
+                 it != m_RedlineChildren.end(); ++it)
+            {
+                if (it->get() == pBackupData)
                 {
-                    aRedlineChildren.erase(it);
+                    m_RedlineChildren.erase(it);
                     break;
                 }
+            }
             pBackupData = pNext;
         }
         pParent->pNext = 0;
@@ -594,7 +596,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
 
         SwRedlineDataChild* pRedlineChild = new SwRedlineDataChild;
         pRedlineChild->pChild = pRedlineData;
-        aRedlineChildren.push_back(pRedlineChild);
+        m_RedlineChildren.push_back(std::unique_ptr<SwRedlineDataChild>(pRedlineChild));
 
         if ( pLastRedlineChild )
             pLastRedlineChild->pNext = pRedlineChild;
@@ -674,9 +676,10 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         {
             SwRedlineDataChild * pChildPtr =
                 const_cast<SwRedlineDataChild*>(m_RedlineParents[i]->pNext);
-            for( SwRedlineDataChildArr::iterator it = aRedlineChildren.begin();
-                 it != aRedlineChildren.end(); ++it)
-                if (&*it == pChildPtr)
+            for (SwRedlineDataChildArr::iterator it = m_RedlineChildren.begin();
+                 it != m_RedlineChildren.end(); ++it)
+            {
+                if (it->get() == pChildPtr)
                 {
                     sal_uInt16 nChildren = 0;
                     while (pChildPtr)
@@ -685,10 +688,11 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
                         nChildren++;
                     }
 
-                    aRedlineChildren.erase(it, it + nChildren);
+                    m_RedlineChildren.erase(it, it + nChildren);
                     bChildrenRemoved = true;
                     break;
                 }
+            }
         }
         SvTreeListEntry *const pEntry = m_RedlineParents[i]->pTLBParent;
         if (pEntry)

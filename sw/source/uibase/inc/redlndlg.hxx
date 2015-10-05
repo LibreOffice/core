@@ -30,7 +30,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/ctredlin.hxx>
 #include <svx/postattr.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/sorted_vector.hxx>
 
 #include <memory>
@@ -60,13 +59,13 @@ struct SwRedlineDataParent
 
 class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to<SwRedlineDataParent> > {};
 
-typedef boost::ptr_vector<SwRedlineDataChild> SwRedlineDataChildArr;
+typedef std::vector<std::unique_ptr<SwRedlineDataChild>> SwRedlineDataChildArr;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
     VclPtr<vcl::Window>     pParentDlg;
     std::vector<std::unique_ptr<SwRedlineDataParent>> m_RedlineParents;
-    SwRedlineDataChildArr   aRedlineChildren;
+    SwRedlineDataChildArr   m_RedlineChildren;
     SwRedlineDataParentSortArr aUsedSeqNo;
     VclPtr<SvxAcceptChgCtr>    aTabPagesCTRL;
     PopupMenu               aPopup;
