@@ -1272,7 +1272,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     Color aColor = rUnderline.GetColor();
     if( aColor != COL_TRANSPARENT )
     {
-        m_rWW8Export.InsUInt16( 0x6877 );
+        m_rWW8Export.InsUInt16( NS_sprm::LN_CCvUl );
 
         m_rWW8Export.InsUInt32( wwUtility::RGBToBGR( aColor.GetColor() ) );
     }

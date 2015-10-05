@@ -6134,7 +6134,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x6815, 0},                                 //undocumented
         {0x6816, 0},                                 //undocumented
         {NS_sprm::LN_CCv, &SwWW8ImplReader::Read_TextForeColor},
-        {0x6877, &SwWW8ImplReader::Read_UnderlineColor},
+        {NS_sprm::LN_CCvUl, &SwWW8ImplReader::Read_UnderlineColor},
         {0xC64D, &SwWW8ImplReader::Read_ParaBackColor},
         {0x6467, 0},                                 //undocumented
         {0xF617, 0},                                 //undocumented

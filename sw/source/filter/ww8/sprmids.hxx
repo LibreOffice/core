@@ -310,6 +310,7 @@ const sal_uInt16 LN_TDxaFromTextRight = 0x941e;
 const sal_uInt16 LN_TDyaFromTextBottom = 0x941f;
 const sal_uInt16 LN_TFNoAllowOverlap = 0x3465;
 const sal_uInt16 LN_CCv = 0x6870;
+const sal_uInt16 LN_CCvUl = 0x6877;
 }
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_SPRMIDS_HXX
