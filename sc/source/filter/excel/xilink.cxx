@@ -703,7 +703,11 @@ void XclImpSupbook::ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv
 
 const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
 {
-    OSL_ENSURE( nXclIndex > 0, "XclImpSupbook::GetExternName - index must be >0" );
+    if (nXclIndex == 0)
+    {
+        SAL_WARN("sc", "XclImpSupbook::GetExternName - index must be >0");
+        return NULL;
+    }
     if (meType == EXC_SBTYPE_SELF || nXclIndex > maExtNameList.size())
         return NULL;
     return &maExtNameList[nXclIndex-1];
