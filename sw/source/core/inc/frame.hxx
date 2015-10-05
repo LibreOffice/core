@@ -1150,6 +1150,32 @@ inline bool SwFrm::IsAccessibleFrm() const
 {
     return (GetType() & FRM_ACCESSIBLE) != 0;
 }
+
+//use this to protect a SwFrm for a given scope from getting deleted
+class SwFrmDeleteGuard
+{
+private:
+    SwFrm *m_pFrm;
+    bool m_bOldDeleteAllowed;
+public:
+    //Flag pFrm for SwFrmDeleteGuard lifetime that we shouldn't delete
+    //it in e.g. SwSectionFrm::MergeNext etc because we will need it
+    //again after the SwFrmDeleteGuard dtor
+    SwFrmDeleteGuard(SwFrm* pFrm)
+        : m_pFrm(pFrm)
+    {
+        m_bOldDeleteAllowed = m_pFrm && !m_pFrm->IsDeleteForbidden();
+        if (m_bOldDeleteAllowed)
+            m_pFrm->ForbidDelete();
+    }
+
+    ~SwFrmDeleteGuard()
+    {
+        if (m_bOldDeleteAllowed)
+            m_pFrm->AllowDelete();
+    }
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

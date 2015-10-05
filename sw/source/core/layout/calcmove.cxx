@@ -346,9 +346,10 @@ void SwFrm::OptPrepareMake()
     if ( GetUpper() && !GetUpper()->IsFooterFrm() &&
          !GetUpper()->IsFlyFrm() )
     {
-        ForbidDelete();
-        GetUpper()->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
-        AllowDelete();
+        {
+            SwFrmDeleteGuard aDeleteGuard(this);
+            GetUpper()->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
+        }
         OSL_ENSURE( GetUpper(), ":-( Layout unstable (Upper gone)." );
         if ( !GetUpper() )
             return;

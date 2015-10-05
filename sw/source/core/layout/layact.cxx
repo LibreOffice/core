@@ -1223,11 +1223,10 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
             aOldRect = static_cast<SwPageFrm*>(pLay)->GetBoundRect(pRenderContext);
         }
 
-        bool const bDeleteForbidden(pLay->IsDeleteForbidden());
-        pLay->ForbidDelete();
-        pLay->Calc(pRenderContext);
-        if (!bDeleteForbidden)
-            pLay->AllowDelete();
+        {
+            SwFrmDeleteGuard aDeleteGuard(pLay);
+            pLay->Calc(pRenderContext);
+        }
 
         if ( aOldFrame != pLay->Frm() )
             bChanged = true;
@@ -1375,7 +1374,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
     if ( pLay->IsFootnoteFrm() ) // no LayFrms as Lower
         return bChanged;
 
-    FlowFrmJoinLockGuard aJoinGuard(pLay);
+    SwFrmDeleteGuard aDeleteGuard(pLay);
     SwFrm *pLow = pLay->Lower();
     bool bTabChanged = false;
     while ( pLow && pLow->GetUpper() == pLay )
