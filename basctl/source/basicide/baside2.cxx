@@ -329,7 +329,7 @@ bool ModulWindow::BasicExecute()
             for ( sal_uInt16 nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
             {
                 SbMethod* pM = static_cast<SbMethod*>(xModule->GetMethods()->Get( nMacro ));
-                DBG_ASSERT( pM, "Method?" );
+                assert(pM && "Method?");
                 pM->GetLineRange( nStart, nEnd );
                 if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
                 {
@@ -532,7 +532,7 @@ bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
                     for ( sal_uInt16 nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
                     {
                         SbMethod* pMethod = static_cast<SbMethod*>(xModule->GetMethods()->Get( nMethod ));
-                        DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
+                        assert(pMethod && "Methode nicht gefunden! (NULL)");
                         pMethod->SetDebugFlags( pMethod->GetDebugFlags() | SbDEBUG_BREAK );
                     }
                 }
@@ -1311,7 +1311,7 @@ void ModulWindow::BasicStarted()
             for ( sal_uInt16 nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
             {
                 SbMethod* pMethod = static_cast<SbMethod*>(xModule->GetMethods()->Get( nMethod ));
-                DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
+                assert(pMethod && "Methode nicht gefunden! (NULL)");
                 pMethod->SetDebugFlags( pMethod->GetDebugFlags() | SbDEBUG_BREAK );
             }
         }

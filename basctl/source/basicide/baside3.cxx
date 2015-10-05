@@ -453,7 +453,7 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
         case SID_CHOOSE_CONTROLS:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
-            DBG_ASSERT( pArgs, "Nix Args" );
+            assert(pArgs && "Nix Args");
 
             const SfxAllEnumItem& rItem = static_cast<const SfxAllEnumItem&>(pArgs->Get( SID_CHOOSE_CONTROLS ));
             switch( rItem.GetValue() )

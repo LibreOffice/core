@@ -131,8 +131,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 void TreeListBox::ExpandedHdl()
 {
     SvTreeListEntry* pEntry = GetHdlEntry();
-    DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );
-
+    assert(pEntry && "Was wurde zugeklappt?");
     if ( !IsExpanded( pEntry ) && pEntry->HasChildrenOnDemand() )
     {
         SvTreeListEntry* pChild = FirstChild( pEntry );
@@ -300,9 +299,9 @@ EntryDescriptor TreeListBox::GetEntryDescriptor( SvTreeListEntry* pEntry )
         for ( size_t n = 0; n < aEntries.size(); n++ )
         {
             SvTreeListEntry* pLE = aEntries[n];
-            DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
+            assert(pLE && "Entrie im Array nicht gefunden");
             Entry* pBE = static_cast<Entry*>(pLE->GetUserData());
-            DBG_ASSERT( pBE, "Keine Daten im Eintrag gefunden!" );
+            assert(pBE && "Keine Daten im Eintrag gefunden!");
 
             switch ( pBE->GetType() )
             {

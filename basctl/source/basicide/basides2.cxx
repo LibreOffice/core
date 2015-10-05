@@ -80,7 +80,7 @@ SfxPrinter* Shell::GetPrinter( bool bCreate )
     if ( pCurWin )
     {
         DocShell* pDocShell = static_cast<DocShell*>(GetViewFrame()->GetObjectShell());
-        DBG_ASSERT( pDocShell, "DocShell ?!" );
+        assert(pDocShell && "DocShell ?!");
         return pDocShell->GetPrinter( bCreate );
     }
     return 0;
@@ -89,7 +89,7 @@ SfxPrinter* Shell::GetPrinter( bool bCreate )
 sal_uInt16 Shell::SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags , bool )
 {
     DocShell* pDocShell = static_cast<DocShell*>(GetViewFrame()->GetObjectShell());
-    DBG_ASSERT( pDocShell, "DocShell ?!" );
+    assert(pDocShell && "DocShell ?!");
     pDocShell->SetPrinter( pNewPrinter );
     return 0;
 }

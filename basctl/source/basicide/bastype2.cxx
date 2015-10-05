@@ -646,7 +646,7 @@ SvTreeListEntry* TreeListBox::CloneEntry( SvTreeListEntry* pSource )
     SvTreeListEntry* pNew = SvTreeListBox::CloneEntry( pSource );
     Entry* pUser = static_cast<Entry*>(pSource->GetUserData());
 
-    DBG_ASSERT( pUser, "User-Daten?!" );
+    assert(pUser && "User-Daten?!");
     DBG_ASSERT( pUser->GetType() != OBJ_TYPE_DOCUMENT, "TreeListBox::CloneEntry: document?!" );
 
     Entry* pNewUser = new Entry( *pUser );
@@ -661,7 +661,7 @@ SvTreeListEntry* TreeListBox::FindEntry( SvTreeListEntry* pParent, const OUStrin
     while ( pEntry )
     {
         Entry* pBasicEntry = static_cast<Entry*>(pEntry->GetUserData());
-        DBG_ASSERT( pBasicEntry, "FindEntry: no Entry ?!" );
+        assert(pBasicEntry && "FindEntry: no Entry ?!");
         if ( ( pBasicEntry->GetType() == eType  ) && ( rText.equals(GetEntryText( pEntry )) ) )
             return pEntry;
 
