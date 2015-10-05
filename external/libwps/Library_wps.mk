@@ -36,6 +36,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,wps,\
 	UnpackedTarball/libwps/src/lib/LotusGraph \
 	UnpackedTarball/libwps/src/lib/LotusSpreadsheet \
 	UnpackedTarball/libwps/src/lib/LotusStyleManager \
+	UnpackedTarball/libwps/src/lib/MSWrite \
 	UnpackedTarball/libwps/src/lib/Quattro \
 	UnpackedTarball/libwps/src/lib/QuattroSpreadsheet \
 	UnpackedTarball/libwps/src/lib/WKS4 \
