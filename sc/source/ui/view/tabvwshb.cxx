@@ -112,8 +112,12 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 
     {
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
+        bool bAlloced = false;
         if ( !pClient )
+        {
             pClient = new ScClient( this, pWin, GetSdrView()->GetModel(), pObj );
+            bAlloced = true;
+        }
 
         if ( !(nErr & ERRCODE_ERROR_MASK) && xObj.is() )
         {
@@ -199,6 +203,8 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                 }
             }
         }
+        if( bAlloced )
+            delete pClient;
     }
     if (nErr != ERRCODE_NONE && !bErrorShown)
         ErrorHandler::HandleError(nErr);
