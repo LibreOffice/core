@@ -53,6 +53,7 @@ public:
     GtkWidget* m_pFindbar;
     GtkWidget* m_pFindbarEntry;
     GtkWidget* m_pFindbarLabel;
+    bool m_bFindAll;
 
     TiledWindow()
         : m_pDocView(0),
@@ -70,7 +71,8 @@ public:
         m_bPartSelectorBroadcast(true),
         m_pFindbar(0),
         m_pFindbarEntry(0),
-        m_pFindbarLabel(0)
+        m_pFindbarLabel(0),
+        m_bFindAll(false)
     {
     }
 };
@@ -176,6 +178,13 @@ static void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
     bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(rWindow.m_pEnableEditing));
     if (bool(lok_doc_view_get_edit(pLOKDocView)) != bActive)
         lok_doc_view_set_edit(pLOKDocView, bActive);
+}
+
+/// Toggles if search should find all results or only the first one.
+static void toggleFindAll(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    rWindow.m_bFindAll = !rWindow.m_bFindAll;
 }
 
 /// Toggle the visibility of the findbar.
@@ -285,6 +294,12 @@ static void doSearch(GtkWidget* pButton, bool bBackwards)
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/value", '/'), pText);
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/type", '/'), "boolean");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/value", '/'), bBackwards);
+    if (rWindow.m_bFindAll)
+    {
+        aTree.put(boost::property_tree::ptree::path_type("SearchItem.Command/type", '/'), "unsigned short");
+        // SvxSearchCmd::FIND_ALL
+        aTree.put(boost::property_tree::ptree::path_type("SearchItem.Command/value", '/'), "1");
+    }
 
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
     GdkRectangle aArea;
@@ -729,6 +744,11 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarPrev), "go-up-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarPrev, -1);
     g_signal_connect(G_OBJECT(pFindbarPrev), "clicked", G_CALLBACK(signalSearchPrev), NULL);
+
+    GtkToolItem* pFindAll = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pFindAll), "Highlight All");
+    gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindAll, -1);
+    g_signal_connect(G_OBJECT(pFindAll), "toggled", G_CALLBACK(toggleFindAll), NULL);
 
     GtkToolItem* pFindbarLabelContainer = gtk_tool_item_new();
     rWindow.m_pFindbarLabel = gtk_label_new("");
