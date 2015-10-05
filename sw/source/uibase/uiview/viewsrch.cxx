@@ -225,7 +225,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 }
                 else
                 {
-                    OString aPayload = OString::number(nFound);
+                    OString aPayload = OString::number(nFound) + ";" + m_pSrchItem->GetSearchString().toUtf8();
                     m_pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_COUNT, aPayload.getStr());
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));

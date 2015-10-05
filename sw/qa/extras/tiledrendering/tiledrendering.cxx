@@ -23,6 +23,7 @@
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
+#include <string>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 
@@ -132,7 +133,8 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     break;
     case LOK_CALLBACK_SEARCH_RESULT_COUNT:
     {
-        m_nSearchResultCount = OString(pPayload).toInt32();
+        std::string aStrPayload(pPayload);
+        m_nSearchResultCount = std::stoi(aStrPayload.substr(0, aStrPayload.find_first_of(";")));
     }
     break;
     }

@@ -658,6 +658,16 @@ callback (gpointer pData)
         searchNotFound(pDocView, pCallback->m_aPayload);
     }
     break;
+    case LOK_CALLBACK_SEARCH_RESULT_COUNT:
+    {
+        size_t nPos = pCallback->m_aPayload.find_first_of(";");
+        int nSearchResultCount = std::stoi(pCallback->m_aPayload.substr(0, nPos));
+        if (nSearchResultCount == 0)
+        {
+            searchNotFound(pDocView, pCallback->m_aPayload.substr(nPos + 1));
+        }
+    }
+    break;
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
         payloadToSize(pCallback->m_aPayload.c_str(), priv->m_nDocumentWidthTwips, priv->m_nDocumentHeightTwips);
