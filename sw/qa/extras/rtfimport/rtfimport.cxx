@@ -2355,6 +2355,12 @@ DECLARE_RTFIMPORT_TEST(testTdf94456, "tdf94456.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-762), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf94435, "tdf94435.rtf")
+{
+    // This was style::ParagraphAdjust_LEFT, \ltrpar undone the effect of \qc.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
