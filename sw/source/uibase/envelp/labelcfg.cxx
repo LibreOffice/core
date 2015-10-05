@@ -173,9 +173,9 @@ void SwLabelConfig::ImplCommit() {}
 
 void SwLabelConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-static SwLabRec* lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeasure, const OUString& rManufacturer)
+static std::unique_ptr<SwLabRec> lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeasure, const OUString& rManufacturer)
 {
-    SwLabRec* pNewRec = new SwLabRec;
+    std::unique_ptr<SwLabRec> pNewRec(new SwLabRec);
     pNewRec->aMake = rManufacturer;
     pNewRec->lPWidth = 0;
     pNewRec->lPHeight = 0;

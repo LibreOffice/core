@@ -68,8 +68,8 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
 void SwLabDlg::_ReplaceGroup( const OUString &rMake )
 {
     // Remove old entries
-    pRecs->erase(pRecs->begin() + 1, pRecs->end());
-    aLabelsCfg.FillLabels(rMake, *pRecs);
+    m_pRecs->erase(m_pRecs->begin() + 1, m_pRecs->end());
+    aLabelsCfg.FillLabels(rMake, *m_pRecs);
     aLstGroup = rMake;
 }
 
@@ -96,7 +96,7 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     , pDBManager(pDBManager_)
     , pPrtPage(0)
     , aTypeIds(50, 10)
-    , pRecs(new SwLabRecs())
+    , m_pRecs(new SwLabRecs)
     , m_bLabel(bLabel)
     , m_nFormatId(0)
     , m_nOptionsId(0)
@@ -131,16 +131,16 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     }
     // Read user label from writer.cfg
     SwLabItem aItem(static_cast<const SwLabItem&>(rSet.Get( FN_LABEL )));
-    SwLabRec* pRec = new SwLabRec;
+    std::unique_ptr<SwLabRec> pRec(new SwLabRec);
     pRec->aMake = pRec->aType = SW_RESSTR( STR_CUSTOM );
     pRec->SetFromItem( aItem );
 
     bool bDouble = false;
 
-    for (size_t nRecPos = 0; nRecPos < pRecs->size(); ++nRecPos)
+    for (size_t nRecPos = 0; nRecPos < m_pRecs->size(); ++nRecPos)
     {
-        if (pRec->aMake == (*pRecs)[nRecPos].aMake &&
-            pRec->aType == (*pRecs)[nRecPos].aType)
+        if (pRec->aMake == (*m_pRecs)[nRecPos]->aMake &&
+            pRec->aType == (*m_pRecs)[nRecPos]->aType)
         {
             bDouble = true;
             break;
@@ -148,9 +148,7 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     }
 
     if (!bDouble)
-        pRecs->insert( pRecs->begin(), pRec );
-    else
-        delete pRec;
+        m_pRecs->insert( m_pRecs->begin(), std::move(pRec));
 
     size_t nLstGroup = 0;
     const std::vector<OUString>& rMan = aLabelsCfg.GetManufacturers();
@@ -175,7 +173,7 @@ SwLabDlg::~SwLabDlg()
 
 void SwLabDlg::dispose()
 {
-    delete pRecs;
+    delete m_pRecs;
     pPrtPage.clear();
     SfxTabDialog::dispose();
 }
@@ -210,7 +208,7 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
     const size_t nCount = Recs().size();
     for (size_t i = 0; i < nCount; ++i)
     {
-        pRec = &Recs()[i];
+        pRec = Recs()[i].get();
         if (pRec->aType != sCustom &&
             rRecName == pRec->aType && bCont == pRec->bCont)
         {
@@ -219,7 +217,7 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
         }
     }
     if (!bFound)    // User defined
-        pRec = &Recs()[0];
+        pRec = Recs()[0].get();
 
     return pRec;
 }
@@ -388,14 +386,14 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
     //insert the entries into the sorted list box
     for ( size_t i = 0; i < nCount; ++i )
     {
-        const OUString aType ( GetParentSwLabDlg()->Recs()[i].aType );
+        const OUString aType(GetParentSwLabDlg()->Recs()[i]->aType);
         bool bInsert = false;
-        if ( GetParentSwLabDlg()->Recs()[i].aType == sCustom )
+        if (GetParentSwLabDlg()->Recs()[i]->aType == sCustom)
         {
             bInsert = true;
             m_pTypeBox->InsertEntry(aType );
         }
-        else if ( GetParentSwLabDlg()->Recs()[i].bCont == bCont )
+        else if (GetParentSwLabDlg()->Recs()[i]->bCont == bCont)
         {
             if ( m_pHiddenSortTypeBox->GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
             {

@@ -38,7 +38,7 @@ class SwLabDlg : public SfxTabDialog
     std::vector<sal_uInt16> aTypeIds;
     std::vector<OUString> aMakes;
 
-    SwLabRecs* pRecs;
+    SwLabRecs* m_pRecs;
     OUString   aLstGroup;
     OUString   m_sBusinessCardDlg;
     bool       m_bLabel;
@@ -61,8 +61,8 @@ public:
     SwLabRec*   GetRecord(const OUString &rRecName, bool bCont);
     void        GetLabItem(SwLabItem &rItem);
 
-          SwLabRecs &Recs()           { return *pRecs;   }
-    const SwLabRecs &Recs()     const { return *pRecs;   }
+          SwLabRecs &Recs()           { return *m_pRecs; }
+    const SwLabRecs &Recs()     const { return *m_pRecs; }
 
           std::vector<sal_uInt16> &TypeIds()       { return aTypeIds; }
     const std::vector<sal_uInt16> &TypeIds() const { return aTypeIds; }

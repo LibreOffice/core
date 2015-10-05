@@ -19,7 +19,9 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_LABREC_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_LABREC_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
+#include <vector>
+
 
 class SwLabItem;
 
@@ -46,7 +48,7 @@ public:
     bool        bCont;
 };
 
-typedef boost::ptr_vector<SwLabRec> SwLabRecs;
+typedef std::vector<std::unique_ptr<SwLabRec>> SwLabRecs;
 
 #endif
 
