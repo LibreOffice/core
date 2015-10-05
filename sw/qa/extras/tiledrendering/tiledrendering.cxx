@@ -18,6 +18,7 @@
 #include <vcl/svapp.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
+#include <svl/srchitem.hxx>
 #include <crsskip.hxx>
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
@@ -42,6 +43,7 @@ public:
     void testSearchTextFrame();
     void testSearchTextFrameWrapAround();
     void testDocumentSizeChanged();
+    void testSearchAll();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -56,6 +58,7 @@ public:
     CPPUNIT_TEST(testSearchTextFrame);
     CPPUNIT_TEST(testSearchTextFrameWrapAround);
     CPPUNIT_TEST(testDocumentSizeChanged);
+    CPPUNIT_TEST(testSearchAll);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -66,10 +69,12 @@ private:
     Size m_aDocumentSize;
     OString m_aTextSelection;
     bool m_bFound;
+    sal_Int32 m_nSearchResultCount;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
-    : m_bFound(true)
+    : m_bFound(true),
+      m_nSearchResultCount(0)
 {
 }
 
@@ -123,6 +128,11 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
     {
         m_bFound = false;
+    }
+    break;
+    case LOK_CALLBACK_SEARCH_RESULT_COUNT:
+    {
+        m_nSearchResultCount = OString(pPayload).toInt32();
     }
     break;
     }
@@ -438,6 +448,26 @@ void SwTiledRenderingTest::testDocumentSizeChanged()
 #endif
 }
 
+void SwTiledRenderingTest::testSearchAll()
+{
+#if !defined(WNT) && !defined(MACOSX)
+    comphelper::LibreOfficeKit::setActive();
+
+    SwXTextDocument* pXTextDocument = createDoc("search.odt");
+    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
+        {"SearchItem.Backward", uno::makeAny(false)},
+        {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    // This was 0; should be 2 results in the body text.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nSearchResultCount);
+
+    comphelper::LibreOfficeKit::setActive(false);
+#endif
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
