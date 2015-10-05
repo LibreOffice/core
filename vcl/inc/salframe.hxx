@@ -86,7 +86,7 @@ enum class SalFrameStyleFlags
     INTRO               = 0x00000100,
 };
 namespace o3tl {
-    template<> struct typed_flags<SalFrameStyleFlags> : is_typed_flags<SalFrameStyleFlags, 0x748001ff> {};
+    template<> struct typed_flags<SalFrameStyleFlags> : is_typed_flags<SalFrameStyleFlags, 0x7c8001ff> {};
 };
 
 // - extended frame style                 -
