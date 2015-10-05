@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_066d8404",
+        "filename": "sc/source/ui/view/tabvwshb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-05T01:01:54Z",
+      "side": 1,
+      "message": "free previously allocated memory",
+      "revId": "73de454131add983e855ca3e7ea6dfe0566a0eb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
