@@ -14,6 +14,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "window.h"
+#include <boost/multi_array.hpp>
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WINDOW_CONTAINER)
@@ -748,11 +749,34 @@ void VclButtonBox::sort_native_button_order()
     VclBuilder::reorderWithinParent(aChilds, true);
 }
 
-VclGrid::array_type VclGrid::assembleGrid() const
+struct GridEntry
 {
-    ext_array_type A;
+    VclPtr<vcl::Window> pChild;
+    sal_Int32 nSpanWidth;
+    sal_Int32 nSpanHeight;
+    int x;
+    int y;
+    GridEntry()
+        : pChild(0)
+        , nSpanWidth(0)
+        , nSpanHeight(0)
+        , x(-1)
+        , y(-1)
+    {
+    }
+};
 
-    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+typedef boost::multi_array<GridEntry, 2> array_type;
+
+static array_type assembleGrid(const VclGrid &rGrid);
+static bool isNullGrid(const array_type& A);
+static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, std::vector<VclGrid::Value> &rHeights);
+
+array_type assembleGrid(const VclGrid &rGrid)
+{
+    array_type A;
+
+    for (vcl::Window* pChild = rGrid.GetWindow(GetWindowType::FirstChild); pChild;
         pChild = pChild->GetWindow(GetWindowType::Next))
     {
         sal_Int32 nLeftAttach = std::max<sal_Int32>(pChild->get_grid_left_attach(), 0);
@@ -772,7 +796,7 @@ VclGrid::array_type VclGrid::assembleGrid() const
             A.resize(boost::extents[nCurrentMaxXPos+1][nCurrentMaxYPos+1]);
         }
 
-        ExtendedGridEntry &rEntry = A[nLeftAttach][nTopAttach];
+        GridEntry &rEntry = A[nLeftAttach][nTopAttach];
         rEntry.pChild = pChild;
         rEntry.nSpanWidth = nWidth;
         rEntry.nSpanHeight = nHeight;
@@ -783,7 +807,7 @@ VclGrid::array_type VclGrid::assembleGrid() const
         {
             for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
             {
-                ExtendedGridEntry &rSpan = A[nLeftAttach+nSpanX][nTopAttach+nSpanY];
+                GridEntry &rSpan = A[nLeftAttach+nSpanX][nTopAttach+nSpanY];
                 rSpan.x = nLeftAttach;
                 rSpan.y = nTopAttach;
             }
@@ -806,13 +830,13 @@ VclGrid::array_type VclGrid::assembleGrid() const
             if (pChild && pChild->IsVisible())
             {
                 aNonEmptyCols[x] = true;
-                if (get_column_homogeneous())
+                if (rGrid.get_column_homogeneous())
                 {
                     for (sal_Int32 nSpanX = 1; nSpanX < rEntry.nSpanWidth; ++nSpanX)
                         aNonEmptyCols[x+nSpanX] = true;
                 }
                 aNonEmptyRows[y] = true;
-                if (get_row_homogeneous())
+                if (rGrid.get_row_homogeneous())
                 {
                     for (sal_Int32 nSpanY = 1; nSpanY < rEntry.nSpanHeight; ++nSpanY)
                         aNonEmptyRows[y+nSpanY] = true;
@@ -821,17 +845,17 @@ VclGrid::array_type VclGrid::assembleGrid() const
         }
     }
 
-    if (!get_column_homogeneous())
+    if (!rGrid.get_column_homogeneous())
     {
         //reduce the spans of elements that span empty columns
         for (sal_Int32 x = 0; x < nMaxX; ++x)
         {
-            std::set<ExtendedGridEntry*> candidates;
+            std::set<GridEntry*> candidates;
             for (sal_Int32 y = 0; y < nMaxY; ++y)
             {
                 if (aNonEmptyCols[x])
                     continue;
-                ExtendedGridEntry &rSpan = A[x][y];
+                GridEntry &rSpan = A[x][y];
                 //cell x/y is spanned by the widget at cell rSpan.x/rSpan.y,
                 //just points back to itself if there's no cell spanning
                 if ((rSpan.x == -1) || (rSpan.y == -1))
@@ -840,29 +864,29 @@ VclGrid::array_type VclGrid::assembleGrid() const
                     //with no widget in it, or spanned by any other widget
                     continue;
                 }
-                ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
+                GridEntry &rEntry = A[rSpan.x][rSpan.y];
                 candidates.insert(&rEntry);
             }
-            for (std::set<ExtendedGridEntry*>::iterator aI = candidates.begin(), aEnd = candidates.end();
+            for (std::set<GridEntry*>::iterator aI = candidates.begin(), aEnd = candidates.end();
                 aI != aEnd; ++aI)
             {
-                ExtendedGridEntry *pEntry = *aI;
+                GridEntry *pEntry = *aI;
                 --pEntry->nSpanWidth;
             }
         }
     }
 
-    if (!get_row_homogeneous())
+    if (!rGrid.get_row_homogeneous())
     {
         //reduce the spans of elements that span empty rows
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
-            std::set<ExtendedGridEntry*> candidates;
+            std::set<GridEntry*> candidates;
             for (sal_Int32 x = 0; x < nMaxX; ++x)
             {
                 if (aNonEmptyRows[y])
                     continue;
-                ExtendedGridEntry &rSpan = A[x][y];
+                GridEntry &rSpan = A[x][y];
                 //cell x/y is spanned by the widget at cell rSpan.x/rSpan.y,
                 //just points back to itself if there's no cell spanning
                 if ((rSpan.x == -1) || (rSpan.y == -1))
@@ -871,13 +895,13 @@ VclGrid::array_type VclGrid::assembleGrid() const
                     //with no widget in it, or spanned by any other widget
                     continue;
                 }
-                ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
+                GridEntry &rEntry = A[rSpan.x][rSpan.y];
                 candidates.insert(&rEntry);
             }
-            for (std::set<ExtendedGridEntry*>::iterator aI = candidates.begin(), aEnd = candidates.end();
+            for (std::set<GridEntry*>::iterator aI = candidates.begin(), aEnd = candidates.end();
                 aI != aEnd; ++aI)
             {
-                ExtendedGridEntry *pEntry = *aI;
+                GridEntry *pEntry = *aI;
                 --pEntry->nSpanHeight;
             }
         }
@@ -905,7 +929,7 @@ VclGrid::array_type VclGrid::assembleGrid() const
     return B;
 }
 
-bool VclGrid::isNullGrid(const array_type &A)
+static bool isNullGrid(const array_type &A)
 {
     sal_Int32 nMaxX = A.shape()[0];
     sal_Int32 nMaxY = A.shape()[1];
@@ -915,7 +939,7 @@ bool VclGrid::isNullGrid(const array_type &A)
     return false;
 }
 
-void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::vector<Value> &rHeights)
+static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, std::vector<VclGrid::Value> &rHeights)
 {
     sal_Int32 nMaxX = A.shape()[0];
     sal_Int32 nMaxY = A.shape()[1];
@@ -944,7 +968,7 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
 
             if (nWidth == 1 || nHeight == 1)
             {
-                Size aChildSize = getLayoutRequisition(*pChild);
+                Size aChildSize = VclContainer::getLayoutRequisition(*pChild);
                 if (nWidth == 1)
                     rWidths[x].m_nValue = std::max(rWidths[x].m_nValue, aChildSize.Width());
                 if (nHeight == 1)
@@ -970,7 +994,7 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
             if (nWidth == 1 && nHeight == 1)
                 continue;
 
-            Size aChildSize = getLayoutRequisition(*pChild);
+            Size aChildSize = VclContainer::getLayoutRequisition(*pChild);
 
             if (nWidth > 1)
             {
@@ -1053,7 +1077,7 @@ Size VclGrid::calculateRequisition() const
 
 Size VclGrid::calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 nColSpacing) const
 {
-    array_type A = assembleGrid();
+    array_type A = assembleGrid(*this);
 
     if (isNullGrid(A))
         return Size();
@@ -1093,7 +1117,7 @@ Size VclGrid::calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 n
 
 void VclGrid::setAllocation(const Size& rAllocation)
 {
-    array_type A = assembleGrid();
+    array_type A = assembleGrid(*this);
 
     if (isNullGrid(A))
         return;

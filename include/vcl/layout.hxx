@@ -18,7 +18,6 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
-#include <boost/multi_array.hpp>
 #include <set>
 
 class VCL_DLLPUBLIC VclContainer : public vcl::Window
@@ -310,36 +309,6 @@ private:
     int m_nRowSpacing;
     int m_nColumnSpacing;
 
-    struct GridEntry
-    {
-        VclPtr<vcl::Window> pChild;
-        sal_Int32 nSpanWidth;
-        sal_Int32 nSpanHeight;
-        GridEntry()
-            : pChild(0)
-            , nSpanWidth(0)
-            , nSpanHeight(0)
-        {
-        }
-    };
-
-    typedef boost::multi_array<GridEntry, 2> array_type;
-
-    struct ExtendedGridEntry : GridEntry
-    {
-        int x;
-        int y;
-        ExtendedGridEntry()
-            : x(-1)
-            , y(-1)
-        {
-        }
-    };
-
-    typedef boost::multi_array<ExtendedGridEntry, 2> ext_array_type;
-
-    array_type assembleGrid() const;
-    static bool isNullGrid(const array_type& A);
 public:
     struct Value
     {
@@ -348,7 +317,6 @@ public:
         Value() : m_nValue(0), m_bExpand(false) {}
     };
 private:
-    static void calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::vector<Value> &rHeights);
 
     Size calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 nColSpacing) const;
     virtual Size calculateRequisition() const SAL_OVERRIDE;

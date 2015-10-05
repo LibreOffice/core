@@ -91,7 +91,6 @@ merge UpdateCheckConfigListener with UpdateCheck
 merge ValueGetter with CellValueGetter
 merge ValueSetter with CellValueSetter
 merge VariableTextField with VariableDateTimeField
-merge VclGrid::GridEntry with VclGrid::ExtendedGridEntry
 merge Viewport3D with Camera3D
 merge XFDate with XFDateStart
 merge XFDateTimePart with XFTimePart
