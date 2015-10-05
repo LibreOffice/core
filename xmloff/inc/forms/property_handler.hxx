@@ -35,8 +35,7 @@ namespace xmloff
 
     typedef ::std::map< PropertyId, ::com::sun::star::uno::Any >    PropertyValues;
 
-    //= IPropertyHandler
-    class IPropertyHandler : public ::salhelper::SimpleReferenceObject
+    class PropertyHandlerBase : public ::salhelper::SimpleReferenceObject
     {
     public:
         /** retrieves the XML attribute value for the given property values
@@ -54,11 +53,11 @@ namespace xmloff
         virtual bool
             getPropertyValues( const OUString& i_attributeValue, PropertyValues& o_propertyValues ) const = 0;
 
-        virtual ~IPropertyHandler() { }
+        virtual ~PropertyHandlerBase() {}
     };
 
     //= PPropertyHandler
-    typedef ::rtl::Reference< IPropertyHandler >    PPropertyHandler;
+    typedef rtl::Reference< PropertyHandlerBase >    PPropertyHandler;
 
     //= PropertyHandlerFactory
     typedef PPropertyHandler (*PropertyHandlerFactory)( const PropertyId i_propertyId );

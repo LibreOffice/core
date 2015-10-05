@@ -326,4 +326,4 @@ merge ww8::WW8Struct with ww8::WW8Sttb
 merge xmloff::IEventAttacher with xmloff::OElementImport
 merge xmloff::IEventAttacherManager with xmloff::ODefaultEventAttacherManager
 merge xmloff::IFormsExportContext with xmloff::OFormLayerXMLExport_Impl
-merge xmloff::IPropertyHandler with xmloff::PropertyHandlerBase
+

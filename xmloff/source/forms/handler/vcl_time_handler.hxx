@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_HANDLER_VCL_TIME_HANDLER_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_HANDLER_VCL_TIME_HANDLER_HXX
 
-#include "property_handler_base.hxx"
+#include "forms/property_handler.hxx"
 
 namespace xmloff
 {
