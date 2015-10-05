@@ -994,7 +994,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                             // when activating the lock.
                             // See http://tools.ietf.org/html/rfc4918#section-14.17 for details
                             LockFileEntry aLockData;
-                            aLockData[LockFileComponent::OOOUSERNAME] = OUString("Unknown user");
+                            aLockData[LockFileComponent::OOOUSERNAME] = "Unknown user";
 
                             uno::Sequence< ::com::sun::star::ucb::Lock >  aLocks;
                             if( aContentToLock.getPropertyValue( "DAV:lockdiscovery" )  >>= aLocks )
