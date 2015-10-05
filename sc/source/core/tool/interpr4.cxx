@@ -193,6 +193,11 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
     return fValue;
 }
 
+double ScInterpreter::ConvertStringToValue( const OUString& rStr, sal_uInt16& rError, short& rCurFmtType )
+{
+    return ScGlobal::ConvertStringToValue( rStr, maCalcConfig, rError, mnStringNoValueError, pFormatter, rCurFmtType);
+}
+
 double ScInterpreter::GetCellValue( const ScAddress& rPos, ScRefCellValue& rCell )
 {
     sal_uInt16 nErr = nGlobalError;

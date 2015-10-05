@@ -204,6 +204,11 @@ void ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );  // for TableOp
 bool IsTableOpInRange( const ScRange& );
 sal_uLong GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell );
 double ConvertStringToValue( const OUString& );
+public:
+/** For matrix back calls into the current interpreter.
+    Uses rError instead of nGlobalError and rCurFmtType instead of nCurFmtType. */
+double ConvertStringToValue( const OUString&, sal_uInt16& rError, short& rCurFmtType );
+private:
 double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
 double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
 double GetValueCellValue( const ScAddress&, double fOrig );
