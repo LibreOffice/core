@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_f1b808e8",
+        "filename": "include/vbahelper/vbacollectionimpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-05T11:56:20Z",
+      "side": 1,
+      "message": "i don\u0027t think this is going to work, Reference can only have one parameter",
+      "revId": "b0dbca2bfa45044d9a20263f725f4e04b66815a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_51ce1484",
+        "filename": "include/vbahelper/vbacollectionimpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-05T11:56:20Z",
+      "side": 1,
+      "message": "... same problem with cppu::UnoTYpe",
+      "revId": "b0dbca2bfa45044d9a20263f725f4e04b66815a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
