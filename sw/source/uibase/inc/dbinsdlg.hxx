@@ -33,8 +33,10 @@
 #include <swdbdata.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/sorted_vector.hxx>
+
+#include <memory>
+#include <vector>
 
 namespace com{namespace sun{namespace star{
     namespace sdbcx{
@@ -52,7 +54,8 @@ class SwView;
 class SfxItemSet;
 class SwTableRep;
 struct DB_Column;
-typedef boost::ptr_vector<DB_Column> DB_Columns;
+
+typedef std::vector<std::unique_ptr<DB_Column>> DB_Columns;
 
 struct SwInsDBColumn
 {

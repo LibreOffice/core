@@ -90,6 +90,8 @@
 #include <unomid.h>
 #include <IDocumentMarkAccess.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 #include <boost/noncopyable.hpp>
 #include <memory>
 #include <swuiexp.hxx>
@@ -856,23 +858,19 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton, void )
 
 static void lcl_InsTextInArr( const OUString& rText, DB_Columns& rColArr )
 {
-    DB_Column* pNew;
     sal_Int32 nSttPos = 0, nFndPos;
     while( -1 != ( nFndPos = rText.indexOf( '\x0A', nSttPos )) )
     {
         if( 1 < nFndPos )
         {
-            pNew = new DB_Column( rText.copy( nSttPos, nFndPos -1 ) );
-            rColArr.push_back( pNew );
+            rColArr.push_back(o3tl::make_unique<DB_Column>(rText.copy(nSttPos, nFndPos -1)));
         }
-        pNew = new DB_Column;
-        rColArr.push_back( pNew );
+        rColArr.push_back(o3tl::make_unique<DB_Column>());
         nSttPos = nFndPos + 1;
     }
     if( nSttPos < rText.getLength() )
     {
-        pNew = new DB_Column( rText.copy( nSttPos ) );
-        rColArr.push_back( pNew );
+        rColArr.push_back(o3tl::make_unique<DB_Column>(rText.copy(nSttPos)));
     }
 }
 
@@ -940,7 +938,7 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
                 else
                     pNew = new DB_Column( rFndCol, nFormat );
 
-                rColArr.push_back( pNew );
+                rColArr.push_back( std::unique_ptr<DB_Column>(pNew) );
             }
         }
     }
@@ -1276,7 +1274,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                 for( size_t n = 0; n < nCols; ++n )
                 {
-                    DB_Column* pDBCol = &aColArr[ n ];
+                    DB_Column* pDBCol = aColArr[ n ].get();
                     OUString sIns;
                     switch( pDBCol->eColType )
                     {
