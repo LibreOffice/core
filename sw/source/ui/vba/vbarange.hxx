@@ -23,14 +23,13 @@
 #include <ooo/vba/word/XParagraphFormat.hpp>
 #include <ooo/vba/word/XFont.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <ooo/vba/word/XStyle.hpp>
 #include <ooo/vba/word/XListFormat.hpp>
 #include "wordvbahelper.hxx"
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XRange > SwVbaRange_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XRange > SwVbaRange_BASE;
 
 class SwVbaRange : public SwVbaRange_BASE
 {

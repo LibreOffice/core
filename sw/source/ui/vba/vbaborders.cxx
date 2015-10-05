@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 typedef ::cppu::WeakImplHelper<container::XIndexAccess > RangeBorders_Base;
-typedef InheritedHelperInterfaceImpl1<word::XBorder > SwVbaBorder_Base;
+typedef InheritedHelperInterfaceWeakImpl<word::XBorder > SwVbaBorder_Base;
 
 // #TODO sort these indexes to match the order in which Word iterates over the
 // borders, the enumeration will match the order in this list

@@ -21,11 +21,10 @@
 
 #include <ooo/vba/word/XTableOfContents.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XTableOfContents > SwVbaTableOfContents_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XTableOfContents > SwVbaTableOfContents_BASE;
 
 class SwVbaTableOfContents : public SwVbaTableOfContents_BASE
 {

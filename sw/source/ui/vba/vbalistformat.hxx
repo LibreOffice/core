@@ -22,11 +22,10 @@
 #include <ooo/vba/word/XListFormat.hpp>
 #include <ooo/vba/word/XListTemplate.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include "vbalisthelper.hxx"
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XListFormat > SwVbaListFormat_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XListFormat > SwVbaListFormat_BASE;
 
 class SwVbaListFormat : public SwVbaListFormat_BASE
 {

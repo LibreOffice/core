@@ -25,7 +25,7 @@
 
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XOLEObject > OLEObjectImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XOLEObject > OLEObjectImpl_BASE;
 
 class ScVbaOLEObject : public OLEObjectImpl_BASE
 {

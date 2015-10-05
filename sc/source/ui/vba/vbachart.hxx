@@ -33,7 +33,7 @@
 #include <ooo/vba/excel/XSeries.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1<ov::excel::XChart > ChartImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl<ov::excel::XChart > ChartImpl_BASE;
 
 class ScVbaChart : public ChartImpl_BASE
 {

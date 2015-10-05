@@ -29,7 +29,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <memory>
 
-typedef InheritedHelperInterfaceImpl1<ov::excel::XChartObject > ChartObjectImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl<ov::excel::XChartObject > ChartObjectImpl_BASE;
 
 class ScVbaChartObject : public ChartObjectImpl_BASE
 {

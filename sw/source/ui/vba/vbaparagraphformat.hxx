@@ -21,11 +21,10 @@
 
 #include <ooo/vba/word/XParagraphFormat.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XParagraphFormat > SwVbaParagraphFormat_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XParagraphFormat > SwVbaParagraphFormat_BASE;
 
 class SwVbaParagraphFormat : public SwVbaParagraphFormat_BASE
 {

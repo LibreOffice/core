@@ -20,11 +20,10 @@
 #define INCLUDED_SW_SOURCE_UI_VBA_VBACHECKBOX_HXX
 
 #include <ooo/vba/word/XCheckBox.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/text/XFormField.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XCheckBox > SwVbaCheckBox_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XCheckBox > SwVbaCheckBox_BASE;
 
 class SwVbaCheckBox : public SwVbaCheckBox_BASE
 {

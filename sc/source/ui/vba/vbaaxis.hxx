@@ -23,7 +23,7 @@
 #include <ooo/vba/excel/XChart.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <memory>
-typedef InheritedHelperInterfaceImpl1< ov::excel::XAxis >  ScVbaAxis_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XAxis >  ScVbaAxis_BASE;
 class ScVbaChart;
 class ScVbaAxis : public ScVbaAxis_BASE
 {

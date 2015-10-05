@@ -21,10 +21,9 @@
 
 #include <ooo/vba/word/XReplacement.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/util/XPropertyReplace.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XReplacement > SwVbaReplacement_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XReplacement > SwVbaReplacement_BASE;
 
 class SwVbaReplacement : public SwVbaReplacement_BASE
 {

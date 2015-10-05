@@ -21,10 +21,9 @@
 
 #include <ooo/vba/word/XTabStop.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/style/TabStop.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XTabStop > SwVbaTabStop_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XTabStop > SwVbaTabStop_BASE;
 
 class SwVbaTabStop : public SwVbaTabStop_BASE
 {

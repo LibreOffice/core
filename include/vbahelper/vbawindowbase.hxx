@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::XWindowBase > WindowBaseImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::XWindowBase > WindowBaseImpl_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaWindowBase : public WindowBaseImpl_BASE
 {

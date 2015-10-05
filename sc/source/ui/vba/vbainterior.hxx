@@ -32,7 +32,7 @@
 
 class ScDocument;
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XInterior > ScVbaInterior_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XInterior > ScVbaInterior_BASE;
 
 class ScVbaInterior :  public ScVbaInterior_BASE
 {

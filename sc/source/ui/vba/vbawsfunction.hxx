@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XWorksheetFunction > ScVbaWSFunction_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XWorksheetFunction > ScVbaWSFunction_BASE;
 
 class ScVbaWSFunction :  public ScVbaWSFunction_BASE
 {

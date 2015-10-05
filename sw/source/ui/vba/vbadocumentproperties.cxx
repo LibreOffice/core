@@ -439,7 +439,7 @@ public:
     MSOIndexToOODocPropInfo& getDocPropInfoMap() { return m_docPropInfoMap; }
 };
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::XDocumentProperty > SwVbaDocumentProperty_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::XDocumentProperty > SwVbaDocumentProperty_BASE;
 
 class SwVbaBuiltInDocumentProperty : public SwVbaDocumentProperty_BASE
 {

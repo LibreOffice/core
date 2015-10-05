@@ -25,7 +25,7 @@
 #include <ooo/vba/word/XFields.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XField > SwVbaField_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XField > SwVbaField_BASE;
 
 class SwVbaField : public SwVbaField_BASE
 {

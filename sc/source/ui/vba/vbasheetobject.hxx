@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
     namespace drawing { class XControlShape; }
 } } }
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XCharacters > ScVbaButtonCharacters_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XCharacters > ScVbaButtonCharacters_BASE;
 
 /** Simple implementation of the Characters symbol for drawing button objects. */
 class ScVbaButtonCharacters : public ScVbaButtonCharacters_BASE
@@ -74,7 +74,7 @@ private:
     sal_Int32 mnLength;
 };
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XSheetObject > ScVbaSheetObject_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XSheetObject > ScVbaSheetObject_BASE;
 
 /** Base class for drawing objects embedded in sheets. */
 class ScVbaSheetObjectBase : public ScVbaSheetObject_BASE

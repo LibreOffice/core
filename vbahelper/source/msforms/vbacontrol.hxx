@@ -32,7 +32,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <memory>
 
-typedef InheritedHelperInterfaceImpl1< ov::msforms::XControl > ControlImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XControl > ControlImpl_BASE;
 
 class ScVbaControl : public ControlImpl_BASE
 {
