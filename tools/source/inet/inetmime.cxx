@@ -1798,7 +1798,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
 {
     ParameterList aList;
     sal_Unicode const * pParameterBegin = pBegin;
-    for (sal_Unicode const * p = pParameterBegin;; pParameterBegin = p)
+    for (sal_Unicode const * p = pParameterBegin;;)
     {
         pParameterBegin = skipLinearWhiteSpaceComment(p, pEnd);
         if (pParameterBegin == pEnd || *pParameterBegin != ';')
