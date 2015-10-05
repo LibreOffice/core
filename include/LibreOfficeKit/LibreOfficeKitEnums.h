@@ -158,7 +158,9 @@ typedef enum
      *
      * Payload is a single 0-based integer.
      */
-    LOK_CALLBACK_SET_PART
+    LOK_CALLBACK_SET_PART,
+    /// Number of search results, in case something is found.
+    LOK_CALLBACK_SEARCH_RESULT_COUNT
 }
 LibreOfficeKitCallbackType;
 

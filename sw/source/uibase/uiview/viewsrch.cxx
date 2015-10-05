@@ -209,7 +209,8 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
             break;
             case SvxSearchCmd::FIND_ALL:
             {
-                bool bRet = SearchAll();
+                sal_uInt16 nFound = 0;
+                bool bRet = SearchAll(&nFound);
                 if( !bRet )
                 {
 #if HAVE_FEATURE_DESKTOP
@@ -221,6 +222,11 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     }
 #endif
                     m_bFound = false;
+                }
+                else
+                {
+                    OString aPayload = OString::number(nFound);
+                    m_pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_COUNT, aPayload.getStr());
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
 #if HAVE_FEATURE_DESKTOP
