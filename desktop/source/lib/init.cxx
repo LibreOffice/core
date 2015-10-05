@@ -903,6 +903,8 @@ static void jsonToPropertyValues(const char* pJSON, uno::Sequence<beans::Propert
                 aValue.Value <<= OString(rValue.c_str()).toFloat();
             else if (rType == "long")
                 aValue.Value <<= OString(rValue.c_str()).toInt32();
+            else if (rType == "unsigned short")
+                aValue.Value <<= static_cast<sal_uInt16>(OString(rValue.c_str()).toUInt32());
             else
                 SAL_WARN("desktop.lib", "jsonToPropertyValues: unhandled type '"<<rType<<"'");
             aArguments.push_back(aValue);
