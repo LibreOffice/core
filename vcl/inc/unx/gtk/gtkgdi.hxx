@@ -189,7 +189,8 @@ protected:
                            const clipList& aClip,
                            ControlState nState,
                            const ImplControlValue& aValue,
-                           const OUString& rCaption );
+                           const OUString& rCaption,
+                           ControlCacheKey& rControlCacheKey);
 
     bool NWPaintGTKArrow( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                            const Rectangle& rControlRectangle,
@@ -246,11 +247,12 @@ protected:
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
                             const OUString& rCaption );
-    bool NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
-                            const Rectangle& rControlRectangle,
-                            const clipList& rClipList,
-                            ControlState nState, const ImplControlValue& aValue,
-                            const OUString& rCaption );
+    bool NWPaintGTKSpinBox(ControlType nType, ControlPart nPart,
+                           const Rectangle& rControlRectangle,
+                           const clipList& rClipList,
+                           ControlState nState, const ImplControlValue& aValue,
+                           const OUString& rCaption,
+                           ControlCacheKey& rControlCacheKey);
     bool NWPaintGTKComboBox( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                              const Rectangle& rControlRectangle,
                              const clipList& rClipList,

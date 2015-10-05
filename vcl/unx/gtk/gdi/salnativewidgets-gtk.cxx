@@ -971,8 +971,8 @@ bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
         if( gdkDrawable[i] == 0 )
             return false;
 
-        returnVal = DoDrawNativeControl( gdkDrawable[i], nType, nPart, aCtrlRect, aClip,
-                                         nState, aValue, rCaption );
+        returnVal = DoDrawNativeControl(gdkDrawable[i], nType, nPart, aCtrlRect, aClip,
+                                        nState, aValue, rCaption, aControlCacheKey);
         if( !returnVal )
             break;
     }
@@ -994,7 +994,8 @@ bool GtkSalGraphics::DoDrawNativeControl(
                             const clipList& aClip,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            const OUString& rCaption )
+                            const OUString& rCaption,
+                            ControlCacheKey& rControlCacheKey)
 {
     if ( (nType==CTRL_PUSHBUTTON) && (nPart==PART_ENTIRE_CONTROL) )
     {
@@ -1026,7 +1027,7 @@ bool GtkSalGraphics::DoDrawNativeControl(
     else if ( ((nType==CTRL_SPINBOX) || (nType==CTRL_SPINBUTTONS))
         && ((nPart==PART_ENTIRE_CONTROL) || (nPart==PART_ALL_BUTTONS)) )
     {
-        return NWPaintGTKSpinBox( nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKSpinBox(nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption, rControlCacheKey);
     }
     else if ( (nType == CTRL_COMBOBOX) &&
         ( (nPart==PART_ENTIRE_CONTROL)
@@ -1390,6 +1391,11 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 #define END_PIXMAP_RENDER(aRect) \
     } \
     if( !NWRenderPixmapToScreen( _pixmap.get(), _mask.get(), aRect ) ) \
+        return false;
+
+#define END_PIXMAP_RENDER_WITH_CONTROL_KEY(aRect, aControlKey) \
+    } \
+    if( !RenderAndCacheNativeControl( _pixmap.get(), _mask.get(), aRect.Left(), aRect.Top(), aControlKey ) ) \
         return false;
 
 // same as above but with pixmaps that should be kept for caching
@@ -2478,12 +2484,13 @@ static void NWPaintOneEditBox(    SalX11Screen nScreen,
 
 }
 
-bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
-                                        const Rectangle& rControlRectangle,
-                                        const clipList&,
-                                        ControlState nState,
-                                        const ImplControlValue& aValue,
-                                        const OUString& rCaption )
+bool GtkSalGraphics::NWPaintGTKSpinBox(ControlType nType, ControlPart nPart,
+                                       const Rectangle& rControlRectangle,
+                                       const clipList&,
+                                       ControlState nState,
+                                       const ImplControlValue& aValue,
+                                       const OUString& rCaption,
+                                       ControlCacheKey& rControlCacheKey)
 {
     Rectangle            pixmapRect;
     GtkStateType        stateType;
@@ -2568,7 +2575,7 @@ bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
         NWPaintOneSpinButton( m_nXScreen, gdkPixmap, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
         NWPaintOneSpinButton( m_nXScreen, gdkPixmap, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
     }
-    END_PIXMAP_RENDER( pixmapRect );
+    END_PIXMAP_RENDER_WITH_CONTROL_KEY(pixmapRect, rControlCacheKey);
 
     return true;
 }
