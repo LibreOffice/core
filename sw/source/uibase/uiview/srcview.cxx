@@ -79,7 +79,7 @@
 #include <popup.hrc>
 #include <web.hrc>
 #include <view.hrc>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>
 #define SwSrcView
@@ -300,7 +300,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             // filesave dialog with autoextension
             FileDialogHelper aDlgHelper(
                 TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
-            uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+            uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
             // search for an html filter for export
@@ -326,7 +326,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
             if( aDlgHelper.Execute() == ERRCODE_NONE)
             {
-                SfxMedium aMedium( xFP->getFiles().getConstArray()[0],
+                SfxMedium aMedium( xFP->getSelectedFiles().getConstArray()[0],
                                     StreamMode::WRITE | StreamMode::SHARE_DENYNONE );
                 SvStream* pOutStream = aMedium.GetOutStream();
                 pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));

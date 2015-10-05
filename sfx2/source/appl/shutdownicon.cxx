@@ -39,6 +39,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -371,7 +372,7 @@ IMPL_LINK_TYPED( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused
     // use constructor for filling up filters automatically!
     if ( ERRCODE_NONE == m_pFileDlg->GetError() )
     {
-        ::com::sun::star::uno::Reference< XFilePicker >    xPicker = m_pFileDlg->GetFilePicker();
+        ::com::sun::star::uno::Reference< XFilePicker2 >    xPicker = m_pFileDlg->GetFilePicker();
 
         try
         {
@@ -382,7 +383,7 @@ IMPL_LINK_TYPED( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused
                 ::com::sun::star::uno::Reference < XFilePickerControlAccess > xPickerControls ( xPicker, UNO_QUERY );
                 ::com::sun::star::uno::Reference < XFilterManager > xFilterManager ( xPicker, UNO_QUERY );
 
-                Sequence< OUString >        sFiles = xPicker->getFiles();
+                Sequence< OUString >        sFiles = xPicker->getSelectedFiles();
                 int                         nFiles = sFiles.getLength();
 
                 int                         nArgs=3;
