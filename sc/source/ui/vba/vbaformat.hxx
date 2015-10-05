@@ -32,10 +32,10 @@
 
 class ScCellRangesBase;
 
-template< typename Ifc1 >
-class ScVbaFormat : public InheritedHelperInterfaceImpl1< Ifc1 >
+template< typename... Ifc >
+class ScVbaFormat : public InheritedHelperInterfaceWeakImpl< Ifc... >
 {
-typedef InheritedHelperInterfaceImpl1< Ifc1 > ScVbaFormat_BASE;
+typedef InheritedHelperInterfaceWeakImpl< Ifc... > ScVbaFormat_BASE;
     css::lang::Locale m_aDefaultLocale;
 protected:
     css::lang::Locale getDefaultLocale() { return m_aDefaultLocale; }

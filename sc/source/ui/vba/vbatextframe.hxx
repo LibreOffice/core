@@ -23,7 +23,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbatextframe.hxx>
 
-//typedef InheritedHelperInterfaceImpl1< ov::excel::XTextFrame > ScVbaTextFrame_BASE;
+//typedef InheritedHelperInterfaceWeakImpl< ov::excel::XTextFrame > ScVbaTextFrame_BASE;
 typedef cppu::ImplInheritanceHelper< VbaTextFrame, ov::excel::XTextFrame > ScVbaTextFrame_BASE;
 
 class ScVbaTextFrame : public ScVbaTextFrame_BASE

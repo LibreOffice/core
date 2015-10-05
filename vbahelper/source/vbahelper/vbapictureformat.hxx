@@ -24,7 +24,7 @@
 #include <ooo/vba/msforms/XPictureFormat.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::msforms::XPictureFormat > ScVbaPictureFormat_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XPictureFormat > ScVbaPictureFormat_BASE;
 
 class ScVbaPictureFormat : public ScVbaPictureFormat_BASE
 {

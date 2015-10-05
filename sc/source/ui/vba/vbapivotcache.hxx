@@ -24,7 +24,7 @@
 #include <ooo/vba/excel/XPivotCache.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1<ov::excel::XPivotCache > PivotCacheImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl<ov::excel::XPivotCache > PivotCacheImpl_BASE;
 
 class ScVbaPivotCache : public PivotCacheImpl_BASE
 {

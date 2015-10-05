@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::msforms::XTextFrame > VbaTextFrame_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XTextFrame > VbaTextFrame_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaTextFrame : public VbaTextFrame_BASE
 {

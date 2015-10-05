@@ -31,10 +31,10 @@
 #include <basic/sberrors.hxx>
 #include <memory>
 
-template< typename Ifc1 >
-class TitleImpl : public InheritedHelperInterfaceImpl< Ifc1 >
+template< typename... Ifc >
+class TitleImpl : public InheritedHelperInterfaceImpl< Ifc... >
 {
-typedef InheritedHelperInterfaceImpl< Ifc1 > BaseClass;
+typedef InheritedHelperInterfaceImpl< Ifc... > BaseClass;
 
 protected:
     css::uno::Reference< css::drawing::XShape > xTitleShape;

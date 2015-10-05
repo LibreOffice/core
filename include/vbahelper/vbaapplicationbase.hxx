@@ -24,7 +24,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <sfx2/objsh.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::XApplicationBase > ApplicationBase_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::XApplicationBase > ApplicationBase_BASE;
 
 struct VbaApplicationBase_Impl;
 

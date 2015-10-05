@@ -26,7 +26,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XView > SwVbaView_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XView > SwVbaView_BASE;
 
 class SwVbaView : public SwVbaView_BASE
 {

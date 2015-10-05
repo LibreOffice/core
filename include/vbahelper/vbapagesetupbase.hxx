@@ -19,13 +19,12 @@
 #ifndef INCLUDED_VBAHELPER_VBAPAGESETUPBASE_HXX
 #define INCLUDED_VBAHELPER_VBAPAGESETUPBASE_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/XPageSetupBase.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::XPageSetupBase > VbaPageSetupBase_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::XPageSetupBase > VbaPageSetupBase_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaPageSetupBase :  public VbaPageSetupBase_BASE
 {

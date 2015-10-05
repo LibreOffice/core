@@ -21,9 +21,8 @@
 
 #include <ooo/vba/word/XAddin.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XAddin > SwVbaAddin_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XAddin > SwVbaAddin_BASE;
 
 class SwVbaAddin : public SwVbaAddin_BASE
 {

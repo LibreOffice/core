@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBARETURNTYPES_HXX
 #define INCLUDED_VBAHELPER_VBARETURNTYPES_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <ooo/vba/msforms/XReturnInteger.hpp>
 #include <ooo/vba/msforms/XReturnBoolean.hpp>
@@ -34,7 +34,7 @@ namespace ooo
     namespace vba
     {
         template< typename T1,  typename T2 >
-        class DefaultReturnHelper : public ::cppu::WeakImplHelper2< T2, css::script::XDefaultProperty >
+        class DefaultReturnHelper : public ::cppu::WeakImplHelper< T2, css::script::XDefaultProperty >
         {
             T1 mnValue;
             public:

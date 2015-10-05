@@ -28,10 +28,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase1.hxx>
-
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
@@ -39,7 +35,7 @@
 
 
 
-typedef ::cppu::WeakImplHelper1< css::container::XEnumeration > EnumerationHelper_BASE;
+typedef ::cppu::WeakImplHelper< css::container::XEnumeration > EnumerationHelper_BASE;
 
 
 
@@ -139,13 +135,13 @@ public:
 
 
 
-typedef ::cppu::WeakImplHelper3< css::container::XNameAccess, css::container::XIndexAccess, css::container::XEnumerationAccess > XNamedCollectionHelper_BASE;
+typedef ::cppu::WeakImplHelper< css::container::XNameAccess, css::container::XIndexAccess, css::container::XEnumerationAccess > XNamedCollectionHelper_BASE;
 
-template< typename Ifc1 >
+template< typename OneIfc >
 class XNamedObjectCollectionHelper : public XNamedCollectionHelper_BASE
 {
 public:
-typedef std::vector< css::uno::Reference< Ifc1 > >  XNamedVec;
+typedef std::vector< css::uno::Reference< OneIfc > >  XNamedVec;
 private:
 
     class XNamedEnumerationHelper : public EnumerationHelper_BASE
@@ -174,7 +170,7 @@ protected:
 public:
     XNamedObjectCollectionHelper( const XNamedVec& sMap ) : mXNamedVec( sMap ), cachePos(mXNamedVec.begin()) {}
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return  cppu::UnoType<Ifc1>::get(); }
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return cppu::UnoType< OneIfc >::get(); }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return ( mXNamedVec.size() > 0 ); }
     // XNameAcess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -228,10 +224,10 @@ public:
 };
 
 // including a HelperInterface implementation
-template< typename Ifc1 >
-class ScVbaCollectionBase : public InheritedHelperInterfaceImpl< Ifc1 >
+template< typename... Ifc >
+class ScVbaCollectionBase : public InheritedHelperInterfaceImpl< Ifc... >
 {
-typedef InheritedHelperInterfaceImpl< Ifc1 > BaseColBase;
+typedef InheritedHelperInterfaceImpl< Ifc... > BaseColBase;
 protected:
     css::uno::Reference< css::container::XIndexAccess > m_xIndexAccess;
     css::uno::Reference< css::container::XNameAccess > m_xNameAccess;
@@ -324,24 +320,24 @@ public:
 
 };
 
-typedef ::cppu::WeakImplHelper1<ov::XCollection> XCollection_InterfacesBASE;
+typedef ::cppu::WeakImplHelper<ov::XCollection> XCollection_InterfacesBASE;
 
-typedef ScVbaCollectionBase< XCollection_InterfacesBASE > CollImplBase1;
+typedef ScVbaCollectionBase< XCollection_InterfacesBASE > CollImplBase;
 // compatible with the old collections ( pre XHelperInterface base class ) ( some internal objects still use this )
-class VBAHELPER_DLLPUBLIC ScVbaCollectionBaseImpl : public CollImplBase1
+class VBAHELPER_DLLPUBLIC ScVbaCollectionBaseImpl : public CollImplBase
 {
 public:
-    ScVbaCollectionBaseImpl( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) throw( css::uno::RuntimeException ) : CollImplBase1( xParent, xContext, xIndexAccess){}
+    ScVbaCollectionBaseImpl( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) throw( css::uno::RuntimeException ) : CollImplBase( xParent, xContext, xIndexAccess){}
 
 };
 
-template <typename Ifc> // where Ifc must implement XCollectionTest
-class CollTestImplHelper :  public ScVbaCollectionBase< ::cppu::WeakImplHelper1< Ifc > >
+template < typename... Ifc > // where Ifc must implement XCollectionTest
+class CollTestImplHelper :  public ScVbaCollectionBase< ::cppu::WeakImplHelper< Ifc... > >
 {
-typedef ScVbaCollectionBase< ::cppu::WeakImplHelper1< Ifc >  > ImplBase1;
+typedef ScVbaCollectionBase< ::cppu::WeakImplHelper< Ifc... >  > ImplBase;
 
 public:
-    CollTestImplHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) throw( css::uno::RuntimeException ) : ImplBase1( xParent, xContext, xIndexAccess, bIgnoreCase ) {}
+    CollTestImplHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) throw( css::uno::RuntimeException ) : ImplBase( xParent, xContext, xIndexAccess, bIgnoreCase ) {}
 };
 
 

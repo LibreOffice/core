@@ -24,7 +24,7 @@
 #include <ooo/vba/msforms/XLineFormat.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::msforms::XLineFormat > ScVbaLineFormat_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XLineFormat > ScVbaLineFormat_BASE;
 
 class ScVbaLineFormat : public ScVbaLineFormat_BASE
 {

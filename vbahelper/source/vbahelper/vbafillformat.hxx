@@ -24,7 +24,7 @@
 #include <ooo/vba/msforms/XFillFormat.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::msforms::XFillFormat > ScVbaFillFormat_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XFillFormat > ScVbaFillFormat_BASE;
 
 class ScVbaFillFormat : public ScVbaFillFormat_BASE
 {

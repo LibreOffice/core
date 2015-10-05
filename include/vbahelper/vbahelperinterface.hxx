@@ -19,9 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBAHELPERINTERFACE_HXX
 #define INCLUDED_VBAHELPER_VBAHELPERINTERFACE_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -53,8 +51,8 @@
 // }
 //
 
-template< typename Ifc1 >
-class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl : public Ifc1
+template< typename... Ifc >
+class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl : public Ifc...
 {
 protected:
     css::uno::WeakReference< ov::XHelperInterface > mxParent;
@@ -99,34 +97,14 @@ public:
     }
  };
 
-template< typename Ifc1 >
-class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl1 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > >
+template <typename... Ifc >
+class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceWeakImpl : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper< Ifc... > >
 {
-    typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > > Base;
+    typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper< Ifc... > > Base;
 public:
-    InheritedHelperInterfaceImpl1< Ifc1 >() {}
-    InheritedHelperInterfaceImpl1< Ifc1 >( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xContext ) {}
-    InheritedHelperInterfaceImpl1< Ifc1 >( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
-};
-
-template< typename Ifc1, typename Ifc2 >
-class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl2 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper2< Ifc1, Ifc2 > >
-{
-    typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper2< Ifc1, Ifc2 > > Base;
-public:
-    InheritedHelperInterfaceImpl2< Ifc1, Ifc2 >() {}
-    InheritedHelperInterfaceImpl2< Ifc1, Ifc2 >( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xContext ) {}
-    InheritedHelperInterfaceImpl2< Ifc1, Ifc2 >( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
-};
-
-template< typename Ifc1, typename Ifc2, typename Ifc3 >
-class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl3 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper3< Ifc1, Ifc2, Ifc3 > >
-{
-    typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper3< Ifc1, Ifc2, Ifc3 > > Base;
-public:
-    InheritedHelperInterfaceImpl3< Ifc1, Ifc2, Ifc3 >() {}
-    InheritedHelperInterfaceImpl3< Ifc1, Ifc2, Ifc3 >( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xContext ) {}
-    InheritedHelperInterfaceImpl3< Ifc1, Ifc2, Ifc3 >( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
+    InheritedHelperInterfaceWeakImpl< Ifc... >() {}
+    InheritedHelperInterfaceWeakImpl< Ifc... >( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xContext ) {}
+    InheritedHelperInterfaceWeakImpl< Ifc... >( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
 };
 
 

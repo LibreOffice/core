@@ -19,13 +19,12 @@
 #ifndef INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX
 #define INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <ooo/vba/XDialogsBase.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ov::XDialogsBase > VbaDialogsBase_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::XDialogsBase > VbaDialogsBase_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaDialogsBase : public VbaDialogsBase_BASE
 {

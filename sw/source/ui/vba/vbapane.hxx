@@ -21,9 +21,8 @@
 
 #include <ooo/vba/word/XPane.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XPane > SwVbaPane_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XPane > SwVbaPane_BASE;
 
 class SwVbaPane : public SwVbaPane_BASE
 {

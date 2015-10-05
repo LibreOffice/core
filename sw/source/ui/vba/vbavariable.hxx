@@ -21,10 +21,9 @@
 
 #include <ooo/vba/word/XVariable.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XVariable > SwVbaVariable_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XVariable > SwVbaVariable_BASE;
 
 class SwVbaVariable : public SwVbaVariable_BASE
 {

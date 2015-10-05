@@ -22,7 +22,7 @@
 #include <ooo/vba/word/XTemplate.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XTemplate > SwVbaTemplate_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XTemplate > SwVbaTemplate_BASE;
 
 class SwVbaTemplate : public SwVbaTemplate_BASE
 {

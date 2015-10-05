@@ -23,10 +23,10 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 
-template< typename Ifc1 >
-class ScVbaCondition : public InheritedHelperInterfaceImpl1< Ifc1 >
+template< typename... Ifc >
+class ScVbaCondition : public InheritedHelperInterfaceWeakImpl< Ifc... >
 {
-typedef InheritedHelperInterfaceImpl1< Ifc1 > ScVbaCondition_BASE;
+typedef InheritedHelperInterfaceWeakImpl< Ifc... > ScVbaCondition_BASE;
 protected:
     css::uno::Reference< css::sheet::XCellRangeAddressable > mxAddressable;
     css::uno::Reference< css::sheet::XSheetCondition > mxSheetCondition;

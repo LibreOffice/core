@@ -27,7 +27,7 @@
 
 #include <vbahelper/vbahelperinterface.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XHyperlink > HyperlinkImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XHyperlink > HyperlinkImpl_BASE;
 
 class ScVbaHyperlink : public HyperlinkImpl_BASE
 {

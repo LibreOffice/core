@@ -45,7 +45,7 @@ namespace ooo { namespace vba { namespace excel {
 
 class ScVbaSheetObjectsBase;
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XWorksheet >  WorksheetImpl_BASE;
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XWorksheet >  WorksheetImpl_BASE;
 
 class ScVbaWorksheet : public WorksheetImpl_BASE
 {
