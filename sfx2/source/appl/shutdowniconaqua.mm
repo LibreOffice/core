@@ -343,15 +343,13 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUStri
     [pItem setEnabled: YES];
     NSMenu* pRecentMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( i_rTitle ) ];
 
+#if MACOSX_SDK_VERSION < 1060
+    [pRecentMenu setDelegate: pRecentDelegate];
+#else
     // When compiling against 10.6 SDK, we get the warning:
     // class 'RecentMenuDelegate' does not implement the 'NSMenuDelegate' protocol
-
-    // No idea if that is a bogus warning, or if the way this is
-    // implemented just is so weird that the compiler gets
-    // confused. Anyway, to avoid warnings, instead of this:
-    // [pRecentMenu setDelegate: pRecentDelegate];
-    // do this:
     objc_msgSend(pRecentMenu, @selector(setDelegate:), pRecentDelegate);
+#endif
 
     [pRecentMenu setAutoenablesItems: NO];
     [pItem setSubmenu: pRecentMenu];
@@ -366,9 +364,11 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUStri
         [pItem setEnabled: YES];
         pRecentMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( i_rTitle ) ];
 
-        // See above
-        // [pRecentMenu setDelegate: pRecentDelegate];
+#if MACOSX_SDK_VERSION < 1060
+        [pRecentMenu setDelegate: pRecentDelegate];
+#else
         objc_msgSend(pRecentMenu, @selector(setDelegate:), pRecentDelegate);
+#endif
 
         [pRecentMenu setAutoenablesItems: NO];
         [pItem setSubmenu: pRecentMenu];

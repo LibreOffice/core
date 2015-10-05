@@ -158,12 +158,13 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 
     //Set the delegate to be notified of certain events
 
-    // I don't know why, but with gcc 4.2.1, this line results in the warning:
+#if MACOSX_SDK_VERSION < 1060
+    [m_pDialog setDelegate:m_pDelegate];
+#else
+    // with gcc 4.2.1, [m_pDialog setDelegate:m_pDelegate] results in the warning
     // class 'AquaFilePickerDelegate' does not implement the 'NSOpenSavePanelDelegate' protocol
-    // So instead of:
-    // [m_pDialog setDelegate:m_pDelegate];
-    // do:
     objc_msgSend(m_pDialog, @selector(setDelegate:), m_pDelegate);
+#endif
 
     int nStatus = runandwaitforresult();
 
