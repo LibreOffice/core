@@ -898,12 +898,10 @@ void ResMgr::TestStack()
     if ( upperLimit < 0 )
     {
         OSL_FAIL( "resource stack underrun!" );
-        upperLimit = aStack.size() - 1;
     }
     else if ( upperLimit >=  static_cast<int>(aStack.size()) )
     {
         OSL_FAIL( "stack occupation index > allocated stack size" );
-        upperLimit = aStack.size() - 1;
     }
 }
 
