@@ -339,7 +339,6 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
             nQ--;
         // Start division
         nK = 0;
-        nTmp = 0;
         for (i = 0; i < nLenB; i++)
         {
             nTmp = (long)aTmpA.nNum[j - nLenB + i]
@@ -407,7 +406,6 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
             nQ--;
         // Start division
         nK = 0;
-        nTmp = 0;
         for (i = 0; i < nLenB; i++)
         {
             nTmp = (long)aTmpA.nNum[j - nLenB + i]
