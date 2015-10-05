@@ -638,6 +638,7 @@ public:
     SAL_DLLPRIVATE virtual bool  HasPrintOptionsPage() const SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window* pParent,
                                                     const SfxItemSet& rSet) SAL_OVERRIDE;
+    static SvxSearchItem* GetSearchItem() { return m_pSrchItem; }
 };
 
 inline long SwView::GetXScroll() const

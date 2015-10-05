@@ -49,6 +49,7 @@
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
 #include <viewsh.hxx>
+#include <view.hxx>
 
 using namespace ::com::sun::star;
 using namespace util;
@@ -342,8 +343,10 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                 }
             }
 
+            // Writer and editeng selections are not supported in parallel.
+            SvxSearchItem* pSearchItem = SwView::GetSearchItem();
             // If we just finished search in shape text, don't attempt to do that again.
-            if (!bEndedTextEdit)
+            if (!bEndedTextEdit && !(pSearchItem && pSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL))
             {
                 // If there are any shapes anchored to this node, search there.
                 SwPaM aPaM(pNode->GetDoc()->GetNodes().GetEndOfContent());
