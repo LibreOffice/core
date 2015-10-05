@@ -104,9 +104,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	@date >> $(fetch_LOGFILE)
 	$(foreach item, \
 		$(call fetch_Optional,ABW,ABW_TARBALL) \
-		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_CODEC_TARBALL) \
-		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_HTTPCLIENT_TARBALL) \
-		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_LANG_TARBALL) \
 		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_LOGGING_TARBALL) \
 		$(call fetch_Optional,APR,APR_TARBALL) \
 		$(call fetch_Optional,APR,APR_UTIL_TARBALL) \

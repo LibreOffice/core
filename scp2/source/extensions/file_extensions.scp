@@ -22,19 +22,6 @@
 
 #ifdef WITH_EXTENSION_INTEGRATION
 
-/* ** MediaWiki Publisher** */
-
-#ifndef WITHOUT_EXTENSION_MEDIAWIKI
-
-File gid_File_Oxt_MediaWiki
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "Extension/wiki-publisher.filelist";
-End
-
-#endif
-
 /* ** Hungarian Cross-reference Toolbar** */
 
 #ifdef WITH_EXTENSION_HUNART

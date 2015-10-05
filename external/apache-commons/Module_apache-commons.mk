@@ -11,13 +11,7 @@ $(eval $(call gb_Module_Module,apache-commons))
 
 $(eval $(call gb_Module_add_targets,apache-commons,\
 	ExternalPackage_apache_commons_logging \
-	ExternalProject_apache_commons_codec \
-	ExternalProject_apache_commons_httpclient \
-	ExternalProject_apache_commons_lang \
 	ExternalProject_apache_commons_logging \
-	UnpackedTarball_apache_commons_codec \
-	UnpackedTarball_apache_commons_httpclient \
-	UnpackedTarball_apache_commons_lang \
 	UnpackedTarball_apache_commons_logging \
 ))
 
