@@ -1,24 +1,24 @@
-From bc6f0f3a006123a89d1321038edeb75f2fd67c6f Mon Sep 17 00:00:00 2001
-From: David Tardon <dtardon@redhat.com>
-Date: Sun, 30 Aug 2015 11:21:29 +0200
+From 53c03b23520005aac0fb9b3036a200d63c7a8f06 Mon Sep 17 00:00:00 2001
+From: Sean Young <sean@mess.org>
+Date: Tue, 6 Oct 2015 09:16:11 +0100
 Subject: [PATCH] add missing include
 
 ---
- src/lib/WPS8.cpp | 1 +
+ src/lib/MSWrite.cpp | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/src/lib/WPS8.cpp b/src/lib/WPS8.cpp
-index 04c1e57..8d39fa8 100644
---- a/src/lib/WPS8.cpp
-+++ b/src/lib/WPS8.cpp
-@@ -19,6 +19,7 @@
-  * applicable instead of those above.
-  */
+diff --git a/src/lib/MSWrite.cpp b/src/lib/MSWrite.cpp
+index 2bc2511..ab5fdd6 100644
+--- a/src/lib/MSWrite.cpp
++++ b/src/lib/MSWrite.cpp
+@@ -32,6 +32,7 @@
+ 
+ #include "MSWrite.h"
  
 +#include <algorithm>
- #include <stdlib.h>
- #include <stdio.h>
- #include <string.h>
+ #include <cstring>
+ 
+ namespace MSWriteParserInternal
 -- 
-2.4.3
+2.1.4
 
