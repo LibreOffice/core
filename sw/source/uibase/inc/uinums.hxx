@@ -21,7 +21,9 @@
 
 #include <numrule.hxx>
 #include "swdllapi.h"
-#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <memory>
+#include <vector>
 
 class SfxPoolItem;
 class SwWrtShell;
@@ -42,7 +44,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
         SwNumFormat aFormat;
         OUString sCharFormatName;
         sal_uInt16 nCharPoolId;
-        boost::ptr_vector<SfxPoolItem> aItems;
+        std::vector<std::unique_ptr<SfxPoolItem>> m_Items;
 
         _SwNumFormatGlobal& operator=( const _SwNumFormatGlobal& ) SAL_DELETED_FUNCTION;
 

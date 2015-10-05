@@ -190,7 +190,7 @@ void SwNumRulesWithName::SetNumFormat(
     aFormats[nIndex] = new _SwNumFormatGlobal(rNumFormat);
     aFormats[nIndex]->sCharFormatName = rName;
     aFormats[nIndex]->nCharPoolId = USHRT_MAX;
-    aFormats[nIndex]->aItems.clear();
+    aFormats[nIndex]->m_Items.clear();
 }
 
 SwNumRulesWithName::_SwNumFormatGlobal::_SwNumFormatGlobal( const SwNumFormat& rFormat )
@@ -209,7 +209,7 @@ SwNumRulesWithName::_SwNumFormatGlobal::_SwNumFormatGlobal( const SwNumFormat& r
             const SfxPoolItem *pCurr = aIter.GetCurItem();
             while( true )
             {
-                aItems.push_back( pCurr->Clone() );
+                m_Items.push_back(std::unique_ptr<SfxPoolItem>(pCurr->Clone()));
                 if( aIter.IsAtEnd() )
                     break;
                 pCurr = aIter.NextItem();
@@ -226,8 +226,10 @@ SwNumRulesWithName::_SwNumFormatGlobal::_SwNumFormatGlobal( const _SwNumFormatGl
     sCharFormatName( rFormat.sCharFormatName ),
     nCharPoolId( rFormat.nCharPoolId )
 {
-    for( sal_uInt16 n = rFormat.aItems.size(); n; )
-        aItems.push_back( rFormat.aItems[ --n ].Clone() );
+    for (size_t n = rFormat.m_Items.size(); n; )
+    {
+        m_Items.push_back(std::unique_ptr<SfxPoolItem>(rFormat.m_Items[ --n ]->Clone()));
+    }
 }
 
 SwNumRulesWithName::_SwNumFormatGlobal::~_SwNumFormatGlobal()
@@ -262,8 +264,12 @@ void SwNumRulesWithName::_SwNumFormatGlobal::ChgNumFormat( SwWrtShell& rSh,
                 pFormat = rSh.GetCharFormatFromPool( nCharPoolId );
 
             if( !pFormat->HasWriterListeners() )       // set attributes
-                for( sal_uInt16 n = aItems.size(); n; )
-                    pFormat->SetFormatAttr( aItems[ --n ] );
+            {
+                for (size_t n = m_Items.size(); n; )
+                {
+                    pFormat->SetFormatAttr( *m_Items[ --n ] );
+                }
+            }
         }
     }
     const_cast<SwNumFormat&>(aFormat).SetCharFormat( pFormat );
