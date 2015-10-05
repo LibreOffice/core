@@ -33,6 +33,9 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/sorted_vector.hxx>
 
+#include <memory>
+#include <vector>
+
 class SwChildWinWrapper;
 
 struct SwRedlineDataChild
@@ -62,8 +65,7 @@ typedef boost::ptr_vector<SwRedlineDataChild> SwRedlineDataChildArr;
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
     VclPtr<vcl::Window>     pParentDlg;
-    boost::ptr_vector<SwRedlineDataParent>
-                            aRedlineParents;
+    std::vector<std::unique_ptr<SwRedlineDataParent>> m_RedlineParents;
     SwRedlineDataChildArr   aRedlineChildren;
     SwRedlineDataParentSortArr aUsedSeqNo;
     VclPtr<SvxAcceptChgCtr>    aTabPagesCTRL;

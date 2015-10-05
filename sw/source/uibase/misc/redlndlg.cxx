@@ -231,12 +231,12 @@ void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
     aUsedSeqNo.clear();
 
     if (nStart)
-        RemoveParents(nStart, aRedlineParents.size() - 1);
+        RemoveParents(nStart, m_RedlineParents.size() - 1);
     else
     {
         pTable->Clear();
         aRedlineChildren.clear();
-        aRedlineParents.erase(aRedlineParents.begin() + nStart, aRedlineParents.end());
+        m_RedlineParents.erase(m_RedlineParents.begin() + nStart, m_RedlineParents.end());
     }
 
     // insert parents
@@ -400,21 +400,20 @@ void SwRedlineAcceptDlg::Activate()
     sal_uInt16 nCount = pSh->GetRedlineCount();
 
     // check the number of pointers
-    SwRedlineDataParent *pParent = 0;
     sal_uInt16 i;
 
     for ( i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
 
-        if (i >= aRedlineParents.size())
+        if (i >= m_RedlineParents.size())
         {
             // new entries have been appended
             Init(i);
             return;
         }
 
-        pParent = &aRedlineParents[i];
+        SwRedlineDataParent *const pParent = m_RedlineParents[i].get();
         if (&rRedln.GetRedlineData() != pParent->pData)
         {
             // Redline-Parents were inserted, changed or deleted
@@ -450,7 +449,7 @@ void SwRedlineAcceptDlg::Activate()
         }
     }
 
-    if (nCount != aRedlineParents.size())
+    if (nCount != m_RedlineParents.size())
     {
         // Redlines were deleted at the end
         Init(nCount);
@@ -461,7 +460,7 @@ void SwRedlineAcceptDlg::Activate()
     for (i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
-        pParent = &aRedlineParents[i];
+        SwRedlineDataParent *const pParent = m_RedlineParents[i].get();
 
         if(rRedln.GetComment() != pParent->sComment)
         {
@@ -490,7 +489,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     sal_uInt16 nAutoFormat = HasRedlineAutoFormat() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
-    SwRedlineDataParent *pParent = &aRedlineParents[nStart];
+    SwRedlineDataParent *const pParent = m_RedlineParents[nStart].get();
     const SwRangeRedline& rRedln = pSh->GetRedline(nStart);
 
     if (bChild)     // should actually never happen, but just in case...
@@ -525,10 +524,9 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
 
     // have entries been deleted?
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
-    sal_uInt16 i;
-    for ( i = nStart + 1; i < aRedlineParents.size(); i++)
+    for (sal_uInt16 i = nStart + 1; i < m_RedlineParents.size(); i++)
     {
-        if (aRedlineParents[i].pData == pRedlineData)
+        if (m_RedlineParents[i]->pData == pRedlineData)
         {
             // remove entries from nStart to i-1
             RemoveParents(nStart, i - 1);
@@ -539,9 +537,9 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
 
     // entries been inserted?
     sal_uInt16 nCount = pSh->GetRedlineCount();
-    pRedlineData = aRedlineParents[nStart].pData;
+    pRedlineData = m_RedlineParents[nStart]->pData;
 
-    for (i = nStart + 1; i < nCount; i++)
+    for (sal_uInt16 i = nStart + 1; i < nCount; i++)
     {
         if (&pSh->GetRedline(i).GetRedlineData() == pRedlineData)
         {
@@ -657,12 +655,12 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     // set the cursor after the last entry because otherwise performance problem in TLB.
     // TLB would otherwise reset the cursor at every Remove (expensive)
-    sal_uInt16 nPos = std::min((sal_uInt16)nCount, (sal_uInt16)aRedlineParents.size());
+    sal_uInt16 nPos = std::min((sal_uInt16)nCount, (sal_uInt16)m_RedlineParents.size());
     SvTreeListEntry *pCurEntry = NULL;
     while( ( pCurEntry == NULL ) && ( nPos > 0 ) )
     {
         --nPos;
-        pCurEntry = aRedlineParents[nPos].pTLBParent;
+        pCurEntry = m_RedlineParents[nPos]->pTLBParent;
     }
 
     if (pCurEntry)
@@ -672,9 +670,10 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     for (sal_uInt16 i = nStart; i <= nEnd; i++)
     {
-        if (!bChildrenRemoved && aRedlineParents[i].pNext)
+        if (!bChildrenRemoved && m_RedlineParents[i]->pNext)
         {
-            SwRedlineDataChild* pChildPtr = const_cast<SwRedlineDataChild*>(aRedlineParents[i].pNext);
+            SwRedlineDataChild * pChildPtr =
+                const_cast<SwRedlineDataChild*>(m_RedlineParents[i]->pNext);
             for( SwRedlineDataChildArr::iterator it = aRedlineChildren.begin();
                  it != aRedlineChildren.end(); ++it)
                 if (&*it == pChildPtr)
@@ -691,7 +690,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
                     break;
                 }
         }
-        SvTreeListEntry *pEntry = aRedlineParents[i].pTLBParent;
+        SvTreeListEntry *const pEntry = m_RedlineParents[i]->pTLBParent;
         if (pEntry)
         {
             long nIdx = aLBoxArr.size() - 1L;
@@ -713,7 +712,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     // unfortunately by Remove it was selected from the TLB always again ...
     pTable->SelectAll(false);
 
-    aRedlineParents.erase( aRedlineParents.begin() + nStart, aRedlineParents.begin() + nEnd + 1);
+    m_RedlineParents.erase(m_RedlineParents.begin() + nStart, m_RedlineParents.begin() + nEnd + 1);
 }
 
 void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
@@ -756,7 +755,8 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         pRedlineParent->pNext    = 0;
         OUString sComment(rRedln.GetComment());
         pRedlineParent->sComment = sComment.replace('\n', ' ');
-        aRedlineParents.insert(aRedlineParents.begin() + i, pRedlineParent);
+        m_RedlineParents.insert(m_RedlineParents.begin() + i,
+                std::unique_ptr<SwRedlineDataParent>(pRedlineParent));
 
         RedlinData *pData = new RedlinData;
         pData->pData = pRedlineParent;
