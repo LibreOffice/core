@@ -649,11 +649,11 @@ void DlgEditor::Cut()
 void implCopyStreamToByteSequence( Reference< XInputStream > xStream,
     Sequence< sal_Int8 >& bytes )
 {
-    sal_Int32 nRead = xStream->readBytes( bytes, xStream->available() );
+    xStream->readBytes( bytes, xStream->available() );
     for (;;)
     {
         Sequence< sal_Int8 > readBytes;
-        nRead = xStream->readBytes( readBytes, 1024 );
+        sal_Int32 nRead = xStream->readBytes( readBytes, 1024 );
         if (! nRead)
             break;
 
