@@ -51,8 +51,8 @@ class SwTableAutoFormat;
 class SwView;
 class SfxItemSet;
 class SwTableRep;
-struct _DB_Column;
-typedef boost::ptr_vector<_DB_Column> _DB_Columns;
+struct DB_Column;
+typedef boost::ptr_vector<DB_Column> DB_Columns;
 
 struct SwInsDBColumn
 {
@@ -142,7 +142,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     DECL_LINK_TYPED( DblClickHdl, ListBox&, void );
     DECL_LINK_TYPED( HeaderHdl, Button*, void );
 
-    bool SplitTextToColArr( const OUString& rText, _DB_Columns& rColArr, bool bInsField );
+    bool SplitTextToColArr( const OUString& rText, DB_Columns& rColArr, bool bInsField );
         using SfxModalDialog::Notify;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     virtual void            ImplCommit() SAL_OVERRIDE;

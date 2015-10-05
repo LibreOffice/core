@@ -108,7 +108,7 @@ const char cDBFieldStart  = '<';
 const char cDBFieldEnd    = '>';
 
 // Helper structure for adding database rows as fields or text
-struct _DB_Column
+struct DB_Column
 {
     enum ColType { DB_FILLTEXT, DB_COL_FIELD, DB_COL_TEXT, DB_SPLITPARA } eColType;
 
@@ -119,35 +119,35 @@ struct _DB_Column
     } DB_ColumnData;
     const SwInsDBColumn* pColInfo;
 
-    _DB_Column()
+    DB_Column()
     {
         pColInfo = 0;
         DB_ColumnData.pText = 0;
         eColType = DB_SPLITPARA;
     }
 
-    explicit _DB_Column( const OUString& rText )
+    explicit DB_Column( const OUString& rText )
     {
         pColInfo = 0;
         DB_ColumnData.pText = new OUString( rText );
         eColType = DB_FILLTEXT;
     }
 
-    _DB_Column( const SwInsDBColumn& rInfo, sal_uLong nFormat )
+    DB_Column( const SwInsDBColumn& rInfo, sal_uLong nFormat )
     {
         pColInfo = &rInfo;
         DB_ColumnData.nFormat = nFormat;
         eColType = DB_COL_TEXT;
     }
 
-    _DB_Column( const SwInsDBColumn& rInfo, SwDBField& rField )
+    DB_Column( const SwInsDBColumn& rInfo, SwDBField& rField )
     {
         pColInfo = &rInfo;
         DB_ColumnData.pField = &rField;
         eColType = DB_COL_FIELD;
     }
 
-    ~_DB_Column()
+    ~DB_Column()
     {
         if( DB_COL_FIELD == eColType )
             delete DB_ColumnData.pField;
@@ -156,7 +156,7 @@ struct _DB_Column
     }
 };
 
-struct _DB_ColumnConfigData: private boost::noncopyable
+struct DB_ColumnConfigData: private boost::noncopyable
 {
     SwInsDBColumns aDBColumns;
     OUString sSource;
@@ -170,13 +170,13 @@ struct _DB_ColumnConfigData: private boost::noncopyable
          bIsHeadlineOn : 1,
          bIsEmptyHeadln : 1;
 
-    _DB_ColumnConfigData()
+    DB_ColumnConfigData()
     {
         bIsTable = bIsHeadlineOn = true;
         bIsField = bIsEmptyHeadln = false;
     }
 
-    ~_DB_ColumnConfigData();
+    ~DB_ColumnConfigData();
 };
 
 bool SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
@@ -854,30 +854,30 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton, void )
     }
 }
 
-static void lcl_InsTextInArr( const OUString& rText, _DB_Columns& rColArr )
+static void lcl_InsTextInArr( const OUString& rText, DB_Columns& rColArr )
 {
-    _DB_Column* pNew;
+    DB_Column* pNew;
     sal_Int32 nSttPos = 0, nFndPos;
     while( -1 != ( nFndPos = rText.indexOf( '\x0A', nSttPos )) )
     {
         if( 1 < nFndPos )
         {
-            pNew = new _DB_Column( rText.copy( nSttPos, nFndPos -1 ) );
+            pNew = new DB_Column( rText.copy( nSttPos, nFndPos -1 ) );
             rColArr.push_back( pNew );
         }
-        pNew = new _DB_Column;
+        pNew = new DB_Column;
         rColArr.push_back( pNew );
         nSttPos = nFndPos + 1;
     }
     if( nSttPos < rText.getLength() )
     {
-        pNew = new _DB_Column( rText.copy( nSttPos ) );
+        pNew = new DB_Column( rText.copy( nSttPos ) );
         rColArr.push_back( pNew );
     }
 }
 
 bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
-                                _DB_Columns& rColArr,
+                                DB_Columns& rColArr,
                                 bool bInsField )
 {
     // create each of the database columns from the text again
@@ -900,7 +900,7 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
                 // so surely the text "before":
                 const SwInsDBColumn& rFndCol = **it;
 
-                _DB_Column* pNew;
+                DB_Column* pNew;
 
                 if( 1 < nSttPos )
                 {
@@ -931,14 +931,14 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
                     SwWrtShell& rSh = pView->GetWrtShell();
                     SwDBFieldType aFieldType( rSh.GetDoc(), aSrch.sColumn,
                                             aDBData );
-                    pNew = new _DB_Column( rFndCol, *new SwDBField(
+                    pNew = new DB_Column( rFndCol, *new SwDBField(
                             static_cast<SwDBFieldType*>(rSh.InsertFieldType( aFieldType )),
                                                             nFormat ) );
                     if( nSubType )
                         pNew->DB_ColumnData.pField->SetSubType( nSubType );
                 }
                 else
-                    pNew = new _DB_Column( rFndCol, nFormat );
+                    pNew = new DB_Column( rFndCol, nFormat );
 
                 rColArr.push_back( pNew );
             }
@@ -1185,7 +1185,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     }
     else                            // add data as fields/text
     {
-        _DB_Columns aColArr;
+        DB_Columns aColArr;
         if( SplitTextToColArr( m_pEdDbText->GetText(), aColArr, m_pRbAsField->IsChecked() ) )
         {
             // now for each data set, we can iterate over the array
@@ -1276,15 +1276,15 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                 for( size_t n = 0; n < nCols; ++n )
                 {
-                    _DB_Column* pDBCol = &aColArr[ n ];
+                    DB_Column* pDBCol = &aColArr[ n ];
                     OUString sIns;
                     switch( pDBCol->eColType )
                     {
-                    case _DB_Column::DB_FILLTEXT:
+                    case DB_Column::DB_FILLTEXT:
                         sIns =  *pDBCol->DB_ColumnData.pText;
                         break;
 
-                    case _DB_Column::DB_SPLITPARA:
+                    case DB_Column::DB_SPLITPARA:
                         rSh.SplitNode();
                         // when the template is not the same as the follow template,
                         // the selected has to be set newly
@@ -1292,7 +1292,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             rSh.SetTextFormatColl( pColl );
                         break;
 
-                    case _DB_Column::DB_COL_FIELD:
+                    case DB_Column::DB_COL_FIELD:
                         {
                             std::unique_ptr<SwDBField> pField(static_cast<SwDBField *>(
                                 pDBCol->DB_ColumnData.pField->CopyField()));
@@ -1329,7 +1329,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                         }
                         break;
 
-                    case _DB_Column::DB_COL_TEXT:
+                    case DB_Column::DB_COL_TEXT:
                         {
                             double nValue = DBL_MAX;
                             Reference< XPropertySet > xColumnProps;
@@ -1471,7 +1471,7 @@ void SwInsertDBColAutoPilot::SetTabSet()
     rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() );
 }
 
-_DB_ColumnConfigData::~_DB_ColumnConfigData() {}
+DB_ColumnConfigData::~DB_ColumnConfigData() {}
 
 static Sequence<OUString> lcl_createSourceNames(const OUString& rNodeName)
 {
@@ -1658,7 +1658,7 @@ void SwInsertDBColAutoPilot::Load()
         pDataSourceProps[2] >>= nCommandType;
         if(sSource.equals(aDBData.sDataSource) && sCommand.equals(aDBData.sCommand))
         {
-            std::unique_ptr<_DB_ColumnConfigData> pNewData(new _DB_ColumnConfigData);
+            std::unique_ptr<DB_ColumnConfigData> pNewData(new DB_ColumnConfigData);
             pNewData->sSource = sSource;
             pNewData->sTable = sCommand;
 
