@@ -2851,6 +2851,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf93919, "tdf93919.docx")
     // This was 0, left margin was not inherited from the list style.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
+DECLARE_OOXMLIMPORT_TEST(testTdf91417, "tdf91417.docx")
+{
+    // The first paragraph should contain a link to "http://www.google.com/"
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xTextCursor(xTextDocument->getText()->createTextCursor( ), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCursorProps(xTextCursor, uno::UNO_QUERY);
+    OUString aValue;
+    xCursorProps->getPropertyValue("HyperLinkURL") >>= aValue;
+    CPPUNIT_ASSERT_EQUAL(OUString("http://www.google.com/"), aValue);
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
