@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_51f9f4c7",
+        "filename": "sysui/desktop/macosx/Info.plist.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-05T11:28:46Z",
+      "side": 1,
+      "message": "we have \u0027application/x-hwp\u0027 in all other files including filter/source/config/fragments/types/writer_MIZI_Hwp_97.xcu",
+      "revId": "b91359d2801adda93692655345db818a80bec3b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_f113e80b",
+        "filename": "sysui/desktop/macosx/Info.plist.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-05T11:28:46Z",
+      "side": 1,
+      "message": "this is \u0027text/spreadsheet\u0027",
+      "revId": "b91359d2801adda93692655345db818a80bec3b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_710078ab",
+        "filename": "sysui/desktop/macosx/Info.plist.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-05T11:28:46Z",
+      "side": 1,
+      "message": "this is \u0027text/csv\u0027",
+      "revId": "b91359d2801adda93692655345db818a80bec3b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_d12b4432",
+        "filename": "sysui/desktop/macosx/Info.plist.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-05T11:28:46Z",
+      "side": 1,
+      "message": "we have several occurrences of \u0027application/x-dbase\u0027",
+      "revId": "b91359d2801adda93692655345db818a80bec3b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_f1e12800",
+        "filename": "sysui/desktop/macosx/Info.plist.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 1368,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-05T11:28:46Z",
+      "side": 1,
+      "message": "hmm we use \u0027application/vnd.corel-draw\u0027 elsewhere although that is apparently in error as it\u0027s not registered on \nhttp://www.iana.org/assignments/media-types/media-types.xhtml",
+      "revId": "b91359d2801adda93692655345db818a80bec3b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
