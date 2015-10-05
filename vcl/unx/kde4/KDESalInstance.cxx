@@ -26,7 +26,7 @@
 
 using namespace com::sun::star;
 
-SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nState )
+SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nState )
 {
     return new KDESalFrame( pParent, nState );
 }
