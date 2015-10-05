@@ -130,7 +130,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	svgio \
 	svx \
 	sw \
-	swext \
 	sysui \
 	test \
 	testtools \

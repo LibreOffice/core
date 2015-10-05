@@ -81,7 +81,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 			svl \
 			svtools \
 			svx \
-			swext \
 			toolkit \
 			ucb \
 			unoxml \
