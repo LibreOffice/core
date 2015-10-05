@@ -784,7 +784,6 @@ namespace basegfx
                                     if(aLastSVGCommand != aCommand)
                                     {
                                         aResult.append(aCommand);
-                                        aLastSVGCommand = aCommand;
                                     }
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
@@ -799,7 +798,6 @@ namespace basegfx
                                     if(aLastSVGCommand != aCommand)
                                     {
                                         aResult.append(aCommand);
-                                        aLastSVGCommand = aCommand;
                                     }
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
@@ -820,7 +818,6 @@ namespace basegfx
                                     if(aLastSVGCommand != aCommand)
                                     {
                                         aResult.append(aCommand);
-                                        aLastSVGCommand = aCommand;
                                     }
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
@@ -837,7 +834,6 @@ namespace basegfx
                                     if(aLastSVGCommand != aCommand)
                                     {
                                         aResult.append(aCommand);
-                                        aLastSVGCommand = aCommand;
                                     }
 
                                     basegfx::internal::putNumberCharWithSpace(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);

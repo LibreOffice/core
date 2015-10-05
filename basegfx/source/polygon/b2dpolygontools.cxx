@@ -3462,7 +3462,6 @@ namespace basegfx
                     && aControlA.equal(aRetval.getB2DPoint(aRetval.count() - 1)))
                 {
                     bControlA = false;
-                    bControlB = false;
                 }
 
                 if(bControlA)
