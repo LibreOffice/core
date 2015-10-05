@@ -34,7 +34,7 @@
 #include <sfx2/docfile.hxx>
 #include <rtl/textenc.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <tools/urlobj.hxx>
 #include <dbui.hrc>
@@ -625,7 +625,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
     if(m_sURL.isEmpty())
     {
         sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
-        uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+        uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
         const OUString sPath( SvtPathOptions().SubstituteVariable("$(userurl)/database") );
         aDlgHelper.SetDisplayDirectory( sPath );
@@ -635,7 +635,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
 
         if( ERRCODE_NONE == aDlgHelper.Execute() )
         {
-            m_sURL = xFP->getFiles().getConstArray()[0];
+            m_sURL = xFP->getSelectedFiles().getConstArray()[0];
             INetURLObject aResult( m_sURL );
             aResult.setExtension("csv");
             m_sURL = aResult.GetMainURL(INetURLObject::NO_DECODE);

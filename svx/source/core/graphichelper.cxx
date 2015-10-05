@@ -41,7 +41,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
@@ -99,7 +99,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     OUString sGraphicsPath( aPathOpt.GetGraphicPath() );
 
     FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
-    Reference < XFilePicker > xFilePicker = aDialogHelper.GetFilePicker();
+    Reference < XFilePicker2 > xFilePicker = aDialogHelper.GetFilePicker();
 
     INetURLObject aPath;
     aPath.SetSmartURL( sGraphicsPath );
@@ -213,7 +213,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         OUString sGraphicPath( aPathOpt.GetGraphicPath() );
 
         FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
-        Reference < XFilePicker > xFilePicker = aDialogHelper.GetFilePicker();
+        Reference < XFilePicker2 > xFilePicker = aDialogHelper.GetFilePicker();
 
         aDialogHelper.SetTitle( "Save as Image" );
 

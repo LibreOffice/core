@@ -38,7 +38,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -2473,7 +2473,7 @@ uno::Sequence<OUString> SwDBManager::GetExistingDatabaseNames()
 OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
 {
     sfx2::FileDialogHelper aDlgHelper( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-    uno::Reference < ui::dialogs::XFilePicker > xFP = aDlgHelper.GetFilePicker();
+    uno::Reference < ui::dialogs::XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
     OUString sHomePath(SvtPathOptions().GetWorkPath());
     aDlgHelper.SetDisplayDirectory( sHomePath );
@@ -2512,7 +2512,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
     {
         uno::Any aURLAny;
         uno::Reference< beans::XPropertySet > aSettings;
-        const OUString aURI( xFP->getFiles().getConstArray()[0] );
+        const OUString aURI( xFP->getSelectedFiles().getConstArray()[0] );
         const DBConnURITypes type = GetDBunoURI( aURI, aURLAny );
 
         if( DBCONN_FLAT == type )

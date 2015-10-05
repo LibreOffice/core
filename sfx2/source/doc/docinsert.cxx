@@ -168,7 +168,7 @@ IMPL_LINK_NOARG_TYPED(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*
     if ( ERRCODE_NONE == m_nError )
         impl_FillURLList( m_pFileDlg, m_pURLList );
 
-    Reference < XFilePicker > xFP = m_pFileDlg->GetFilePicker();
+    Reference < XFilePicker2 > xFP = m_pFileDlg->GetFilePicker();
     Reference < XFilePickerControlAccess > xCtrlAccess( xFP, UNO_QUERY );
     if ( xCtrlAccess.is() )
     {

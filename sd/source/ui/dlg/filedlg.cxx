@@ -27,7 +27,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <vcl/msgbox.hxx>
 #include <vcl/idle.hxx>
 #include <sal/types.h>
@@ -222,7 +222,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
 {
     maUpdateIdle.SetIdleHdl(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
 
-    css::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > xFileDlg = GetFilePicker();
+    css::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker2 > xFileDlg = GetFilePicker();
 
     // get the control access
     mxControlAccess = css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess > ( xFileDlg, css::uno::UNO_QUERY );
