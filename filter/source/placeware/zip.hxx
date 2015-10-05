@@ -31,7 +31,7 @@ struct ZipEntry;
 class PlacewareZipFile
 {
 public:
-    PlacewareZipFile( osl::File& rFile );
+    explicit PlacewareZipFile( osl::File& rFile );
     ~PlacewareZipFile();
 
     bool addFile( osl::File& rFile, const OString& rName );

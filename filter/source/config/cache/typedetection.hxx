@@ -53,7 +53,7 @@ public:
         @param  rxContext
                 reference to the uno service manager, which created this service instance.
      */
-    TypeDetection(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+    explicit TypeDetection(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
 
 

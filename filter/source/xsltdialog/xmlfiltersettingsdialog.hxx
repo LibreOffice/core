@@ -46,7 +46,7 @@ protected:
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 public:
-    SvxPathControl(vcl::Window* pParent);
+    explicit SvxPathControl(vcl::Window* pParent);
     HeaderBar* getHeaderBar() { return m_pHeaderBar; }
     XMLFilterListBox* getListBox() { return m_pFocusCtrl; }
     virtual ~SvxPathControl();

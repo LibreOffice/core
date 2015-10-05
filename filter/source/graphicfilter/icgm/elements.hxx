@@ -126,8 +126,8 @@ class CGMElements
         // Delimiter Counts -> which will be increased by each 'begin' operation
         //                     and decreased by each 'end' operation
         bool            bSegmentCount;
-                            CGMElements( CGM& rCGM );
-                            ~CGMElements();
+        explicit CGMElements( CGM& rCGM );
+        ~CGMElements();
         CGMElements&        operator=( CGMElements& );
         void                Init();
         static Bundle*      GetBundleIndex( long nIndex, BundleList&, Bundle& );

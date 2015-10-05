@@ -51,8 +51,8 @@ private:
     void                ImplReadHeader();
 
 public:
-                        PCXReader(SvStream &rStream);
-                        ~PCXReader();
+    explicit PCXReader(SvStream &rStream);
+    ~PCXReader();
     bool                ReadPCX(Graphic & rGraphic );
                         // Reads a PCX file from the stream and fills the GDIMetaFile
 };

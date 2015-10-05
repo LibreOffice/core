@@ -53,7 +53,7 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
             @param  rxContext
                     reference to the uno service manager, which created this service instance.
          */
-        FrameLoaderFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+        explicit FrameLoaderFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
 
 

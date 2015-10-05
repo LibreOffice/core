@@ -107,7 +107,7 @@ private:
 
 public:
 
-    TIFFWriter(SvStream &rStream);
+    explicit TIFFWriter(SvStream &rStream);
     ~TIFFWriter();
 
     bool WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );

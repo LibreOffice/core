@@ -53,7 +53,7 @@ class PlaceWareExportFilter : public cppu::WeakImplHelper
     Reference< XComponentContext > mxContext;
 
 public:
-    PlaceWareExportFilter( const Reference< XComponentContext > &rxContext);
+    explicit PlaceWareExportFilter( const Reference< XComponentContext > &rxContext);
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) throw(RuntimeException, std::exception) SAL_OVERRIDE;

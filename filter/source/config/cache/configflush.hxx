@@ -67,7 +67,7 @@ class ConfigFlush : public BaseLock
 
         /** @short  standard ctor.
          */
-        ConfigFlush(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        explicit ConfigFlush(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 
 
 

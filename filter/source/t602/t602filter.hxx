@@ -138,7 +138,7 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
                                         css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
-    T602ImportFilterDialog(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
+    explicit T602ImportFilterDialog(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
 
 };
 
@@ -254,8 +254,8 @@ private:
         throw (css::uno::RuntimeException);
 
     public:
-        T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
-        T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream);
+        explicit T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
+        explicit T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream);
         virtual ~T602ImportFilter();
 
     // XFilter

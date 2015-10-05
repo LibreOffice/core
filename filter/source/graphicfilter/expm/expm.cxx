@@ -47,7 +47,7 @@ private:
     void                ImplWritePixel( sal_uLong ) const;
 
 public:
-    XPMWriter(SvStream& rOStm);
+    explicit XPMWriter(SvStream& rOStm);
     ~XPMWriter();
 
     bool            WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );

@@ -36,21 +36,21 @@ class Impl_OlePres
     sal_uInt8*      pJob;
     Size            aSize;      // Groesse in 100TH_MM
 public:
-                    Impl_OlePres( SotClipboardFormatId nF )
-                        : nFormat( nF )
-                        , nAspect( ASPECT_CONTENT )
-                        , pBmp( NULL )
-                        , pMtf( NULL )
-                        , nAdvFlags( 0x2 )  // in Dokument gefunden
-                        , nJobLen( 0 )
-                        , pJob( NULL )
-                    {}
-                    ~Impl_OlePres()
-                    {
-                        delete pJob;
-                        delete pBmp;
-                        delete pMtf;
-                    }
+    explicit Impl_OlePres( SotClipboardFormatId nF )
+        : nFormat( nF )
+        , nAspect( ASPECT_CONTENT )
+        , pBmp( NULL )
+        , pMtf( NULL )
+        , nAdvFlags( 0x2 )  // in Dokument gefunden
+        , nJobLen( 0 )
+        , pJob( NULL )
+    {}
+    ~Impl_OlePres()
+    {
+        delete pJob;
+        delete pBmp;
+        delete pMtf;
+    }
     void    SetMtf( const GDIMetaFile & rMtf )
             {
                 if( pMtf )

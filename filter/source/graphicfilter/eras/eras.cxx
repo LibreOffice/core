@@ -49,7 +49,7 @@ private:
     void                ImplPutByte( sal_uInt8 );   // RLE decoding
 
 public:
-    RASWriter(SvStream &rStream);
+    explicit RASWriter(SvStream &rStream);
     ~RASWriter();
 
     bool WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );

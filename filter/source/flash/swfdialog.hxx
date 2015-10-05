@@ -71,7 +71,7 @@ protected:
 
 public:
 
-                SWFDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit SWFDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual     ~SWFDialog();
 };
 

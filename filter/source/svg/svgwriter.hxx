@@ -210,7 +210,7 @@ class SVGTextWriter
     vcl::Font                                   maParentFont;
 
   public:
-    SVGTextWriter( SVGExport& rExport );
+    explicit SVGTextWriter( SVGExport& rExport );
     virtual ~SVGTextWriter();
 
     sal_Int32 setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nCurAction );

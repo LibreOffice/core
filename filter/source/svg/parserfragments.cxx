@@ -127,7 +127,7 @@ namespace
         struct definition
         {
             ::boost::spirit::classic::rule< ScannerT > colorExpression;
-            definition( const ColorGrammar& self )
+            explicit definition( const ColorGrammar& self )
             {
                 using namespace ::boost::spirit::classic;
 

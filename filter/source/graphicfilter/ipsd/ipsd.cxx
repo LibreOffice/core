@@ -77,7 +77,7 @@ private:
     bool                ImplReadHeader();
 
 public:
-    PSDReader(SvStream &rStream);
+    explicit PSDReader(SvStream &rStream);
     ~PSDReader();
     bool ReadPSD(Graphic & rGraphic);
 };

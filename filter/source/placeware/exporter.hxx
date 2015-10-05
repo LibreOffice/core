@@ -32,7 +32,7 @@ class PageEntry;
 class PlaceWareExporter
 {
 public:
-    PlaceWareExporter( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit PlaceWareExporter( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     ~PlaceWareExporter();
 
     bool doExport( css::uno::Reference< css::lang::XComponent > xDoc,

@@ -343,7 +343,7 @@ class FindByType : std::unary_function<FlatDetectionInfo, bool>
 {
     OUString maType;
 public:
-    FindByType(const OUString& rType) : maType(rType) {}
+    explicit FindByType(const OUString& rType) : maType(rType) {}
     bool operator() (const FlatDetectionInfo& rInfo) const
     {
         return rInfo.sType == maType;

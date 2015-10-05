@@ -100,8 +100,8 @@ private:
     bool                ImplReadBody();
 
 public:
-                        TGAReader(SvStream &rTGA);
-                        ~TGAReader();
+    explicit TGAReader(SvStream &rTGA);
+    ~TGAReader();
     bool                ReadTGA(Graphic &rGraphic);
 };
 

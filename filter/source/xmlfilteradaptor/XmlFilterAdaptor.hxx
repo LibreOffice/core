@@ -71,7 +71,7 @@ protected:
 
 public:
 
-    XmlFilterAdaptor( const css::uno::Reference< css::uno::XComponentContext > & rxContext)
+    explicit XmlFilterAdaptor( const css::uno::Reference< css::uno::XComponentContext > & rxContext)
         : mxContext(rxContext)
         , meType(FILTER_IMPORT)
     {

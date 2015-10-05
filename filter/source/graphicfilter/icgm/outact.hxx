@@ -61,7 +61,7 @@ protected:
         CGM*                        mpCGM;
 
 public:
-                                CGMOutAct( CGM& rCGM );
+    explicit                    CGMOutAct( CGM& rCGM );
     virtual                     ~CGMOutAct();
     void                        FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
     virtual void                InsertPage() { mnCurrentPage++; } ;

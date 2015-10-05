@@ -33,7 +33,7 @@ class filter_info_impl;
 class XMLFilterTabPageXSLT : public TabPage
 {
 public:
-    XMLFilterTabPageXSLT( vcl::Window* pParent);
+    explicit XMLFilterTabPageXSLT(vcl::Window* pParent);
     virtual ~XMLFilterTabPageXSLT();
     virtual void dispose() SAL_OVERRIDE;
 

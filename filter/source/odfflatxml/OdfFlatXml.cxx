@@ -62,7 +62,7 @@ namespace filter {
 
         public:
 
-            OdfFlatXml(const Reference<XComponentContext> &r) :
+            explicit OdfFlatXml(const Reference<XComponentContext> &r) :
                 m_xContext(r)
             {
             }

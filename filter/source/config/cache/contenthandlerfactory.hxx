@@ -53,7 +53,7 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
             @param  rxContext
                     reference to the uno service manager, which created this service instance.
          */
-        ContentHandlerFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+        explicit ContentHandlerFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
 
 

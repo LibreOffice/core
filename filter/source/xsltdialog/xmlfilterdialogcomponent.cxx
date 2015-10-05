@@ -68,7 +68,7 @@ class XMLFilterDialogComponent :    public XMLFilterDialogComponentBase,
                                     public XTerminateListener
 {
 public:
-    XMLFilterDialogComponent( const Reference< XComponentContext >& rxContext );
+    explicit XMLFilterDialogComponent( const Reference< XComponentContext >& rxContext );
     virtual ~XMLFilterDialogComponent();
 
 protected:

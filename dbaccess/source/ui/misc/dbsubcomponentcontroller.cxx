@@ -89,7 +89,7 @@ namespace dbaui
         {
         }
 
-        DataSourceHolder( const Reference< XDataSource >& _rxDataSource )
+        explicit DataSourceHolder(const Reference< XDataSource >& _rxDataSource)
         {
             m_xDataSource = _rxDataSource;
             Reference< XDocumentDataSource > xDocDS( m_xDataSource, UNO_QUERY );
@@ -143,7 +143,7 @@ namespace dbaui
         bool                            m_bModified;    // is the data modified
         bool                            m_bNotAttached;
 
-        DBSubComponentController_Impl( ::osl::Mutex& i_rMutex )
+        explicit DBSubComponentController_Impl(osl::Mutex& i_rMutex)
             :m_aDocScriptSupport()
             ,m_aModifyListeners( i_rMutex )
             ,m_nDocStartNumber(0)
@@ -261,7 +261,7 @@ namespace dbaui
                     xDS = Reference< XDataSource >( xConnAsChild->getParent(), UNO_QUERY );
 
                 // (take the indirection through XDataSource to ensure we have a correct object ....)
-                m_pImpl->m_aDataSource = xDS;
+                m_pImpl->m_aDataSource = DataSourceHolder(xDS);
             }
             SAL_WARN_IF( !m_pImpl->m_aDataSource.is(), "dbaccess.ui", "DBSubComponentController::initializeConnection: unable to obtain the data source object!" );
 

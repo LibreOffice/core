@@ -54,7 +54,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
             @param  rxContext
                     reference to the uno service manager, which created this service instance.
          */
-        FilterFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+        explicit FilterFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
 
 

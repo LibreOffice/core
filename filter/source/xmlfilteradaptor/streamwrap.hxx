@@ -42,7 +42,7 @@ class OOutputStreamWrapper : public OutputStreamWrapper_Base
     ::osl::File&        rStream;
 
 public:
-    OOutputStreamWrapper(::osl::File& _rStream) :rStream(_rStream) { }
+    explicit OOutputStreamWrapper(osl::File& _rStream) :rStream(_rStream) { }
 
 // css::io::XOutputStream
     virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

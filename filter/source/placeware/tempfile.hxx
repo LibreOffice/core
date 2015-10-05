@@ -26,7 +26,7 @@
 class PlaceWareTempFile : public osl::File
 {
 public:
-    PlaceWareTempFile( const OUString& aURL );
+    explicit PlaceWareTempFile( const OUString& aURL );
     ~PlaceWareTempFile();
 
     static OUString createTempFileURL();

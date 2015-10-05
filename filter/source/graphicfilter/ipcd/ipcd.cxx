@@ -76,7 +76,7 @@ private:
 
 public:
 
-    PCDReader(SvStream &rStream)
+    explicit PCDReader(SvStream &rStream)
         : bStatus(false)
         , nLastPercent(0)
         , m_rPCD(rStream)

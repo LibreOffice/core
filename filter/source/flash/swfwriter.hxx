@@ -176,7 +176,7 @@ typedef std::vector<FlashFont*> FontMap;
 class Tag : public SvMemoryStream
 {
 public:
-    Tag( sal_uInt8 nTagId );
+    explicit Tag( sal_uInt8 nTagId );
 
     sal_uInt8 getTagId() const { return mnTagId; }
 
@@ -207,7 +207,7 @@ private:
 class Sprite
 {
 public:
-    Sprite( sal_uInt16 nId );
+    explicit Sprite( sal_uInt16 nId );
     ~Sprite();
 
     void write( SvStream& out );
@@ -228,7 +228,7 @@ public:
     enum FillStyleType { solid = 0x00, linear_gradient = 0x10, radial_gradient = 0x12, tiled_bitmap = 0x40, clipped_bitmap = 0x41 };
 
     /** this c'tor creates a solid fill style */
-    FillStyle( const Color& rSolidColor );
+    explicit FillStyle( const Color& rSolidColor );
 
     /** this c'tor creates a linear or radial gradient fill style */
     FillStyle( const Rectangle& rBoundRect, const Gradient& rGradient );

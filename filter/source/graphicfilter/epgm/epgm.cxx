@@ -46,7 +46,7 @@ private:
     css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
 public:
-    PGMWriter(SvStream &rStream);
+    explicit PGMWriter(SvStream &rStream);
     ~PGMWriter();
 
     bool WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );

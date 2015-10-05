@@ -41,7 +41,7 @@ namespace dbaui
         {
         }
 
-        FeatureSupport( AuthenticationMode _Auth )
+        explicit FeatureSupport(AuthenticationMode _Auth)
             :eAuthentication( _Auth )
         {
         }
@@ -134,9 +134,9 @@ namespace dbaui
                     OUString sAuth;
                     aMetaData.get("Authentication") >>= sAuth;
                     if ( sAuth == "UserPassword" )
-                        aInit = AuthUserPwd;
+                        aInit = FeatureSupport(AuthUserPwd);
                     else if ( sAuth == "Password" )
-                        aInit = AuthPwd;
+                        aInit = FeatureSupport(AuthPwd);
                 }
                 s_aSupport.insert(std::make_pair(*pIter,aInit));
             }
@@ -149,7 +149,7 @@ namespace dbaui
     class DataSourceMetaData_Impl
     {
     public:
-        DataSourceMetaData_Impl( const OUString& _sURL );
+        explicit DataSourceMetaData_Impl(const OUString& rURL);
 
         OUString getType() const { return m_sURL; }
 

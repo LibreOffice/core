@@ -27,10 +27,8 @@
 
 class DXFGroupReader
 {
-
 public:
-
-    DXFGroupReader( SvStream & rIStream );
+    explicit DXFGroupReader( SvStream & rIStream );
 
     bool GetStatus() const;
 

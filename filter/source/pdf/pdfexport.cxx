@@ -969,7 +969,7 @@ class PDFErrorRequest : private cppu::BaseMutex,
 {
     task::PDFExportException maExc;
 public:
-    PDFErrorRequest( const task::PDFExportException& i_rExc );
+    explicit PDFErrorRequest( const task::PDFExportException& i_rExc );
 
     // XInteractionRequest
     virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;

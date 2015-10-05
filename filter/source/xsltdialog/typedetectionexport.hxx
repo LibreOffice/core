@@ -28,7 +28,7 @@
 class TypeDetectionExporter
 {
 public:
-    TypeDetectionExporter( css::uno::Reference< css::uno::XComponentContext >& mxContext );
+    explicit TypeDetectionExporter( css::uno::Reference< css::uno::XComponentContext >& mxContext );
 
     void doExport(css::uno::Reference < css::io::XOutputStream > xOS,  const XMLFilterVector& rFilters );
 

@@ -40,7 +40,7 @@ protected:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
 
 public:
-    FilterDetect( const css::uno::Reference< css::uno::XComponentContext > &rxCtx)
+    explicit FilterDetect( const css::uno::Reference< css::uno::XComponentContext > &rxCtx)
         : mxCtx( rxCtx ) {}
 
     virtual ~FilterDetect() {}

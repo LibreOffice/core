@@ -44,8 +44,8 @@ private:
     bool            ImplReadHeader();
 
 public:
-                        PBMReader(SvStream & rPBM);
-                        ~PBMReader();
+    explicit PBMReader(SvStream & rPBM);
+    ~PBMReader();
     bool                ReadPBM(Graphic & rGraphic );
 };
 

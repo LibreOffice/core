@@ -57,8 +57,8 @@ private:
     sal_uInt8           ImplGetByte();
 
 public:
-                        RASReader(SvStream &rRAS);
-                        ~RASReader();
+    explicit RASReader(SvStream &rRAS);
+    ~RASReader();
     bool                ReadRAS(Graphic & rGraphic);
 };
 

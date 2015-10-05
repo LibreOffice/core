@@ -71,7 +71,7 @@ using namespace com::sun::star::xml::sax;
 class GlobalEventListenerImpl : public ::cppu::WeakImplHelper< css::document::XDocumentEventListener >
 {
 public:
-    GlobalEventListenerImpl( XMLFilterTestDialog* pDialog );
+    explicit GlobalEventListenerImpl( XMLFilterTestDialog* pDialog );
 
     // XDocumentEventListener
     virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;

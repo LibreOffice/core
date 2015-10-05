@@ -51,7 +51,7 @@ class ImpPDFTabLinksPage;
 class PDFFilterResId : public ResId
 {
 public:
-    PDFFilterResId( sal_uInt32 nId );
+    explicit PDFFilterResId( sal_uInt32 nId );
 };
 
 class ImplErrorDialog : public MessageDialog
@@ -61,7 +61,7 @@ class ImplErrorDialog : public MessageDialog
 
     DECL_LINK(SelectHdl, void *);
     public:
-    ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
+    explicit ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
     virtual ~ImplErrorDialog();
     virtual void dispose() SAL_OVERRIDE;
 };

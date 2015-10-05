@@ -67,9 +67,9 @@ class OslOutputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XOutputStr
     osl::File   mrFile;
 
 public:
-    OslOutputStreamWrapper(const OUString& sFileName) : mrFile(sFileName)
+    explicit OslOutputStreamWrapper(const OUString& rFileName) : mrFile(rFileName)
     {
-        osl_removeFile(sFileName.pData);
+        osl_removeFile(rFileName.pData);
         mrFile.open( osl_File_OpenFlag_Create|osl_File_OpenFlag_Write );
     }
 
@@ -155,7 +155,7 @@ class FlashExportFilter : public cppu::WeakImplHelper
     bool mbExportSelection;
 
 public:
-    FlashExportFilter( const Reference< XComponentContext > &rxContext);
+    explicit FlashExportFilter( const Reference< XComponentContext > &rxContext);
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) throw(RuntimeException, std::exception) SAL_OVERRIDE;

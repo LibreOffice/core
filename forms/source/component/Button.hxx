@@ -130,7 +130,7 @@ protected:
     virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
-    OButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
     virtual ~OButtonControl();
 
     // XServiceInfo

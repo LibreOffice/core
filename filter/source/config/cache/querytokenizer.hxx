@@ -78,7 +78,7 @@ class QueryTokenizer : public std::unordered_map< OUString                    ,
             @param  sQuery
                     the query string.
          */
-        QueryTokenizer(const OUString& sQuery);
+        explicit QueryTokenizer(const OUString& sQuery);
 
 
 

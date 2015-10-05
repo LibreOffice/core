@@ -36,7 +36,7 @@ class PlainTextFilterDetect : public cppu::WeakImplHelper<
 
 public:
 
-    PlainTextFilterDetect (const css::uno::Reference<css::uno::XComponentContext>& xCxt);
+    explicit PlainTextFilterDetect (const css::uno::Reference<css::uno::XComponentContext>& xCxt);
     virtual ~PlainTextFilterDetect();
 
     // XExtendedFilterDetection
