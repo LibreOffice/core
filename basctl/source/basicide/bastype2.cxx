@@ -365,7 +365,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                                 SvTreeListEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
                                 if ( !pEntry )
                                 {
-                                    pEntry = AddEntry(
+                                    AddEntry(
                                         aName,
                                         Image( IDEResId( RID_IMG_MACRO ) ),
                                         pModuleEntry, false,
@@ -404,7 +404,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                     SvTreeListEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJ_TYPE_DIALOG );
                     if ( !pDialogEntry )
                     {
-                        pDialogEntry = AddEntry(
+                        AddEntry(
                             aDlgName,
                             Image( IDEResId( RID_IMG_DIALOG ) ),
                             pLibRootEntry, false,
@@ -521,7 +521,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
                     SvTreeListEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
                     if ( !pEntry )
                     {
-                        pEntry = AddEntry(
+                        AddEntry(
                             aName,
                             Image( IDEResId( RID_IMG_MACRO ) ),
                             pModuleEntry, false,
