@@ -103,8 +103,6 @@ OUString ImplImageTree::fallbackStyle(const OUString &style)
 {
     if (style == "galaxy")
         return OUString();
-    else if (style == "industrial")
-        return OUString("galaxy");
     else if (style == "tango")
         return OUString("galaxy");
     else if (style == "breeze")

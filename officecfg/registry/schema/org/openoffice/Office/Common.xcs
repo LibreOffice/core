@@ -5693,11 +5693,6 @@
               <desc>HiContrast</desc>
             </info>
           </enumeration>
-          <enumeration oor:value="industrial">
-            <info>
-              <desc>Industrial</desc>
-            </info>
-          </enumeration>
           <enumeration oor:value="crystal">
             <info>
               <desc>Crystal - the KDE default theme</desc>
