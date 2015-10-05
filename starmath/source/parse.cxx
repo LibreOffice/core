@@ -1018,10 +1018,7 @@ void SmParser::DoAlign()
 
 void SmParser::DoLine()
 {
-    sal_uInt16  n = 0;
     SmNodeArray  ExpressionArray;
-
-    ExpressionArray.resize(n);
 
     // start with single expression that may have an alignment statement
     // (and go on with expressions that must not have alignment
@@ -1029,15 +1026,13 @@ void SmParser::DoLine()
     if (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
     {
         DoAlign();
-        ExpressionArray.resize(++n);
-        ExpressionArray[n - 1] = popOrZero(m_aNodeStack);
+        ExpressionArray.push_back(popOrZero(m_aNodeStack));
     }
 
     while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
     {
         DoExpression();
-        ExpressionArray.resize(++n);
-        ExpressionArray[n - 1] = popOrZero(m_aNodeStack);
+        ExpressionArray.push_back(popOrZero(m_aNodeStack));
     }
 
     //If there's no expression, add an empty one.
@@ -1067,23 +1062,18 @@ void SmParser::DoExpression()
             m_aNodeStack.push_front(pNode.release());  // push the node from above again (now to be used as argument to this current 'nospace' node)
     }
 
-    sal_uInt16       n = 0;
     SmNodeArray  RelationArray;
 
-    RelationArray.resize(n);
-
     DoRelation();
-    RelationArray.resize(++n);
-    RelationArray[n - 1] = popOrZero(m_aNodeStack);
+    RelationArray.push_back(popOrZero(m_aNodeStack));
 
     while (m_aCurToken.nLevel >= 4)
     {
         DoRelation();
-        RelationArray.resize(++n);
-        RelationArray[n - 1] = popOrZero(m_aNodeStack);
+        RelationArray.push_back(popOrZero(m_aNodeStack));
     }
 
-    if (n > 1)
+    if (RelationArray.size() > 1)
     {
         SmExpressionNode *pSNode = new SmExpressionNode(m_aCurToken);
         pSNode->SetSubNodes(RelationArray);
