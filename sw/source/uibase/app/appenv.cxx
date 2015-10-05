@@ -59,6 +59,7 @@
 #include <expfld.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <crsskip.hxx>
+#include <fmtpdsc.hxx>
 
 #include <cmdid.h>
 #include <globals.hrc>
@@ -302,12 +303,15 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             {
                 pSh->SplitNode();
                 pSh->Right( CRSR_SKIP_CHARS, false, 1, false );
-                SfxItemSet aBreakSet( pSh->GetAttrPool(), RES_BREAK, RES_BREAK, 0 );
-                aBreakSet.Put( SvxFormatBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
+                SfxItemSet aBreakSet( pSh->GetAttrPool(), RES_PAGEDESC, RES_PAGEDESC, 0 );
+                aBreakSet.Put( SwFormatPageDesc( pFollow ) );
                 pSh->SetTableAttr( aBreakSet );
             }
             else
-                pSh->InsertPageBreak(0, boost::none);
+            {
+                OUString sFollowName(pFollow->GetName());
+                pSh->InsertPageBreak(&sFollowName, boost::none);
+            }
             pSh->SttEndDoc(true);
         }
         else
