@@ -1113,8 +1113,10 @@ static ScMatrixRef lcl_MatrixCalculation(
         {
             for (j = 0; j < nMinR; j++)
             {
+                bool bVal1 = rMat1.IsValueOrEmpty(i,j);
+                bool bVal2 = rMat2.IsValueOrEmpty(i,j);
                 sal_uInt16 nErr;
-                if (rMat1.IsValueOrEmpty(i,j) && rMat2.IsValueOrEmpty(i,j))
+                if (bVal1 && bVal2)
                 {
                     double d = Op(rMat1.GetDouble(i,j), rMat2.GetDouble(i,j));
                     xResMat->PutDouble( d, i, j);
@@ -1123,6 +1125,28 @@ static ScMatrixRef lcl_MatrixCalculation(
                          ((nErr = rMat2.GetErrorIfNotString(i,j)) != 0))
                 {
                     xResMat->PutError( nErr, i, j);
+                }
+                else if ((!bVal1 && rMat1.IsString(i,j)) || (!bVal2 && rMat2.IsString(i,j)))
+                {
+                    sal_uInt16 nError1 = 0;
+                    short nFmt1 = 0;
+                    double fVal1 = (bVal1 ? rMat1.GetDouble(i,j) :
+                            pInterpreter->ConvertStringToValue( rMat1.GetString(i,j).getString(), nError1, nFmt1));
+
+                    sal_uInt16 nError2 = 0;
+                    short nFmt2 = 0;
+                    double fVal2 = (bVal2 ? rMat2.GetDouble(i,j) :
+                            pInterpreter->ConvertStringToValue( rMat2.GetString(i,j).getString(), nError2, nFmt2));
+
+                    if (nError1)
+                        xResMat->PutError( nError1, i, j);
+                    else if (nError2)
+                        xResMat->PutError( nError2, i, j);
+                    else
+                    {
+                        double d = Op( fVal1, fVal2);
+                        xResMat->PutDouble( d, i, j);
+                    }
                 }
                 else
                     xResMat->PutError( errNoValue, i, j);
