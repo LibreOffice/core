@@ -424,7 +424,10 @@ bool SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
 |*/
 void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
 {
-    if( !pNxt->IsJoinLocked() && GetSection() == pNxt->GetSection() )
+    if (pNxt->IsDeleteForbidden())
+        return;
+
+    if (!pNxt->IsJoinLocked() && GetSection() == pNxt->GetSection())
     {
         PROTOCOL( this, PROT_SECTION, ACT_MERGE, pNxt )
 

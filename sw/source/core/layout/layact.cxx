@@ -1223,7 +1223,11 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
             aOldRect = static_cast<SwPageFrm*>(pLay)->GetBoundRect(pRenderContext);
         }
 
+        bool const bDeleteForbidden(pLay->IsDeleteForbidden());
+        pLay->ForbidDelete();
         pLay->Calc(pRenderContext);
+        if (!bDeleteForbidden)
+            pLay->AllowDelete();
 
         if ( aOldFrame != pLay->Frm() )
             bChanged = true;
