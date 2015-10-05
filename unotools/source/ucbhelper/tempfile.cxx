@@ -415,7 +415,6 @@ OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )
     if ( bRet )
     {
         // append own internal directory
-        bRet = true;
         OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
         rTempNameBase_Impl = rBaseName + "/";
 
