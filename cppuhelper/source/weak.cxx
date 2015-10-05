@@ -142,11 +142,11 @@ Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted() throw(css:
             guard.clear();
             // WeakObject has a (XInterface *) cast operator
             ret = *m_pObject;
-            n = osl_atomic_decrement( &m_pObject->m_refCount );
+            osl_atomic_decrement( &m_pObject->m_refCount );
         }
         else
             // Another thread wait in the dispose method at the guard
-            n = osl_atomic_decrement( &m_pObject->m_refCount );
+            osl_atomic_decrement( &m_pObject->m_refCount );
     }
 
     return ret;
