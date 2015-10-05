@@ -121,6 +121,7 @@ enum
     SIZE_CHANGED,
     HYPERLINK_CLICKED,
     CURSOR_CHANGED,
+    SEARCH_RESULT_COUNT,
 
     LAST_SIGNAL
 };
@@ -221,6 +222,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_STATUS_INDICATOR_FINISH";
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
         return "LOK_CALLBACK_SEARCH_NOT_FOUND";
+    case LOK_CALLBACK_SEARCH_RESULT_COUNT:
+        return "LOK_CALLBACK_SEARCH_RESULT_COUNT";
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
         return "LOK_CALLBACK_DOCUMENT_SIZE_CHANGED";
     case LOK_CALLBACK_SET_PART:
@@ -361,6 +364,11 @@ static void
 searchNotFound(LOKDocView* pDocView, const std::string& rString)
 {
     g_signal_emit(pDocView, doc_view_signals[SEARCH_NOT_FOUND], 0, rString.c_str());
+}
+
+static void searchResultCount(LOKDocView* pDocView, const std::string& rString)
+{
+    g_signal_emit(pDocView, doc_view_signals[SEARCH_RESULT_COUNT], 0, rString.c_str());
 }
 
 static void
@@ -643,6 +651,11 @@ callback (gpointer pData)
     case LOK_CALLBACK_SET_PART:
     {
         setPart(pDocView, pCallback->m_aPayload);
+    }
+    break;
+    case LOK_CALLBACK_SEARCH_RESULT_COUNT:
+    {
+        searchResultCount(pDocView, pCallback->m_aPayload);
     }
     break;
     default:
@@ -1841,6 +1854,21 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_NONE, 4,
                      G_TYPE_INT, G_TYPE_INT,
                      G_TYPE_INT, G_TYPE_INT);
+    /**
+     * LOKDocView::search-result-count:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @aCommand: number of matches.
+     */
+    doc_view_signals[SEARCH_RESULT_COUNT] =
+        g_signal_new("search-result_count",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__STRING,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
+
 }
 
 SAL_DLLPUBLIC_EXPORT GtkWidget*

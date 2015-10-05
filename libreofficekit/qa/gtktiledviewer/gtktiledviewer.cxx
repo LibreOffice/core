@@ -387,6 +387,14 @@ static void signalSearch(LOKDocView* pLOKDocView, char* /*pPayload*/, gpointer /
     gtk_label_set_text(GTK_LABEL(rWindow.m_pFindbarLabel), "Search key not found");
 }
 
+/// LOKDocView found some search matches -> set the search label accordingly.
+static void signalSearchResultCount(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pData*/)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
+    std::stringstream ss;
+    ss << pPayload << " match(es)";
+    gtk_label_set_text(GTK_LABEL(rWindow.m_pFindbarLabel), ss.str().c_str());
+}
 
 static void signalPart(LOKDocView* pLOKDocView, int nPart, gpointer /*pData*/)
 {
@@ -764,6 +772,7 @@ static void setupDocView(GtkWidget* pDocView)
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
+    g_signal_connect(pDocView, "search-result-count", G_CALLBACK(signalSearchResultCount), NULL);
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
     g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), NULL);
     g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), NULL);
