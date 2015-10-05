@@ -31,7 +31,7 @@
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFrm( pFormat, pSib, pAnch )
 {
-    bInCnt = bInvalidLayout = bInvalidContent = true;
+    m_bInCnt = bInvalidLayout = bInvalidContent = true;
     SwTwips nRel = pFormat->GetVertOrient().GetPos();
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;
@@ -81,7 +81,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     {
         InvalidatePage();
         mbValidPos = false;
-        bInvalid  = true;
+        m_bInvalid  = true;
         Calc(getRootFrm()->GetCurrShell()->GetOut());
         delete pNotify;
     }
@@ -223,7 +223,7 @@ void SwFlyInCntFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     if ( IsClipped() )
-        mbValidSize = bHeightClipped = bWidthClipped = false;
+        mbValidSize = m_bHeightClipped = m_bWidthClipped = false;
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || !m_bValidContentPos )
     {
@@ -261,7 +261,7 @@ void SwFlyInCntFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             {
                 Frm().Width( pFrm->Prt().Width() );
                 mbValidPrtArea = false;
-                bWidthClipped = true;
+                m_bWidthClipped = true;
             }
         }
     }

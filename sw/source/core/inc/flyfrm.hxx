@@ -74,7 +74,7 @@ class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 
 protected:
     // Predecessor/Successor for chaining with text flow
-    SwFlyFrm *pPrevLink, *pNextLink;
+    SwFlyFrm *m_pPrevLink, *m_pNextLink;
 
 private:
     // It must be possible to block Content-bound flys so that they will be not
@@ -83,38 +83,38 @@ private:
     // the constructor call of the root object since otherwise the anchor will
     // be formatted before the root is anchored correctly to a shell and
     // because too much would be formatted as a result.
-    bool bLocked :1;
+    bool m_bLocked :1;
     // true if the background of NotifyDTor needs to be notified at the end
     // of a MakeAll() call.
-    bool bNotifyBack :1;
+    bool m_bNotifyBack :1;
 
 protected:
     // Pos, PrtArea or SSize have been invalidated - they will be evaluated
     // again immediately because they have to be valid _at all time_.
     // The invalidation is tracked here so that LayAction knows about it and
     // can handle it properly. Exceptions prove the rule.
-    bool bInvalid :1;
+    bool m_bInvalid :1;
 
     // true if the proposed height of an attribute is a minimal height
     // (this means that the frame can grow higher if needed)
-    bool bMinHeight :1;
+    bool m_bMinHeight :1;
     // true if the fly frame could not format position/size based on its
     // attributes, e.g. because there was not enough space.
-    bool bHeightClipped :1;
-    bool bWidthClipped :1;
+    bool m_bHeightClipped :1;
+    bool m_bWidthClipped :1;
     // If true then call only the format after adjusting the width (CheckClip);
     // but the width will not be re-evaluated based on the attributes.
-    bool bFormatHeightOnly :1;
+    bool m_bFormatHeightOnly :1;
 
-    bool bInCnt :1;        ///< FLY_AS_CHAR, anchored as character
-    bool bAtCnt :1;        ///< FLY_AT_PARA, anchored at paragraph
-    bool bLayout :1;       ///< FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
-    bool bAutoPosition :1; ///< FLY_AT_CHAR, anchored at character
+    bool m_bInCnt :1;        ///< FLY_AS_CHAR, anchored as character
+    bool m_bAtCnt :1;        ///< FLY_AT_PARA, anchored at paragraph
+    bool m_bLayout :1;       ///< FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
+    bool m_bAutoPosition :1; ///< FLY_AT_CHAR, anchored at character
 
-    bool bNoShrink :1;     ///< temporary forbid shrinking to avoid loops
+    bool m_bNoShrink :1;     ///< temporary forbid shrinking to avoid loops
     // If true, the content of the fly frame will not be deleted when it
     // is moved to an invisible layer.
-    bool bLockDeleteContent :1;
+    bool m_bLockDeleteContent :1;
 
     friend class SwNoTextFrm; // is allowed to call NotifyBackground
 
@@ -125,8 +125,8 @@ protected:
     void MakePrtArea( const SwBorderAttrs &rAttrs );
     void MakeContentPos( const SwBorderAttrs &rAttrs );
 
-    void Lock()         { bLocked = true; }
-    void Unlock()       { bLocked = false; }
+    void Lock()         { m_bLocked = true; }
+    void Unlock()       { m_bLocked = false; }
 
     Size CalcRel( const SwFormatFrmSize &rSz ) const;
     SwTwips CalcAutoWidth() const;
@@ -175,8 +175,8 @@ public:
 
     bool FrmSizeChg( const SwFormatFrmSize & );
 
-    SwFlyFrm *GetPrevLink() const { return pPrevLink; }
-    SwFlyFrm *GetNextLink() const { return pNextLink; }
+    SwFlyFrm *GetPrevLink() const { return m_pPrevLink; }
+    SwFlyFrm *GetNextLink() const { return m_pNextLink; }
 
     static void ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow );
     static void UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow );
@@ -189,26 +189,26 @@ public:
     void NotifyDrawObj();
 
     void ChgRelPos( const Point &rAbsPos );
-    bool IsInvalid() const { return bInvalid; }
-    void Invalidate() const { const_cast<SwFlyFrm*>(this)->bInvalid = true; }
-    void Validate() const { const_cast<SwFlyFrm*>(this)->bInvalid = false; }
+    bool IsInvalid() const { return m_bInvalid; }
+    void Invalidate() const { const_cast<SwFlyFrm*>(this)->m_bInvalid = true; }
+    void Validate() const { const_cast<SwFlyFrm*>(this)->m_bInvalid = false; }
 
-    bool IsMinHeight()  const { return bMinHeight; }
-    bool IsLocked()     const { return bLocked; }
-    bool IsAutoPos()    const { return bAutoPosition; }
-    bool IsFlyInCntFrm() const { return bInCnt; }
-    bool IsFlyFreeFrm() const { return bAtCnt || bLayout; }
-    bool IsFlyLayFrm() const { return bLayout; }
-    bool IsFlyAtCntFrm() const { return bAtCnt; }
+    bool IsMinHeight()  const { return m_bMinHeight; }
+    bool IsLocked()     const { return m_bLocked; }
+    bool IsAutoPos()    const { return m_bAutoPosition; }
+    bool IsFlyInCntFrm() const { return m_bInCnt; }
+    bool IsFlyFreeFrm() const { return m_bAtCnt || m_bLayout; }
+    bool IsFlyLayFrm() const { return m_bLayout; }
+    bool IsFlyAtCntFrm() const { return m_bAtCnt; }
 
-    bool IsNotifyBack() const { return bNotifyBack; }
-    void SetNotifyBack()      { bNotifyBack = true; }
-    void ResetNotifyBack()    { bNotifyBack = false; }
-    bool IsNoShrink()   const { return bNoShrink; }
-    bool IsLockDeleteContent()  const { return bLockDeleteContent; }
+    bool IsNotifyBack() const { return m_bNotifyBack; }
+    void SetNotifyBack()      { m_bNotifyBack = true; }
+    void ResetNotifyBack()    { m_bNotifyBack = false; }
+    bool IsNoShrink()   const { return m_bNoShrink; }
+    bool IsLockDeleteContent()  const { return m_bLockDeleteContent; }
 
-    bool IsClipped()        const   { return bHeightClipped || bWidthClipped; }
-    bool IsHeightClipped()  const   { return bHeightClipped; }
+    bool IsClipped()        const   { return m_bHeightClipped || m_bWidthClipped; }
+    bool IsHeightClipped()  const   { return m_bHeightClipped; }
 
     bool IsLowerOf( const SwLayoutFrm* pUpper ) const;
     inline bool IsUpperOf( const SwFlyFrm& _rLower ) const

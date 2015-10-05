@@ -127,7 +127,7 @@ void SwFlyFreeFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     if ( IsClipped() )
     {
-        mbValidSize = bHeightClipped = bWidthClipped = false;
+        mbValidSize = m_bHeightClipped = m_bWidthClipped = false;
         // no invalidation of position,
         // if anchored object is anchored inside a Writer fly frame,
         // its position is already locked, and it follows the text flow.
@@ -146,7 +146,7 @@ void SwFlyFreeFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     int nLoopControlRuns = 0;
     const int nLoopControlMax = 10;
 
-    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || bFormatHeightOnly || !m_bValidContentPos )
+    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || m_bFormatHeightOnly || !m_bValidContentPos )
     {
         SWRECTFN( this )
         const SwFormatFrmSize *pSz;
@@ -168,11 +168,11 @@ void SwFlyFreeFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 m_bValidContentPos = false;
             }
 
-            if ( !mbValidSize || bFormatHeightOnly )
+            if ( !mbValidSize || m_bFormatHeightOnly )
             {
                 mbValidSize = false;
                 Format( getRootFrm()->GetCurrShell()->GetOut(), &rAttrs );
-                bFormatHeightOnly = false;
+                m_bFormatHeightOnly = false;
             }
         }
 
@@ -219,7 +219,7 @@ void SwFlyFreeFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
 #if OSL_DEBUG_LEVEL > 0
     SWRECTFN( this )
-    OSL_ENSURE( bHeightClipped || ( (Frm().*fnRect->fnGetHeight)() > 0 &&
+    OSL_ENSURE( m_bHeightClipped || ( (Frm().*fnRect->fnGetHeight)() > 0 &&
             (Prt().*fnRect->fnGetHeight)() > 0),
             "SwFlyFreeFrm::Format(), flipping Fly." );
 
@@ -302,7 +302,7 @@ void SwFlyFreeFrm::CheckClip( const SwFormatFrmSize &rSz )
                 Frm().Pos().Y() = std::max( aClip.Top(), nClipBot - Frm().Height() );
                 if ( Frm().Top() != nOld )
                     bAgain = true;
-                bHeightClipped = true;
+                m_bHeightClipped = true;
             }
         }
         if ( bRig )
@@ -319,7 +319,7 @@ void SwFlyFreeFrm::CheckClip( const SwFormatFrmSize &rSz )
                 else
                     bAgain = true;
             }
-            bWidthClipped = true;
+            m_bWidthClipped = true;
         }
         if ( bAgain )
             mbValidSize = false;
@@ -342,7 +342,7 @@ void SwFlyFreeFrm::CheckClip( const SwFormatFrmSize &rSz )
                 nDiff -= aFrmRect.Top(); // nDiff represents the available distance
                 nDiff = aFrmRect.Height() - nDiff;
                 aFrmRect.Height( aFrmRect.Height() - nDiff );
-                bHeightClipped = true;
+                m_bHeightClipped = true;
             }
             if ( bRig )
             {
@@ -350,7 +350,7 @@ void SwFlyFreeFrm::CheckClip( const SwFormatFrmSize &rSz )
                 nDiff -= aFrmRect.Left();// nDiff represents the available distance
                 nDiff = aFrmRect.Width() - nDiff;
                 aFrmRect.Width( aFrmRect.Width() - nDiff );
-                bWidthClipped = true;
+                m_bWidthClipped = true;
             }
 
             // #i17297# - no proportional
@@ -384,14 +384,14 @@ void SwFlyFreeFrm::CheckClip( const SwFormatFrmSize &rSz )
                 {
                     aFrmRect.Height( aFrmRect.Width() * aOldSize.Height() /
                                      aOldSize.Width() );
-                    bHeightClipped = true;
+                    m_bHeightClipped = true;
                 }
                 // Adjusted the height? change width proportionally
                 else if( aFrmRect.Height() != aOldSize.Height() )
                 {
                     aFrmRect.Width( aFrmRect.Height() * aOldSize.Width() /
                                     aOldSize.Height() );
-                    bWidthClipped = true;
+                    m_bWidthClipped = true;
                 }
 
                 // #i17297# - reactivate change
@@ -405,7 +405,7 @@ void SwFlyFreeFrm::CheckClip( const SwFormatFrmSize &rSz )
                 // this code.
                 if ( aFrmRect.HasArea() &&
                      static_cast<SwContentFrm*>(Lower())->GetNode()->GetOLENode() &&
-                     ( bWidthClipped || bHeightClipped ) )
+                     ( m_bWidthClipped || m_bHeightClipped ) )
                 {
                     SwFlyFrameFormat *pFormat = GetFormat();
                     pFormat->LockModify();
@@ -441,8 +441,8 @@ void SwFlyFreeFrm::CheckClip( const SwFormatFrmSize &rSz )
                 } while ( pLow );
                 ::CalcContent( this );
                 ColUnlock();
-                if ( !mbValidSize && !bWidthClipped )
-                    bFormatHeightOnly = mbValidSize = true;
+                if ( !mbValidSize && !m_bWidthClipped )
+                    m_bFormatHeightOnly = mbValidSize = true;
             }
             else
             {
@@ -470,7 +470,7 @@ bool SwFlyFreeFrm::IsFormatPossible() const
 SwFlyLayFrm::SwFlyLayFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFreeFrm( pFormat, pSib, pAnch )
 {
-    bLayout = true;
+    m_bLayout = true;
 }
 
 // #i28701#

@@ -71,21 +71,21 @@ TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
 SwFlyFrm::SwFlyFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
     SwLayoutFrm( pFormat, pSib ),
     SwAnchoredObject(), // #i26791#
-    pPrevLink( 0 ),
-    pNextLink( 0 ),
-    bInCnt( false ),
-    bAtCnt( false ),
-    bLayout( false ),
-    bAutoPosition( false ),
-    bNoShrink( false ),
-    bLockDeleteContent( false ),
+    m_pPrevLink( 0 ),
+    m_pNextLink( 0 ),
+    m_bInCnt( false ),
+    m_bAtCnt( false ),
+    m_bLayout( false ),
+    m_bAutoPosition( false ),
+    m_bNoShrink( false ),
+    m_bLockDeleteContent( false ),
     m_bValidContentPos( false )
 {
     mnFrmType = FRM_FLY;
 
-    bInvalid = bNotifyBack = true;
-    bLocked  = bMinHeight =
-    bHeightClipped = bWidthClipped = bFormatHeightOnly = false;
+    m_bInvalid = m_bNotifyBack = true;
+    m_bLocked  = m_bMinHeight =
+    m_bHeightClipped = m_bWidthClipped = m_bFormatHeightOnly = false;
 
     // Size setting: Fixed size is always the width
     const SwFormatFrmSize &rFrmSize = pFormat->GetFrmSize();
@@ -137,7 +137,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
 
     // Fixed or variable Height?
     if ( rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE )
-        bMinHeight = true;
+        m_bMinHeight = true;
     else if ( rFrmSize.GetHeightSizeType() == ATT_FIX_SIZE )
         mbFixSize = true;
 
@@ -204,7 +204,7 @@ void SwFlyFrm::InsertCnt()
         if ( Lower() && Lower()->IsNoTextFrm() )
         {
             mbFixSize = true;
-            bMinHeight = false;
+            m_bMinHeight = false;
         }
     }
 }
@@ -486,8 +486,8 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
     OSL_ENSURE( !pMaster->GetNextLink(), "link can not be changed" );
     OSL_ENSURE( !pFollow->GetPrevLink(), "link can not be changed" );
 
-    pMaster->pNextLink = pFollow;
-    pFollow->pPrevLink = pMaster;
+    pMaster->m_pNextLink = pFollow;
+    pFollow->m_pPrevLink = pMaster;
 
     if ( pMaster->ContainsContent() )
     {
@@ -530,8 +530,8 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 
 void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 {
-    pMaster->pNextLink = 0;
-    pFollow->pPrevLink = 0;
+    pMaster->m_pNextLink = 0;
+    pFollow->m_pPrevLink = 0;
 
     if ( pFollow->ContainsContent() )
     {
@@ -638,18 +638,18 @@ bool SwFlyFrm::FrmSizeChg( const SwFormatFrmSize &rFrmSize )
     bool bRet = false;
     SwTwips nDiffHeight = Frm().Height();
     if ( rFrmSize.GetHeightSizeType() == ATT_VAR_SIZE )
-        mbFixSize = bMinHeight = false;
+        mbFixSize = m_bMinHeight = false;
     else
     {
         if ( rFrmSize.GetHeightSizeType() == ATT_FIX_SIZE )
         {
             mbFixSize = true;
-            bMinHeight = false;
+            m_bMinHeight = false;
         }
         else if ( rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE )
         {
             mbFixSize = false;
-            bMinHeight = true;
+            m_bMinHeight = true;
         }
         nDiffHeight -= rFrmSize.GetHeight();
     }
@@ -676,7 +676,7 @@ bool SwFlyFrm::FrmSizeChg( const SwFormatFrmSize &rFrmSize )
         else if ( Lower()->IsNoTextFrm() )
         {
             mbFixSize = true;
-            bMinHeight = false;
+            m_bMinHeight = false;
         }
     }
     return bRet;
@@ -1087,7 +1087,7 @@ bool SwFlyFrm::GetInfo( SfxPoolItem & rInfo ) const
 void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
 {
     InvalidatePage( pPage );
-    bNotifyBack = bInvalid = true;
+    m_bNotifyBack = m_bInvalid = true;
 
     SwFlyFrm *pFrm;
     if ( GetAnchorFrm() && 0 != (pFrm = AnchorFrm()->FindFlyFrm()) )
@@ -1330,7 +1330,7 @@ void SwFlyFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAtt
             }
         }
 
-        if ( !bFormatHeightOnly )
+        if ( !m_bFormatHeightOnly )
         {
             OSL_ENSURE( aRelSize == CalcRel( rFrmSz ), "SwFlyFrm::Format CalcRel problem" );
             SwTwips nNewSize = bVert ? aRelSize.Height() : aRelSize.Width();
@@ -1826,7 +1826,7 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, bool bTst )
         {
             const SwRect aOld( GetObjRectWithSpaces() );
             _InvalidateSize();
-            const bool bOldLock = bLocked;
+            const bool bOldLock = m_bLocked;
             Unlock();
             if ( IsFlyFreeFrm() )
             {
@@ -1841,11 +1841,11 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, bool bTst )
                 // Suppress format of width for autowidth frame, because the
                 // format of the width would call <SwTextFrm::CalcFitToContent()>
                 // for the lower frame, which initiated this grow.
-                const bool bOldFormatHeightOnly = bFormatHeightOnly;
+                const bool bOldFormatHeightOnly = m_bFormatHeightOnly;
                 const SwFormatFrmSize& rFrmSz = GetFormat()->GetFrmSize();
                 if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
                 {
-                    bFormatHeightOnly = true;
+                    m_bFormatHeightOnly = true;
                 }
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
                 static_cast<SwFlyFreeFrm*>(this)->SwFlyFreeFrm::MakeAll(getRootFrm()->GetCurrShell()->GetOut());
@@ -1853,7 +1853,7 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, bool bTst )
                 // #i55416#
                 if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
                 {
-                    bFormatHeightOnly = bOldFormatHeightOnly;
+                    m_bFormatHeightOnly = bOldFormatHeightOnly;
                 }
             }
             else
@@ -1921,7 +1921,7 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, bool bTst )
         {
             const SwRect aOld( GetObjRectWithSpaces() );
             _InvalidateSize();
-            const bool bOldLocked = bLocked;
+            const bool bOldLocked = m_bLocked;
             Unlock();
             if ( IsFlyFreeFrm() )
             {
@@ -1936,11 +1936,11 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, bool bTst )
                 // Suppress format of width for autowidth frame, because the
                 // format of the width would call <SwTextFrm::CalcFitToContent()>
                 // for the lower frame, which initiated this shrink.
-                const bool bOldFormatHeightOnly = bFormatHeightOnly;
+                const bool bOldFormatHeightOnly = m_bFormatHeightOnly;
                 const SwFormatFrmSize& rFrmSz = GetFormat()->GetFrmSize();
                 if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
                 {
-                    bFormatHeightOnly = true;
+                    m_bFormatHeightOnly = true;
                 }
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
                 static_cast<SwFlyFreeFrm*>(this)->SwFlyFreeFrm::MakeAll(getRootFrm()->GetCurrShell()->GetOut());
@@ -1948,7 +1948,7 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, bool bTst )
                 // #i55416#
                 if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
                 {
-                    bFormatHeightOnly = bOldFormatHeightOnly;
+                    m_bFormatHeightOnly = bOldFormatHeightOnly;
                 }
             }
             else

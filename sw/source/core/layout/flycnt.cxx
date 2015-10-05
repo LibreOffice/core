@@ -69,8 +69,8 @@ static inline SwTwips lcl_GetTopForObjPos(const SwContentFrm* pCnt, const bool b
 SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFreeFrm( pFormat, pSib, pAnch )
 {
-    bAtCnt = true;
-    bAutoPosition = (FLY_AT_CHAR == pFormat->GetAnchor().GetAnchorId());
+    m_bAtCnt = true;
+    m_bAutoPosition = (FLY_AT_CHAR == pFormat->GetAnchor().GetAnchorId());
 }
 
 // #i28701#
