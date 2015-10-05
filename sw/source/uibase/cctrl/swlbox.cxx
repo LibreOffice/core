@@ -58,8 +58,7 @@ void SwComboBox::Init()
     sal_Int32 nSize = GetEntryCount();
     for( sal_Int32 i=0; i < nSize; ++i )
     {
-        SwBoxEntry* pTmp = new SwBoxEntry(ComboBox::GetEntry(i), i);
-        aEntryLst.push_back(pTmp);
+        m_EntryList.push_back(SwBoxEntry(ComboBox::GetEntry(i), i));
     }
 }
 
@@ -70,7 +69,7 @@ SwComboBox::~SwComboBox()
 
 void SwComboBox::InsertSwEntry(const SwBoxEntry& rEntry)
 {
-    InsertSorted(new SwBoxEntry(rEntry));
+    InsertSorted(rEntry);
 }
 
 sal_Int32 SwComboBox::InsertEntry(const OUString& rStr, sal_Int32)
@@ -81,23 +80,23 @@ sal_Int32 SwComboBox::InsertEntry(const OUString& rStr, sal_Int32)
 
 void SwComboBox::RemoveEntryAt(sal_Int32 const nPos)
 {
-    if(nPos < 0 || static_cast<size_t>(nPos) >= aEntryLst.size())
+    if (nPos < 0 || static_cast<size_t>(nPos) >= m_EntryList.size())
         return;
 
     // Remove old element
-    SwBoxEntry* pEntry = &aEntryLst[nPos];
+    SwBoxEntry const& rEntry = m_EntryList[nPos];
     ComboBox::RemoveEntryAt(nPos);
 
     // Don't add new entries to the list
-    if(pEntry->bNew)
+    if (rEntry.bNew)
     {
-        aEntryLst.erase(aEntryLst.begin() + nPos);
+        m_EntryList.erase(m_EntryList.begin() + nPos);
     }
     else
     {
         // add to DelEntryLst
-        aDelEntryLst.transfer(aDelEntryLst.end(),
-                aEntryLst.begin() + nPos, aEntryLst);
+        m_DelEntryList.push_back(m_EntryList[nPos]);
+        m_EntryList.erase(m_EntryList.begin() + nPos);
     }
 }
 
@@ -108,30 +107,30 @@ sal_Int32 SwComboBox::GetSwEntryPos(const SwBoxEntry& rEntry) const
 
 const SwBoxEntry& SwComboBox::GetSwEntry(sal_Int32 const nPos) const
 {
-    if(0 <= nPos && static_cast<size_t>(nPos) < aEntryLst.size())
-        return aEntryLst[nPos];
+    if (0 <= nPos && static_cast<size_t>(nPos) < m_EntryList.size())
+        return m_EntryList[nPos];
 
     return aDefault;
 }
 
 sal_Int32 SwComboBox::GetRemovedCount() const
 {
-    return static_cast<sal_Int32>(aDelEntryLst.size());
+    return static_cast<sal_Int32>(m_DelEntryList.size());
 }
 
 const SwBoxEntry& SwComboBox::GetRemovedEntry(sal_Int32 nPos) const
 {
-    if(0 <= nPos && static_cast<size_t>(nPos) < aDelEntryLst.size())
-        return aDelEntryLst[nPos];
+    if (0 <= nPos && static_cast<size_t>(nPos) < m_DelEntryList.size())
+        return m_DelEntryList[nPos];
 
     return aDefault;
 }
 
-void SwComboBox::InsertSorted(SwBoxEntry* pEntry)
+void SwComboBox::InsertSorted(SwBoxEntry const& rEntry)
 {
-    ComboBox::InsertEntry(pEntry->aName);
-    sal_Int32 nPos = ComboBox::GetEntryPos(pEntry->aName);
-    aEntryLst.insert( aEntryLst.begin() + nPos, pEntry );
+    ComboBox::InsertEntry(rEntry.aName);
+    sal_Int32 nPos = ComboBox::GetEntryPos(rEntry.aName);
+    m_EntryList.insert(m_EntryList.begin() + nPos, rEntry);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
