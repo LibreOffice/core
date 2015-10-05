@@ -195,7 +195,7 @@ IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, p
             mpCellBorderStylePopup.reset(
                 new CellBorderStylePopup(
                     this,
-                    ::boost::bind(&CellAppearancePropertyPanel::CreateCellBorderStylePopupControl, this, _1)));
+                    [this] (svx::sidebar::PopupContainer* pParent) { return this->CreateCellBorderStylePopupControl(pParent); } ));
         }
 
         if(mpCellBorderStylePopup.get())
@@ -217,7 +217,7 @@ IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pT
             mpCellLineStylePopup.reset(
                 new CellLineStylePopup(
                     this,
-                    ::boost::bind(&CellAppearancePropertyPanel::CreateCellLineStylePopupControl, this, _1)));
+                    [this] (svx::sidebar::PopupContainer* pParent) { return this->CreateCellBorderStylePopupControl(pParent); } ));
         }
 
         if(mpCellLineStylePopup.get())
