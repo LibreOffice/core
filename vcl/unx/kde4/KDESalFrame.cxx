@@ -48,7 +48,7 @@
 #include <boost/optional.hpp>
 
 
-KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nState ) :
+KDESalFrame::KDESalFrame( SalFrame* pParent, SalFrameStyleFlags nState ) :
     X11SalFrame( pParent, nState )
 {
 }
