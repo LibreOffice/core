@@ -11,6 +11,7 @@
 #include <jni.h>
 
 #include <sal/types.h>
+#include <vcl/event.hxx>
 
 #include <android/log.h>
 
@@ -279,7 +280,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postMou
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y, jint count)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
-    pDocument->pClass->postMouseEvent(pDocument, type, x, y, count);
+    pDocument->pClass->postMouseEvent(pDocument, type, x, y, count, MOUSE_LEFT, 0);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postUnoCommand
