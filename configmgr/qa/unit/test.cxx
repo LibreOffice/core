@@ -55,7 +55,11 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/configuration.hxx>
+#include <comphelper/configurationlistener.hxx>
+#include <comphelper/configurationlistener.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
+#include <officecfg/Office/Math.hxx>
 
 namespace {
 
@@ -70,6 +74,7 @@ public:
     void testSetSetMemberName();
     void testInsertSetMember();
     void testReadCommands();
+    void testListener();
 #if 0
     void testThreads();
 #endif
@@ -98,6 +103,7 @@ public:
     CPPUNIT_TEST(testSetSetMemberName);
     CPPUNIT_TEST(testInsertSetMember);
     CPPUNIT_TEST(testReadCommands);
+    CPPUNIT_TEST(testListener);
 #if 0
     CPPUNIT_TEST(testThreads);
 #endif
@@ -354,6 +360,47 @@ void Test::testReadCommands()
     printf("Reading elements took %" SAL_PRIuUINT32 " ms\n", n);
     css::uno::Reference< css::lang::XComponent >(
         access, css::uno::UNO_QUERY_THROW)->dispose();
+}
+
+void Test::testListener()
+{
+    OUString aRandomPath = "/org.openoffice.Office.Math/View";
+
+    // test with no props.
+    {
+        rtl::Reference<comphelper::ConfigurationListener> xListener(
+            new comphelper::ConfigurationListener(aRandomPath));
+        xListener->dispose();
+    }
+
+    // test some changes
+    {
+        rtl::Reference<comphelper::ConfigurationListener> xListener(
+            new comphelper::ConfigurationListener(aRandomPath));
+
+        comphelper::ConfigurationListenerProperty<bool> aSetting(xListener, "AutoRedraw");
+        CPPUNIT_ASSERT_MESSAGE("check AutoRedraw defaults to true", aSetting.get());
+
+        // set to false
+        {
+            std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Math::View::AutoRedraw::set(false, xChanges);
+            xChanges->commit();
+        }
+        CPPUNIT_ASSERT_MESSAGE("listener failed to trigger", !aSetting.get());
+
+        // set to true
+        {
+            std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Math::View::AutoRedraw::set(true, xChanges);
+            xChanges->commit();
+        }
+        CPPUNIT_ASSERT_MESSAGE("listener failed to trigger", aSetting.get());
+
+        xListener->dispose();
+    }
 }
 
 void Test::testRecursive()

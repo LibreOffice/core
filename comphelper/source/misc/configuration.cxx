@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/configuration.hxx>
+#include <comphelper/configurationlistener.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -207,6 +208,56 @@ std::shared_ptr< comphelper::ConfigurationChanges >
 comphelper::detail::ConfigurationWrapper::createChanges() const {
     return std::shared_ptr< ConfigurationChanges >(
         new ConfigurationChanges(context_));
+}
+
+void comphelper::ConfigurationListener::addListener(ConfigurationListenerPropertyBase *pListener)
+{
+    maListeners.push_back( pListener );
+    mxConfig->addPropertyChangeListener( pListener->maName, this );
+    pListener->setProperty( mxConfig->getPropertyValue( pListener->maName ) );
+}
+
+void comphelper::ConfigurationListener::removeListener(ConfigurationListenerPropertyBase *pListener)
+{
+    auto it = maListeners.begin();
+    it = std::find( maListeners.begin(), maListeners.end(), pListener );
+    if ( it != maListeners.end() )
+    {
+        maListeners.erase( it );
+        mxConfig->removePropertyChangeListener( pListener->maName, this );
+    }
+}
+
+void comphelper::ConfigurationListener::dispose()
+{
+    for (auto it = maListeners.begin(); it != maListeners.end(); ++it)
+    {
+        mxConfig->removePropertyChangeListener( (*it)->maName, this );
+        (*it)->dispose();
+    }
+    maListeners.clear();
+}
+
+void SAL_CALL comphelper::ConfigurationListener::disposing(css::lang::EventObject const &)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    dispose();
+}
+
+void SAL_CALL comphelper::ConfigurationListener::propertyChange(
+    css::beans::PropertyChangeEvent const &rEvt )
+    throw (css::uno::RuntimeException, std::exception)
+{
+    assert( rEvt.Source == mxConfig );
+    for ( auto it = maListeners.begin(); it != maListeners.end(); ++it )
+    {
+        if ( (*it)->maName == rEvt.PropertyName )
+        {
+            // ignore rEvt.NewValue - in theory it could be stale => not set.
+            css::uno::Any aValue = mxConfig->getPropertyValue( (*it)->maName );
+            (*it)->setProperty( aValue );
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
