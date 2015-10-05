@@ -769,6 +769,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case FN_INSERT_FRAME_INTERACT:
                 {
                     if( GetShell().IsSelFrmMode()
+                        || rSh.IsTableMode()
                         || GetShell().CrsrInsideInputField()
                         || bCrsrInHidden )
                         rSet.DisableItem(nWhich);
