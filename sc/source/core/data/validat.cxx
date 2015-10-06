@@ -289,9 +289,8 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
 
     StarBASIC* pRoot = pDocSh->GetBasic();
     SbxVariable* pVar = pRoot->Find( aErrorTitle, SbxCLASS_METHOD );
-    if ( pVar && dynamic_cast<const SbMethod*>( pVar) !=  nullptr )
+    if (SbMethod* pMethod = dynamic_cast<SbMethod*>(pVar))
     {
-        SbMethod* pMethod = static_cast<SbMethod*>(pVar);
         SbModule* pModule = pMethod->GetModule();
         SbxObject* pObject = pModule->GetParent();
         OUStringBuffer aMacroStr = pObject->GetName();

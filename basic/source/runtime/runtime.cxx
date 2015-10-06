@@ -528,10 +528,8 @@ StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic )
     if( pActiveModule )
     {
         SbxObject* pParent = pActiveModule->GetParent();
-        if( pParent && 0 != dynamic_cast<const StarBASIC*>( pParent) )
-        {
-            pCurBasic = static_cast<StarBASIC*>(pParent);
-        }
+        if (StarBASIC *pBasic = dynamic_cast<StarBASIC*>(pParent))
+            pCurBasic = pBasic;
     }
     return pCurBasic;
 }
@@ -1166,10 +1164,7 @@ void SbiRuntime::PushForEach()
     }
 
     bool bError_ = false;
-    BasicCollection* pCollection;
-    SbxDimArray* pArray;
-    SbUnoObject* pUnoObj;
-    if( (pArray = dynamic_cast<SbxDimArray*>( pObj)) != NULL  )
+    if (SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(pObj))
     {
         p->eForType = FOR_EACH_ARRAY;
         p->refEnd = reinterpret_cast<SbxVariable*>(pArray);
@@ -1186,13 +1181,13 @@ void SbiRuntime::PushForEach()
             p->pArrayUpperBounds[i] = uBound;
         }
     }
-    else if( (pCollection = dynamic_cast<BasicCollection*>( pObj)) != NULL  )
+    else if (BasicCollection* pCollection = dynamic_cast<BasicCollection*>(pObj))
     {
         p->eForType = FOR_EACH_COLLECTION;
         p->refEnd = pCollection;
         p->nCurCollectionIndex = 0;
     }
-    else if( (pUnoObj = dynamic_cast<SbUnoObject*>( pObj)) != NULL  )
+    else if (SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>(pObj))
     {
         // XEnumerationAccess?
         Any aAny = pUnoObj->getUnoAny();
@@ -3239,24 +3234,23 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     }
     if( t == SbxOBJECT )
     {
-        SbxObject* pObj;
-        if( dynamic_cast<const SbxObject *>(pVal) != nullptr )
-            pObj = static_cast<SbxObject*>( pVal );
-        else
+        SbxObject* pObj = dynamic_cast<SbxObject*>(pVal);
+        if (!pObj)
         {
-            pObj = static_cast<SbxObject*>( refVal->GetObject() );
-            if( pObj && dynamic_cast<const SbxObject *>(pObj) == nullptr )
-                pObj = NULL;
+            pObj = dynamic_cast<SbxObject*>(refVal->GetObject());
         }
         if( pObj )
         {
             if( !implIsClass( pObj, aClass ) )
             {
-                if ( ( bVBAEnabled || CodeCompleteOptions::IsExtendedTypeDeclaration() ) && dynamic_cast<const SbUnoObject *>(pObj) != nullptr )
+                SbUnoObject* pUnoObj(nullptr);
+                if (bVBAEnabled || CodeCompleteOptions::IsExtendedTypeDeclaration())
                 {
-                    SbUnoObject& rUnoObj = dynamic_cast<SbUnoObject&>(*pObj);
-                    bOk = checkUnoObjectType(rUnoObj, aClass);
+                    pUnoObj = dynamic_cast<SbUnoObject*>(pObj);
                 }
+
+                if (pUnoObj)
+                    bOk = checkUnoObjectType(*pUnoObj, aClass);
                 else
                     bOk = false;
                 if ( !bOk )
@@ -3540,7 +3534,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             SetupArgs( pElem, nOp1 );
         }
         // because a particular call-type is requested
-        if( dynamic_cast<const SbxMethod *>(pElem) != nullptr )
+        if (SbxMethod* pMethod = dynamic_cast<SbxMethod*>(pElem))
         {
             // shall the type be converted?
             SbxDataType t2 = pElem->GetType();
@@ -3567,7 +3561,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             // has to know the difference between Left$() and Left()
 
             // because the methods' parameters are cut away in PopVar()
-            SbxVariable* pNew = new SbxMethod( *(static_cast<SbxMethod*>(pElem)) );
+            SbxVariable* pNew = new SbxMethod(*pMethod);
             //OLD: SbxVariable* pNew = new SbxVariable( *pElem );
 
             pElem->SetParameters(0);
@@ -3853,9 +3847,8 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             SbxBaseRef pObj = pElem->GetObject();
             if( pObj )
             {
-                if( 0 != dynamic_cast<const SbUnoObject*>( &pObj) )
+                if (SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj)))
                 {
-                    SbUnoObject* pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj));
                     Any aAny = pUnoObj->getUnoAny();
 
                     if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
@@ -3924,9 +3917,9 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                 SbxBaseRef pDfltObj = pDflt->GetObject();
                                 if( pDfltObj )
                                 {
-                                    if( 0 != dynamic_cast<const SbUnoObject*>( &pDfltObj) )
+                                    if (SbUnoObject* pSbObj = dynamic_cast<SbUnoObject*>(static_cast<SbxBase*>(pDfltObj)))
                                     {
-                                        pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pDfltObj));
+                                        pUnoObj = pSbObj;
                                         Any aUnoAny = pUnoObj->getUnoAny();
 
                                         if( aUnoAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
@@ -3964,9 +3957,8 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                     // #42940, set parameter 0 to NULL so that var doesn't contain itself
                     pPar->Put( NULL, 0 );
                 }
-                else if( 0 != dynamic_cast<const BasicCollection*>( &pObj) )
+                else if (BasicCollection* pCol = dynamic_cast<BasicCollection*>(static_cast<SbxBase*>(pObj)))
                 {
-                    BasicCollection* pCol = static_cast<BasicCollection*>(static_cast<SbxBase*>(pObj));
                     pElem = new SbxVariable( SbxVARIANT );
                     pPar->Put( pElem, 0 );
                     pCol->CollItem( pPar );
@@ -4382,12 +4374,9 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         return;
     }
 
-    SbxDimArray* pArray = 0;
-    if( 0 != dynamic_cast<const SbxDimArray*>( &xObj) )
+    SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(static_cast<SbxBase*>(xObj));
+    if (pArray)
     {
-        SbxBase* pObj = static_cast<SbxBase*>(xObj);
-        pArray = static_cast<SbxDimArray*>(pObj);
-
         short nDims = pArray->GetDims();
         sal_Int32 nTotalSize = 0;
 

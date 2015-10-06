@@ -265,7 +265,10 @@ SwFlyFrm* SwFEShell::GetSelectedFlyFrm() const
             return 0;
 
         SdrObject *pO = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        return ( pO && dynamic_cast<const SwVirtFlyDrawObj*>( pO ) != nullptr ) ? static_cast<SwVirtFlyDrawObj*>(pO)->GetFlyFrm() : 0;
+
+        SwVirtFlyDrawObj *pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pO);
+
+        return pFlyObj ? pFlyObj->GetFlyFrm() : nullptr;
     }
     return 0;
 }
@@ -311,9 +314,16 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
     SwFrameFormat *pFormat = FindFrameFormat( pObj );
     if( pFormat && FLY_AT_FLY == pFormat->GetAnchor().GetAnchorId() )
     {
-        const SwFrm* pFly = dynamic_cast<SwVirtFlyDrawObj *>(pObj) != nullptr ?
-            static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetAnchorFrm() :
-            static_cast<SwDrawContact*>(GetUserCall(pObj))->GetAnchorFrm( pObj );
+        const SwFrm* pFly;
+        if (SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj *>(pObj))
+        {
+            pFly = pFlyObj->GetFlyFrm()->GetAnchorFrm();
+        }
+        else
+        {
+            pFly = static_cast<SwDrawContact*>(GetUserCall(pObj))->GetAnchorFrm(pObj);
+        }
+
         OSL_ENSURE( pFly, "IsFlyInFly: Where's my anchor?" );
         OSL_ENSURE( pFly->IsFlyFrm(), "IsFlyInFly: Funny anchor!" );
         return static_cast<const SwFlyFrm*>(pFly)->GetFormat();
@@ -1159,8 +1169,8 @@ void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Poi
     {
         const SwFrameFormat* pFormat = GetFormatFromObj( *pDocPos );
 
-        if(dynamic_cast<const SwFlyFrameFormat*>( pFormat) )
-            pFly = static_cast<const SwFlyFrameFormat*>(pFormat)->GetFrm();
+        if (const SwFlyFrameFormat* pFlyFormat = dynamic_cast<const SwFlyFrameFormat*>(pFormat))
+            pFly = pFlyFormat->GetFrm();
     }
     else
         pFly = GetSelectedFlyFrm();
@@ -1455,10 +1465,14 @@ const SwFrameFormat* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
     const auto nOld = pDView->GetHitTolerancePixel();
     pDView->SetHitTolerancePixel( 2 );
 
-    if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV,SdrSearchOptions::PICKMACRO ) &&
-         dynamic_cast<const SwVirtFlyDrawObj*>( pObj) != nullptr )
+    SwVirtFlyDrawObj* pFlyObj(nullptr);
+    if (pDView->PickObj(rPt, pDView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMACRO))
     {
-        SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
+        pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+    }
+    if (pFlyObj)
+    {
+        SwFlyFrm *pFly = pFlyObj->GetFlyFrm();
         const SwFormatURL &rURL = pFly->GetFormat()->GetURL();
         if( !rURL.GetURL().isEmpty() || rURL.GetMap() )
         {
@@ -1523,9 +1537,14 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
     SdrPageView* pPV;
     SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
-    if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV ) &&  dynamic_cast<const SwVirtFlyDrawObj*>( pObj) != nullptr )
+    SwVirtFlyDrawObj* pFlyObj(nullptr);
+    if (pDView->PickObj(rPt, pDView->getHitTolLog(), pObj, pPV))
     {
-        SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
+        pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+    }
+    if (pFlyObj)
+    {
+        SwFlyFrm *pFly = pFlyObj->GetFlyFrm();
         if ( pFly->Lower() && pFly->Lower()->IsNoTextFrm() )
         {
             SwGrfNode *pNd = static_cast<SwContentFrm*>(pFly->Lower())->GetNode()->GetGrfNode();
@@ -1568,8 +1587,8 @@ const SwFrameFormat* SwFEShell::GetFormatFromObj( const Point& rPt, SwRect** pRe
         if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE ) )
         {
            // first check it:
-            if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) != nullptr )
-                pRet = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFormat();
+            if (SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
+                pRet = pFlyObj->GetFormat();
             else if ( pObj->GetUserCall() ) //not for group objects
                 pRet = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFormat();
             if(pRet && pRectToFill)
@@ -1603,9 +1622,8 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
     // investigate 'master' drawing object, if method
     // is called for a 'virtual' drawing object.
     const SdrObject* pInvestigatedObj;
-    if ( dynamic_cast<const SwDrawVirtObj*>( &rObj) != nullptr )
+    if (const SwDrawVirtObj* pDrawVirtObj = dynamic_cast<const SwDrawVirtObj*>( &rObj))
     {
-        const SwDrawVirtObj* pDrawVirtObj = static_cast<const SwDrawVirtObj*>(&rObj);
         pInvestigatedObj = &(pDrawVirtObj->GetReferencedObj());
     }
     else
@@ -1634,9 +1652,9 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
             }
         }
     }
-    else if( dynamic_cast<const SwVirtFlyDrawObj*>( pInvestigatedObj) != nullptr )
+    else if (const SwVirtFlyDrawObj *pFlyObj = dynamic_cast<const SwVirtFlyDrawObj*>(pInvestigatedObj))
     {
-        const SwFlyFrm *pFly = static_cast<const SwVirtFlyDrawObj&>(*pInvestigatedObj).GetFlyFrm();
+        const SwFlyFrm *pFly = pFlyObj->GetFlyFrm();
         if ( pFly->Lower() && pFly->Lower()->IsNoTextFrm() )
         {
             if ( static_cast<const SwContentFrm*>(pFly->Lower())->GetNode()->GetGrfNode() )

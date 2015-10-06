@@ -463,9 +463,9 @@ void SbxObject::Insert( SbxVariable* pVar )
         static const char* pCls[] =
             { "DontCare","Array","Value","Variable","Method","Property","Object" };
         OUString aVarName( pVar->GetName() );
-        if ( aVarName.isEmpty() && 0 != dynamic_cast<const SbxObject*>( pVar) )
+        if (const SbxObject *pSbxObj = aVarName.isEmpty() ? dynamic_cast<const SbxObject*>(pVar) : nullptr)
         {
-            aVarName = dynamic_cast<SbxObject*>( pVar)->GetClassName( );
+            aVarName = pSbxObj->GetClassName();
         }
         SAL_INFO(
             "basic.sbx",
@@ -507,9 +507,9 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         static const char* pCls[] =
             { "DontCare","Array","Value","Variable","Method","Property","Object" };
         OUString aVarName( pVar->GetName() );
-        if ( aVarName.isEmpty() && 0 != dynamic_cast<const SbxObject*>( pVar) )
+        if (const SbxObject *pSbxObj = aVarName.isEmpty() ? dynamic_cast<const SbxObject*>(pVar) : nullptr)
         {
-            aVarName = dynamic_cast<SbxObject*>( pVar)->GetClassName( );
+            aVarName = pSbxObj->GetClassName();
         }
         SAL_INFO(
             "basic.sbx",
@@ -535,9 +535,9 @@ void SbxObject::Remove( SbxVariable* pVar )
     {
 #ifdef DBG_UTIL
         OUString aVarName( pVar->GetName() );
-        if ( aVarName.isEmpty() && 0 != dynamic_cast<const SbxObject*>( pVar) )
+        if (const SbxObject *pSbxObj = aVarName.isEmpty() ? dynamic_cast<const SbxObject*>(pVar) : nullptr)
         {
-            aVarName = dynamic_cast<SbxObject*>( pVar)->GetClassName( );
+            aVarName = pSbxObj->GetClassName();
         }
         SAL_INFO(
             "basic.sbx",
@@ -855,13 +855,13 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
             if ( pVar )
             {
                 rStrm.WriteCharPtr( aIndentNameStr.getStr() ).WriteCharPtr( "  - Sub" );
-                if ( 0 != dynamic_cast<const SbxObject*>( pVar) )
+                if (SbxObject *pSbxObj = dynamic_cast<SbxObject*>(pVar))
                 {
-                    static_cast<SbxObject*>(pVar)->Dump( rStrm, bFill );
+                    pSbxObj->Dump(rStrm, bFill);
                 }
-                else if ( 0 != dynamic_cast<const SbxVariable*>( pVar) )
+                else if (SbxVariable *pSbxVar = dynamic_cast<SbxVariable*>(pVar))
                 {
-                    static_cast<SbxVariable*>(pVar)->Dump( rStrm, bFill );
+                    pSbxVar->Dump(rStrm, bFill);
                 }
             }
         }

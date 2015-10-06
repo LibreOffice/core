@@ -1268,11 +1268,9 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                     if ( aSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET )
                     {
                         const SvxFieldData* pField = static_cast<const SvxFieldItem*>(pItem)->GetField();
-                        if ( pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr )
+                        if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                         {
                             bUrl = true;
-                            const SvxURLField*  pURLField = static_cast<const SvxURLField*>(pField);
-//                          String              aFieldText = rEngine.GetText( aSel );
                             rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_anchor ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_href ).WriteCharPtr( "=\"" );
                             OUT_STR( pURLField->GetURL() );
                             rStrm.WriteCharPtr( "\">" );

@@ -674,31 +674,39 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 SfxApplication* pApp = SfxGetpApp();
                 const SfxPoolItem* pItem;
+                const SfxStringItem* pStringItem(nullptr);
                 SfxMedium* pMed = NULL;
-                if ( pReqArgs &&
-                     pReqArgs->GetItemState( SID_FILE_NAME, true, &pItem ) == SfxItemState::SET &&
-                     dynamic_cast<const SfxStringItem*>( pItem) !=  nullptr )
+                if (pReqArgs && pReqArgs->GetItemState(SID_FILE_NAME, true, &pItem) == SfxItemState::SET)
                 {
-                    OUString aFileName =
-                        static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    pStringItem = dynamic_cast<const SfxStringItem*>(pItem);
+                }
+                if (pStringItem)
+                {
+                    OUString aFileName = pStringItem->GetValue();
 
                     OUString aFilterName;
-                    if ( pReqArgs->GetItemState( SID_FILTER_NAME, true, &pItem ) == SfxItemState::SET &&
-                         dynamic_cast<const SfxStringItem*>( pItem) !=  nullptr )
+                    pStringItem = nullptr;
+                    if (pReqArgs->GetItemState(SID_FILTER_NAME, true, &pItem) == SfxItemState::SET)
+                        pStringItem = dynamic_cast<const SfxStringItem*>(pItem);
+                    if (pStringItem)
                     {
-                        aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                        aFilterName = pStringItem->GetValue();
                     }
                     OUString aOptions;
-                    if ( pReqArgs->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) == SfxItemState::SET &&
-                         dynamic_cast<const SfxStringItem*>( pItem) !=  nullptr )
+                    pStringItem = nullptr;
+                    if (pReqArgs->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SfxItemState::SET)
+                        pStringItem = dynamic_cast<const SfxStringItem*>(pItem);
+                    if (pStringItem)
                     {
-                        aOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                        aOptions = pStringItem->GetValue();
                     }
                     short nVersion = 0;
-                    if ( pReqArgs->GetItemState( SID_VERSION, true, &pItem ) == SfxItemState::SET &&
-                         dynamic_cast<const SfxInt16Item*>( pItem) !=  nullptr )
+                    const SfxInt16Item* pInt16Item(nullptr);
+                    if (pReqArgs->GetItemState(SID_VERSION, true, &pItem) == SfxItemState::SET)
+                        pInt16Item = dynamic_cast<const SfxInt16Item*>(pItem);
+                    if (pInt16Item)
                     {
-                        nVersion = static_cast<const SfxInt16Item*>(pItem)->GetValue();
+                        nVersion = pInt16Item->GetValue();
                     }
 
                     //  kein Filter angegeben -> Detection
@@ -817,9 +825,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
                 {
-                    if ( dynamic_cast<const SfxStringItem*>( pItem) !=  nullptr )
+                    if (const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>(pItem))
                     {
-                        OUString aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                        OUString aName = pStringItem->GetValue();
                         SCTAB nTab;
                         if (aDocument.GetTable( aName, nTab ))
                         {
@@ -845,9 +853,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
                 {
-                    if ( dynamic_cast<const SfxStringItem*>( pItem) !=  nullptr )
+                    if (const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>(pItem))
                     {
-                        OUString aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                        OUString aName = pStringItem->GetValue();
                         SCTAB nTab;
                         if (aDocument.GetTable( aName, nTab ))
                         {
@@ -893,9 +901,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
             const SfxPoolItem* pItem;
             if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
             {
-                if ( dynamic_cast<const SfxUInt16Item*>( pItem) !=  nullptr )
+                if (const SfxUInt16Item* pInt16Item = dynamic_cast<const SfxUInt16Item*>(pItem))
                 {
-                    sal_uInt16 nY2k = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                    sal_uInt16 nY2k = pInt16Item->GetValue();
                     // immer an den DocOptions setzen, damit das auch fuer SO50
                     // gespeichert wird (und alle Abfragen bisher auch darauf laufen).
                     // SetDocOptions propagiert das an den NumberFormatter
@@ -2292,10 +2300,13 @@ IMPL_LINK_TYPED( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
                     pImpl->pRequest->AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, sOptions ) );
             }
             const SfxPoolItem* pItem = NULL;
+            const SfxInt16Item* pInt16Item(nullptr);
             SfxItemSet* pSet = pMed->GetItemSet();
-            if ( pSet &&
-                    pSet->GetItemState( SID_VERSION, true, &pItem ) == SfxItemState::SET &&
-                    dynamic_cast<const SfxInt16Item*>( pItem) !=  nullptr )
+            if (pSet && pSet->GetItemState(SID_VERSION, true, &pItem) == SfxItemState::SET)
+            {
+                pInt16Item = dynamic_cast<const SfxInt16Item*>(pItem);
+            }
+            if (pInt16Item)
             {
                 pImpl->pRequest->AppendItem( *pItem );
             }

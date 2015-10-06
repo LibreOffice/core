@@ -156,10 +156,9 @@ SbiSymDef* SbiParser::CheckRTLForSym(const OUString& rSym, SbxDataType eType)
     if (!pVar)
         return nullptr;
 
-    if (dynamic_cast<const SbxMethod *>(pVar) != nullptr)
+    if (SbxMethod* pMethod = dynamic_cast<SbxMethod*>(pVar))
     {
         SbiProcDef* pProc_ = aRtlSyms.AddProc( rSym );
-        SbxMethod* pMethod = static_cast<SbxMethod*>(pVar);
         if (pMethod->IsRuntimeFunction())
         {
             pProc_->SetType( pMethod->GetRuntimeFunctionReturnType() );

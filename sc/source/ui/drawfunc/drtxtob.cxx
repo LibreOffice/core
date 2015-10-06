@@ -323,9 +323,8 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     if ( pFieldItem )
                     {
                         const SvxFieldData* pField = pFieldItem->GetField();
-                        if( pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr )
+                        if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                         {
-                            const SvxURLField* pURLField = static_cast< const SvxURLField* >( pField );
                             ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
                         }
                     }
@@ -391,9 +390,8 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             if (pFieldItem)
             {
                 const SvxFieldData* pField = pFieldItem->GetField();
-                if ( pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr )
+                if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
-                    const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
                     aHLinkItem.SetName( pURLField->GetRepresentation() );
                     aHLinkItem.SetURL( pURLField->GetURL() );
                     aHLinkItem.SetTargetFrame( pURLField->GetTargetFrame() );

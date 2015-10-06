@@ -354,9 +354,8 @@ void ScDocShell::UpdateLinks()
     {
         --k;
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[k];
-        if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
+        if (ScTableLink* pTabLink = dynamic_cast<ScTableLink*>(pBase))
         {
-            ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
             if (pTabLink->IsUsed())
                 aNames.insert(pTabLink->GetFileName());
             else        // nicht mehr benutzt -> loeschen
@@ -418,9 +417,8 @@ bool ScDocShell::ReloadTabLinks()
     for (size_t i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
-        if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
+        if (ScTableLink* pTabLink = dynamic_cast<ScTableLink*>(pBase))
         {
-            ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
 //			pTabLink->SetAddUndo(sal_False);		//! Undo's zusammenfassen
 
 			// Painting only after Update() makes no sense:

@@ -228,18 +228,18 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const ScHint* pScHint = dynamic_cast<const ScHint*>( &rHint );
         if (pScHint && (pScHint->GetId() & SC_HINT_DATACHANGED))
             bDataChanged = true;
-        else if ( dynamic_cast<const ScAreaChangedHint*>(&rHint) )      // position of broadcaster changed
+        else if (const ScAreaChangedHint *pChgHint = dynamic_cast<const ScAreaChangedHint*>(&rHint))      // position of broadcaster changed
         {
-            ScRange aNewRange = static_cast<const ScAreaChangedHint&>(rHint).GetRange();
+            ScRange aNewRange = pChgHint->GetRange();
             if ( aRange != aNewRange )
             {
                 bRefreshListener = true;
                 bDataChanged = true;
             }
         }
-        else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
+        else if (const SfxSimpleHint *pSplHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
         {
-            sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
+            sal_uLong nId = pSplHint->GetId();
             if (nId == SFX_HINT_DYING)
             {
                 //  If the range is being deleted, listening must be restarted

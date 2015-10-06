@@ -246,9 +246,8 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while(pViewShell)
         {
-            if ( dynamic_cast<const ScTabViewShell*>( pViewShell) !=  nullptr )
+            if (ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(pViewShell))
             {
-                ScTabViewShell* pViewSh = static_cast<ScTabViewShell*>(pViewShell);
                 pViewSh->PaintGrid();
                 pViewSh->PaintTop();
                 pViewSh->PaintLeft();
@@ -293,10 +292,8 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
         SfxViewShell* pSh = SfxViewShell::GetFirst();
         while ( pSh )
         {
-            if ( dynamic_cast<const ScTabViewShell*>( pSh) !=  nullptr )
+            if (ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(pSh))
             {
-                ScTabViewShell* pViewSh = static_cast<ScTabViewShell*>(pSh);
-
                 // set ref-device for EditEngine (re-evaluates digit settings)
                 ScInputHandler* pHdl = GetInputHdl(pViewSh);
                 if (pHdl)
@@ -305,9 +302,8 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
                 pViewSh->DigitLanguageChanged();
                 pViewSh->PaintGrid();
             }
-            else if ( dynamic_cast<const ScPreviewShell*>( pSh) !=  nullptr )
+            else if (ScPreviewShell* pPreviewSh = dynamic_cast<ScPreviewShell*>(pSh))
             {
-                ScPreviewShell* pPreviewSh = static_cast<ScPreviewShell*>(pSh);
                 ScPreview* pPreview = pPreviewSh->GetPreview();
 
                 pPreview->SetDigitLanguage( GetOptDigitLanguage() );
@@ -1551,8 +1547,8 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
         {
             //  store the dialog id also in the view shell
             SfxViewShell* pViewSh = pViewFrm->GetViewShell();
-            if ( pViewSh && dynamic_cast<const ScTabViewShell*>( pViewSh) !=  nullptr )
-                static_cast<ScTabViewShell*>(pViewSh)->SetCurRefDlgId( nCurRefDlgId );
+            if (ScTabViewShell* pTabViewSh = dynamic_cast<ScTabViewShell*>(pViewSh))
+                pTabViewSh->SetCurRefDlgId(nCurRefDlgId);
             else
             {
                 // no ScTabViewShell - possible for example from a Basic macro
@@ -2146,10 +2142,9 @@ IMPL_LINK_TYPED( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
     const SvxFieldItem& rField = pInfo->GetField();
     const SvxFieldData* pField = rField.GetField();
 
-    if (pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr)
+    if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
     {
         // URLField
-        const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
         OUString aURL = pURLField->GetURL();
 
         switch ( pURLField->GetFormat() )

@@ -4449,13 +4449,13 @@ RTLFUNC(Load)
     SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     if ( pObj )
     {
-        if( dynamic_cast<const SbUserFormModule *>(pObj) != nullptr )
+        if (SbUserFormModule* pModule = dynamic_cast<SbUserFormModule*>(pObj))
         {
-            static_cast<SbUserFormModule*>(pObj)->Load();
+            pModule->Load();
         }
-        else if( dynamic_cast<const SbxObject *>(pObj) != nullptr )
+        else if (SbxObject* pSbxObj = dynamic_cast<SbxObject*>(pObj))
         {
-            SbxVariable* pVar = static_cast<SbxObject*>(pObj)->Find( OUString("Load"), SbxCLASS_METHOD );
+            SbxVariable* pVar = pSbxObj->Find(OUString("Load"), SbxCLASS_METHOD);
             if( pVar )
             {
                 pVar->GetInteger();
@@ -4480,14 +4480,13 @@ RTLFUNC(Unload)
     SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     if ( pObj )
     {
-        if( dynamic_cast<const SbUserFormModule *>(pObj) != nullptr )
+        if (SbUserFormModule* pFormModule = dynamic_cast<SbUserFormModule*>(pObj))
         {
-            SbUserFormModule* pFormModule = static_cast<SbUserFormModule*>(pObj);
             pFormModule->Unload();
         }
-        else if( dynamic_cast<const SbxObject *>(pObj) != nullptr )
+        else if (SbxObject *pSbxObj = dynamic_cast<SbxObject*>(pObj))
         {
-            SbxVariable* pVar = static_cast<SbxObject*>(pObj)->Find( OUString("Unload"), SbxCLASS_METHOD );
+            SbxVariable* pVar = pSbxObj->Find(OUString("Unload"), SbxCLASS_METHOD);
             if( pVar )
             {
                 pVar->GetInteger();
@@ -4534,16 +4533,13 @@ RTLFUNC(SavePicture)
     }
 
     SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
-    if( dynamic_cast<const SbStdPicture *>(pObj) != nullptr )
+    if (SbStdPicture *pPicture = dynamic_cast<SbStdPicture*>(pObj))
     {
         SvFileStream aOStream( rPar.Get(2)->GetOUString(), StreamMode::WRITE | StreamMode::TRUNC );
-        Graphic aGraphic = static_cast<SbStdPicture*>(pObj)->GetGraphic();
+        Graphic aGraphic = pPicture->GetGraphic();
         WriteGraphic( aOStream, aGraphic );
     }
 }
-
-
-
 
 RTLFUNC(MsgBox)
 {

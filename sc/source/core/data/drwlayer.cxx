@@ -2047,9 +2047,8 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
         Graphic     aGraphic;
         bool        bObjSupported = false;
 
-        if ( dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr  ) // Simple Graphics object
+        if (const SdrGrafObj* pGrafObj = dynamic_cast<const SdrGrafObj*>(pObj)) // Simple Graphics object
         {
-            const SdrGrafObj*   pGrafObj = static_cast<const SdrGrafObj*>( pObj );
             const GeoStat&      rGeo = pGrafObj->GetGeoStat();
             const Graphic&      rGraphic = pGrafObj->GetGraphic();
 
@@ -2075,10 +2074,10 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
 
             bObjSupported = true;
         }
-        else if ( dynamic_cast<const SdrOle2Obj*>( pObj) !=  nullptr ) // OLE object
+        else if (const SdrOle2Obj* pOleObj = dynamic_cast<const SdrOle2Obj*>(pObj)) // OLE object
         {
             // TODO/LEAN: working with visual area needs running state
-            aGraphSize = static_cast<const SdrOle2Obj*>(pObj)->GetOrigObjSize();
+            aGraphSize = pOleObj->GetOrigObjSize();
             bObjSupported = true;
         }
 
