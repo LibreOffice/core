@@ -374,8 +374,6 @@ void ImageAryData::Load(const OUString &rPrefix)
 
     OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-    BitmapEx aBmpEx;
-
     OUString aFileName = rPrefix;
     aFileName += maName;
 #if OSL_DEBUG_LEVEL > 0
