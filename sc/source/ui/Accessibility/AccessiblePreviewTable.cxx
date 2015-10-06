@@ -322,15 +322,15 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCe
         {
             const bool bRotatedColHeader = rRowInfo.bIsHeader;
             const bool bRotatedRowHeader = rColInfo.bIsHeader;
-            ScAccessiblePreviewHeaderCell* pHeaderCell = new ScAccessiblePreviewHeaderCell(this, mpViewShell, aCellPos,
-                                        bRotatedColHeader, bRotatedRowHeader, nNewIndex);
-            xRet = pHeaderCell;
+            rtl::Reference<ScAccessiblePreviewHeaderCell> pHeaderCell(new ScAccessiblePreviewHeaderCell(this, mpViewShell, aCellPos,
+                                        bRotatedColHeader, bRotatedRowHeader, nNewIndex));
+            xRet = pHeaderCell.get();
             pHeaderCell->Init();
         }
         else
         {
-            ScAccessiblePreviewCell* pCell = new ScAccessiblePreviewCell( this, mpViewShell, aCellPos, nNewIndex );
-            xRet = pCell;
+            rtl::Reference<ScAccessiblePreviewCell> pCell(new ScAccessiblePreviewCell( this, mpViewShell, aCellPos, nNewIndex ));
+            xRet = pCell.get();
             pCell->Init();
         }
     }
