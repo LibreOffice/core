@@ -2823,7 +2823,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
             delete arrOUS[3]; delete arrOUS[4];
         }
 
-        // For some bizarre reason, only odd numbered tests were set up to run with cppunit
+        // For some bizarre reason, only odd numbered tests were set up to run
     };
 
     TEST_F(append_006_Int32, append_001)
