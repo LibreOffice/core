@@ -4161,7 +4161,6 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex,
         nY -= pLine->GetHeight();
         if ( !aStatus.IsOutliner() )
             nY -= nSBL;
-        nCurIndex = nCurIndex - pLine->GetLen();
     }
 
     Rectangle aEditCursor;
