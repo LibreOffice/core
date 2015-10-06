@@ -828,10 +828,9 @@ void BarChart::createShapes()
                             double fLowerBarDepth = fLogicBarDepth;
                             double fUpperBarDepth = fLogicBarDepth;
                             {
-                                double fOuterBarDepth = fLogicBarDepth;
                                 if( lcl_hasGeometry3DVariableWidth(nGeometry3D) && fCompleteHeight!=0.0 )
                                 {
-                                    fOuterBarDepth = fLogicBarDepth * (fTopHeight)/(fabs(fCompleteHeight));
+                                    double fOuterBarDepth = fLogicBarDepth * (fTopHeight)/(fabs(fCompleteHeight));
                                     fLowerBarDepth = (fBaseValue < fUpperYValue) ? fabs(fLogicBarDepth) : fabs(fOuterBarDepth);
                                     fUpperBarDepth = (fBaseValue < fUpperYValue) ? fabs(fOuterBarDepth) : fabs(fLogicBarDepth);
                                 }
