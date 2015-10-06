@@ -253,7 +253,11 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
             {
                 bool bRet = SearchAndWrap(bApi);
                 if( bRet )
+                {
                     Scroll(m_pWrtShell->GetCharRect().SVRect());
+                    if (comphelper::LibreOfficeKit::isActive())
+                        lcl_emitSearchResultCallbacks(1, m_pSrchItem, m_pWrtShell);
+                }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
 #if HAVE_FEATURE_DESKTOP
                 {
