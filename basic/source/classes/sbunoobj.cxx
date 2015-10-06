@@ -4693,7 +4693,6 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
             args[1] <<= xProxy;
 
             Reference< XInterface > xRet;
-            bSuccess = false;
             try
             {
                 xRet = xComImplementsFactory->createInstanceWithArguments( args );
