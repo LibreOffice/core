@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_ac30f79f",
+        "filename": "oox/inc/drawingml/chart/datasourcecontext.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-10-06T09:50:08Z",
+      "side": 1,
+      "message": "As this isn\u0027t a pure getter that just returns the value of a field, I would perhaps call it \"CreateNumberFormatter()\" instead? Dunno. Does the surrounding code have any clear naming policy in this regards?",
+      "revId": "f5ebf903c360aadb08e4f7c7c520426e605033fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_6c009fab",
+        "filename": "oox/inc/drawingml/chart/datasourcecontext.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-10-06T09:50:08Z",
+      "side": 1,
+      "message": "Surely this should have a \"m\" prefix",
+      "revId": "f5ebf903c360aadb08e4f7c7c520426e605033fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_cc2bab32",
+        "filename": "oox/source/drawingml/chart/datasourcecontext.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-10-06T09:50:08Z",
+      "side": 1,
+      "message": "Now it is easy to confuse this variable with the member pNumberFormatter, and why abbreviate \"Number\" in one case but not the other? And anyway, as this is a member function, why not use the member directly? Isn\u0027t that the point of members, even private, that they can be used in member functions?",
+      "range": {
+        "startLine": 113,
+        "startChar": 20,
+        "endLine": 113,
+        "endChar": 37
+      },
+      "revId": "f5ebf903c360aadb08e4f7c7c520426e605033fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
