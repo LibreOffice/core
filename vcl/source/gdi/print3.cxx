@@ -251,7 +251,7 @@ static OUString queryFile( Printer* pPrinter )
 
     if( xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK )
     {
-        uno::Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
+        uno::Sequence< OUString > aPathSeq( xFilePicker->getSelectedFiles() );
         INetURLObject aObj( aPathSeq[0] );
         aResult = aObj.PathToFileName();
     }

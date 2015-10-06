@@ -1531,7 +1531,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
 
         if( xFilePicker->execute() == ExecutableDialogResults::OK )
         {
-            Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
+            Sequence< OUString > aPathSeq( xFilePicker->getSelectedFiles() );
             INetURLObject aObj( aPathSeq[0] );
             // we're using ansi calls (StartDocA) so convert the string
             aOutFileName = aObj.PathToFileName();
