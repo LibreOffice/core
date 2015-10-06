@@ -37,69 +37,9 @@
 
 using namespace store;
 
-// PageCache (non-virtual interface) implementation.
-storeError PageCache::lookupPageAt (PageHolder & rxPage, sal_uInt32 nOffset)
-{
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::lookupPageAt(): invalid Offset");
-    if (nOffset == STORE_PAGE_NULL)
-        return store_E_CantSeek;
-
-    return lookupPageAt_Impl (rxPage, nOffset);
-}
-
-storeError PageCache::insertPageAt (PageHolder const & rxPage, sal_uInt32 nOffset)
-{
-    // [SECURITY:ValInput]
-    PageData const * pagedata = rxPage.get();
-    OSL_PRECOND(!(pagedata == 0), "store::PageCache::insertPageAt(): invalid Page");
-    if (pagedata == 0)
-        return store_E_InvalidParameter;
-
-    sal_uInt32 const offset = pagedata->location();
-    OSL_PRECOND(!(nOffset != offset), "store::PageCache::insertPageAt(): inconsistent Offset");
-    if (nOffset != offset)
-        return store_E_InvalidParameter;
-
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::insertPageAt(): invalid Offset");
-    if (nOffset == STORE_PAGE_NULL)
-        return store_E_CantSeek;
-
-    return insertPageAt_Impl (rxPage, nOffset);
-}
-
-storeError PageCache::updatePageAt (PageHolder const & rxPage, sal_uInt32 nOffset)
-{
-    // [SECURITY:ValInput]
-    PageData const * pagedata = rxPage.get();
-    OSL_PRECOND(!(pagedata == 0), "store::PageCache::updatePageAt(): invalid Page");
-    if (pagedata == 0)
-        return store_E_InvalidParameter;
-
-    sal_uInt32 const offset = pagedata->location();
-    OSL_PRECOND(!(nOffset != offset), "store::PageCache::updatePageAt(): inconsistent Offset");
-    if (nOffset != offset)
-        return store_E_InvalidParameter;
-
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::updatePageAt(): invalid Offset");
-    if (nOffset == STORE_PAGE_NULL)
-        return store_E_CantSeek;
-
-    return updatePageAt_Impl (rxPage, nOffset);
-}
-
-storeError PageCache::removePageAt (sal_uInt32 nOffset)
-{
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::removePageAt(): invalid Offset");
-    if (nOffset == STORE_PAGE_NULL)
-        return store_E_CantSeek;
-
-    return removePageAt_Impl (nOffset);
-}
-
 // Entry
-namespace
-{
 
+namespace store {
 struct Entry
 {
     // Representation
@@ -119,8 +59,7 @@ struct Entry
     // Destruction
     ~Entry() {}
 };
-
-} // namespace
+};
 
 // EntryCache interface
 namespace
@@ -219,69 +158,8 @@ static int highbit(sal_Size n)
     return k;
 }
 
-//PageCache_Impl implementation
-namespace store
-{
 
-class PageCache_Impl :
-    public store::OStoreObject,
-    public store::PageCache,
-    private boost::noncopyable
-{
-    // Representation
-    static size_t const theTableSize = 32;
-    static_assert(STORE_IMPL_ISP2(theTableSize), "must be the case");
-
-    Entry **     m_hash_table;
-    Entry *      m_hash_table_0[theTableSize];
-    size_t       m_hash_size;
-    size_t       m_hash_shift;
-    size_t const m_page_shift;
-
-    size_t       m_hash_entries; // total number of entries in table.
-    size_t       m_nHit;
-    size_t       m_nMissed;
-
-    static inline int hash_Impl(sal_uInt32 a, size_t s, size_t q, size_t m)
-    {
-        return static_cast<int>((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m));
-    }
-    inline int hash_index_Impl (sal_uInt32 nOffset)
-    {
-        return hash_Impl(nOffset, m_hash_shift, m_page_shift, m_hash_size - 1);
-    }
-
-    Entry * lookup_Impl (Entry * entry, sal_uInt32 nOffset);
-    void rescale_Impl (sal_Size new_size);
-
-    // PageCache Implementation
-    virtual storeError lookupPageAt_Impl (
-        PageHolder & rxPage,
-        sal_uInt32   nOffset) SAL_OVERRIDE;
-
-    virtual storeError insertPageAt_Impl (
-        PageHolder const & rxPage,
-        sal_uInt32         nOffset) SAL_OVERRIDE;
-
-    virtual storeError updatePageAt_Impl (
-        PageHolder const & rxPage,
-        sal_uInt32         nOffset) SAL_OVERRIDE;
-
-    virtual storeError removePageAt_Impl (
-        sal_uInt32 nOffset) SAL_OVERRIDE;
-
-public:
-    // Construction
-    explicit PageCache_Impl (sal_uInt16 nPageSize);
-
-protected:
-    // Destruction
-    virtual ~PageCache_Impl();
-};
-
-} // namespace store
-
-PageCache_Impl::PageCache_Impl (sal_uInt16 nPageSize)
+PageCache::PageCache (sal_uInt16 nPageSize)
     : m_hash_table   (m_hash_table_0),
       m_hash_size    (theTableSize),
       m_hash_shift   (highbit(m_hash_size) - 1),
@@ -295,7 +173,7 @@ PageCache_Impl::PageCache_Impl (sal_uInt16 nPageSize)
     memset(m_hash_table_0, 0, sizeof(m_hash_table_0));
 }
 
-PageCache_Impl::~PageCache_Impl()
+PageCache::~PageCache()
 {
     double s_x = 0.0;
     sal_Size i, n = m_hash_size;
@@ -326,7 +204,7 @@ PageCache_Impl::~PageCache_Impl()
     OSL_TRACE("Hits: %zu, Misses: %zu", m_nHit, m_nMissed);
 }
 
-void PageCache_Impl::rescale_Impl (sal_Size new_size)
+void PageCache::rescale_Impl (sal_Size new_size)
 {
     sal_Size new_bytes = new_size * sizeof(Entry*);
     Entry ** new_table = static_cast<Entry**>(rtl_allocateMemory(new_bytes));
@@ -369,7 +247,7 @@ void PageCache_Impl::rescale_Impl (sal_Size new_size)
     }
 }
 
-Entry * PageCache_Impl::lookup_Impl (Entry * entry, sal_uInt32 nOffset)
+Entry * PageCache::lookup_Impl (Entry * entry, sal_uInt32 nOffset)
 {
     int lookups = 0;
     while (entry != 0)
@@ -391,10 +269,12 @@ Entry * PageCache_Impl::lookup_Impl (Entry * entry, sal_uInt32 nOffset)
     return entry;
 }
 
-storeError PageCache_Impl::lookupPageAt_Impl (
-    PageHolder & rxPage,
-    sal_uInt32   nOffset)
+storeError PageCache::lookupPageAt (PageHolder & rxPage, sal_uInt32 nOffset)
 {
+    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::lookupPageAt(): invalid Offset");
+    if (nOffset == STORE_PAGE_NULL)
+        return store_E_CantSeek;
+
     int index = hash_index_Impl(nOffset);
     Entry const * entry = lookup_Impl (m_hash_table[index], nOffset);
     if (entry != 0)
@@ -412,10 +292,23 @@ storeError PageCache_Impl::lookupPageAt_Impl (
     return store_E_NotExists;
 }
 
-storeError PageCache_Impl::insertPageAt_Impl (
-    PageHolder const & rxPage,
-    sal_uInt32         nOffset)
+storeError PageCache::insertPageAt (PageHolder const & rxPage, sal_uInt32 nOffset)
 {
+    // [SECURITY:ValInput]
+    PageData const * pagedata = rxPage.get();
+    OSL_PRECOND(!(pagedata == 0), "store::PageCache::insertPageAt(): invalid Page");
+    if (pagedata == 0)
+        return store_E_InvalidParameter;
+
+    sal_uInt32 const offset = pagedata->location();
+    OSL_PRECOND(!(nOffset != offset), "store::PageCache::insertPageAt(): inconsistent Offset");
+    if (nOffset != offset)
+        return store_E_InvalidParameter;
+
+    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::insertPageAt(): invalid Offset");
+    if (nOffset == STORE_PAGE_NULL)
+        return store_E_CantSeek;
+
     Entry * entry = EntryCache::get().create (rxPage, nOffset);
     if (entry != 0)
     {
@@ -430,10 +323,23 @@ storeError PageCache_Impl::insertPageAt_Impl (
     return store_E_OutOfMemory;
 }
 
-storeError PageCache_Impl::updatePageAt_Impl (
-    PageHolder const & rxPage,
-    sal_uInt32         nOffset)
+storeError PageCache::updatePageAt (PageHolder const & rxPage, sal_uInt32 nOffset)
 {
+    // [SECURITY:ValInput]
+    PageData const * pagedata = rxPage.get();
+    OSL_PRECOND(!(pagedata == 0), "store::PageCache::updatePageAt(): invalid Page");
+    if (pagedata == 0)
+        return store_E_InvalidParameter;
+
+    sal_uInt32 const offset = pagedata->location();
+    OSL_PRECOND(!(nOffset != offset), "store::PageCache::updatePageAt(): inconsistent Offset");
+    if (nOffset != offset)
+        return store_E_InvalidParameter;
+
+    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::updatePageAt(): invalid Offset");
+    if (nOffset == STORE_PAGE_NULL)
+        return store_E_CantSeek;
+
     int index = hash_index_Impl(nOffset);
     Entry *  entry  = lookup_Impl (m_hash_table[index], nOffset);
     if (entry != 0)
@@ -444,12 +350,15 @@ storeError PageCache_Impl::updatePageAt_Impl (
         // Update stats and leave. // m_nUpdHit += 1;
         return store_E_None;
     }
-    return insertPageAt_Impl (rxPage, nOffset);
+    return insertPageAt (rxPage, nOffset);
 }
 
-storeError PageCache_Impl::removePageAt_Impl (
-    sal_uInt32 nOffset)
+storeError PageCache::removePageAt (sal_uInt32 nOffset)
 {
+    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::removePageAt(): invalid Offset");
+    if (nOffset == STORE_PAGE_NULL)
+        return store_E_CantSeek;
+
     Entry ** ppEntry = &(m_hash_table[hash_index_Impl(nOffset)]);
     while (*ppEntry != 0)
     {
@@ -492,7 +401,7 @@ PageCache_createInstance (
     rtl::Reference< store::PageCache > & rxCache,
     sal_uInt16                           nPageSize)
 {
-    rxCache = new PageCache_Impl (nPageSize);
+    rxCache = new PageCache (nPageSize);
     if (!rxCache.is())
         return store_E_OutOfMemory;
 

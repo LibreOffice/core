@@ -25,9 +25,13 @@
 
 #include "store/types.h"
 #include "storbase.hxx"
+#include "object.hxx"
+#include "boost/noncopyable.hpp"
 
 namespace store
 {
+
+struct Entry;
 
 /*========================================================================
  *
@@ -35,9 +39,40 @@ namespace store
  *
  *======================================================================*/
 
-class PageCache : public virtual salhelper::SimpleReferenceObject
+class PageCache :
+    public store::OStoreObject,
+    private boost::noncopyable
 {
+    // Representation
+    static size_t const theTableSize = 32;
+    static_assert(STORE_IMPL_ISP2(theTableSize), "must be the case");
+
+    Entry **     m_hash_table;
+    Entry *      m_hash_table_0[theTableSize];
+    size_t       m_hash_size;
+    size_t       m_hash_shift;
+    size_t const m_page_shift;
+
+    size_t       m_hash_entries; // total number of entries in table.
+    size_t       m_nHit;
+    size_t       m_nMissed;
+
+    static inline int hash_Impl(sal_uInt32 a, size_t s, size_t q, size_t m)
+    {
+        return static_cast<int>((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m));
+    }
+    inline int hash_index_Impl (sal_uInt32 nOffset)
+    {
+        return hash_Impl(nOffset, m_hash_shift, m_page_shift, m_hash_size - 1);
+    }
+
+    Entry * lookup_Impl (Entry * entry, sal_uInt32 nOffset);
+    void rescale_Impl (sal_Size new_size);
+
 public:
+    // Construction
+    explicit PageCache (sal_uInt16 nPageSize);
+
     /** load.
      */
     storeError lookupPageAt (
@@ -62,25 +97,8 @@ public:
         sal_uInt32 nOffset);
 
 protected:
-    virtual ~PageCache() {}
-
-private:
-    /** Implementation (abstract).
-     */
-    virtual storeError lookupPageAt_Impl (
-        PageHolder & rxPage,
-        sal_uInt32   nOffset) = 0;
-
-    virtual storeError insertPageAt_Impl (
-        PageHolder const & rxPage,
-        sal_uInt32         nOffset) = 0;
-
-    virtual storeError updatePageAt_Impl (
-        PageHolder const & rxPage,
-        sal_uInt32         nOffset) = 0;
-
-    virtual storeError removePageAt_Impl (
-        sal_uInt32 nOffset) = 0;
+    // Destruction
+    virtual ~PageCache();
 };
 
 /*========================================================================
