@@ -463,7 +463,6 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
     case extract_exp:
     case length_exp:
     case char_value_fct:
-    {
         bSimple=false;
         if (!addDateValue(rString, rParam))
         {
@@ -492,8 +491,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
             rString.append(aStringPara.makeStringAndClear());
         }
         bHandled = true;
-    }
-    //fall-through
+        break;
     case odbc_call_spec:
     case subquery:
     case term:
@@ -502,8 +500,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
     case cast_spec:
     case num_value_exp:
         bSimple = false;
-
-    break;
+        break;
     default:
         break;
     }   // switch ( getKnownRuleID() )
