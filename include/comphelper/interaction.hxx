@@ -36,26 +36,6 @@ namespace comphelper
 
 
 
-    //= OInteractionSelect
-
-    /** base class for concrete XInteractionContinuation implementations.<p/>
-        Instances of the classes maintain a flag indicating if the handler was called.
-    */
-    class OInteractionSelect
-    {
-        bool    m_bSelected : 1;    /// indicates if the select event occurred
-
-    protected:
-        OInteractionSelect() : m_bSelected(false) { }
-
-    public:
-        /// determines whether or not this handler was selected
-        bool    wasSelected() const { return m_bSelected; }
-    protected:
-        void    implSelected() { m_bSelected = true; }
-    };
-
-
     //= OInteraction
 
     /** template for instantiating concret interaction handlers<p/>
@@ -63,21 +43,25 @@ namespace comphelper
     */
     template <class INTERACTION>
     class OInteraction
-            :public ::cppu::WeakImplHelper< INTERACTION >
-            ,public OInteractionSelect
+            : public ::cppu::WeakImplHelper< INTERACTION >
     {
     public:
-        OInteraction() { }
+        OInteraction() : m_bSelected(false) {}
 
-    // XInteractionContinuation
-        virtual void SAL_CALL select(  ) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        /// determines whether or not this handler was selected
+        bool    wasSelected() const { return m_bSelected; }
+
+        // XInteractionContinuation
+        virtual void SAL_CALL select() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    private:
+        bool    m_bSelected : 1;    /// indicates if the select event occurred
     };
 
 
     template <class INTERACTION>
     void SAL_CALL OInteraction< INTERACTION >::select(  ) throw(::com::sun::star::uno::RuntimeException)
     {
-        implSelected();
+        m_bSelected = true;
     }
 
 

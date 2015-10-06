@@ -136,7 +136,6 @@ merge chart::ResourceChangeListener with chart::ChartTypeTabPage
 merge chart::WindowController with chart::ChartController
 merge comphelper::IPropertyInfoService with frm::ConcreteInfoService
 merge comphelper::NameContainerImpl with comphelper::NameContainer
-merge comphelper::OInteractionSelect with comphelper::OInteraction
 merge comphelper::OSeekableInputWrapper_BASE with comphelper::OSeekableInputWrapper
 merge comphelper::OStatefulPropertySet with PropertySetBase
 merge connectivity::hsqldb::IMethodGuardAccess with connectivity::hsqldb::OHsqlConnection
