@@ -88,11 +88,6 @@ public:
 
 
 
-    Accessor const& getWrappedAccessor() const { return maAccessor; }
-    Accessor&       getWrappedAccessor() { return maAccessor; }
-
-
-
     data_type lookup(value_type const& v) const
     {
         // TODO(P3): use table-based/octree approach here!
@@ -142,16 +137,6 @@ public:
             lookup(
                 vigra::detail::RequiresExplicitCast<value_type>::cast(value) ),
             i );
-    }
-
-    template< typename V, class Iterator, class Difference >
-    void set(V const& value, Iterator const& i, Difference const& diff) const
-    {
-        maAccessor.set(
-            lookup(
-                vigra::detail::RequiresExplicitCast<value_type>::cast(value) ),
-            i,
-            diff );
     }
 };
 

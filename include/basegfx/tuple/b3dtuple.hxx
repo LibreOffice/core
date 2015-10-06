@@ -282,31 +282,6 @@ namespace basegfx
     // external operators
 
 
-    inline B3DTuple minimum(const B3DTuple& rTupA, const B3DTuple& rTupB)
-    {
-        return B3DTuple(
-            std::min(rTupB.getX(), rTupA.getX()),
-            std::min(rTupB.getY(), rTupA.getY()),
-            std::min(rTupB.getZ(), rTupA.getZ()));
-    }
-
-    inline B3DTuple maximum(const B3DTuple& rTupA, const B3DTuple& rTupB)
-    {
-        return B3DTuple(
-            std::max(rTupB.getX(), rTupA.getX()),
-            std::max(rTupB.getY(), rTupA.getY()),
-            std::max(rTupB.getZ(), rTupA.getZ()));
-    }
-
-    inline B3DTuple absolute(const B3DTuple& rTup)
-    {
-        B3DTuple aAbs(
-            fabs(rTup.getX()),
-            fabs(rTup.getY()),
-            fabs(rTup.getZ()));
-        return aAbs;
-    }
-
     inline B3DTuple interpolate(const B3DTuple& rOld1, const B3DTuple& rOld2, double t)
     {
         if(rOld1 == rOld2)
@@ -338,14 +313,6 @@ namespace basegfx
             rOld1.getZ() == rOld2.getZ() ? rOld1.getZ() : (rOld1.getZ() + rOld2.getZ()) * 0.5);
     }
 
-    inline B3DTuple average(const B3DTuple& rOld1, const B3DTuple& rOld2, const B3DTuple& rOld3)
-    {
-        return B3DTuple(
-            (rOld1.getX() == rOld2.getX() && rOld2.getX() == rOld3.getX()) ? rOld1.getX() : (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
-            (rOld1.getY() == rOld2.getY() && rOld2.getY() == rOld3.getY()) ? rOld1.getY() : (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0),
-            (rOld1.getZ() == rOld2.getZ() && rOld2.getZ() == rOld3.getZ()) ? rOld1.getZ() : (rOld1.getZ() + rOld2.getZ() + rOld3.getZ()) * (1.0 / 3.0));
-    }
-
     inline B3DTuple operator+(const B3DTuple& rTupA, const B3DTuple& rTupB)
     {
         B3DTuple aSum(rTupA);
@@ -358,13 +325,6 @@ namespace basegfx
         B3DTuple aSub(rTupA);
         aSub -= rTupB;
         return aSub;
-    }
-
-    inline B3DTuple operator/(const B3DTuple& rTupA, const B3DTuple& rTupB)
-    {
-        B3DTuple aDiv(rTupA);
-        aDiv /= rTupB;
-        return aDiv;
     }
 
     inline B3DTuple operator*(const B3DTuple& rTupA, const B3DTuple& rTupB)
@@ -381,21 +341,7 @@ namespace basegfx
         return aNew;
     }
 
-    inline B3DTuple operator*(double t, const B3DTuple& rTup)
-    {
-        B3DTuple aNew(rTup);
-        aNew *= t;
-        return aNew;
-    }
-
     inline B3DTuple operator/(const B3DTuple& rTup, double t)
-    {
-        B3DTuple aNew(rTup);
-        aNew /= t;
-        return aNew;
-    }
-
-    inline B3DTuple operator/(double t, const B3DTuple& rTup)
     {
         B3DTuple aNew(rTup);
         aNew /= t;
