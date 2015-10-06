@@ -1395,19 +1395,19 @@ paintTileInThread (gpointer data)
     aTileRectangle.y = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileX;
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
-    g_test_timer_start();
+    std::stringstream ss;
+    ss << "lok::Document::paintTile(" << static_cast<void*>(pBuffer) << ", "
+        << nTileSizePixels << ", " << nTileSizePixels << ", "
+        << aTileRectangle.x << ", " << aTileRectangle.y << ", "
+        << pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) << ", "
+        << pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) << ")";
+    g_info(ss.str().c_str());
     priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
                                          pBuffer,
                                          nTileSizePixels, nTileSizePixels,
                                          aTileRectangle.x, aTileRectangle.y,
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom),
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom));
-
-    double elapsedTime = g_test_timer_elapsed();
-    g_info ("Rendered (%d, %d) in %f seconds",
-            pLOEvent->m_nPaintTileX,
-            pLOEvent->m_nPaintTileY,
-            elapsedTime);
 
     //create a mapping for it
     buffer.m_mTiles[index].setPixbuf(pPixBuf);

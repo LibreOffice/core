@@ -372,7 +372,6 @@ static void signalCommand(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pD
     {
         std::string aKey = aPayload.substr(0, nPosition);
         std::string aValue = aPayload.substr(nPosition + 1);
-        g_info("signalCommand: '%s' is '%s'", aKey.c_str(), aValue.c_str());
 
         if (rWindow.m_aCommandNameToolItems.find(aKey) != rWindow.m_aCommandNameToolItems.end())
         {

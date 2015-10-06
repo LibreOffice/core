@@ -58,7 +58,6 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
                             GThreadPool* lokThreadPool)
 {
     int index = x * m_nWidth + y;
-    g_info("Setting tile invalid (%d, %d)", x, y);
     if (m_mTiles.find(index) != m_mTiles.end())
     {
         m_mTiles[index].valid = false;
