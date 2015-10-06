@@ -54,6 +54,7 @@ public:
 private:
     void OpenCLAutomaticSelectionChanged();
     void SelectedDeviceChanged();
+    void CoupleEmptyAsZeroToStringConversion();
 
     SvTreeListEntry *createItem(const OUString &rCaption, const OUString& sValue) const;
     void     setValueAt(size_t nPos, const OUString &rString);
