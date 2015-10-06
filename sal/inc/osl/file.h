@@ -132,11 +132,11 @@ typedef enum {
     osl_File_E_USERS,
     osl_File_E_OVERFLOW,
     osl_File_E_NOTREADY,
-    osl_File_E_LOCKED,
     osl_File_E_invalidError,        /* unmapped error: always last entry in enum! */
     osl_File_E_TIMEDOUT,
     osl_File_E_NETWORK,
-    osl_File_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
+    osl_File_E_FORCE_EQUAL_SIZE,
+    osl_File_E_LOCKED = SAL_MAX_ENUM
 } oslFileError;
 
 typedef void *oslDirectory;
