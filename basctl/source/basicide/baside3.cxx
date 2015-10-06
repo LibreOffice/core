@@ -699,7 +699,7 @@ bool DialogWindow::SaveDialog()
 
     if( xFP->execute() == RET_OK )
     {
-        Sequence< OUString > aPaths = xFP->getFiles();
+        Sequence< OUString > aPaths = xFP->getSelectedFiles();
         aCurPath = aPaths[0];
 
         // export dialog model to xml
@@ -944,7 +944,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
 
     if( xFP->execute() == RET_OK )
     {
-        Sequence< OUString > aPaths = xFP->getFiles();
+        Sequence< OUString > aPaths = xFP->getSelectedFiles();
         aCurPath = aPaths[0];
 
         OUString aBasePath;
