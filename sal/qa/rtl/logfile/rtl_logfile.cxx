@@ -160,7 +160,7 @@ namespace rtl_logfile
 
         nError1 = osl::File::remove( suFilePath );
         printError( nError1 );
-        CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: remove ", ( ::osl::FileBase::E_None == nError1 ) || ( nError1 == ::osl::FileBase::E_NOENT ) );
+        ASSERT_TRUE( ( ::osl::FileBase::E_None == nError1 ) || ( nError1 == ::osl::FileBase::E_NOENT ) ) << "In deleteTestFile Function: remove ";
         */
     }
 
