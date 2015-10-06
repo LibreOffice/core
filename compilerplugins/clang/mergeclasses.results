@@ -163,7 +163,6 @@ merge dbp::OModuleResourceClient with dbp::OUnoAutoPilot
 merge dbtools::ISQLStatementHelper with connectivity::mysql::OTables
 merge formula::ExternalReferenceHelper with ScExternalRefManager
 merge formula::IStructHelper with formula::StructPage
-merge framework::ILayoutNotifications with framework::LayoutManager
 merge framework::IListBoxListener with framework::DropdownToolbarController
 merge framework::ISpinfieldListener with framework::SpinfieldToolbarController
 merge framework::IStorageListener with framework::XMLBasedAcceleratorConfiguration

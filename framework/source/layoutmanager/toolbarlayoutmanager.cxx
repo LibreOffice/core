@@ -53,7 +53,7 @@ namespace framework
 ToolbarLayoutManager::ToolbarLayoutManager(
     const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Reference< ui::XUIElementFactory >& xUIElementFactory,
-    ILayoutNotifications* pParentLayouter ):
+    LayoutManager* pParentLayouter ):
     m_xContext( rxContext),
     m_xUIElementFactoryManager( xUIElementFactory ),
     m_pParentLayouter( pParentLayouter ),
@@ -980,7 +980,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
                         if ( aToolbar.m_xUIElement.is() && !aToolbar.m_bFloating )
                         {
                             implts_setLayoutDirty();
-                            m_pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
+                            m_pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
                         }
                     }
                 }
@@ -3231,7 +3231,7 @@ throw( uno::RuntimeException, std::exception )
         }
 
         if ( bNotify )
-            m_pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
+            m_pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
     }
 }
 
@@ -3572,7 +3572,7 @@ throw (uno::RuntimeException, std::exception)
     aWriteLock.clear();
 
     if ( bNotify )
-        m_pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
+        m_pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
 }
 
 sal_Bool SAL_CALL ToolbarLayoutManager::prepareToggleFloatingMode( const lang::EventObject& e )
@@ -3723,11 +3723,11 @@ throw (uno::RuntimeException, std::exception)
             implts_setLayoutDirty();
 
             aReadLock.reset();
-            ILayoutNotifications* pParentLayouter( m_pParentLayouter );
+            LayoutManager* pParentLayouter( m_pParentLayouter );
             aReadLock.clear();
 
             if ( pParentLayouter )
-                pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
+                pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
         }
     }
     else
@@ -3787,11 +3787,11 @@ throw (uno::RuntimeException, std::exception)
 
         SolarMutexClearableGuard aReadLock;
         bool bLayoutDirty = m_bLayoutDirty;
-        ILayoutNotifications* pParentLayouter( m_pParentLayouter );
+        LayoutManager* pParentLayouter( m_pParentLayouter );
         aWriteLock.clear();
 
         if ( bLayoutDirty && pParentLayouter )
-            pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
+            pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
     }
 }
 
@@ -3940,11 +3940,11 @@ throw (uno::RuntimeException, std::exception)
             SolarMutexClearableGuard aWriteLock;
             bool bNotify = !aUIElement.m_bFloating;
             m_bLayoutDirty = bNotify;
-            ILayoutNotifications* pParentLayouter( m_pParentLayouter );
+            LayoutManager* pParentLayouter( m_pParentLayouter );
             aWriteLock.clear();
 
             if ( bNotify && pParentLayouter )
-                pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
+                pParentLayouter->requestLayout( LayoutManager::HINT_TOOLBARSPACE_HAS_CHANGED );
         }
     }
 }

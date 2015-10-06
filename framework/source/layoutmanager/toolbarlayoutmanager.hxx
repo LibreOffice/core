@@ -34,7 +34,7 @@
 #include <uiconfiguration/globalsettings.hxx>
 #include <framework/addonsoptions.hxx>
 #include <uielement/uielement.hxx>
-#include <helper/ilayoutnotifications.hxx>
+#include <services/layoutmanager.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -74,7 +74,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< ::com::sun::star::aw
 
         ToolbarLayoutManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElementFactory >& xUIElementFactory,
-                              ILayoutNotifications* pParentLayouter );
+                              LayoutManager* pParentLayouter );
         virtual ~ToolbarLayoutManager();
 
         void reset();
@@ -274,7 +274,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< ::com::sun::star::aw
         css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > m_xModuleCfgMgr;
         css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > m_xDocCfgMgr;
         css::uno::Reference< ::com::sun::star::container::XNameAccess >      m_xPersistentWindowState;
-        ILayoutNotifications*                                                m_pParentLayouter;
+        LayoutManager*                                                       m_pParentLayouter;
 
         UIElementVector                                                      m_aUIElements;
         UIElement                                                            m_aDockUIElement;

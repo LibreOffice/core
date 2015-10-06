@@ -27,7 +27,6 @@
 #include <uielement/menubarmanager.hxx>
 #include <framework/addonsoptions.hxx>
 #include <uielement/uielement.hxx>
-#include <helper/ilayoutnotifications.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -61,6 +60,7 @@
 class MenuBar;
 namespace framework
 {
+
     class ToolbarLayoutManager;
     class GlobalSettings;
     namespace detail
@@ -75,10 +75,15 @@ namespace framework
     class LayoutManager : public  LayoutManager_Base                    ,
                           private cppu::BaseMutex,
                           public  ::cppu::OBroadcastHelper              ,
-                          public  ILayoutNotifications                  ,
                           public  LayoutManager_PBase
     {
         public:
+            enum Hint
+            {
+                HINT_NOT_SPECIFIED,
+                HINT_TOOLBARSPACE_HAS_CHANGED,
+                HINT_COUNT
+            };
             enum { DOCKINGAREAS_COUNT = 4 };
 
             LayoutManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
@@ -171,9 +176,8 @@ namespace framework
             DECL_LINK_TYPED( MenuBarClose, void *, void);
             DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
 
-            //  ILayoutNotifications
-
-            virtual void requestLayout( Hint eHint ) SAL_OVERRIDE;
+            //  called from ToolbarLayoutManager
+            void requestLayout( Hint eHint = HINT_NOT_SPECIFIED );
 
             /// Reading of settings - shared with ToolbarLayoutManager.
             static bool readWindowStateData( const OUString& rName, UIElement& rElementData,
