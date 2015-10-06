@@ -55,14 +55,11 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-struct PreCreationStruct
+struct MutexHolder
 {
     const rtl::Reference<SotMutexHolder> m_rMutexRef;
 
-    PreCreationStruct()
-    : m_rMutexRef( new SotMutexHolder )
-    {}
-
+    MutexHolder() : m_rMutexRef( new SotMutexHolder ) {}
 };
 
 namespace package {
@@ -76,7 +73,7 @@ typedef ::std::list< OInputCompStream* > InputStreamsList_Impl;
 struct OStorage_Impl;
 class OWriteStream;
 
-struct OWriteStream_Impl : public PreCreationStruct
+struct OWriteStream_Impl : public MutexHolder
 {
     friend struct OStorage_Impl;
     friend class OWriteStream;

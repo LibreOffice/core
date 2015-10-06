@@ -55,7 +55,6 @@ merge OldBasicPassword with basic::SfxScriptLibraryContainer
 merge OpenGLDeviceInfo with X11OpenGLDeviceInfo
 merge OpenGLSalBitmapOp with ScaleOp
 merge PPTExBulletProvider with PPTWriter
-merge PreCreationStruct with OWriteStream_Impl
 merge SalInfoPrinter with PspSalInfoPrinter
 merge SalInstance with SalGenericInstance
 merge SalPrinter with PspSalPrinter
