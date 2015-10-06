@@ -546,7 +546,6 @@ namespace xmloff { namespace token {
         TOKEN( "data-label-number",               XML_DATA_LABEL_NUMBER ),
         TOKEN( "data-label-symbol",               XML_DATA_LABEL_SYMBOL ),
         TOKEN( "data-label-text",                 XML_DATA_LABEL_TEXT ),
-        TOKEN( "data-label-wrap",                 XML_DATA_LABEL_WRAP ),
         TOKEN( "data-pilot-field",                XML_DATA_PILOT_FIELD ),
         TOKEN( "data-pilot-grand-total",          XML_DATA_PILOT_GRAND_TOTAL ),
         TOKEN( "data-pilot-level",                XML_DATA_PILOT_LEVEL ),
