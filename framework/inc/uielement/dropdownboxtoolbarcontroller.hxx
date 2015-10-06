@@ -35,20 +35,7 @@ namespace framework
 
 class ListBoxControl;
 
-class IListBoxListener
-{
-    public:
-        virtual void Select() = 0;
-        virtual void DoubleClick() = 0;
-        virtual void GetFocus() = 0;
-        virtual void LoseFocus() = 0;
-        virtual bool PreNotify( NotifyEvent& rNEvt ) = 0;
-    protected:
-        ~IListBoxListener() {}
-};
-
-class DropdownToolbarController : public IListBoxListener,
-                                  public ComplexToolbarController
+class DropdownToolbarController : public ComplexToolbarController
 
 {
     public:
@@ -63,12 +50,12 @@ class DropdownToolbarController : public IListBoxListener,
         // XComponent
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // IListBoxListener
-        virtual void Select() SAL_OVERRIDE;
-        virtual void DoubleClick() SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void LoseFocus() SAL_OVERRIDE;
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        // called from ListBoxControl
+        void Select();
+        void DoubleClick();
+        void GetFocus();
+        void LoseFocus();
+        bool PreNotify( NotifyEvent& rNEvt );
 
     protected:
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) SAL_OVERRIDE;

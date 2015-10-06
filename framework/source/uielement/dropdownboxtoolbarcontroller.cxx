@@ -52,7 +52,7 @@ namespace framework
 class ListBoxControl : public ListBox
 {
     public:
-        ListBoxControl( vcl::Window* pParent, WinBits nStyle, IListBoxListener* pListBoxListener );
+        ListBoxControl( vcl::Window* pParent, WinBits nStyle, DropdownToolbarController* pListBoxListener );
         virtual ~ListBoxControl();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -63,10 +63,10 @@ class ListBoxControl : public ListBox
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     private:
-        IListBoxListener* m_pListBoxListener;
+        DropdownToolbarController* m_pListBoxListener;
 };
 
-ListBoxControl::ListBoxControl( vcl::Window* pParent, WinBits nStyle, IListBoxListener* pListBoxListener ) :
+ListBoxControl::ListBoxControl( vcl::Window* pParent, WinBits nStyle, DropdownToolbarController* pListBoxListener ) :
     ListBox( pParent, nStyle )
     , m_pListBoxListener( pListBoxListener )
 {
