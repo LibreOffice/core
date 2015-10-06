@@ -104,6 +104,17 @@ namespace {
         rtl::Reference<PresenterController> mpPresenterController;
     };
 
+    /// This command restarts the presentation timer.
+    class RestartTimerCommand : public Command
+    {
+    public:
+        explicit RestartTimerCommand(const rtl::Reference<PresenterController>& rpPresenterController);
+        virtual ~RestartTimerCommand();
+        virtual void Execute() SAL_OVERRIDE;
+    private:
+        rtl::Reference<PresenterController> mpPresenterController;
+    };
+
     class SetNotesViewCommand : public Command
     {
     public:
@@ -408,6 +419,8 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
         return new GotoPreviousSlideCommand(rpPresenterController);
     if (rsURLPath == "SwitchMonitor")
         return new SwitchMonitorCommand(rpPresenterController);
+    if (rsURLPath == "RestartTimer")
+        return new RestartTimerCommand(rpPresenterController);
     if (rsURLPath == "ShowNotes")
         return new SetNotesViewCommand(true, rpPresenterController);
     if (rsURLPath == "ShowSlideSorter")
@@ -610,6 +623,21 @@ SwitchMonitorCommand::SwitchMonitorCommand (
 void SwitchMonitorCommand::Execute()
 {
     mpPresenterController->SwitchMonitors();
+}
+
+RestartTimerCommand::RestartTimerCommand (const rtl::Reference<PresenterController>& rpPresenterController)
+: mpPresenterController(rpPresenterController)
+{
+}
+
+RestartTimerCommand::~RestartTimerCommand()
+{
+}
+
+void RestartTimerCommand::Execute()
+{
+    if (IPresentationTime* pPresentationTime = mpPresenterController->GetPresentationTime())
+        pPresentationTime->restart();
 }
 
 //===== SetNotesViewCommand ===================================================

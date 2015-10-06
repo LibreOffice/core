@@ -310,7 +310,7 @@ namespace {
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) SAL_OVERRIDE;
     };
 
-    class PresentationTimeLabel : public TimeLabel
+    class PresentationTimeLabel : public TimeLabel, public IPresentationTime
     {
     public:
         static ::rtl::Reference<Element> Create (
@@ -320,6 +320,7 @@ namespace {
             const SharedElementMode& rpMouseOverMode,
             const SharedElementMode& rpSelectedMode,
             const SharedElementMode& rpDisabledMode) SAL_OVERRIDE;
+        virtual void restart() SAL_OVERRIDE;
     private:
         TimeFormatter maTimeFormatter;
         TimeValue maStartTimeValue;
@@ -1909,6 +1910,7 @@ void CurrentTimeLabel::SetModes (
 
 PresentationTimeLabel::~PresentationTimeLabel()
 {
+    mpToolBar->GetPresenterController()->SetPresentationTime(0);
 }
 
 PresentationTimeLabel::PresentationTimeLabel (
@@ -1916,6 +1918,12 @@ PresentationTimeLabel::PresentationTimeLabel (
     : TimeLabel(rpToolBar),
       maTimeFormatter(),
       maStartTimeValue()
+{
+    restart();
+    mpToolBar->GetPresenterController()->SetPresentationTime(this);
+}
+
+void PresentationTimeLabel::restart()
 {
     maStartTimeValue.Seconds = 0;
     maStartTimeValue.Nanosec = 0;

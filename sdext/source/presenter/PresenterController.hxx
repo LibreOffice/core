@@ -68,6 +68,14 @@ namespace {
     > PresenterControllerInterfaceBase;
 }
 
+/// Represents an element in the toolbar that shows the time elapsed since the presentation started.
+class IPresentationTime
+{
+public:
+    virtual void restart() = 0;
+    virtual ~IPresentationTime();
+};
+
 /** The controller of the presenter screen is responsible for telling the
     individual views which slides to show.  Additionally it provides access
     to frequently used values of the current theme.
@@ -132,6 +140,9 @@ public:
         const bool bIsSlideSorterActive,
         const bool bIsNotesViewActive,
         const bool bIsHelpViewActive);
+
+    void SetPresentationTime(IPresentationTime* pPresentationTime);
+    IPresentationTime* GetPresentationTime();
 
     // XConfigurationChangeListener
 
@@ -215,6 +226,7 @@ private:
     css::uno::Reference<css::util::XURLTransformer> mxUrlTransformer;
     ::rtl::Reference<PresenterAccessible> mpAccessibleObject;
     bool mbIsAccessibilityActive;
+    IPresentationTime* mpPresentationTime;
 
     void GetSlides (const sal_Int32 nOffset);
     void UpdateViews();

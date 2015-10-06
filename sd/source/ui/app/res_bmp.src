@@ -553,6 +553,11 @@ Bitmap BMP_PRESENTERSCREEN_BUTTON_SWITCH_MONITOR_NORMAL
     File = "presenterscreen-ButtonSwitchMonitorNormal.png";
 };
 
+Bitmap BMP_PRESENTERSCREEN_BUTTON_RESTART_TIMER_NORMAL
+{
+    File = "presenterscreen-ButtonRestartTimerNormal.png";
+};
+
 Bitmap BMP_PRESENTERSCREEN_BORDER_TOOLBAR_RIGHT
 {
     File = "presenterscreen-BorderToolbarRight.png";
@@ -606,6 +611,11 @@ Bitmap BMP_PRESENTERSCREEN_BUTTON_FRAME_RIGHT_MOUSE_OVER
 Bitmap BMP_PRESENTERSCREEN_BUTTON_SWITCH_MONITOR_MOUSE_OVER
 {
     File = "presenterscreen-ButtonSwitchMonitorMouseOver.png";
+};
+
+Bitmap BMP_PRESENTERSCREEN_BUTTON_RESTART_TIMER_MOUSE_OVER
+{
+    File = "presenterscreen-ButtonRestartTimerMouseOver.png";
 };
 
 Bitmap BMP_PRESENTERSCREEN_BUTTON_SLIDE_PREVIOUS_DISABLED

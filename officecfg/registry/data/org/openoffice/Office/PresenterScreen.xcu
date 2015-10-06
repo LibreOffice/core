@@ -345,6 +345,53 @@
             </prop>
           </node>
           <node oor:name="k" oor:op="replace">
+            <prop oor:name="Name">
+              <value>RestartTimer</value>
+            </prop>
+            <prop oor:name="Type">
+              <value>Button</value>
+            </prop>
+            <node oor:name="Normal">
+              <prop oor:name="Text">
+                <value xml:lang="en-US">Restart</value>
+              </prop>
+              <node oor:name="Icon">
+                <prop oor:name="NormalFileName">
+                  <value>bitmaps/ButtonRestartTimerNormal.png</value>
+                </prop>
+              </node>
+              <prop oor:name="Action">
+                <value>vnd.org.libreoffice.presenterscreen:RestartTimer</value>
+              </prop>
+              <node oor:name="Font">
+                <prop oor:name="Size">
+                  <value>12</value>
+                </prop>
+                <prop oor:name="Style">
+                  <value>Bold</value>
+                </prop>
+                <prop oor:name="Color">
+                  <value>B3B7BC</value>
+                </prop>
+                <prop oor:name="Anchor">
+                  <value>Center</value>
+                </prop>
+              </node>
+            </node>
+            <node oor:name="MouseOver">
+              <node oor:name="Icon">
+                <prop oor:name="NormalFileName">
+                  <value>bitmaps/ButtonRestartTimerMouseOver.png</value>
+                </prop>
+              </node>
+              <node oor:name="Font">
+                <prop oor:name="Color">
+                  <value>FFFFFF</value>
+                </prop>
+              </node>
+            </node>
+          </node>
+          <node oor:name="l" oor:op="replace">
             <prop oor:name="Type">
               <value>VerticalSeparator</value>
             </prop>
@@ -356,7 +403,7 @@
               </node>
             </node>
           </node>
-          <node oor:name="l" oor:op="replace">
+          <node oor:name="m" oor:op="replace">
             <prop oor:name="Name">
               <value>SwitchMonitor</value>
             </prop>
@@ -410,7 +457,7 @@
               </node>
             </node>
           </node>
-          <node oor:name="m" oor:op="replace">
+          <node oor:name="n" oor:op="replace">
             <prop oor:name="Type">
               <value>VerticalSeparator</value>
             </prop>
@@ -422,7 +469,7 @@
               </node>
             </node>
           </node>
-          <node oor:name="n" oor:op="replace">
+          <node oor:name="o" oor:op="replace">
             <prop oor:name="Name">
               <value>Help</value>
             </prop>

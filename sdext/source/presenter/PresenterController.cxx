@@ -70,6 +70,10 @@ namespace {
 
 namespace sdext { namespace presenter {
 
+IPresentationTime::~IPresentationTime()
+{
+}
+
 PresenterController::InstanceContainer PresenterController::maInstances;
 
 ::rtl::Reference<PresenterController> PresenterController::Instance (
@@ -702,6 +706,16 @@ void PresenterController::RequestViews (
         else
             HideView(sViewURL);
     }
+}
+
+void PresenterController::SetPresentationTime(IPresentationTime* pPresentationTime)
+{
+    mpPresentationTime = pPresentationTime;
+}
+
+IPresentationTime* PresenterController::GetPresentationTime()
+{
+    return mpPresentationTime;
 }
 
 //----- XConfigurationChangeListener ------------------------------------------
