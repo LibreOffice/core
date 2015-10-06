@@ -60,12 +60,6 @@ namespace basegfx
         return *this;
     }
 
-    B2IVector operator*( const B2DHomMatrix& rMat, const B2IVector& rVec )
-    {
-        B2IVector aRes( rVec );
-        return aRes*=rMat;
-    }
-
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

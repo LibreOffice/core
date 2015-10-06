@@ -418,25 +418,6 @@ namespace basegfx
                 testLastLine();
             }
 
-            void doNormalize()
-            {
-                if(mpLine)
-                {
-                    const double fHomValue(get((RowSize - 1), (RowSize - 1)));
-
-                    for(sal_uInt16 a(0); a < RowSize; a++)
-                    {
-                        for(sal_uInt16 b(0); b < RowSize; b++)
-                        {
-                            set(a, b, get(a, b) / fHomValue);
-                        }
-                    }
-
-                    // evtl. get rid of last matrix line
-                    testLastLine();
-                }
-            }
-
             double doDeterminant() const
             {
                 ImplHomMatrixTemplate aWork(*this);
@@ -459,35 +440,6 @@ namespace basegfx
                 }
 
                 return fRetval;
-            }
-
-            double doTrace() const
-            {
-                double fTrace = (mpLine) ? 0.0 : 1.0;
-                const sal_uInt16 nMaxLine(
-                    sal::static_int_cast<sal_uInt16>(mpLine ? RowSize : (RowSize - 1)) );
-
-                for(sal_uInt16 a(0); a < nMaxLine; a++)
-                {
-                    fTrace += get(a, a);
-                }
-
-                return fTrace;
-            }
-
-            void doTranspose()
-            {
-                for(sal_uInt16 a(0); a < (RowSize - 1); a++)
-                {
-                    for(sal_uInt16 b(a + 1); b < RowSize; b++)
-                    {
-                        const double fTemp(get(a, b));
-                        set(a, b, get(b, a));
-                        set(b, a, fTemp);
-                    }
-                }
-
-                testLastLine();
             }
 
             void doAddMatrix(const ImplHomMatrixTemplate& rMat)

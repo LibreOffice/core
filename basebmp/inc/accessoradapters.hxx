@@ -92,22 +92,10 @@ public:
     {}
 
 
-
-    WrappedAccessor const& getWrappedAccessor() const { return maAccessor; }
-    WrappedAccessor&       getWrappedAccessor() { return maAccessor; }
-
-
-
-    value_type getter(typename GetterFunctor::argument_type v) const
-    {
-        return maGetterFunctor(v);
-    }
     typename SetterFunctor::result_type setter(argument_type v) const
     {
         return maSetterFunctor(v);
     }
-
-
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
@@ -130,16 +118,6 @@ public:
             maSetterFunctor(
                 vigra::detail::RequiresExplicitCast<argument_type>::cast(value) ),
             i );
-    }
-
-    template< typename V, class Iterator, class Difference >
-    void set(V const& value, Iterator const& i, Difference const& diff) const
-    {
-        maAccessor.set(
-            maSetterFunctor(
-                vigra::detail::RequiresExplicitCast<argument_type>::cast(value) ),
-            i,
-            diff );
     }
 
 };
@@ -203,19 +181,6 @@ public:
 
 
 
-    WrappedAccessor const& getWrappedAccessor() const { return maAccessor; }
-    WrappedAccessor&       getWrappedAccessor() { return maAccessor; }
-
-
-
-    static typename SetterFunctor::result_type setter(
-        typename SetterFunctor::first_argument_type v1,
-        argument_type                               v2 )
-    {
-        return maSetterFunctor(v1,v2);
-    }
-
-
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
@@ -238,16 +203,6 @@ public:
             maFunctor(maAccessor(i),
                       vigra::detail::RequiresExplicitCast<argument_type>::cast(value)),
             i );
-    }
-
-    template< typename V, class Iterator, class Difference >
-    void set(V const& value, Iterator const& i, Difference const& diff) const
-    {
-        maAccessor.set(
-            maFunctor(maAccessor(i,diff),
-                      vigra::detail::RequiresExplicitCast<argument_type>::cast(value)),
-            i,
-            diff );
     }
 
 };
@@ -338,19 +293,6 @@ public:
     WrappedAccessor1 const& get1stWrappedAccessor() const { return ma1stAccessor; }
     WrappedAccessor1&       get1stWrappedAccessor() { return ma1stAccessor; }
 
-    WrappedAccessor2 const& get2ndWrappedAccessor() const { return ma2ndAccessor; }
-    WrappedAccessor2&       get2ndWrappedAccessor() { return ma2ndAccessor; }
-
-
-
-    static typename Functor::result_type setter(
-        typename Functor::first_argument_type  v1,
-        typename Functor::second_argument_type v2,
-        argument_type                          v3 )
-    {
-        return maSetterFunctor(v1,v2,v3);
-    }
-
 
 
     template< class Iterator >
@@ -375,17 +317,6 @@ public:
                       ma2ndAccessor(i.second()),
                       vigra::detail::RequiresExplicitCast<argument_type>::cast(value)),
             i.first() );
-    }
-
-    template< typename V, class Iterator, class Difference >
-    void set(V const& value, Iterator const& i, Difference const& diff) const
-    {
-        ma1stAccessor.set(
-            maFunctor(ma1stAccessor(i.first(), diff),
-                      ma2ndAccessor(i.second(),diff),
-                      vigra::detail::RequiresExplicitCast<argument_type>::cast(value)),
-            i.first(),
-            diff );
     }
 
 };
@@ -459,13 +390,6 @@ public:
 
 
 
-    WrappedAccessor1 const& get1stWrappedAccessor() const { return ma1stAccessor; }
-    WrappedAccessor1&       get1stWrappedAccessor() { return ma1stAccessor; }
-
-    WrappedAccessor2 const& get2ndWrappedAccessor() const { return ma2ndAccessor; }
-    WrappedAccessor2&       get2ndWrappedAccessor() { return ma2ndAccessor; }
-
-
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
@@ -482,34 +406,6 @@ public:
     }
 
 
-
-    template< typename V, class Iterator >
-    void set(V const& value, Iterator const& i) const
-    {
-        ma1stAccessor.set(
-            vigra::detail::RequiresExplicitCast<typename WrappedAccessor1::value_type>::cast(
-                value.first),
-            i.first() );
-        ma2ndAccessor.set(
-            vigra::detail::RequiresExplicitCast<typename WrappedAccessor2::value_type>::cast(
-                value.second),
-            i.second() );
-    }
-
-    template< typename V, class Iterator, class Difference >
-    void set(V const& value, Iterator const& i, Difference const& diff) const
-    {
-        ma1stAccessor.set(
-            vigra::detail::RequiresExplicitCast<typename WrappedAccessor1::value_type>::cast(
-                value.first),
-            i.first(),
-            diff );
-        ma2ndAccessor.set(
-            vigra::detail::RequiresExplicitCast<typename WrappedAccessor2::value_type>::cast(
-                value.second),
-            i.second(),
-            diff );
-    }
 
 };
 

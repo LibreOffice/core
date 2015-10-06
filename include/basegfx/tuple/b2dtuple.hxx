@@ -221,20 +221,6 @@ namespace basegfx
     // external operators
 
 
-    inline B2DTuple minimum(const B2DTuple& rTupA, const B2DTuple& rTupB)
-    {
-        return B2DTuple(
-            std::min(rTupB.getX(), rTupA.getX()),
-            std::min(rTupB.getY(), rTupA.getY()));
-    }
-
-    inline B2DTuple maximum(const B2DTuple& rTupA, const B2DTuple& rTupB)
-    {
-        return B2DTuple(
-            std::max(rTupB.getX(), rTupA.getX()),
-            std::max(rTupB.getY(), rTupA.getY()));
-    }
-
     inline B2DTuple absolute(const B2DTuple& rTup)
     {
         B2DTuple aAbs(
@@ -270,13 +256,6 @@ namespace basegfx
         return B2DTuple(
             rOld1.getX() == rOld2.getX() ? rOld1.getX() : (rOld1.getX() + rOld2.getX()) * 0.5,
             rOld1.getY() == rOld2.getY() ? rOld1.getY() : (rOld1.getY() + rOld2.getY()) * 0.5);
-    }
-
-    inline B2DTuple average(const B2DTuple& rOld1, const B2DTuple& rOld2, const B2DTuple& rOld3)
-    {
-        return B2DTuple(
-            (rOld1.getX() == rOld2.getX() && rOld2.getX() == rOld3.getX()) ? rOld1.getX() : (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
-            (rOld1.getY() == rOld2.getY() && rOld2.getY() == rOld3.getY()) ? rOld1.getY() : (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0));
     }
 
     inline B2DTuple operator+(const B2DTuple& rTupA, const B2DTuple& rTupB)
@@ -325,14 +304,6 @@ namespace basegfx
     {
         B2DTuple aNew(rTup);
         aNew /= t;
-        return aNew;
-    }
-
-    inline B2DTuple operator/(double t, const B2DTuple& rTup)
-    {
-        B2DTuple aNew(t, t);
-        B2DTuple aTmp(rTup);
-        aNew /= aTmp;
         return aNew;
     }
 
