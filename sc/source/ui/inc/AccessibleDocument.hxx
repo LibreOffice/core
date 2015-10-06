@@ -260,7 +260,7 @@ protected:
 private:
     ScTabViewShell* mpViewShell;
     ScSplitPos      meSplitPos;
-    ScAccessibleSpreadsheet* mpAccessibleSpreadsheet;
+    rtl::Reference<ScAccessibleSpreadsheet> mpAccessibleSpreadsheet;
     ScChildrenShapes* mpChildrenShapes;
     ScAccessibleEditObject* mpTempAccEdit;
     com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> mxTempAcc;

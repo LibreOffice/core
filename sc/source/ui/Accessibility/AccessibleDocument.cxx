@@ -1404,7 +1404,6 @@ ScAccessibleDocument::ScAccessibleDocument(
     : ScAccessibleDocumentBase(rxParent),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
-    mpAccessibleSpreadsheet(NULL),
     mpChildrenShapes(NULL),
     mpTempAccEdit(NULL),
     mbCompleteSheetSelected(false)
@@ -1519,7 +1518,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if (mxTempAcc.is() && mpTempAccEdit)
                 mpTempAccEdit->LostFocus();
-            else if (mpAccessibleSpreadsheet)
+            else if (mpAccessibleSpreadsheet.is())
                 mpAccessibleSpreadsheet->LostFocus();
             else
                 CommitFocusLost();
@@ -1549,7 +1548,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
             if (mxTempAcc.is() && mpTempAccEdit)
                 mpTempAccEdit->GotFocus();
-            else if (mpAccessibleSpreadsheet)
+            else if (mpAccessibleSpreadsheet.is())
                 mpAccessibleSpreadsheet->GotFocus();
             else
                 CommitFocusGained();
@@ -1561,7 +1560,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const SfxSimpleHint* pSimpleHint = static_cast<const SfxSimpleHint*>(&rHint);
         // only notify if child exist, otherwise it is not necessary
         if ((pSimpleHint->GetId() == SC_HINT_ACC_TABLECHANGED) &&
-            mpAccessibleSpreadsheet)
+            mpAccessibleSpreadsheet.is())
         {
             FreeAccessibleSpreadsheet();
             if (mpChildrenShapes)
@@ -1581,7 +1580,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             aEvent.Source = uno::Reference< XAccessibleContext >(this);
             CommitChange(aEvent); // all children changed
 
-            if (mpAccessibleSpreadsheet)
+            if (mpAccessibleSpreadsheet.is())
                 mpAccessibleSpreadsheet->FireFirstCellFocus();
         }
         else if (pSimpleHint->GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
@@ -1604,7 +1603,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     AddChild(xAcc, true);
 
-                    if (mpAccessibleSpreadsheet)
+                    if (mpAccessibleSpreadsheet.is())
                         mpAccessibleSpreadsheet->LostFocus();
                     else
                         CommitFocusLost();
@@ -1622,7 +1621,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                 mpTempAccEdit = NULL;
                 RemoveChild(mxTempAcc, true);
-                if (mpAccessibleSpreadsheet && mpViewShell && mpViewShell->IsActive())
+                if (mpAccessibleSpreadsheet.is() && mpViewShell && mpViewShell->IsActive())
                     mpAccessibleSpreadsheet->GotFocus();
                 else if( mpViewShell && mpViewShell->IsActive())
                     CommitFocusGained();
@@ -1643,12 +1642,12 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     CommitChange(aEvent);
 
-                    if (mpAccessibleSpreadsheet)
+                    if (mpAccessibleSpreadsheet.is())
                         mpAccessibleSpreadsheet->BoundingBoxChanged();
-                    if (mpAccessibleSpreadsheet && mpViewShell && mpViewShell->IsActive())
+                    if (mpAccessibleSpreadsheet.is() && mpViewShell && mpViewShell->IsActive())
                         mpAccessibleSpreadsheet->FireFirstCellFocus();
                 }
-                else if (mpAccessibleSpreadsheet)
+                else if (mpAccessibleSpreadsheet.is())
                 {
                     mpAccessibleSpreadsheet->VisAreaChanged();
                 }
@@ -1665,7 +1664,7 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
         throw (uno::RuntimeException, std::exception)
 {
     bool bSelectionChanged(false);
-    if (mpAccessibleSpreadsheet)
+    if (mpAccessibleSpreadsheet.is())
     {
         bool bOldSelected(mbCompleteSheetSelected);
         mbCompleteSheetSelected = IsTableSelected();
@@ -2218,23 +2217,21 @@ SCTAB ScAccessibleDocument::getVisibleTable() const
 uno::Reference < XAccessible >
     ScAccessibleDocument::GetAccessibleSpreadsheet()
 {
-    if (!mpAccessibleSpreadsheet && mpViewShell)
+    if (!mpAccessibleSpreadsheet.is() && mpViewShell)
     {
         mpAccessibleSpreadsheet = new ScAccessibleSpreadsheet(this, mpViewShell, getVisibleTable(), meSplitPos);
-        mpAccessibleSpreadsheet->acquire();
         mpAccessibleSpreadsheet->Init();
         mbCompleteSheetSelected = IsTableSelected();
     }
-    return mpAccessibleSpreadsheet;
+    return mpAccessibleSpreadsheet.get();
 }
 
 void ScAccessibleDocument::FreeAccessibleSpreadsheet()
 {
-    if (mpAccessibleSpreadsheet)
+    if (mpAccessibleSpreadsheet.is())
     {
         mpAccessibleSpreadsheet->dispose();
-        mpAccessibleSpreadsheet->release();
-        mpAccessibleSpreadsheet = NULL;
+        mpAccessibleSpreadsheet.clear();
     }
 }
 
@@ -2481,7 +2478,7 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::
             {
                 return aSeq;
             }
-            else if( mpAccessibleSpreadsheet )
+            else if( mpAccessibleSpreadsheet.is() )
             {
                 uno::Reference < XAccessible > xFindCellAcc = mpAccessibleSpreadsheet->GetActiveCell();
                 // add xFindCellAcc to the return the Sequence
