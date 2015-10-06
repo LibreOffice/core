@@ -35,26 +35,7 @@ namespace framework
 
 class SpinfieldControl;
 
-class ISpinfieldListener
-{
-    public:
-        virtual void Up() = 0;
-        virtual void Down() = 0;
-        virtual void First() = 0;
-        virtual void Last() = 0;
-        virtual void KeyInput( const KeyEvent& rKEvt ) = 0;
-        virtual void Modify() = 0;
-        virtual void GetFocus() = 0;
-        virtual void StateChanged( StateChangedType nType ) = 0;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) = 0;
-        virtual bool PreNotify( NotifyEvent& rNEvt ) = 0;
-
-    protected:
-        ~ISpinfieldListener() {}
-};
-
-class SpinfieldToolbarController : public ISpinfieldListener,
-                                   public ComplexToolbarController
+class SpinfieldToolbarController : public ComplexToolbarController
 
 {
     public:
@@ -69,17 +50,17 @@ class SpinfieldToolbarController : public ISpinfieldListener,
         // XComponent
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // ISpinfieldListener
-        virtual void Up() SAL_OVERRIDE;
-        virtual void Down() SAL_OVERRIDE;
-        virtual void First() SAL_OVERRIDE;
-        virtual void Last() SAL_OVERRIDE;
-        virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-        virtual void Modify() SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        // called from SpinfieldControl
+        void Up();
+        void Down();
+        void First();
+        void Last();
+        void KeyInput( const KeyEvent& rKEvt );
+        void Modify();
+        void GetFocus();
+        void StateChanged( StateChangedType nType );
+        void DataChanged( const DataChangedEvent& rDCEvt );
+        bool PreNotify( NotifyEvent& rNEvt );
 
     protected:
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) SAL_OVERRIDE;
