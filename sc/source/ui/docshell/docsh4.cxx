@@ -67,6 +67,7 @@ using namespace ::com::sun::star;
 #include <svl/PasswordHelper.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include "docuno.hxx"
@@ -452,11 +453,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 if (nCanUpdate == com::sun::star::document::UpdateDocMode::NO_UPDATE)
                     nSet = LM_NEVER;
-                else if (nCanUpdate == com::sun::star::document::UpdateDocMode::QUIET_UPDATE &&
-                    nSet == LM_ON_DEMAND)
-                    nSet = LM_NEVER;
                 else if (nCanUpdate == com::sun::star::document::UpdateDocMode::FULL_UPDATE)
                     nSet = LM_ALWAYS;
+
+                if (nSet == LM_ALWAYS && !(SvtSecurityOptions().GetMacroSecurityLevel() == 0))
+                    nSet = LM_ON_DEMAND;
+                if (nCanUpdate == com::sun::star::document::UpdateDocMode::QUIET_UPDATE &&
+                   nSet == LM_ON_DEMAND)
+                   nSet = LM_NEVER;
 
                 if(nSet==LM_ON_DEMAND)
                 {

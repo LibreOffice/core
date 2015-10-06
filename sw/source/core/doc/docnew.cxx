@@ -118,6 +118,7 @@
 
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
+#include <unotools/securityoptions.hxx>
 
 //UUUU
 #include <svx/xfillit0.hxx>
@@ -1016,6 +1017,13 @@ void SwDoc::UpdateLinks( sal_Bool bUI )
             case document::UpdateDocMode::NO_UPDATE:   bUpdate = sal_False;break;
             case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = sal_False; break;
             case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = sal_True; break;
+        }
+        if (nLinkMode == AUTOMATIC && !bAskUpdate)
+        {
+            if (!(SvtSecurityOptions().GetMacroSecurityLevel() == 0))
+            {
+                bAskUpdate = true;
+            }
         }
         if( bUpdate && (bUI || !bAskUpdate) )
         {
