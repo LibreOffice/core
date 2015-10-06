@@ -481,6 +481,10 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
     splash->gc = XCreateGC( splash->display, splash->win, value_mask, &values );
 
     size_hints.flags = PPosition | PSize | PMinSize | PMaxSize;
+    size_hints.x = display_x_pos;
+    size_hints.y = display_y_pos;
+    size_hints.width = splash->width;
+    size_hints.height = splash->height;
     size_hints.min_width = splash->width;
     size_hints.max_width = splash->width;
     size_hints.min_height = splash->height;
