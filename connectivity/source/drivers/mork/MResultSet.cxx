@@ -1516,7 +1516,7 @@ bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
             "connectivity.mork", "return False, m_nRowPos = " << m_nRowPos);
         return false;
     }
-    sal_Int32 nCurCard = nCurPos;
+    sal_Int32 nCurCard;
     if ( nCurPos < (sal_Int32)m_pKeySet->get().size() ) //The requested row is exist in m_pKeySet, so we just use it
     {
         nCurCard = (m_pKeySet->get())[nCurPos-1];
