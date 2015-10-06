@@ -30,6 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu.changeset_36801.patch.1 \
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.diff) \
 	external/icu/icu.vc15.patch \
+	$(if $(filter EMSCRIPTEN,$(OS)),external/icu/icu4c-emscripten.patch.1) \
 ))
 
 # vim: set noet sw=4 ts=4:
