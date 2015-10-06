@@ -1511,7 +1511,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         pLine->SetValid();
                         if ( bCalcCharPositions && bQuickFormat )
                         {
-                            bCalcCharPositions = false;
                             bLineBreak = false;
                             pParaPortion->CorrectValuesBehindLastFormattedLine( nLine );
                             break;
@@ -1525,7 +1524,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     //  then the text width does not have to be determined anew:
                     if ( nEnd == ( aSaveLine.GetEnd() + nInvalidDiff ) )
                     {
-                        bCalcCharPositions = false;
                         bLineBreak = false;
                         pParaPortion->CorrectValuesBehindLastFormattedLine( nLine );
                         break;
