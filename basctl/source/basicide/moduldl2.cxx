@@ -786,7 +786,7 @@ void LibPage::InsertLib()
         Reference< script::XLibraryContainer2 > xDlgLibContImport;
 
         // file URLs
-        Sequence< OUString > aFiles = xFP->getFiles();
+        Sequence< OUString > aFiles = xFP->getSelectedFiles();
         INetURLObject aURLObj( aFiles[0] );
         INetURLObject aModURLObj( aURLObj );
         INetURLObject aDlgURLObj( aURLObj );
@@ -1223,7 +1223,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
     {
         GetExtraData()->SetAddLibPath(xFP->getDisplayDirectory());
 
-        Sequence< OUString > aFiles = xFP->getFiles();
+        Sequence< OUString > aFiles = xFP->getSelectedFiles();
         INetURLObject aURL( aFiles[0] );
         if( aURL.getExtension().isEmpty() )
             aURL.setExtension( "oxt" );
