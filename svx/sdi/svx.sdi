@@ -4002,10 +4002,10 @@ SfxVoidItem FontDialog SID_CHAR_DLG
     Asynchron;
 
     /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
 
