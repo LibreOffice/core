@@ -298,8 +298,7 @@ public:
 
     inline bool IsOnlineSpell() const
         { return !bReadonly && (nCoreOptions & VIEWOPT_1_ONLINESPELL) != 0; }
-    inline void SetOnlineSpell( bool b )
-        { b ? (nCoreOptions |= VIEWOPT_1_ONLINESPELL ) : ( nCoreOptions &= ~VIEWOPT_1_ONLINESPELL); }
+    void SetOnlineSpell( bool b );
 
     inline bool IsViewMetaChars() const
         { return !bReadonly && (nCoreOptions & VIEWOPT_1_VIEWMETACHARS) != 0; }

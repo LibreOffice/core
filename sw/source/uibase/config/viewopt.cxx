@@ -317,6 +317,11 @@ bool SwViewOption::IsAutoCompleteWords()
     return rFlags.bAutoCmpltCollectWords;
 }
 
+void SwViewOption::SetOnlineSpell(bool b)
+{
+    b ? (nCoreOptions |= VIEWOPT_1_ONLINESPELL ) : ( nCoreOptions &= ~VIEWOPT_1_ONLINESPELL);
+}
+
 AuthorCharAttr::AuthorCharAttr() :
     nItemId (SID_ATTR_CHAR_UNDERLINE),
     nAttr   (UNDERLINE_SINGLE),
