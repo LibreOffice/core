@@ -21,7 +21,6 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
-	<!-- UTI declarations for OS X >= 10.4	-->
 	<key>UTExportedTypeDeclarations</key>
 
 	<key>UTImportedTypeDeclarations</key>
