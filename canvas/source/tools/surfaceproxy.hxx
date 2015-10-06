@@ -114,8 +114,6 @@ namespace canvas
         // 32bit rgba and can have any size.
         canvas::IColorBufferSharedPtr mpBuffer;
     };
-
-    typedef std::shared_ptr< SurfaceProxy > SurfaceProxySharedPtr;
 }
 
 #endif

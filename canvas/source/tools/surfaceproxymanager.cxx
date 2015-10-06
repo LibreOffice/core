@@ -53,7 +53,7 @@ namespace canvas
             // not much to do for now, simply allocate a new surface
             // proxy from our internal pool and initialize this thing
             // properly. we *don't* create a hardware surface for now.
-            return SurfaceProxySharedPtr(new SurfaceProxy(pBuffer,mpPageManager));
+            return std::shared_ptr<ISurfaceProxy>(new SurfaceProxy(pBuffer,mpPageManager));
         }
 
     private:
