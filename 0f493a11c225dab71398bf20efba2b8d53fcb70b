@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_0ccac3a1",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2015-10-06T08:23:18Z",
+      "side": 1,
+      "message": "Is this necessary?  Looks to me as if this was not in the original behaviour?",
+      "revId": "0f493a11c225dab71398bf20efba2b8d53fcb70b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_8ce7f33f",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2015-10-06T08:23:18Z",
+      "side": 1,
+      "message": "It seems to me that this body is actually a copy of lcl_InsertMeanValueLine()?  Could we just do:\n\nfor( const auto\u0026 xSrs : aSeries )\n    lcl_InsertMeanValueLine(m_xCC, xSrs);\n\ninstead?",
+      "range": {
+        "startLine": 346,
+        "startChar": 8,
+        "endLine": 346,
+        "endChar": 9
+      },
+      "revId": "0f493a11c225dab71398bf20efba2b8d53fcb70b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_6ce41f3b",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2015-10-06T08:23:18Z",
+      "side": 1,
+      "message": "I\u0027d personally prefer to keep the resetEquationPosition method, just change it so that it accepts xCurve parameter, and call it here; but not a big deal :-)",
+      "revId": "0f493a11c225dab71398bf20efba2b8d53fcb70b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
