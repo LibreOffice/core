@@ -227,23 +227,6 @@ namespace basegfx
     // external operators
 
 
-    /** get a 3D Vector which is in 2D (ignoring
-        the Z-Coordinate) perpendicular to a given 3D Vector
-
-        @attention This only works if the given 3D Vector is normalized.
-
-        @param rNormalizedVec
-        A normalized 3D Vector.
-
-        @return
-        A 3D Vector perpendicular to the given one in X,Y (2D).
-    */
-    inline B3DVector getPerpendicular2D( const B3DVector& rNormalizedVec )
-    {
-        B3DVector aPerpendicular(-rNormalizedVec.getY(), rNormalizedVec.getX(), rNormalizedVec.getZ());
-        return aPerpendicular;
-    }
-
     /** Test two vectors which need not to be normalized for parallelism
 
         @param rVecA

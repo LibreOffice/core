@@ -122,10 +122,6 @@ namespace basegfx
 
         BASEGFX_DLLPUBLIC ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const css::geometry::AffineMatrix3D& matrix );
 
-        BASEGFX_DLLPUBLIC css::geometry::Matrix2D&
-            matrixFromHomMatrix( css::geometry::Matrix2D&         matrix,
-                                 const ::basegfx::B2DHomMatrix&   transform);
-
         // Geometry conversions
 
 

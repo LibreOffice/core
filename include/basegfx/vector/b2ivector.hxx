@@ -132,13 +132,6 @@ namespace basegfx
 
     // external operators
 
-    /** Transform vector by given transformation matrix.
-
-        Since this is a vector, translational components of the
-        matrix are disregarded.
-    */
-    BASEGFX_DLLPUBLIC B2IVector operator*( const B2DHomMatrix& rMat, const B2IVector& rVec );
-
     template< typename charT, typename traits >
     inline std::basic_ostream<charT, traits> & operator <<(
         std::basic_ostream<charT, traits> & stream, const basegfx::B2IVector& vector )
