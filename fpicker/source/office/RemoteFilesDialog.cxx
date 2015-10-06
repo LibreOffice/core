@@ -344,7 +344,7 @@ void RemoteFilesDialog::dispose()
     m_pAddService_btn.clear();
     m_pServices_lb.clear();
     m_pFilter_lb.clear();
-    m_pName_ed.clear();
+    m_pName_ed.disposeAndClear();
     m_pNewFolder.clear();
 
     ModalDialog::dispose();
