@@ -1195,7 +1195,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         if ( aStatus.OneCharPerLine() )
         {
             // State before Portion (apart from nTmpWidth):
-            nPortionEnd = nTmpPos;
             nTmpPos -= pPortion ? pPortion->GetLen() : 0;
             nPortionStart = nTmpPos;
             nTmpPortion--;
