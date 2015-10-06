@@ -858,14 +858,20 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
 {
     const char* pServiceName=0;
-    if ( nDialog == SFX2_IMPL_DIALOG_SYSTEM )
-        pServiceName = FILE_OPEN_SERVICE_NAME_OOO;
-    else if ( nDialog == SFX2_IMPL_DIALOG_OOO )
-        pServiceName = FILE_OPEN_SERVICE_NAME_OOO;
-    else if ( nDialog == SFX2_IMPL_DIALOG_REMOTE )
-        pServiceName = "com.sun.star.ui.dialogs.RemoteFilePicker";
-    else
-        pServiceName = "com.sun.star.ui.dialogs.FilePicker";
+    switch (nDialog)
+    {
+        case SFX2_IMPL_DIALOG_SYSTEM:
+        case SFX2_IMPL_DIALOG_OOO:
+            pServiceName = "com.sun.star.ui.dialogs.OfficeFilePicker";
+            break;
+        case SFX2_IMPL_DIALOG_REMOTE:
+            pServiceName = "com.sun.star.ui.dialogs.RemoteFilePicker";
+            break;
+        default:
+            pServiceName = "com.sun.star.ui.dialogs.FilePicker";
+            break;
+    }
+
     OUString aService = OUString::createFromAscii( pServiceName );
 
     uno::Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
