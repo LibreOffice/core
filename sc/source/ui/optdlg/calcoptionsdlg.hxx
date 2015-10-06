@@ -53,6 +53,7 @@ public:
 private:
     void OpenCLAutomaticSelectionChanged();
     void SelectedDeviceChanged();
+    void CoupleEmptyAsZeroToStringConversion();
 
 private:
     VclPtr<CheckBox> mpEmptyAsZero;
