@@ -423,11 +423,9 @@ void setStackModeAtSeries(
     if( xCorrespondingCoordinateSystem.is() &&
         1 < xCorrespondingCoordinateSystem->getDimension() )
     {
-        sal_Int32 nAxisIndexCount = aAxisIndexSet.size();
-        if( !nAxisIndexCount )
+        if( aAxisIndexSet.empty() )
         {
             aAxisIndexSet.insert(0);
-            nAxisIndexCount = aAxisIndexSet.size();
         }
 
         for( ::std::set< sal_Int32 >::const_iterator aIt = aAxisIndexSet.begin();
