@@ -134,7 +134,6 @@ merge chart::LegendEntryProvider with chart::VSeriesPlotter
 merge chart::MarkHandleProvider with chart::SelectionHelper
 merge chart::ResourceChangeListener with chart::ChartTypeTabPage
 merge chart::WindowController with chart::ChartController
-merge comphelper::IMapModificationListener with comphelper::MapEnumerator
 merge comphelper::IPropertyInfoService with frm::ConcreteInfoService
 merge comphelper::NameContainerImpl with comphelper::NameContainer
 merge comphelper::OInteractionSelect with comphelper::OInteraction
