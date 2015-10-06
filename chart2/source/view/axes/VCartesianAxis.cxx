@@ -1134,19 +1134,12 @@ void VCartesianAxis::get2DAxisMainLine(
     //m_aAxisProperties might get updated and changed here because
     //    the label alignment and inner direction sign depends exactly of the choice of the axis line position which is made here in this method
 
-    double fMinX = m_pPosHelper->getLogicMinX();
-    double fMinY = m_pPosHelper->getLogicMinY();
-    double fMinZ = m_pPosHelper->getLogicMinZ();
-    double fMaxX = m_pPosHelper->getLogicMaxX();
-    double fMaxY = m_pPosHelper->getLogicMaxY();
-    double fMaxZ = m_pPosHelper->getLogicMaxZ();
-
-    double fXStart = fMinX;
-    double fYStart = fMinY;
-    double fZStart = fMinZ;
-    double fXEnd = fXStart;
-    double fYEnd = fYStart;
-    double fZEnd = fZStart;
+    double const fMinX = m_pPosHelper->getLogicMinX();
+    double const fMinY = m_pPosHelper->getLogicMinY();
+    double const fMinZ = m_pPosHelper->getLogicMinZ();
+    double const fMaxX = m_pPosHelper->getLogicMaxX();
+    double const fMaxY = m_pPosHelper->getLogicMaxY();
+    double const fMaxZ = m_pPosHelper->getLogicMaxZ();
 
     double fXOnXPlane = fMinX;
     double fXOther = fMaxX;
@@ -1183,6 +1176,13 @@ void VCartesianAxis::get2DAxisMainLine(
         fZOnZPlane = fMinZ;
         fZOther = fMaxZ;
     }
+
+    double fXStart = fMinX;
+    double fYStart = fMinY;
+    double fZStart = fMinZ;
+    double fXEnd;
+    double fYEnd;
+    double fZEnd = fZStart;
 
     if( 0==m_nDimensionIndex ) //x-axis
     {
