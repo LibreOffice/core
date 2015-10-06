@@ -207,6 +207,13 @@ formula/res/fapok.png cmd/sc_ok.png
 formula/res/fapopen.png cmd/sc_open.png
 formula/res/fx.png cmd/sc_dbviewfunctions.png
 
+# fpicker
+# ==============================================
+fpicker/res/fp011.png cmd/sc_firstpage.png
+fpicker/res/fp011.png cmd/sc_filecontrol.png
+fpicker/res/fp011.png cmd/sc_starshapes.png
+fpicker/res/fp011.png desktop/res/shared_16.png
+
 # FolderTree expanded icon
 # ==============================================
 svtools/res/folderop.png formula/res/fapopen.png
