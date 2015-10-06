@@ -3191,39 +3191,6 @@ namespace basegfx
             }
         }
 
-        bool containsOnlyHorizontalAndVerticalEdges(const B2DPolygon& rCandidate)
-        {
-            if(rCandidate.areControlPointsUsed())
-            {
-                return false;
-            }
-
-            const sal_uInt32 nPointCount(rCandidate.count());
-
-            if(nPointCount < 2)
-            {
-                return true;
-            }
-
-            const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount + 1 : nPointCount);
-            basegfx::B2DPoint aLast(rCandidate.getB2DPoint(0));
-
-            for(sal_uInt32 a(1); a < nEdgeCount; a++)
-            {
-                const sal_uInt32 nNextIndex(a % nPointCount);
-                const basegfx::B2DPoint aCurrent(rCandidate.getB2DPoint(nNextIndex));
-
-                if(!basegfx::fTools::equal(aLast.getX(), aCurrent.getX()) && !basegfx::fTools::equal(aLast.getY(), aCurrent.getY()))
-                {
-                    return false;
-                }
-
-                aLast = aCurrent;
-            }
-
-            return true;
-        }
-
         B2DVector getTangentEnteringPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex)
         {
             B2DVector aRetval(0.0, 0.0);

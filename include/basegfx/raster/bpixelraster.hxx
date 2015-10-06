@@ -64,13 +64,10 @@ namespace basegfx
 
         // coordinate calcs between X/Y and span
         sal_uInt32 getIndexFromXY(sal_uInt32 nX, sal_uInt32 nY) const { return (nX + (nY * mnWidth)); }
-        sal_uInt32 getXFromIndex(sal_uInt32 nIndex) const { return (nIndex % mnWidth); }
-        sal_uInt32 getYFromIndex(sal_uInt32 nIndex) const { return (nIndex / mnWidth); }
 
         // data access read
         sal_uInt32 getWidth() const { return mnWidth; }
         sal_uInt32 getHeight() const { return mnHeight; }
-        sal_uInt32 getCount() const { return mnCount; }
 
         // data access read only
         const BPixel& getBPixel(sal_uInt32 nIndex) const
