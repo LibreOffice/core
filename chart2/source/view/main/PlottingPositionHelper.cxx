@@ -365,8 +365,8 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
     double fTranslate =1.0;
     double fScale     =FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0;
 
-    double fTranslateLogicZ =fTranslate;
-    double fScaleLogicZ     =fScale;
+    double fTranslateLogicZ;
+    double fScaleLogicZ;
     {
         double fScaleDirectionZ = AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation ? 1.0 : -1.0;
         double MinZ = getLogicMinZ();
