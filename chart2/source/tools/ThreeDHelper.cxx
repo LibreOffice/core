@@ -1050,13 +1050,11 @@ void ThreeDHelper::getRotationFromDiagram( const uno::Reference< beans::XPropert
     }
     else
     {
-        fXAngle = BaseGFXHelper::Rad2Deg( fXAngle );
-        fYAngle = BaseGFXHelper::Rad2Deg( fYAngle );
-        fZAngle = BaseGFXHelper::Rad2Deg( fZAngle );
-
-        rnHorizontalAngleDegree = ::basegfx::fround(fXAngle);
-        rnVerticalAngleDegree = ::basegfx::fround(-1.0*fYAngle);
-        //nZRotation = ::basegfx::fround(-1.0*fZAngle);
+        rnHorizontalAngleDegree = basegfx::fround(
+            BaseGFXHelper::Rad2Deg(fXAngle));
+        rnVerticalAngleDegree = basegfx::fround(
+            -1.0 * BaseGFXHelper::Rad2Deg(fYAngle));
+        // nZRotation = basegfx::fround(-1.0 * BaseGFXHelper::Rad2Deg(fZAngle));
     }
 
     lcl_shiftAngleToIntervalMinus180To180( rnHorizontalAngleDegree );
