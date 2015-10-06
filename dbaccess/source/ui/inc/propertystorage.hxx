@@ -29,44 +29,26 @@ class SfxItemSet;
 namespace dbaui
 {
 
-    // PropertyStorage
-    class SAL_NO_VTABLE PropertyStorage
-    {
-    public:
-        virtual void getPropertyValue( css::uno::Any& _out_rValue ) const = 0;
-        virtual void setPropertyValue( const css::uno::Any& _rValue ) = 0;
-
-        virtual ~PropertyStorage();
-    };
-
-    typedef std::shared_ptr< PropertyStorage >      PPropertyStorage;
-    typedef ::std::map< sal_Int32, PPropertyStorage >   PropertyValues;
-
-    // SetItemPropertyStorage
-    typedef sal_uInt16  ItemId;
-
     /** a PropertyStorage implementation which stores the value in an item set
     */
-    class SetItemPropertyStorage : public PropertyStorage
+    class SetItemPropertyStorage
     {
     public:
-        SetItemPropertyStorage( SfxItemSet& _rItemSet, const ItemId _nItemID )
+        SetItemPropertyStorage( SfxItemSet& _rItemSet, const sal_uInt16 _nItemID )
             :m_rItemSet( _rItemSet )
             ,m_nItemID( _nItemID )
         {
         }
 
-        virtual ~SetItemPropertyStorage()
-        {
-        }
-
-        virtual void getPropertyValue( css::uno::Any& _out_rValue ) const SAL_OVERRIDE;
-        virtual void setPropertyValue( const css::uno::Any& _rValue ) SAL_OVERRIDE;
+        void getPropertyValue( css::uno::Any& _out_rValue ) const;
+        void setPropertyValue( const css::uno::Any& _rValue );
 
     private:
-        SfxItemSet&     m_rItemSet;
-        const ItemId    m_nItemID;
+        SfxItemSet&       m_rItemSet;
+        const sal_uInt16  m_nItemID;
     };
+
+    typedef ::std::map< sal_Int32, std::shared_ptr< SetItemPropertyStorage > >   PropertyValues;
 
 } // namespace dbaui
 

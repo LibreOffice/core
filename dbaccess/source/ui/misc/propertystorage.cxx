@@ -39,20 +39,14 @@ namespace dbaui
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
 
-    // PropertyStorage
-    PropertyStorage::~PropertyStorage()
-    {
-    }
-
     // helper
     namespace
     {
-        #undef UNOTYPE
         template < class ITEMTYPE, class UNOTYPE >
         class ItemAdapter
         {
         public:
-            static bool trySet( SfxItemSet& _rSet, ItemId _nItemId, const Any& _rValue )
+            static bool trySet( SfxItemSet& _rSet, sal_uInt16 _nItemId, const Any& _rValue )
             {
                 const SfxPoolItem& rItem( _rSet.Get( _nItemId ) );
                 const ITEMTYPE* pTypedItem = dynamic_cast< const ITEMTYPE* >( &rItem );

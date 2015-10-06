@@ -155,7 +155,6 @@ merge dbaui::(anonymous namespace)::ILabelProvider with dbaui::(anonymous namesp
 merge dbaui::IApplicationController with dbaui::OApplicationController
 merge dbaui::IEntryFilter with dbaui::(anonymous namespace)::FilterByEntryDataId
 merge dbaui::OOdbcLibWrapper with dbaui::OOdbcEnumeration
-merge dbaui::PropertyStorage with dbaui::SetItemPropertyStorage
 merge dbaui::SbaGridListener with dbaui::SbaXDataBrowserController
 merge dbmm::IMigrationProgress with dbmm::ProgressPage
 merge dbmm::IProgressConsumer with dbmm::ProgressDelegator
