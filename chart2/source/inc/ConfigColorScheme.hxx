@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CONFIGCOLORSCHEME_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CONFIGCOLORSCHEME_HXX
 
-#include "ConfigItemListener.hxx"
 #include "charttoolsdllapi.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
@@ -42,7 +41,6 @@ class ChartConfigItem;
 }
 
 class ConfigColorScheme :
-    public ConfigItemListener,
     public ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::XColorScheme,
         ::com::sun::star::lang::XServiceInfo >
@@ -64,13 +62,13 @@ public:
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
+    // ____ ConfigItemListener ____
+    SAL_DLLPRIVATE void notify( const OUString & rPropertyName );
+
 protected:
     // ____ XColorScheme ____
     SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getColorByIndex( ::sal_Int32 nIndex )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // ____ ConfigItemListener ____
-    SAL_DLLPRIVATE virtual void notify( const OUString & rPropertyName ) SAL_OVERRIDE;
 
 private:
     SAL_DLLPRIVATE void retrieveConfigColors();

@@ -129,7 +129,6 @@ merge cairocanvas::DeviceHelper with cairocanvas::SpriteDeviceHelper
 merge cairocanvas::Sprite with cairocanvas::CanvasCustomSpriteSpriteBase_Base
 merge canvas::ISurfaceProxy with canvas::SurfaceProxy
 merge canvas::ISurfaceProxyManager with canvas::SurfaceProxyManager
-merge chart::ConfigItemListener with chart::ConfigColorScheme
 merge chart::ExplicitValueProvider with chart::ChartView
 merge chart::LegendEntryProvider with chart::VSeriesPlotter
 merge chart::MarkHandleProvider with chart::SelectionHelper

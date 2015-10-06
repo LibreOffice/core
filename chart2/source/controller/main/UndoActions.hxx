@@ -19,8 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_UNDOACTIONS_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_UNDOACTIONS_HXX
 
-#include "ConfigItemListener.hxx"
-
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XUndoAction.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

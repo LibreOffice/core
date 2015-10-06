@@ -52,29 +52,25 @@ namespace impl
 class ChartConfigItem : public ::utl::ConfigItem
 {
 public:
-    explicit ChartConfigItem( ConfigItemListener & rListener );
-    virtual ~ChartConfigItem();
+    explicit ChartConfigItem( ConfigColorScheme & rListener );
+    virtual ~ChartConfigItem() {}
 
     void addPropertyNotification( const OUString & rPropertyName );
-
     uno::Any getProperty( const OUString & aPropertyName );
 
 protected:
     // ____ ::utl::ConfigItem ____
-    virtual void                    ImplCommit() SAL_OVERRIDE;
+    virtual void ImplCommit() SAL_OVERRIDE;
     virtual void Notify( const Sequence< OUString > & aPropertyNames ) SAL_OVERRIDE;
 
 private:
-    ConfigItemListener & m_rListener;
-    ::std::set< OUString >        m_aPropertiesToNotify;
+    ConfigColorScheme &      m_rListener;
+    ::std::set< OUString >   m_aPropertiesToNotify;
 };
 
-ChartConfigItem::ChartConfigItem( ConfigItemListener & rListener ) :
+ChartConfigItem::ChartConfigItem( ConfigColorScheme & rListener ) :
         ::utl::ConfigItem( "Office.Chart/DefaultColor" ),
     m_rListener( rListener )
-{}
-
-ChartConfigItem::~ChartConfigItem()
 {}
 
 void ChartConfigItem::Notify( const Sequence< OUString > & aPropertyNames )
