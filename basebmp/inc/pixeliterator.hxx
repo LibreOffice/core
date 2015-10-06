@@ -154,26 +154,6 @@ public:
         return y - rhs.y;
     }
 
-    value_type get() const
-    {
-        return *y();
-    }
-
-    value_type get(difference_type d) const
-    {
-        return *y(d);
-    }
-
-    void set( value_type v ) const
-    {
-        *y() = v;
-    }
-
-    void set( value_type v, difference_type d ) const
-    {
-        *y(d) = v;
-    }
-
     reference operator*() const
     {
         return *y();
@@ -222,11 +202,6 @@ private:
     pointer current() const
     {
         return y() + x;
-    }
-
-    pointer current(int dx, int dy) const
-    {
-        return y(dy) + x+dx;
     }
 
 public:
@@ -294,26 +269,6 @@ public:
     column_iterator columnIterator() const
     {
         return column_iterator(y,x);
-    }
-
-    value_type get() const
-    {
-        return *current();
-    }
-
-    value_type get(difference_type const & d) const
-    {
-        return *current(d.y, d.x);
-    }
-
-    void set( value_type v ) const
-    {
-        *current() = v;
-    }
-
-    void set( value_type v, difference_type const & d ) const
-    {
-        *current(d.y,d.x) = v;
     }
 
     reference operator*() const

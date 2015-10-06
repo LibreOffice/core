@@ -19,7 +19,7 @@
 Dump a list of calls to methods, and a list of method definitions.
 Then we will post-process the 2 lists and find the set of unused methods.
 
-Be warned that it produces around 4G of log file.
+Be warned that it produces around 5G of log file.
 
 The process goes something like this:
   $ make check
@@ -99,9 +99,6 @@ public:
     bool VisitCallExpr(CallExpr* );
     bool VisitFunctionDecl( const FunctionDecl* decl );
     bool VisitDeclRefExpr( const DeclRefExpr* );
-    bool VisitCXXConstructExpr( const CXXConstructExpr* );
-    bool VisitVarDecl( const VarDecl* );
-    bool VisitCXXRecordDecl( CXXRecordDecl* );
 private:
     void logCallToRootMethods(const FunctionDecl* functionDecl);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
@@ -216,22 +213,7 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
                 goto gotfunc;
         }
         /*
-        // ignore case where we can't determine the target of the call because we're inside a template
-        if (isa<CXXDependentScopeMemberExpr>(callee))
-            return true;
-        if (isa<UnresolvedLookupExpr>(callee))
-            return true;
-        if (isa<UnresolvedMemberExpr>(callee))
-            return true;
-        if (isa<DependentScopeDeclRefExpr>(callee))
-            return true;
-        // ignore this, doesn't really exist (side-effect of template expansion on scalar types)
-        if (isa<CXXPseudoDestructorExpr>(callee))
-            return true;
         expr->dump();
-        std::string name = compiler.getSourceManager().getFilename(expansionLoc);
-        std::string sourceLocation = name + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
-        cout << sourceLocation << endl;
         throw "Cant touch this";
         */
         return true;
@@ -246,28 +228,6 @@ gotfunc:
         TraverseFunctionDecl(calleeFunctionDecl);
 
     logCallToRootMethods(calleeFunctionDecl);
-    return true;
-}
-
-bool UnusedMethods::VisitCXXConstructExpr(const CXXConstructExpr* expr)
-{
-    const CXXConstructorDecl *consDecl = expr->getConstructor();
-    consDecl = consDecl->getCanonicalDecl();
-    if (consDecl->getTemplatedKind() == FunctionDecl::TemplatedKind::TK_NonTemplate
-        && !consDecl->isFunctionTemplateSpecialization()) {
-        return true;
-    }
-    // if we see a call to a constructor, it may effectively create a whole new class,
-    // if the constructor's class is templated.
-    if (!traversedFunctionSet.insert(fullyQualifiedName(consDecl)).second)
-        return true;
-
-    const CXXRecordDecl* parent = consDecl->getParent();
-    for( CXXRecordDecl::ctor_iterator it = parent->ctor_begin(); it != parent->ctor_end(); ++it)
-        TraverseCXXConstructorDecl(*it);
-    for( CXXRecordDecl::method_iterator it = parent->method_begin(); it != parent->method_end(); ++it)
-        TraverseCXXMethodDecl(*it);
-
     return true;
 }
 
@@ -308,57 +268,6 @@ bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
         return true;
     }
     logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl());
-    return true;
-}
-
-// this is for declarations of static variables that involve a template
-bool UnusedMethods::VisitVarDecl( const VarDecl* varDecl )
-{
-    varDecl = varDecl->getCanonicalDecl();
-
-    if (varDecl->getStorageClass() != SC_Static)
-        return true;
-    const CXXRecordDecl* recordDecl = varDecl->getType()->getAsCXXRecordDecl();
-    if (!recordDecl)
-        return true;
-// workaround clang-3.5 issue
-#if __clang_major__ > 3 || ( __clang_major__ == 3 && __clang_minor__ >= 6 )
-    if (!recordDecl->getTemplateInstantiationPattern())
-        return true;
-#endif
-    for( CXXRecordDecl::ctor_iterator it = recordDecl->ctor_begin(); it != recordDecl->ctor_end(); ++it)
-        TraverseCXXConstructorDecl(*it);
-    for( CXXRecordDecl::method_iterator it = recordDecl->method_begin(); it != recordDecl->method_end(); ++it)
-        TraverseCXXMethodDecl(*it);
-    return true;
-}
-
-// Sometimes a class will inherit from something, and in the process invoke a template,
-// which can create new methods.
-//
-bool UnusedMethods::VisitCXXRecordDecl( CXXRecordDecl* recordDecl )
-{
-    recordDecl = recordDecl->getCanonicalDecl();
-    if (!recordDecl->hasDefinition())
-        return true;
-// workaround clang-3.5 issue
-#if __clang_major__ > 3 || ( __clang_major__ == 3 && __clang_minor__ >= 6 )
-    for(CXXBaseSpecifier* baseSpecifier = recordDecl->bases_begin();
-        baseSpecifier != recordDecl->bases_end(); ++baseSpecifier)
-    {
-        const Type *baseType = baseSpecifier->getType().getTypePtr();
-        if (isa<TypedefType>(baseSpecifier->getType())) {
-            baseType = dyn_cast<TypedefType>(baseType)->desugar().getTypePtr();
-        }
-        if (isa<RecordType>(baseType)) {
-            const RecordType *baseRecord = dyn_cast<RecordType>(baseType);
-            CXXRecordDecl* baseRecordDecl = dyn_cast<CXXRecordDecl>(baseRecord->getDecl());
-            if (baseRecordDecl && baseRecordDecl->getTemplateInstantiationPattern()) {
-                TraverseCXXRecordDecl(baseRecordDecl);
-            }
-        }
-    }
-#endif
     return true;
 }
 

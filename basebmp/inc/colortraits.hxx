@@ -113,21 +113,9 @@ template< typename ColorType > struct ColorTraits
                           IntegerBlendFunctor< ColorType, AlphaType, polarity >,
                           BlendFunctor< ColorType, AlphaType, polarity > > {};
 
-    /// @return number of color channels
-    static int numChannels() { return 1; }
-
     /// Type of a color component (i.e. the type of an individual channel)
     typedef ColorType component_type;
 
-    static inline component_type toGreyscale( ColorType c )
-    {
-        return c;
-    }
-
-    static inline ColorType fromGreyscale( component_type c )
-    {
-        return c;
-    }
 };
 
 } // namespace basebmp
