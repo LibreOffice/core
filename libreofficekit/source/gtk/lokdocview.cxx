@@ -233,6 +233,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_DOCUMENT_SIZE_CHANGED";
     case LOK_CALLBACK_SET_PART:
         return "LOK_CALLBACK_SET_PART";
+    case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
+        return "LOK_CALLBACK_SEARCH_RESULT_SELECTION";
     }
     return 0;
 }
@@ -677,6 +679,10 @@ callback (gpointer pData)
     case LOK_CALLBACK_SET_PART:
     {
         setPart(pDocView, pCallback->m_aPayload);
+    }
+    break;
+    case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
+    {
     }
     break;
     default:
