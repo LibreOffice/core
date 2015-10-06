@@ -462,7 +462,8 @@ SAL_IMPLEMENT_MAIN()
             ::System::String ^ sKeyFile = ustring_to_String(keyfile);
             try {
                 System::IO::FileStream^ fs = gcnew System::IO::FileStream(
-                    sKeyFile, System::IO::FileMode::Open);
+                    sKeyFile, System::IO::FileMode::Open,
+                    System::IO::FileAccess::Read, System::IO::FileShare::Read);
                 kp = gcnew StrongNameKeyPair(fs);
                 fs->Close();
             }
