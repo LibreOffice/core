@@ -101,14 +101,14 @@ public:
             void                EndDocument();
     /** Creates an OCX form control OBJ record from the passed form control.
         @descr  Writes the form control data to the 'Ctls' stream. */
-    XclExpOcxControlObj* CreateOCXCtrlObj(
+    std::unique_ptr<XclExpOcxControlObj> CreateOCXCtrlObj(
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
                             const Rectangle* pChildAnchor );
 
 private:
     tools::SvRef<SotStorageStream>  mxCtlsStrm;         /// The 'Ctls' stream.
     /** Creates a TBX form control OBJ record from the passed form control. */
-    XclExpTbxControlObj* CreateTBXCtrlObj(
+    std::unique_ptr<XclExpTbxControlObj> CreateTBXCtrlObj(
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
                             const Rectangle* pChildAnchor );
 

@@ -251,9 +251,9 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                 OSL_TRACE("XclEscherEx::StartShape, this control can't get the property ControlTypeinMSO!");
             }
             if( nMsCtlType == 2 )  //OCX Form Control
-                pCurrXclObj = CreateOCXCtrlObj( rxShape, pChildAnchor );
+                pCurrXclObj = CreateOCXCtrlObj( rxShape, pChildAnchor ).release();
             else  //TBX Form Control
-                pCurrXclObj = CreateTBXCtrlObj( rxShape, pChildAnchor );
+                pCurrXclObj = CreateTBXCtrlObj( rxShape, pChildAnchor ).release();
             if( !pCurrXclObj )
                 pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDocRef() );   // just a metafile
         }
@@ -408,7 +408,7 @@ void XclEscherEx::EndDocument()
     mpOutStrm->Seek( 0 );
 }
 
-XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
+std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
 {
     ::std::unique_ptr< XclExpOcxControlObj > xOcxCtrl;
 
@@ -435,10 +435,10 @@ XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, 
             }
         }
     }
-    return xOcxCtrl.release();
+    return xOcxCtrl;
 }
 
-XclExpTbxControlObj* XclEscherEx::CreateTBXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
+std::unique_ptr<XclExpTbxControlObj> XclEscherEx::CreateTBXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
 {
     ::std::unique_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( mrObjMgr, xShape, pChildAnchor ) );
     if( xTbxCtrl->GetObjType() == EXC_OBJTYPE_UNKNOWN )
@@ -450,7 +450,7 @@ XclExpTbxControlObj* XclEscherEx::CreateTBXCtrlObj( Reference< XShape > xShape, 
         Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( xShape );
         ConvertTbxMacro( *xTbxCtrl, xCtrlModel );
     }
-    return xTbxCtrl.release();
+    return xTbxCtrl;
 }
 
 void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< XControlModel > xCtrlModel )
