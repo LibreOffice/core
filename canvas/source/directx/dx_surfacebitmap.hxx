@@ -104,7 +104,7 @@ namespace dxcanvas
 
         // access point to the surface proxy which handles
         // the hardware-dependent rendering stuff.
-        canvas::ISurfaceProxySharedPtr mpSurfaceProxy;
+        std::shared_ptr< canvas::ISurfaceProxy > mpSurfaceProxy;
 
         // container for pixel data, we need to use a directx
         // surface since GDI+ sucks...

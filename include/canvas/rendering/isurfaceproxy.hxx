@@ -97,8 +97,6 @@ namespace canvas
                            const ::basegfx::B2DPolyPolygon& rClipPoly,
                            const ::basegfx::B2DHomMatrix&   rTransform ) = 0;
     };
-
-    typedef std::shared_ptr< ISurfaceProxy > ISurfaceProxySharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_RENDERING_ISURFACEPROXY_HXX
