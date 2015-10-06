@@ -294,7 +294,7 @@ bool DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_CATEGORY, m_pCBCategory->IsChecked() ) );
     if( m_pCBSymbol->GetState()!= TRISTATE_INDET )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_pCBSymbol->IsChecked()) );
-    if( m_pCBSymbol->GetState()!= TRISTATE_INDET )
+    if( m_pCBWrapText->GetState()!= TRISTATE_INDET )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_WRAP_TEXT, m_pCBWrapText->IsChecked()) );
 
     OUString aSep = m_aEntryMap[m_pLB_Separator->GetSelectEntryPos()];
