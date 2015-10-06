@@ -120,8 +120,8 @@ class ScDrawStringsVars
 
     Color               aBackConfigColor;       // used for ScPatternAttr::GetFont calls
     Color               aTextConfigColor;
-    sal_Int32           nPos;
-    sal_Unicode         nChar;
+    sal_Int32           nRepeatPos;
+    sal_Unicode         nRepeatChar;
 
 public:
                 ScDrawStringsVars(ScOutputData* pData, bool bPTL);
@@ -162,7 +162,7 @@ public:
     bool    GetLineBreak() const                    { return bLineBreak; }
     bool    IsRepeat() const                        { return bRepeat; }
     bool    IsShrink() const                        { return bShrink; }
-    void        RepeatToFill( long colWidth );
+    void        RepeatToFill( long nColWidth );
 
     long    GetAscent() const   { return nAscentPixel; }
     bool    IsRotated() const   { return bRotated; }
@@ -205,8 +205,8 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     bRepeat     ( false ),
     bShrink     ( false ),
     bPixelToLogic( bPTL ),
-    nPos( -1 ),
-    nChar( 0x0 )
+    nRepeatPos( -1 ),
+    nRepeatChar( 0x0 )
 {
     ScModule* pScMod = SC_MOD();
     bCellContrast = pOutput->mbUseStyleColor &&
@@ -501,16 +501,16 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
                                      ftCheck, true );
             if ( nFormat )
             {
-                nPos = aString.indexOf( 0x1B );
-                if ( nPos != -1 )
+                nRepeatPos = aString.indexOf( 0x1B );
+                if ( nRepeatPos != -1 )
                 {
-                    if (nPos + 1 == aString.getLength())
-                        nPos = -1;
+                    if (nRepeatPos + 1 == aString.getLength())
+                        nRepeatPos = -1;
                     else
                     {
-                        nChar = aString[ nPos + 1 ];
+                        nRepeatChar = aString[ nRepeatPos + 1 ];
                         // delete placeholder and char to repeat
-                        aString = aString.replaceAt( nPos, 2, "" );
+                        aString = aString.replaceAt( nRepeatPos, 2, "" );
                         // Do not cache/reuse a repeat-filled string, column
                         // widths or fonts or sizes may differ.
                         maLastCell.clear();
@@ -519,8 +519,8 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
             }
             else
             {
-                nPos = -1;
-                nChar = 0x0;
+                nRepeatPos = -1;
+                nRepeatChar = 0x0;
             }
             if (aString.getLength() > DRAWTEXT_MAX)
                 aString = aString.copy(0, DRAWTEXT_MAX);
@@ -554,25 +554,25 @@ void ScDrawStringsVars::SetHashText()
     SetAutoText(OUString("###"));
 }
 
-void ScDrawStringsVars::RepeatToFill( long colWidth )
+void ScDrawStringsVars::RepeatToFill( long nColWidth )
 {
-    if ( nPos == -1 || nPos > aString.getLength() )
+    if ( nRepeatPos == -1 || nRepeatPos > aString.getLength() )
         return;
 
-    long charWidth = pOutput->pFmtDevice->GetTextWidth(OUString(nChar));
-    if ( charWidth < 1) return;
+    long nCharWidth = pOutput->pFmtDevice->GetTextWidth(OUString(nRepeatChar));
+    if ( nCharWidth < 1) return;
     if (bPixelToLogic)
-        colWidth = pOutput->mpRefDevice->PixelToLogic(Size(colWidth,0)).Width();
+        nColWidth = pOutput->mpRefDevice->PixelToLogic(Size(nColWidth,0)).Width();
     // Are there restrictions on the cell type we should filter out here ?
-    long aSpaceToFill = ( colWidth - aTextSize.Width() );
+    long nSpaceToFill = ( nColWidth - aTextSize.Width() );
 
-    if ( aSpaceToFill <= charWidth )
+    if ( nSpaceToFill <= nCharWidth )
         return;
 
-    long nCharsToInsert = aSpaceToFill / charWidth;
+    long nCharsToInsert = nSpaceToFill / nCharWidth;
     OUStringBuffer aFill;
-    comphelper::string::padToLength(aFill, nCharsToInsert, nChar);
-    aString = aString.replaceAt( nPos, 0, aFill.makeStringAndClear() );
+    comphelper::string::padToLength(aFill, nCharsToInsert, nRepeatChar);
+    aString = aString.replaceAt( nRepeatPos, 0, aFill.makeStringAndClear() );
     TextChanged();
 }
 
