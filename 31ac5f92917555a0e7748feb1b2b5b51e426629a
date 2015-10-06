@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_eca30f4e",
+        "filename": "include/comphelper/unwrapargs.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-06T15:38:21Z",
+      "side": 1,
+      "message": "Since the \"hidden\" functions are going to be in their own namespace I removed the starting \"_\" in patch 6, however after reviewing patch 6 I noticed I missed one.",
+      "revId": "31ac5f92917555a0e7748feb1b2b5b51e426629a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
