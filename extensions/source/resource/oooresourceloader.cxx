@@ -39,13 +39,14 @@ namespace extensions { namespace resource
 {
     /** encapsulates access to a fixed resource type
     */
-    class IResourceType
+    class StringResourceAccess
     {
     public:
+        StringResourceAccess();
+
         /** returns the RESOURCE_TYPE associated with this instance
         */
-        virtual RESOURCE_TYPE getResourceType() const = 0;
-
+        static RESOURCE_TYPE getResourceType();
         /** reads a single resource from the given resource manager
             @param  _resourceManager
                 the resource manager to read from
@@ -57,31 +58,19 @@ namespace extensions { namespace resource
                 the caller checked via <code>_resourceManager.IsAvailable( getResourceType(), _resourceId )</code>
                 that the required resource really exists
         */
-        virtual Any getResource( SimpleResMgr& _resourceManager, sal_Int32 _resourceId ) const = 0;
-
-        virtual ~IResourceType() { };
-    };
-
-    class StringResourceAccess : public IResourceType
-    {
-    public:
-        StringResourceAccess();
-
-        // IResourceType
-        virtual RESOURCE_TYPE getResourceType() const SAL_OVERRIDE;
-        virtual Any getResource( SimpleResMgr& _resourceManager, sal_Int32 _resourceId ) const SAL_OVERRIDE;
+        static Any getResource( SimpleResMgr& _resourceManager, sal_Int32 _resourceId );
     };
 
     StringResourceAccess::StringResourceAccess()
     {
     }
 
-    RESOURCE_TYPE StringResourceAccess::getResourceType() const
+    RESOURCE_TYPE StringResourceAccess::getResourceType()
     {
         return RSC_STRING;
     }
 
-    Any StringResourceAccess::getResource( SimpleResMgr& _resourceManager, sal_Int32 _resourceId ) const
+    Any StringResourceAccess::getResource( SimpleResMgr& _resourceManager, sal_Int32 _resourceId )
     {
         OSL_PRECOND( _resourceManager.IsAvailable( getResourceType(), _resourceId ), "StringResourceAccess::getResource: precondition not met!" );
         Any aResource;
@@ -94,7 +83,7 @@ namespace extensions { namespace resource
     class OpenOfficeResourceBundle : public OpenOfficeResourceBundle_Base
     {
     private:
-        typedef std::shared_ptr< IResourceType >            ResourceTypePtr;
+        typedef std::shared_ptr< StringResourceAccess >  ResourceTypePtr;
         typedef ::std::map< OUString, ResourceTypePtr >  ResourceTypes;
 
         ::osl::Mutex                    m_aMutex;
@@ -257,11 +246,11 @@ namespace extensions { namespace resource
         if ( !impl_getResourceTypeAndId_nothrow( _key, resourceType, resourceId ) )
             return false;
 
-        if ( !m_pResourceManager->IsAvailable( resourceType->getResourceType(), resourceId ) )
+        if ( !m_pResourceManager->IsAvailable( StringResourceAccess::getResourceType(), resourceId ) )
             // no such resource with the given type/id
             return false;
 
-        _out_Element = resourceType->getResource( *m_pResourceManager, resourceId );
+        _out_Element = StringResourceAccess::getResource( *m_pResourceManager, resourceId );
         return _out_Element.hasValue();
     }
 
@@ -308,7 +297,7 @@ namespace extensions { namespace resource
         if ( !impl_getResourceTypeAndId_nothrow( _key, resourceType, resourceId ) )
             return sal_False;
 
-        if ( !m_pResourceManager->IsAvailable( resourceType->getResourceType(), resourceId ) )
+        if ( !m_pResourceManager->IsAvailable( StringResourceAccess::getResourceType(), resourceId ) )
             return sal_False;
 
         return sal_True;

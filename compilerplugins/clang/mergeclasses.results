@@ -161,7 +161,6 @@ merge dbmm::IProgressConsumer with dbmm::ProgressDelegator
 merge dbmm::MacroMigrationModuleClient with dbmm::MacroMigrationDialogService
 merge dbp::OModuleResourceClient with dbp::OUnoAutoPilot
 merge dbtools::ISQLStatementHelper with connectivity::mysql::OTables
-merge extensions::resource::IResourceType with extensions::resource::StringResourceAccess
 merge formula::ExternalReferenceHelper with ScExternalRefManager
 merge formula::IStructHelper with formula::StructPage
 merge framework::IComboBoxListener with framework::ComboboxToolbarController
