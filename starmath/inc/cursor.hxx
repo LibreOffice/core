@@ -78,14 +78,14 @@ class SmDocShell;
 class SmCursor{
 public:
     SmCursor(SmNode* tree, SmDocShell* pShell)
-        : anchor(NULL)
-        , position(NULL)
-        , pTree(tree)
-        , pDocShell(pShell)
-        , pGraph(NULL)
-        , pClipboard(NULL)
-        , nEditSections(0)
-        , bIsEnabledSetModifiedSmDocShell(false)
+        : mpAnchor(nullptr)
+        , mpPosition(nullptr)
+        , mpTree(tree)
+        , mpDocShell(pShell)
+        , mpGraph(nullptr)
+        , mpClipboard(nullptr)
+        , mnEditSections(0)
+        , mbIsEnabledSetModifiedSmDocShell(false)
     {
         //Build graph
         BuildGraph();
@@ -94,15 +94,15 @@ public:
     ~SmCursor()
     {
         SetClipboard();
-        delete pGraph;
-        pGraph = NULL;
+        delete mpGraph;
+        mpGraph = nullptr;
     }
 
     /** Get position */
-    SmCaretPos GetPosition() const { return position->CaretPos; }
+    SmCaretPos GetPosition() const { return mpPosition->CaretPos; }
 
     /** True, if the cursor has a selection */
-    bool HasSelection() { return anchor != position; }
+    bool HasSelection() { return mpAnchor != mpPosition; }
 
     /** Move the position of this cursor */
     void Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor = true);
@@ -223,16 +223,16 @@ public:
 private:
     friend class SmDocShell;
 
-    SmCaretPosGraphEntry    *anchor,
-                            *position;
+    SmCaretPosGraphEntry    *mpAnchor,
+                            *mpPosition;
     /** Formula tree */
-    SmNode* pTree;
+    SmNode* mpTree;
     /** Owner of the formula tree */
-    SmDocShell* pDocShell;
+    SmDocShell* mpDocShell;
     /** Graph over caret position in the current tree */
-    SmCaretPosGraph* pGraph;
+    SmCaretPosGraph* mpGraph;
     /** Clipboard holder */
-    SmNodeList* pClipboard;
+    SmNodeList* mpClipboard;
 
     /** Returns a node that is selected, if any could be found */
     SmNode* FindSelectedNode(SmNode* pNode);
@@ -360,9 +360,9 @@ private:
     /** The number of times BeginEdit have been called
      * Used to allow nesting of BeginEdit() and EndEdit() sections
      */
-    int nEditSections;
+    int mnEditSections;
     /** Holds data for BeginEdit() and EndEdit() */
-    bool bIsEnabledSetModifiedSmDocShell;
+    bool mbIsEnabledSetModifiedSmDocShell;
     /** Begin edit section where the tree will be modified */
     void BeginEdit();
     /** End edit section where the tree will be modified */
