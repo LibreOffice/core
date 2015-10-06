@@ -57,7 +57,6 @@
 
 using namespace css;
 using namespace css::uno;
-using ::rtl::OUString;
 
 namespace
 {
