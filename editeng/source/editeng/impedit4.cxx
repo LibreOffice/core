@@ -1307,7 +1307,6 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
         bool bParaAttribs = false;
         if ( bNewContent || ( ( n > 0 ) && ( n < (nContents-1) ) ) )
         {
-            bParaAttribs = false;
             {
                 // only style and ParaAttribs when new paragraph, or
                 // completely internal ...
