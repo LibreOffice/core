@@ -297,7 +297,7 @@ INSINGLECHAR:
 
 void SvxRTFParser::ReadStyleTable()
 {
-    int nToken, bSaveChkStyleAttr = bChkStyleAttr ? 1 : 0;
+    int bSaveChkStyleAttr = bChkStyleAttr ? 1 : 0;
     sal_uInt16 nStyleNo = 0;
     bool bHasStyleNo = false;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
@@ -310,7 +310,8 @@ void SvxRTFParser::ReadStyleTable()
 
     while( _nOpenBrakets && IsParserWorking() )
     {
-        switch( nToken = GetNextToken() )
+        int nToken = GetNextToken();
+        switch( nToken )
         {
         case '}':       if( --_nOpenBrakets && IsParserWorking() )
                             // Style has been completely read,
@@ -320,10 +321,10 @@ void SvxRTFParser::ReadStyleTable()
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
-                    nToken = SkipToken();
+                    SkipToken();
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ) &&
                             RTF_PN != nToken )
-                    nToken = SkipToken( -2 );
+                    SkipToken( -2 );
                 else
                 {
                     // filter out at once
@@ -458,9 +459,9 @@ void SvxRTFParser::ReadFontTable()
 
     while( _nOpenBrakets && IsParserWorking() )
     {
-        int nToken = 0;
         bool bCheckNewFont = false;
-        switch( ( nToken = GetNextToken() ))
+        int nToken = GetNextToken();
+        switch( nToken )
         {
             case '}':
                 bIsAltFntNm = false;
@@ -473,13 +474,13 @@ void SvxRTFParser::ReadFontTable()
                 break;
             case '{':
                 if( RTF_IGNOREFLAG != GetNextToken() )
-                    nToken = SkipToken();
+                    SkipToken();
                 // immediately skip unknown and all known but non-evaluated
                 // groups
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ) &&
                         RTF_PANOSE != nToken && RTF_FNAME != nToken &&
                         RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
-                    nToken = SkipToken( -2 );
+                    SkipToken( -2 );
                 else
                 {
                     // filter out at once
@@ -597,21 +598,20 @@ OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
 
     while( _nOpenBrakets && IsParserWorking() )
     {
-        int nToken = 0;
-        switch( nToken = GetNextToken() )
+        switch( GetNextToken() )
         {
         case '}':       --_nOpenBrakets;    break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
-                    nToken = SkipToken();
+                    SkipToken();
                 else if( RTF_UNKNOWNCONTROL != GetNextToken() )
-                    nToken = SkipToken( -2 );
+                    SkipToken( -2 );
                 else
                 {
                     // filter out at once
                     ReadUnknownData();
-                    nToken = GetNextToken();
+                    int nToken = GetNextToken();
                     if( '}' != nToken )
                         eState = SVPAR_ERROR;
                     break;
@@ -662,16 +662,16 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 
     while( _nOpenBrakets && IsParserWorking() )
     {
-        int nToken = 0;
-        switch( nToken = GetNextToken() )
+        int nToken = GetNextToken();
+        switch( nToken )
         {
         case '}':       --_nOpenBrakets;    break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
-                    nToken = SkipToken();
+                    SkipToken();
                 else if( RTF_UNKNOWNCONTROL != GetNextToken() )
-                    nToken = SkipToken( -2 );
+                    SkipToken( -2 );
                 else
                 {
                     // filter out at once
