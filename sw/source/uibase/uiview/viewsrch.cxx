@@ -102,6 +102,51 @@ static void lcl_addContainerToJson(boost::property_tree::ptree& rTree, const OSt
     rTree.add_child(rKey.getStr(), aChildren);
 }
 
+/// Emits LOK callbacks (count, selection) for search results.
+static void lcl_emitSearchResultCallbacks(sal_uInt16 nFound, SvxSearchItem* pSearchItem, SwWrtShell* pWrtShell)
+{
+    OString aPayload = OString::number(nFound) + ";" + pSearchItem->GetSearchString().toUtf8();
+    pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_COUNT, aPayload.getStr());
+
+    // Emit a callback also about the selection rectangles, grouped by matches.
+    if (SwPaM* pPaM = pWrtShell->GetCrsr())
+    {
+        std::vector<OString> aMatches;
+        for (SwPaM& rPaM : pPaM->GetRingContainer())
+        {
+            if (SwShellCrsr* pShellCrsr = dynamic_cast<SwShellCrsr*>(&rPaM))
+            {
+                std::vector<OString> aSelectionRectangles;
+                pShellCrsr->SwSelPaintRects::Show(&aSelectionRectangles);
+                std::stringstream ss;
+                bool bFirst = true;
+                for (size_t i = 0; i < aSelectionRectangles.size(); ++i)
+                {
+                    const OString& rSelectionRectangle = aSelectionRectangles[i];
+                    if (rSelectionRectangle.isEmpty())
+                        continue;
+                    if (bFirst)
+                        bFirst = false;
+                    else
+                        ss << "; ";
+                    ss << rSelectionRectangle.getStr();
+                }
+                OString sRect = ss.str().c_str();
+                aMatches.push_back(sRect);
+            }
+        }
+        boost::property_tree::ptree aTree;
+        aTree.put("searchString", pSearchItem->GetSearchString().toUtf8().getStr());
+        lcl_addContainerToJson(aTree, "searchResultSelection", aMatches);
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        aPayload = aStream.str().c_str();
+
+        pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+    }
+}
+
 void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -241,48 +286,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     m_bFound = false;
                 }
                 else if (comphelper::LibreOfficeKit::isActive())
-                {
-                    OString aPayload = OString::number(nFound) + ";" + m_pSrchItem->GetSearchString().toUtf8();
-                    m_pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_COUNT, aPayload.getStr());
-
-                    // Emit a callback also about the selection rectangles, grouped by matches.
-                    if (SwPaM* pPaM = m_pWrtShell->GetCrsr())
-                    {
-                        std::vector<OString> aMatches;
-                        for (SwPaM& rPaM : pPaM->GetRingContainer())
-                        {
-                            if (SwShellCrsr* pShellCrsr = dynamic_cast<SwShellCrsr*>(&rPaM))
-                            {
-                                std::vector<OString> aSelectionRectangles;
-                                pShellCrsr->SwSelPaintRects::Show(&aSelectionRectangles);
-                                std::stringstream ss;
-                                bool bFirst = true;
-                                for (size_t i = 0; i < aSelectionRectangles.size(); ++i)
-                                {
-                                    const OString& rSelectionRectangle = aSelectionRectangles[i];
-                                    if (rSelectionRectangle.isEmpty())
-                                        continue;
-                                    if (bFirst)
-                                        bFirst = false;
-                                    else
-                                        ss << "; ";
-                                    ss << rSelectionRectangle.getStr();
-                                }
-                                OString sRect = ss.str().c_str();
-                                aMatches.push_back(sRect);
-                            }
-                        }
-                        boost::property_tree::ptree aTree;
-                        aTree.put("searchString", m_pSrchItem->GetSearchString().toUtf8().getStr());
-                        lcl_addContainerToJson(aTree, "searchResultSelection", aMatches);
-
-                        std::stringstream aStream;
-                        boost::property_tree::write_json(aStream, aTree);
-                        aPayload = aStream.str().c_str();
-
-                        m_pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
-                    }
-                }
+                    lcl_emitSearchResultCallbacks(nFound, m_pSrchItem, m_pWrtShell);
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
 #if HAVE_FEATURE_DESKTOP
                 {
