@@ -131,24 +131,6 @@ ChartController::~ChartController()
     stopDoubleClickWaiting();
 }
 
-ChartController::RefCountable::RefCountable() : m_nRefCount(0)
-{
-}
-
-ChartController::RefCountable::~RefCountable()
-{
-}
-void ChartController::RefCountable::acquire()
-{
-    m_nRefCount++;
-}
-void ChartController::RefCountable::release()
-{
-    m_nRefCount--;
-    if(!m_nRefCount)
-        delete this;
-}
-
 ChartController::TheModel::TheModel( const uno::Reference< frame::XModel > & xModel ) :
     m_xModel( xModel ),
     m_xCloseable( NULL ),

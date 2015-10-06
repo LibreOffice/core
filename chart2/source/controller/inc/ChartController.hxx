@@ -447,17 +447,7 @@ private:
 private:
     class TheModelRef;
     friend class ChartController::TheModelRef;
-    class RefCountable
-    {
-        public:
-            RefCountable();
-            virtual ~RefCountable();
-            void acquire();
-            void release();
-        private:
-            sal_Int32 m_nRefCount;
-    };
-    class TheModel : public RefCountable
+    class TheModel : public salhelper::SimpleReferenceObject
     {
         public:
             explicit TheModel( const ::com::sun::star::uno::Reference<

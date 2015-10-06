@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_libraries,chartcontroller,\
     drawinglayer \
     editeng \
     sal \
+    salhelper \
 	i18nlangtag \
     sfx \
     sot \
