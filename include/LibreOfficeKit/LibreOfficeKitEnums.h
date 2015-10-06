@@ -161,7 +161,26 @@ typedef enum
      * Number of search results followed by the original searched phrase.
      * count;phrase
      */
-    LOK_CALLBACK_SEARCH_RESULT_COUNT
+    LOK_CALLBACK_SEARCH_RESULT_COUNT,
+
+    /**
+     * Selection rectangles of the search result when find all is performed.
+     *
+     * Payload format example, in case of two matches:
+     *
+     * {
+     *     "searchString": "...",
+     *     "searchResultSelection": [
+     *         "...",
+     *         "..."
+     *     ]
+     * }
+     *
+     * - searchString is the search query
+     * - searchResultSelection is an array of rectangle list, in
+     *   LOK_CALLBACK_TEXT_SELECTION format.
+     */
+    LOK_CALLBACK_SEARCH_RESULT_SELECTION
 }
 LibreOfficeKitCallbackType;
 
