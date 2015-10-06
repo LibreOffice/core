@@ -57,11 +57,6 @@ public:
         *i = vigra::detail::RequiresExplicitCast<value_type>::cast(value);
     }
 
-    template< typename V, class Iterator, class Difference >
-    void set(V const& value, Iterator const& i, Difference const& diff) const
-    {
-        i[diff] = vigra::detail::RequiresExplicitCast<value_type>::cast(value);
-    }
 };
 
 
@@ -98,12 +93,6 @@ public:
         i.set( vigra::detail::RequiresExplicitCast<value_type>::cast(value) );
     }
 
-    template< typename V, class Iterator, class Difference >
-    void set(V const& value, Iterator const& i, Difference const& diff) const
-    {
-        i.set( vigra::detail::RequiresExplicitCast<value_type>::cast(value),
-               diff );
-    }
 };
 
 } // namespace basebmp
