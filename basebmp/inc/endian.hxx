@@ -35,11 +35,7 @@ template< typename T > inline T byteSwap( T );
    }
 
 // byteSwap<T> shall fail for any type T not in the list below
-BASEBMP_BYTE_SWAP(sal_Int8,)
-BASEBMP_BYTE_SWAP(sal_uInt8,)
-BASEBMP_BYTE_SWAP(sal_Int16,OSL_SWAPWORD)
 BASEBMP_BYTE_SWAP(sal_uInt16,OSL_SWAPWORD)
-BASEBMP_BYTE_SWAP(sal_Int32,OSL_SWAPDWORD)
 BASEBMP_BYTE_SWAP(sal_uInt32,OSL_SWAPDWORD)
 
 #undef BASEBMP_BYTE_SWAP
