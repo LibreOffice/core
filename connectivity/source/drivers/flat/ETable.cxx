@@ -618,18 +618,14 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
         }
         else
         {
-            // lengths depending on data-type:
-            sal_Int32   nLen;
             sal_Int32 nType = 0;
             if(bIsTable)
             {
-                nLen    = m_aPrecisions[i-1];
                 nType   = m_aTypes[i-1];
             }
             else
             {
                 Reference< XPropertySet> xColumn = *aIter;
-                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))  >>= nLen;
                 xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))       >>= nType;
             }
             switch(nType)
