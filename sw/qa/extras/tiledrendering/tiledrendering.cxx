@@ -342,7 +342,10 @@ void lcl_search(bool bBackward)
 void SwTiledRenderingTest::testSearch()
 {
 #if !defined(WNT) && !defined(MACOSX)
+    comphelper::LibreOfficeKit::setActive();
+
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
+    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     size_t nNode = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
 
@@ -351,6 +354,8 @@ void SwTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
     size_t nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
+    /// Make sure we get search result selection for normal find as well, not only find all.
+    CPPUNIT_ASSERT(!m_aSearchResultSelection.empty());
 
     // Next hit, in the shape.
     lcl_search(false);
@@ -375,6 +380,8 @@ void SwTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
     nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
+
+    comphelper::LibreOfficeKit::setActive(false);
 #endif
 }
 
