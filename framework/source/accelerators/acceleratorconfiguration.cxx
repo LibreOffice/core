@@ -387,7 +387,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeResetListener(const css::u
 }
 
 // IStorageListener
-void XMLBasedAcceleratorConfiguration::changesOccurred(const OUString& /*sPath*/)
+void XMLBasedAcceleratorConfiguration::changesOccurred()
 {
     reload();
 }

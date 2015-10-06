@@ -18,6 +18,7 @@
  */
 
 #include <accelerators/storageholder.hxx>
+#include <accelerators/acceleratorconfiguration.hxx>
 
 #include <services.h>
 
@@ -284,13 +285,13 @@ void StorageHolder::notifyPath(const OUString& sPath)
            pIt2 != rInfo.Listener.end();
          ++pIt2                          )
     {
-        IStorageListener* pListener = *pIt2;
+        XMLBasedAcceleratorConfiguration* pListener = *pIt2;
         if (pListener)
-            pListener->changesOccurred(sNormedPath);
+            pListener->changesOccurred();
     }
 }
 
-void StorageHolder::addStorageListener(      IStorageListener* pListener,
+void StorageHolder::addStorageListener(      XMLBasedAcceleratorConfiguration* pListener,
                                        const OUString&  sPath    )
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
@@ -307,7 +308,7 @@ void StorageHolder::addStorageListener(      IStorageListener* pListener,
         rInfo.Listener.push_back(pListener);
 }
 
-void StorageHolder::removeStorageListener(      IStorageListener* pListener,
+void StorageHolder::removeStorageListener(      XMLBasedAcceleratorConfiguration* pListener,
                                           const OUString&  sPath    )
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);

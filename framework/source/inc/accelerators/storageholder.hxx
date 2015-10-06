@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_STORAGEHOLDER_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_STORAGEHOLDER_HXX
 
-#include <accelerators/istoragelistener.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
@@ -29,6 +28,7 @@
 namespace framework
 {
 
+class XMLBasedAcceleratorConfiguration;
 /**
     TODO document me
  */
@@ -41,7 +41,7 @@ class StorageHolder
         /** @short  TODO */
         typedef ::std::vector< css::uno::Reference< css::embed::XStorage > > TStorageList;
 
-        typedef ::std::vector< IStorageListener* > TStorageListenerList;
+        typedef ::std::vector< XMLBasedAcceleratorConfiguration* > TStorageListenerList;
 
         struct TStorageInfo
         {
@@ -118,12 +118,12 @@ class StorageHolder
 
         /** @short  TODO
          */
-        void addStorageListener(      IStorageListener* pListener,
+        void addStorageListener(     XMLBasedAcceleratorConfiguration* pListener,
                                         const OUString&  sPath    );
 
         /** @short  TODO
          */
-        void removeStorageListener(      IStorageListener* pListener,
+        void removeStorageListener(   XMLBasedAcceleratorConfiguration* pListener,
                                            const OUString&  sPath    );
 
         /** @short  TODO

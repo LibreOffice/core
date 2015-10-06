@@ -18,7 +18,6 @@
  */
 
 #include <accelerators/acceleratorconfiguration.hxx>
-#include <accelerators/istoragelistener.hxx>
 #include <accelerators/presethandler.hxx>
 
 #include <xml/acceleratorconfigurationreader.hxx>

@@ -355,8 +355,8 @@ class PresetHandler
         void commitUserChanges();
 
         /** TODO */
-        void addStorageListener(IStorageListener* pListener);
-        void removeStorageListener(IStorageListener* pListener);
+        void addStorageListener(XMLBasedAcceleratorConfiguration* pListener);
+        void removeStorageListener(XMLBasedAcceleratorConfiguration* pListener);
 
     // helper
 

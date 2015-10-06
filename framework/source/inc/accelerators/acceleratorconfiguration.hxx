@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCONFIGURATION_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCONFIGURATION_HXX
 
-#include <accelerators/istoragelistener.hxx>
 #include <accelerators/presethandler.hxx>
 #include <accelerators/acceleratorcache.hxx>
 #include <accelerators/keymapping.hxx>
@@ -61,8 +60,7 @@ const char CFG_ENTRY_MODULES[] = "Modules";
 /**
     implements a read/write access to the accelerator configuration.
  */
-class XMLBasedAcceleratorConfiguration : public    IStorageListener,
-                                         public    ::cppu::WeakImplHelper<
+class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
                                                        css::form::XReset,                    // TODO use XPresetHandler instead if available
                                                        css::ui::XAcceleratorConfiguration >  // => css::ui::XUIConfigurationPersistence
                                                                                              //    css::ui::XUIConfigurationStorage
@@ -176,8 +174,8 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
         virtual void SAL_CALL removeResetListener(const css::uno::Reference< css::form::XResetListener >& xListener)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // IStorageListener
-        virtual void changesOccurred(const OUString& sPath) SAL_OVERRIDE;
+        // called when changes occurred in the storage
+        void changesOccurred();
 
         // helper for derived classes
 

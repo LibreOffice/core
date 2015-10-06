@@ -632,7 +632,7 @@ void PresetHandler::commitUserChanges()
     }
 }
 
-void PresetHandler::addStorageListener(IStorageListener* pListener)
+void PresetHandler::addStorageListener(XMLBasedAcceleratorConfiguration* pListener)
 {
     OUString sRelPath;
     EConfigType eCfgType;
@@ -662,7 +662,7 @@ void PresetHandler::addStorageListener(IStorageListener* pListener)
     }
 }
 
-void PresetHandler::removeStorageListener(IStorageListener* pListener)
+void PresetHandler::removeStorageListener(XMLBasedAcceleratorConfiguration* pListener)
 {
     OUString sRelPath;
     EConfigType eCfgType;
