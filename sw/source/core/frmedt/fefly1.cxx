@@ -311,7 +311,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
     SwFrameFormat *pFormat = FindFrameFormat( pObj );
     if( pFormat && FLY_AT_FLY == pFormat->GetAnchor().GetAnchorId() )
     {
-        const SwFrm* pFly =  nullptr ?
+        const SwFrm* pFly = dynamic_cast<SwVirtFlyDrawObj *>(pObj) != nullptr ?
             static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetAnchorFrm() :
             static_cast<SwDrawContact*>(GetUserCall(pObj))->GetAnchorFrm( pObj );
         OSL_ENSURE( pFly, "IsFlyInFly: Where's my anchor?" );
@@ -394,7 +394,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     if ( FLY_AS_CHAR == nAnchorId )
         return aRet;
 
-    bool bFlyFrame =  nullptr;
+    bool bFlyFrame = dynamic_cast<SwVirtFlyDrawObj *>(pObj) != nullptr;
 
     SwFlyFrm* pFly = 0L;
     const SwFrm* pFooterOrHeader = NULL;
