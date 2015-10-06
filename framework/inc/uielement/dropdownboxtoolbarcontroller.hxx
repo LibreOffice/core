@@ -63,7 +63,7 @@ class DropdownToolbarController : public IListBoxListener,
         // XComponent
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // IComboBoxListener
+        // IListBoxListener
         virtual void Select() SAL_OVERRIDE;
         virtual void DoubleClick() SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;

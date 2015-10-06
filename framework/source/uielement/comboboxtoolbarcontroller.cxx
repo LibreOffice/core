@@ -47,13 +47,13 @@ namespace framework
 {
 
 // Wrapper class to notify controller about events from combobox.
-// Unfortunaltly the events are notifed through virtual methods instead
+// Unfortunately the events are notified through virtual methods instead
 // of Listeners.
 
 class ComboBoxControl : public ComboBox
 {
     public:
-        ComboBoxControl( vcl::Window* pParent, WinBits nStyle, IComboBoxListener* pComboBoxListener );
+        ComboBoxControl( vcl::Window* pParent, WinBits nStyle, ComboboxToolbarController* pComboboxToolbarController );
         virtual ~ComboBoxControl();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -66,12 +66,12 @@ class ComboBoxControl : public ComboBox
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     private:
-        IComboBoxListener* m_pComboBoxListener;
+        ComboboxToolbarController* m_pComboboxToolbarController;
 };
 
-ComboBoxControl::ComboBoxControl( vcl::Window* pParent, WinBits nStyle, IComboBoxListener* pComboBoxListener ) :
+ComboBoxControl::ComboBoxControl( vcl::Window* pParent, WinBits nStyle, ComboboxToolbarController* pComboboxToolbarController ) :
     ComboBox( pParent, nStyle )
-    , m_pComboBoxListener( pComboBoxListener )
+    , m_pComboboxToolbarController( pComboboxToolbarController )
 {
 }
 
@@ -82,57 +82,57 @@ ComboBoxControl::~ComboBoxControl()
 
 void ComboBoxControl::dispose()
 {
-    m_pComboBoxListener = 0;
+    m_pComboboxToolbarController = 0;
     ComboBox::dispose();
 }
 
 void ComboBoxControl::Select()
 {
     ComboBox::Select();
-    if ( m_pComboBoxListener )
-        m_pComboBoxListener->Select();
+    if ( m_pComboboxToolbarController )
+        m_pComboboxToolbarController->Select();
 }
 
 void ComboBoxControl::DoubleClick()
 {
     ComboBox::DoubleClick();
-    if ( m_pComboBoxListener )
-        m_pComboBoxListener->DoubleClick();
+    if ( m_pComboboxToolbarController )
+        m_pComboboxToolbarController->DoubleClick();
 }
 
 void ComboBoxControl::Modify()
 {
     ComboBox::Modify();
-    if ( m_pComboBoxListener )
-        m_pComboBoxListener->Modify();
+    if ( m_pComboboxToolbarController )
+        m_pComboboxToolbarController->Modify();
 }
 
 void ComboBoxControl::KeyInput( const ::KeyEvent& rKEvt )
 {
     ComboBox::KeyInput( rKEvt );
-    if ( m_pComboBoxListener )
-        m_pComboBoxListener->KeyInput( rKEvt );
+    if ( m_pComboboxToolbarController )
+        m_pComboboxToolbarController->KeyInput( rKEvt );
 }
 
 void ComboBoxControl::GetFocus()
 {
     ComboBox::GetFocus();
-    if ( m_pComboBoxListener )
-        m_pComboBoxListener->GetFocus();
+    if ( m_pComboboxToolbarController )
+        m_pComboboxToolbarController->GetFocus();
 }
 
 void ComboBoxControl::LoseFocus()
 {
     ComboBox::LoseFocus();
-    if ( m_pComboBoxListener )
-        m_pComboBoxListener->LoseFocus();
+    if ( m_pComboboxToolbarController )
+        m_pComboboxToolbarController->LoseFocus();
 }
 
 bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
-    if ( m_pComboBoxListener )
-        bRet = m_pComboBoxListener->PreNotify( rNEvt );
+    if ( m_pComboboxToolbarController )
+        bRet = m_pComboboxToolbarController->PreNotify( rNEvt );
     if ( !bRet )
         bRet = ComboBox::PreNotify( rNEvt );
 
