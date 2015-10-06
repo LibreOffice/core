@@ -83,15 +83,6 @@ namespace basegfx
         {
         }
 
-        /** Query total bounds of all added ranges.
-
-            @return the union bound rect over all added ranges.
-         */
-        B2DRange getBounds() const
-        {
-            return maTotalBounds;
-        }
-
         /** Add an additional range.
 
             This method integrates a new range into the connected

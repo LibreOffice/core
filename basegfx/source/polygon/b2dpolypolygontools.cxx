@@ -495,24 +495,6 @@ namespace basegfx
             return aRetval;
         }
 
-        bool containsOnlyHorizontalAndVerticalEdges(const B2DPolyPolygon& rCandidate)
-        {
-            if(rCandidate.areControlPointsUsed())
-            {
-                return false;
-            }
-
-            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
-            {
-                if(!containsOnlyHorizontalAndVerticalEdges(rCandidate.getB2DPolygon(a)))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         B2DPolyPolygon createSevenSegmentPolyPolygon(sal_Char nNumber, bool bLitSegments)
         {
             // config here
