@@ -34,6 +34,40 @@
       "revId": "03692bd66c31d2b4b42a401b334483a0506c4044",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_ac2f57f5",
+        "filename": "include/comphelper/unwrapargs.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-06T15:16:57Z",
+      "side": 1,
+      "message": "anonymous namespace in header file is probably not a good idea, as it will create numerous different versions of those inline functions",
+      "revId": "03692bd66c31d2b4b42a401b334483a0506c4044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_4c6ddb31",
+        "filename": "include/comphelper/unwrapargs.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-10-06T15:16:57Z",
+      "side": 1,
+      "message": "identifier that start with _ are somewhat questionable - _ followed by uppercase is reserved for C++ implementation so should not be used by our code, i forgot what the rule was for _ followed by lower case though\n\nbut since this is going into a detail namespace as per the comment above, no reason to use any funny names",
+      "revId": "03692bd66c31d2b4b42a401b334483a0506c4044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
