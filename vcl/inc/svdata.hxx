@@ -342,7 +342,6 @@ struct ImplSVData
     VclPtr<vcl::Window>     mpIntroWindow;                  // the splash screen
     DockingManager*         mpDockingManager;
     BlendFrameCache*        mpBlendFrameCache;
-    bool                    mbIsTestTool;
 
     oslThreadIdentifier     mnMainThreadId;
     rtl::Reference< vcl::DisplayConnection > mxDisplayConnection;
