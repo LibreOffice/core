@@ -193,6 +193,12 @@ desktop/res/caution_16.png dbaccess/res/exwarning.png
 desktop/res/info_16.png cmd/sc_helpindex.png
 desktop/res/lock_16.png cmd/sc_protect.png
 
+# extensions
+# ==============================================
+extensions/res/arrow.png cmd/sc_nextrecord.png
+extensions/res/buttonminus.png extensions/source/scanner/minus.png
+extensions/res/buttonplus.png extensions/source/scanner/plus.png
+
 # FolderTree expanded icon
 # ==============================================
 svtools/res/folderop.png formula/res/fapopen.png
