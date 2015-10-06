@@ -86,14 +86,6 @@ public:
 
 
     void        setColor( color_type col ) { maBlendColor=col; }
-    color_type  getColor() { return maBlendColor; }
-    void        setGetterValue( value_type val ) { maGetterValue=val; }
-    value_type  getGetterValue() { return maGetterValue; }
-
-
-
-    WrappedAccessor const& getWrappedAccessor() const { return maWrappee; }
-    WrappedAccessor&       getWrappedAccessor() { return maWrappee; }
 
 
 
@@ -122,17 +114,6 @@ public:
             i );
     }
 
-    template< typename V, typename IteratorType, class Difference >
-    void set(V const& value, IteratorType const& i, Difference const& diff) const
-    {
-        maWrappee.set(
-            maFunctor(
-                vigra::detail::RequiresExplicitCast<alpha_type>::cast(value),
-                maWrappee(i,diff),
-                maBlendColor),
-            i,
-            diff );
-    }
 };
 
 } // namespace basebmp

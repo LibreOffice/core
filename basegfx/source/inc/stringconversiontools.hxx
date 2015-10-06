@@ -69,13 +69,6 @@ namespace basegfx
                                  const OUString& rStr,
                                  const sal_Int32 nLen);
 
-        void skipNumber(sal_Int32&       io_rPos,
-                        const OUString&  rStr,
-                        const sal_Int32  nLen);
-
-        void skipDouble(sal_Int32&       io_rPos,
-                        const OUString&  rStr);
-
         void putNumberCharWithSpace(OUStringBuffer& rStr,
                                     double          fValue,
                                     double          fOldValue,

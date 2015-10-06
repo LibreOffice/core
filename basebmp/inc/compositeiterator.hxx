@@ -209,30 +209,6 @@ namespace detail
             return ret;
         }
 
-        value_type get() const
-        {
-            return value_type(pImpl->maIter1.get(),
-                              pImpl->maIter2.get());
-        }
-
-        value_type get(difference_type const & d) const
-        {
-            return value_type(pImpl->maIter1.get(d),
-                              pImpl->maIter2.get(d));
-        }
-
-        void set( value_type v ) const
-        {
-            pImpl->maIter1.set(v);
-            pImpl->maIter2.set(v);
-        }
-
-        void set( value_type v, difference_type const & d ) const
-        {
-            pImpl->maIter1.set(v,d);
-            pImpl->maIter2.set(v,d);
-        }
-
         CompositeIteratorBase& operator=(const CompositeIteratorBase& rNew)
         {
             this->pImpl->maIter1 = rNew.pImpl->maIter1;

@@ -59,17 +59,6 @@ namespace basebmp
 
     template< class Iterator, class Accessor >
     inline vigra::pair<Iterator,Accessor>
-    srcIter(Iterator const&          begin,
-            Accessor const&          accessor,
-            const basegfx::B2IPoint& rPt)
-    {
-        return vigra::pair<Iterator,Accessor>(
-            begin + vigra::Diff2D(rPt.getX(),rPt.getY()),
-            accessor);
-    }
-
-    template< class Iterator, class Accessor >
-    inline vigra::pair<Iterator,Accessor>
     destIter(Iterator const&          begin,
              Accessor const&          accessor,
              const basegfx::B2IPoint& rPt)

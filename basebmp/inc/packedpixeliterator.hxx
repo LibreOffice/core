@@ -211,22 +211,12 @@ public:
         return unsigned_cast<value_type>(*y() & mask_) >> shift_;
     }
 
-    value_type get(difference_type d) const
-    {
-        return unsigned_cast<value_type>(*y(d) & mask_) >> shift_;
-    }
-
     void set( value_type v ) const
     {
         const value_type pixel_value( (v << shift_) & mask_ );
         *y() = (*y() & ~mask_) | pixel_value;
     }
 
-    void set( value_type v, difference_type d ) const
-    {
-        const value_type pixel_value( (v << shift_) & mask_ );
-        *y(d) = (*y(d) & ~mask_) | pixel_value;
-    }
 };
 
 template< typename Valuetype,
@@ -445,13 +435,6 @@ public:
                       MsbFirst>(remainder_);
     }
 
-    value_type get(difference_type d) const
-    {
-        PackedPixelRowIterator tmp(*this);
-        tmp += d;
-        return tmp.get();
-    }
-
     void set( value_type v ) const
     {
         const value_type pixel_value(
@@ -459,13 +442,6 @@ public:
              get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder_))
             & mask_ );
         *data_ = (*data_ & ~mask_) | pixel_value;
-    }
-
-    void set( value_type v, difference_type d ) const
-    {
-        PackedPixelRowIterator tmp(*this);
-        tmp += d;
-        tmp.set(v);
     }
 };
 
@@ -511,11 +487,6 @@ private:
     pointer current() const
     {
         return y() + (x / num_intraword_positions);
-    }
-
-    pointer current(int dx, int dy) const
-    {
-        return y(dy) + ((x+dx)/num_intraword_positions);
     }
 
     bool equal(PackedPixelIterator const & rhs) const
@@ -601,15 +572,6 @@ public:
                 >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
     }
 
-    value_type get(difference_type const & d) const
-    {
-        const int remainder( x(d.x) % num_intraword_positions );
-
-        return (unsigned_cast<value_type>(*current(d.x,d.y) &
-                                          get_mask<value_type, bits_per_pixel, MsbFirst>(remainder))
-                >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
-    }
-
     void set( value_type v ) const
     {
         const int remainder( x % num_intraword_positions );
@@ -622,17 +584,6 @@ public:
         *p = (*p & ~mask) | pixel_value;
     }
 
-    void set( value_type v, difference_type const & d ) const
-    {
-        const int remainder( (x + d.x) % num_intraword_positions );
-        const int mask( get_mask<value_type, bits_per_pixel, MsbFirst>(remainder) );
-        const value_type pixel_value(
-            (v <<
-             get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder))
-             & mask );
-        pointer p = current(d.x,d.y);
-        *p = (*p & ~mask) | pixel_value;
-    }
 };
 
 
