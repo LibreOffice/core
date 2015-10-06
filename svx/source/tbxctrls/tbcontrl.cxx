@@ -307,6 +307,7 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
 };
 
 #define BUTTON_WIDTH 20
+#define BUTTON_PADDING 10
 #define ITEM_HEIGHT 30
 
 SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
@@ -820,7 +821,7 @@ void SvxStyleBox_Impl::CalcOptimalExtraUserWidth()
         }
         Pop();
 
-        const long nWidth = aTextRectForActualFont.GetWidth() + BUTTON_WIDTH;
+        const long nWidth = aTextRectForActualFont.GetWidth() + BUTTON_WIDTH + BUTTON_PADDING;
 
         nMaxUserDrawFontWidth = std::max(nWidth, nMaxUserDrawFontWidth);
     }
