@@ -42,8 +42,8 @@ private:
 
     bool m_userHasCancelled;
 private:
-    DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
-    DECL_LINK_TYPED(CancelHdl, Button*, void);
+    DECL_LINK_TYPED(DoubleClickHdl, ListBox &, void);
+    DECL_LINK_TYPED(CancelHdl, Button *, void);
 
     void dispose() SAL_OVERRIDE;
 

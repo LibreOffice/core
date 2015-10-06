@@ -189,13 +189,13 @@ OUString WPFTEncodingDialog::GetEncoding() const
     return getEncoding(m_pLbCharset);
 }
 
-IMPL_LINK_NOARG_TYPED(WPFTEncodingDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG_TYPED(WPFTEncodingDialog, CancelHdl, Button *, void)
 {
     m_userHasCancelled=true;
     Close();
 }
 
-IMPL_LINK_TYPED(WPFTEncodingDialog, DoubleClickHdl, ListBox&, rLb, void)
+IMPL_LINK_TYPED(WPFTEncodingDialog, DoubleClickHdl, ListBox &, rLb, void)
 {
     if (&rLb == m_pLbCharset)
     {
