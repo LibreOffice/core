@@ -17,13 +17,13 @@ avmedia/res/avl02054.png cmd/lc_mediamute.png
 
 # chart2
 # ==============================================
-/chart2/res/dataeditor_icon01.png cmd/sc_insertrowsafter.png
-/chart2/res/dataeditor_icon02.png cmd/sc_insertcolumnsafter.png
-/chart2/res/dataeditor_icon03.png cmd/sc_deleterows.png
-/chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
-/chart2/res/dataeditor_icon05.png cmd/sc_insertcellsright.png
-/chart2/res/dataeditor_icon06.png cmd/sc_insertcellsdown.png
-/chart2/res/dataeditor_icon07.png cmd/sc_insertcolumnsafter.png
+chart2/res/dataeditor_icon01.png cmd/sc_insertrowsafter.png
+chart2/res/dataeditor_icon02.png cmd/sc_insertcolumnsafter.png
+chart2/res/dataeditor_icon03.png cmd/sc_deleterows.png
+chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
+chart2/res/dataeditor_icon05.png cmd/sc_insertcellsright.png
+chart2/res/dataeditor_icon06.png cmd/sc_insertcellsdown.png
+chart2/res/dataeditor_icon07.png cmd/sc_insertcolumnsafter.png
 
 # cmd
 # ==============================================
@@ -186,6 +186,12 @@ dbaccess/res/sc040.png cmd/sc_reload.png
 dbaccess/res/sortdown.png cmd/sc_sortascending.png
 dbaccess/res/sortup.png cmd/sc_sortdescending.png
 dbaccess/res/tables_32.png res/tables_32.png
+
+# desktop
+# ==============================================
+desktop/res/caution_16.png dbaccess/res/exwarning.png
+desktop/res/info_16.png cmd/sc_helpindex.png
+desktop/res/lock_16.png cmd/sc_protect.png
 
 # FolderTree expanded icon
 # ==============================================
