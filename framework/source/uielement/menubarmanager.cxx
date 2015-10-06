@@ -444,7 +444,7 @@ throw ( RuntimeException, std::exception )
                     {
                         // Checkmark or RadioButton
                         m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId );
-                        m_pVCLMenu->CheckItem( pMenuItemHandler->nItemId, ( aItemText == aEnumPart ) ? true : false );
+                        m_pVCLMenu->CheckItem( pMenuItemHandler->nItemId, aItemText == aEnumPart );
 
                         MenuItemBits nBits = m_pVCLMenu->GetItemBits( pMenuItemHandler->nItemId );
                         //If not already designated RadioButton set as CheckMark
