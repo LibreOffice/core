@@ -39,16 +39,7 @@
 namespace linguistic
 {
 
-
-class Flushable
-{
-public:
-    virtual void    Flush() = 0;
-
-protected:
-    ~Flushable() {}
-};
-
+class SpellCache;
 
 class FlushListener :
     public cppu::WeakImplHelper
@@ -57,20 +48,16 @@ class FlushListener :
         ::com::sun::star::beans::XPropertyChangeListener
     >
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList >    xDicList;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguProperties >             xPropSet;
-    Flushable                                              *pFlushObj;
+    css::uno::Reference< css::linguistic2::XSearchableDictionaryList >    xDicList;
+    css::uno::Reference< css::linguistic2::XLinguProperties >             xPropSet;
+    SpellCache&                                                           mrSpellCache;
 
     FlushListener(const FlushListener &) SAL_DELETED_FUNCTION;
     FlushListener & operator = (const FlushListener &) SAL_DELETED_FUNCTION;
 
 public:
-    FlushListener( Flushable *pFO );
-    virtual ~FlushListener();
-
-    inline void SetFlushObj( Flushable *pFO)    { pFlushObj = pFO; }
+    FlushListener( SpellCache& rFO ) : mrSpellCache(rFO) {}
+    virtual ~FlushListener() {}
 
     void        SetDicList( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > &rDL );
     void        SetPropSet( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLinguProperties > &rPS );
@@ -86,8 +73,7 @@ public:
 };
 
 
-class SpellCache :
-    public Flushable
+class SpellCache
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryListEventListener >
@@ -105,8 +91,8 @@ public:
     SpellCache();
     virtual ~SpellCache();
 
-    // Flushable
-    virtual void    Flush() SAL_OVERRIDE;
+    // called from FlushListener
+    void    Flush();
 
     void    AddWord( const OUString& rWord, LanguageType nLang );
     bool    CheckWord( const OUString& rWord, LanguageType nLang );

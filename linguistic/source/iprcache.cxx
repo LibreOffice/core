@@ -99,17 +99,6 @@ static bool lcl_IsFlushProperty( sal_Int32 nHandle )
 }
 
 
-FlushListener::FlushListener( Flushable *pFO )
-{
-    SetFlushObj( pFO );
-}
-
-
-FlushListener::~FlushListener()
-{
-}
-
-
 void FlushListener::SetDicList( Reference<XSearchableDictionaryList> &rDL )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -176,9 +165,8 @@ void SAL_CALL FlushListener::processDictionaryListEvent(
                 DictionaryListEventFlags::DEACTIVATE_POS_DIC;
         bool bFlush = 0 != (nEvt & nFlushFlags);
 
-        DBG_ASSERT( pFlushObj, "missing object (NULL pointer)" );
-        if (bFlush && pFlushObj != NULL)
-            pFlushObj->Flush();
+        if (bFlush)
+            mrSpellCache.Flush();
     }
 }
 
@@ -193,9 +181,8 @@ void SAL_CALL FlushListener::propertyChange(
     {
         bool bFlush = lcl_IsFlushProperty( rEvt.PropertyHandle );
 
-        DBG_ASSERT( pFlushObj, "missing object (NULL pointer)" );
-        if (bFlush && pFlushObj != NULL)
-            pFlushObj->Flush();
+        if (bFlush)
+            mrSpellCache.Flush();
     }
 }
 
@@ -203,7 +190,7 @@ void SAL_CALL FlushListener::propertyChange(
 
 SpellCache::SpellCache()
 {
-    pFlushLstnr = new FlushListener( this );
+    pFlushLstnr = new FlushListener( *this );
     xFlushLstnr = pFlushLstnr;
     Reference<XSearchableDictionaryList> aDictionaryList(GetDictionaryList());
     pFlushLstnr->SetDicList( aDictionaryList ); //! after reference is established
