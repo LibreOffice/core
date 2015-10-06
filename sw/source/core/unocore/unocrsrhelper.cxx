@@ -837,7 +837,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
-                    for ( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+                    for ( size_t n = 0; n < aRangeArr.Count(); ++n )
                     {
                         // no start of a new list
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
@@ -927,7 +927,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
                 pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                 SwPamRanges aRangeArr( rPam );
                 SwPaM aPam( *rPam.GetPoint() );
-                for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+                for( size_t n = 0; n < aRangeArr.Count(); ++n )
                     pDoc->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), 1 );
                 pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
             }

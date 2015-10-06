@@ -40,16 +40,16 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
     if( aRg.nEnd < aRg.nStart )
     {   aRg.nStart = aRg.nEnd; aRg.nEnd = rIdx1.GetIndex(); }
 
-    _SwPamRanges::const_iterator it = lower_bound(aRg); //search Insert Position
-    size_type nPos = it - begin();
-    if (!empty() && (it != end()) && (*it) == aRg)
+    o3tl::sorted_vector<SwPamRange>::const_iterator it = maVector.lower_bound(aRg); //search Insert Position
+    size_t nPos = it - maVector.begin();
+    if (!maVector.empty() && (it != maVector.end()) && (*it) == aRg)
     {
         // is the one in the Array smaller?
-        SwPamRange const& rTmp = _SwPamRanges::operator[](nPos);
+        SwPamRange const& rTmp = maVector[nPos];
         if( rTmp.nEnd < aRg.nEnd )
         {
             aRg.nEnd = rTmp.nEnd;
-            erase(begin() + nPos); // combine
+            maVector.erase(maVector.begin() + nPos); // combine
         }
         else
             return; // done, because by precondition everything is combined
@@ -62,28 +62,28 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
         // combine with predecessor?
         if( nPos > 0 )
         {
-            SwPamRange const& rTmp = _SwPamRanges::operator[](nPos-1);
+            SwPamRange const& rTmp = maVector[nPos-1];
             if( rTmp.nEnd == aRg.nStart
                 || rTmp.nEnd+1 == aRg.nStart )
             {
                 aRg.nStart = rTmp.nStart;
                 bEnd = false;
-                erase( begin() + --nPos ); // combine
+                maVector.erase( maVector.begin() + --nPos ); // combine
             }
             // range contained in rTmp?
             else if( rTmp.nStart <= aRg.nStart && aRg.nEnd <= rTmp.nEnd )
                 return;
         }
         // combine with successor?
-        if( nPos < size() )
+        if( nPos < maVector.size() )
         {
-            SwPamRange const& rTmp = _SwPamRanges::operator[](nPos);
+            SwPamRange const& rTmp = maVector[nPos];
             if( rTmp.nStart == aRg.nEnd ||
                 rTmp.nStart == aRg.nEnd+1 )
             {
                 aRg.nEnd = rTmp.nEnd;
                 bEnd = false;
-                erase( begin() + nPos ); // combine
+                maVector.erase( maVector.begin() + nPos ); // combine
             }
 
             // range contained in rTmp?
@@ -92,13 +92,13 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
         }
     } while( !bEnd );
 
-    _SwPamRanges::insert( aRg );
+    maVector.insert( aRg );
 }
 
-SwPaM& SwPamRanges::SetPam( size_type nArrPos, SwPaM& rPam )
+SwPaM& SwPamRanges::SetPam( size_t nArrPos, SwPaM& rPam )
 {
     OSL_ASSERT( nArrPos < Count() );
-    const SwPamRange& rTmp = (*this)[ nArrPos ];
+    const SwPamRange& rTmp = maVector[ nArrPos ];
     rPam.GetPoint()->nNode = rTmp.nStart;
     rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), 0 );
     rPam.SetMark();
@@ -136,7 +136,7 @@ bool SwEditShell::NoNum()
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->NoNum( aRangeArr.SetPam( n, aPam ));
         GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
@@ -155,7 +155,7 @@ bool SwEditShell::SelectionHasNumber() const
     if (!bResult && pTextNd && pTextNd->Len()==0 && !pTextNd->GetNumRule()) {
         SwPamRanges aRangeArr( *GetCrsr() );
         SwPaM aPam( *GetCrsr()->GetPoint() );
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
         {
             aRangeArr.SetPam( n, aPam );
             {
@@ -201,7 +201,7 @@ bool SwEditShell::SelectionHasBullet() const
     if (!bResult && pTextNd && pTextNd->Len()==0 && !pTextNd->GetNumRule()) {
         SwPamRanges aRangeArr( *GetCrsr() );
         SwPaM aPam( *GetCrsr()->GetPoint() );
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
         {
             aRangeArr.SetPam( n, aPam );
             {
@@ -281,7 +281,7 @@ void SwEditShell::DelNumRules()
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
         {
             GetDoc()->DelNumRules( aRangeArr.SetPam( n, aPam ) );
         }
@@ -314,7 +314,7 @@ bool SwEditShell::NumUpDown( bool bDown )
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->NumUpDown( aRangeArr.SetPam( n, aPam ), bDown );
         GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
@@ -535,7 +535,7 @@ bool SwEditShell::OutlineUpDown( short nOffset )
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->OutlineUpDown(
                                     aRangeArr.SetPam( n, aPam ), nOffset );
         GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
@@ -745,7 +745,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         OUString sContinuedListId(rContinuedListId);
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
         {
             aRangeArr.SetPam( n, aPam );
             OUString sListId = GetDoc()->SetNumRule( aPam, rRule,
@@ -804,7 +804,7 @@ void SwEditShell::SetNumRuleStart( bool bFlag, SwPaM* pPaM )
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->SetNumRuleStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), bFlag );
         GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
@@ -831,7 +831,7 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt, SwPaM* pPaM )
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), nStt );
         GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }

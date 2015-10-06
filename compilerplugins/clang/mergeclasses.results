@@ -97,7 +97,6 @@ merge XMLTransformer with XMLTransformerBase
 merge XclDebugObjCounter with XclRootData
 merge _LibreOfficeKit with LibLibreOffice_Impl
 merge _LibreOfficeKitDocument with LibLODocument_Impl
-merge _SwPamRanges with SwPamRanges
 merge _SwRedlineTable with SwRedlineTable
 merge _uno_ExtEnvironment with (anonymous namespace)::uno_DefaultEnvironment
 merge abp::OModuleResourceClient with abp::OABSPilotUno

@@ -354,7 +354,7 @@ lcl_SetNodeNumStart(SwPaM & rCrsr, uno::Any const& rValue)
         pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( rCrsr );
         SwPaM aPam( *rCrsr.GetPoint() );
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
         {
           pDoc->SetNumRuleStart(*aRangeArr.SetPam( n, aPam ).GetPoint());
           pDoc->SetNodeNumStart(*aRangeArr.SetPam( n, aPam ).GetPoint(),

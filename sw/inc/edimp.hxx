@@ -39,21 +39,20 @@ struct SwPamRange
         { return nStart < rRg.nStart; }
 };
 
-class _SwPamRanges : public o3tl::sorted_vector<SwPamRange> {};
-
-class SwPamRanges : private _SwPamRanges
+class SwPamRanges
 {
 public:
     SwPamRanges( const SwPaM& rRing );
-    using _SwPamRanges::size_type;
 
     void Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 );
-    SwPaM& SetPam( size_type nArrPos, SwPaM& rPam );
+    SwPaM& SetPam( size_t nArrPos, SwPaM& rPam );
 
-    size_type Count() const
-                {   return _SwPamRanges::size(); }
-    SwPamRange operator[]( size_type nPos ) const
-                { return _SwPamRanges::operator[](nPos); }
+    size_t Count() const
+                { return maVector.size(); }
+    SwPamRange operator[]( size_t nPos ) const
+                { return maVector[nPos]; }
+private:
+    o3tl::sorted_vector<SwPamRange> maVector;
 };
 
 #endif

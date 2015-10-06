@@ -529,7 +529,7 @@ void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
     {
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
+        for( size_t n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->MoveLeftMargin( aRangeArr.SetPam( n, aPam ),
                                         bRight, bModulus );
     }
