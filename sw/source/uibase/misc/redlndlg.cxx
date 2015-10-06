@@ -526,7 +526,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
 
     // have entries been deleted?
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
-    for (sal_uInt16 i = nStart + 1; i < m_RedlineParents.size(); i++)
+    for (size_t i = nStart + 1; i < m_RedlineParents.size(); i++)
     {
         if (m_RedlineParents[i]->pData == pRedlineData)
         {
