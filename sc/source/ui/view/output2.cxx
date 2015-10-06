@@ -507,6 +507,9 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
                     nChar = aString[ nPos + 1 ];
                     // delete placeholder and char to repeat
                     aString = aString.replaceAt( nPos, 2, "" );
+                    // Do not cache/reuse a repeat-filled string, column widths
+                    // or fonts or sizes may differ.
+                    maLastCell.clear();
                 }
             }
             else
