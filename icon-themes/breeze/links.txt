@@ -1,4 +1,5 @@
 # avmedia
+# ==============================================
 avmedia/res/av02048.png cmd/sc_avmediaplayer.png
 avmedia/res/av02049.png cmd/sc_runbasic.png
 avmedia/res/av02050.png cmd/sc_mediapause.png
@@ -13,6 +14,9 @@ avmedia/res/avl02051.png cmd/lc_basicstop.png
 avmedia/res/avl02052.png cmd/lc_mediarepeat.png
 avmedia/res/avl02053.png cmd/lc_ok.png
 avmedia/res/avl02054.png cmd/lc_mediamute.png
+
+# cmd
+# ==============================================
 
 # Open
 cmd/lc_openfromwriter.png cmd/lc_open.png
@@ -110,9 +114,6 @@ cmd/lc_browseforward.png cmd/lc_pagedown.png
 cmd/sc_browsebackward cmd/sc_pageup.png
 cmd/sc_browseforward.png cmd/sc_pagedown.png
 
-# database
-database/linked_text_table.png cmd/sc_dataimport.png
-
 # language support for rtl
 # doesn't work for all other languages
 #cmd/lc_redo.png cmd/ar/lc_undo.png
@@ -139,14 +140,12 @@ cmd/sc_setdefault.png cmd/sc_resetattributes.png
 # Toggle graphics visibility in Writer
 cmd/sc_showgraphics.png cmd/sc_graphic.png
 
-# split cells duplicates
-/sw/res/zetlhor2.png svx/res/zetlhor2.png
-/sw/res/zetlver2.png svx/res/zetlver2.png
-
-# FolderTree expanded icon
-svtools/res/folderop.png formula/res/fapopen.png
+# database
+# ==============================================
+database/linked_text_table.png cmd/sc_dataimport.png
 
 # dbaccess
+# ==============================================
 dbaccess/res/all_left.png cmd/sc_firstrecord.png
 dbaccess/res/all_right.png cmd/sc_lastrecord.png
 dbaccess/res/db.png cmd/sc_viewdatasourcebrowser.png
@@ -164,7 +163,7 @@ dbaccess/res/nu07.png cmd/sc_ok.png
 dbaccess/res/nu08.png cmd/sc_cancel.png
 dbaccess/res/one_left.png cmd/sc_prevrecord.png
 dbaccess/res/one_right.png cmd/sc_nextrecord.png
-dbaccess/res/pkey.png jo01.png
+dbaccess/res/jo01.png dbaccess/res/pkey.png
 dbaccess/res/queries_32.png res/queries_32.png
 dbaccess/res/report_16.png cmd/sc_executereport.png
 dbaccess/res/reports_16.png cmd/sc_executereport.png
@@ -177,3 +176,94 @@ dbaccess/res/sc040.png cmd/sc_reload.png
 dbaccess/res/sortdown.png cmd/sc_sortascending.png
 dbaccess/res/sortup.png cmd/sc_sortdescending.png
 dbaccess/res/tables_32.png res/tables_32.png
+
+# FolderTree expanded icon
+# ==============================================
+svtools/res/folderop.png formula/res/fapopen.png
+
+# sw
+# ==============================================
+
+# imglst
+sw/imglst/lc20556.png cmd/lc_dbviewfunctions.png
+sw/imglst/lc20557.png cmd/lc_cancel.png
+sw/imglst/lc20558.png cmd/lc_ok.png
+sw/imglst/nc20001.png cmd/sc_inserttable.png
+sw/imglst/nc20002.png cmd/sc_diagramarea.png
+sw/imglst/nc20003.png cmd/sc_imagebutton.png
+sw/imglst/nc20004.png cmd/sc_insertobject.png
+sw/imglst/nc20005.png cmd/sc_insertbookmark.png
+sw/imglst/nc20007.png cmd/sc_inserthyperlink.png
+sw/imglst/nc20008.png cmd/sc_insertreferencefield.png
+sw/imglst/nc20009.png cmd/sc_insertindexesentry.png
+sw/imglst/nc20010.png cmd/sc_showannotations.png
+sw/imglst/nc20011.png cmd/sc_toggleobjectbeziermode.png
+sw/imglst/re01.png cmd/lc_unsetcellsreadonly.png
+sw/imglst/re02.png cmd/lc_unsetcellsreadonly.png
+sw/imglst/re03.png cmd/sc_protect.png
+sw/imglst/re04.png cmd/sc_protect.png
+sw/imglst/sc20171.png cmd/sc_downsearch.png
+sw/imglst/sc20172.png cmd/sc_prevrecord.png
+sw/imglst/sc20173.png cmd/sc_nextrecord.png
+sw/imglst/sc20174.png cmd/sc_upsearch.png
+sw/imglst/sc20175.png cmd/sc_nextrecord.png
+sw/imglst/sc20182.png cmd/sc_anchormenu.png
+sw/imglst/sc20186.png cmd/sc_prevrecord.png
+sw/imglst/sc20233.png cmd/sc_ok.png
+sw/imglst/sc20235.png cmd/sc_editdoc.png
+sw/imglst/sc20238.png sc/res/droplink.png
+sw/imglst/sc20239.png cmd/sc_copy.png
+sw/imglst/sc20245.png cmd/sc_editdoc.png
+sw/imglst/sc20246.png sc/res/droplink.png
+sw/imglst/sc20248.png cmd/sc_save.png
+sw/imglst/sc20249.png cmd/sc_navigator.png
+sw/imglst/sc20556.png cmd/sc_dbviewfunctions.png
+sw/imglst/sc20557.png cmd/sc_cancel.png
+sw/imglst/sc20558.png cmd/sc_ok.png
+sw/imglst/sc_datainrows.png cmd/sc_datainrows.png
+sw/imglst/sf02.png cmd/sc_charfontname.png
+sw/imglst/sf03.png cmd/sc_diagramarea.png
+sw/imglst/sf04.png cmd/sc_showsinglepage.png
+sw/imglst/sf05.png cmd/sc_defaultbullet.png
+sw/imglst/sr20000.png cmd/sc_downsearch.png
+sw/imglst/sr20001.png cmd/sc_upsearch.png
+sw/imglst/sr20002.png cmd/sc_inserttable.png
+sw/imglst/sr20003.png cmd/sc_insertframe.png
+sw/imglst/sr20004.png cmd/sc_showsinglepage.png
+sw/imglst/sr20005d.png cmd/sc_inserthyperlink.png
+sw/imglst/sr20005.png cmd/sc_editdoc.png
+sw/imglst/sr20007.png sw/imglst/nc20006.png
+sw/imglst/sr20008.png cmd/sc_insertbookmark.png
+sw/imglst/sr20009.png cmd/sc_toggleobjectbeziermode.png
+sw/imglst/sr20010.png cmd/sc_drawchart.png
+sw/imglst/sr20011.png sw/imglst/nc20000.png
+sw/imglst/sr20012.png cmd/sc_insertreferencefield.png
+sw/imglst/sr20013.png cmd/sc_insertfootnote.png
+sw/imglst/sr20014.png dbaccess/res/exwarning.png
+sw/imglst/sr20015.png cmd/sc_insertbookmark.png
+sw/imglst/sr20016.png cmd/sc_recsearch.png
+sw/imglst/sr20017.png cmd/sc_insertindexesentry.png
+sw/imglst/sr20018.png cmd/sc_inserttable.png
+sw/imglst/sr20019.png cmd/sc_remove.png
+sw/imglst/sx03.png cmd/sc_dbqueryedit.png
+
+# navigation
+sw/res/all_left.png cmd/sc_firstrecord.png
+sw/res/all_right.png cmd/sc_lastrecord.png
+sw/res/one_left.png cmd/sc_previouspage.png
+sw/res/one_right.png cmd/sc_nextrecord.png
+sw/res/page_break.png cmd/lc_insertpagebreak.png
+sw/res/styfamnu.png cmd/sc_defaultbullet.png
+
+# split cells duplicates
+sw/res/zetlhor2.png svx/res/zetlhor2.png
+sw/res/zetlver2.png svx/res/zetlver2.png
+
+# vcl
+# ==============================================
+vcl/res/index.png cmd/sc_insertmultiindex.png
+
+# xmlsecurity
+# ==============================================
+xmlsecurity/res/key_12.png dbaccess/res/pkey.png
+xmlsecurity/res/signet_11x16.png xmlsecurity/res/notcertificate_16.png
