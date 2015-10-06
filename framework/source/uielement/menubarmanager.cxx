@@ -77,6 +77,7 @@
 #include <svtools/miscopt.hxx>
 #include <uielement/menubarmerger.hxx>
 #include <boost/noncopyable.hpp>
+#include <tools/urlobj.hxx>
 
 // Be careful removing this "bad" construct. There are serious problems
 // with #define STRICT and including windows.h. Changing this needs some
@@ -437,29 +438,45 @@ throw ( RuntimeException, std::exception )
                 }
                 else if ( Event.State >>= aItemText )
                 {
-                    // Replacement for place holders
-                    if ( aItemText.startsWith("($1)") )
+                    INetURLObject aURL( aFeatureURL );
+                    OUString aEnumPart = aURL.GetURLPath().getToken( 1, '.' );
+                    if ( !aEnumPart.isEmpty() && aURL.GetProtocol() == INetProtocol::Uno )
                     {
-                        OUString aTmp(FWK_RESSTR(STR_UPDATEDOC));
-                        aTmp += " ";
-                        aTmp += aItemText.copy( 4 );
-                        aItemText = aTmp;
-                    }
-                    else if ( aItemText.startsWith("($2)") )
-                    {
-                        OUString aTmp(FWK_RESSTR(STR_CLOSEDOC_ANDRETURN));
-                        aTmp += aItemText.copy( 4 );
-                        aItemText = aTmp;
-                    }
-                    else if ( aItemText.startsWith("($3)") )
-                    {
-                        OUString aTmp(FWK_RESSTR(STR_SAVECOPYDOC));
-                        aTmp += aItemText.copy( 4 );
-                        aItemText = aTmp;
-                    }
+                        // Checkmark or RadioButton
+                        m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId );
+                        m_pVCLMenu->CheckItem( pMenuItemHandler->nItemId, ( aItemText == aEnumPart ) ? true : false );
 
-                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId );
-                    m_pVCLMenu->SetItemText( pMenuItemHandler->nItemId, aItemText );
+                        MenuItemBits nBits = m_pVCLMenu->GetItemBits( pMenuItemHandler->nItemId );
+                        //If not already designated RadioButton set as CheckMark
+                        if (!(nBits & MenuItemBits::RADIOCHECK))
+                            m_pVCLMenu->SetItemBits( pMenuItemHandler->nItemId, nBits | MenuItemBits::CHECKABLE );
+                    }
+                    else
+                    {
+                        // Replacement for place holders
+                        if ( aItemText.startsWith("($1)") )
+                        {
+                            OUString aTmp(FWK_RESSTR(STR_UPDATEDOC));
+                            aTmp += " ";
+                            aTmp += aItemText.copy( 4 );
+                            aItemText = aTmp;
+                        }
+                        else if ( aItemText.startsWith("($2)") )
+                        {
+                            OUString aTmp(FWK_RESSTR(STR_CLOSEDOC_ANDRETURN));
+                            aTmp += aItemText.copy( 4 );
+                            aItemText = aTmp;
+                        }
+                        else if ( aItemText.startsWith("($3)") )
+                        {
+                            OUString aTmp(FWK_RESSTR(STR_SAVECOPYDOC));
+                            aTmp += aItemText.copy( 4 );
+                            aItemText = aTmp;
+                        }
+
+                        m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId );
+                        m_pVCLMenu->SetItemText( pMenuItemHandler->nItemId, aItemText );
+                    }
                 }
                 else if ( Event.State >>= aVisibilityStatus )
                 {
