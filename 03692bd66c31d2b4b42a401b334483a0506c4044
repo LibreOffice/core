@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_0c35a345",
+        "filename": "include/comphelper/unwrapargs.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-06T13:51:00Z",
+      "side": 1,
+      "message": "any reason to switch to an unnamed namespace here?  the consequence is that each translation unit which includes this file will have different, independent instances of these inline functions",
+      "revId": "03692bd66c31d2b4b42a401b334483a0506c4044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
