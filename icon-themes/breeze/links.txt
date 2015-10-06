@@ -15,6 +15,16 @@ avmedia/res/avl02052.png cmd/lc_mediarepeat.png
 avmedia/res/avl02053.png cmd/lc_ok.png
 avmedia/res/avl02054.png cmd/lc_mediamute.png
 
+# chart2
+# ==============================================
+/chart2/res/dataeditor_icon01.png cmd/sc_insertrowsafter.png
+/chart2/res/dataeditor_icon02.png cmd/sc_insertcolumnsafter.png
+/chart2/res/dataeditor_icon03.png cmd/sc_deleterows.png
+/chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
+/chart2/res/dataeditor_icon05.png cmd/sc_insertcellsright.png
+/chart2/res/dataeditor_icon06.png cmd/sc_insertcellsdown.png
+/chart2/res/dataeditor_icon07.png cmd/sc_insertcolumnsafter.png
+
 # cmd
 # ==============================================
 
