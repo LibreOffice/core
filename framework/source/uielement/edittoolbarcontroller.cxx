@@ -51,7 +51,7 @@ namespace framework
 class EditControl : public Edit
 {
     public:
-        EditControl( vcl::Window* pParent, WinBits nStyle, IEditListener* pEditListener );
+        EditControl( vcl::Window* pParent, WinBits nStyle, EditToolbarController* pEditToolbarController );
         virtual ~EditControl();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -62,12 +62,12 @@ class EditControl : public Edit
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     private:
-        IEditListener* m_pEditListener;
+        EditToolbarController* m_pEditToolbarController;
 };
 
-EditControl::EditControl( vcl::Window* pParent, WinBits nStyle, IEditListener* pEditListener ) :
+EditControl::EditControl( vcl::Window* pParent, WinBits nStyle, EditToolbarController* pEditToolbarController ) :
     Edit( pParent, nStyle )
-    , m_pEditListener( pEditListener )
+    , m_pEditToolbarController( pEditToolbarController )
 {
 }
 
@@ -78,43 +78,43 @@ EditControl::~EditControl()
 
 void EditControl::dispose()
 {
-    m_pEditListener = 0;
+    m_pEditToolbarController = 0;
     Edit::dispose();
 }
 
 void EditControl::Modify()
 {
     Edit::Modify();
-    if ( m_pEditListener )
-        m_pEditListener->Modify();
+    if ( m_pEditToolbarController )
+        m_pEditToolbarController->Modify();
 }
 
 void EditControl::KeyInput( const ::KeyEvent& rKEvt )
 {
     Edit::KeyInput( rKEvt );
-    if ( m_pEditListener )
-        m_pEditListener->KeyInput( rKEvt );
+    if ( m_pEditToolbarController )
+        m_pEditToolbarController->KeyInput( rKEvt );
 }
 
 void EditControl::GetFocus()
 {
     Edit::GetFocus();
-    if ( m_pEditListener )
-        m_pEditListener->GetFocus();
+    if ( m_pEditToolbarController )
+        m_pEditToolbarController->GetFocus();
 }
 
 void EditControl::LoseFocus()
 {
     Edit::LoseFocus();
-    if ( m_pEditListener )
-        m_pEditListener->LoseFocus();
+    if ( m_pEditToolbarController )
+        m_pEditToolbarController->LoseFocus();
 }
 
 bool EditControl::PreNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
-    if ( m_pEditListener )
-        bRet = m_pEditListener->PreNotify( rNEvt );
+    if ( m_pEditToolbarController )
+        bRet = m_pEditToolbarController->PreNotify( rNEvt );
     if ( !bRet )
         bRet = Edit::PreNotify( rNEvt );
 

@@ -34,21 +34,7 @@ namespace framework
 
 class EditControl;
 
-class IEditListener
-{
-    public:
-        virtual void Modify() = 0;
-        virtual void KeyInput( const KeyEvent& rKEvt ) = 0;
-        virtual void GetFocus() = 0;
-        virtual void LoseFocus() = 0;
-        virtual bool PreNotify( NotifyEvent& rNEvt ) = 0;
-
-    protected:
-        ~IEditListener() {}
-};
-
-class EditToolbarController : public IEditListener,
-                              public ComplexToolbarController
+class EditToolbarController : public ComplexToolbarController
 
 {
     public:
@@ -63,12 +49,12 @@ class EditToolbarController : public IEditListener,
         // XComponent
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // IEditListener
-        virtual void Modify() SAL_OVERRIDE;
-        virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-        virtual void GetFocus() SAL_OVERRIDE;
-        virtual void LoseFocus() SAL_OVERRIDE;
-        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        // called from EditControl
+        void Modify();
+        void KeyInput( const KeyEvent& rKEvt );
+        void GetFocus();
+        void LoseFocus();
+        bool PreNotify( NotifyEvent& rNEvt );
 
     protected:
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) SAL_OVERRIDE;
