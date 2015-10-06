@@ -260,7 +260,6 @@ merge svt::IEditImplementation with svt::GenericEditImplementation
 merge svt::IEnumerationResultHandler with SvtFileView_Impl
 merge svt::IFilePickerController with SvtFileDialog_Base
 merge svt::IFilePickerListener with SvtFilePicker
-merge svt::IValueNormalization with svt::StandardFormatNormalizer
 merge svt::table::IAccessibleTable with svt::table::TableControl
 merge svt::table::IAccessibleTableControl with accessibility::AccessibleGridControlAccess
 merge svt::table::IColumnModel with svt::table::UnoGridColumnFacade
