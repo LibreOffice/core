@@ -103,6 +103,11 @@ exclusionSet = set([
     "class vcl::Window * CreateWindow(class VCLXWindow **,const struct com::sun::star::awt::WindowDescriptor *,class vcl::Window *,long)",
     ])
 
+# clang does not always use exactly the same numbers in the type-parameter vars it generates
+# so I need to substitute them to ensure we can match correctly.
+normalizeTypeParamsRegex = re.compile(r"type-parameter-\d+-\d+")
+def normalizeTypeParams( line ):
+    return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
 
 # The parsing here is designed to avoid grabbing stuff which is mixed in from gbuild.
 # I have not yet found a way of suppressing the gbuild output.
@@ -111,12 +116,12 @@ with io.open(sys.argv[1], "rb", buffering=1024*1024) as txt:
         if line.startswith("definition:\t"):
             idx1 = line.find("\t",12)
             idx2 = line.find("\t",idx1+1)
-            funcInfo = (line[12:idx1], line[idx1+1:idx2])
+            funcInfo = (normalizeTypeParams(line[12:idx1]), normalizeTypeParams(line[idx1+1:idx2]))
             definitionSet.add(funcInfo)
             definitionToSourceLocationMap[funcInfo] = line[idx2+1:].strip()
         elif line.startswith("call:\t"):
             idx1 = line.find("\t",6)
-            callSet.add((line[6:idx1], line[idx1+1:].strip()))
+            callSet.add((normalizeTypeParams(line[6:idx1]), normalizeTypeParams(line[idx1+1:].strip())))
 
 tmp1set = set()
 for d in definitionSet:
