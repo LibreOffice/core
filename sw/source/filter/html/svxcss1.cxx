@@ -649,9 +649,8 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
     DestroyBorderInfos();
 }
 
-SvxCSS1MapEntry::SvxCSS1MapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
+SvxCSS1MapEntry::SvxCSS1MapEntry( const SfxItemSet& rItemSet,
                                   const SvxCSS1PropertyInfo& rProp ) :
-    aKey( rKey.toAsciiUpperCase() ),
     aItemSet( rItemSet ),
     aPropInfo( rProp )
 {}
@@ -928,7 +927,7 @@ void SvxCSS1Parser::InsertMapEntry( const OUString& rKey,
     CSS1Map::iterator itr = rMap.find(rKey);
     if (itr == rMap.end())
     {
-        rMap.insert(std::make_pair(rKey, o3tl::make_unique<SvxCSS1MapEntry>(rKey, rItemSet, rProp)));
+        rMap.insert(std::make_pair(rKey, o3tl::make_unique<SvxCSS1MapEntry>(rItemSet, rProp)));
     }
     else
     {

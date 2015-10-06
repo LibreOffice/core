@@ -154,7 +154,6 @@ public:
 
 class SvxCSS1MapEntry
 {
-    OUString aKey;
     SfxItemSet aItemSet;
     SvxCSS1PropertyInfo aPropInfo;
 
@@ -163,7 +162,7 @@ public:
         aItemSet( rPool, pWhichMap )
     {}
 
-    SvxCSS1MapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
+    SvxCSS1MapEntry( const SfxItemSet& rItemSet,
                      const SvxCSS1PropertyInfo& rProp );
 
     const SfxItemSet& GetItemSet() const { return aItemSet; }
