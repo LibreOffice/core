@@ -24,7 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <cppunit/simpleheader.hxx>
+#include "gtest/gtest.h"
 #include <osl/file.h>
 #include <rtl/ustring.hxx>
 
@@ -67,62 +67,55 @@ void test_getVolumeInformation(const rtl::OUString& path_url)
             osl_VolumeInfo_Mask_FileSystemName |
             osl_VolumeInfo_Mask_DeviceHandle);
 
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_getVolumeInformation failed",
-            err == osl_File_E_None
-        );
+        ASSERT_TRUE( err == osl_File_E_None ) << "osl_getVolumeInformation failed";
     }
 
 //------------------------------
 //
 //------------------------------
 
-class TestClass_osl_getVolumeInformation : public CppUnit::TestFixture
+class TestClass_osl_getVolumeInformation : public ::testing::Test
 {
 public:
-
-    /*-------------------------------------
-        Start a process and join with this
-        process specify a timeout so that
-        osl_joinProcessWithTimeout returns
-        osl_Process_E_TimedOut
-     -------------------------------------*/
-
-    void test_osl_getVolumeInformation()
-    {
-        rtl::OUString path = rtl::OUString::createFromAscii(TEST_PATH_1);
-        rtl::OUString path_url;
-        osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
-        test_getVolumeInformation(path_url);
-
-        path = rtl::OUString::createFromAscii(TEST_PATH_2);
-        osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
-        test_getVolumeInformation(path_url);
-
-        path = rtl::OUString::createFromAscii(TEST_PATH_3);
-        osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
-        test_getVolumeInformation(path_url);
-
-        path = rtl::OUString::createFromAscii(TEST_PATH_4);
-        osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
-        test_getVolumeInformation(path_url);
-
-        path = rtl::OUString::createFromAscii(TEST_PATH_5);
-        osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
-        test_getVolumeInformation(path_url);
-
-        path = rtl::OUString::createFromAscii(TEST_PATH_6);
-        osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
-        test_getVolumeInformation(path_url);
-    }
-
-    CPPUNIT_TEST_SUITE( TestClass_osl_getVolumeInformation );
-    CPPUNIT_TEST( test_osl_getVolumeInformation );
-    CPPUNIT_TEST_SUITE_END( );
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TestClass_osl_getVolumeInformation, "Test osl_getVolumeInformation");
+/*-------------------------------------
+    Start a process and join with this
+    process specify a timeout so that
+    osl_joinProcessWithTimeout returns
+    osl_Process_E_TimedOut
+ -------------------------------------*/
 
-NOADDITIONAL;
+void test_osl_getVolumeInformation()
+{
+    rtl::OUString path = rtl::OUString::createFromAscii(TEST_PATH_1);
+    rtl::OUString path_url;
+    osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
+    test_getVolumeInformation(path_url);
 
+    path = rtl::OUString::createFromAscii(TEST_PATH_2);
+    osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
+    test_getVolumeInformation(path_url);
+
+    path = rtl::OUString::createFromAscii(TEST_PATH_3);
+    osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
+    test_getVolumeInformation(path_url);
+
+    path = rtl::OUString::createFromAscii(TEST_PATH_4);
+    osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
+    test_getVolumeInformation(path_url);
+
+    path = rtl::OUString::createFromAscii(TEST_PATH_5);
+    osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
+    test_getVolumeInformation(path_url);
+
+    path = rtl::OUString::createFromAscii(TEST_PATH_6);
+    osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
+    test_getVolumeInformation(path_url);
+}
+
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
