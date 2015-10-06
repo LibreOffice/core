@@ -682,8 +682,8 @@ void implRemoveDirRecursive( const OUString& aDirPath )
 
     FileStatus aFileStatus( osl_FileStatus_Mask_Type );
     nRet = aItem.getFileStatus( aFileStatus );
-    FileStatus::Type aType = aFileStatus.getFileType();
-    bool bFolder = isFolder( aType );
+    bool bFolder = nRet == FileBase::E_None
+        && isFolder( aFileStatus.getFileType() );
 
     if( !bExists || !bFolder )
     {
@@ -710,6 +710,11 @@ void implRemoveDirRecursive( const OUString& aDirPath )
         // Handle flags
         FileStatus aFileStatus2( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL );
         nRet = aItem2.getFileStatus( aFileStatus2 );
+        if( nRet != FileBase::E_None )
+        {
+            SAL_WARN("basic", "getFileStatus failed");
+            continue;
+        }
         OUString aPath = aFileStatus2.getFileURL();
 
         // Directory?
@@ -3056,6 +3061,11 @@ RTLFUNC(Dir)
                         // Handle flags
                         FileStatus aFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName );
                         nRet = aItem.getFileStatus( aFileStatus );
+                        if( nRet != FileBase::E_None )
+                        {
+                            SAL_WARN("basic", "getFileStatus failed");
+                            continue;
+                        }
 
                         // Only directories?
                         if( bFolderFlag )
