@@ -1051,6 +1051,57 @@ void WinSalGraphicsImpl::ResetClipRegion()
     SelectClipRgn( mrParent.getHDC(), 0 );
 }
 
+static bool containsOnlyHorizontalAndVerticalEdges(const basegfx::B2DPolygon& rCandidate)
+{
+    if(rCandidate.areControlPointsUsed())
+    {
+        return false;
+    }
+
+    const sal_uInt32 nPointCount(rCandidate.count());
+
+    if(nPointCount < 2)
+    {
+        return true;
+    }
+
+    const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount + 1 : nPointCount);
+    basegfx::B2DPoint aLast(rCandidate.getB2DPoint(0));
+
+    for(sal_uInt32 a(1); a < nEdgeCount; a++)
+    {
+        const sal_uInt32 nNextIndex(a % nPointCount);
+        const basegfx::B2DPoint aCurrent(rCandidate.getB2DPoint(nNextIndex));
+
+        if(!basegfx::fTools::equal(aLast.getX(), aCurrent.getX()) && !basegfx::fTools::equal(aLast.getY(), aCurrent.getY()))
+        {
+            return false;
+        }
+
+        aLast = aCurrent;
+    }
+
+    return true;
+}
+
+static bool containsOnlyHorizontalAndVerticalEdges(const basegfx::B2DPolyPolygon& rCandidate)
+{
+    if(rCandidate.areControlPointsUsed())
+    {
+        return false;
+    }
+
+    for(sal_uInt32 a(0); a < rCandidate.count(); a++)
+    {
+        if(!containsOnlyHorizontalAndVerticalEdges(rCandidate.getB2DPolygon(a)))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 {
     if ( mrParent.mhRegion )
@@ -1078,7 +1129,7 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 
         if(!aPolyPolygon.areControlPointsUsed())
         {
-            if(basegfx::tools::containsOnlyHorizontalAndVerticalEdges(aPolyPolygon))
+            if(containsOnlyHorizontalAndVerticalEdges(aPolyPolygon))
             {
                 bUsePolygon = false;
             }

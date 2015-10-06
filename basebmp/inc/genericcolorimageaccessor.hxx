@@ -58,16 +58,6 @@ namespace basebmp
         { return mpDevice->getPixel( basegfx::B2IPoint( i[diff]->x,
                                                         i[diff]->y ) ); }
 
-        template< typename Iterator >
-        void set(Color const& value, Iterator const& i) const
-        { return mpDevice->setPixel( basegfx::B2IPoint( i->x,i->y ),
-                                     value, meDrawMode ); }
-
-        template< class Iterator, class Difference >
-        void set(value_type const& value, Iterator const& i, Difference const& diff) const
-        { return mpDevice->setPixel( basegfx::B2IPoint( i[diff]->x,
-                                                        i[diff]->y ),
-                                     value, meDrawMode ); }
     };
 }
 
