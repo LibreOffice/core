@@ -1194,7 +1194,6 @@ ScAccessibleDocumentPagePreview::ScAccessibleDocumentPagePreview(
     mpViewShell(pViewShell),
     mpNotesChildren(NULL),
     mpShapeChildren(NULL),
-    mpTable(NULL),
     mpHeader(NULL),
     mpFooter(NULL)
 {
@@ -1217,11 +1216,7 @@ ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview()
 void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 {
     SolarMutexGuard aGuard;
-    if (mpTable)
-    {
-        mpTable->release();
-        mpTable = NULL;
-    }
+    mpTable.clear();
     if (mpHeader)
     {
         mpHeader->release();
@@ -1260,10 +1255,10 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
         // only notify if child exist, otherwise it is not necessary
         if (pSimpleHint->GetId() == SC_HINT_DATACHANGED)
         {
-            if (mpTable) // if there is no table there is nothing to notify, because no one recongnizes the change
+            if (mpTable.is()) // if there is no table there is nothing to notify, because no one recongnizes the change
             {
                 {
-                    uno::Reference<XAccessible> xAcc = mpTable;
+                    uno::Reference<XAccessible> xAcc = mpTable.get();
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::CHILD;
                     aEvent.Source = uno::Reference< XAccessibleContext >(this);
@@ -1272,8 +1267,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                 }
 
                 mpTable->dispose();
-                mpTable->release();
-                mpTable = NULL;
+                mpTable.clear();
             }
 
             Size aOutputSize;
@@ -1295,11 +1289,10 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                 sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
 
                 mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-                mpTable->acquire();
                 mpTable->Init();
 
                 {
-                    uno::Reference<XAccessible> xAcc = mpTable;
+                    uno::Reference<XAccessible> xAcc = mpTable.get();
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::CHILD;
                     aEvent.Source = uno::Reference< XAccessibleContext >(this);
@@ -1360,17 +1353,16 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                 const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
                 ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChildren(), GetShapeChildren() );
 
-                if ( !mpTable && (aCount.nTables > 0) )
+                if ( !mpTable.is() && (aCount.nTables > 0) )
                 {
                     //! order is background shapes, header, table or notes, footer, foreground shapes, controls
                     sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
 
                     mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-                    mpTable->acquire();
                     mpTable->Init();
                 }
-                if (mpTable && VCLRectangle(mpTable->getBounds()).IsInside(VCLPoint(rPoint)))
-                    xAccessible = mpTable;
+                if (mpTable.is() && VCLRectangle(mpTable->getBounds()).IsInside(VCLPoint(rPoint)))
+                    xAccessible = mpTable.get();
             }
             if (!xAccessible.is())
                 xAccessible = GetNotesChildren()->GetAt(rPoint);
@@ -1469,13 +1461,12 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
         }
         else if ( nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nTables )
         {
-            if ( !mpTable )
+            if ( !mpTable.is() )
             {
                 mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-                mpTable->acquire();
                 mpTable->Init();
             }
-            xAccessible = mpTable;
+            xAccessible = mpTable.get();
         }
         else if ( nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nNoteParagraphs )
         {

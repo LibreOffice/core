@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEDOCUMENTPAGEPREVIEW_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEDOCUMENTPAGEPREVIEW_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "AccessibleDocumentBase.hxx"
 
 class ScPreviewShell;
@@ -131,7 +135,7 @@ private:
     ScPreviewShell* mpViewShell;
     ScNotesChildren* mpNotesChildren;
     ScShapeChildren* mpShapeChildren;
-    ScAccessiblePreviewTable* mpTable;
+    rtl::Reference<ScAccessiblePreviewTable> mpTable;
     ScAccessiblePageHeader* mpHeader;
     ScAccessiblePageHeader* mpFooter;
 
