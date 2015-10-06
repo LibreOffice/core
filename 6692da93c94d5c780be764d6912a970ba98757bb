@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_20098b2d",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-06T20:08:13Z",
+      "side": 1,
+      "message": "This branch should only be executed if compiling ODFF. As is, also UI, API and OOXML accept more than one parameter here for ISOWEEKNUM but then bail out later in the interpreter.",
+      "revId": "6692da93c94d5c780be764d6912a970ba98757bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_c02a4f7e",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-06T20:08:13Z",
+      "side": 1,
+      "message": "So this ODFF check actually belongs to the beginning of the branch above.",
+      "range": {
+        "startLine": 1283,
+        "startChar": 40,
+        "endLine": 1283,
+        "endChar": 75
+      },
+      "revId": "6692da93c94d5c780be764d6912a970ba98757bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_4c5e7b46",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-06T20:08:13Z",
+      "side": 1,
+      "message": "Don\u0027t throw! Nothing catches! Instead, PushIllegalArgument() and return.",
+      "revId": "6692da93c94d5c780be764d6912a970ba98757bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_6c553f1c",
+        "filename": "sc/source/core/tool/odffmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-06T20:08:13Z",
+      "side": 1,
+      "message": "Seeing this and the NETWORKDAYS_XCL below, they would also need modifications in scaddins/source/analysis/analysishelper.cxx\n\nAs is, the functions are still displayed with an _ADD suffix in the Function Wizard, and this mapping here is used only for the English names known to the compiler that are used for the API compatibility mapping. Best leave this here as is and address later. I\u0027m not sure at the moment what would be best.",
+      "revId": "6692da93c94d5c780be764d6912a970ba98757bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
