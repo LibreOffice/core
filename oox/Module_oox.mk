@@ -19,6 +19,7 @@ $(eval $(call gb_Module_add_targets,oox,\
 $(eval $(call gb_Module_add_check_targets,oox,\
 	CppunitTest_oox_tokenmap \
 	CppunitTest_oox_vba_compression \
+	CppunitTest_oox_vba_encryption \
 ))
 
 # vim: set noet sw=4 ts=4:

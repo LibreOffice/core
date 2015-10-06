@@ -111,13 +111,14 @@ private:
     SvMemoryStream& mrUncompressedStream;
 };
 
-class VBAEncryption
+class OOX_DLLPUBLIC VBAEncryption
 {
 public:
     VBAEncryption(const sal_uInt8* pData,
                   const sal_uInt16 nLength,
-                  SvStream& rEncryptedData
-                 );
+                  SvStream& rEncryptedData,
+                  sal_uInt8* pSeed,
+                  sal_uInt8 nProjKey);
 
     void write();
 
