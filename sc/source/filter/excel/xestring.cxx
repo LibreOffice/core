@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <cassert>
 
 #include <osl/diagnose.h>
 #include "xlstyle.hxx"
@@ -335,7 +336,7 @@ void XclExpString::Write( XclExpStream& rStrm ) const
 
 void XclExpString::WriteHeaderToMem( sal_uInt8* pnMem ) const
 {
-    OSL_ENSURE( pnMem, "XclExpString::WriteHeaderToMem - no memory to write to" );
+    assert(pnMem);
     OSL_ENSURE( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeaderToMem - string too long" );
     OSL_ENSURE( !IsWriteFormats(), "XclExpString::WriteHeaderToMem - formatted strings not supported" );
     // length
@@ -356,7 +357,7 @@ void XclExpString::WriteHeaderToMem( sal_uInt8* pnMem ) const
 
 void XclExpString::WriteBufferToMem( sal_uInt8* pnMem ) const
 {
-    OSL_ENSURE( pnMem, "XclExpString::WriteBufferToMem - no memory to write to" );
+    assert(pnMem);
     if( !IsEmpty() )
     {
         if( mbIsBiff8 )
