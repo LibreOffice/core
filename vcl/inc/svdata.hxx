@@ -31,6 +31,7 @@
 #include "tools/debug.hxx"
 #include "tools/solar.h"
 #include "vcl/bitmapex.hxx"
+#include "vcl/idle.hxx"
 #include "vcl/dllapi.h"
 #include "vcl/keycod.hxx"
 #include "vcl/svapp.hxx"
@@ -156,7 +157,12 @@ struct ImplSVAppData
      */
     ImeStatusWindowMode meShowImeStatusWindow;
 
+    SvFileStream*       mpEventTestInput;
+    Idle*               mpEventTestingIdle;
+    int                 mnEventTestLimit;
+
     DECL_STATIC_LINK_TYPED( ImplSVAppData, ImplQuitMsg, void*, void );
+    DECL_LINK_TYPED(VclEventTestingHdl, Idle*, void);
 };
 
 struct ImplSVGDIData

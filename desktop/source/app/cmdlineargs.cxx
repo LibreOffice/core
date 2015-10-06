@@ -494,6 +494,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     // vcl/unx/generic/app/sm.cxx:
                     oArg != "session=" &&
 #endif
+                    oArg != "eventtesting" &&
                     //ignore additional legacy options that don't do anything anymore
                     oArg != "nocrashreport" &&
                     m_unknown.isEmpty())

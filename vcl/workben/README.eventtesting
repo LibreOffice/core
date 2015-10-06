@@ -1,0 +1,13 @@
+Notes on experimental afl driven ui fuzzing
+
+only keyboard events for now
+
+vcl/workben/eventtesting is just serialized "helloworld" keystrokes to get
+things started
+
+currently an arbitrary limit of 10 keystrokes before application quits in
+order to initially explore that shallow space
+
+Xnest :1
+cp vcl/workben/eventtesting .
+afl-fuzz -f eventtesting -t 10000 -i ~/fuzz/in.vcl -o ~/fuzz/out.vcl -d -T vcl -m 50000000 instdir/program/soffice.bin --nologo --writer --eventtesting --norestore --display :1

@@ -327,10 +327,75 @@ const vcl::KeyCode* Application::GetReservedKeyCode( sal_uLong i )
         return &ImplReservedKeys::get()->first[i].mKeyCode;
 }
 
+namespace
+{
+    bool InjectKeyEvent(SvStream& rStream)
+    {
+        VclPtr<vcl::Window> xWin(Application::GetActiveTopWindow());
+        if (!xWin)
+            return false;
+
+        SalKeyEvent aKeyEvent;
+        rStream.ReadUInt64(aKeyEvent.mnTime);
+        rStream.ReadUInt16(aKeyEvent.mnCode);
+        rStream.ReadUInt16(aKeyEvent.mnCharCode);
+        rStream.ReadUInt16(aKeyEvent.mnRepeat);
+        if (!rStream.good())
+            return false;
+
+        ImplWindowFrameProc(xWin.get(), NULL, SALEVENT_KEYINPUT, &aKeyEvent);
+        ImplWindowFrameProc(xWin.get(), NULL, SALEVENT_KEYUP, &aKeyEvent);
+        return true;
+    }
+}
+
+IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
+{
+    SAL_INFO("vcl.eventtesting", "EventTestLimit is " << mnEventTestLimit);
+    if (mnEventTestLimit == 0)
+    {
+        delete mpEventTestInput;
+        delete mpEventTestingIdle;
+        SAL_INFO("vcl.eventtesting", "Event Limit reached, exiting" << mnEventTestLimit);
+        Application::Quit();
+    }
+    else
+    {
+        Scheduler::ProcessTaskScheduling(true);
+        if (InjectKeyEvent(*mpEventTestInput))
+            --mnEventTestLimit;
+        if (!mpEventTestInput->good())
+        {
+            delete mpEventTestInput;
+            delete mpEventTestingIdle;
+            SAL_INFO("vcl.eventtesting", "Event Input exhausted, exiting" << mnEventTestLimit);
+            Application::Quit();
+            return;
+        }
+        Scheduler::ProcessTaskScheduling(true);
+        mpEventTestingIdle->Start();
+    }
+}
+
 void Application::Execute()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mbInAppExecute = true;
+
+    sal_uInt16 n = GetCommandLineParamCount();
+    for (sal_uInt16 i = 0; i != n; ++i)
+    {
+        if (GetCommandLineParam(i) == "--eventtesting")
+        {
+            pSVData->maAppData.mnEventTestLimit = 10;
+            pSVData->maAppData.mpEventTestingIdle = new Idle("eventtesting");
+            pSVData->maAppData.mpEventTestingIdle->SetIdleHdl(LINK(&(pSVData->maAppData), ImplSVAppData, VclEventTestingHdl));
+            pSVData->maAppData.mpEventTestingIdle->SetPriority(SchedulerPriority::LOWEST);
+            pSVData->maAppData.mpEventTestInput = new SvFileStream("eventtesting", StreamMode::READ);
+            pSVData->maAppData.mpEventTestingIdle->Start();
+            break;
+        }
+    }
 
     while ( !pSVData->maAppData.mbAppQuit )
         Application::Yield();
