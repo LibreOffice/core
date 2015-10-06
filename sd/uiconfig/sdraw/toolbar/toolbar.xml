@@ -37,9 +37,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:style="radio" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled" toolbar:style="radio" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="10104" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="10110" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox" toolbar:style="radio dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:LineToolbox" toolbar:style="radio dropdown"/>
