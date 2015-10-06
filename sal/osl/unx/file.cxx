@@ -38,6 +38,7 @@
 #include "uunxapi.hxx"
 
 #include <algorithm>
+#include <cassert>
 #include <limits>
 
 #include <string.h>
@@ -217,12 +218,12 @@ void FileHandle_Impl::Allocator::deallocate (sal_uInt8 * pBuffer)
 FileHandle_Impl::Guard::Guard(pthread_mutex_t * pMutex)
     : m_mutex (pMutex)
 {
-    OSL_PRECOND (m_mutex != 0, "FileHandle_Impl::Guard::Guard(): null pointer.");
+    assert(m_mutex != 0);
     (void) pthread_mutex_lock (m_mutex); // ignoring EINVAL ...
 }
 FileHandle_Impl::Guard::~Guard()
 {
-    OSL_PRECOND (m_mutex != 0, "FileHandle_Impl::Guard::~Guard(): null pointer.");
+    assert(m_mutex != 0);
     (void) pthread_mutex_unlock (m_mutex);
 }
 
