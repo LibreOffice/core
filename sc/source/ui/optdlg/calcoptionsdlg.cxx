@@ -97,6 +97,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpEmptyAsZero,"checkEmptyAsZero");
     mpEmptyAsZero->Check(rConfig.mbEmptyStringAsZero);
     mpEmptyAsZero->SetClickHdl(LINK(this, ScCalcOptionsDialog, AsZeroModifiedHdl));
+    CoupleEmptyAsZeroToStringConversion();
 
     get(mpSyntax,"comboSyntaxRef");
     mpSyntax->SelectEntryPos( toSelectedItem(rConfig.meStringRefAddressSyntax) );
@@ -194,35 +195,41 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
 #endif
 }
 
+void ScCalcOptionsDialog::CoupleEmptyAsZeroToStringConversion()
+{
+    switch (maConfig.meStringConversion)
+    {
+        case ScCalcConfig::StringConversion::ILLEGAL:
+            maConfig.mbEmptyStringAsZero = false;
+            mpEmptyAsZero->Check(false);
+            mpEmptyAsZero->Enable(false);
+            break;
+        case ScCalcConfig::StringConversion::ZERO:
+            maConfig.mbEmptyStringAsZero = true;
+            mpEmptyAsZero->Check();
+            mpEmptyAsZero->Enable(false);
+            break;
+        case ScCalcConfig::StringConversion::UNAMBIGUOUS:
+        case ScCalcConfig::StringConversion::LOCALE:
+            // Reset to the value the user selected before.
+            maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero;
+            mpEmptyAsZero->Enable(true);
+            mpEmptyAsZero->Check( mbSelectedEmptyStringAsZero);
+            break;
+    }
+}
+
 IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, CheckBox*, pCheckBox )
 {
-    maConfig.mbEmptyStringAsZero = pCheckBox->IsChecked();
+    maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero = pCheckBox->IsChecked();
     return 0;
 }
 
 IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox*, pConv )
 {
 
-  maConfig.meStringConversion = (ScCalcConfig::StringConversion)pConv->GetSelectEntryPos();
-    switch (maConfig.meStringConversion)
-    {
-         case ScCalcConfig::StringConversion::ILLEGAL:
-                    maConfig.mbEmptyStringAsZero = false;
-                    mpEmptyAsZero->Check(false);
-                    mpEmptyAsZero->Enable(false);
-         break;
-         case ScCalcConfig::StringConversion::ZERO:
-                    maConfig.mbEmptyStringAsZero = true;
-                    mpEmptyAsZero->Check(true);
-                    mpEmptyAsZero->Enable(false);
-         break;
-         case ScCalcConfig::StringConversion::UNAMBIGUOUS:
-         case ScCalcConfig::StringConversion::LOCALE:
-                    // Reset to the value the user selected before.
-                    maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero;
-                    mpEmptyAsZero->Enable(true);
-         break;
-     }
+    maConfig.meStringConversion = (ScCalcConfig::StringConversion)pConv->GetSelectEntryPos();
+    CoupleEmptyAsZeroToStringConversion();
     return 0;
 }
 
