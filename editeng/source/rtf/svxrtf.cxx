@@ -1026,7 +1026,6 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                         pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();  // can be changed after AttrGroupEnd!
                         pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
                         aAttrStack.push_back( pNew );
-                        pAkt = pNew;
                     }
                 }
                 else
