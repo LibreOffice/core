@@ -3091,17 +3091,15 @@ void Content::lock(
                       aOwner ));
         }
         break;
+        case SC_FORBIDDEN:
+        case SC_NOT_IMPLEMENTED:
         case SC_METHOD_NOT_ALLOWED:
             // this it's not always received, but the RFC4918 (which supersed RFC2518)
             // tells about this in:
             // http://tools.ietf.org/html/rfc4918#appendix-D.1
             // throw exception, will be interpreted by the lock requester (framework)
             // it is actually a info, not an error
-            throw ucb::InteractiveLockingLockNotAvailableException( e.getData(),
-                                                                    static_cast< cppu::OWeakObject * >( this ),
-                                                                    task::InteractionClassification_INFO,
-                                                                    aURL,
-                                                                    e.getExtendedError() );
+            return;
             break;
             //i126305 TODO
             //see http://tools.ietf.org/html/rfc4918#section-9.10.6
@@ -3579,12 +3577,18 @@ const Content::ResourceType & Content::getResourceType(
         catch ( DAVException const & e )
         {
             rResAccess->resetUri();
-
-            if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
+            switch(  e.getStatus() )
             {
+                // returned errors are part of base http 1.1 RFCs:
+            case SC_FORBIDDEN:          // https://tools.ietf.org/html/rfc7231#section-6.5.3
+            case SC_NOT_IMPLEMENTED:    // http://tools.ietf.org/html/rfc7231#section-6.6.2
+            case SC_METHOD_NOT_ALLOWED: // http://tools.ietf.org/html/rfc7231#section-6.5.5
                 // Status SC_METHOD_NOT_ALLOWED is a safe indicator that the
                 // resource is NON_DAV
                 eResourceType = NON_DAV;
+                break;
+            default:
+                ;
             }
             // cancel command execution is case that no user authentication data has been provided.
             if ( e.getError() == DAVException::DAV_HTTP_NOAUTH )
