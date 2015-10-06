@@ -63,8 +63,8 @@ bool is_equal(T x, T y, sal_Int16 _nPrec)
 
     if (_nPrec != PREC_long_double)
     {
-        t_print(T_VERBOSE, "double equal: %.20f\n", x);
-        t_print(T_VERBOSE, "              %.20f\n", y);
+        //t_print(T_VERBOSE, "double equal: %.20f\n", x);
+        //t_print(T_VERBOSE, "              %.20f\n", y);
     }
     //here nPrecOfN is the number after dot
     sal_Int32 nBeforeDot = sal_Int32( log10(x) );
@@ -76,20 +76,24 @@ bool is_equal(T x, T y, sal_Int16 _nPrec)
     sal_Int32 nPrecOfN = -nPRECISION + nBeforeDot;
 
     if (_nPrec != PREC_long_double)
-        t_print(T_VERBOSE, "nPrecOfN is  %d\n", nPrecOfN);
+    {
+        //t_print(T_VERBOSE, "nPrecOfN is  %d\n", nPrecOfN);
+    }
 
     long double nPrec = pow(0.1, -nPrecOfN);
 
     if (_nPrec != PREC_long_double)
-        t_print(T_VERBOSE, "        prec: %.20f\n", nPrec);
+    {
+        //t_print(T_VERBOSE, "        prec: %.20f\n", nPrec);
+    }
 
     long double nDelta = fabs( x - y ) ;
 
     if (_nPrec != PREC_long_double)
     {
-        t_print(T_VERBOSE, "       delta: %.20f\n", nDelta);
-        t_print(T_VERBOSE, "       nPrec: %.20f\n", nPrec);
-        t_print(T_VERBOSE, "delta must be less or equal to prec!\n\n");
+        //t_print(T_VERBOSE, "       delta: %.20f\n", nDelta);
+        //t_print(T_VERBOSE, "       nPrec: %.20f\n", nPrec);
+        //t_print(T_VERBOSE, "delta must be less or equal to prec!\n\n");
     }
 
     if (nDelta > nPrec)
