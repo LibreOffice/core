@@ -80,6 +80,7 @@
 #include <unomid.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <numeric>
 
 
 using namespace ::com::sun::star;
