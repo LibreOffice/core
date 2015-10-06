@@ -319,6 +319,9 @@ bool SwViewOption::IsAutoCompleteWords()
 
 void SwViewOption::SetOnlineSpell(bool b)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     b ? (nCoreOptions |= VIEWOPT_1_ONLINESPELL ) : ( nCoreOptions &= ~VIEWOPT_1_ONLINESPELL);
 }
 

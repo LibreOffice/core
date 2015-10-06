@@ -98,6 +98,7 @@
 
 #include <tools/tenccvt.hxx>
 #include <vcl/settings.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;
@@ -232,7 +233,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CTL,
             ::com::sun::star::i18n::ScriptType::COMPLEX), EE_CHAR_LANGUAGE_CTL );
 
-        mbOnlineSpell = aOptions.bIsSpellAuto;
+        if (!comphelper::LibreOfficeKit::isActive())
+            mbOnlineSpell = aOptions.bIsSpellAuto;
     }
 
     LanguageType eRealLanguage = MsLangId::getRealLanguage( meLanguage );
