@@ -249,7 +249,6 @@ merge slideshow::internal::UserPaintEventHandler with slideshow::internal::Paint
 merge slideshow::internal::View with slideshow::internal::UnoView
 merge slideshow::internal::ViewRepaintHandler with (anonymous namespace)::SlideShowImpl::SeparateListenerImpl
 merge slideshow::internal::ViewUpdate with slideshow::internal::ShapeManagerImpl
-merge store::IStoreHandle with store::OStoreObject
 merge store::PageCache with store::PageCache_Impl
 merge svgio::svgreader::InfoProvider with svgio::svgreader::SvgNode
 merge svl::IUndoManager with SfxUndoManager

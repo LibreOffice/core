@@ -29,46 +29,19 @@ namespace store
 
 /*========================================================================
  *
- * IStoreHandle interface.
- *
- *======================================================================*/
-class IStoreHandle : public virtual salhelper::SimpleReferenceObject
-{
-public:
-    /** Replaces dynamic_cast type checking.
-     */
-    virtual bool isKindOf (sal_uInt32 nTypeId) = 0;
-
-protected:
-    virtual ~IStoreHandle() {}
-};
-
-/** Template helper function as dynamic_cast replacement.
- */
-template<class store_handle_type>
-store_handle_type * SAL_CALL query (
-    IStoreHandle * pHandle, store_handle_type *);
-
-/*========================================================================
- *
  * OStoreObject interface.
  *
  *======================================================================*/
-class OStoreObject : public store::IStoreHandle
+class OStoreObject : public virtual salhelper::SimpleReferenceObject
 {
-    /** Template function specialization as dynamic_cast replacement.
-     */
-    friend OStoreObject*
-    SAL_CALL query<> (IStoreHandle *pHandle, OStoreObject*);
-
 public:
     /** Construction.
      */
     OStoreObject() {}
 
-    /** IStoreHandle.
+    /** Replaces dynamic_cast type checking.
      */
-    virtual bool isKindOf (sal_uInt32 nTypeId) SAL_OVERRIDE;
+    virtual bool isKindOf (sal_uInt32 nTypeId);
 
 protected:
     /** Destruction.
@@ -83,18 +56,11 @@ private:
     OStoreObject& operator= (const OStoreObject&) SAL_DELETED_FUNCTION;
 };
 
-/** Template function specialization as dynamic_cast replacement.
+/** Template helper function as dynamic_cast replacement.
  */
-template<> inline OStoreObject*
-SAL_CALL query (IStoreHandle *pHandle, OStoreObject*)
-{
-    if (pHandle && pHandle->isKindOf (OStoreObject::m_nTypeId))
-    {
-        // Handle is kind of OStoreObject.
-        return static_cast<OStoreObject*>(pHandle);
-    }
-    return 0;
-}
+template<class store_handle_type>
+store_handle_type * SAL_CALL query (
+    OStoreObject * pHandle, store_handle_type *);
 
 /*========================================================================
  *

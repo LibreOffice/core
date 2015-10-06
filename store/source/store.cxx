@@ -48,7 +48,7 @@ public:
     static store_handle_type * SAL_CALL query (void * pHandle)
     {
         return store::query (
-            static_cast<IStoreHandle*>(pHandle),
+            static_cast<OStoreObject*>(pHandle),
             static_cast<store_handle_type*>(0));
     }
 };
@@ -68,7 +68,7 @@ storeError SAL_CALL store_acquireHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C()
 {
-    IStoreHandle *pHandle = static_cast<IStoreHandle*>(Handle);
+    OStoreObject *pHandle = static_cast<OStoreObject*>(Handle);
     if (!pHandle)
         return store_E_InvalidHandle;
 
@@ -83,7 +83,7 @@ storeError SAL_CALL store_releaseHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C()
 {
-    IStoreHandle *pHandle = static_cast<IStoreHandle*>(Handle);
+    OStoreObject *pHandle = static_cast<OStoreObject*>(Handle);
     if (!pHandle)
         return store_E_InvalidHandle;
 
