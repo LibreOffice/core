@@ -1372,7 +1372,6 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                             , aPercentDiagonalPropertyName, uno::makeAny( static_cast< sal_Int16 >(rnRoundedEdges) ) ) )
                     {
                         bDifferentRoundedEdges = true;
-                        nCurrentRoundedEdges = -1;
                     }
                 }
 
