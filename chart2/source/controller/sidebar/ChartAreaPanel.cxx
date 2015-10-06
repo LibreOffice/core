@@ -99,8 +99,6 @@ DrawModelWrapper* getDrawModelWrapper(css::uno::Reference<css::frame::XModel> xM
 XGradient getXGradientForName(css::uno::Reference<css::frame::XModel> xModel,
         const OUString& rName)
 {
-
-
     try
     {
         ViewElementListProvider aProvider = getViewElementListProvider(xModel);
