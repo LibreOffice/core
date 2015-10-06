@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <string>
+#include <boost/property_tree/json_parser.hpp>
+
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/dispatchcommand.hxx>
@@ -23,7 +26,6 @@
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
-#include <string>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 
@@ -71,6 +73,7 @@ private:
     OString m_aTextSelection;
     bool m_bFound;
     sal_Int32 m_nSearchResultCount;
+    std::vector<OString> m_aSearchResultSelection;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
@@ -135,6 +138,16 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     {
         std::string aStrPayload(pPayload);
         m_nSearchResultCount = std::stoi(aStrPayload.substr(0, aStrPayload.find_first_of(";")));
+    }
+    break;
+    case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
+    {
+        m_aSearchResultSelection.clear();
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(pPayload);
+        boost::property_tree::read_json(aStream, aTree);
+        for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
+            m_aSearchResultSelection.push_back(rValue.second.data().c_str());
     }
     break;
     }
@@ -466,6 +479,8 @@ void SwTiledRenderingTest::testSearchAll()
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was 0; should be 2 results in the body text.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nSearchResultCount);
+    // Make sure that we get exactly as many rectangle lists as matches.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSearchResultSelection.size());
 
     comphelper::LibreOfficeKit::setActive(false);
 #endif
