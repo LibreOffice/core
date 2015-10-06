@@ -663,17 +663,20 @@ SwSectionFrm* SwSectionFrm::FindMaster() const
 {
     OSL_ENSURE( IsFollow(), "SwSectionFrm::FindMaster(): !IsFollow" );
 
+    if (!pSection)
+        return nullptr;
+
     SwIterator<SwSectionFrm,SwFormat> aIter( *pSection->GetFormat() );
     SwSectionFrm* pSect = aIter.First();
     while ( pSect )
     {
-            if( pSect->GetFollow() == this )
-                return pSect;
+        if (pSect->GetFollow() == this)
+            return pSect;
         pSect = aIter.Next();
     }
 
     OSL_FAIL( "Follow ist lost in Space." );
-    return 0;
+    return nullptr;
 }
 
 SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const

@@ -179,9 +179,9 @@ void SwSectionFrm::DelEmpty( bool bRemove )
         }
         _Cut( bRemove );
     }
-    if( IsFollow() )
+    SwSectionFrm *pMaster = IsFollow() ? FindMaster() : nullptr;
+    if (pMaster)
     {
-        SwSectionFrm *pMaster = FindMaster();
         pMaster->SetFollow( GetFollow() );
         // A Master always grabs the space until the lower edge of his
         // Upper. If he doesn't have a Follow anymore, he can
