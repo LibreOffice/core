@@ -496,12 +496,12 @@ void ZipPackage::getZipFileContents()
     ZipPackageStream *pPkgStream;
     ZipPackageFolder *pPkgFolder, *pCurrent;
     OUString sTemp, sDirName;
-    sal_Int32 nOldIndex, nIndex, nStreamIndex;
+    sal_Int32 nOldIndex, nStreamIndex;
     FolderHash::iterator aIter;
 
     while (xEnum->hasMoreElements())
     {
-        nIndex = nOldIndex = 0;
+        nOldIndex = 0;
         pCurrent = m_pRootFolder;
         const ZipEntry & rEntry = *xEnum->nextElement();
         OUString rName = rEntry.sPath;
@@ -524,6 +524,7 @@ void ZipPackage::getZipFileContents()
 
         if ( pCurrent == m_pRootFolder )
         {
+            sal_Int32 nIndex;
             while ( ( nIndex = rName.indexOf( '/', nOldIndex ) ) != -1 )
             {
                 sTemp = rName.copy ( nOldIndex, nIndex - nOldIndex );
