@@ -1512,7 +1512,6 @@ namespace xmloff
                                 m_eType = TEXT;
                         }
                     }
-                    knownType = true;
                 }
 
                 // attributes which are common to all the types:
