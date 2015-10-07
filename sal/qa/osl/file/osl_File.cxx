@@ -1446,11 +1446,11 @@ namespace osl_FileStatus
 
             // testDirectory is "/tmp/PID/tmpdir/"
             ::osl::Directory testDirectory( aTmpName3 );
-                ::osl::FileBase::RC nError1 = testDirectory.open();
+            testDirectory.open();
             ::rtl::OUString aFileName ("link.file");
             bool bOk = false;
             while (true) {
-                nError1 = testDirectory.getNextItem( rItem_link, 4 );
+                osl::FileBase::RC nError1 = testDirectory.getNextItem( rItem_link, 4 );
                 if (::osl::FileBase::E_None == nError1) {
                     sal_uInt32 mask_link = osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_LinkTargetURL;
                     ::osl::FileStatus   rFileStatus( mask_link );
