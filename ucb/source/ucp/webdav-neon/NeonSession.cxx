@@ -358,7 +358,7 @@ namespace {
 } // namespace
 
 extern "C" int NeonSession_CertificationNotify( void *userdata,
-                                                int failures,
+                                                int,
                                                 const ne_ssl_certificate *cert )
 {
     OSL_ASSERT( cert );
@@ -375,8 +375,6 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
 
     if ( !xCertificateContainer.is() )
         return 1;
-
-    failures = 0;
 
     char * dn = ne_ssl_readable_dname( ne_ssl_cert_subject( cert ) );
     OUString cert_subject( dn, strlen( dn ), RTL_TEXTENCODING_UTF8, 0 );
@@ -462,15 +460,13 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         pSession->getRequestEnvironment().m_xEnv );
     if ( xEnv.is() )
     {
-        failures = static_cast< int >( certValidity );
-
         uno::Reference< task::XInteractionHandler > xIH(
             xEnv->getInteractionHandler() );
         if ( xIH.is() )
         {
             rtl::Reference< ucbhelper::SimpleCertificateValidationRequest >
                 xRequest( new ucbhelper::SimpleCertificateValidationRequest(
-                    (sal_Int32)failures, xEECert, pSession->getHostName() ) );
+                    (sal_Int32)certValidity, xEECert, pSession->getHostName() ) );
             xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
