@@ -218,7 +218,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
             case sal_Unicode('('):
                 if (key_count > 0) {
                     sal_Int16 end = i+1;
-                    for (end=i+1; end < len && keyStr[end] != close; end++) ;
+                    for (; end < len && keyStr[end] != close; end++) ;
 
                     if (end >= len) // no found
                         throw RuntimeException();
