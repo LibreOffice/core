@@ -14,12 +14,6 @@ $(eval $(call gb_Jar_set_packageroot,mediawiki,com))
 
 $(eval $(call gb_Jar_set_manifest,mediawiki,$(SRCDIR)/swext/mediawiki/src/com/sun/star/wiki/MANIFEST.MF))
 
-$(eval $(call gb_Jar_use_externals,mediawiki,\
-	commons-codec \
-	commons-lang \
-	commons-logging \
-))
-
 $(eval $(call gb_Jar_use_jars,mediawiki,\
 	juh \
 	jurt \
