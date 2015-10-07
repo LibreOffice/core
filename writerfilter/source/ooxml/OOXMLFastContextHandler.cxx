@@ -1031,8 +1031,11 @@ void OOXMLFastContextHandlerProperties::handlePicture()
 
 void OOXMLFastContextHandlerProperties::handleBreak()
 {
-    OOXMLBreakHandler aBreakHandler(*mpStream);
-    getPropertySet()->resolve(aBreakHandler);
+    if(isForwardEvents())
+    {
+        OOXMLBreakHandler aBreakHandler(*mpStream);
+        getPropertySet()->resolve(aBreakHandler);
+    }
 }
 
 void OOXMLFastContextHandlerProperties::handleOLE()
