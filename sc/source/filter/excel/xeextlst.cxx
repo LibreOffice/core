@@ -321,6 +321,7 @@ XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot
                     case IconSet_3Smilies:
                     case IconSet_3ColorSmilies:
                     case IconSet_5Boxes:
+                    case IconSet_3Stars:
                         bNeedsExt = true;
                     break;
                     default:
