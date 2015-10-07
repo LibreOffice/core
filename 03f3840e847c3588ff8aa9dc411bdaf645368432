@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_20b4ebf0",
+        "filename": "vcl/opengl/win/WinDeviceInfo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-10-07T11:11:29Z",
+      "side": 1,
+      "message": "This should be true...",
+      "range": {
+        "startLine": 736,
+        "startChar": 15,
+        "endLine": 736,
+        "endChar": 20
+      },
+      "revId": "03f3840e847c3588ff8aa9dc411bdaf645368432",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
