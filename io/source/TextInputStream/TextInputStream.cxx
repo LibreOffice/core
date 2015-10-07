@@ -344,7 +344,6 @@ sal_Int32 OTextInputStream::implReadNext()
                     mSeqSource.realloc( nTotalRead );
                 }
                 mSeqSource.getArray()[ nOldLen ] = aOneByteSeq.getConstArray()[ 0 ];
-                pbSource = mSeqSource.getConstArray();
                 bCont = true;
             }
 
