@@ -185,6 +185,10 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 setHeadless();
             }
+            else if ( oArg == "eventtesting" )
+            {
+                m_eventtesting = true;
+            }
             else if ( oArg == "cat" )
             {
                 m_textcat = true;
@@ -494,7 +498,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     // vcl/unx/generic/app/sm.cxx:
                     oArg != "session=" &&
 #endif
-                    oArg != "eventtesting" &&
                     //ignore additional legacy options that don't do anything anymore
                     oArg != "nocrashreport" &&
                     m_unknown.isEmpty())
@@ -599,6 +602,7 @@ void CommandLineArgs::InitParamValues()
     m_invisible = false;
     m_headless = false;
 #endif
+    m_eventtesting = false;
     m_quickstart = false;
     m_noquickstart = false;
     m_terminateafterinit = false;

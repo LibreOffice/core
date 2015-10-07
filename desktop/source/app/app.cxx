@@ -1474,7 +1474,7 @@ int Desktop::Main()
             }
         }
 
-        if ( rCmdLineArgs.IsHeadless() )
+        if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
         {
             // Ensure that we use not the system file dialogs as
             // headless mode relies on Application::EnableHeadlessMode()
@@ -1645,7 +1645,7 @@ int Desktop::doShutdown()
     delete pResMgr, pResMgr = NULL;
     // Restore old value
     const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
-    if ( rCmdLineArgs.IsHeadless() )
+    if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
         SvtMiscOptions().SetUseSystemFileDialog( pExecGlobals->bUseSystemFileDialog );
 
     OUString pidfileName = rCmdLineArgs.GetPidfileName();

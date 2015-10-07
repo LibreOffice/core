@@ -61,6 +61,7 @@ class CommandLineArgs: private boost::noncopyable
         bool                IsNoRestore() const { return m_norestore;}
         bool                IsNoDefault() const { return m_nodefault;}
         bool                IsHeadless() const { return m_headless;}
+        bool                IsEventTesting() const { return m_eventtesting;}
         bool                IsQuickstart() const { return m_quickstart;}
         bool                IsNoQuickstart() const { return m_noquickstart;}
         bool                IsTerminateAfterInit() const { return m_terminateafterinit;}
@@ -123,6 +124,7 @@ class CommandLineArgs: private boost::noncopyable
         bool m_invisible;
         bool m_norestore;
         bool m_headless;
+        bool m_eventtesting;
         bool m_quickstart;
         bool m_noquickstart;
         bool m_terminateafterinit;
