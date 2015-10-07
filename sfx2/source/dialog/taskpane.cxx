@@ -607,7 +607,7 @@ namespace sfx2
             ::svt::PToolPanel pCustomPanel( new CustomToolPanel( aResourceNode, m_xFrame ) );
 
             size_t nPanelPos = m_aPanelDeck->GetPanelCount();
-            nPanelPos = m_aPanelDeck->InsertPanel( pCustomPanel, nPanelPos );
+            m_aPanelDeck->InsertPanel( pCustomPanel, nPanelPos );
 
             if ( ::comphelper::getBOOL( aResourceNode.getNodeValue( "Visible" ) ) )
                 sFirstVisiblePanelResource = *resource;
