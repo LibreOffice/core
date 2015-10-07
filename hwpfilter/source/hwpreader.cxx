@@ -648,8 +648,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 }
                 if( prop->angle > 0 && ( prop->gstyle == 1 || prop->gstyle == 4))
                 {
-                    int angle = prop->angle >= 180 ? prop->angle - 180 : prop->angle;
-                    angle = 1800 - prop->angle * 10;
+                    int angle = 1800 - prop->angle * 10;
                     padd( "draw:angle", sXML_CDATA,
                         ascii(Int2Str( angle, "%d", buf)));
                 }
