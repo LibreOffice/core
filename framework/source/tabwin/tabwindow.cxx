@@ -606,15 +606,11 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::ex
     TabControl* pTabControl = impl_GetTabControl( m_xTabControlWindow );
     if ( pTabControl )
     {
-        sal_uInt16 nCurTabId = pTabControl->GetCurPageId();
         sal_uInt16 nPos      = pTabControl->GetPagePos( sal_uInt16( ID ));
         if ( nPos == TAB_PAGE_NOTFOUND )
             throw css::lang::IndexOutOfBoundsException();
-        else
-        {
-            pTabControl->RemovePage( sal_uInt16( ID ));
-            nCurTabId = pTabControl->GetCurPageId();
-        }
+        pTabControl->RemovePage( sal_uInt16( ID ));
+        sal_uInt16 nCurTabId = pTabControl->GetCurPageId();
         aLock.clear();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
