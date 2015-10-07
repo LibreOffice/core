@@ -240,35 +240,17 @@ public:
     static const typename VectorType::value_type&
                         getVectorElement( const VectorType& rVector, sal_Int32 nIndex, const typename VectorType::value_type& rDefault );
 
-    /** Returns the reference to an existing element of the passed vector, or
-        the passed default value, if the passed index is out of bounds. */
-    template< typename VectorType >
-    static typename VectorType::value_type&
-                        getVectorElementAccess( VectorType& rVector, sal_Int32 nIndex, typename VectorType::value_type& rDefault );
-
     /** Returns the pointer to an existing element of the passed map, or a null
         pointer, if an element with the passed key does not exist. */
     template< typename MapType >
     static const typename MapType::mapped_type*
                         getMapElement( const MapType& rMap, const typename MapType::key_type& rKey );
 
-    /** Returns the pointer to an existing element of the passed map, or a null
-        pointer, if an element with the passed key does not exist. */
-    template< typename MapType >
-    static typename MapType::mapped_type*
-                        getMapElementAccess( MapType& rMap, const typename MapType::key_type& rKey );
-
     /** Returns the reference to an existing element of the passed map, or the
         passed default value, if an element with the passed key does not exist. */
     template< typename MapType >
     static const typename MapType::mapped_type&
                         getMapElement( const MapType& rMap, const typename MapType::key_type& rKey, const typename MapType::mapped_type& rDefault );
-
-    /** Returns the reference to an existing element of the passed map, or the
-        passed default value, if an element with the passed key does not exist. */
-    template< typename MapType >
-    static typename MapType::mapped_type&
-                        getMapElementAccess( MapType& rMap, const typename MapType::key_type& rKey, typename MapType::mapped_type& rDefault );
 
     // vector/map/matrix to UNO sequence --------------------------------------
 
@@ -316,12 +298,6 @@ template< typename VectorType >
     return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? rVector[ static_cast< size_t >( nIndex ) ] : rDefault;
 }
 
-template< typename VectorType >
-/*static*/ typename VectorType::value_type& ContainerHelper::getVectorElementAccess( VectorType& rVector, sal_Int32 nIndex, typename VectorType::value_type& rDefault )
-{
-    return ((0 <= nIndex) && (static_cast< size_t >( nIndex ) < rVector.size())) ? rVector[ static_cast< size_t >( nIndex ) ] : rDefault;
-}
-
 template< typename MapType >
 /*static*/ const typename MapType::mapped_type* ContainerHelper::getMapElement( const MapType& rMap, const typename MapType::key_type& rKey )
 {
@@ -330,23 +306,9 @@ template< typename MapType >
 }
 
 template< typename MapType >
-/*static*/ typename MapType::mapped_type* ContainerHelper::getMapElementAccess( MapType& rMap, const typename MapType::key_type& rKey )
-{
-    typename MapType::iterator aIt = rMap.find( rKey );
-    return (aIt == rMap.end()) ? 0 : &aIt->second;
-}
-
-template< typename MapType >
 /*static*/ const typename MapType::mapped_type& ContainerHelper::getMapElement( const MapType& rMap, const typename MapType::key_type& rKey, const typename MapType::mapped_type& rDefault )
 {
     typename MapType::const_iterator aIt = rMap.find( rKey );
-    return (aIt == rMap.end()) ? rDefault : aIt->second;
-}
-
-template< typename MapType >
-/*static*/ typename MapType::mapped_type& ContainerHelper::getMapElementAccess( MapType& rMap, const typename MapType::key_type& rKey, typename MapType::mapped_type& rDefault )
-{
-    typename MapType::iterator aIt = rMap.find( rKey );
     return (aIt == rMap.end()) ? rDefault : aIt->second;
 }
 

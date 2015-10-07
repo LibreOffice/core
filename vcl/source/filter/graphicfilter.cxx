@@ -1159,11 +1159,6 @@ sal_uInt16 GraphicFilter::GetImportFormatNumber( const OUString& rFormatName )
     return pConfig->GetImportFormatNumber( rFormatName );
 }
 
-sal_uInt16 GraphicFilter::GetImportFormatNumberForMediaType( const OUString& rMediaType )
-{
-    return pConfig->GetImportFormatNumberForMediaType( rMediaType );
-}
-
 sal_uInt16 GraphicFilter::GetImportFormatNumberForShortName( const OUString& rShortName )
 {
     return pConfig->GetImportFormatNumberForShortName( rShortName );
@@ -1184,20 +1179,9 @@ OUString GraphicFilter::GetImportFormatTypeName( sal_uInt16 nFormat )
     return pConfig->GetImportFilterTypeName( nFormat );
 }
 
-OUString GraphicFilter::GetImportFormatMediaType( sal_uInt16 nFormat )
-{
-    return pConfig->GetImportFormatMediaType( nFormat );
-}
-
 OUString GraphicFilter::GetImportFormatShortName( sal_uInt16 nFormat )
 {
     return pConfig->GetImportFormatShortName( nFormat );
-}
-
-OUString GraphicFilter::GetImportOSFileType( sal_uInt16 )
-{
-    OUString aOSFileType;
-    return aOSFileType;
 }
 
 OUString GraphicFilter::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
@@ -1240,11 +1224,6 @@ OUString GraphicFilter::GetExportFormatName( sal_uInt16 nFormat )
     return pConfig->GetExportFormatName( nFormat );
 }
 
-OUString GraphicFilter::GetExportFormatTypeName( sal_uInt16 nFormat )
-{
-    return pConfig->GetExportFilterTypeName( nFormat );
-}
-
 OUString GraphicFilter::GetExportFormatMediaType( sal_uInt16 nFormat )
 {
     return pConfig->GetExportFormatMediaType( nFormat );
@@ -1253,12 +1232,6 @@ OUString GraphicFilter::GetExportFormatMediaType( sal_uInt16 nFormat )
 OUString GraphicFilter::GetExportFormatShortName( sal_uInt16 nFormat )
 {
     return pConfig->GetExportFormatShortName( nFormat );
-}
-
-OUString GraphicFilter::GetExportOSFileType( sal_uInt16 )
-{
-    OUString aOSFileType;
-    return aOSFileType;
 }
 
 OUString GraphicFilter::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )

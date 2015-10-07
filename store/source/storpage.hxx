@@ -117,17 +117,6 @@ public:
     storeError remove (
         const OStorePageKey &rKey);
 
-    /** rebuild (combines recover and compact from 'Src' to 'Dst').
-     *  @param  pSrcLB [in] accessed readonly.
-     *  @param  pDstLB [in] truncated and accessed readwrite (as initialize()).
-     *  @return store_E_None upon success.
-     *
-     *  @see store_rebuildFile()
-     */
-    storeError rebuild (
-        ILockBytes *pSrcLB,
-        ILockBytes *pDstLB);
-
     /** IStoreHandle.
      */
     virtual bool isKindOf (sal_uInt32 nTypeId) SAL_OVERRIDE;

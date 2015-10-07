@@ -578,13 +578,4 @@ bool BitmapFilterStackBlur::filter(Bitmap& rBitmap)
     return true;
 }
 
-bool BitmapFilterStackBlur::filter(BitmapEx& rBitmapEx)
-{
-    Bitmap aBitmap = rBitmapEx.GetBitmap();
-    filter(aBitmap);
-    rBitmapEx = BitmapEx(aBitmap);
-
-    return true;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

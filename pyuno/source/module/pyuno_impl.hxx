@@ -260,16 +260,8 @@ PyRef ustring2PyString( const OUString & source );
 OUString pyString2ustring( PyObject *str );
 
 
-PyRef AnyToPyObject (const com::sun::star::uno::Any & a, const Runtime &r )
-    throw ( com::sun::star::uno::RuntimeException );
-
-com::sun::star::uno::Any PyObjectToAny (PyObject* o)
-    throw ( com::sun::star::uno::RuntimeException );
-
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
     throw ( com::sun::star::reflection::InvocationTargetException );
-
-com::sun::star::uno::TypeClass StringToTypeClass (char* string);
 
 PyRef PyUNO_callable_new (
     const com::sun::star::uno::Reference<com::sun::star::script::XInvocation2> &xInv,
@@ -283,7 +275,6 @@ PyObject *PyUNO_ByteSequence_new( const com::sun::star::uno::Sequence< sal_Int8 
 
 PyRef getTypeClass( const Runtime &);
 PyRef getEnumClass( const Runtime &);
-PyRef getBoolClass( const Runtime &);
 PyRef getCharClass( const Runtime &);
 PyRef getByteSequenceClass( const Runtime & );
 PyRef getPyUnoClass();
@@ -307,8 +298,6 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object )
 
 bool isInterfaceClass( const Runtime &, PyObject *obj );
 bool isInstanceOfStructOrException( PyObject *obj);
-com::sun::star::uno::Sequence<com::sun::star::uno::Type> implementsInterfaces(
-    const Runtime & runtime, PyObject *obj );
 
 struct RuntimeCargo
 {

@@ -25,8 +25,6 @@ public:
     virtual ~BitmapFilterStackBlur();
 
     virtual bool filter(Bitmap& rBitmap) SAL_OVERRIDE;
-
-    bool filter(BitmapEx& rBitmap);
 };
 
 #endif // INCLUDED_VCL_BITMAPFILTERSTACKBLUR_HXX

@@ -162,9 +162,6 @@ public:
                         return( mnLumPercent != 0 || mnContPercent != 0 || mnRPercent != 0 ||
                                 mnGPercent != 0 || mnBPercent != 0 || mfGamma != 1.0 || mbInvert );
                     }
-
-    friend SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr );
-    friend SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr );
 };
 
 class SVT_DLLPUBLIC GraphicObject : public SvDataCopyStream
