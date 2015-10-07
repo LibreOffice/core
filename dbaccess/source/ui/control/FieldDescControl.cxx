@@ -449,63 +449,6 @@ void OFieldDescControl::SetReadOnly( bool bReadOnly )
     }
 }
 
-OUString OFieldDescControl::GetControlText( sal_uInt16 nControlId )
-{
-    // Read out the Controls' texts
-    switch( nControlId )
-    {
-        case FIELD_PROPERTY_BOOL_DEFAULT:
-            if (pBoolDefault)
-                return pBoolDefault->GetSelectEntry();
-            break;
-        case FIELD_PROPERTY_DEFAULT:
-            if (pDefault)
-                return pDefault->GetText();
-            break;
-        case FIELD_PROPERTY_REQUIRED:
-            if (pRequired)
-                return pRequired->GetSelectEntry();
-            break;
-        case FIELD_PROPERTY_TEXTLEN:
-            if (pTextLen)
-                return OUString::number(pTextLen->GetValue());
-            break;
-        case FIELD_PROPERTY_NUMTYPE:
-            if (pNumType)
-                return pNumType->GetSelectEntry();
-            break;
-        case FIELD_PROPERTY_AUTOINC:
-            if (pAutoIncrement)
-                return pAutoIncrement->GetSelectEntry();
-            break;
-        case FIELD_PROPERTY_LENGTH:
-            if (pLength)
-                return pLength->GetText();
-            break;
-        case FIELD_PROPERTY_SCALE:
-            if (pScale)
-                return pScale->GetText();
-            break;
-        case FIELD_PROPERTY_FORMAT:
-            if (pFormatSample)
-                return pFormatSample->GetText();
-            break;
-        case FIELD_PROPERTY_COLUMNNAME:
-            if(m_pColumnName)
-                return m_pColumnName->GetText();
-            break;
-        case FIELD_PROPERTY_TYPE:
-            if(m_pType)
-                return m_pType->GetSelectEntry();
-            break;
-        case FIELD_PROPERTY_AUTOINCREMENT:
-            if(m_pAutoIncrementValue)
-                return m_pAutoIncrementValue->GetText();
-    }
-
-    return OUString();
-}
-
 void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& rText )
 {
     // Set the Controls' texts

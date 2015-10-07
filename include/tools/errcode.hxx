@@ -81,18 +81,12 @@ Warning           ||   ||      |
 
 #ifdef __RSC
 
-#define ERRCODE_TOERRID(x) (x & ~ERRCODE_DYNAMIC_MASK)
 #define ERRCODE_TOERROR(x) \
     ((x & ERRCODE_WARNING_MASK) ? 0 : (x & ERRCODE_ERROR_MASK))
 
 #else
 
 typedef sal_uInt32 ErrCode;
-
-inline sal_uInt32 ERRCODE_TOERRID( ErrCode x )
-{
-    return x & ~ERRCODE_DYNAMIC_MASK;
-}
 
 inline sal_uInt32 ERRCODE_TOERROR( ErrCode x )
 {

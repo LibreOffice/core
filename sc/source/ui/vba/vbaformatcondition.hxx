@@ -56,7 +56,6 @@ public:
     virtual ::sal_Int32 Operator( bool  ) throw (css::script::BasicErrorException) override;
     virtual ::sal_Int32 SAL_CALL Operator(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
     virtual void setFormula1( const css::uno::Any& _aFormula1) throw ( css::script::BasicErrorException ) override;
-    virtual void setFormula2( const css::uno::Any& _aFormula2) throw ( css::script::BasicErrorException ) override;
     virtual css::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& Index ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;

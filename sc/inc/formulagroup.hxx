@@ -141,7 +141,6 @@ public:
     static void getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int32& rPlatformId);
 #endif
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;
-    virtual CompiledFormula* createCompiledFormula( ScFormulaCellGroup& rGroup, ScTokenArray& rCode ) = 0;
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) = 0;
 };
 
@@ -153,7 +152,6 @@ public:
     virtual ~FormulaGroupInterpreterSoftware() {}
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) override;
-    virtual CompiledFormula* createCompiledFormula( ScFormulaCellGroup& rGroup, ScTokenArray& rCode ) override;
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) override;
 };
 

@@ -346,17 +346,6 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForExtension( const OUString&
     return GRFILTER_FORMAT_NOTFOUND;
 }
 
-sal_uInt16 FilterConfigCache::GetImportFormatNumberForMediaType( const OUString& rMediaType )
-{
-    CacheVector::const_iterator aIter, aEnd;
-    for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
-    {
-        if ( aIter->sMediaType.equalsIgnoreAsciiCase( rMediaType ) )
-            return sal::static_int_cast< sal_uInt16 >(aIter - aImport.begin());
-    }
-    return GRFILTER_FORMAT_NOTFOUND;
-}
-
 sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const OUString& rShortName )
 {
     CacheVector::const_iterator aEnd;
@@ -512,13 +501,6 @@ OUString FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat, sal_In
 {
     if ( (nFormat < aExport.size()) && (nEntry < aExport[ nFormat ].lExtensionList.getLength()) )
         return aExport[ nFormat ].lExtensionList[ nEntry ];
-    return OUString("");
-}
-
-OUString FilterConfigCache::GetExportFilterTypeName( sal_uInt16 nFormat )
-{
-    if( nFormat < aExport.size() )
-        return aExport[ nFormat ].sFilterType;
     return OUString("");
 }
 

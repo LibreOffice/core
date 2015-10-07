@@ -572,39 +572,4 @@ SvPersistStream& operator >>
     return rStm.ReadPointer( rpObj );
 }
 
-SvStream& operator >>
-(
-    SvStream & rStm,
-    SvPersistStream & rThis
-)
-{
-    SvStream * pOldStm = rThis.GetStream();
-    rThis.SetStream( &rStm );
-
-    sal_uInt8 nVers;
-    rThis.ReadUChar( nVers ); // Version
-    if( 0 == nVers )
-    {
-        sal_uInt32 nCount = 0;
-        rThis.ReadUInt32( nCount );
-        for( sal_uInt32 i = 0; i < nCount; i++ )
-        {
-            SvPersistBase * pEle;
-            // read, but don't insert into table
-            sal_uIntPtr nId = rThis.ReadObj( pEle, false );
-            if( rThis.GetError() )
-                break;
-
-            // Id of object is never modified
-            rThis.aPUIdx.Insert( nId, pEle );
-            rThis.aPTable[ pEle ] = nId;
-        }
-    }
-    else
-        rThis.SetError( SVSTREAM_FILEFORMAT_ERROR );
-
-    rThis.SetStream( pOldStm );
-    return rStm;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

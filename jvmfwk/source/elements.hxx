@@ -314,11 +314,6 @@ public:
      */
     void getVmParametersArray(rtl_uString *** parParameters, sal_Int32 * size) const;
 
-    /** returns an array.
-        Caller must free the strings and the array.
-     */
-    void getJRELocations(rtl_uString *** parLocations, sal_Int32 * size) const;
-
     const ::std::vector< OUString> & getJRELocations() const { return m_JRELocations;}
 };
 
