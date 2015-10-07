@@ -321,7 +321,6 @@ static HWPDrawingObject *LoadDrawingObject(void)
     fprintf(stderr, "LoadDrawingObject\n");
 
     HWPDrawingObject *hdo, *head, *prev;
-    int res;
 
     unsigned short link_info;
 
@@ -343,7 +342,7 @@ static HWPDrawingObject *LoadDrawingObject(void)
         }
         else
         {
-            switch (res = HWPDOFunc(hdo, OBJFUNC_LOAD, NULL, 0))
+            switch (int res = HWPDOFunc(hdo, OBJFUNC_LOAD, NULL, 0))
             {
                 case OBJRET_FILE_ERROR:
                     goto error;
