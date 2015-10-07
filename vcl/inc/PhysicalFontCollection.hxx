@@ -40,7 +40,7 @@ private:
     typedef std::unordered_map<OUString, PhysicalFontFamily*,OUStringHash> PhysicalFontFamilies;
     PhysicalFontFamilies    maPhysicalFontFamilies;
 
-    PreMatchFontSubstititution* mpPreMatchHook;       // device specific prematch substitution
+    ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyph fallback substitution
 
 public:
@@ -63,7 +63,7 @@ public:
                         OUString& rMissingCodes, int nFallbackLevel ) const;
 
     // prepare platform specific font substitutions
-    void                    SetPreMatchHook( PreMatchFontSubstititution* );
+    void                    SetPreMatchHook( ImplPreMatchFontSubstitution* );
     void                    SetFallbackHook( ImplGlyphFallbackFontSubstitution* );
 
     // misc utilities
