@@ -794,7 +794,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
         // now check symmetric plus handles
         if (bControl) { // cases 5,6,7,8
             sal_uInt16   nSt; // the associated support point
-            sal_uInt16   nFix=nPnt;  // the opposing control point
+            sal_uInt16   nFix;  // the opposing control point
             if (bIsNextControl) { // if the next one is a control point, the on before has to be a support point
                 nSt=nPrevPnt;
                 nFix=nPrevPrevPnt;
