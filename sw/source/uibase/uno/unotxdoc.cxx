@@ -1709,8 +1709,8 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     }
     Reference<XInterface> xTmp(
         arguments == 0
-        ? SvxFmMSFactory::createInstance(aTmpServiceName)
-        : SvxFmMSFactory::createInstanceWithArguments(
+        ? SvxUnoDrawMSFactory::createInstance(aTmpServiceName)
+        : SvxUnoDrawMSFactory::createInstanceWithArguments(
             aTmpServiceName, *arguments));
     if (rServiceName == "com.sun.star.drawing.GroupShape"
         || rServiceName == "com.sun.star.drawing.Shape3DSceneObject")
@@ -1744,7 +1744,7 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames()
     static Sequence< OUString > aServices;
     if ( aServices.getLength() == 0 )
     {
-        Sequence< OUString > aRet =  SvxFmMSFactory::getAvailableServiceNames();
+        Sequence< OUString > aRet =  SvxUnoDrawMSFactory::getAvailableServiceNames();
         OUString* pRet = aRet.getArray();
         for ( sal_Int32 i = 0; i < aRet.getLength(); ++i )
         {
@@ -1756,7 +1756,7 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames()
             }
         }
         Sequence< OUString > aOwn = SwXServiceProvider::GetAllServiceNames();
-        aServices = SvxFmMSFactory::concatServiceNames(aRet, aOwn);
+        aServices = SvxUnoDrawMSFactory::concatServiceNames(aRet, aOwn);
     }
 
     return aServices;

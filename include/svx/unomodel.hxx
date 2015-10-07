@@ -26,13 +26,13 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <sfx2/sfxbasemodel.hxx>
-#include <svx/fmdmod.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/unomod.hxx>
 
 class SdrModel;
 
 class SVX_DLLPUBLIC SvxUnoDrawingModel : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
-                           public SvxFmMSFactory,
+                           public SvxUnoDrawMSFactory,
                            public ::com::sun::star::drawing::XDrawPagesSupplier,
                            public ::com::sun::star::lang::XServiceInfo,
                            public ::com::sun::star::ucb::XAnyCompareFactory
@@ -76,7 +76,7 @@ public:
     // XDrawPagesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPages > SAL_CALL getDrawPages(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // XMultiServiceFactory ( SvxFmMSFactory )
+    // XMultiServiceFactory ( SvxUnoDrawMSFactory )
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

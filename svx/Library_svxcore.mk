@@ -427,7 +427,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/form/delayedevent \
     svx/source/form/fmcontrolbordermanager \
     svx/source/form/fmcontrollayout \
-    svx/source/form/fmdmod \
     svx/source/form/fmdocumentclassification \
     svx/source/form/fmdpage \
     svx/source/form/fmexch \

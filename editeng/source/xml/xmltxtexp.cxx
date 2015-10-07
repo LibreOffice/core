@@ -193,7 +193,7 @@ SvxSimpleUnoModel::~SvxSimpleUnoModel()
 {
 }
 
-// XMultiServiceFactory ( SvxFmMSFactory )
+// XMultiServiceFactory ( SvxUnoDrawMSFactory )
 uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( const OUString& aServiceSpecifier )
     throw(uno::Exception, uno::RuntimeException, std::exception)
 {

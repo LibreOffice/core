@@ -815,7 +815,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::getHandoutMast
     return xPage;
 }
 
-// XMultiServiceFactory ( SvxFmMSFactory )
+// XMultiServiceFactory ( SvxUnoDrawMSFactory )
 
 css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     OUString const & aServiceSpecifier, OUString const & referer)
@@ -1075,7 +1075,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     }
     else
     {
-        xRet = SvxFmMSFactory::createInstance( aServiceSpecifier );
+        xRet = SvxUnoDrawMSFactory::createInstance( aServiceSpecifier );
     }
 
     uno::Reference< drawing::XShape > xShape( xRet, uno::UNO_QUERY );
@@ -1111,7 +1111,7 @@ SdXImpressDocument::createInstanceWithArguments(
     {
         return create(ServiceSpecifier, arg);
     }
-    return SvxFmMSFactory::createInstanceWithArguments(
+    return SvxUnoDrawMSFactory::createInstanceWithArguments(
         ServiceSpecifier, Arguments);
 }
 
@@ -1123,7 +1123,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
+    const uno::Sequence< OUString > aSNS_ORG( SvxUnoDrawMSFactory::getAvailableServiceNames() );
 
     uno::Sequence< OUString > aSNS( mbImpressDoc ? (36) : (19) );
 

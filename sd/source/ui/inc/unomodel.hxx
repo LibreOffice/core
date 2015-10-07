@@ -43,7 +43,7 @@
 
 #include <svl/lstner.hxx>
 #include <sfx2/sfxbasemodel.hxx>
-#include <svx/fmdmod.hxx>
+#include <svx/unomod.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/ITiledRenderable.hxx>
@@ -69,7 +69,7 @@ extern OUString getPageApiNameFromUiName( const OUString& rUIName );
 *                                                                      *
 ***********************************************************************/
 class SD_DLLPUBLIC SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
-                           public SvxFmMSFactory,
+                           public SvxUnoDrawMSFactory,
                            public ::com::sun::star::drawing::XDrawPageDuplicator,
                            public ::com::sun::star::drawing::XLayerSupplier,
                            public ::com::sun::star::drawing::XMasterPagesSupplier,
@@ -191,7 +191,7 @@ public:
     // XPresentationSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation > SAL_CALL getPresentation(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // XMultiServiceFactory ( SvxFmMSFactory )
+    // XMultiServiceFactory ( SvxUnoDrawMSFactory )
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL
     createInstanceWithArguments(

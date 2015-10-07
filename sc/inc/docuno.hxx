@@ -23,7 +23,6 @@
 #include "address.hxx"
 #include <sfx2/sfxbasemodel.hxx>
 #include <svl/lstner.hxx>
-#include <svx/fmdmod.hxx>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
@@ -53,6 +52,7 @@
 #include <svl/itemprop.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <svx/unomod.hxx>
 #include "drwlayer.hxx"
 
 class ScDocShell;
@@ -81,7 +81,7 @@ class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public com::sun::star::view::XRenderable,
                     public com::sun::star::document::XLinkTargetSupplier,
                     public com::sun::star::beans::XPropertySet,
-                    public SvxFmMSFactory,  ///< derived from XMultiServiceFactory
+                    public SvxUnoDrawMSFactory,  ///< derived from XMultiServiceFactory
                     public com::sun::star::lang::XServiceInfo,
                     public ::com::sun::star::util::XChangesNotifier,
                     public com::sun::star::sheet::opencl::XOpenCLSelection

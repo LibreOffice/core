@@ -76,7 +76,7 @@ merge StarSymbolToMSMultiFont with StarSymbolToMSMultiFontImpl
 merge StgReader with WW8Reader
 merge SvListView with SvTreeListBox
 merge SvxShapeMaster with SdXShape
-merge SvxUnoDrawMSFactory with SvxFmMSFactory
+merge SvxUnoDrawMSFactory with SvxUnoDrawMSFactory
 merge SwXParaFrameEnumeration with SwXParaFrameEnumerationImpl
 merge SwXParagraphEnumeration with SwXParagraphEnumerationImpl
 merge SwXTextRanges with SwXTextRangesImpl
