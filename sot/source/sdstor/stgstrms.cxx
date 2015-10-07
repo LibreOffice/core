@@ -431,12 +431,13 @@ bool StgStrm::Pos2Page( sal_Int32 nBytePos )
         SAL_WARN("sot", "seek to index " << nIdx <<
                  " beyond page cache size " << m_aPagesCache.size());
         // fdo#84229 - handle seek to end and back as eg. XclImpStream expects
-        nIdx = m_aPagesCache.size();
         nPage = STG_EOF;
         nOffset = 0;
         // Intriguingly in the past we didn't reset nPos to match the real
-        // length of the stream thus: nPos = nPageSize * nIdx; so retain
-        // this behavior for now.
+        // length of the stream thus:
+        //   nIdx = m_aPagesCache.size();
+        //   nPos = nPageSize * nIdx;
+        // so retain this behavior for now.
         return false;
     }
 
