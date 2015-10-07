@@ -260,13 +260,12 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
-    sal_uLong nErr = sal::static_int_cast< sal_uLong >(-1);
-
     // read header
     bool bNegativ;
     sal_uInt16 nLang;
     nDicVersion = ReadDicVersion(pStream, nLang, bNegativ);
-    if (0 != (nErr = pStream->GetError()))
+    sal_uLong nErr = pStream->GetError();
+    if (0 != nErr)
         return nErr;
 
     nLanguage = nLang;
@@ -440,7 +439,6 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     if (!xStream.is())
         return static_cast< sal_uLong >(-1);
 
-    sal_uLong nErr = sal::static_int_cast< sal_uLong >(-1);
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
 
@@ -448,7 +446,8 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
 
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_UTF8;
     pStream->WriteLine(OString(pVerOOo7));
-    if (0 != (nErr = pStream->GetError()))
+    sal_uLong nErr = pStream->GetError();
+    if (0 != nErr)
         return nErr;
     /* XXX: the <none> case could be differentiated, is it absence or
      * undetermined or multiple? Earlier versions did not know about 'und' and
