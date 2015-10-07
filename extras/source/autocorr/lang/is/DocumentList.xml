@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
+  <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
+  <block-list:block block-list:abbreviated-name=":10.30:" block-list:name="🕥"/>
+  <block-list:block block-list:abbreviated-name=":10:" block-list:name="🕙"/>
+  <block-list:block block-list:abbreviated-name=":11.30:" block-list:name="🕦"/>
+  <block-list:block block-list:abbreviated-name=":11:" block-list:name="🕚"/>
+  <block-list:block block-list:abbreviated-name=":12.30:" block-list:name="🕧"/>
+  <block-list:block block-list:abbreviated-name=":12:" block-list:name="🕛"/>
+  <block-list:block block-list:abbreviated-name=":1/2:" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name=":1.30:" block-list:name="🕜"/>
+  <block-list:block block-list:abbreviated-name=":1/3:" block-list:name="⅓"/>
+  <block-list:block block-list:abbreviated-name=":1/4:" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name=":1/8:" block-list:name="⅛"/>
+  <block-list:block block-list:abbreviated-name=":_1:" block-list:name="₁"/>
+  <block-list:block block-list:abbreviated-name=":1:" block-list:name="🕐"/>
+  <block-list:block block-list:abbreviated-name=":^1:" block-list:name="¹"/>
+  <block-list:block block-list:abbreviated-name=":2.30:" block-list:name="🕝"/>
+  <block-list:block block-list:abbreviated-name=":2/3:" block-list:name="⅔"/>
+  <block-list:block block-list:abbreviated-name=":_2:" block-list:name="₂"/>
+  <block-list:block block-list:abbreviated-name=":!2:" block-list:name="❗"/>
+  <block-list:block block-list:abbreviated-name=":?2:" block-list:name="❔"/>
+  <block-list:block block-list:abbreviated-name=":2:" block-list:name="🕑"/>
+  <block-list:block block-list:abbreviated-name=":^2:" block-list:name="²"/>
+  <block-list:block block-list:abbreviated-name=":3.30:" block-list:name="🕞"/>
+  <block-list:block block-list:abbreviated-name=":3/4:" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":3/8:" block-list:name="⅜"/>
+  <block-list:block block-list:abbreviated-name=":_3:" block-list:name="₃"/>
+  <block-list:block block-list:abbreviated-name=":3:" block-list:name="🕒"/>
+  <block-list:block block-list:abbreviated-name=":^3:" block-list:name="³"/>
+  <block-list:block block-list:abbreviated-name=":4.30:" block-list:name="🕟"/>
+  <block-list:block block-list:abbreviated-name=":_4:" block-list:name="₄"/>
+  <block-list:block block-list:abbreviated-name=":4:" block-list:name="🕓"/>
+  <block-list:block block-list:abbreviated-name=":^4:" block-list:name="⁴"/>
+  <block-list:block block-list:abbreviated-name=":5.30:" block-list:name="🕠"/>
+  <block-list:block block-list:abbreviated-name=":5/8:" block-list:name="⅝"/>
+  <block-list:block block-list:abbreviated-name=":_5:" block-list:name="₅"/>
+  <block-list:block block-list:abbreviated-name=":5:" block-list:name="🕔"/>
+  <block-list:block block-list:abbreviated-name=":^5:" block-list:name="⁵"/>
+  <block-list:block block-list:abbreviated-name=":6.30:" block-list:name="🕡"/>
+  <block-list:block block-list:abbreviated-name=":_6:" block-list:name="₆"/>
+  <block-list:block block-list:abbreviated-name=":6:" block-list:name="🕕"/>
+  <block-list:block block-list:abbreviated-name=":^6:" block-list:name="⁶"/>
+  <block-list:block block-list:abbreviated-name=":7.30:" block-list:name="🕢"/>
+  <block-list:block block-list:abbreviated-name=":7/8:" block-list:name="⅞"/>
+  <block-list:block block-list:abbreviated-name=":_7:" block-list:name="₇"/>
+  <block-list:block block-list:abbreviated-name=":7:" block-list:name="🕖"/>
+  <block-list:block block-list:abbreviated-name=":^7:" block-list:name="⁷"/>
+  <block-list:block block-list:abbreviated-name=":8.30:" block-list:name="🕣"/>
+  <block-list:block block-list:abbreviated-name=":_8:" block-list:name="₈"/>
+  <block-list:block block-list:abbreviated-name=":8:" block-list:name="🕗"/>
+  <block-list:block block-list:abbreviated-name=":^8:" block-list:name="⁸"/>
+  <block-list:block block-list:abbreviated-name=":9.30:" block-list:name="🕤"/>
+  <block-list:block block-list:abbreviated-name=":_9:" block-list:name="₉"/>
+  <block-list:block block-list:abbreviated-name=":9:" block-list:name="🕘"/>
+  <block-list:block block-list:abbreviated-name=":^9:" block-list:name="⁹"/>
+  <block-list:block block-list:abbreviated-name=":A2:" block-list:name="⇒"/>
+  <block-list:block block-list:abbreviated-name=":abc:" block-list:name="🔤"/>
+  <block-list:block block-list:abbreviated-name=":^a:" block-list:name="ᵃ"/>
+  <block-list:block block-list:abbreviated-name=":_a:" block-list:name="ₐ"/>
+  <block-list:block block-list:abbreviated-name=":^A:" block-list:name="ᴬ"/>
+  <block-list:block block-list:abbreviated-name=":A:" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=":aðvörun:" block-list:name="⚠"/>
+  <block-list:block block-list:abbreviated-name=":aflæsa:" block-list:name="🔓"/>
+  <block-list:block block-list:abbreviated-name=":afmæli:" block-list:name="🎂"/>
+  <block-list:block block-list:abbreviated-name=":áherslumerki2:" block-list:name="‣"/>
+  <block-list:block block-list:abbreviated-name=":áherslumerki3:" block-list:name="◦"/>
+  <block-list:block block-list:abbreviated-name=":áherslumerki:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":akkeri:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":alda:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":^alfa:" block-list:name="ᵅ"/>
+  <block-list:block block-list:abbreviated-name=":alfa:" block-list:name="α"/>
+  <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name=":ást:" block-list:name="💘"/>
+  <block-list:block block-list:abbreviated-name=":athugasemd2:" block-list:name="♪"/>
+  <block-list:block block-list:abbreviated-name=":athugasemd:" block-list:name="♩"/>
+  <block-list:block block-list:abbreviated-name=":atóm:" block-list:name="⚛"/>
+  <block-list:block block-list:abbreviated-name=":augu:" block-list:name="👀"/>
+  <block-list:block block-list:abbreviated-name=":AV2:" block-list:name="⇔"/>
+  <block-list:block block-list:abbreviated-name=":AV:" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name=":bækur:" block-list:name="📚"/>
+  <block-list:block block-list:abbreviated-name=":baht:" block-list:name="฿"/>
+  <block-list:block block-list:abbreviated-name=":^b:" block-list:name="ᵇ"/>
+  <block-list:block block-list:abbreviated-name=":^B:" block-list:name="ᴮ"/>
+  <block-list:block block-list:abbreviated-name=":^beta:" block-list:name="ᵝ"/>
+  <block-list:block block-list:abbreviated-name=":_beta:" block-list:name="ᵦ"/>
+  <block-list:block block-list:abbreviated-name=":beta:" block-list:name="β"/>
+  <block-list:block block-list:abbreviated-name=":Beta:" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name=":bíó:" block-list:name="🎦"/>
+  <block-list:block block-list:abbreviated-name=":birtustig2:" block-list:name="🔆"/>
+  <block-list:block block-list:abbreviated-name=":birtustig:" block-list:name="🔅"/>
+  <block-list:block block-list:abbreviated-name=":bjalla:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":^=:" block-list:name="⁼"/>
+  <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
+  <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
+  <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
+  <block-list:block block-list:abbreviated-name=":^+:" block-list:name="⁺"/>
+  <block-list:block block-list:abbreviated-name=":~:" block-list:name="≈"/>
+  <block-list:block block-list:abbreviated-name=":_=:" block-list:name="₌"/>
+  <block-list:block block-list:abbreviated-name=":_-:" block-list:name="₋"/>
+  <block-list:block block-list:abbreviated-name=":_(:" block-list:name="₍"/>
+  <block-list:block block-list:abbreviated-name=":_):" block-list:name="₎"/>
+  <block-list:block block-list:abbreviated-name=":_+:" block-list:name="₊"/>
+  <block-list:block block-list:abbreviated-name=":---:" block-list:name="—"/>
+  <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name=":-:" block-list:name="−"/>
+  <block-list:block block-list:abbreviated-name=":-+:" block-list:name="∓"/>
+  <block-list:block block-list:abbreviated-name=":!:" block-list:name="❕"/>
+  <block-list:block block-list:abbreviated-name=":!!:" block-list:name="‼"/>
+  <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
+  <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
+  <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
+  <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
+  <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name=":blóm:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":blýantur2:" block-list:name="✏"/>
+  <block-list:block block-list:abbreviated-name=":blýantur3:" block-list:name="✐"/>
+  <block-list:block block-list:abbreviated-name=":blýantur:" block-list:name="✎"/>
+  <block-list:block block-list:abbreviated-name=":bók2:" block-list:name="📖"/>
+  <block-list:block block-list:abbreviated-name=":bókamerki2:" block-list:name="🔖"/>
+  <block-list:block block-list:abbreviated-name=":bókamerki:" block-list:name="📑"/>
+  <block-list:block block-list:abbreviated-name=":bók:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":bolti:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":brosandi2:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":brosandi:" block-list:name="☺"/>
+  <block-list:block block-list:abbreviated-name=":brú:" block-list:name="🌉"/>
+  <block-list:block block-list:abbreviated-name=":byrjandi:" block-list:name="🔰"/>
+  <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
+  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
+  <block-list:block block-list:abbreviated-name=":cd:" block-list:name="💿"/>
+  <block-list:block block-list:abbreviated-name=":^chi:" block-list:name="ᵡ"/>
+  <block-list:block block-list:abbreviated-name=":_chi:" block-list:name="ᵪ"/>
+  <block-list:block block-list:abbreviated-name=":chi:" block-list:name="χ"/>
+  <block-list:block block-list:abbreviated-name=":Chi:" block-list:name="Χ"/>
+  <block-list:block block-list:abbreviated-name=":dagatal2:" block-list:name="📆"/>
+  <block-list:block block-list:abbreviated-name=":dagatal:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":deilir:" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>
+  <block-list:block block-list:abbreviated-name=":delta:" block-list:name="δ"/>
+  <block-list:block block-list:abbreviated-name=":Delta:" block-list:name="Δ"/>
+  <block-list:block block-list:abbreviated-name=":disklingur:" block-list:name="💾"/>
+  <block-list:block block-list:abbreviated-name=":dollari2:" block-list:name="💵"/>
+  <block-list:block block-list:abbreviated-name=":dvd:" block-list:name="📀"/>
+  <block-list:block block-list:abbreviated-name=":^e:" block-list:name="ᵉ"/>
+  <block-list:block block-list:abbreviated-name=":_e:" block-list:name="ₑ"/>
+  <block-list:block block-list:abbreviated-name=":^E:" block-list:name="ᴱ"/>
+  <block-list:block block-list:abbreviated-name=":eða:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":einvalsreitur:" block-list:name="🔘"/>
+  <block-list:block block-list:abbreviated-name=":eitur:" block-list:name="☠"/>
+  <block-list:block block-list:abbreviated-name=":ekki:" block-list:name="¬"/>
+  <block-list:block block-list:abbreviated-name=":ekki hlutmengi:" block-list:name="⊄"/>
+  <block-list:block block-list:abbreviated-name=":ekki í:" block-list:name="∉"/>
+  <block-list:block block-list:abbreviated-name=":ekki jafnt:" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name=":ekki yfirmengi:" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":eldfjall:" block-list:name="🌋"/>
+  <block-list:block block-list:abbreviated-name=":elding:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":eldsneytisdæla:" block-list:name="⛽"/>
+  <block-list:block block-list:abbreviated-name=":eldur:" block-list:name="🔥"/>
+  <block-list:block block-list:abbreviated-name=":endurunninn pappír:" block-list:name="♼"/>
+  <block-list:block block-list:abbreviated-name=":endurvinnsla2:" block-list:name="♻"/>
+  <block-list:block block-list:abbreviated-name=":endurvinnsla:" block-list:name="♲"/>
+  <block-list:block block-list:abbreviated-name=":engin inngangur:" block-list:name="⛔"/>
+  <block-list:block block-list:abbreviated-name=":^epsilon:" block-list:name="ᵋ"/>
+  <block-list:block block-list:abbreviated-name=":epsilon:" block-list:name="ε"/>
+  <block-list:block block-list:abbreviated-name=":Epsilon:" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=":er ekki til:" block-list:name="∄"/>
+  <block-list:block block-list:abbreviated-name=":er til:" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=":eta:" block-list:name="η"/>
+  <block-list:block block-list:abbreviated-name=":Eta:" block-list:name="Η"/>
+  <block-list:block block-list:abbreviated-name=":evra2:" block-list:name="💶"/>
+  <block-list:block block-list:abbreviated-name=":evra:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":eyra:" block-list:name="👂"/>
+  <block-list:block block-list:abbreviated-name=":fætur:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":Farsi:" block-list:name="☫"/>
+  <block-list:block block-list:abbreviated-name=":farsími:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":fax:" block-list:name="📠"/>
+  <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
+  <block-list:block block-list:abbreviated-name=":ferja:" block-list:name="⛴"/>
+  <block-list:block block-list:abbreviated-name=":ferningsrót:" block-list:name="∛"/>
+  <block-list:block block-list:abbreviated-name=":ferningur2:" block-list:name="■"/>
+  <block-list:block block-list:abbreviated-name=":ferningur:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":ff:" block-list:name="ﬀ"/>
+  <block-list:block block-list:abbreviated-name=":ffi:" block-list:name="ﬃ"/>
+  <block-list:block block-list:abbreviated-name=":ffl:" block-list:name="ﬄ"/>
+  <block-list:block block-list:abbreviated-name=":fi:" block-list:name="ﬁ"/>
+  <block-list:block block-list:abbreviated-name=":fimmhyrningur2:" block-list:name="⬟"/>
+  <block-list:block block-list:abbreviated-name=":fimmhyrningur:" block-list:name="⬠"/>
+  <block-list:block block-list:abbreviated-name=":fimmröndungur:" block-list:name="⛤"/>
+  <block-list:block block-list:abbreviated-name=":Fiskar:" block-list:name="♓"/>
+  <block-list:block block-list:abbreviated-name=":fjall:" block-list:name="⛰"/>
+  <block-list:block block-list:abbreviated-name=":fjölskylda:" block-list:name="👪"/>
+  <block-list:block block-list:abbreviated-name=":flagg2:" block-list:name="⚑"/>
+  <block-list:block block-list:abbreviated-name=":flagg3:" block-list:name="🏁"/>
+  <block-list:block block-list:abbreviated-name=":flagg:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":Flatt:" block-list:name="♭"/>
+  <block-list:block block-list:abbreviated-name=":fl:" block-list:name="ﬂ"/>
+  <block-list:block block-list:abbreviated-name=":flögg2:" block-list:name="🎏"/>
+  <block-list:block block-list:abbreviated-name=":flögg:" block-list:name="🎌"/>
+  <block-list:block block-list:abbreviated-name=":flugvél:" block-list:name="✈"/>
+  <block-list:block block-list:abbreviated-name=":friður:" block-list:name="☮"/>
+  <block-list:block block-list:abbreviated-name=":fullt tungl2:" block-list:name="🌝"/>
+  <block-list:block block-list:abbreviated-name=":fullt tungl:" block-list:name="🌕"/>
+  <block-list:block block-list:abbreviated-name=":fyrir allt:" block-list:name="∀"/>
+  <block-list:block block-list:abbreviated-name=":fyrsta kvartil:" block-list:name="🌓"/>
+  <block-list:block block-list:abbreviated-name=":^gamma:" block-list:name="ᵞ"/>
+  <block-list:block block-list:abbreviated-name=":_gamma:" block-list:name="ᵧ"/>
+  <block-list:block block-list:abbreviated-name=":gamma:" block-list:name="γ"/>
+  <block-list:block block-list:abbreviated-name=":Gamma:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":^g:" block-list:name="ᵍ"/>
+  <block-list:block block-list:abbreviated-name=":^G:" block-list:name="ᴳ"/>
+  <block-list:block block-list:abbreviated-name=":geislavirkni:" block-list:name="☢"/>
+  <block-list:block block-list:abbreviated-name=":gervihnöttur:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":gifting:" block-list:name="⚭"/>
+  <block-list:block block-list:abbreviated-name=":golf:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":gosbrunnur:" block-list:name="⛲"/>
+  <block-list:block block-list:abbreviated-name=":gráða:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
+  <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
+  <block-list:block block-list:abbreviated-name=":hægri2:" block-list:name="👉"/>
+  <block-list:block block-list:abbreviated-name=":hægri3:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":hægri:" block-list:name="☞"/>
+  <block-list:block block-list:abbreviated-name=":halastjarna:" block-list:name="☄"/>
+  <block-list:block block-list:abbreviated-name=":hamar og meitill:" block-list:name="⚒"/>
+  <block-list:block block-list:abbreviated-name=":hamar og sigð:" block-list:name="☭"/>
+  <block-list:block block-list:abbreviated-name=":hátalari:" block-list:name="📢"/>
+  <block-list:block block-list:abbreviated-name=":^h:" block-list:name="ʰ"/>
+  <block-list:block block-list:abbreviated-name=":_h:" block-list:name="ₕ"/>
+  <block-list:block block-list:abbreviated-name=":^H:" block-list:name="ᴴ"/>
+  <block-list:block block-list:abbreviated-name=":heildi2:" block-list:name="∬"/>
+  <block-list:block block-list:abbreviated-name=":heildi3:" block-list:name="∭"/>
+  <block-list:block block-list:abbreviated-name=":heildi4:" block-list:name="∮"/>
+  <block-list:block block-list:abbreviated-name=":heildi5:" block-list:name="∰"/>
+  <block-list:block block-list:abbreviated-name=":heildi:" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name=":hjálmur:" block-list:name="⛑"/>
+  <block-list:block block-list:abbreviated-name=":hjarta:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":hjartsláttur:" block-list:name="💓"/>
+  <block-list:block block-list:abbreviated-name=":hjólastóll:" block-list:name="♿"/>
+  <block-list:block block-list:abbreviated-name=":hjörtu2:" block-list:name="♡"/>
+  <block-list:block block-list:abbreviated-name=":hjörtu:" block-list:name="♥"/>
+  <block-list:block block-list:abbreviated-name=":hljóð:" block-list:name="🔉"/>
+  <block-list:block block-list:abbreviated-name=":hluti:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":hlutmengi:" block-list:name="⊂"/>
+  <block-list:block block-list:abbreviated-name=":hnappur2:" block-list:name="🔲"/>
+  <block-list:block block-list:abbreviated-name=":hnappur:" block-list:name="🔳"/>
+  <block-list:block block-list:abbreviated-name=":hnefi2:" block-list:name="👊"/>
+  <block-list:block block-list:abbreviated-name=":hnefi:" block-list:name="✊"/>
+  <block-list:block block-list:abbreviated-name=":hnöttur2:" block-list:name="🌎"/>
+  <block-list:block block-list:abbreviated-name=":hnöttur3:" block-list:name="🌏"/>
+  <block-list:block block-list:abbreviated-name=":hnöttur4:" block-list:name="🌐"/>
+  <block-list:block block-list:abbreviated-name=":hnöttur:" block-list:name="🌍"/>
+  <block-list:block block-list:abbreviated-name=":höfundarréttur:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":hönd:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":horn2:" block-list:name="∡"/>
+  <block-list:block block-list:abbreviated-name=":hornabolti:" block-list:name="⚾"/>
+  <block-list:block block-list:abbreviated-name=":horn:" block-list:name="∠"/>
+  <block-list:block block-list:abbreviated-name=":hornbrotin blaðsíða:" block-list:name="📃"/>
+  <block-list:block block-list:abbreviated-name=":hótel2:" block-list:name="🏩"/>
+  <block-list:block block-list:abbreviated-name=":hótel:" block-list:name="🏨"/>
+  <block-list:block block-list:abbreviated-name=":hringur2:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":hringur:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":Hrútur:" block-list:name="♈"/>
+  <block-list:block block-list:abbreviated-name=":hryvnia:" block-list:name="₴"/>
+  <block-list:block block-list:abbreviated-name=":hús2:" block-list:name="🏡"/>
+  <block-list:block block-list:abbreviated-name=":hús:" block-list:name="🏠"/>
+  <block-list:block block-list:abbreviated-name=":hvít drottning:" block-list:name="♕"/>
+  <block-list:block block-list:abbreviated-name=":hvítt peð:" block-list:name="♙"/>
+  <block-list:block block-list:abbreviated-name=":hvítur biskup:" block-list:name="♗"/>
+  <block-list:block block-list:abbreviated-name=":hvítur hringur:" block-list:name="⚪"/>
+  <block-list:block block-list:abbreviated-name=":hvítur hrókur:" block-list:name="♖"/>
+  <block-list:block block-list:abbreviated-name=":hvítur kóngur:" block-list:name="♔"/>
+  <block-list:block block-list:abbreviated-name=":hvítur riddari:" block-list:name="♘"/>
+  <block-list:block block-list:abbreviated-name=":^i:" block-list:name="ⁱ"/>
+  <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
+  <block-list:block block-list:abbreviated-name=":^I:" block-list:name="ᴵ"/>
+  <block-list:block block-list:abbreviated-name=":í:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":í lagi2:" block-list:name="🙆"/>
+  <block-list:block block-list:abbreviated-name=":í lagi:" block-list:name="👌"/>
+  <block-list:block block-list:abbreviated-name=":já:" block-list:name="👍"/>
+  <block-list:block block-list:abbreviated-name=":^j:" block-list:name="ʲ"/>
+  <block-list:block block-list:abbreviated-name=":_j:" block-list:name="ⱼ"/>
+  <block-list:block block-list:abbreviated-name=":^J:" block-list:name="ᴶ"/>
+  <block-list:block block-list:abbreviated-name=":Jörðin:" block-list:name="♁"/>
+  <block-list:block block-list:abbreviated-name=":^jóta:" block-list:name="ᶥ"/>
+  <block-list:block block-list:abbreviated-name=":jóta:" block-list:name="ι"/>
+  <block-list:block block-list:abbreviated-name=":Jóta:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":Júpíter:" block-list:name="♃"/>
+  <block-list:block block-list:abbreviated-name=":kaffi:" block-list:name="☕"/>
+  <block-list:block block-list:abbreviated-name=":kappa:" block-list:name="κ"/>
+  <block-list:block block-list:abbreviated-name=":Kappa:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":karlkyns:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":^k:" block-list:name="ᵏ"/>
+  <block-list:block block-list:abbreviated-name=":_k:" block-list:name="ₖ"/>
+  <block-list:block block-list:abbreviated-name=":^K:" block-list:name="ᴷ"/>
+  <block-list:block block-list:abbreviated-name=":keðjur:" block-list:name="⛓"/>
+  <block-list:block block-list:abbreviated-name=":kirkja:" block-list:name="⛪"/>
+  <block-list:block block-list:abbreviated-name=":kista:" block-list:name="⚰"/>
+  <block-list:block block-list:abbreviated-name=":klippispjald:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":knattspyrna:" block-list:name="⚽"/>
+  <block-list:block block-list:abbreviated-name=":Krabbi:" block-list:name="♋"/>
+  <block-list:block block-list:abbreviated-name=":kvaðratrót:" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name=":kvenkyns:" block-list:name="♀"/>
+  <block-list:block block-list:abbreviated-name=":læsa:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>
+  <block-list:block block-list:abbreviated-name=":Lambda:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":lás2:" block-list:name="🔏"/>
+  <block-list:block block-list:abbreviated-name=":lás3:" block-list:name="🔐"/>
+  <block-list:block block-list:abbreviated-name=":lauf2:" block-list:name="♧"/>
+  <block-list:block block-list:abbreviated-name=":lauf:" block-list:name="♣"/>
+  <block-list:block block-list:abbreviated-name=":^l:" block-list:name="ˡ"/>
+  <block-list:block block-list:abbreviated-name=":_l:" block-list:name="ₗ"/>
+  <block-list:block block-list:abbreviated-name=":^L:" block-list:name="ᴸ"/>
+  <block-list:block block-list:abbreviated-name=":línurit2:" block-list:name="📉"/>
+  <block-list:block block-list:abbreviated-name=":línurit3:" block-list:name="📊"/>
+  <block-list:block block-list:abbreviated-name=":línurit:" block-list:name="💹"/>
+  <block-list:block block-list:abbreviated-name=":líra:" block-list:name="₤"/>
+  <block-list:block block-list:abbreviated-name=":lítill ferningur2:" block-list:name="▪"/>
+  <block-list:block block-list:abbreviated-name=":lítill ferningur:" block-list:name="▫"/>
+  <block-list:block block-list:abbreviated-name=":Ljón:" block-list:name="♌"/>
+  <block-list:block block-list:abbreviated-name=":&lt;=:" block-list:name="≤"/>
+  <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
+  <block-list:block block-list:abbreviated-name=":lykill:" block-list:name="🔑"/>
+  <block-list:block block-list:abbreviated-name=":lykkja2:" block-list:name="➿"/>
+  <block-list:block block-list:abbreviated-name=":lykkja:" block-list:name="➰"/>
+  <block-list:block block-list:abbreviated-name=":lyklaborð:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":mappa2:" block-list:name="📂"/>
+  <block-list:block block-list:abbreviated-name=":mappa:" block-list:name="📁"/>
+  <block-list:block block-list:abbreviated-name=":margfeldi:" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name=":^m:" block-list:name="ᵐ"/>
+  <block-list:block block-list:abbreviated-name=":_m:" block-list:name="ₘ"/>
+  <block-list:block block-list:abbreviated-name=":^M:" block-list:name="ᴹ"/>
+  <block-list:block block-list:abbreviated-name=":meitill:" block-list:name="⛏"/>
+  <block-list:block block-list:abbreviated-name=":Merkúr:" block-list:name="☿"/>
+  <block-list:block block-list:abbreviated-name=":Meyja:" block-list:name="♍"/>
+  <block-list:block block-list:abbreviated-name=":miðlungs ferningur:" block-list:name="◻"/>
+  <block-list:block block-list:abbreviated-name=":miðlungs stjarna:" block-list:name="⭐"/>
+  <block-list:block block-list:abbreviated-name=":minnispunktar2:" block-list:name="♬"/>
+  <block-list:block block-list:abbreviated-name=":minnispunktar:" block-list:name="♫"/>
+  <block-list:block block-list:abbreviated-name=":mu:" block-list:name="μ"/>
+  <block-list:block block-list:abbreviated-name=":Mu:" block-list:name="Μ"/>
+  <block-list:block block-list:abbreviated-name=":munnur:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":mús2:" block-list:name="🐭"/>
+  <block-list:block block-list:abbreviated-name=":mús:" block-list:name="🐁"/>
+  <block-list:block block-list:abbreviated-name=":myndavél:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":N2:" block-list:name="⇑"/>
+  <block-list:block block-list:abbreviated-name=":NA2:" block-list:name="⇗"/>
+  <block-list:block block-list:abbreviated-name=":NA:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":nafn:" block-list:name="📛"/>
+  <block-list:block block-list:abbreviated-name=":náttúrulegt:" block-list:name="♮"/>
+  <block-list:block block-list:abbreviated-name=":Naut:" block-list:name="♉"/>
+  <block-list:block block-list:abbreviated-name=":^n:" block-list:name="ⁿ"/>
+  <block-list:block block-list:abbreviated-name=":_n:" block-list:name="ₙ"/>
+  <block-list:block block-list:abbreviated-name=":^N:" block-list:name="ᴺ"/>
+  <block-list:block block-list:abbreviated-name=":N:" block-list:name="↑"/>
+  <block-list:block block-list:abbreviated-name=":nef:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":nei:" block-list:name="👎"/>
+  <block-list:block block-list:abbreviated-name=":Neptúnus:" block-list:name="♆"/>
+  <block-list:block block-list:abbreviated-name=":niður2:" block-list:name="👇"/>
+  <block-list:block block-list:abbreviated-name=":niður:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":niðurteljari:" block-list:name="⏲"/>
+  <block-list:block block-list:abbreviated-name=":nótt:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":NS2:" block-list:name="⇕"/>
+  <block-list:block block-list:abbreviated-name=":nsek:" block-list:name="↕"/>
+  <block-list:block block-list:abbreviated-name=":nu:" block-list:name="ν"/>
+  <block-list:block block-list:abbreviated-name=":Nu:" block-list:name="Ν"/>
+  <block-list:block block-list:abbreviated-name=":NV2:" block-list:name="⇖"/>
+  <block-list:block block-list:abbreviated-name=":NV:" block-list:name="↖"/>
+  <block-list:block block-list:abbreviated-name=":nýtt tungl2:" block-list:name="🌚"/>
+  <block-list:block block-list:abbreviated-name=":nýtt tungl:" block-list:name="🌑"/>
+  <block-list:block block-list:abbreviated-name=":^o:" block-list:name="ᵒ"/>
+  <block-list:block block-list:abbreviated-name=":_o:" block-list:name="ₒ"/>
+  <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
+  <block-list:block block-list:abbreviated-name=":óendanleiki:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":og:" block-list:name="∧"/>
+  <block-list:block block-list:abbreviated-name=":ómega:" block-list:name="ω"/>
+  <block-list:block block-list:abbreviated-name=":Ómega:" block-list:name="Ω"/>
+  <block-list:block block-list:abbreviated-name=":omicron:" block-list:name="ο"/>
+  <block-list:block block-list:abbreviated-name=":Omicron:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":opinber skráning:" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=":partý:" block-list:name="🎉"/>
+  <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
+  <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
+  <block-list:block block-list:abbreviated-name=":^P:" block-list:name="ᴾ"/>
+  <block-list:block block-list:abbreviated-name=":peningar:" block-list:name="💸"/>
+  <block-list:block block-list:abbreviated-name=":pesó:" block-list:name="₱"/>
+  <block-list:block block-list:abbreviated-name=":^phi:" block-list:name="ᵠ"/>
+  <block-list:block block-list:abbreviated-name=":_phi:" block-list:name="ᵩ"/>
+  <block-list:block block-list:abbreviated-name=":^Phi:" block-list:name="ᶲ"/>
+  <block-list:block block-list:abbreviated-name=":phi:" block-list:name="φ"/>
+  <block-list:block block-list:abbreviated-name=":Phi:" block-list:name="Φ"/>
+  <block-list:block block-list:abbreviated-name=":pí:" block-list:name="π"/>
+  <block-list:block block-list:abbreviated-name=":Pí:" block-list:name="Π"/>
+  <block-list:block block-list:abbreviated-name=":Plútó:" block-list:name="♇"/>
+  <block-list:block block-list:abbreviated-name=":prómill:" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name=":psi:" block-list:name="ψ"/>
+  <block-list:block block-list:abbreviated-name=":Psi:" block-list:name="Ψ"/>
+  <block-list:block block-list:abbreviated-name=":pund2:" block-list:name="💷"/>
+  <block-list:block block-list:abbreviated-name=":pund:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":^r:" block-list:name="ʳ"/>
+  <block-list:block block-list:abbreviated-name=":_r:" block-list:name="ᵣ"/>
+  <block-list:block block-list:abbreviated-name=":^R:" block-list:name="ᴿ"/>
+  <block-list:block block-list:abbreviated-name=":reglustika2:" block-list:name="📐"/>
+  <block-list:block block-list:abbreviated-name=":reglustika:" block-list:name="📏"/>
+  <block-list:block block-list:abbreviated-name=":regnbogi:" block-list:name="🌈"/>
+  <block-list:block block-list:abbreviated-name=":regnhlíf2:" block-list:name="🌂"/>
+  <block-list:block block-list:abbreviated-name=":regnhlíf3:" block-list:name="⛱"/>
+  <block-list:block block-list:abbreviated-name=":regnhlíf:" block-list:name="☂"/>
+  <block-list:block block-list:abbreviated-name=":rétthyrningur2:" block-list:name="▬"/>
+  <block-list:block block-list:abbreviated-name=":rétthyrningur:" block-list:name="▭"/>
+  <block-list:block block-list:abbreviated-name=":réttur þríhyrningur:" block-list:name="⊿"/>
+  <block-list:block block-list:abbreviated-name=":_rho:" block-list:name="ᵨ"/>
+  <block-list:block block-list:abbreviated-name=":rho:" block-list:name="ρ"/>
+  <block-list:block block-list:abbreviated-name=":Rho:" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name=":rigning2:" block-list:name="⛆"/>
+  <block-list:block block-list:abbreviated-name=":rigning:" block-list:name="☔"/>
+  <block-list:block block-list:abbreviated-name=":rúpía:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":rýtingur2:" block-list:name="‡"/>
+  <block-list:block block-list:abbreviated-name=":rýtingur:" block-list:name="†"/>
+  <block-list:block block-list:abbreviated-name=":S2:" block-list:name="⇓"/>
+  <block-list:block block-list:abbreviated-name=":SA2:" block-list:name="⇘"/>
+  <block-list:block block-list:abbreviated-name=":SA:" block-list:name="↘"/>
+  <block-list:block block-list:abbreviated-name=":sæti:" block-list:name="💺"/>
+  <block-list:block block-list:abbreviated-name=":sameining:" block-list:name="∪"/>
+  <block-list:block block-list:abbreviated-name=":samsíða:" block-list:name="∥"/>
+  <block-list:block block-list:abbreviated-name=":samsíðungur2:" block-list:name="▰"/>
+  <block-list:block block-list:abbreviated-name=":samsíðungur:" block-list:name="▱"/>
+  <block-list:block block-list:abbreviated-name=":Satúrnus:" block-list:name="♄"/>
+  <block-list:block block-list:abbreviated-name=":^s:" block-list:name="ˢ"/>
+  <block-list:block block-list:abbreviated-name=":_s:" block-list:name="ₛ"/>
+  <block-list:block block-list:abbreviated-name=":S:" block-list:name="↓"/>
+  <block-list:block block-list:abbreviated-name=":seglbátur:" block-list:name="⛵"/>
+  <block-list:block block-list:abbreviated-name=":sent:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":sexhyrningur2:" block-list:name="⬢"/>
+  <block-list:block block-list:abbreviated-name=":sexhyrningur:" block-list:name="⬡"/>
+  <block-list:block block-list:abbreviated-name=":shekel:" block-list:name="₪"/>
+  <block-list:block block-list:abbreviated-name=":síðasta kvartil:" block-list:name="🌗"/>
+  <block-list:block block-list:abbreviated-name=":sigma2:" block-list:name="ς"/>
+  <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
+  <block-list:block block-list:abbreviated-name=":Sigma:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":símboði:" block-list:name="📟"/>
+  <block-list:block block-list:abbreviated-name=":sími2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":sími:" block-list:name="☎"/>
+  <block-list:block block-list:abbreviated-name=":skauti:" block-list:name="⛸"/>
+  <block-list:block block-list:abbreviated-name=":skeiðklukka:" block-list:name="⏱"/>
+  <block-list:block block-list:abbreviated-name=":skel:" block-list:name="🐚"/>
+  <block-list:block block-list:abbreviated-name=":skíðamaður:" block-list:name="⛷"/>
+  <block-list:block block-list:abbreviated-name=":skíði:" block-list:name="🎿"/>
+  <block-list:block block-list:abbreviated-name=":skilnaður:" block-list:name="⚮"/>
+  <block-list:block block-list:abbreviated-name=":skjöldur:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":skóli:" block-list:name="🏫"/>
+  <block-list:block block-list:abbreviated-name=":skrifa:" block-list:name="✍"/>
+  <block-list:block block-list:abbreviated-name=":skrifstofa:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":skrun:" block-list:name="📜"/>
+  <block-list:block block-list:abbreviated-name=":skurðflötur:" block-list:name="∩"/>
+  <block-list:block block-list:abbreviated-name=":ský2:" block-list:name="⛅"/>
+  <block-list:block block-list:abbreviated-name=":ský3:" block-list:name="⛈"/>
+  <block-list:block block-list:abbreviated-name=":ský:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":smári:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":snjókall2:" block-list:name="⛄"/>
+  <block-list:block block-list:abbreviated-name=":snjókall:" block-list:name="☃"/>
+  <block-list:block block-list:abbreviated-name=":Sól2:" block-list:name="☼"/>
+  <block-list:block block-list:abbreviated-name=":sólarupprás2:" block-list:name="🌄"/>
+  <block-list:block block-list:abbreviated-name=":sólarupprás3:" block-list:name="🌇"/>
+  <block-list:block block-list:abbreviated-name=":sólarupprás:" block-list:name="🌅"/>
+  <block-list:block block-list:abbreviated-name=":sól:" block-list:name="🌞"/>
+  <block-list:block block-list:abbreviated-name=":Sól:" block-list:name="☉"/>
+  <block-list:block block-list:abbreviated-name=":sólsetur:" block-list:name="🌆"/>
+  <block-list:block block-list:abbreviated-name=":sólskin:" block-list:name="☀"/>
+  <block-list:block block-list:abbreviated-name=":spaðar2:" block-list:name="♤"/>
+  <block-list:block block-list:abbreviated-name=":spaðar:" block-list:name="♠"/>
+  <block-list:block block-list:abbreviated-name=":sporbaugur:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":Sporðdreki:" block-list:name="♏"/>
+  <block-list:block block-list:abbreviated-name=":staf:" block-list:name="📈"/>
+  <block-list:block block-list:abbreviated-name=":stjarna2:" block-list:name="☆"/>
+  <block-list:block block-list:abbreviated-name=":stjarna3:" block-list:name="🌟"/>
+  <block-list:block block-list:abbreviated-name=":stjarna4:" block-list:name="🌠"/>
+  <block-list:block block-list:abbreviated-name=":stjarna:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":stór hringur2:" block-list:name="⬤"/>
+  <block-list:block block-list:abbreviated-name=":stór hringur:" block-list:name="◯"/>
+  <block-list:block block-list:abbreviated-name=":stormur:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":strik:" block-list:name="💨"/>
+  <block-list:block block-list:abbreviated-name=":stundaglas2:" block-list:name="⏳"/>
+  <block-list:block block-list:abbreviated-name=":stundaglas:" block-list:name="⌛"/>
+  <block-list:block block-list:abbreviated-name=":súkkulaði:" block-list:name="🍫"/>
+  <block-list:block block-list:abbreviated-name=":summa:" block-list:name="∑"/>
+  <block-list:block block-list:abbreviated-name=":SV2:" block-list:name="⇙"/>
+  <block-list:block block-list:abbreviated-name=":svart peð:" block-list:name="♟"/>
+  <block-list:block block-list:abbreviated-name=":svartur biskup:" block-list:name="♝"/>
+  <block-list:block block-list:abbreviated-name=":svartur hringur:" block-list:name="⚫"/>
+  <block-list:block block-list:abbreviated-name=":svartur hrókur:" block-list:name="♜"/>
+  <block-list:block block-list:abbreviated-name=":svartur kóngur:" block-list:name="♚"/>
+  <block-list:block block-list:abbreviated-name=":svartur riddari:" block-list:name="♞"/>
+  <block-list:block block-list:abbreviated-name=":SV:" block-list:name="↙"/>
+  <block-list:block block-list:abbreviated-name=":sverð:" block-list:name="⚔"/>
+  <block-list:block block-list:abbreviated-name=":svört drottning:" block-list:name="♛"/>
+  <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
+  <block-list:block block-list:abbreviated-name=":Tau:" block-list:name="Τ"/>
+  <block-list:block block-list:abbreviated-name=":^t:" block-list:name="ᵗ"/>
+  <block-list:block block-list:abbreviated-name=":_t:" block-list:name="ₜ"/>
+  <block-list:block block-list:abbreviated-name=":^T:" block-list:name="ᵀ"/>
+  <block-list:block block-list:abbreviated-name=":tengill:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":teningur1:" block-list:name="⚀"/>
+  <block-list:block block-list:abbreviated-name=":teningur2:" block-list:name="⚁"/>
+  <block-list:block block-list:abbreviated-name=":teningur3:" block-list:name="⚂"/>
+  <block-list:block block-list:abbreviated-name=":teningur4:" block-list:name="⚃"/>
+  <block-list:block block-list:abbreviated-name=":teningur5:" block-list:name="⚄"/>
+  <block-list:block block-list:abbreviated-name=":teningur6:" block-list:name="⚅"/>
+  <block-list:block block-list:abbreviated-name=":teningur:" block-list:name="🎲"/>
+  <block-list:block block-list:abbreviated-name=":tíglar2:" block-list:name="♢"/>
+  <block-list:block block-list:abbreviated-name=":tíglar:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":tígull:" block-list:name="◊"/>
+  <block-list:block block-list:abbreviated-name=":tjald:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":tm:" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=":tölva:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":tölvupóstfang:" block-list:name="📧"/>
+  <block-list:block block-list:abbreviated-name=":tómatur:" block-list:name="🍅"/>
+  <block-list:block block-list:abbreviated-name=":tomma:" block-list:name="″"/>
+  <block-list:block block-list:abbreviated-name=":tómt mengi:" block-list:name="∅"/>
+  <block-list:block block-list:abbreviated-name=":tónlist2:" block-list:name="🎵"/>
+  <block-list:block block-list:abbreviated-name=":tónlist:" block-list:name="🎶"/>
+  <block-list:block block-list:abbreviated-name=":trukkur:" block-list:name="⛟"/>
+  <block-list:block block-list:abbreviated-name=":tunga:" block-list:name="👅"/>
+  <block-list:block block-list:abbreviated-name=":tungl2:" block-list:name="🌜"/>
+  <block-list:block block-list:abbreviated-name=":Tungl2:" block-list:name="☾"/>
+  <block-list:block block-list:abbreviated-name=":tungl:" block-list:name="🌛"/>
+  <block-list:block block-list:abbreviated-name=":Tungl:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":Tvíburi:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":tyrknesk líra:" block-list:name="₺"/>
+  <block-list:block block-list:abbreviated-name=":^u:" block-list:name="ᵘ"/>
+  <block-list:block block-list:abbreviated-name=":_u:" block-list:name="ᵤ"/>
+  <block-list:block block-list:abbreviated-name=":^U:" block-list:name="ᵁ"/>
+  <block-list:block block-list:abbreviated-name=":umslag2:" block-list:name="📨"/>
+  <block-list:block block-list:abbreviated-name=":umslag3:" block-list:name="📩"/>
+  <block-list:block block-list:abbreviated-name=":umslag:" block-list:name="✉"/>
+  <block-list:block block-list:abbreviated-name=":upp2:" block-list:name="👆"/>
+  <block-list:block block-list:abbreviated-name=":upp:" block-list:name="☝"/>
+  <block-list:block block-list:abbreviated-name=":upplýsingar2:" block-list:name="💁"/>
+  <block-list:block block-list:abbreviated-name=":upplýsingar:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":Úranus:" block-list:name="♅"/>
+  <block-list:block block-list:abbreviated-name=":úr:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":úthaf:" block-list:name="🌊"/>
+  <block-list:block block-list:abbreviated-name=":útvarp:" block-list:name="📻"/>
+  <block-list:block block-list:abbreviated-name=":uxi:" block-list:name="🐂"/>
+  <block-list:block block-list:abbreviated-name=":V2:" block-list:name="⇐"/>
+  <block-list:block block-list:abbreviated-name=":varúð:" block-list:name="☡"/>
+  <block-list:block block-list:abbreviated-name=":Vatnsberi:" block-list:name="♒"/>
+  <block-list:block block-list:abbreviated-name=":vaxandi tungl:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":^v:" block-list:name="ᵛ"/>
+  <block-list:block block-list:abbreviated-name=":_v:" block-list:name="ᵥ"/>
+  <block-list:block block-list:abbreviated-name=":^V:" block-list:name="ⱽ"/>
+  <block-list:block block-list:abbreviated-name=":V:" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=":vekjaraklukka:" block-list:name="⏰"/>
+  <block-list:block block-list:abbreviated-name=":verslun2:" block-list:name="🏬"/>
+  <block-list:block block-list:abbreviated-name=":verslun:" block-list:name="🏪"/>
+  <block-list:block block-list:abbreviated-name=":vetrarbrautin:" block-list:name="🌌"/>
+  <block-list:block block-list:abbreviated-name=":vhs:" block-list:name="📼"/>
+  <block-list:block block-list:abbreviated-name=":vinstri2:" block-list:name="👈"/>
+  <block-list:block block-list:abbreviated-name=":vinstri3:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":vinstri:" block-list:name="☜"/>
+  <block-list:block block-list:abbreviated-name=":Vog:" block-list:name="♎"/>
+  <block-list:block block-list:abbreviated-name=":vogir:" block-list:name="⚖"/>
+  <block-list:block block-list:abbreviated-name=":^w:" block-list:name="ʷ"/>
+  <block-list:block block-list:abbreviated-name=":^W:" block-list:name="ᵂ"/>
+  <block-list:block block-list:abbreviated-name=":won:" block-list:name="₩"/>
+  <block-list:block block-list:abbreviated-name=":x2:" block-list:name="❌"/>
+  <block-list:block block-list:abbreviated-name=":x3:" block-list:name="❎"/>
+  <block-list:block block-list:abbreviated-name=":^x:" block-list:name="ˣ"/>
+  <block-list:block block-list:abbreviated-name=":_x:" block-list:name="ₓ"/>
+  <block-list:block block-list:abbreviated-name=":x:" block-list:name="×"/>
+  <block-list:block block-list:abbreviated-name=":xi:" block-list:name="ξ"/>
+  <block-list:block block-list:abbreviated-name=":Xi:" block-list:name="Ξ"/>
+  <block-list:block block-list:abbreviated-name=":^y:" block-list:name="ʸ"/>
+  <block-list:block block-list:abbreviated-name=":yen2:" block-list:name="💴"/>
+  <block-list:block block-list:abbreviated-name=":yen:" block-list:name="¥"/>
+  <block-list:block block-list:abbreviated-name=":yfirmengi:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":yin yang:" block-list:name="☯"/>
+  <block-list:block block-list:abbreviated-name=":ypsilon:" block-list:name="υ"/>
+  <block-list:block block-list:abbreviated-name=":Ypsilon:" block-list:name="Υ"/>
+  <block-list:block block-list:abbreviated-name=":^z:" block-list:name="ᶻ"/>
+  <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name=":Zeta:" block-list:name="Ζ"/>
+  <block-list:block block-list:abbreviated-name=":zzz:" block-list:name="💤"/>
+  <block-list:block block-list:abbreviated-name=":þagga:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":^þeta:" block-list:name="ᶿ"/>
+  <block-list:block block-list:abbreviated-name=":þeta:" block-list:name="θ"/>
+  <block-list:block block-list:abbreviated-name=":Þeta:" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=":þríhyrningur2:" block-list:name="▲"/>
+  <block-list:block block-list:abbreviated-name=":þríhyrningur:" block-list:name="△"/>
+</block-list:block-list>
