@@ -619,6 +619,7 @@ callback (gpointer pData)
         }
         else
             memset(&priv->m_aHandleMiddleRect, 0, sizeof(priv->m_aHandleMiddleRect));
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
     case LOK_CALLBACK_TEXT_SELECTION_START:
