@@ -706,9 +706,9 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     BitmapWriteAccess*  pAcc = NULL;
     BitmapReadAccess*   pReadAcc = NULL;
     sal_uInt16              nColTabSize;
-    sal_uInt16              nRowBytes, nBndX, nBndY, nWidth, nHeight, nVersion, nPackType, nPixelType,
+    sal_uInt16              nRowBytes, nBndX, nBndY, nWidth, nHeight, nPackType,
                         nPixelSize, nCmpCount, nCmpSize;
-    sal_uInt32          nPackSize, nPlaneBytes, nHRes, nVRes;
+    sal_uInt32          nHRes, nVRes;
     sal_uInt8               nDat, nRed, nGreen, nBlue, nDummy;
     size_t              i, nDataSize = 0;
 
@@ -730,6 +730,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     if ( ( nRowBytes & 0x8000 ) != 0 )
     {   // it is a PixMap
         nRowBytes &= 0x3fff;
+        sal_uInt16 nVersion;
+        sal_uInt32 nPackSize;
+        sal_uInt16 nPixelType;
+        sal_uInt32 nPlaneBytes;
         pPict->ReadUInt16( nVersion ).ReadUInt16( nPackType ).ReadUInt32( nPackSize ).ReadUInt32( nHRes ).ReadUInt32( nVRes ).ReadUInt16( nPixelType ).                    ReadUInt16( nPixelSize ).ReadUInt16( nCmpCount ).ReadUInt16( nCmpSize ).ReadUInt32( nPlaneBytes );
 
         pPict->SeekRel( 8 );
@@ -769,10 +773,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     else
     {
         nRowBytes &= 0x3fff;
-        nVersion = 0;
         nPackType = 0;
-        nPackSize = nHRes = nVRes = nPlaneBytes = 0;
-        nPixelType = 0;
+        // nHRes = nVRes = 0;
         nPixelSize = nCmpCount = nCmpSize = 1;
         nDataSize += 10;
         aBitmap = Bitmap( Size( nWidth, nHeight ), 1 );
