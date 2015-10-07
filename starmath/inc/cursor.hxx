@@ -13,6 +13,7 @@
 #include "caret.hxx"
 
 #include <list>
+#include <memory>
 
 /** Factor to multiple the squared horizontal distance with
  * Used for Up and Down movement.
@@ -82,7 +83,6 @@ public:
         , mpPosition(nullptr)
         , mpTree(tree)
         , mpDocShell(pShell)
-        , mpGraph(nullptr)
         , mpClipboard(nullptr)
         , mnEditSections(0)
         , mbIsEnabledSetModifiedSmDocShell(false)
@@ -94,8 +94,6 @@ public:
     ~SmCursor()
     {
         SetClipboard();
-        delete mpGraph;
-        mpGraph = nullptr;
     }
 
     /** Get position */
@@ -230,7 +228,7 @@ private:
     /** Owner of the formula tree */
     SmDocShell* mpDocShell;
     /** Graph over caret position in the current tree */
-    SmCaretPosGraph* mpGraph;
+    std::unique_ptr<SmCaretPosGraph> mpGraph;
     /** Clipboard holder */
     SmNodeList* mpClipboard;
 
