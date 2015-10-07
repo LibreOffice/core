@@ -26,20 +26,6 @@
 
 class EditEngine;
 
-class EditNodeIdx : public SvxNodeIdx
-{
-private:
-    EditEngine*   mpEditEngine;
-    ContentNode*  mpNode;
-
-public:
-    EditNodeIdx(EditEngine* pEE, ContentNode* pNd = NULL);
-
-    virtual sal_Int32   GetIdx() const SAL_OVERRIDE;
-    virtual SvxNodeIdx* Clone() const SAL_OVERRIDE;
-    ContentNode* GetNode() { return mpNode; }
-};
-
 class EditPosition : public SvxPosition
 {
 private:
@@ -56,7 +42,7 @@ public:
     virtual SvxPosition* Clone() const SAL_OVERRIDE;
 
     // clone NodeIndex
-    virtual SvxNodeIdx* MakeNodeIdx() const SAL_OVERRIDE;
+    virtual EditNodeIdx* MakeNodeIdx() const SAL_OVERRIDE;
 };
 
 #define ACTION_INSERTTEXT       1
@@ -80,13 +66,13 @@ protected:
     virtual void        InsertPara() SAL_OVERRIDE;
     virtual void        InsertText() SAL_OVERRIDE;
     virtual void        MovePos( bool bForward = true ) SAL_OVERRIDE;
-    virtual void        SetEndPrevPara( SvxNodeIdx*& rpNodePos,
-                                            sal_Int32& rCntPos ) SAL_OVERRIDE;
+    virtual void        SetEndPrevPara( EditNodeIdx*& rpNodePos,
+                                        sal_Int32& rCntPos ) SAL_OVERRIDE;
 
     virtual void        UnknownAttrToken( int nToken, SfxItemSet* pSet ) SAL_OVERRIDE;
     virtual void        NextToken( int nToken ) SAL_OVERRIDE;
     virtual void        SetAttrInDoc( SvxRTFItemStackType &rSet ) SAL_OVERRIDE;
-    virtual bool        IsEndPara( SvxNodeIdx* pNd, sal_Int32 nCnt ) const SAL_OVERRIDE;
+    virtual bool        IsEndPara( EditNodeIdx* pNd, sal_Int32 nCnt ) const SAL_OVERRIDE;
     virtual void        CalcValue() SAL_OVERRIDE;
     void                CreateStyleSheets();
     SfxStyleSheet*      CreateStyleSheet( SvxRTFStyleType* pRTFStyle );

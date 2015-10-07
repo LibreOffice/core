@@ -1192,8 +1192,8 @@ void SvxRTFItemStackType::SetStartPos( const SvxPosition& rPos )
     nSttCnt = rPos.GetCntIdx();
 }
 
-void SvxRTFItemStackType::MoveFullNode(const SvxNodeIdx &rOldNode,
-    const SvxNodeIdx &rNewNode)
+void SvxRTFItemStackType::MoveFullNode(const EditNodeIdx &rOldNode,
+    const EditNodeIdx &rNewNode)
 {
     bool bSameEndAsStart = (pSttNd == pEndNd);
 
@@ -1232,7 +1232,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
         nSttCnt != pTmp->nSttCnt )
         return;
 
-    SvxNodeIdx* pLastNd = pTmp->pEndNd;
+    EditNodeIdx* pLastNd = pTmp->pEndNd;
     sal_Int32 nLastCnt = pTmp->nEndCnt;
 
     SfxItemSet aMrgSet( pTmp->aAttrSet );

@@ -274,7 +274,7 @@ void EditRTFParser::MovePos( bool const bForward )
             aCurSel.Max(), i18n::CharacterIteratorMode::SKIPCHARACTER);
 }
 
-void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
+void EditRTFParser::SetEndPrevPara( EditNodeIdx*& rpNodePos,
                                     sal_Int32& rCntPos )
 {
     // The Intention is to: determine the current insert position of the
@@ -292,7 +292,7 @@ void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     rCntPos = pPrevNode->Len();
 }
 
-bool EditRTFParser::IsEndPara( SvxNodeIdx* pNd, sal_Int32 nCnt ) const
+bool EditRTFParser::IsEndPara( EditNodeIdx* pNd, sal_Int32 nCnt ) const
 {
     return nCnt == ( static_cast<EditNodeIdx*>(pNd)->GetNode()->Len());
 }
@@ -607,7 +607,7 @@ sal_Int32 EditNodeIdx::GetIdx() const
     return mpEditEngine->GetEditDoc().GetPos(mpNode);
 }
 
-SvxNodeIdx* EditNodeIdx::Clone() const
+EditNodeIdx* EditNodeIdx::Clone() const
 {
     return new EditNodeIdx(mpEditEngine, mpNode);
 }
@@ -620,7 +620,7 @@ SvxPosition* EditPosition::Clone() const
     return new EditPosition(mpEditEngine, mpCurSel);
 }
 
-SvxNodeIdx* EditPosition::MakeNodeIdx() const
+EditNodeIdx* EditPosition::MakeNodeIdx() const
 {
     return new EditNodeIdx(mpEditEngine, mpCurSel->Max().GetNode());
 }

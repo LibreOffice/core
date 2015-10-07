@@ -75,7 +75,6 @@ merge SfxUndoListener with framework::UndoManagerHelper_Impl
 merge StarSymbolToMSMultiFont with StarSymbolToMSMultiFontImpl
 merge StgReader with WW8Reader
 merge SvListView with SvTreeListBox
-merge SvxNodeIdx with EditNodeIdx
 merge SvxPosition with EditPosition
 merge SvxShapeMaster with SdXShape
 merge SvxUnoDrawMSFactory with SvxFmMSFactory

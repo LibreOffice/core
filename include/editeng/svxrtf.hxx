@@ -54,13 +54,19 @@ namespace com { namespace sun { namespace star {
 //        Swg - NodePosition is a SwIndex, which is used internally
 // EditEngine - ULONG to list of paragraphs
 
-
-class SvxNodeIdx
+class EditEngine;
+class ContentNode;
+class EditNodeIdx
 {
 public:
-    virtual ~SvxNodeIdx() {}
-    virtual sal_Int32   GetIdx() const = 0;
-    virtual SvxNodeIdx* Clone() const = 0;  // Cloning itself
+    EditNodeIdx(EditEngine* pEE, ContentNode* pNd = NULL);
+    ~EditNodeIdx() {}
+    sal_Int32   GetIdx() const;
+    EditNodeIdx* Clone() const;  // Cloning itself
+    ContentNode* GetNode() { return mpNode; }
+private:
+    EditEngine*   mpEditEngine;
+    ContentNode*  mpNode;
 };
 
 class SvxPosition
@@ -72,7 +78,7 @@ public:
     virtual sal_Int32   GetCntIdx() const = 0;
 
     virtual SvxPosition* Clone() const = 0; // Cloning itself
-    virtual SvxNodeIdx* MakeNodeIdx() const = 0; // Cloning NodeIndex
+    virtual EditNodeIdx* MakeNodeIdx() const = 0; // Cloning NodeIndex
 };
 
 
@@ -266,7 +272,7 @@ protected:
 
     virtual void InsertText() = 0;
     virtual void MovePos( bool bForward = true ) = 0;
-    virtual void SetEndPrevPara( SvxNodeIdx*& rpNodePos,
+    virtual void SetEndPrevPara( EditNodeIdx*& rpNodePos,
                                  sal_Int32& rCntPos )=0;
     virtual void SetAttrInDoc( SvxRTFItemStackType &rSet );
     // for Tokens, which are not evaluated in ReadAttr
@@ -299,7 +305,7 @@ public:
     inline const Color& GetColor( size_t nId ) const;
     const vcl::Font& GetFont( sal_uInt16 nId );      // Changes the default Font
 
-    virtual bool IsEndPara( SvxNodeIdx* pNd, sal_Int32 nCnt ) const = 0;
+    virtual bool IsEndPara( EditNodeIdx* pNd, sal_Int32 nCnt ) const = 0;
 
     // to set a different attribute pool. May only be done prior to CallParser!
     // The maps are not generated anew!
@@ -324,11 +330,11 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
 {
     friend class SvxRTFParser;
 
-    SfxItemSet  aAttrSet;
-    SvxNodeIdx  *pSttNd, *pEndNd;
-    sal_Int32 nSttCnt, nEndCnt;
+    SfxItemSet   aAttrSet;
+    EditNodeIdx  *pSttNd, *pEndNd;
+    sal_Int32    nSttCnt, nEndCnt;
     SvxRTFItemStackList* m_pChildList;
-    sal_uInt16 nStyleNo;
+    sal_uInt16   nStyleNo;
 
     SvxRTFItemStackType(SvxRTFItemStackType const&) = delete;
     void operator=(SvxRTFItemStackType const&) = delete;
@@ -348,14 +354,14 @@ public:
     //bad, consider this deprecated.
     void SetStartPos( const SvxPosition& rPos );
 
-    void MoveFullNode(const SvxNodeIdx &rOldNode,
-        const SvxNodeIdx &rNewNode);
+    void MoveFullNode(const EditNodeIdx &rOldNode,
+        const EditNodeIdx &rNewNode);
 
     sal_Int32 GetSttNodeIdx() const { return pSttNd->GetIdx(); }
     sal_Int32 GetEndNodeIdx() const { return pEndNd->GetIdx(); }
 
-    const SvxNodeIdx& GetSttNode() const { return *pSttNd; }
-    const SvxNodeIdx& GetEndNode() const { return *pEndNd; }
+    const EditNodeIdx& GetSttNode() const { return *pSttNd; }
+    const EditNodeIdx& GetEndNode() const { return *pEndNd; }
 
     sal_Int32 GetSttCnt() const { return nSttCnt; }
     sal_Int32 GetEndCnt() const { return nEndCnt; }
