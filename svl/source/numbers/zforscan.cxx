@@ -673,7 +673,6 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                 {
                     sSymbol = rStr.copy( --nPos, sCurString.getLength() );
                     nPos = nPos + sSymbol.getLength();
-                    eState = SsStop;
                     eType = NF_SYMBOLTYPE_STRING;
                     return eType;
                 }
