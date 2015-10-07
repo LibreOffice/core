@@ -202,7 +202,7 @@ int SvRTFParser::_GetNextToken()
                                     if( '\\' == cAnsi &&
                                         '\'' == ( cAnsi = GetNextChar() ))
                                         // read on HexValue
-                                        cAnsi = GetHexValue();
+                                        GetHexValue();
                                     nNextCh = GetNextChar();
                                 }
                                 ScanText();
@@ -426,7 +426,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                                 if( '\\' == cAnsi &&
                                     '\'' == ( cAnsi = GetNextChar() ))
                                     // HexValue ueberlesen
-                                    cAnsi = GetHexValue();
+                                    GetHexValue();
                                 nNextCh = GetNextChar();
                             }
                             bNextCh = false;
