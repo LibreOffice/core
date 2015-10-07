@@ -1262,9 +1262,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         aXP1.Insert(XPOLY_APPEND,aXP2[nNum],XPOLY_NORMAL);
     }
     sal_uInt16 nPointCount=aXP1.GetPointCount();
-    char cForm=0;
+    char cForm;
     if (bInfo || pnQuality!=NULL) {
-        cForm='?';
         if (nPointCount==2) cForm='I';
         else if (nPointCount==3) cForm='L';
         else if (nPointCount==4) { // Z or U
@@ -1304,6 +1303,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 pInfo->nMiddleLine=2;
             }
         }
+    }
+    else
+    {
+        cForm = 0;
     }
     if (pnQuality!=NULL) {
         sal_uIntPtr nQual=0;
