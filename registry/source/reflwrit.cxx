@@ -1114,29 +1114,24 @@ void TypeWriter::createBlop()
         pInfo = pNextInfo;
     }
 
-    // write fields
-    pBuffer += writeUINT16(pBuffer, m_fieldCount);
-    if (blopFieldsSize)
+    auto writeList = [&pBuffer](
+        sal_uInt16 count, sal_uInt8 * data, sal_uInt32 size)
     {
-        memcpy(pBuffer, pBlopFields, blopFieldsSize);
-        pBuffer += blopFieldsSize;
-    }
+        pBuffer += writeUINT16(pBuffer, count);
+        if (size != 0) {
+            memcpy(pBuffer, data, size);
+            pBuffer += size;
+        }
+    };
+
+    // write fields
+    writeList(m_fieldCount, pBlopFields, blopFieldsSize);
 
     // write methods
-    pBuffer += writeUINT16(pBuffer, m_methodCount);
-    if (blopMethodsSize)
-    {
-        memcpy(pBuffer, pBlopMethods, blopMethodsSize);
-        pBuffer += blopMethodsSize;
-    }
+    writeList(m_methodCount, pBlopMethods, blopMethodsSize);
 
     // write references
-    pBuffer += writeUINT16(pBuffer, m_referenceCount);
-    if (blopReferenceSize)
-    {
-        memcpy(pBuffer, pBlopReferences, blopReferenceSize);
-        pBuffer += blopReferenceSize;
-    }
+    writeList(m_referenceCount, pBlopReferences, blopReferenceSize);
 
     delete[] pBlopFields;
     delete[] pBlopMethods;
