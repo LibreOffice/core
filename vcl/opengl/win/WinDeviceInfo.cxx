@@ -727,6 +727,14 @@ bool WinOpenGLDeviceInfo::isDeviceBlocked()
         return true;
     }
 
+    /* Anything that's exotic eg. VMWare / VirtualBox GL drivers
+       we're not interested in for now. */
+    if (maAdapterVendorID != GetDeviceVendor(wgl::VendorAMD) &&
+        maAdapterVendorID != GetDeviceVendor(wgl::VendorATI) &&
+        maAdapterVendorID != GetDeviceVendor(wgl::VendorIntel) &&
+        maAdapterVendorID != GetDeviceVendor(wgl::VendorNVIDIA))
+        return true;
+
     return FindBlocklistedDeviceInList();
 }
 
