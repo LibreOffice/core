@@ -39,7 +39,10 @@ using namespace sca::analysis;
 #define INTPAR              true    // first parameter is internal
 
 #define FUNCDATA( FUNCNAME, DBL, OPT, NUMOFPAR, CAT ) \
-    { "get" #FUNCNAME, ANALYSIS_FUNCNAME_##FUNCNAME, ANALYSIS_##FUNCNAME, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FUNCNAME, NUMOFPAR, CAT }
+    { "get" #FUNCNAME, ANALYSIS_FUNCNAME_##FUNCNAME, ANALYSIS_##FUNCNAME, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FUNCNAME, NUMOFPAR, CAT, NULL }
+
+#define FUNCDATAS( FUNCNAME, DBL, OPT, NUMOFPAR, CAT, SUFFIX ) \
+    { "get" #FUNCNAME, ANALYSIS_FUNCNAME_##FUNCNAME, ANALYSIS_##FUNCNAME, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FUNCNAME, NUMOFPAR, CAT, SUFFIX }
 
 const FuncDataBase pFuncDatas[] =
 {
@@ -48,9 +51,9 @@ const FuncDataBase pFuncDatas[] =
     FUNCDATA( Workday,          UNIQUE,     INTPAR,     3,          FDCat_DateTime ),
     FUNCDATA( Yearfrac,         UNIQUE,     INTPAR,     3,          FDCat_DateTime ),
     FUNCDATA( Edate,            UNIQUE,     INTPAR,     2,          FDCat_DateTime ),
-    FUNCDATA( Weeknum,          DOUBLE,     INTPAR,     2,          FDCat_DateTime ),
+    FUNCDATAS( Weeknum,         DOUBLE,     INTPAR,     2,          FDCat_DateTime, "_EXCEL2003" ),
     FUNCDATA( Eomonth,          UNIQUE,     INTPAR,     2,          FDCat_DateTime ),
-    FUNCDATA( Networkdays,      DOUBLE,     INTPAR,     3,          FDCat_DateTime ),
+    FUNCDATAS( Networkdays,     DOUBLE,     INTPAR,     3,          FDCat_DateTime, "_XCL" ),
     FUNCDATA( Iseven,           DOUBLE,     STDPAR,     1,          FDCat_Inf ),
     FUNCDATA( Isodd,            DOUBLE,     STDPAR,     1,          FDCat_Inf ),
     FUNCDATA( Multinomial,      UNIQUE,     STDPAR,     1,          FDCat_Math ),
@@ -1402,6 +1405,9 @@ FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
     nCompID( r.nCompListID ),
     eCat( r.eCat )
 {
+    if (r.pSuffix)
+        aSuffix = OUString::createFromAscii( r.pSuffix);
+
     AnalysisRscStrArrLoader aArrLoader( RID_ANALYSIS_DEFFUNCTION_NAMES, nCompID, rResMgr );
     const ResStringArray&   rArr = aArrLoader.GetStringArray();
 

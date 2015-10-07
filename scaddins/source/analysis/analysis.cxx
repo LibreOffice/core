@@ -289,7 +289,13 @@ OUString SAL_CALL AnalysisAddIn::getDisplayFunctionName( const OUString& aProgra
     {
         aRet = GetDisplFuncStr( it->GetUINameID() );
         if( it->IsDouble() )
-            aRet += "_ADD";
+        {
+            const OUString& rSuffix = it->GetSuffix();
+            if (!rSuffix.isEmpty())
+                aRet += rSuffix;
+            else
+                aRet += "_ADD";
+        }
     }
     else
     {

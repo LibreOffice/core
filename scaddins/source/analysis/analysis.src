@@ -127,29 +127,29 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Weeknum
     {
-        String 1    // description Weeknum_add
+        String 1    // description Weeknum_Excel2003
         {
-            Text [ en-US ] = "Returns the number of the calendar week in which the specified date occurs.";
+            Text [ en-US ] = "Returns the number of the calendar week in which the specified date occurs.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use WEEKNUM instead.";
         };
 
-        String 2 // name of parameter 1         Weeknum_add
+        String 2 // name of parameter 1         Weeknum_Excel2003
         {
             Text [ en-US ] = "Date";
         };
 
-        String 3 // description of parameter 1  Weeknum_add
+        String 3 // description of parameter 1  Weeknum_Excel2003
         {
-            Text [ en-US ] = "The date";
+            Text [ en-US ] = "The date or date serial number";
         };
 
-        String 4 // name of parameter 2         Weeknum_add
+        String 4 // name of parameter 2         Weeknum_Excel2003
         {
             Text [ en-US ] = "Return type";
         };
 
-        String 5 // description of parameter 2  Weeknum_add
+        String 5 // description of parameter 2  Weeknum_Excel2003
         {
-            Text [ en-US ] = "Indicates the first day of the week (1 = Sunday, other values = Monday)";
+            Text [ en-US ] = "Indicates the first day of the week (1 = Sunday, 2 = Monday)";
         };
     };
 
@@ -185,7 +185,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Networkdays
         {
-            Text [ en-US ] = "Returns the number of workdays between two dates";
+            Text [ en-US ] = "Returns the number of workdays between two dates.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use NETWORKDAYS instead.";
         };
 
         String 2 // name of parameter 1         Networkdays

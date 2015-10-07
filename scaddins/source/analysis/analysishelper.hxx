@@ -166,6 +166,7 @@ struct FuncDataBase
     sal_uInt16              nCompListID;        // resource ID to list of valid names
     sal_uInt16              nNumOfParams;       // number of named / described parameters
     FDCategory              eCat;               // function category
+    const char*             pSuffix;            // if bDouble, append a suffix other than "_ADD" for UI
 };
 
 
@@ -182,6 +183,8 @@ private:
     sal_uInt16              nCompID;
     std::vector<OUString>  aCompList;          // list of all valid names
     FDCategory              eCat;               // function category
+    OUString                aSuffix;            // if bDouble and not empty, append a suffix other than "_ADD" for UI
+
 public:
                             FuncData( const FuncDataBase& rBaseData, ResMgr& );
     virtual                 ~FuncData();
@@ -189,6 +192,7 @@ public:
     inline sal_uInt16       GetUINameID() const;
     inline sal_uInt16       GetDescrID() const;
     inline bool             IsDouble() const;
+    inline const OUString&  GetSuffix() const;
 
     sal_uInt16              GetStrIndex( sal_uInt16 nParamNum ) const;
     inline bool             Is( const OUString& rCompareTo ) const;
@@ -560,6 +564,12 @@ inline sal_uInt16 FuncData::GetDescrID() const
 inline bool FuncData::IsDouble() const
 {
     return bDouble;
+}
+
+
+inline const OUString& FuncData::GetSuffix() const
+{
+    return aSuffix;
 }
 
 
