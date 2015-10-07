@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_800057ac",
+        "filename": "chart2/source/tools/ExponentialRegressionCurveCalculator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-10-07T10:25:40Z",
+      "side": 1,
+      "message": "naming?",
+      "revId": "2ac83982ba1a7bdbdedb9d7a98d42b755f36fd5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_e02b1332",
+        "filename": "chart2/source/tools/ExponentialRegressionCurveCalculator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-10-07T10:25:40Z",
+      "side": 1,
+      "message": "this is unnecessary, we have optimised \"const char*\" append",
+      "revId": "2ac83982ba1a7bdbdedb9d7a98d42b755f36fd5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_c0308fa1",
+        "filename": "chart2/source/tools/ExponentialRegressionCurveCalculator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-10-07T10:25:40Z",
+      "side": 1,
+      "message": "surely we could skip both the fabs() here and the previous line?",
+      "revId": "2ac83982ba1a7bdbdedb9d7a98d42b755f36fd5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_2026ab68",
+        "filename": "chart2/source/tools/ExponentialRegressionCurveCalculator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-10-07T10:25:40Z",
+      "side": 1,
+      "message": "ditto here",
+      "revId": "2ac83982ba1a7bdbdedb9d7a98d42b755f36fd5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_8017b7ec",
+        "filename": "chart2/source/tools/ExponentialRegressionCurveCalculator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-10-07T10:25:40Z",
+      "side": 1,
+      "message": "these 2 lines are the same in both branches of the if and could be moved outside it.",
+      "revId": "2ac83982ba1a7bdbdedb9d7a98d42b755f36fd5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
