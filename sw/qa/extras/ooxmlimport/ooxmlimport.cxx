@@ -40,6 +40,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -2860,6 +2861,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf91417, "tdf91417.docx")
     OUString aValue;
     xCursorProps->getPropertyValue("HyperLinkURL") >>= aValue;
     CPPUNIT_ASSERT_EQUAL(OUString("http://www.google.com/"), aValue);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf90810, "tdf90810short.docx")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XFootnotesSupplier> xFtnSupp(xTextDocument, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFtnIdxAcc(xFtnSupp->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XFootnote> xFtn(xFtnIdxAcc->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xFtnText(xFtn, uno::UNO_QUERY);
+    rtl::OUString sFtnText = xFtnText->getString();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(90), static_cast<sal_Int32>(sFtnText.getLength()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
