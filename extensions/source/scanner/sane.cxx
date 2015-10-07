@@ -410,46 +410,37 @@ bool Sane::GetOptionValue( int n, double* pSet )
     return true;
 }
 
-bool Sane::SetOptionValue( int n, bool bSet )
+void Sane::SetOptionValue( int n, bool bSet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_BOOL )
-        return false;
+        return;
     SANE_Word nRet = bSet ? SANE_TRUE : SANE_FALSE;
-    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, &nRet );
-    if( nStatus != SANE_STATUS_GOOD )
-        return false;
-    return true;
+    ControlOption( n, SANE_ACTION_SET_VALUE, &nRet );
 }
 
-bool Sane::SetOptionValue( int n, const OUString& rSet )
+void Sane::SetOptionValue( int n, const OUString& rSet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
-        return false;
+        return;
     OString aSet(OUStringToOString(rSet, osl_getThreadTextEncoding()));
-    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, const_cast<char *>(aSet.getStr()) );
-    if( nStatus != SANE_STATUS_GOOD )
-        return false;
-    return true;
+    ControlOption( n, SANE_ACTION_SET_VALUE, const_cast<char *>(aSet.getStr()) );
 }
 
-bool Sane::SetOptionValue( int n, double fSet, int nElement )
+void Sane::SetOptionValue( int n, double fSet, int nElement )
 {
-    bool bSuccess = false;
-
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
-        return false;
+        return;
 
-    SANE_Status nStatus;
     if( mppOptions[n]->size/sizeof(SANE_Word) > 1 )
     {
         std::unique_ptr<SANE_Word[]> pSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
-        nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pSet.get() );
+        SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pSet.get() );
         if( nStatus == SANE_STATUS_GOOD )
         {
             pSet[nElement] = mppOptions[n]->type == SANE_TYPE_INT ?
                 (SANE_Word)fSet : SANE_FIX( fSet );
-            nStatus = ControlOption(  n, SANE_ACTION_SET_VALUE, pSet.get() );
+            ControlOption(  n, SANE_ACTION_SET_VALUE, pSet.get() );
         }
     }
     else
@@ -458,18 +449,15 @@ bool Sane::SetOptionValue( int n, double fSet, int nElement )
             mppOptions[n]->type == SANE_TYPE_INT ?
             (SANE_Word)fSet : SANE_FIX( fSet );
 
-        nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, &nSetTo );
-        if( nStatus == SANE_STATUS_GOOD )
-            bSuccess = true;
+        ControlOption( n, SANE_ACTION_SET_VALUE, &nSetTo );
     }
-    return bSuccess;
 }
 
-bool Sane::SetOptionValue( int n, double* pSet )
+void Sane::SetOptionValue( int n, double* pSet )
 {
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
-        return false;
+        return;
     std::unique_ptr<SANE_Word[]> pFixedSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
     for( size_t i = 0; i < mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
@@ -478,10 +466,7 @@ bool Sane::SetOptionValue( int n, double* pSet )
         else
             pFixedSet[i] = (SANE_Word)pSet[i];
     }
-    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, pFixedSet.get() );
-    if( nStatus != SANE_STATUS_GOOD )
-        return false;
-    return true;
+    ControlOption( n, SANE_ACTION_SET_VALUE, pFixedSet.get() );
 }
 
 enum FrameStyleType {

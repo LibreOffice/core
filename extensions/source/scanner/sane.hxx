@@ -150,10 +150,10 @@ public:
     bool            GetOptionValue( int, double&, int nElement = 0 );
     bool            GetOptionValue( int, double* );
 
-    bool            SetOptionValue( int, bool );
-    bool            SetOptionValue( int, const OUString& );
-    bool            SetOptionValue( int, double, int nElement = 0 );
-    bool            SetOptionValue( int, double* );
+    void            SetOptionValue( int, bool );
+    void            SetOptionValue( int, const OUString& );
+    void            SetOptionValue( int, double, int nElement = 0 );
+    void            SetOptionValue( int, double* );
 
     bool            ActivateButtonOption( int );
 
