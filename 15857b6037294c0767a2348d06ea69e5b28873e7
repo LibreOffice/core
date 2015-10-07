@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_e0dcb31a",
+        "filename": "tools/source/generic/config.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-07T12:52:01Z",
+      "side": 1,
+      "message": "The initial \"Config::ReadKey( \" will be lost, as you assign the result of the rKey + ... over it.  Also, there is no need any longer to use an OStringBuffer at all; just use an OString aTraceStr to hold the result of concatenating all the parts.",
+      "revId": "15857b6037294c0767a2348d06ea69e5b28873e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
