@@ -66,7 +66,7 @@ for clazz in sorted(definitionSet - instantiatedSet):
     if clazz.find("mutex") != -1 or clazz.find("Mutex") != -1:
         continue
     otherclazz = next(iter(parentChildDict[clazz]))
-   # exclude combinations that span modules because we often use those to make cross-module dependencies more manageable.
+    # exclude combinations that span modules because we often use those to make cross-module dependencies more manageable.
     if extractModuleName(clazz) != extractModuleName(otherclazz):
         continue
     print "merge", clazz, "with", otherclazz

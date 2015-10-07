@@ -84,7 +84,7 @@ PhysicalFontCollection::~PhysicalFontCollection()
     Clear();
 }
 
-void PhysicalFontCollection::SetPreMatchHook( ImplPreMatchFontSubstitution* pHook )
+void PhysicalFontCollection::SetPreMatchHook( PreMatchFontSubstititution* pHook )
 {
     mpPreMatchHook = pHook;
 }

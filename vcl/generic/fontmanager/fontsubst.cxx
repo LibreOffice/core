@@ -35,19 +35,6 @@
 #include <unotools/fontdefs.hxx>
 #include <list>
 
-// platform specific font substitution hooks
-
-class FcPreMatchSubstititution
-:   public ImplPreMatchFontSubstitution
-{
-public:
-    bool FindFontSubstitute( FontSelectPattern& ) const SAL_OVERRIDE;
-    typedef ::std::pair<FontSelectPatternAttributes, FontSelectPatternAttributes> value_type;
-private:
-    typedef ::std::list<value_type> CachedFontMapType;
-    mutable CachedFontMapType maCachedFontMap;
-};
-
 class FcGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
@@ -95,7 +82,7 @@ void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFont
     // register font fallback substitutions (unless disabled by bit0)
     if( (nDisableBits & 1) == 0 )
     {
-        static FcPreMatchSubstititution aSubstPreMatch;
+        static PreMatchFontSubstititution aSubstPreMatch;
         pFontCollection->SetPreMatchHook( &aSubstPreMatch );
     }
 
@@ -138,12 +125,12 @@ namespace
             : mrAttributes(rAttributes)
         {
         }
-        bool operator()(const FcPreMatchSubstititution::value_type& rOther) const
+        bool operator()(const PreMatchFontSubstititution::value_type& rOther) const
             { return rOther.first == mrAttributes; }
     };
 }
 
-bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelData ) const
+bool PreMatchFontSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelData ) const
 {
     // We don't actually want to talk to Fontconfig at all for symbol fonts
     if( rFontSelData.IsSymbolFont() )

@@ -112,12 +112,16 @@ public:
 // PreMatchFontSubstitution
 // abstracts the concept of a configured font substitution
 // before the availability of the originally selected font has been checked
-class ImplPreMatchFontSubstitution
-:   public ImplFontSubstitution
+class PreMatchFontSubstititution
 {
 public:
-    virtual bool FindFontSubstitute( FontSelectPattern& ) const = 0;
+    bool FindFontSubstitute( FontSelectPattern& ) const;
+    typedef ::std::pair<FontSelectPatternAttributes, FontSelectPatternAttributes> value_type;
+private:
+    typedef ::std::list<value_type> CachedFontMapType;
+    mutable CachedFontMapType maCachedFontMap;
 };
+
 
 // ImplGlyphFallbackFontSubstitution
 // abstracts the concept of finding the best font to support an incomplete font

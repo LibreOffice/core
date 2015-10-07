@@ -46,8 +46,6 @@ merge ISwFrameControl with SwFrameMenuButtonBase
 merge IXFAttrList with XFSaxAttrList
 merge IXFStream with XFSaxStream
 merge IXFStyle with XFStyle
-merge ImplGlyphFallbackFontSubstitution with FcGlyphFallbackSubstititution
-merge ImplPreMatchFontSubstitution with FcPreMatchSubstititution
 merge LwpDLList with LwpParaProperty
 merge LwpDLVListHead with LwpPropList
 merge OldBasicPassword with basic::SfxScriptLibraryContainer

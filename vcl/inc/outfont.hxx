@@ -37,7 +37,7 @@ class ImplGetDevFontList;
 class ImplGetDevSizeList;
 class ImplFontEntry;
 class ImplFontCache;
-class ImplPreMatchFontSubstitution;
+class PreMatchFontSubstititution;
 class ImplGlyphFallbackFontSubstitution;
 class FontSelectPattern;
 namespace vcl { class Font; }
