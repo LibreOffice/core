@@ -555,7 +555,7 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-void ServerFont::SetFontOptions(std::shared_ptr<ImplFontOptions> xFontOptions)
+void ServerFont::SetFontOptions(std::shared_ptr<FontConfigFontOptions> xFontOptions)
 {
     mxFontOptions = xFontOptions;
 
@@ -608,7 +608,7 @@ void ServerFont::SetFontOptions(std::shared_ptr<ImplFontOptions> xFontOptions)
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-std::shared_ptr<ImplFontOptions> ServerFont::GetFontOptions() const
+std::shared_ptr<FontConfigFontOptions> ServerFont::GetFontOptions() const
 {
     return mxFontOptions;
 }

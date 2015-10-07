@@ -1140,15 +1140,12 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
     return bRet;
 }
 
-class FontConfigFontOptions : public ImplFontOptions
+FontConfigFontOptions::~FontConfigFontOptions()
 {
-public:
-    FontConfigFontOptions() : mpPattern(0) {}
-    virtual ~FontConfigFontOptions()
-    {
-        FcPatternDestroy(mpPattern);
-    }
-    virtual void *GetPattern(void * face, bool bEmbolden, bool /*bVerticalLayout*/) const SAL_OVERRIDE
+    FcPatternDestroy(mpPattern);
+}
+
+    void *FontConfigFontOptions::GetPattern(void * face, bool bEmbolden) const
     {
         FcValue value;
         value.type = FcTypeFTFace;
@@ -1163,10 +1160,8 @@ public:
 #endif
         return mpPattern;
     }
-    FcPattern* mpPattern;
-};
 
-ImplFontOptions* PrintFontManager::getFontOptions(
+FontConfigFontOptions* PrintFontManager::getFontOptions(
     const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void*))
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
@@ -1210,9 +1205,7 @@ ImplFontOptions* PrintFontManager::getFontOptions(
         (void) FcPatternGetInteger(pResult,
             FC_HINT_STYLE, 0, &hintstyle);
 
-        pOptions = new FontConfigFontOptions;
-
-        pOptions->mpPattern = pResult;
+        pOptions = new FontConfigFontOptions(pResult);
 
         if( eEmbeddedBitmap == FcResultMatch )
             pOptions->meEmbeddedBitmap = embitmap ? EMBEDDEDBITMAP_TRUE : EMBEDDEDBITMAP_FALSE;

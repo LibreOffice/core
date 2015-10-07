@@ -46,7 +46,6 @@ merge ISwFrameControl with SwFrameMenuButtonBase
 merge IXFAttrList with XFSaxAttrList
 merge IXFStream with XFSaxStream
 merge IXFStyle with XFStyle
-merge ImplFontOptions with FontConfigFontOptions
 merge ImplGlyphFallbackFontSubstitution with FcGlyphFallbackSubstititution
 merge ImplPreMatchFontSubstitution with FcPreMatchSubstititution
 merge LwpDLList with LwpParaProperty

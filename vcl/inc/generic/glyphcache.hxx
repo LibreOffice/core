@@ -42,7 +42,7 @@ class FtFontInfo;
 class GlyphCachePeer;
 class GlyphData;
 class GraphiteFaceWrapper;
-class ImplFontOptions;
+class FontConfigFontOptions;
 class PhysicalFontCollection;
 class RawBitmap;
 class ServerFont;
@@ -174,8 +174,8 @@ public:
     bool                    TestFont() const { return mbFaceOk;}
     FT_Face                 GetFtFace() const;
     int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
-    void                    SetFontOptions(std::shared_ptr<ImplFontOptions>);
-    std::shared_ptr<ImplFontOptions> GetFontOptions() const;
+    void                    SetFontOptions(std::shared_ptr<FontConfigFontOptions>);
+    std::shared_ptr<FontConfigFontOptions> GetFontOptions() const;
     bool                    NeedsArtificialBold() const { return mbArtBold; }
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }
 
@@ -253,7 +253,7 @@ private:
     FT_FaceRec_*            maFaceFT;
     FT_SizeRec_*            maSizeFT;
 
-    std::shared_ptr<ImplFontOptions> mxFontOptions;
+    std::shared_ptr<FontConfigFontOptions> mxFontOptions;
 
     bool                    mbFaceOk;
     bool                    mbArtItalic;
@@ -278,7 +278,7 @@ public:
 
 private:
     ServerFont*             mpServerFont;
-    std::shared_ptr<ImplFontOptions> mxFontOptions;
+    std::shared_ptr<FontConfigFontOptions> mxFontOptions;
     bool                    mbGotFontOptions;
 
 };

@@ -122,9 +122,8 @@ public:
     bool                operator==( const ImplFontMetric& ) const;
 };
 
-// - ImplFontOptions -
-
-class ImplFontOptions
+typedef struct _FcPattern   FcPattern;
+class FontConfigFontOptions
 {
 public:
     FontEmbeddedBitmap meEmbeddedBitmap; // whether the embedded bitmaps should be used
@@ -132,21 +131,31 @@ public:
     FontAutoHint       meAutoHint;       // whether the font should be autohinted
     FontHinting        meHinting;        // whether the font should be hinted
     FontHintStyle      meHintStyle;      // type of font hinting to be used
-public:
-                        ImplFontOptions() :
+
+                        FontConfigFontOptions() :
                             meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
                             meAntiAlias(ANTIALIAS_DONTKNOW),
                             meAutoHint(AUTOHINT_DONTKNOW),
                             meHinting(HINTING_DONTKNOW),
-                            meHintStyle(HINT_SLIGHT) {}
-    virtual             ~ImplFontOptions() {}
+                            meHintStyle(HINT_SLIGHT),
+                            mpPattern(0) {}
+                        FontConfigFontOptions(FcPattern* pPattern) :
+                            meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
+                            meAntiAlias(ANTIALIAS_DONTKNOW),
+                            meAutoHint(AUTOHINT_DONTKNOW),
+                            meHinting(HINTING_DONTKNOW),
+                            meHintStyle(HINT_SLIGHT),
+                            mpPattern(pPattern) {}
+                        ~FontConfigFontOptions();
 
     FontAutoHint        GetUseAutoHint() const { return meAutoHint; }
     FontHintStyle       GetHintStyle() const { return meHintStyle; }
     bool                DontUseEmbeddedBitmaps() const { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
     bool                DontUseAntiAlias() const { return meAntiAlias == ANTIALIAS_FALSE; }
     bool                DontUseHinting() const { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
-    virtual void*       GetPattern(void * /*pFace*/, bool /*bEmbolden*/, bool /*bVerticalMetrics*/) const { return NULL; }
+    void*               GetPattern(void * /*pFace*/, bool /*bEmbolden*/) const;
+private:
+    FcPattern* mpPattern;
 };
 
 // - ImplFontCharMap -

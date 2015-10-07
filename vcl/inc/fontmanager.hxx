@@ -45,7 +45,7 @@
 namespace utl { class MultiAtomProvider; }
 
 class FontSubsetInfo;
-class ImplFontOptions;
+class FontConfigFontOptions;
 class FontSelectPattern;
 
 namespace psp {
@@ -498,7 +498,7 @@ public:
     false else
      */
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
-    static ImplFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*));
+    static FontConfigFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*));
 
     bool Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes );
 

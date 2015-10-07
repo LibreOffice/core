@@ -100,7 +100,7 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
     return false;
 }
 
-ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize);
+FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize);
 
 void ImplServerFontEntry::HandleFontOptions()
 {
@@ -257,8 +257,8 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         cairo_font_face_t* font_face = static_cast<cairo_font_face_t*>(CairoFontsCache::FindCachedFont(aId));
         if (!font_face)
         {
-            const ImplFontOptions *pOptions = rFont.GetFontOptions().get();
-            void *pPattern = pOptions ? pOptions->GetPattern(aFace, aId.mbEmbolden, aId.mbVerticalMetrics) : NULL;
+            const FontConfigFontOptions *pOptions = rFont.GetFontOptions().get();
+            void *pPattern = pOptions ? pOptions->GetPattern(aFace, aId.mbEmbolden) : NULL;
             if (pPattern)
                 font_face = cairo_ft_font_face_create_for_pattern(static_cast<FcPattern*>(pPattern));
             if (!font_face)
@@ -439,7 +439,7 @@ void cairosubcallback(void* pPattern)
         static_cast<FcPattern*>(pPattern));
 }
 
-ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)
+FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)
 {
     psp::FastPrintFontInfo aInfo;
 
