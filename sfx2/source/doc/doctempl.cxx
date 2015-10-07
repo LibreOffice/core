@@ -1413,20 +1413,16 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
                       INetURLObject::ENCODE_ALL );
     OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::NO_DECODE );
 
-    DocTempl_EntryData_Impl* pEntry;
     bool        bFound = false;
     size_t          nPos = GetEntryPos( rTitle, bFound );
 
-    if ( bFound )
-    {
-        pEntry = maEntries[ nPos ];
-    }
-    else
+    if ( !bFound )
     {
         if ( pPos )
             nPos = *pPos;
 
-        pEntry = new DocTempl_EntryData_Impl( this, rTitle );
+        DocTempl_EntryData_Impl* pEntry = new DocTempl_EntryData_Impl(
+            this, rTitle );
         pEntry->SetTargetURL( rTargetURL );
         pEntry->SetHierarchyURL( aLinkURL );
         if ( nPos < maEntries.size() ) {
