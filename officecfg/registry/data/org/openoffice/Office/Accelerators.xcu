@@ -211,13 +211,19 @@
       <node oor:name="X_MOD2" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-          <value xml:lang="en-US">.uno:UnicodeNotationToggle</value>
+          <value xml:lang="en-US" install:module="unxwnt">.uno:UnicodeNotationToggle</value>
         </prop>
       </node>
       <node oor:name="C_MOD2" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-          <value xml:lang="de">.uno:UnicodeNotationToggle</value>
+          <value xml:lang="de"    install:module="unxwnt">.uno:UnicodeNotationToggle</value>
+        </prop>
+      </node>
+      <node oor:name="X_MOD1_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US" install:module="macosx">.uno:UnicodeNotationToggle</value>
         </prop>
       </node>
       <node oor:name="Y_SHIFT_MOD1" oor:op="replace">
