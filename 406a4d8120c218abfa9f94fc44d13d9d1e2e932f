@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_c0d7ef21",
+        "filename": "chart2/source/tools/MovingAverageRegressionCurveCalculator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-10-07T10:26:56Z",
+      "side": 1,
+      "message": "this could simply be:\n   return SCH....",
+      "range": {
+        "startLine": 106,
+        "startChar": 25,
+        "endLine": 106,
+        "endChar": 35
+      },
+      "revId": "406a4d8120c218abfa9f94fc44d13d9d1e2e932f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
