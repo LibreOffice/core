@@ -189,9 +189,8 @@ throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
         m_bDiscardChildren = aState.m_bDiscardChildren;
         m_bTookChoice = aState.m_bTookChoice;
     }
-    else if (!m_bDiscardChildren && isForwardEvents())
+    else if (!m_bDiscardChildren)
         lcl_endFastElement(Element);
-
 }
 
 void OOXMLFastContextHandler::lcl_startFastElement
