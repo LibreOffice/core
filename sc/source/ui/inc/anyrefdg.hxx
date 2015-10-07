@@ -135,9 +135,6 @@ protected:
 
     bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc );
 
-    void preNotify(const NotifyEvent& rEvent, const bool bBindRef);
-    void stateChanged(const StateChangedType nStateChange, const bool bBindRef);
-
 public:
                         ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef );
     virtual             ~ScRefHandler();

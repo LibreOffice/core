@@ -289,15 +289,6 @@ sal_Int32 ExtensionBox_Impl::getSelIndex() const
 }
 
 
-void ExtensionBox_Impl::checkIndex( sal_Int32 nIndex ) const
-{
-    if ( nIndex < 0 )
-        throw lang::IllegalArgumentException( "The list index starts with 0",0, 0 );
-    if ( static_cast< sal_uInt32 >( nIndex ) >= m_vEntries.size())
-        throw lang::IllegalArgumentException( "There is no element at the provided position. The position exceeds the number of available list entries",0, 0 );
-}
-
-
 // Title + description
 void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
 {

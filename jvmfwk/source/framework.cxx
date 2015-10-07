@@ -1005,32 +1005,6 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation)
 
 }
 
-javaFrameworkError SAL_CALL jfw_getJRELocations(
-    rtl_uString *** parLocations, sal_Int32 *pLen)
-{
-    javaFrameworkError errcode = JFW_E_NONE;
-    try
-    {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
-        if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
-            return JFW_E_DIRECT_MODE;
-
-        if (parLocations == NULL || pLen == NULL)
-            return JFW_E_INVALID_ARG;
-        const jfw::MergedSettings settings;
-        settings.getJRELocations(parLocations, pLen);
-    }
-    catch (const jfw::FrameworkException& e)
-    {
-        errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
-    }
-
-    return errcode;
-}
-
-
 javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
 {
     //get the function jfw_plugin_existJRE

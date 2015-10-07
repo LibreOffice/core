@@ -597,17 +597,6 @@ void ScFormulaCellGroup::compileCode(
     }
 }
 
-void ScFormulaCellGroup::compileOpenCLKernel()
-{
-    if (meCalcState == sc::GroupCalcDisabled)
-        return;
-
-    mpCompiledFormula =
-        sc::FormulaGroupInterpreter::getStatic()->createCompiledFormula(*this, *mpCode);
-
-    meKernelState = sc::OpenCLKernelBinaryCreated;
-}
-
 sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
     ScFormulaCell** ppTopCell, const ScRange& rRange, bool bStartFixed, bool bEndFixed )
 {

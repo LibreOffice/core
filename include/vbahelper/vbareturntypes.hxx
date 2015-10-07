@@ -39,9 +39,9 @@ namespace ooo
             T1 mnValue;
             public:
             DefaultReturnHelper( const T1& nValue ) : mnValue( nValue ) {}
-            virtual void  SAL_CALL setValue( T1 nValue ) throw (css::uno::RuntimeException) { mnValue = nValue; }
-            virtual T1  SAL_CALL getValue() throw (css::uno::RuntimeException) { return mnValue; }
-            OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return OUString("Value"); }
+            virtual void  SAL_CALL setValue( T1 nValue ) throw (css::uno::RuntimeException) SAL_OVERRIDE { mnValue = nValue; }
+            virtual T1  SAL_CALL getValue() throw (css::uno::RuntimeException) SAL_OVERRIDE { return mnValue; }
+            OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE { return OUString("Value"); }
         };
 
         typedef DefaultReturnHelper< sal_Int32, ov::msforms::XReturnInteger > ReturnInteger_BASE;

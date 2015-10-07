@@ -80,20 +80,6 @@ css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumb
 
 
 
-sal_Int32 getStandardFormat(
-        const css::uno::Reference<css::util::XNumberFormatter>& xFormatter,
-        sal_Int16 nType,
-        const css::lang::Locale& _rLocale)
-{
-    css::uno::Reference<css::util::XNumberFormatsSupplier> xSupplier( xFormatter.is() ? xFormatter->getNumberFormatsSupplier() : css::uno::Reference<css::util::XNumberFormatsSupplier>(NULL));
-    css::uno::Reference<css::util::XNumberFormats> xFormats( xSupplier.is() ? xSupplier->getNumberFormats() : css::uno::Reference<css::util::XNumberFormats>(NULL));
-    css::uno::Reference<css::util::XNumberFormatTypes> xTypes(xFormats, css::uno::UNO_QUERY);
-    OSL_ENSURE(xTypes.is(), "getStandardFormat : no format types !");
-
-    return xTypes.is() ? xTypes->getStandardFormat(nType, _rLocale) : 0;
-}
-
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
