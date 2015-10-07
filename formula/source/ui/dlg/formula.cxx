@@ -1354,7 +1354,6 @@ IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FormulaCursorHdl, EditBox&, void)
 {
     FormEditData* pData = m_pHelper->getFormEditData();
     if (!pData) return;
-    sal_Int32 nFStart = pData->GetFStart();
 
     bEditFlag=true;
 
@@ -1373,7 +1372,7 @@ IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FormulaCursorHdl, EditBox&, void)
     {
         sal_Int32 nPos = aSel.Min();
 
-        nFStart=GetFunctionPos(nPos - 1);
+        sal_Int32 nFStart=GetFunctionPos(nPos - 1);
 
         if(nFStart<nPos)
         {
