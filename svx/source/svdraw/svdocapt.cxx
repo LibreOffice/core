@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -761,6 +765,23 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     return pRet;
 }
 
+namespace {
+
+void handleNegativeScale(basegfx::B2DTuple & scale, double * rotate) {
+    assert(rotate != nullptr);
+
+    // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
+    // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
+    if(basegfx::fTools::less(scale.getX(), 0.0) && basegfx::fTools::less(scale.getY(), 0.0))
+    {
+        scale.setX(fabs(scale.getX()));
+        scale.setY(fabs(scale.getY()));
+        *rotate = fmod(*rotate + F_PI, F_2PI);
+    }
+}
+
+}
+
 // #i32599#
 // Add own implementation for TRSetBaseGeometry to handle TailPos over changes.
 void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
@@ -771,14 +792,7 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     double fRotate, fShearX;
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
-    // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
-    // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
-    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
-    {
-        aScale.setX(fabs(aScale.getX()));
-        aScale.setY(fabs(aScale.getY()));
-        fRotate = fmod(fRotate + F_PI, F_2PI);
-    }
+    handleNegativeScale(aScale, &fRotate);
 
     // force metric to pool metric
     SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
