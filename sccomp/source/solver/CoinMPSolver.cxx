@@ -294,7 +294,10 @@ void SAL_CALL CoinMPSolver::solve() throw(uno::RuntimeException, std::exception)
                     pLowerBounds, pUpperBounds, pRowType, pRHS, NULL,
                     pMatrixBegin, pMatrixCount, pMatrixIndex, pMatrix,
                     NULL, NULL, NULL );
-    nResult = CoinLoadInteger( hProb, pColType );
+    if (nResult == SOLV_CALL_SUCCESS)
+    {
+        nResult = CoinLoadInteger( hProb, pColType );
+    }
 
     delete[] pColType;
     delete[] pMatrixIndex;
@@ -314,15 +317,21 @@ void SAL_CALL CoinMPSolver::solve() throw(uno::RuntimeException, std::exception)
 
     // solve model
 
-    nResult = CoinCheckProblem( hProb );
-
-    try
+    if (nResult == SOLV_CALL_SUCCESS)
     {
-        nResult = CoinOptimizeProblem( hProb, 0 );
+        nResult = CoinCheckProblem( hProb );
     }
-    catch (const CoinError& e)
+
+    if (nResult == SOLV_CALL_SUCCESS)
     {
-        throw std::runtime_error(e.message());
+        try
+        {
+            nResult = CoinOptimizeProblem( hProb, 0 );
+        }
+        catch (const CoinError& e)
+        {
+            throw std::runtime_error(e.message());
+        }
     }
 
     mbSuccess = ( nResult == SOLV_CALL_SUCCESS );
