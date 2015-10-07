@@ -989,19 +989,19 @@ long Dialog::GetResult() const
 
 void Dialog::EndAllDialogs( vcl::Window* pParent )
 {
-   ImplSVData*  pSVData = ImplGetSVData();
-   Dialog*      pTempModDialog;
-   Dialog*      pModDialog = pSVData->maWinData.mpLastExecuteDlg;
-   while ( pModDialog )
-   {
-     pTempModDialog = pModDialog->mpPrevExecuteDlg;
-     if(!pParent || pParent->IsWindowOrChild(pModDialog,true))
-     {
-        pModDialog->EndDialog();
-        pModDialog->PostUserEvent( Link<void*,void>() );
-     }
-     pModDialog = pTempModDialog;
-   }
+    ImplSVData* pSVData = ImplGetSVData();
+    Dialog* pTempModDialog;
+    Dialog* pModDialog = pSVData->maWinData.mpLastExecuteDlg;
+    while (pModDialog)
+    {
+        pTempModDialog = pModDialog->mpPrevExecuteDlg;
+        if(!pParent || pParent->IsWindowOrChild(pModDialog,true))
+        {
+            pModDialog->EndDialog();
+            pModDialog->PostUserEvent( Link<void*,void>() );
+        }
+        pModDialog = pTempModDialog;
+    }
 }
 
 void Dialog::SetModalInputMode( bool bModal )
