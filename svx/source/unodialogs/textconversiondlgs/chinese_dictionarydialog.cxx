@@ -748,8 +748,8 @@ IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, ModifyHdl, Button*, void)
         {
             if( m_pCB_Reverse->IsChecked() )
             {
-                sal_uIntPtr nPos = rReverse.deleteEntries( pE->m_aMapping );
-                nPos = rReverse.deleteEntries( aMapping );
+                rReverse.deleteEntries( pE->m_aMapping );
+                sal_uIntPtr nPos = rReverse.deleteEntries( aMapping );
                 rReverse.addEntry( aMapping, aTerm, nConversionPropertyType, nPos );
             }
 
