@@ -783,19 +783,6 @@ storeError OStorePageBIOS::releasePage (const OStorePageDescriptor& rDescr)
 }
 
 /*
- * getRefererCount.
- * Precond: none.
- */
-sal_uInt32 OStorePageBIOS::getRefererCount()
-{
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
-
-    // Obtain total referer count.
-    return m_ace_head.m_used;
-}
-
-/*
  * allocate.
  * Precond: initialized, writeable.
  */
@@ -1004,101 +991,5 @@ storeError OStorePageBIOS::size (sal_uInt32 &rnSize)
     return m_xLockBytes->getSize (rnSize);
 }
 
-/*
- * scanBegin.
- * Precond: initialized.
- */
-storeError OStorePageBIOS::scanBegin (
-    ScanContext &rCtx, sal_uInt32 nMagic)
-{
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
-
-    // Initialize [out] param.
-    rCtx.m_aDescr = OStorePageDescriptor(0, 0, 0);
-    rCtx.m_nSize  = 0;
-    rCtx.m_nMagic = nMagic;
-
-    // Check precond.
-    if (!m_xLockBytes.is())
-        return store_E_InvalidAccess;
-
-    // Check SuperBlock page.
-    storeError eErrCode = m_pSuper->verify (*this);
-    if (eErrCode != store_E_None)
-    {
-        // Damaged. Determine page size (NYI).
-        OSL_TRACE ("OStorePageBIOS::scanBegin(): damaged.\n");
-        return eErrCode;
-    }
-
-    // Setup Context descriptor.
-    rCtx.m_aDescr = m_pSuper->m_aSuperOne.m_aDescr;
-    rCtx.m_aDescr.m_nSize = store::ntohs(rCtx.m_aDescr.m_nSize);
-    rCtx.m_aDescr.m_nAddr = rCtx.m_aDescr.m_nSize;
-
-    // Setup Context size.
-    eErrCode = size (rCtx.m_nSize);
-    if (eErrCode != store_E_None)
-        rCtx.m_nSize = ((sal_uInt32)(~0));
-
-    // Done.
-    return store_E_None;
-}
-
-/*
- * scanNext.
- * Precond: initialized.
- */
-storeError OStorePageBIOS::scanNext (
-    ScanContext &rCtx, OStorePageObject &rPage)
-{
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
-
-    // Check precond.
-    if (!m_xLockBytes.is())
-        return store_E_InvalidAccess;
-
-    // Setup PageHead.
-    PageData aPageHead;
-
-    // Check context.
-    while (rCtx.isValid())
-    {
-        // Assign next location.
-        sal_uInt32 nAddr = rCtx.m_aDescr.m_nAddr;
-        rCtx.m_aDescr.m_nAddr += rCtx.m_aDescr.m_nSize;
-
-        // Read PageHead.
-        storeError eErrCode = read (nAddr, &aPageHead, PageData::theSize);
-        if (eErrCode != store_E_None)
-            continue;
-
-        // Verify PageHead.
-        eErrCode = aPageHead.verify (nAddr);
-        if (eErrCode != store_E_None)
-            continue;
-
-        // Check PageHead Magic number.
-        if (aPageHead.m_aGuard.m_nMagic != rCtx.m_nMagic)
-            continue;
-
-        // Check PageHead Unused link.
-        if (aPageHead.m_aUnused.m_nAddr != STORE_PAGE_NULL)
-            continue;
-
-        // Load page.
-        eErrCode = loadObjectAt_Impl (rPage, nAddr);
-        if (eErrCode != store_E_None)
-            continue;
-
-        // Deliver page.
-        return store_E_None;
-    }
-
-    // Done.
-    return store_E_CantSeek;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

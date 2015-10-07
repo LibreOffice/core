@@ -110,42 +110,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_flushFile (
 ) SAL_THROW_EXTERN_C();
 
 
-/** Get the number of referers to a file.
-    @param  hFile [in] the File Handle.
-    @param  pnRefCount [out] number of open directories and streams.
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_getFileRefererCount (
-    storeFileHandle  hFile,
-    sal_uInt32      *pnRefCount
-) SAL_THROW_EXTERN_C();
-
-
-/** Get the size of a file.
-    @param  hFile [in] the File Handle.
-    @param  pnSize [out] the file size in bytes.
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_getFileSize (
-    storeFileHandle  hFile,
-    sal_uInt32      *pnSize
-) SAL_THROW_EXTERN_C();
-
-
-/** Recover and Compact a file into another file.
-    @see store_openFile()
-
-    @param  pSrcFilename [in] opened with store_AccessReadOnly.
-    @param  pDstFilename [in] created with store_AccessCreate.
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_rebuildFile (
-    rtl_uString *pSrcFilename,
-    rtl_uString *pDstFilename
-) SAL_THROW_EXTERN_C();
-
-
-
 /** Directory Handle opaque type.
  */
 typedef void* storeDirectoryHandle;
@@ -167,16 +131,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openDirectory (
     rtl_uString          *pName,
     storeAccessMode       eAccessMode,
     storeDirectoryHandle *phDirectory
-) SAL_THROW_EXTERN_C();
-
-
-/** Close a directory.
-    @param  hDirectory [in] the Directory Handle.
-    @return store_E_None          upon success,
-            store_E_InvalidHandle otherwise.
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_closeDirectory (
-    storeDirectoryHandle hDirectory
 ) SAL_THROW_EXTERN_C();
 
 
@@ -229,16 +183,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openStream (
 ) SAL_THROW_EXTERN_C();
 
 
-/** Close a stream.
-    @param  hStrm [in] the Stream Handle.
-    @return store_E_None          upon success,
-            store_E_InvalidHandle otherwise.
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_closeStream (
-    storeStreamHandle hStrm
-) SAL_THROW_EXTERN_C();
-
-
 /** Read from a stream.
     @param  hStrm [in] the Stream Handle.
     @param  nOffset [in] the offset of the first byte to read.
@@ -272,109 +216,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_writeStream (
     sal_uInt32        *pnDone
 ) SAL_THROW_EXTERN_C();
 
-
-/** Flush a stream.
-    @param  hStrm [in] the Stream Handle.
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_flushStream (
-    storeStreamHandle hStrm
-) SAL_THROW_EXTERN_C();
-
-
-/** Get the size of a stream.
-    @param  hStrm [in] the Stream Handle.
-    @param  pnSize [out] the stream size in bytes.
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_getStreamSize (
-    storeStreamHandle  hStrm,
-    sal_uInt32        *pnSize
-) SAL_THROW_EXTERN_C();
-
-
-/** Set the size of a stream.
-    @param  hStrm [in] the Stream Handle.
-    @param  nSize [in] the new stream size in bytes.
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_setStreamSize (
-    storeStreamHandle hStrm,
-    sal_uInt32        nSize
-) SAL_THROW_EXTERN_C();
-
-
-
-/** Set attributes of a file entry.
-    @param  hFile [in] the File Handle.
-    @param  pPath [in] the entry path.
-    @param  pName [in] the entry name.
-    @param  nMask1 [in] the attributes to be cleared.
-    @param  nMask2 [in] the attributes to be set.
-    @param  pnAttrib [out] the resulting attributes, may be NULL.
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_attrib (
-    storeFileHandle hFile,
-    rtl_uString    *pPath,
-    rtl_uString    *pName,
-    sal_uInt32      nMask1,
-    sal_uInt32      nMask2,
-    sal_uInt32     *pnAttrib
-) SAL_THROW_EXTERN_C();
-
-
-/** Insert a file entry as 'hard link' to another file entry.
-    @pre  Source must not exist, Destination must exist.
-    @post Source has attribute STORE_ATTRIB_ISLINK.
-    @see      store_attrib()
-
-    @param  hFile [in] the File Handle
-    @param  pSrcPath [in] the Source path
-    @param  pSrcName [in] the Source name
-    @param  pDstPath [in] the Destination path
-    @param  pDstName [in] the Destination name
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_link (
-    storeFileHandle hFile,
-    rtl_uString *pSrcPath, rtl_uString *pSrcName,
-    rtl_uString *pDstPath, rtl_uString *pDstName
-) SAL_THROW_EXTERN_C();
-
-
-/** Insert a file entry as 'symbolic link' to another file entry.
-    @pre  Source must not exist
-    @post Source has attribute STORE_ATTRIB_ISLINK.
-    @see      store_attrib()
-
-    @param  hFile [in] the File Handle
-    @param  pSrcPath [in] the Source path
-    @param  pSrcName [in] the Source name
-    @param  pDstPath [in] the Destination path
-    @param  pDstName [in] the Destination name
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_symlink (
-    storeFileHandle hFile,
-    rtl_uString *pSrcPath, rtl_uString *pSrcName,
-    rtl_uString *pDstPath, rtl_uString *pDstName
-) SAL_THROW_EXTERN_C();
-
-
-/** Rename a file entry.
-    @param  hFile [in] the File Handle
-    @param  pSrcPath [in] the Source path
-    @param  pSrcName [in] the Source name
-    @param  pDstPath [in] the Destination path
-    @param  pDstName [in] the Destination name
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_rename (
-    storeFileHandle hFile,
-    rtl_uString *pSrcPath, rtl_uString *pSrcName,
-    rtl_uString *pDstPath, rtl_uString *pDstName
-) SAL_THROW_EXTERN_C();
 
 
 /** Remove a file entry.

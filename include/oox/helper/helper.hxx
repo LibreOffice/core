@@ -166,19 +166,6 @@ inline void setFlag( Type& ornBitField, Type nMask, bool bSet = true )
     if( bSet ) ornBitField |= nMask; else ornBitField &= ~nMask;
 }
 
-/** Inserts a value into a bitfield.
-
-    Inserts the lower nBitCount bits of nValue into ornBitField, starting
-    there at bit nStartBit. Other contents of ornBitField keep unchanged.
- */
-template< typename Type, typename InsertType >
-void insertValue( Type& ornBitField, InsertType nValue, sal_uInt8 nStartBit, sal_uInt8 nBitCount )
-{
-    sal_uInt64 nMask = 1; nMask <<= nBitCount; --nMask;
-    Type nNewValue = static_cast< Type >( nValue & nMask );
-    (ornBitField &= ~(nMask << nStartBit)) |= (nNewValue << nStartBit);
-}
-
 
 
 /** Optional value, similar to ::boost::optional<>, with convenience accessors.
@@ -198,7 +185,6 @@ public:
     const Type&  get() const { return maValue; }
     const Type&  get( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
 
-    void         reset() { mbHasValue = false; }
     void         set( const Type& rValue ) { maValue = rValue; mbHasValue = true; }
     Type&        use() { mbHasValue = true; return maValue; }
 
@@ -256,13 +242,6 @@ public:
 
 #endif
 
-    /** Reads a value from memory, assuming memory buffer in little-endian.
-        @param ornValue  (out-parameter) Contains the value read from memory.
-        @param pSrcBuffer  The memory buffer to read the value from.
-     */
-    template< typename Type >
-    inline static void  readLittleEndian( Type& ornValue, const void* pSrcBuffer );
-
     /** Writes a value to memory, while converting it to little-endian.
         @param pDstBuffer  The memory buffer to write the value to.
         @param nValue  The value to be written to memory in little-endian.
@@ -279,13 +258,6 @@ private:
 };
 
 
-
-template< typename Type >
-inline void ByteOrderConverter::readLittleEndian( Type& ornValue, const void* pSrcBuffer )
-{
-    memcpy( &ornValue, pSrcBuffer, sizeof( Type ) );
-    convertLittleEndian( ornValue );
-}
 
 template< typename Type >
 inline void ByteOrderConverter::writeLittleEndian( void* pDstBuffer, Type nValue )

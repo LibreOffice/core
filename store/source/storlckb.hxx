@@ -86,22 +86,11 @@ public:
         sal_uInt32  nBytes,
         sal_uInt32 &rnDone);
 
-    /** flush.
-     *  @return store_E_None upon success
-     */
-    storeError flush();
-
     /** setSize.
      *  @param  nSize [in]
      *  @return store_E_None upon success
      */
     storeError setSize (sal_uInt32 nSize);
-
-    /** stat.
-     *  @paran  rnSize [out]
-     *  @return store_E_None upon success
-     */
-    storeError stat (sal_uInt32 &rnSize);
 
     /** IStoreHandle.
      */

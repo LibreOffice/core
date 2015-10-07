@@ -92,8 +92,6 @@ public:
 
     storeError releasePage (const OStorePageDescriptor& rDescr);
 
-    sal_uInt32 getRefererCount();
-
     /** Page Allocation.
      */
     enum Allocation
@@ -148,18 +146,6 @@ public:
          */
         inline bool isValid() const;
     };
-
-    /** scanBegin.
-     */
-    storeError scanBegin (
-        ScanContext &rCtx,
-        sal_uInt32   nMagic = 0);
-
-    /** scanNext.
-     */
-    storeError scanNext (
-        ScanContext      &rCtx,
-        OStorePageObject &rPage);
 
 protected:
     /** Destruction (OReference).

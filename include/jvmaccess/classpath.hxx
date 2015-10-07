@@ -69,36 +69,6 @@ JVMACCESS_DLLPUBLIC jobjectArray translateToUrls(
     css::uno::Reference<css::uno::XComponentContext> const & context,
     JNIEnv * environment, OUString const & classPath);
 
-/**
-   loads a class via a java.net.URLClassLoader.
-
-   @param context
-   a component context; must not be null.
-
-   @param environment
-   a JNI environment; must not be null.
-
-   @param classPath
-   a list of zero or more internal (see the
-   com.sun.star.uri.ExternalUriReferenceTranslator service) URI references,
-   where any space characters (U+0020) are ignored (and, in particular, separate
-   adjacent URI references).  Any vnd.sun.star.expand URL references in the list
-   are expanded using the com.sun.star.util.theMacroExpander singleton of the
-   given context.
-
-   @param name
-   the Java binary name of the class to load.
-
-   @returns
-   a local reference to a java.lang.Class instance.  If null, a (still pending)
-   JNI exception occurred.
-
-   @throws com::sun::star::uno::RuntimeException
- */
-JVMACCESS_DLLPUBLIC jclass loadClass(
-    css::uno::Reference<css::uno::XComponentContext> const & context,
-    JNIEnv * environment, OUString const & classPath, OUString const & name);
-
 }
 
 }

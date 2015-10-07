@@ -73,8 +73,6 @@ namespace connectivity
     };
     typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
-    OOO_DLLPUBLIC_DBTOOLS OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
-
     typedef std::map<OUString, sdbcx::TKeyProperties> TKeyMap;
 
     struct OTableHelperImpl;

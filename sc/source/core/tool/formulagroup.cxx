@@ -300,12 +300,6 @@ ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMa
     return ScMatrixRef();
 }
 
-CompiledFormula* FormulaGroupInterpreterSoftware::createCompiledFormula(
-    ScFormulaCellGroup& /*rGroup*/, ScTokenArray& /*rCode*/ )
-{
-    return NULL;
-}
-
 bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
                                                 ScFormulaCellGroupRef& xGroup,
                                                 ScTokenArray& rCode)

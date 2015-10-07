@@ -21,8 +21,6 @@ public:
     virtual ~FormulaGroupInterpreterOpenCL();
 
     virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat ) override;
-    virtual CompiledFormula* createCompiledFormula(
-        ScFormulaCellGroup& rGroup, ScTokenArray& rCode ) override;
     virtual bool interpret( ScDocument& rDoc, const ScAddress& rTopPos,
         ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode ) override;
 };

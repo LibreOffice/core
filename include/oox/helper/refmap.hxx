@@ -82,14 +82,6 @@ public:
 
     /** Calls the passed member function of ObjType on every contained object,
         automatically skips all elements that are empty references. */
-    template< typename FuncType, typename ParamType >
-    void                forEachMem( FuncType pFunc, ParamType aParam ) const
-                        {
-                            forEach( ::boost::bind( pFunc, _1, aParam ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object,
-        automatically skips all elements that are empty references. */
     template< typename FuncType, typename ParamType1, typename ParamType2 >
     void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
@@ -102,14 +94,6 @@ public:
     void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3 ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object,
-        automatically skips all elements that are empty references. */
-    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3, typename ParamType4 >
-    void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3, ParamType4 aParam4 ) const
-                        {
-                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3, aParam4 ) );
                         }
 
 
@@ -129,29 +113,6 @@ public:
                             forEachWithKey( ::boost::bind( pFunc, _2, _1 ) );
                         }
 
-    /** Calls the passed member function of ObjType on every contained object.
-        Passes the object key as first argument to the member function. */
-    template< typename FuncType, typename ParamType >
-    void                forEachMemWithKey( FuncType pFunc, ParamType aParam ) const
-                        {
-                            forEachWithKey( ::boost::bind( pFunc, _2, _1, aParam ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object.
-        Passes the object key as first argument to the member function. */
-    template< typename FuncType, typename ParamType1, typename ParamType2 >
-    void                forEachMemWithKey( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
-                        {
-                            forEachWithKey( ::boost::bind( pFunc, _2, _1, aParam1, aParam2 ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object.
-        Passes the object key as first argument to the member function. */
-    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
-    void                forEachMemWithKey( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
-                        {
-                            forEachWithKey( ::boost::bind( pFunc, _2, _1, aParam1, aParam2, aParam3 ) );
-                        }
 
 private:
     template< typename FunctorType >

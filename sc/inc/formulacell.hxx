@@ -80,7 +80,6 @@ public:
     void setCode( ScTokenArray* pCode );
     void compileCode(
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
-    void compileOpenCLKernel();
 
     sc::FormulaGroupAreaListener* getAreaListener(
         ScFormulaCell** ppTopCell, const ScRange& rRange, bool bStartFixed, bool bEndFixed );

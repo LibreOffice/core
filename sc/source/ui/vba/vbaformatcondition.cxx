@@ -115,12 +115,6 @@ ScVbaFormatCondition::setFormula1( const uno::Any& _aFormula1) throw ( script::B
     ScVbaFormatCondition_BASE::setFormula1( uno::makeAny( ScVbaFormatConditions::getA1Formula(_aFormula1) ) );
 }
 
-void
-ScVbaFormatCondition::setFormula2( const uno::Any& _aFormula2) throw ( script::BasicErrorException )
-{
-    ScVbaFormatCondition_BASE::setFormula1( uno::makeAny( ScVbaFormatConditions::getA1Formula(_aFormula2)) );
-}
-
 ::sal_Int32 SAL_CALL
 ScVbaFormatCondition::Type(  ) throw ( script::BasicErrorException, uno::RuntimeException, std::exception )
 {
