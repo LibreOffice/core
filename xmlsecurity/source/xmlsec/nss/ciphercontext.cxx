@@ -108,7 +108,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
         OSL_ENSURE( nOldLastBlockLen <= m_nBlockSize, "Unexpected last block size!" );
 
         sal_Int32 nAvailableData = nOldLastBlockLen + aData.getLength();
-        sal_Int32 nToConvertLen = nAvailableData;
+        sal_Int32 nToConvertLen;
         if ( m_bEncryption || !m_bW3CPadding )
         {
             if ( nAvailableData % m_nBlockSize == 0 )
