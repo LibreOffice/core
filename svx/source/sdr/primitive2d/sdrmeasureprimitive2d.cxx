@@ -87,8 +87,6 @@ namespace drawinglayer
             Primitive2DSequence aRetval;
             css::uno::Reference<SdrBlockTextPrimitive2D> xBlockText;
             basegfx::B2DRange aTextRange;
-            double fTextX((getStart().getX() + getEnd().getX()) * 0.5);
-            double fTextY((getStart().getX() + getEnd().getX()) * 0.5);
             const basegfx::B2DVector aLine(getEnd() - getStart());
             const double fDistance(aLine.getLength());
             const double fAngle(atan2(aLine.getY(), aLine.getX()));
@@ -140,6 +138,8 @@ namespace drawinglayer
             }
 
             // prepare line attribute and result
+            double fTextX;
+            double fTextY;
             {
                 const attribute::SdrLineAttribute rLineAttribute(getSdrLSTAttribute().getLine());
                 bool bArrowsOutside(false);
