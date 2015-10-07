@@ -1318,52 +1318,37 @@ void TabBar::Resize()
     }
 
     // order the scroll buttons
-    long nHeight = aNewSize.Height();
+    long const nHeight = aNewSize.Height();
     // adapt font height?
     ImplInitSettings( true, false );
 
     long nButtonMargin = BUTTON_MARGIN * GetDPIScaleFactor();
 
     long nX = mbMirrored ? (aNewSize.Width() - nHeight - nButtonMargin) : nButtonMargin;
-    long nXDiff = mbMirrored ? -nHeight : nHeight;
+    long const nXDiff = mbMirrored ? -nHeight : nHeight;
 
     nButtonWidth += nButtonMargin;
 
-    Size aBtnSize( nHeight, nHeight );
-    if (mpImpl->mpFirstButton)
+    Size const aBtnSize( nHeight, nHeight );
+    auto setButton = [aBtnSize, nXDiff, nHeight, &nX, &nButtonWidth](
+        ScopedVclPtr<ImplTabButton> const & button)
     {
-        mpImpl->mpFirstButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
-        nX += nXDiff;
-        nButtonWidth += nHeight;
-    }
-    if (mpImpl->mpPrevButton)
-    {
-        mpImpl->mpPrevButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
-        nX += nXDiff;
-        nButtonWidth += nHeight;
-    }
-    if (mpImpl->mpNextButton)
-    {
-        mpImpl->mpNextButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
-        nX += nXDiff;
-        nButtonWidth += nHeight;
-    }
-    if (mpImpl->mpLastButton)
-    {
-        mpImpl->mpLastButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
-        nX += nXDiff;
-        nButtonWidth += nHeight;
-    }
+        if (button) {
+            button->SetPosSizePixel(Point(nX, 0), aBtnSize);
+            nX += nXDiff;
+            nButtonWidth += nHeight;
+        }
+    };
+
+    setButton(mpImpl->mpFirstButton);
+    setButton(mpImpl->mpPrevButton);
+    setButton(mpImpl->mpNextButton);
+    setButton(mpImpl->mpLastButton);
 
     nButtonWidth += nButtonMargin;
     nX += mbMirrored ? -nButtonMargin : nButtonMargin;
 
-    if (mpImpl->mpAddButton)
-    {
-        mpImpl->mpAddButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
-        nX += nXDiff;
-        nButtonWidth += nHeight;
-    }
+    setButton(mpImpl->mpAddButton);
 
     nButtonWidth += nButtonMargin;
 
