@@ -710,8 +710,8 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( rArgs.mnFlags & SalLayoutFlags::ForFallback )
     {
         // calculate superfluous context char positions
-        aDropChars.push_back( 0 );
-        aDropChars.push_back( rArgs.mnLength );
+        aDropChars.push_back(0);
+        aDropChars.push_back(rArgs.mrStr.getLength());
         int nMin, nEnd;
         bool bRTL;
         for( rArgs.ResetPos(); rArgs.GetNextRun( &nMin, &nEnd, &bRTL ); )
@@ -748,7 +748,9 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     // determine relevant substring and work only on it
     // when Bidi status is unknown we need to look at the whole string though
     mnSubStringMin = 0;
-    int nSubStringEnd = rArgs.mnLength;
+    const int nLength = rArgs.mrStr.getLength();
+    const sal_Unicode *pStr = rArgs.mrStr.getStr();
+    int nSubStringEnd = nLength;
     if( aScriptState.fOverrideDirection )
     {
         // TODO: limit substring to portion limits
@@ -756,17 +758,16 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( mnSubStringMin < 0 )
             mnSubStringMin = 0;
         nSubStringEnd = rArgs.mnEndCharPos + 8;
-        if( nSubStringEnd > rArgs.mnLength )
-            nSubStringEnd = rArgs.mnLength;
+        if( nSubStringEnd > nLength )
+            nSubStringEnd = nLength;
 
     }
-
     // now itemize the substring with its context
     for( int nItemCapacity = 16;; nItemCapacity *= 8 )
     {
         mpScriptItems = new SCRIPT_ITEM[ nItemCapacity ];
         HRESULT nRC = ScriptItemize(
-            reinterpret_cast<LPCWSTR>(rArgs.mpStr + mnSubStringMin), nSubStringEnd - mnSubStringMin,
+            reinterpret_cast<LPCWSTR>(pStr + mnSubStringMin), nSubStringEnd - mnSubStringMin,
             nItemCapacity - 1, &aScriptControl, &aScriptState,
             mpScriptItems, &mnItemCount );
         if( !nRC )  // break loop when everything is correctly itemized
@@ -909,7 +910,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         int nGlyphCount = 0;
         int nCharCount = rVisualItem.mnEndCharPos - rVisualItem.mnMinCharPos;
         HRESULT nRC = ScriptShape( mhDC, &rScriptCache,
-            reinterpret_cast<LPCWSTR>(rArgs.mpStr + rVisualItem.mnMinCharPos),
+            reinterpret_cast<LPCWSTR>(pStr + rVisualItem.mnMinCharPos),
             nCharCount,
             mnGlyphCapacity - rVisualItem.mnMinGlyphPos, // problem when >0xFFFF
             &rVisualItem.mpScriptItem->a,
@@ -934,7 +935,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
             // the primitive layout engine is good enough for the default layout
             rVisualItem.mpScriptItem->a.eScript = SCRIPT_UNDEFINED;
             nRC = ScriptShape( mhDC, &rScriptCache,
-                reinterpret_cast<LPCWSTR>(rArgs.mpStr + rVisualItem.mnMinCharPos),
+                reinterpret_cast<LPCWSTR>(pStr + rVisualItem.mnMinCharPos),
                 nCharCount,
                 mnGlyphCapacity - rVisualItem.mnMinGlyphPos,
                 &rVisualItem.mpScriptItem->a,
@@ -983,7 +984,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                             if( mpLogClusters[ c ] == i )
                             {
                                 // #i55716# skip WORDJOINER
-                                if( rArgs.mpStr[ c ] == 0x2060 )
+                                if( pStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else
                                     rArgs.NeedFallback( c, false );
@@ -998,7 +999,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                             if( mpLogClusters[ c ] == i )
                             {
                                 // #i55716# skip WORDJOINER
-                                if( rArgs.mpStr[ c ] == 0x2060 )
+                                if( pStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else
                                     rArgs.NeedFallback( c, true );

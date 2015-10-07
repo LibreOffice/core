@@ -308,7 +308,7 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     else if(rArgs.mnFlags & SalLayoutFlags::ForFallback)
     {
 #ifdef GRLAYOUT_DEBUG
-        fprintf(grLog(),"fallback c%d %x in run %d\n", firstChar, rArgs.mpStr[firstChar],
+        fprintf(grLog(),"fallback c%d %x in run %d\n", firstChar, rArgs.mrStr[firstChar],
             rArgs.maRuns.PosIsInAnyRun(firstChar));
 #endif
         // glyphs that aren't requested for fallback will be taken from base
@@ -405,6 +405,7 @@ bool GraphiteLayout::LayoutText(ImplLayoutArgs & rArgs)
     fprintf(grLog(), "New Graphite LayoutText\n");
 #endif
     success = false;
+    const int nLength = rArgs.mrStr.getLength();
     while (true)
     {
         int nBidiMinRunPos, nBidiEndRunPos;
@@ -418,11 +419,12 @@ bool GraphiteLayout::LayoutText(ImplLayoutArgs & rArgs)
         if (nBidiMinRunPos == mnMinCharPos)
             nBidiMinRunPos = maximum<int>(0, nBidiMinRunPos - EXTRA_CONTEXT_LENGTH);
         if (nBidiEndRunPos == mnEndCharPos)
-            nBidiEndRunPos = minimum<int>(rArgs.mnLength, nBidiEndRunPos + EXTRA_CONTEXT_LENGTH);
-        size_t numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + nBidiMinRunPos,
-                 rArgs.mpStr + nBidiEndRunPos, NULL);
+            nBidiEndRunPos = minimum<int>(nLength, nBidiEndRunPos + EXTRA_CONTEXT_LENGTH);
+        const sal_Unicode *pStr = rArgs.mrStr.getStr();
+        size_t numchars = gr_count_unicode_characters(gr_utf16, pStr + nBidiMinRunPos,
+                 pStr + nBidiEndRunPos, NULL);
         gr_segment * pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures ? mpFeatures->values() : NULL,
-                                gr_utf16, rArgs.mpStr + nBidiMinRunPos, numchars, 2 | int(bRightToLeft));
+                                gr_utf16, pStr + nBidiMinRunPos, numchars, 2 | int(bRightToLeft));
 
         if (pSegment != NULL)
         {
@@ -432,9 +434,9 @@ bool GraphiteLayout::LayoutText(ImplLayoutArgs & rArgs)
             fprintf(grLog(),"Gr::LayoutText %d-%d, context %d-%d, len %d, numchars %" SAL_PRI_SIZET "u, rtl %d scaling %f:",
                 rArgs.mnMinCharPos, rArgs.mnEndCharPos,
                 nBidiMinRunPos, nBidiEndRunPos,
-                rArgs.mnLength, numchars, bRightToLeft, mfScaling);
+                mnLength, numchars, bRightToLeft, mfScaling);
             for (int i = mnSegCharOffset; i < nBidiEndRunPos; ++i)
-                fprintf(grLog(), " %04X", rArgs.mpStr[i]);
+                fprintf(grLog(), " %04X", rArgs.mrStr[i]);
             fprintf(grLog(), "\n");
 #endif
             fillFrom(pSegment, rArgs, mfScaling, bRightToLeft, nBidiEndRunPos);
@@ -546,7 +548,7 @@ void  GraphiteLayout::AdjustLayout(ImplLayoutArgs& rArgs)
             for (int i = rArgs.mnMinCharPos; i < rArgs.mnEndCharPos; i++)
             {
                 UErrorCode aStatus = U_ZERO_ERROR;
-                UScriptCode scriptCode = uscript_getScript(rArgs.mpStr[i], &aStatus);
+                UScriptCode scriptCode = uscript_getScript(rArgs.mrStr[i], &aStatus);
                 if (scriptCode == USCRIPT_ARABIC || scriptCode == USCRIPT_SYRIAC)
                 {
                     bKashidaScript = true;
