@@ -501,10 +501,9 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
 SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
 {
     SbiExprNode *pRes;
-    SbiToken eTok;
 
     // test operand:
-    switch( eTok = pParser->Peek() )
+    switch( SbiToken eTok = pParser->Peek() )
     {
     case SYMBOL:
         pRes = Term();
