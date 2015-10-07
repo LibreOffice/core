@@ -221,12 +221,6 @@ namespace detail
 
     @return         rBuf;
  */
-inline OStringBuffer& truncateToLength(
-    OStringBuffer& rBuffer, sal_Int32 nLength)
-{
-    return detail::truncateToLength(rBuffer, nLength);
-}
-
 inline OUStringBuffer& truncateToLength(
     OUStringBuffer& rBuffer, sal_Int32 nLength)
 {

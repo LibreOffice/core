@@ -24,8 +24,7 @@
 #include <svdata.hxx>
 
 // Callback
-GraphicConverter::GraphicConverter() :
-    mpConvertData( NULL )
+GraphicConverter::GraphicConverter()
 {
 }
 

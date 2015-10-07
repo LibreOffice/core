@@ -132,20 +132,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_getFileSize (
 ) SAL_THROW_EXTERN_C();
 
 
-/** Recover and Compact a file into another file.
-    @see store_openFile()
-
-    @param  pSrcFilename [in] opened with store_AccessReadOnly.
-    @param  pDstFilename [in] created with store_AccessCreate.
-    @return store_E_None upon success
- */
-STORE_DLLPUBLIC storeError SAL_CALL store_rebuildFile (
-    rtl_uString *pSrcFilename,
-    rtl_uString *pDstFilename
-) SAL_THROW_EXTERN_C();
-
-
-
 /** Directory Handle opaque type.
  */
 typedef void* storeDirectoryHandle;

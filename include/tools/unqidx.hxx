@@ -62,7 +62,6 @@ public:
     void        Insert(sal_uIntPtr aIdx, T* p) { return UniqueIndexImpl::Insert(aIdx, p); }
     T*          Get(sal_uIntPtr idx) const { return static_cast<T*>( UniqueIndexImpl::Get(idx) ); }
     T*          Remove(sal_uIntPtr idx) { return static_cast<T*>( UniqueIndexImpl::Remove(idx) ); }
-    sal_uIntPtr Count() const { return UniqueIndexImpl::size(); }
     sal_uIntPtr GetIndexOf(T* p) const { return UniqueIndexImpl::GetIndexOf(p); }
 
     using UniqueIndexImpl::FirstIndex;

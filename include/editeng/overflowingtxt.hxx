@@ -75,7 +75,6 @@ class OverflowingText
 public:
     OutlinerParaObject *JuxtaposeParaObject(Outliner *, OutlinerParaObject *);
     OutlinerParaObject *DeeplyMergeParaObject(Outliner *, OutlinerParaObject *);
-    static ESelection GetInsertionPointSel();
 
 private:
     friend class Outliner;

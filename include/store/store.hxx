@@ -105,18 +105,6 @@ public:
         return store_openStream (hFile, rPath.pData, rName.pData, eMode, &m_hImpl);
     }
 
-    /** Close the stream.
-        @see store_closeStream()
-     */
-    inline void close()
-    {
-        if (m_hImpl)
-        {
-            (void) store_closeStream (m_hImpl);
-            m_hImpl = 0;
-        }
-    }
-
     /** Read from the stream.
         @see store_readStream()
      */
@@ -145,39 +133,6 @@ public:
             return store_E_InvalidHandle;
 
         return store_writeStream (m_hImpl, nOffset, pBuffer, nBytes, &rnDone);
-    }
-
-    /** Flush the stream.
-        @see store_flushStream()
-     */
-    inline storeError flush() const
-    {
-        if (!m_hImpl)
-            return store_E_InvalidHandle;
-
-        return store_flushStream (m_hImpl);
-    }
-
-    /** Get the stream size.
-        @see store_getStreamSize()
-     */
-    inline storeError getSize (sal_uInt32 & rnSize) const
-    {
-        if (!m_hImpl)
-            return store_E_InvalidHandle;
-
-        return store_getStreamSize (m_hImpl, &rnSize);
-    }
-
-    /** Set the stream size.
-        @see store_setStreamSize()
-     */
-    inline storeError setSize (sal_uInt32 nSize)
-    {
-        if (!m_hImpl)
-            return store_E_InvalidHandle;
-
-        return store_setStreamSize (m_hImpl, nSize);
     }
 
 private:
@@ -260,18 +215,6 @@ public:
             m_hImpl = 0;
         }
         return store_openDirectory (hFile, rPath.pData, rName.pData, eMode, &m_hImpl);
-    }
-
-    /** Close the directory.
-        @see store_closeDirectory()
-     */
-    inline void close()
-    {
-        if (m_hImpl)
-        {
-            (void) store_closeDirectory (m_hImpl);
-            m_hImpl = 0;
-        }
     }
 
     /** Directory iterator type.
@@ -426,99 +369,6 @@ public:
             return store_E_InvalidHandle;
 
         return store_flushFile (m_hImpl);
-    }
-
-    /** Get the number of referers to the file.
-        @see store_getFileRefererCount()
-     */
-    inline storeError getRefererCount (sal_uInt32 & rnRefCount) const
-    {
-        if (!m_hImpl)
-            return store_E_InvalidHandle;
-
-        return store_getFileRefererCount (m_hImpl, &rnRefCount);
-    }
-
-    /** Get the file size.
-        @see store_getFileSize()
-     */
-    inline storeError getSize (sal_uInt32 & rnSize) const
-    {
-        if (!m_hImpl)
-            return store_E_InvalidHandle;
-
-        return store_getFileSize (m_hImpl, &rnSize);
-    }
-
-    /** Set attributes of a file entry.
-        @see store_attrib()
-     */
-    inline storeError attrib (
-        rtl::OUString const & rPath,
-        rtl::OUString const & rName,
-        sal_uInt32            nMask1,
-        sal_uInt32            nMask2,
-        sal_uInt32          & rnAttrib)
-    {
-        if (!m_hImpl)
-            return store_E_InvalidHandle;
-
-        return store_attrib (m_hImpl, rPath.pData, rName.pData, nMask1, nMask2, &rnAttrib);
-    }
-
-    /** Set attributes of a file entry.
-        @see store_attrib()
-     */
-    inline storeError attrib (
-        rtl::OUString const & rPath,
-        rtl::OUString const & rName,
-        sal_uInt32            nMask1,
-        sal_uInt32            nMask2)
-    {
-        if (!m_hImpl)
-            return store_E_InvalidHandle;
-
-        return store_attrib (m_hImpl, rPath.pData, rName.pData, nMask1, nMask2, NULL);
-    }
-
-    /** Insert a file entry as 'hard link' to another file entry.
-        @see store_link()
-     */
-    inline storeError link (
-        rtl::OUString const & rSrcPath, rtl::OUString const & rSrcName,
-        rtl::OUString const & rDstPath, rtl::OUString const & rDstName)
-    {
-        if (!m_hImpl)
-            return store_E_InvalidHandle;
-
-        return store_link (
-            m_hImpl, rSrcPath.pData, rSrcName.pData, rDstPath.pData, rDstName.pData);
-    }
-
-    /** Insert a file entry as 'symbolic link' to another file entry.
-        @see store_symlink()
-     */
-    inline storeError symlink (
-        rtl::OUString const & rSrcPath, rtl::OUString const & rSrcName,
-        rtl::OUString const & rDstPath, rtl::OUString const & rDstName)
-    {
-        if (!m_hImpl)
-            return store_E_InvalidHandle;
-
-        return store_symlink (m_hImpl, rSrcPath.pData, rSrcName.pData, rDstPath.pData, rDstName.pData);
-    }
-
-    /** Rename a file entry.
-        @see store_rename()
-     */
-    inline storeError rename (
-        rtl::OUString const & rSrcPath, rtl::OUString const & rSrcName,
-        rtl::OUString const & rDstPath, rtl::OUString const & rDstName)
-    {
-        if (!m_hImpl)
-            return store_E_InvalidHandle;
-
-        return store_rename (m_hImpl, rSrcPath.pData, rSrcName.pData, rDstPath.pData, rDstName.pData);
     }
 
     /** Remove a file entry.

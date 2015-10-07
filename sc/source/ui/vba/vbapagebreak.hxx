@@ -43,11 +43,11 @@ public:
                     css::sheet::TablePageBreakData aTablePageBreakData) throw (css::uno::RuntimeException);
     virtual ~ScVbaPageBreak(){}
 
-    virtual sal_Int32 SAL_CALL getType( ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setType(sal_Int32 type) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getType( ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual void SAL_CALL setType(sal_Int32 type) throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
-    virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::excel::XRange> SAL_CALL Location() throw ( css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual css::uno::Reference< ov::excel::XRange> SAL_CALL Location() throw ( css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE;
 };
 
 typedef ScVbaPageBreak < ov::excel::XHPageBreak > ScVbaHPageBreak_BASE;

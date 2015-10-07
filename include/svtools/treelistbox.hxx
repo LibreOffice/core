@@ -177,18 +177,6 @@ public:
     virtual void        Clone(SvLBoxItem* pSource) = 0;
 };
 
-inline SvLBoxItem* new_clone(const SvLBoxItem& rSrc)
-{
-    SvLBoxItem* p = rSrc.Create();
-    p->Clone(const_cast<SvLBoxItem*>(&rSrc));
-    return p;
-}
-
-inline void delete_clone(const SvLBoxItem* p)
-{
-    delete p;
-}
-
 // *********************************************************************
 // ****************************** SvTreeListBox ************************
 // *********************************************************************

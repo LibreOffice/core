@@ -208,22 +208,6 @@ ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
     return ERRCODE_NONE;
 }
 
-// virtual
-void SvOutputStreamOpenLockBytes::Terminate()
-{
-    if (m_xOutputStream.is())
-    {
-        try
-        {
-            m_xOutputStream->closeOutput();
-        }
-        catch (const io::IOException&)
-        {
-        }
-    }
-}
-
-
 //  SvInputStream
 
 
