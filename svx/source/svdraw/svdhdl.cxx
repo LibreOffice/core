@@ -19,6 +19,7 @@
 
 
 #include <algorithm>
+#include <cassert>
 
 #include <svx/svdhdl.hxx>
 #include <svx/svdpagv.hxx>
@@ -2396,6 +2397,26 @@ SdrCropViewHdl::SdrCropViewHdl(
 {
 }
 
+namespace {
+
+void translateRotationToMirroring(basegfx::B2DVector & scale, double * rotate) {
+    assert(rotate != nullptr);
+
+    // detect 180 degree rotation, this is the same as mirrored in X and Y,
+    // thus change to mirroring. Prefer mirroring here. Use the equal call
+    // with getSmallValue here, the original which uses rtl::math::approxEqual
+    // is too correct here. Maybe this changes with enhanced precision in aw080
+    // to the better so that this can be reduced to the more precise call again
+    if(basegfx::fTools::equal(fabs(*rotate), F_PI, 0.000000001))
+    {
+        scale.setX(scale.getX() * -1.0);
+        scale.setY(scale.getY() * -1.0);
+        *rotate = 0.0;
+    }
+}
+
+}
+
 void SdrCropViewHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
@@ -2418,17 +2439,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
         return;
     }
 
-    // detect 180 degree rotation, this is the same as mirrored in X and Y,
-    // thus change to mirroring. Prefer mirroring here. Use the equal call
-    // with getSmallValue here, the original which uses rtl::math::approxEqual
-    // is too correct here. Maybe this changes with enhanced precision in aw080
-    // to the better so that this can be reduced to the more precise call again
-    if(basegfx::fTools::equal(fabs(fRotate), F_PI, 0.000000001))
-    {
-        aScale.setX(aScale.getX() * -1.0);
-        aScale.setY(aScale.getY() * -1.0);
-        fRotate = 0.0;
-    }
+    translateRotationToMirroring(aScale, &fRotate);
 
     // remember mirroring, reset at Scale and adapt crop values for usage;
     // mirroring can stay in the object transformation, so do not have to

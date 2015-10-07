@@ -1683,7 +1683,6 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                 mxTextEditObj->SetMergedItemSetAndBroadcast(*pSet, bReplaceAll);
 
                 FlushComeBackTimer(); // to set ModeHasChanged immediately
-                bRet=true;
             }
         }
         else if (!bOnlyEEItems)
@@ -1728,7 +1727,6 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                 }
             }
             FlushComeBackTimer();
-            bRet=true;
         }
         if(!bNoEEItems)
         {
