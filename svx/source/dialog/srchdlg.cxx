@@ -68,6 +68,8 @@
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
+
+#include <cstdlib>
 #include <memory>
 
 using namespace com::sun::star::i18n;
@@ -812,7 +814,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         m_pColumnsBtn->SetClickHdl( aLink );
         m_pAllSheetsCB->SetClickHdl( aLink );
 
-        sal_uIntPtr nModifyFlagCheck(nModifyFlag);
+        sal_uIntPtr nModifyFlagCheck;
         switch ( pSearchItem->GetCellType() )
         {
             case SvxSearchCellType::FORMULA:
@@ -826,6 +828,9 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
             case SvxSearchCellType::NOTE:
                 nModifyFlagCheck = MODIFY_CALC_NOTES;
                 break;
+
+            default:
+                std::abort(); // cannot happen
         }
         if ( (nModifyFlag & nModifyFlagCheck) == 0 )
             m_pCalcSearchInLB->SelectEntryPos( static_cast<sal_Int32>(pSearchItem->GetCellType()) );
