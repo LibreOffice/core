@@ -368,7 +368,6 @@ void SaneDlg::InitFields()
 
     int nOption, i, nValue;
     double fValue;
-    bool bSuccess = false;
     const char *ppSpecialOptions[] = {
         "resolution",
         "tl-x",
@@ -395,8 +394,7 @@ void SaneDlg::InitFields()
     {
         double fRes;
 
-        bSuccess = mrSane.GetOptionValue( nOption, fRes );
-        if( bSuccess )
+        if( mrSane.GetOptionValue( nOption, fRes ) )
         {
             mpReslBox->Enable( true );
 
@@ -468,11 +466,9 @@ void SaneDlg::InitFields()
                 pField = mpBottomField;
         }
         nOption = pOptionName ? mrSane.GetOptionByName( pOptionName ) : -1;
-        bSuccess = false;
         if( nOption != -1 )
         {
-            bSuccess = mrSane.GetOptionValue( nOption, fValue );
-            if( bSuccess )
+            if( mrSane.GetOptionValue( nOption, fValue ) )
             {
                 if( mrSane.GetOptionUnit( nOption ) == SANE_UNIT_MM )
                 {
