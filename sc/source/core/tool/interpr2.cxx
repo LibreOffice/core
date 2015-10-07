@@ -250,7 +250,7 @@ void ScInterpreter::ScGetIsoWeekOfYear()
     {
         Date aDate = *(pFormatter->GetNullDate());
         aDate += (long)::rtl::math::approxFloor(GetDouble());
-        PushInt( (int) aDate.GetWeekOfYear( MONDAY, 4 ) );
+        PushInt( (int) aDate.GetWeekOfYear() );
     }
 }
 
