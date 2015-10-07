@@ -22,7 +22,7 @@
 
 
 
-#if defined (SOLARIS) || (FREEBSD)
+#if defined (FREEBSD) || defined (SOLARIS)
 
 #ifdef __cplusplus
 extern "C" {

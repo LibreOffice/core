@@ -1085,7 +1085,7 @@ SAL_CALL osl_mapFile (
         // OS simultaneously pages in the rest); on other platforms, it remains
         // to be evaluated whether madvise or equivalent is available and
         // actually useful:
-#if defined MACOSX
+#if defined (FREEBSD) || defined (MACOSX)
         int e = posix_madvise(p, nLength, POSIX_MADV_WILLNEED);
         if (e != 0)
         {
