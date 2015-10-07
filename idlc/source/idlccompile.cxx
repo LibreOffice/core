@@ -388,8 +388,8 @@ sal_Int32 compileFile(const OString * pathname)
     //yydebug = 1 parser produce trace information
     yydebug = 0;
 
-    sal_Int32 nErrors = yyparse();
-    nErrors = idlc()->getErrorCount();
+    yyparse();
+    sal_Int32 nErrors = idlc()->getErrorCount();
 
     fclose(yyin);
     if (unlink(preprocFile.getStr()) != 0)
