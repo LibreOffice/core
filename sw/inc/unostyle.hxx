@@ -60,13 +60,13 @@ class SwXStyleFamilies :  public cppu::WeakImplHelper
 >,
     public SwUnoCollection
 {
-    SwDocShell*         pDocShell;
+    SwDocShell*         m_pDocShell;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxCharStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxParaStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxFrameStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxPageStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxNumberingStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   m_pxCharStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   m_pxParaStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   m_pxFrameStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   m_pxPageStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   m_pxNumberingStyles;
 protected:
     virtual ~SwXStyleFamilies();
 public:

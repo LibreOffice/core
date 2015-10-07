@@ -166,23 +166,23 @@ uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames() throw( un
 
 SwXStyleFamilies::SwXStyleFamilies(SwDocShell& rDocShell) :
     SwUnoCollection(rDocShell.GetDoc()),
-    pDocShell(&rDocShell),
-    pxCharStyles(0),
-    pxParaStyles(0),
-    pxFrameStyles(0),
-    pxPageStyles(0),
-    pxNumberingStyles(0)
+    m_pDocShell(&rDocShell),
+    m_pxCharStyles(0),
+    m_pxParaStyles(0),
+    m_pxFrameStyles(0),
+    m_pxPageStyles(0),
+    m_pxNumberingStyles(0)
 {
 
 }
 
 SwXStyleFamilies::~SwXStyleFamilies()
 {
-    delete pxCharStyles;
-    delete pxParaStyles;
-    delete pxFrameStyles;
-    delete pxPageStyles;
-    delete pxNumberingStyles;
+    delete m_pxCharStyles;
+    delete m_pxParaStyles;
+    delete m_pxFrameStyles;
+    delete m_pxPageStyles;
+    delete m_pxNumberingStyles;
 }
 
 uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
@@ -255,52 +255,52 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
         {
             case SFX_STYLE_FAMILY_CHAR:
             {
-                if(!pxCharStyles)
+                if(!m_pxCharStyles)
                 {
-                    static_cast<SwXStyleFamilies*>(this)->pxCharStyles = new uno::Reference< container::XNameContainer > ();
-                    *pxCharStyles = new SwXStyleFamily(pDocShell, nType);
+                    static_cast<SwXStyleFamilies*>(this)->m_pxCharStyles = new uno::Reference< container::XNameContainer > ();
+                    *m_pxCharStyles = new SwXStyleFamily(m_pDocShell, nType);
                 }
-                aRef = *pxCharStyles;
+                aRef = *m_pxCharStyles;
             }
             break;
             case SFX_STYLE_FAMILY_PARA:
             {
-                if(!pxParaStyles)
+                if(!m_pxParaStyles)
                 {
-                    static_cast<SwXStyleFamilies*>(this)->pxParaStyles = new uno::Reference< container::XNameContainer > ();
-                    *pxParaStyles = new SwXStyleFamily(pDocShell, nType);
+                    static_cast<SwXStyleFamilies*>(this)->m_pxParaStyles = new uno::Reference< container::XNameContainer > ();
+                    *m_pxParaStyles = new SwXStyleFamily(m_pDocShell, nType);
                 }
-                aRef = *pxParaStyles;
+                aRef = *m_pxParaStyles;
             }
             break;
             case SFX_STYLE_FAMILY_PAGE     :
             {
-                if(!pxPageStyles)
+                if(!m_pxPageStyles)
                 {
-                    static_cast<SwXStyleFamilies*>(this)->pxPageStyles = new uno::Reference< container::XNameContainer > ();
-                    *pxPageStyles = new SwXStyleFamily(pDocShell, nType);
+                    static_cast<SwXStyleFamilies*>(this)->m_pxPageStyles = new uno::Reference< container::XNameContainer > ();
+                    *m_pxPageStyles = new SwXStyleFamily(m_pDocShell, nType);
                 }
-                aRef = *pxPageStyles;
+                aRef = *m_pxPageStyles;
             }
             break;
             case SFX_STYLE_FAMILY_FRAME    :
             {
-                if(!pxFrameStyles)
+                if(!m_pxFrameStyles)
                 {
-                    static_cast<SwXStyleFamilies*>(this)->pxFrameStyles = new uno::Reference< container::XNameContainer > ();
-                    *pxFrameStyles = new SwXStyleFamily(pDocShell, nType);
+                    static_cast<SwXStyleFamilies*>(this)->m_pxFrameStyles = new uno::Reference< container::XNameContainer > ();
+                    *m_pxFrameStyles = new SwXStyleFamily(m_pDocShell, nType);
                 }
-                aRef = *pxFrameStyles;
+                aRef = *m_pxFrameStyles;
             }
             break;
             case SFX_STYLE_FAMILY_PSEUDO:
             {
-                if(!pxNumberingStyles)
+                if(!m_pxNumberingStyles)
                 {
-                    static_cast<SwXStyleFamilies*>(this)->pxNumberingStyles = new uno::Reference< container::XNameContainer > ();
-                    *pxNumberingStyles = new SwXStyleFamily(pDocShell, nType);
+                    static_cast<SwXStyleFamilies*>(this)->m_pxNumberingStyles = new uno::Reference< container::XNameContainer > ();
+                    *m_pxNumberingStyles = new SwXStyleFamily(m_pDocShell, nType);
                 }
-                aRef = *pxNumberingStyles;
+                aRef = *m_pxNumberingStyles;
             }
             break;
         }
@@ -366,7 +366,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         aOpt.SetNumRules( bLoadStyleNumbering );
         aOpt.SetMerge( !bLoadStyleOverwrite );
 
-        sal_uLong nErr = pDocShell->LoadStylesFromFile( rURL, aOpt, true );
+        sal_uLong nErr = m_pDocShell->LoadStylesFromFile( rURL, aOpt, true );
         if( nErr )
             throw io::IOException();
     }
