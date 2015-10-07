@@ -4096,12 +4096,6 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
     return pDynamicKernel;
 }
 
-CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(
-    ScFormulaCellGroup& rGroup, ScTokenArray& rCode )
-{
-    return DynamicKernel::create(maCalcConfig, rCode, rGroup.mnLength);
-}
-
 namespace {
 
 class CLInterpreterResult

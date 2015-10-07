@@ -47,7 +47,7 @@ public:
         xShapePropertySet.set( xTitleShape, css::uno::UNO_QUERY_THROW );
         oShapeHelper.reset( new ov::ShapeHelper(xTitleShape) );
     }
-    css::uno::Reference< ov::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    css::uno::Reference< ov::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         // #TODO find out what the proper parent should be
         // leaving as set by the helperapi for the moment
@@ -55,14 +55,14 @@ public:
         // otherwise attempts to access the palette will fail
         return new ScVbaInterior( BaseClass::mxParent, BaseClass::mxContext, xShapePropertySet );
     }
-    css::uno::Reference< ov::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    css::uno::Reference< ov::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         // #TODO find out what the proper parent should be
         // leaving as set by the helperapi for the moment
         return new ScVbaFont( BaseClass::mxParent, BaseClass::mxContext, m_Palette, xShapePropertySet );
 
     }
-    void SAL_CALL setText( const OUString& Text ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    void SAL_CALL setText( const OUString& Text ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         try
         {
@@ -73,7 +73,7 @@ public:
             throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
         }
     }
-    OUString SAL_CALL getText(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    OUString SAL_CALL getText(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         OUString sText;
         try
@@ -87,31 +87,23 @@ public:
         return sText;
     }
 
-    css::uno::Reference< ov::excel::XCharacters > SAL_CALL Characters(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
-    {
-        // #FIXME #TODO the helperapi Characters implementation doesn't
-        // seem to do very much, need to know how the existing Characters
-        // impl ( that we use for Range ) can be reused
-        return  css::uno::Reference< ov::excel::XCharacters > ();
-    }
-
-    void SAL_CALL setTop( double Top ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    void SAL_CALL setTop( double Top ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         oShapeHelper->setTop( Top );
     }
-    double SAL_CALL getTop(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    double SAL_CALL getTop(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         return oShapeHelper->getTop();
     }
-    void SAL_CALL setLeft( double Left ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    void SAL_CALL setLeft( double Left ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         oShapeHelper->setLeft( Left );
     }
-    double SAL_CALL getLeft(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    double SAL_CALL getLeft(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         return oShapeHelper->getLeft();
     }
-    void SAL_CALL setOrientation( ::sal_Int32 _nOrientation ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    void SAL_CALL setOrientation( ::sal_Int32 _nOrientation ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         try
         {
@@ -122,7 +114,7 @@ public:
             throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
         }
     }
-    ::sal_Int32 SAL_CALL getOrientation(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    ::sal_Int32 SAL_CALL getOrientation(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         sal_Int32 nSOOrientation = 0;
         try
@@ -136,11 +128,11 @@ public:
         return static_cast< sal_Int32 >(nSOOrientation / 100) ;
     }
 // XHelperInterface
-    OUString getServiceImplName()
+    OUString getServiceImplName() SAL_OVERRIDE
     {
         return OUString("TitleImpl");
     }
-    css::uno::Sequence< OUString > getServiceNames()
+    css::uno::Sequence< OUString > getServiceNames() SAL_OVERRIDE
     {
         static css::uno::Sequence< OUString > aServiceNames;
         if ( aServiceNames.getLength() == 0 )

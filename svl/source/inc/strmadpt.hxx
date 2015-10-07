@@ -54,8 +54,6 @@ public:
 
     virtual ErrCode FillAppend(const void * pBuffer, sal_uLong nCount,
                                sal_uLong * pWritten) override;
-
-    virtual void Terminate() override;
 };
 
 #endif // INCLUDED_SVL_STRMADPT_HXX

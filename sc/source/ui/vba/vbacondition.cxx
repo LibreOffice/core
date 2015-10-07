@@ -105,17 +105,6 @@ ScVbaCondition< Ifc... >::setFormula1( const uno::Any& _aFormula1) throw ( scrip
 }
 
 template< typename... Ifc >
-void
-ScVbaCondition< Ifc... >::setFormula2( const uno::Any& _aFormula2) throw ( script::BasicErrorException )
-{
-    OUString sFormula2;
-    // #TODO surely this can't be right?
-    // ( from helperapi/impl/.../calc/ConditionImpl.java
-    if ( (_aFormula2 >>= sFormula2 ))
-        mxSheetCondition->setFormula1(sFormula2);
-}
-
-template< typename... Ifc >
 sal_Int32
 ScVbaCondition< Ifc... >::Operator(bool _bIncludeFormulaValue) throw ( script::BasicErrorException )
 {

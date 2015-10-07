@@ -112,24 +112,6 @@ namespace canvas
         inline unsigned int pow2( unsigned int c ) { return 0x1 << c; }
         inline unsigned int mask( unsigned int c ) { return ((unsigned int)(-1)) / (pow2(pow2(c)) + 1); }
         inline unsigned int count( unsigned int x, unsigned int c ) { return ((x) & mask(c)) + (((x) >> (pow2(c))) & mask(c)); }
-        template<typename T>
-        inline unsigned int bitcount( T c ) {
-            unsigned int nByteIndex = 0;
-            unsigned int nNumBytes = sizeof(T)<<2;
-            do {
-                c=count(c,nByteIndex++);
-                nNumBytes >>= 1;
-            } while(nNumBytes);
-            return c;
-        }
-        inline sal_uInt32 bitcount32( sal_uInt32 c ) {
-            c=count(c,0);
-            c=count(c,1);
-            c=count(c,2);
-            c=count(c,3);
-            c=count(c,4);
-            return c;
-        }
 
         /** Round given floating point value down to next integer
          */

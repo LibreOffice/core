@@ -941,39 +941,6 @@ void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
     m_aHelper.ToggleCollapsed( pEdit, pButton );
 }
 
-void ScRefHandler::preNotify(const NotifyEvent& rNEvt, const bool bBindRef)
-{
-    if( bBindRef || m_bInRefMode )
-    {
-        MouseNotifyEvent nSwitch=rNEvt.GetType();
-        if(nSwitch==MouseNotifyEvent::GETFOCUS)
-        {
-            pActiveWin=rNEvt.GetWindow();
-        }
-    }
-}
-
-void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool bBindRef)
-{
-    if( !bBindRef && !m_bInRefMode ) return;
-
-    if(nStateChange == StateChangedType::Visible)
-    {
-        if(m_rWindow->IsVisible())
-        {
-            ScFormulaReferenceHelper::enableInput( false );
-            ScFormulaReferenceHelper::EnableSpreadsheets();
-            ScFormulaReferenceHelper::SetDispatcherLock( true );
-            aIdle.Start();
-        }
-        else
-        {
-            ScFormulaReferenceHelper::enableInput( true );
-            ScFormulaReferenceHelper::SetDispatcherLock( false );           /*//! here and in DoClose ?*/
-        }
-    }
-}
-
 IMPL_LINK_NOARG_TYPED(ScRefHandler, UpdateFocusHdl, Idle *, void)
 {
     if (pActiveWin)
