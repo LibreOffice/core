@@ -313,7 +313,7 @@ void osl_InitSparcV9(void)
 #endif
 
 #if    ( defined(__GNUC__) && (defined(X86) || defined(X86_64)) )\
-    || ( defined(SOLARIS) && defined (__SUNPRO_C) && defined(__i386) )
+    || ( defined(SOLARIS) && defined(__i386) )
 
 /* Safe default */
 int osl_isSingleCPU = 0;
