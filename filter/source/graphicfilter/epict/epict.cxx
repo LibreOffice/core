@@ -870,7 +870,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     Bitmap              aBitmap( rBitmap );
 
     sal_uLong   nWidth, nHeight, nDstRowBytes, nx, nc, ny, nCount, nColTabSize, i;
-    sal_uLong   nDstRowPos, nSrcRowBytes, nEqu3, nPos, nDstMapPos;
+    sal_uLong   nDstRowPos, nEqu3, nPos, nDstMapPos;
     sal_uInt16  nBitsPerPixel, nPackType;
     sal_uInt8   *pComp[4], *pTemp;
     sal_uInt8    nEquData = 0;
@@ -899,8 +899,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     // If 24-Bit, then create the Opcode 'DirectBitsRect':
     if ( nBitsPerPixel == 24 )
     {
-        // Calculate the number of bytes of an (uncompressed) line of source and destination.
-        nSrcRowBytes =( ( 3 * nWidth ) + 0x0003 ) & 0xfffc;
+        // Calculate the number of bytes of an (uncompressed) line of destination.
         nDstRowBytes = nWidth * 4;
 
         // writing Opcode and BaseAddr (?):
@@ -1086,7 +1085,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
 
         // Calculate the number of bytes of an (unpacked) line of source an destination.
         nDstRowBytes = ( nWidth * nBitsPerPixel + 7 ) >> 3;
-        nSrcRowBytes = ( nDstRowBytes + 3 ) & 0xfffffffc;
+        sal_uLong nSrcRowBytes = ( nDstRowBytes + 3 ) & 0xfffffffc;
 
         // writing Opcode:
         pPict->WriteUInt16( 0x0098 );
