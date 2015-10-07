@@ -815,12 +815,7 @@ OString Config::ReadKey(const OString& rKey) const
 OString Config::ReadKey(const OString& rKey, const OString& rDefault) const
 {
 #ifdef DBG_UTIL
-    OStringBuffer aTraceStr("Config::ReadKey( ");
-    aTraceStr.append(rKey);
-    aTraceStr.append(" ) from ");
-    aTraceStr.append(GetGroup());
-    aTraceStr.append(" in ");
-    aTraceStr.append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    OString aTraceStr("Config::ReadKey( " + rKey + " ) from " + GetGroup() + " in " + OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
