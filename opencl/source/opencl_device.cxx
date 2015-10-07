@@ -485,9 +485,8 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
     if (!bIsDeviceSelected || bForceSelection)
     {
         /* Setup */
-        ds_status status;
         ds_profile* profile = NULL;
-        status = initDSProfile(&profile, "LibreOffice v0.1");
+        initDSProfile(&profile, "LibreOffice v0.1");
 
         if (!profile)
         {
@@ -499,6 +498,7 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
         /* Try reading scores from file */
         std::string tmpStr(sProfilePath);
         const char* fileName = tmpStr.append("sc_opencl_device_profile.dat").c_str();
+        ds_status status;
         if (!bForceSelection)
         {
             status = readProfileFromFile(profile, deserializeScore, fileName);
