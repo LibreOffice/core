@@ -75,10 +75,9 @@ public:
     // string related inputs
     LanguageTag         maLanguageTag;
     SalLayoutFlags      mnFlags;
-    int                 mnLength;
+    const OUString&     mrStr;
     int                 mnMinCharPos;
     int                 mnEndCharPos;
-    const sal_Unicode*  mpStr;
 
     // performance hack
     vcl::TextLayoutCache const* m_pTextLayoutCache;
@@ -93,7 +92,7 @@ public:
     ImplLayoutRuns      maFallbackRuns;
 
 public:
-                ImplLayoutArgs( const sal_Unicode* pStr, int nLength,
+                ImplLayoutArgs( const OUString& rStr,
                                 int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags,
                                 const LanguageTag& rLanguageTag,
                                 vcl::TextLayoutCache const* pLayoutCache);
@@ -339,7 +338,7 @@ public:
     void    ApplyDXArray( ImplLayoutArgs& );
     void    Justify( DeviceCoordinate nNewWidth );
     void            KashidaJustify( long nIndex, int nWidth );
-    void            ApplyAsianKerning( const sal_Unicode*, int nLength );
+    void            ApplyAsianKerning(const OUString& rStr);
     void            SortGlyphItems();
 
     // used by upper layers

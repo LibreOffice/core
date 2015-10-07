@@ -53,13 +53,11 @@ private:
         // mutable so that the DrawOffset/DrawBase can be set
         mutable GraphiteLayoutImpl maImpl;
         grutils::GrFeatureParser * mpFeatures;
-        const sal_Unicode * mpStr;
 public:
         GraphiteServerFontLayout(ServerFont& pServerFont) throw();
 
         virtual bool  LayoutText( ImplLayoutArgs& rArgs) SAL_OVERRIDE
         {
-            mpStr = rArgs.mpStr;
             SalLayout::AdjustLayout(rArgs);
             return maImpl.LayoutText(rArgs);
         };    // first step of layout
