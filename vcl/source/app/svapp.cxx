@@ -36,6 +36,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
+#include "vcl/dialog.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/keycod.hxx"
 #include "vcl/event.hxx"
@@ -347,6 +348,17 @@ namespace
         ImplWindowFrameProc(xWin.get(), NULL, SALEVENT_KEYUP, &aKeyEvent);
         return true;
     }
+
+    void CloseDialogsAndQuit()
+    {
+        vcl::Window* pAppWindow = Application::GetFirstTopLevelWindow();
+        while (pAppWindow)
+        {
+            Dialog::EndAllDialogs(pAppWindow);
+            pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
+        }
+        Application::Quit();
+    }
 }
 
 IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
@@ -357,7 +369,7 @@ IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
         delete mpEventTestInput;
         delete mpEventTestingIdle;
         SAL_INFO("vcl.eventtesting", "Event Limit reached, exiting" << mnEventTestLimit);
-        Application::Quit();
+        CloseDialogsAndQuit();
     }
     else
     {
@@ -369,7 +381,7 @@ IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
             delete mpEventTestInput;
             delete mpEventTestingIdle;
             SAL_INFO("vcl.eventtesting", "Event Input exhausted, exiting" << mnEventTestLimit);
-            Application::Quit();
+            CloseDialogsAndQuit();
             return;
         }
         Scheduler::ProcessTaskScheduling(true);
