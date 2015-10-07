@@ -19,13 +19,11 @@ $(eval $(call gb_Extension_use_default_license,wiki-publisher))
 ifeq ($(SYSTEM_APACHE_COMMONS),)
 $(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_logging))
 $(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_codec))
-$(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_httpclient))
 $(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_lang))
 
 $(eval $(call gb_Extension_add_file,wiki-publisher,$(if $(filter TRUE,$(HAVE_JAVA6)),commons-codec-1.9.jar,commons-codec-1.6.jar),\
 $(call gb_UnpackedTarball_get_dir,apache_commons_codec)$(if $(filter TRUE,$(HAVE_JAVA6)),/dist/commons-codec-1.9.jar,/dist/commons-codec-1.6-SNAPSHOT.jar)\
 ))
-$(eval $(call gb_Extension_add_file,wiki-publisher,commons-httpclient-3.1.jar,$(call gb_UnpackedTarball_get_dir,apache_commons_httpclient)/dist/commons-httpclient.jar))
 $(eval $(call gb_Extension_add_file,wiki-publisher,$(if $(filter TRUE,$(HAVE_JAVA6)),commons-lang3-3.3.1.jar,commons-lang-2.4.jar),\
 $(call gb_UnpackedTarball_get_dir,apache_commons_lang)$(if $(filter TRUE,$(HAVE_JAVA6)),/target/commons-lang3-3.3.1.jar,/dist/commons-lang-2.4.jar)\
 ))

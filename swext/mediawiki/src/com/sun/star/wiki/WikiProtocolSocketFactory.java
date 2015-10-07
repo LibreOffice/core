@@ -25,17 +25,14 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.KeyStore;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import org.apache.commons.httpclient.ConnectTimeoutException;
-import org.apache.commons.httpclient.HttpClientError;
-import org.apache.commons.httpclient.params.HttpConnectionParams;
-import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 
-class WikiProtocolSocketFactory implements SecureProtocolSocketFactory
+class WikiProtocolSocketFactory extends SSLSocketFactory
 {
     private SSLContext m_aSSLContext;
 
@@ -105,40 +102,56 @@ class WikiProtocolSocketFactory implements SecureProtocolSocketFactory
         }
 
         if ( m_aSSLContext == null )
-            throw new HttpClientError();
+            throw new RuntimeException("failed to create SSLContext");
 
         return m_aSSLContext;
     }
 
+    @Override
+    public Socket createSocket(InetAddress address, int port)
+        throws IOException
+    {
+        return GetNotSoSecureSSLContext().getSocketFactory().createSocket(address, port);
+    }
+
+    @Override
+    public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort)
+        throws IOException
+    {
+        return GetNotSoSecureSSLContext().getSocketFactory().createSocket(address, port, localAddress, localPort);
+    }
+
+    @Override
     public Socket createSocket( String sHost, int nPort, InetAddress clientHost, int clientPort )
         throws IOException, UnknownHostException
     {
         return GetNotSoSecureSSLContext().getSocketFactory().createSocket( sHost, nPort, clientHost, clientPort );
     }
 
-    public Socket createSocket( final String sHost, final int nPort, final InetAddress aLocalAddress, final int nLocalPort, final HttpConnectionParams params )
-        throws IOException, UnknownHostException, ConnectTimeoutException
-    {
-        if ( params == null )
-            return createSocket( sHost, nPort, aLocalAddress, nLocalPort );
-
-        int nTimeout = params.getConnectionTimeout();
-        Socket aSocket = GetNotSoSecureSSLContext().getSocketFactory().createSocket();
-        aSocket.bind( new InetSocketAddress( aLocalAddress, nLocalPort ) );
-        aSocket.connect( new InetSocketAddress( sHost, nPort ), nTimeout );
-        return aSocket;
-    }
-
+    @Override
     public Socket createSocket( String sHost, int nPort )
         throws IOException, UnknownHostException
     {
         return GetNotSoSecureSSLContext().getSocketFactory().createSocket( sHost, nPort );
     }
 
+    @Override
     public Socket createSocket( Socket aSocket, String sHost, int nPort, boolean bAutoClose )
-        throws IOException, UnknownHostException
+        throws IOException
     {
         return GetNotSoSecureSSLContext().getSocketFactory().createSocket( aSocket, sHost, nPort, bAutoClose );
+    }
+
+    @Override
+    public String[] getDefaultCipherSuites()
+    {
+        return GetNotSoSecureSSLContext().getSocketFactory().getDefaultCipherSuites();
+    }
+
+    @Override
+    public String[] getSupportedCipherSuites()
+    {
+        return GetNotSoSecureSSLContext().getSocketFactory().getSupportedCipherSuites();
     }
 
     @Override

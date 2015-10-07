@@ -17,7 +17,6 @@ $(eval $(call gb_Jar_set_manifest,mediawiki,$(SRCDIR)/swext/mediawiki/src/com/su
 $(eval $(call gb_Jar_use_externals,mediawiki,\
 	commons-codec \
 	commons-lang \
-	commons-httpclient \
 	commons-logging \
 ))
 
