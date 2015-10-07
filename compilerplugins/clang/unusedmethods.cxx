@@ -251,7 +251,7 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     if (isa<CXXConstructorDecl>(functionDecl)) {
         return true;
     }
-    if (methodDecl && methodDecl->isDeleted()) {
+    if (functionDecl && functionDecl->isDeleted()) {
         return true;
     }
 

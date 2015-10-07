@@ -101,44 +101,4 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
     return result;
 }
 
-jclass jvmaccess::ClassPath::loadClass(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
-    JNIEnv * environment, OUString const & classPath, OUString const & name)
-{
-    assert(context.is());
-    assert(environment != 0);
-    jclass classLoader(environment->FindClass("java/net/URLClassLoader"));
-    if (classLoader == 0) {
-        return 0;
-    }
-    jmethodID ctorLoader(
-        environment->GetMethodID(classLoader, "<init>", "([Ljava/net/URL;)V"));
-    if (ctorLoader == 0) {
-        return 0;
-    }
-    jvalue arg;
-    arg.l = translateToUrls(context, environment, classPath);
-    if (arg.l == 0) {
-        return 0;
-    }
-    jobject cl = environment->NewObjectA(classLoader, ctorLoader, &arg);
-    if (cl == 0) {
-        return 0;
-    }
-    jmethodID methLoadClass(
-        environment->GetMethodID(
-            classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;"));
-    if (methLoadClass == 0) {
-        return 0;
-    }
-    arg.l = environment->NewString(
-        static_cast< jchar const * >(name.getStr()),
-        static_cast< jsize >(name.getLength()));
-    if (arg.l == 0) {
-        return 0;
-    }
-    return static_cast<jclass>(
-        environment->CallObjectMethodA(cl, methLoadClass, &arg));
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

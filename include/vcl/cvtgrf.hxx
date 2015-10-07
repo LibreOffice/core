@@ -36,7 +36,6 @@ class VCL_DLLPUBLIC GraphicConverter
 private:
 
     Link<ConvertData&,bool>  maFilterHdl;
-    ConvertData*             mpConvertData;
 
 public:
 
@@ -45,8 +44,6 @@ public:
 
     static sal_uLong        Import( SvStream& rIStm, Graphic& rGraphic, ConvertDataFormat nFormat = ConvertDataFormat::Unknown );
     static sal_uLong        Export( SvStream& rOStm, const Graphic& rGraphic, ConvertDataFormat nFormat );
-
-    ConvertData*        GetConvertData() { return mpConvertData; }
 
     void                SetFilterHdl( const Link<ConvertData&,bool>& rLink ) { maFilterHdl = rLink; }
     const Link<ConvertData&,bool>&  GetFilterHdl() const { return maFilterHdl; }

@@ -79,54 +79,11 @@ public:
         OStorePageLink & rLink,
         sal_uInt32 &     rAttrib);
 
-    /** attrib [nAttrib = ((nAttrib & ~nMask1) | nMask2)].
-     *  @see store_attrib()
-     */
-    storeError attrib (
-        const OStorePageKey &rKey,
-        sal_uInt32           nMask1,
-        sal_uInt32           nMask2,
-        sal_uInt32          &rAttrib);
-
-    /** link (insert Source Key as hardlink to Destination).
-     *  @see store_link()
-     */
-    storeError link (
-        const OStorePageKey &rSrcKey,
-        const OStorePageKey &rDstKey);
-
-    /** symlink (insert Source DirectoryPage as symlink to Destination).
-     *  @see store_symlink()
-     */
-    storeError symlink (
-        const rtl_String    *pSrcPath,
-        const rtl_String    *pSrcName,
-        const OStorePageKey &rDstKey);
-
-    /** rename.
-     *  @see store_rename()
-     */
-    storeError rename (
-        const OStorePageKey &rSrcKey,
-        const rtl_String    *pDstPath,
-        const rtl_String    *pDstName);
-
     /** remove.
      *  @see store_remove()
      */
     storeError remove (
         const OStorePageKey &rKey);
-
-    /** rebuild (combines recover and compact from 'Src' to 'Dst').
-     *  @param  pSrcLB [in] accessed readonly.
-     *  @param  pDstLB [in] truncated and accessed readwrite (as initialize()).
-     *  @return store_E_None upon success.
-     *
-     *  @see store_rebuildFile()
-     */
-    storeError rebuild (
-        ILockBytes *pSrcLB,
-        ILockBytes *pDstLB);
 
     /** IStoreHandle.
      */

@@ -260,16 +260,8 @@ PyRef ustring2PyString( const OUString & source );
 OUString pyString2ustring( PyObject *str );
 
 
-PyRef AnyToPyObject (const css::uno::Any & a, const Runtime &r )
-    throw ( css::uno::RuntimeException );
-
-css::uno::Any PyObjectToAny (PyObject* o)
-    throw ( css::uno::RuntimeException );
-
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
     throw ( css::reflection::InvocationTargetException );
-
-css::uno::TypeClass StringToTypeClass (char* string);
 
 PyRef PyUNO_callable_new (
     const css::uno::Reference<css::script::XInvocation2> &xInv,
@@ -283,7 +275,6 @@ PyObject *PyUNO_ByteSequence_new( const css::uno::Sequence< sal_Int8 > &, const 
 
 PyRef getTypeClass( const Runtime &);
 PyRef getEnumClass( const Runtime &);
-PyRef getBoolClass( const Runtime &);
 PyRef getCharClass( const Runtime &);
 PyRef getByteSequenceClass( const Runtime & );
 PyRef getPyUnoClass();
@@ -307,8 +298,6 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object )
 
 bool isInterfaceClass( const Runtime &, PyObject *obj );
 bool isInstanceOfStructOrException( PyObject *obj);
-css::uno::Sequence<css::uno::Type> implementsInterfaces(
-    const Runtime & runtime, PyObject *obj );
 
 struct RuntimeCargo
 {

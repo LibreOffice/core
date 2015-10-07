@@ -38,13 +38,6 @@ namespace comphelper
     /// returns the decimals of the given numeric number formatunder the given formats
     COMPHELPER_DLLPUBLIC css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey);
 
-    /** returns the standard format for the given type and the given _rLocale
-    */
-    sal_Int32 getStandardFormat(
-            const css::uno::Reference<css::util::XNumberFormatter>& xFormatter,
-            sal_Int16 nType,
-            const css::lang::Locale& _rLocale);
-
     /** retrieves a the value of a given property for a given format key, relating to a given formatter
     */
     COMPHELPER_DLLPUBLIC css::uno::Any getNumberFormatProperty(
