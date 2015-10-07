@@ -45,6 +45,8 @@
 #include "impimagetree.hxx"
 #include <vcldemo-debug.hxx>
 
+#include <vcl/BitmapProcessor.hxx>
+
 using namespace css;
 
 namespace {
@@ -123,7 +125,12 @@ bool ImplImageTree::loadImage(OUString const & name, OUString const & style, Bit
     {
         try {
             if (doLoadImage(name, aStyle, bitmap, localized))
+            {
+                static bool bIconsForDarkTheme = !!getenv("VCL_ICONS_FOR_DARK_THEME");
+                if (bIconsForDarkTheme)
+                    bitmap = BitmapProcessor::createLightImage(bitmap);
                 return true;
+            }
         }
         catch (css::uno::RuntimeException &) {}
 
