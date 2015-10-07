@@ -41,7 +41,7 @@ class Enumeration
     sal_Int32 mnIndex;
 
 public:
-    Enumeration( css::container::XIndexAccess* );
+    explicit Enumeration( css::container::XIndexAccess* );
 
     virtual sal_Bool SAL_CALL hasMoreElements()
         throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

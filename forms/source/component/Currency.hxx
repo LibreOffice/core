@@ -73,7 +73,7 @@ protected:
     virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
-    OCurrencyControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+    explicit OCurrencyControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE

@@ -84,7 +84,7 @@ namespace frm
         void initControlModel(css::uno::Reference< css::beans::XPropertySet >& xControlModel);
 
     public:
-        OFilterControl( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
+        explicit OFilterControl( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject)
         css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

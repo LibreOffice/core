@@ -246,7 +246,7 @@ namespace xforms
     class OBooleanType : public OBooleanType_Base
     {
     public:
-        OBooleanType( const OUString& _rName );
+        explicit OBooleanType( const OUString& _rName );
 
     protected:
         DECLARE_DEFAULT_CLONING( OBooleanType )
@@ -318,7 +318,7 @@ namespace xforms
     class classname : public classname##_Base                   \
     {                                                           \
     public:                                                     \
-        classname( const OUString& _rName );             \
+        explicit classname( const OUString& _rName );           \
                                                                 \
     protected:                                                  \
         DECLARE_DEFAULT_CLONING( classname )                    \

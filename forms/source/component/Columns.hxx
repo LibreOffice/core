@@ -63,7 +63,7 @@ protected:
 
 public:
     OGridColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext, const OUString& _sModelName = OUString());
-    OGridColumn(const OGridColumn* _pOriginal );
+    explicit OGridColumn(const OGridColumn* _pOriginal );
     virtual ~OGridColumn();
 
     // UNO binding
@@ -119,8 +119,8 @@ class ClassName                                                                 
     ,public OAggregationArrayUsageHelper< ClassName >                                                       \
 {                                                                                                           \
 public:                                                                                                     \
-    ClassName(const css::uno::Reference<css::uno::XComponentContext>& _rContext );                                            \
-    ClassName(const ClassName* _pCloneFrom);                                                                \
+    explicit ClassName(const css::uno::Reference<css::uno::XComponentContext>& _rContext );                                            \
+    explicit ClassName(const ClassName* _pCloneFrom);                                                                \
                                                                                                             \
     virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;                                         \

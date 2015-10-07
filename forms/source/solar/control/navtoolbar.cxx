@@ -101,7 +101,7 @@ namespace frm
         const IFeatureDispatcher*   m_pDispatcher;
 
     public:
-        ImplNavToolBar( vcl::Window* _pParent )
+        explicit ImplNavToolBar( vcl::Window* _pParent )
             :ToolBox( _pParent, WB_3DLOOK )
             ,m_pDispatcher( NULL )
         {

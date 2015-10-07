@@ -72,7 +72,7 @@ protected:
     virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
-    ONumericControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit ONumericControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()

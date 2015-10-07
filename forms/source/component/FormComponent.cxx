@@ -95,9 +95,9 @@ void ControlModelLock::addPropertyNotification( const sal_Int32 _nHandle, const 
 class FieldChangeNotifier
 {
 public:
-    FieldChangeNotifier( ControlModelLock& _rLock )
-        :m_rLock( _rLock )
-        ,m_rModel( dynamic_cast< OBoundControlModel& >( _rLock.getModel() ) )
+    explicit FieldChangeNotifier(ControlModelLock& _rLock)
+        : m_rLock( _rLock )
+        , m_rModel( dynamic_cast< OBoundControlModel& >( _rLock.getModel() ) )
     {
         m_xOldField = m_rModel.getField();
     }

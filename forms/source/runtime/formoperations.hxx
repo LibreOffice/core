@@ -77,7 +77,7 @@ namespace frm
     #endif
 
     public:
-        FormOperations( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
+        explicit FormOperations( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
         // XServiceInfo - static versions
         static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
@@ -351,7 +351,7 @@ namespace frm
             bool            m_bCleared;
 
         public:
-            inline MethodGuard( FormOperations& _rOwner )
+            explicit MethodGuard( FormOperations& _rOwner )
                 :m_rOwner( _rOwner )
                 ,m_bCleared( false )
             {

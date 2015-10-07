@@ -40,7 +40,7 @@ namespace frm
         ::cppu::OInterfaceContainerHelper   m_aErrorListeners;
 
     protected:
-        OErrorBroadcaster( ::cppu::OBroadcastHelper& _rBHelper );
+        explicit OErrorBroadcaster( ::cppu::OBroadcastHelper& _rBHelper );
         virtual ~OErrorBroadcaster( );
 
         void SAL_CALL disposing();

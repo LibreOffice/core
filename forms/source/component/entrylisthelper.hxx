@@ -58,7 +58,7 @@ namespace frm
 
 
     protected:
-        OEntryListHelper( OControlModel& _rControlModel );
+        explicit OEntryListHelper( OControlModel& _rControlModel );
         OEntryListHelper( const OEntryListHelper& _rSource, OControlModel& _rControlModel );
         virtual ~OEntryListHelper( );
 

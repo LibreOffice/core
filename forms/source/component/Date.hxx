@@ -95,7 +95,7 @@ protected:
     virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
-    ODateControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit ODateControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
     DECLARE_UNO3_AGG_DEFAULTS(ODateControl, OBoundControl)
 
 // css::lang::XServiceInfo

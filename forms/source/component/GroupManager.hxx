@@ -142,7 +142,7 @@ class OGroup
     friend class OGroupLess;
 
 public:
-    OGroup( const OUString& rGroupName );
+    explicit OGroup(const OUString& rGroupName);
     virtual ~OGroup();
 
     bool operator==( const OGroup& rGroup ) const;
@@ -176,7 +176,7 @@ class OGroupManager : public ::cppu::WeakImplHelper< css::beans::XPropertyChange
     void removeFromGroupMap(const OUString& _sGroupName,const css::uno::Reference< css::beans::XPropertySet>& _xSet);
 
 public:
-    OGroupManager(const css::uno::Reference< css::container::XContainer >& _rxContainer);
+    explicit OGroupManager(const css::uno::Reference< css::container::XContainer >& _rxContainer);
     virtual ~OGroupManager();
 
 // css::lang::XEventListener

@@ -152,7 +152,7 @@ class OFormattedModel
         ImplSVEvent * m_nKeyEvent;
 
     public:
-        OFormattedControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+        explicit OFormattedControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
         virtual ~OFormattedControl();
 
         DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl)

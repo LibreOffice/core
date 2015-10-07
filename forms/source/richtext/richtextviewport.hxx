@@ -33,7 +33,7 @@ namespace frm
         bool        m_bHideInactiveSelection;
 
     public:
-        RichTextViewPort( vcl::Window* _pParent );
+        explicit RichTextViewPort( vcl::Window* _pParent );
 
         void    setView( EditView& _rView );
 

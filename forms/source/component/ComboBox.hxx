@@ -142,7 +142,7 @@ protected:
 class OComboBoxControl : public OBoundControl
 {
 public:
-    OComboBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+    explicit OComboBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()

@@ -44,7 +44,7 @@ namespace frm
     {
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
     public:
-        ONavigationBarControl(
+        explicit ONavigationBarControl(
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
@@ -95,7 +95,7 @@ namespace frm
         );
 
     protected:
-        ONavigationBarPeer(
+        explicit ONavigationBarPeer(
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
         virtual ~ONavigationBarPeer();

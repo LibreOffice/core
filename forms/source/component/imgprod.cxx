@@ -42,8 +42,8 @@ class ImgProdLockBytes : public SvLockBytes
 
 public:
 
-                        ImgProdLockBytes( SvStream* pStm, bool bOwner );
-                        ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > & rStreamRef );
+    ImgProdLockBytes( SvStream* pStm, bool bOwner );
+    explicit ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > & rStreamRef );
     virtual             ~ImgProdLockBytes();
 
     virtual ErrCode     ReadAt( sal_uInt64 nPos, void* pBuffer, sal_Size nCount, sal_Size * pRead ) const SAL_OVERRIDE;

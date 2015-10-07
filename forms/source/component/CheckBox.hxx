@@ -64,7 +64,7 @@ protected:
 class OCheckBoxControl : public OBoundControl
 {
 public:
-    OCheckBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+    explicit OCheckBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()

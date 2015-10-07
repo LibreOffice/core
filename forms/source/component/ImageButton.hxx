@@ -63,7 +63,7 @@ protected:
     virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
-    OImageButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OImageButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()

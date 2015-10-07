@@ -88,7 +88,7 @@ namespace frm
         SvxAdjust   m_eAdjust;
 
     public:
-        ParaAlignmentHandler( AttributeId _nAttributeId );
+        explicit ParaAlignmentHandler( AttributeId _nAttributeId );
 
     public:
         virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
@@ -101,7 +101,7 @@ namespace frm
         sal_uInt16  m_nLineSpace;
 
     public:
-        LineSpacingHandler( AttributeId _nAttributeId );
+        explicit LineSpacingHandler( AttributeId _nAttributeId );
 
     public:
         virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
@@ -114,7 +114,7 @@ namespace frm
         SvxEscapement   m_eEscapement;
 
     public:
-        EscapementHandler( AttributeId _nAttributeId );
+        explicit EscapementHandler( AttributeId _nAttributeId );
 
     public:
         virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
@@ -162,7 +162,7 @@ namespace frm
         SvxAdjust           m_eOppositeDefaultAdjustment;
 
     public:
-        ParagraphDirectionHandler( AttributeId _nAttributeId );
+        explicit ParagraphDirectionHandler( AttributeId _nAttributeId );
 
     public:
         virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;

@@ -69,7 +69,7 @@ namespace frm
         bool                        m_bPastePossible;
 
     public:
-        OPasteClipboardDispatcher( EditView& _rView );
+        explicit OPasteClipboardDispatcher( EditView& _rView );
 
     protected:
         virtual ~OPasteClipboardDispatcher();

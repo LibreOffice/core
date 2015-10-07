@@ -96,7 +96,7 @@ namespace frm
 
         struct AppendRowSetValueString : public ::std::unary_function< OUString, void >
         {
-            AppendRowSetValueString( OUString& _string )
+            explicit AppendRowSetValueString( OUString& _string )
                 :m_string( _string )
             {
             }
@@ -1434,7 +1434,7 @@ namespace frm
             const Sequence< OUString >&  m_rList;
 
         public:
-            ExtractStringFromSequence_Safe( const Sequence< OUString >& _rList ) : m_rList( _rList ) { }
+            explicit ExtractStringFromSequence_Safe( const Sequence< OUString >& _rList ) : m_rList( _rList ) { }
 
             OUString operator ()( sal_Int16 _nIndex )
             {
@@ -1485,7 +1485,7 @@ namespace frm
             const ValueList&  m_rList;
 
         public:
-            ExtractAnyFromValueList_Safe( const ValueList& _rList ) : m_rList( _rList ) { }
+            explicit ExtractAnyFromValueList_Safe( const ValueList& _rList ) : m_rList( _rList ) { }
 
             Any operator ()( sal_Int16 _nIndex )
             {

@@ -75,7 +75,7 @@ private:
 class ORadioButtonControl: public OBoundControl
 {
 public:
-    ORadioButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit ORadioButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()

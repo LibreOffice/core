@@ -131,7 +131,7 @@ class OEditControl : public OBoundControl
     ImplSVEvent *    m_nKeyEvent;
 
 public:
-    OEditControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+    explicit OEditControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
     virtual ~OEditControl();
 
     DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl)

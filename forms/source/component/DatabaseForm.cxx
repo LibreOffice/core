@@ -122,7 +122,7 @@ namespace frm
 class DocumentModifyGuard
 {
 public:
-    DocumentModifyGuard( const Reference< XInterface >& _rxFormComponent )
+    explicit DocumentModifyGuard( const Reference< XInterface >& _rxFormComponent )
         :m_xDocumentModify( getXModel( _rxFormComponent ), UNO_QUERY )
     {
         impl_changeModifiableFlag_nothrow( false );
@@ -167,7 +167,7 @@ protected:
 
 public:
 
-    OFormSubmitResetThread(ODatabaseForm* pControl) : OComponentEventThread(pControl) { }
+    explicit OFormSubmitResetThread(ODatabaseForm* pControl) : OComponentEventThread(pControl) { }
 };
 
 

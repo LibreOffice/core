@@ -156,7 +156,7 @@ private:
     virtual css::uno::Sequence< css::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
-    OImageControlControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OImageControlControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OImageControlControl, OBoundControl )

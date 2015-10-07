@@ -52,7 +52,7 @@ class BindingCollection : public NamedCollection<css::uno::Reference<css::beans:
     Model* mpModel;
 
 public:
-    BindingCollection( Model* pModel ) : mpModel( pModel ) {}
+    explicit BindingCollection( Model* pModel ) : mpModel( pModel ) {}
     virtual ~BindingCollection() {}
 
     virtual bool isValid( const T& t ) const SAL_OVERRIDE
@@ -79,7 +79,7 @@ class SubmissionCollection : public NamedCollection<css::uno::Reference<css::bea
     Model* mpModel;
 
 public:
-    SubmissionCollection( Model* pModel ) : mpModel( pModel ) {}
+    explicit SubmissionCollection( Model* pModel ) : mpModel( pModel ) {}
     virtual ~SubmissionCollection() {}
 
 public:

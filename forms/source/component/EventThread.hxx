@@ -86,7 +86,7 @@ public:
     DECLARE_UNO3_DEFAULTS(OComponentEventThread, OWeakObject)
     virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
+    explicit OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
     virtual ~OComponentEventThread();
 
     void addEvent( const css::lang::EventObject* _pEvt, bool bFlag = false );

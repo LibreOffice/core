@@ -162,7 +162,7 @@ namespace frm
         typedef ::osl::MutexGuard   GuardBase;
 
     public:
-        ImageModelMethodGuard( OClickableImageBaseModel& _rModel )
+        explicit ImageModelMethodGuard( OClickableImageBaseModel& _rModel )
             :GuardBase( _rModel.getMutex( OClickableImageBaseModel::GuardAccess() ) )
         {
             if ( NULL == _rModel.getImageProducer( OClickableImageBaseModel::GuardAccess() ) )
@@ -271,7 +271,7 @@ namespace frm
                                 bool ) SAL_OVERRIDE;
 
     public:
-        OImageProducerThread_Impl( OClickableImageBaseControl *pControl ) :
+        explicit OImageProducerThread_Impl( OClickableImageBaseControl *pControl ) :
             OComponentEventThread( pControl )
         {}
 

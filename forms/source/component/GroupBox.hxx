@@ -61,7 +61,7 @@ protected:
 class OGroupBoxControl : public OControl
 {
 public:
-    OGroupBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OGroupBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()

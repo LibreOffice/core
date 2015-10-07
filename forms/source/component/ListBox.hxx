@@ -269,7 +269,7 @@ protected:
     virtual css::uno::Sequence< css::uno::Type>   _getTypes() SAL_OVERRIDE;
 
 public:
-    OListBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OListBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
     virtual ~OListBoxControl();
 
     // UNO Anbindung
