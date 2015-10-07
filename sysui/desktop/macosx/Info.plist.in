@@ -1721,6 +1721,8 @@
             </array>
         </dict>
         <dict>
+            <key>CFBundleTypeName</key>
+            <string>Flat ODF</string>
             <key>LSItemContentTypes</key>
             <array>
                 <string>vnd.oasis.opendocument.text-flat-xml</string>
@@ -1734,6 +1736,8 @@
             <string>Owner</string>
         </dict>
         <dict>
+            <key>CFBundleTypeName</key>
+            <string>3rd party formats</string>
             <key>LSItemContentTypes</key>
             <array>
                 <string>public.plain-text</string>
