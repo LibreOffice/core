@@ -137,9 +137,10 @@ public:
 
     void            SetDefaultStyle( const OUString& rDefault ) { sDefaultStyle = rDefault; }
 
-    void            CalcOptimalExtraUserWidth();
-
 protected:
+    /// Calculate the optimal width of the dropdown.  Very expensive operation, triggers lots of font measurement.
+    DECL_DLLPRIVATE_LINK_TYPED(CalcOptimalExtraUserWidth, VclWindowEvent&, void);
+
     virtual void    Select() SAL_OVERRIDE;
 
 private:
@@ -337,6 +338,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     SetOptimalSize();
     EnableAutocomplete( true );
     EnableUserDraw( true );
+    AddEventListener(LINK(this, SvxStyleBox_Impl, CalcOptimalExtraUserWidth));
     SetUserItemSize( Size( 0, ITEM_HEIGHT ) );
 }
 
@@ -347,10 +349,13 @@ SvxStyleBox_Impl::~SvxStyleBox_Impl()
 
 void SvxStyleBox_Impl::dispose()
 {
-    for(int i = 0; i < MAX_STYLES_ENTRIES; i++)
+    RemoveEventListener(LINK(this, SvxStyleBox_Impl, CalcOptimalExtraUserWidth));
+
+    for (int i = 0; i < MAX_STYLES_ENTRIES; i++)
     {
         m_pButtons[i].disposeAndClear();
     }
+
     ComboBox::dispose();
 }
 
@@ -789,8 +794,12 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     DrawEntry( rUDEvt, false, false );
 }
 
-void SvxStyleBox_Impl::CalcOptimalExtraUserWidth()
+IMPL_LINK_TYPED(SvxStyleBox_Impl, CalcOptimalExtraUserWidth, VclWindowEvent&, event, void)
 {
+    // perform the calculation only when we are opening the dropdown
+    if (event.GetId() != VCLEVENT_DROPDOWN_PRE_OPEN)
+        return;
+
     long nMaxNormalFontWidth = 0;
     sal_Int32 nEntryCount = GetEntryCount();
     for (sal_Int32 i = 0; i < nEntryCount; ++i)
@@ -2309,8 +2318,6 @@ void SvxStyleToolBoxControl::FillStyleBox()
             sal_uInt16 nLines = static_cast<sal_uInt16>(
                     std::min( pBox->GetEntryCount(), static_cast<sal_Int32>(MAX_STYLES_ENTRIES)));
             pBox->SetDropDownLineCount( nLines );
-
-            pBox->CalcOptimalExtraUserWidth();
         }
     }
 }
