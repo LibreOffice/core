@@ -71,6 +71,19 @@ void exportUTF16String(SvStream& rStrm, const OUString& rString)
     }
 }
 
+void exportHexString(SvStream& rStrm, const sal_uInt8 nByte)
+{
+    sal_uInt8 nNibble = (nByte & 0xF0) >> 4;
+    for(sal_uInt8 i = 0; i < 2; i++)
+    {
+        if(nNibble > 9)
+            rStrm.WriteUInt8(nNibble + 55);
+        else
+            rStrm.WriteUInt8(nNibble + 48);
+        nNibble = nByte & 0xF;
+    }
+}
+
 bool isWorkbook(css::uno::Reference<css::uno::XInterface> xInterface)
 {
     css::uno::Reference<ooo::vba::excel::XWorkbook> xWorkbook(xInterface, css::uno::UNO_QUERY);
@@ -362,29 +375,30 @@ VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, Sv
 
 void VBAEncryption::writeSeed()
 {
-    mrEncryptedData.WriteUInt8(mnSeed);
+    exportHexString(mrEncryptedData, mnSeed);
 }
 
 void VBAEncryption::writeVersionEnc()
 {
     mnVersionEnc = mnSeed ^ mnVersion;
-    mrEncryptedData.WriteUInt8(mnVersionEnc);
+    exportHexString(mrEncryptedData, mnVersionEnc);
 }
 
 void VBAEncryption::writeProjKeyEnc()
 {
-    /*
-    OUString mrProjectCLSID = "{9F10AB9C-89AC-4C0F-8AFB-8E9B96D5F170}"; //TODO:Find the real ProjectId.ProjectClSID
-    sal_Int32 n = mrProjectCLSID.getLength();
-    const sal_Unicode* pString = mrProjectCLSID.getStr();
-    for (sal_Int32 i = 0; i < n; ++i)
+    if(!mnProjKey)
     {
-        sal_Unicode character = pString[i];
-        mnProjKey += character;
+        OUString sProjectCLSID = "{9F10AB9C-89AC-4C0F-8AFB-8E9B96D5F170}"; //TODO:Find the real ProjectId.ProjectClSID
+        sal_Int32 n = sProjectCLSID.getLength();
+        const sal_Unicode* pString = sProjectCLSID.getStr();
+        for (sal_Int32 i = 0; i < n; ++i)
+        {
+            sal_Unicode character = pString[i];
+            mnProjKey += character;
+        }
     }
-    */
     sal_uInt8 nProjKeyEnc = mnSeed ^ mnProjKey;
-    mrEncryptedData.WriteUInt8(nProjKeyEnc);
+    exportHexString(mrEncryptedData, nProjKeyEnc);
     mnUnencryptedByte1 = mnProjKey;
     mnEncryptedByte1 = nProjKeyEnc; // ProjKeyEnc
     mnEncryptedByte2 = mnVersionEnc; // VersionEnc
@@ -397,7 +411,7 @@ void VBAEncryption::writeIgnoredEnc()
     {
         sal_uInt8 nTempValue = 0xBE; // TODO:Generate a random value
         sal_uInt8 nByteEnc = nTempValue ^ (mnEncryptedByte2 + mnUnencryptedByte1);
-        mrEncryptedData.WriteUInt8(nByteEnc);
+        exportHexString(mrEncryptedData, nByteEnc);
         mnEncryptedByte2 = mnEncryptedByte1;
         mnEncryptedByte1 = nByteEnc;
         mnUnencryptedByte1 = nTempValue;
@@ -411,7 +425,7 @@ void VBAEncryption::writeDataLengthEnc()
     {
         sal_uInt8 nByte = temp & 0xFF;
         sal_uInt8 nByteEnc = nByte ^ (mnEncryptedByte2 + mnUnencryptedByte1);
-        mrEncryptedData.WriteUInt8(nByteEnc);
+        exportHexString(mrEncryptedData, nByteEnc);
         mnEncryptedByte2 = mnEncryptedByte1;
         mnEncryptedByte1 = nByteEnc;
         mnUnencryptedByte1 = nByte;
@@ -424,7 +438,7 @@ void VBAEncryption::writeDataEnc()
     for(sal_Int8 i = 0; i < mnLength; i++)
     {
         sal_uInt8 nByteEnc = mpData[i] ^ (mnEncryptedByte2 + mnUnencryptedByte1);
-        mrEncryptedData.WriteUInt8(nByteEnc);
+        exportHexString(mrEncryptedData, nByteEnc);
         mnEncryptedByte2 = mnEncryptedByte1;
         mnEncryptedByte1 = nByteEnc;
         mnUnencryptedByte1 = mpData[i];
