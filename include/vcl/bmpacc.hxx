@@ -138,7 +138,6 @@ protected:
 
 public:
 
-    SAL_DLLPRIVATE void ImplZeroInitUnusedBits();
     SAL_DLLPRIVATE BitmapBuffer* ImplGetBitmapBuffer() const
     {
         return mpBuffer;

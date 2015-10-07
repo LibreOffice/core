@@ -219,20 +219,6 @@ inline bool ScBigRange::Intersects( const ScBigRange& r ) const
         );
 }
 
-inline SvStream& WriteScBigRange ( SvStream& rStream, const ScBigRange& rRange )
-{
-    WriteScBigAddress( rStream, rRange.aStart );
-    WriteScBigAddress( rStream, rRange.aEnd );
-    return rStream;
-}
-
-inline SvStream& ReadScBigRange( SvStream& rStream, ScBigRange& rRange )
-{
-    ReadScBigAddress( rStream, rRange.aStart );
-    ReadScBigAddress( rStream, rRange.aEnd );
-    return rStream;
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

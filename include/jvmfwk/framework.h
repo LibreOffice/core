@@ -726,30 +726,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString **
  */
 JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation);
 
-/** obtains an array containing paths to JRE installations.
-
-    <p>
-    It is not guaranteed that the returned paths represent
-    a valid JRE. One can use <code>jfw_getJavaInfoByPath</code> to check this.
-    </p>
-
-    @param parLocations
-    [out] on return it contains the array of paths.
-    @param pSize
-    [out] on return it contains the size of the array <code>parLocations</code>.
-
-    @return
-    JFW_E_NONE function ran successfully.<br/>
-    JFW_E_INVALIDARG parLocation is NULL or pSize is NULL.<br/>
-    JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
-    were not met.<br/>
-    JFW_E_DIRECT_MODE the function cannot be used in this mode.
- */
-JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getJRELocations(
-    rtl_uString *** parLocations, sal_Int32 * pSize);
-
-
 /** checks if the installation of the jre still exists.
 
     This function checks if the JRE described by pInfo still

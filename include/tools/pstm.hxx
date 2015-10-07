@@ -175,9 +175,6 @@ public:
     SvPersistStream&    ReadPointer( SvPersistBase * & rpObj );
     TOOLS_DLLPUBLIC friend SvPersistStream& WriteSvPersistBase(SvPersistStream &, SvPersistBase *);
     TOOLS_DLLPUBLIC friend SvPersistStream& operator >> (SvPersistStream &, SvPersistBase * &);
-
-    // Objects maintain their IDs while storing and loading to/from stream
-    friend SvStream& operator >> ( SvStream &, SvPersistStream & );
 };
 
 #endif

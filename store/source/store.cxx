@@ -239,38 +239,6 @@ storeError SAL_CALL store_getFileSize (
     return xManager->size (*pnSize);
 }
 
-/*
- * store_rebuildFile.
- */
-storeError SAL_CALL store_rebuildFile (
-    rtl_uString *pSrcFilename,
-    rtl_uString *pDstFilename
-) SAL_THROW_EXTERN_C()
-{
-    storeError eErrCode = store_E_None;
-
-    if (!(pSrcFilename && pDstFilename))
-        return store_E_InvalidParameter;
-
-    Reference<OStorePageManager> xManager (new OStorePageManager());
-    if (!xManager.is())
-        return store_E_OutOfMemory;
-
-    Reference<ILockBytes> xSrcLB;
-    eErrCode = FileLockBytes_createInstance (xSrcLB, pSrcFilename, store_AccessReadOnly);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-    OSL_ASSERT(xSrcLB.is());
-
-    Reference<ILockBytes> xDstLB;
-    eErrCode = FileLockBytes_createInstance (xDstLB, pDstFilename, store_AccessCreate);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-    OSL_ASSERT(xDstLB.is());
-
-    return xManager->rebuild (&*xSrcLB, &*xDstLB);
-}
-
 /*========================================================================
  *
  * storeDirectoryHandle implementation.
