@@ -85,7 +85,6 @@ public:
     sal_uInt16  GetImportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aImport.size()); };
     sal_uInt16  GetImportFormatNumber( const OUString& rFormatName );
-    sal_uInt16  GetImportFormatNumberForMediaType( const OUString& rMediaType );
     sal_uInt16  GetImportFormatNumberForShortName( const OUString& rShortName );
     sal_uInt16  GetImportFormatNumberForTypeName( const OUString& rType );
     sal_uInt16  GetImportFormatNumberForExtension( const OUString& rExt );
@@ -112,7 +111,6 @@ public:
     OUString    GetExportFormatMediaType( sal_uInt16 nFormat );
     OUString    GetExportFormatShortName( sal_uInt16 nFormat );
     OUString    GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
-    OUString    GetExportFilterTypeName( sal_uInt16 nFormat );
     OUString    GetExportInternalFilterName( sal_uInt16 nFormat );
 
     bool    IsExportInternalFilter( sal_uInt16 nFormat );

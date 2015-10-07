@@ -144,7 +144,6 @@ private:
     DECL_LINK_TYPED(TbxLineStyleSelectHdl, ToolBox*, void);
 
     // for CellLineStyle popup
-    svx::sidebar::PopupControl* CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent);
     void EndCellLineStylePopupMode();
 
     // for CellBorderStyle popup

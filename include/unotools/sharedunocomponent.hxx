@@ -195,11 +195,8 @@ namespace utl
 
         inline bool set( const ::com::sun::star::uno::BaseReference& _rRef, ::com::sun::star::uno::UnoReference_Query _query );
 
-        inline void set( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
         inline void set( const ::com::sun::star::uno::BaseReference & _rRef, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
-        inline void set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
 
-        inline void set( const INTERFACE* _pInterface, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
         inline void set( const ::com::sun::star::uno::Reference< INTERFACE >& _rRef, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
         inline void set( const SharedUNOComponent& _rComp, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
 
@@ -242,23 +239,11 @@ namespace utl
     }
 
     // comparison operators
-    template < class INTERFACE, class COMPONENT >
-    bool operator==( const ::com::sun::star::uno::Reference< INTERFACE >& _rLHS, const SharedUNOComponent< INTERFACE, COMPONENT >& _rRHS )
-    {
-        return _rLHS == _rRHS.getTyped();
-    }
 
     template < class INTERFACE, class COMPONENT >
     bool operator==( const SharedUNOComponent< INTERFACE, COMPONENT >& _rLHS, const ::com::sun::star::uno::Reference< INTERFACE >& _rRHS )
     {
         return _rLHS.getTyped() == _rRHS;
-    }
-
-    // conversion to Any
-    template < class INTERFACE, class COMPONENT >
-    inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const SharedUNOComponent< INTERFACE, COMPONENT >& value )
-    {
-        rAny <<= value.getTyped();
     }
 
     template < class INTERFACE, class COMPONENT >
@@ -268,27 +253,9 @@ namespace utl
     }
 
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
-    {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _pInterface, _queryThrow ), TakeOwnership );
-    }
-
-    template < class INTERFACE, class COMPONENT >
     void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::BaseReference & _rRef, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
     {
         reset( ::com::sun::star::uno::Reference< INTERFACE >( _rRef, _queryThrow ), TakeOwnership );
-    }
-
-    template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
-    {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _rAny, _queryThrow ), TakeOwnership );
-    }
-
-    template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const INTERFACE* _pInterface, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
-    {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _pInterface, _setThrow ), TakeOwnership );
     }
 
     template < class INTERFACE, class COMPONENT >

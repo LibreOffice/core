@@ -326,9 +326,6 @@ public:
     inline void         ReplaceRecord( RecordRefType xRec, size_t nPos )
                             { RemoveRecord( nPos ); InsertRecord( xRec, nPos ); }
 
-    /** Inserts a newly created record at the specified position into the list. */
-    inline void         InsertNewRecord( RecType* pRec, size_t nPos )
-                            { if( pRec ) InsertRecord( RecordRefType( pRec ), nPos ); }
     /** Appends a newly created record to the list. */
     inline void         AppendNewRecord( RecType* pRec )
                             { if( pRec ) AppendRecord( RecordRefType( pRec ) ); }

@@ -139,9 +139,9 @@ public:
 
     virtual             ~ValueItemWrapper() {}
 
-    virtual ValueT      GetItemValue( const ItemT& rItem ) const
+    virtual ValueT      GetItemValue( const ItemT& rItem ) const SAL_OVERRIDE
                             { return static_cast< ValueT >( rItem.GetValue() ); }
-    virtual void        SetItemValue( ItemT& rItem, ValueT aValue ) const
+    virtual void        SetItemValue( ItemT& rItem, ValueT aValue ) const SAL_OVERRIDE
                             { rItem.SetValue( static_cast< InternalValueT >( aValue ) ); }
 };
 
@@ -164,9 +164,9 @@ public:
 
     virtual             ~IdentItemWrapper() {}
 
-    virtual const ItemT& GetItemValue( const ItemT& rItem ) const
+    virtual const ItemT& GetItemValue( const ItemT& rItem ) const SAL_OVERRIDE
                             { return rItem; }
-    virtual void        SetItemValue( ItemT& rItem, const ItemT& rValue ) const
+    virtual void        SetItemValue( ItemT& rItem, const ItemT& rValue ) const SAL_OVERRIDE
                             { rItem = rValue; }
 };
 

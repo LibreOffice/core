@@ -42,7 +42,6 @@ public:
 
     sal_uIntPtr   Insert( void* p );
     // insert value with key, replacing existing entry if necessary
-    void          Insert( sal_uIntPtr aIndex, void* p );
     void*         Remove( sal_uIntPtr aIndex );
     void*         Get( sal_uIntPtr aIndex ) const;
 
@@ -59,10 +58,8 @@ public:
     UniqueIndex<T>( sal_uIntPtr _nStartIndex = 0 ) : UniqueIndexImpl(_nStartIndex) {}
 
     sal_uIntPtr Insert(T* p) { return UniqueIndexImpl::Insert(p); }
-    void        Insert(sal_uIntPtr aIdx, T* p) { return UniqueIndexImpl::Insert(aIdx, p); }
     T*          Get(sal_uIntPtr idx) const { return static_cast<T*>( UniqueIndexImpl::Get(idx) ); }
     T*          Remove(sal_uIntPtr idx) { return static_cast<T*>( UniqueIndexImpl::Remove(idx) ); }
-    sal_uIntPtr Count() const { return UniqueIndexImpl::size(); }
     sal_uIntPtr GetIndexOf(T* p) const { return UniqueIndexImpl::GetIndexOf(p); }
 
     using UniqueIndexImpl::FirstIndex;

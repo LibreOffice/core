@@ -525,18 +525,6 @@ inline ScVSplitPos WhichV( ScSplitPos ePos )
                 SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
 }
 
-inline ScSplitPos Which( ScHSplitPos eHPos )
-{
-    return (eHPos==SC_SPLIT_LEFT) ?
-                SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
-}
-
-inline ScSplitPos Which( ScVSplitPos eVPos )
-{
-    return (eVPos==SC_SPLIT_TOP) ?
-                SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT;
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

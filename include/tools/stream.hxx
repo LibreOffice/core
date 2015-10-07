@@ -153,8 +153,6 @@ public:
 
     virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
                                sal_Size * pWritten) = 0;
-
-    virtual void    Terminate() = 0;
 };
 
 
@@ -178,8 +176,6 @@ public:
 
     virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
                                sal_Size * pWritten) override;
-
-    virtual void    Terminate() override { m_bTerminated = true; }
 };
 
 

@@ -59,9 +59,6 @@ public:
     /** Aligns the stream according to the passed type and reads a value. */
     template< typename Type >
     void         writeAligned( Type nVal ) { align( sizeof( Type ) ); writeValue( nVal ); }
-    /** Aligns the stream according to the passed type and skips the size of the type. */
-    template< typename Type >
-    void         padAligned() { align( sizeof( Type ) ); pad( sizeof( Type ) ); }
 
 private:
     BinaryOutputStream*  mpOutStrm;           ///< The wrapped input stream.
