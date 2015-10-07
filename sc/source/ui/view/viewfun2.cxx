@@ -1836,7 +1836,8 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
         SetCursor( nCol, nRow, true );
 
-        if (rDoc.GetDrawLayer()->isTiledRendering())
+        // Don't move cell selection handles for find-all: selection of all but the first result would be lost.
+        if (rDoc.GetDrawLayer()->isTiledRendering() && nCommand == SvxSearchCmd::FIND)
         {
             Point aCurPos = GetViewData().GetScrPos(nCol, nRow, GetViewData().GetActivePart());
 
