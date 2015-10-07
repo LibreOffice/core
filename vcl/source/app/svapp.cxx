@@ -351,12 +351,14 @@ namespace
 
     void CloseDialogsAndQuit()
     {
+        Scheduler::ProcessTaskScheduling(true);
         vcl::Window* pAppWindow = Application::GetFirstTopLevelWindow();
         while (pAppWindow)
         {
             Dialog::EndAllDialogs(pAppWindow);
             pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
         }
+        Scheduler::ProcessTaskScheduling(true);
         Application::Quit();
     }
 }
@@ -378,11 +380,8 @@ IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
             --mnEventTestLimit;
         if (!mpEventTestInput->good())
         {
-            delete mpEventTestInput;
-            delete mpEventTestingIdle;
-            SAL_INFO("vcl.eventtesting", "Event Input exhausted, exiting" << mnEventTestLimit);
-            CloseDialogsAndQuit();
-            return;
+            SAL_INFO("vcl.eventtesting", "Event Input exhausted, exit next cycle");
+            mnEventTestLimit = 0;
         }
         Scheduler::ProcessTaskScheduling(true);
         mpEventTestingIdle->Start();
