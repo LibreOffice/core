@@ -503,8 +503,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
         fprintf( stderr, "Warning: %s\n",
                 "QuotationEnd equals DoubleQuotationEnd. Not necessarily an issue, but unusual.");
     // Known good values, exclude ASCII single (U+0027, ') and double (U+0022, ") quotes.
-    int ic;
-    switch (ic = aQuoteStart.toChar())
+    switch (int ic = aQuoteStart.toChar())
     {
         case 0x2018:    // LEFT SINGLE QUOTATION MARK
         case 0x201a:    // SINGLE LOW-9 QUOTATION MARK
@@ -518,7 +517,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
             fprintf( stderr, "Warning: %s U+%04X %s\n",
                     "QuotationStart may be wrong:", ic, OSTR( aQuoteStart));
     }
-    switch (ic = aQuoteEnd.toChar())
+    switch (int ic = aQuoteEnd.toChar())
     {
         case 0x2019:    // RIGHT SINGLE QUOTATION MARK
         case 0x201a:    // SINGLE LOW-9 QUOTATION MARK
@@ -532,7 +531,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
             fprintf( stderr, "Warning: %s U+%04X %s\n",
                     "QuotationEnd may be wrong:", ic, OSTR( aQuoteEnd));
     }
-    switch (ic = aDoubleQuoteStart.toChar())
+    switch (int ic = aDoubleQuoteStart.toChar())
     {
         case 0x00ab:    // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
         case 0x00bb:    // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
@@ -546,7 +545,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
             fprintf( stderr, "Warning: %s U+%04X %s\n",
                     "DoubleQuotationStart may be wrong:", ic, OSTR( aDoubleQuoteStart));
     }
-    switch (ic = aDoubleQuoteEnd.toChar())
+    switch (int ic = aDoubleQuoteEnd.toChar())
     {
         case 0x00ab:    // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
         case 0x00bb:    // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
