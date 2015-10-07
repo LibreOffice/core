@@ -465,7 +465,7 @@ vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, co
 
                 ::rtl::ByteSequence resSeq( aSeq.getLength() );
 
-                result = rtl_cipher_decode ( aDecoder, aSeq.getArray(), aSeq.getLength(),
+                rtl_cipher_decode ( aDecoder, aSeq.getArray(), aSeq.getLength(),
                                                         reinterpret_cast<sal_uInt8*>(resSeq.getArray()), resSeq.getLength() );
 
                 OUString aPasswd( reinterpret_cast<char*>(resSeq.getArray()), resSeq.getLength(), RTL_TEXTENCODING_UTF8 );
