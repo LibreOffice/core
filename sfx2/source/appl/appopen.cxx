@@ -739,7 +739,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         // SID_OPENURL does the same as SID_OPENDOC!
         rReq.SetSlot( SID_OPENDOC );
-        nSID = SID_OPENDOC;
     }
     else if ( nSID == SID_OPENTEMPLATE )
     {
@@ -755,7 +754,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     else if ( nSID == SID_OPENHYPERLINK )
     {
         rReq.SetSlot( SID_OPENDOC );
-        nSID = SID_OPENDOC;
         bHyperlinkUsed = true;
     }
 
