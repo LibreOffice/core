@@ -2,8 +2,7 @@ Notes on experimental afl driven ui fuzzing
 
 only keyboard events for now
 
-vcl/workben/eventtesting is just serialized "helloworld" keystrokes to get
-things started
+vcl/workben/eventtesting is just serialized "hello" + ctrl+a + ctrl+b keystrokes to get things started
 
 currently an arbitrary limit of 10 keystrokes before application quits in
 order to initially explore that shallow space

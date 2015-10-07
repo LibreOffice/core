@@ -336,10 +336,10 @@ namespace
             return false;
 
         SalKeyEvent aKeyEvent;
-        rStream.ReadUInt64(aKeyEvent.mnTime);
+        aKeyEvent.mnTime = 0;
         rStream.ReadUInt16(aKeyEvent.mnCode);
         rStream.ReadUInt16(aKeyEvent.mnCharCode);
-        rStream.ReadUInt16(aKeyEvent.mnRepeat);
+        aKeyEvent.mnRepeat = 0;
         if (!rStream.good())
             return false;
 
