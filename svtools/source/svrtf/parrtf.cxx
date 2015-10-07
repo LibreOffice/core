@@ -64,7 +64,8 @@ int SvRTFParser::_GetNextToken()
         case '\\':
             {
                 // control charaters
-                switch( nNextCh = GetNextChar() )
+                nNextCh = GetNextChar();
+                switch( nNextCh )
                 {
                 case '{':
                 case '}':
@@ -316,7 +317,8 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
         {
         case '\\':
             {
-                switch (nNextCh = GetNextChar())
+                nNextCh = GetNextChar();
+                switch (nNextCh)
                 {
                 case '\'':
                     {
