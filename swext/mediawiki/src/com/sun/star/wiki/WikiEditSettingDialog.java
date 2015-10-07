@@ -21,11 +21,9 @@ package com.sun.star.wiki;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.net.URI;
+import java.net.HttpURLConnection;
 import javax.net.ssl.SSLException;
-
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.methods.GetMethod;
 
 import com.sun.star.awt.XDialog;
 import com.sun.star.beans.XPropertySet;
@@ -199,8 +197,6 @@ public class WikiEditSettingDialog extends WikiDialog
             String sUserName = ( String ) GetPropSet( "UsernameField" ).getPropertyValue( "Text" );
             String sPassword = ( String ) GetPropSet( "PasswordField" ).getPropertyValue( "Text" );
 
-            HostConfiguration aHostConfig = new HostConfiguration();
-            boolean bInitHost = true;
             boolean bAllowIndex = true;
 
             do
@@ -213,20 +209,17 @@ public class WikiEditSettingDialog extends WikiDialog
 
                 if ( sURL.length() > 0 )
                 {
-                    URI aURI = new URI( sURL, false );
-                    GetMethod aRequest = new GetMethod( aURI.getEscapedPathQuery() );
-                    aRequest.setFollowRedirects( false );
-                    Helper.ExecuteMethod( aRequest, aHostConfig, aURI, m_xContext, bInitHost );
-                    bInitHost = false;
+                    URI aURI = new URI(sURL);
+                    HttpURLConnection connGet = Helper.PrepareMethod("GET", aURI, m_xContext);
+                    connGet.setInstanceFollowRedirects(false);
+                    connGet.connect();
 
-                    int nResultCode = aRequest.getStatusCode();
+                    int nResultCode = connGet.getResponseCode();
                     String sWebPage = null;
                     if ( nResultCode == 200 )
-                        sWebPage = aRequest.getResponseBodyAsString();
+                        sWebPage = Helper.ReadResponseBody(connGet);
                     else if ( nResultCode >= 301 && nResultCode <= 303 || nResultCode == 307 )
-                        sRedirectURL = aRequest.getResponseHeader( "Location" ).getValue();
-
-                    aRequest.releaseConnection();
+                        sRedirectURL = connGet.getHeaderField("Location");
 
                     if ( sWebPage != null && sWebPage.length() > 0 )
                     {
@@ -252,10 +245,10 @@ public class WikiEditSettingDialog extends WikiDialog
                         }
                         else
                         {
-                            URI aMainURI = new URI( sMainURL, true ); // it must be an escaped URL, otherwise an exception should be thrown
+                            URI aMainURI = new URI(sMainURL);
 
                             if ( ( sUserName.length() > 0 || sPassword.length() > 0 )
-                              && Helper.Login( aMainURI, sUserName, sPassword, m_xContext ) == null )
+                              && !Helper.Login(aMainURI, sUserName, sPassword, m_xContext))
                             {
                                 // a wrong login information is provided
                                 // show error
@@ -268,7 +261,7 @@ public class WikiEditSettingDialog extends WikiDialog
                             }
                             else
                             {
-                                setting.put( "Url", aMainURI.getEscapedURI() );
+                                setting.put( "Url", aMainURI.toASCIIString() );
                                 setting.put( "Username", sUserName );
                                 setting.put( "Password", sPassword );
                                 if ( addMode )

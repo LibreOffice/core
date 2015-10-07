@@ -53,18 +53,10 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XChangesBatch;
 import java.net.*;
 import java.io.*;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
 import javax.swing.text.html.HTMLEditorKit;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.cookie.CookiePolicy;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
 
 public class Helper
 {
@@ -142,8 +134,6 @@ public class Helper
 
     private static String[] m_pConfigStrings;
 
-    private static MultiThreadedHttpConnectionManager m_aConnectionManager;
-    private static HttpClient m_aClient;
     private static boolean m_bAllowConnection = true;
 
     private static Boolean m_bShowInBrowser = null;
@@ -174,35 +164,11 @@ public class Helper
         return m_pConfigStrings[nID];
     }
 
-    synchronized private static HttpClient GetHttpClient()
-        throws WikiCancelException
-    {
-        if ( !m_bAllowConnection )
-            throw new WikiCancelException();
-
-        if ( m_aConnectionManager == null )
-            m_aConnectionManager = new MultiThreadedHttpConnectionManager();
-
-        if ( m_aClient == null )
-        {
-            m_aClient = new HttpClient( m_aConnectionManager );
-            m_aClient.getParams().setParameter( "http.protocol.cookie-policy", CookiePolicy.BROWSER_COMPATIBILITY );
-            m_aClient.getParams().setParameter( "http.protocol.single-cookie-header", Boolean.TRUE );
-            m_aClient.getParams().setParameter( "http.protocol.content-charset", "UTF-8" );
-        }
-
-        return m_aClient;
-    }
-
     synchronized protected static void AllowConnection( boolean bAllow )
     {
         m_bAllowConnection = bAllow;
-        if ( !bAllow && m_aConnectionManager != null )
-        {
-            m_aClient = null;
-            m_aConnectionManager.shutdown();
-            m_aConnectionManager = null;
-        }
+        // TODO: how to shut down any pending connections?
+        // hope it doesn't matter?
     }
 
     synchronized protected static boolean IsConnectionAllowed()
@@ -280,11 +246,6 @@ public class Helper
             throw new com.sun.star.uno.RuntimeException();
 
         return m_xInteractionHandler;
-    }
-
-    private static Protocol GetOwnHttps( int nPort )
-    {
-        return new Protocol( "https", new WikiProtocolSocketFactory(), ( ( nPort < 0 ) ? 443 : nPort ) );
     }
 
     protected static String GetMainURL( String sWebPage, String sVURL )
@@ -365,9 +326,6 @@ public class Helper
         return sResultURL;
 
     }
-
-
-
 
     protected static String CreateTempFile( XComponentContext xContext )
     {
@@ -579,30 +537,30 @@ public class Helper
         return xNameAccess;
     }
 
-    private static void SetConfigurationProxy( HostConfiguration aHostConfig, XComponentContext xContext )
+    private static Proxy GetConfigurationProxy(URI uri, XComponentContext xContext)
     {
-        if ( aHostConfig == null || xContext == null )
-            return;
+        assert(uri != null);
+        assert(xContext != null);
 
         try
         {
             XNameAccess xNameAccess = GetConfigNameAccess( xContext, "org.openoffice.Inet/Settings" );
 
             int nProxyType = AnyConverter.toInt( xNameAccess.getByName( "ooInetProxyType" ) );
-            if ( nProxyType == 0 )
-                aHostConfig.setProxyHost( null );
-            else
-            {
+            if ( nProxyType == 0 ) {
+                return Proxy.NO_PROXY;
+            } else {
                 if ( nProxyType == 1 )
                 {
                     // system proxy
+                    return null;
                 }
                 else if ( nProxyType == 2 )
                 {
                     String aProxyNameProp = "ooInetHTTPProxyName";
                     String aProxyPortProp = "ooInetHTTPProxyPort";
 
-                    if ( aHostConfig.getProtocol().getScheme().equals( "https" ) )
+                    if (uri.getScheme().equals("https"))
                     {
                         aProxyNameProp = "ooInetHTTPSProxyName";
                         aProxyPortProp = "ooInetHTTPSProxyPort";
@@ -620,7 +578,8 @@ public class Helper
                         nProxyPort = 80;
 
                     // TODO: check whether the URL is in the NoProxy list
-                    aHostConfig.setProxy( aProxyName, nProxyPort );
+                    InetSocketAddress address = new InetSocketAddress(aProxyName, nProxyPort);
+                    return new Proxy(Proxy.Type.HTTP, address);
                 }
             }
         }
@@ -628,6 +587,7 @@ public class Helper
         {
             e.printStackTrace();
         }
+        return null; // invalid configuration value?
     }
 
     protected static void ShowURLInBrowser( XComponentContext xContext, String sURL )
@@ -648,33 +608,70 @@ public class Helper
         }
     }
 
-    protected static void ExecuteMethod( HttpMethodBase aMethod, HostConfiguration aHostConfig, URI aURI, XComponentContext xContext, boolean bSetHost )
+    protected static HttpURLConnection PrepareMethod(String method, URI uri, XComponentContext xContext)
         throws WikiCancelException, IOException, SSLException
     {
-        if ( aMethod != null && aHostConfig != null && aURI != null && xContext != null )
-        {
-            if ( bSetHost )
-            {
-                aHostConfig.setHost( aURI );
-                SetConfigurationProxy( aHostConfig, xContext );
-            }
+        assert(method != null);
+        assert(uri != null);
+        assert(xContext != null);
 
-            if ( aHostConfig.getProtocol().getScheme().equals( "https" )
-              && AllowUnknownCert( xContext, aURI.getHost() ) )
-            {
-                // let unknown certificates be accepted
-                {
-                    {
-                        aHostConfig.setHost( aHostConfig.getHost(), ( aURI.getPort() < 0 ? 443 : aURI.getPort() ), Helper.GetOwnHttps( aURI.getPort() ) );
-                        Helper.GetHttpClient().executeMethod( aHostConfig, aMethod );
-                    }
+        if (!IsConnectionAllowed()) {
+            throw new WikiCancelException();
+        }
+
+        if (java.net.CookieHandler.getDefault() == null) {
+            // set a cookie manager so cookies don't get lost
+            // apparently it's not possible to do that on a per-connection
+            // basis but only globally?
+            java.net.CookieHandler.setDefault(new java.net.CookieManager());
+        }
+
+        Proxy proxy = GetConfigurationProxy(uri, xContext);
+        HttpURLConnection conn = null;
+        if (proxy != null) {
+            conn = (HttpURLConnection) uri.toURL().openConnection(proxy);
+        } else {
+            conn = (HttpURLConnection) uri.toURL().openConnection();
+        }
+        if (uri.getScheme().equals("https") && AllowUnknownCert(xContext, uri.getHost()))
+        {
+            // let unknown certificates be accepted
+            ((HttpsURLConnection) conn).setSSLSocketFactory(new WikiProtocolSocketFactory());
+        }
+
+        conn.setRequestMethod(method);
+        // note: don't connect yet so that the caller can do some further setup
+
+        return conn;
+    }
+
+    protected static String ReadResponseBody(HttpURLConnection conn)
+        throws IOException
+    {
+        String ret = null;
+        InputStream stream = conn.getInputStream();
+        try {
+            // there doesn't seem to be an easier way get the content encoding
+            String type = conn.getContentType();
+            String charset = "ISO-8859-1"; // default in RFC2616
+            for (String param : type.split(";")) {
+                if (param.trim().toLowerCase().startsWith("charset=")) {
+                    charset = param.trim().substring("charset=".length());
+                    break;
                 }
             }
-            else
-            {
-                Helper.GetHttpClient().executeMethod( aHostConfig, aMethod );
+            BufferedReader br =
+                new BufferedReader(new InputStreamReader(stream, charset));
+            StringBuilder buf = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                buf.append(line);
             }
+            ret = buf.toString();
+        } finally {
+            stream.close();
         }
+        return ret;
     }
 
     private static class HTMLParse extends HTMLEditorKit
@@ -738,76 +735,74 @@ public class Helper
         return sResult;
     }
 
-    protected static HostConfiguration Login( URI aMainURL, String sWikiUser, String sWikiPass, XComponentContext xContext )
-        throws java.io.IOException, WikiCancelException
+    protected static boolean Login(URI aMainURL, String sWikiUser, String sWikiPass, XComponentContext xContext)
+        throws java.io.IOException, WikiCancelException, URISyntaxException
     {
-        HostConfiguration aHostConfig = null;
+        boolean success = false;
 
         if ( sWikiUser != null && sWikiPass != null && xContext != null )
         {
-            HostConfiguration aNewHostConfig = new HostConfiguration();
-
-            URI aURI = new URI( aMainURL.toString() + "index.php?title=Special:Userlogin", false );
-            GetMethod aGetCookie = new GetMethod( aURI.getEscapedPathQuery() );
-
-            ExecuteMethod( aGetCookie, aNewHostConfig, aURI, xContext, true );
-
-            int nResultCode = aGetCookie.getStatusCode();
             String sLoginPage = null;
-            if ( nResultCode == 200 )
-                sLoginPage = aGetCookie.getResponseBodyAsString();
+            URI aURI = new URI(aMainURL.toString() + "index.php?title=Special:Userlogin");
+            HttpURLConnection connGet = PrepareMethod("GET", aURI, xContext);
+            connGet.setInstanceFollowRedirects(true);
 
-            aGetCookie.releaseConnection();
+            connGet.connect();
+            int nResultCode = connGet.getResponseCode();
+            if (nResultCode == 200) {
+                sLoginPage = ReadResponseBody(connGet);
+            }
 
             if ( sLoginPage != null )
             {
                 String sLoginToken = GetLoginToken( sLoginPage );
 
-                PostMethod aPost = new PostMethod();
-                URI aPostURI = new URI( aMainURL.getPath() + "index.php?title=Special:Userlogin&action=submitlogin", false );
-                aPost.setPath( aPostURI.getEscapedPathQuery() );
+                URI aPostURI = new URI(aMainURL.toString() + "index.php?title=Special:Userlogin&action=submitlogin");
 
-                aPost.addParameter( "wpName", sWikiUser );
-                aPost.addParameter( "wpRemember", "1" );
-                aPost.addParameter( "wpPassword", sWikiPass );
-                if ( sLoginToken.length() > 0 )
-                    aPost.addParameter( "wpLoginToken", sLoginToken );
+                HttpURLConnection connPost = PrepareMethod("POST", aPostURI, xContext);
+                connPost.setInstanceFollowRedirects(true);
+                connPost.setDoInput(true);
+                connPost.setDoOutput(true);
+                connPost.connect();
+
+                OutputStreamWriter post = new OutputStreamWriter(connPost.getOutputStream());
+                post.write("wpName=");
+                post.write(URLEncoder.encode(sWikiUser, "UTF-8"));
+                post.write("&wpRemember=1");
+                post.write("&wpPassword=");
+                post.write(URLEncoder.encode(sWikiPass, "UTF-8"));
+
+                if (sLoginToken.length() > 0) {
+                    post.write("&wpLoginToken=");
+                    post.write(URLEncoder.encode(sLoginToken, "UTF-8"));
+                }
 
                 String[][] pArgs = GetSpecialArgs( xContext, aMainURL.getHost() );
                 if ( pArgs != null )
                     for ( int nArgInd = 0; nArgInd < pArgs.length; nArgInd++ )
                         if ( pArgs[nArgInd].length == 2 && pArgs[nArgInd][0] != null && pArgs[nArgInd][1] != null )
-                            aPost.addParameter( pArgs[nArgInd][0], pArgs[nArgInd][1] );
+                        {
+                            post.write("&");
+                            post.write(URLEncoder.encode(pArgs[nArgInd][0], "UTF-8"));
+                            post.write("=");
+                            post.write(URLEncoder.encode(pArgs[nArgInd][0], "UTF-8"));
+                        }
 
-                ExecuteMethod( aPost, aNewHostConfig, aPostURI, xContext, false );
+                post.flush();
+                post.close();
 
-                nResultCode = aPost.getStatusCode();
-
-                while( nResultCode >= 301 && nResultCode <= 303 || nResultCode == 307 )
-                {
-                    String sRedirectURL = aPost.getResponseHeader( "Location" ).getValue();
-                    aPost.releaseConnection();
-
-                    aURI = new URI( sRedirectURL );
-                    aPost = new PostMethod();
-                    aPost.setPath( aURI.getEscapedPathQuery() );
-                    ExecuteMethod( aPost, aNewHostConfig, aURI, xContext, false );
-
-                    nResultCode = aPost.getStatusCode();
-                }
+                nResultCode = connPost.getResponseCode();
 
                 if ( nResultCode == 200 )
                 {
-                    String sResult = aPost.getResponseBodyAsString();
+                    String sResult = ReadResponseBody(connPost);
                     if ( !LoginReportsError( sResult ) )
-                        aHostConfig = aNewHostConfig;
+                        success = true;
                 }
-
-                aPost.releaseConnection();
             }
         }
 
-        return aHostConfig;
+        return success;
     }
 
     protected static String[] GetPasswordsForURLAndUser( XComponentContext xContext, String sURL, String sUserName )

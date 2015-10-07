@@ -19,14 +19,13 @@
 package com.sun.star.wiki;
 
 import java.io.StringReader;
+import java.io.OutputStreamWriter;
 import java.util.Map;
+import java.net.URLEncoder;
+import java.net.URI;
+import java.net.HttpURLConnection;
 
 import javax.swing.text.html.HTMLEditorKit;
-
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
 
 import com.sun.star.uno.XComponentContext;
 
@@ -47,12 +46,11 @@ public class WikiArticle
     private final String m_sTitle;
 
     private final URI m_aMainURI;
-    private HostConfiguration m_aHostConfig;
-
+    private boolean m_isLoggedIn = false;
 
     /** Creates a new instance of WikiArticle */
     public WikiArticle( XComponentContext xContext, String sTitle, Map<String,String> wikiSettings, boolean bLogin, WikiPropDialog aPropDialog )
-        throws java.net.MalformedURLException, java.io.IOException, WikiCancelException
+        throws java.net.URISyntaxException, java.io.IOException, WikiCancelException
     {
         m_xContext = xContext;
 
@@ -61,7 +59,7 @@ public class WikiArticle
         m_sWikiPass = wikiSettings.get("Password");
         m_sTitle = sTitle;
 
-        m_aMainURI = new URI( sMainUrl, false );
+        m_aMainURI = new URI(sMainUrl);
 
         if ( bLogin )
         {
@@ -112,23 +110,21 @@ public class WikiArticle
 
 
     private String getArticleWiki()
-        throws java.io.IOException, WikiCancelException
+        throws java.net.URISyntaxException, java.io.IOException, WikiCancelException
     {
         String sWikiCode = null;
 
-        if ( m_aHostConfig != null )
+        if (m_isLoggedIn)
         {
-            URI aURI = new URI( m_aMainURI.toString() + "index.php?title=" + m_sTitle + "&action=edit", false );
-            GetMethod aRequest = new GetMethod( aURI.getEscapedPathQuery() );
+            URI aURI = new URI(m_aMainURI.toString() + "index.php?title=" + m_sTitle + "&action=edit");
+            HttpURLConnection connGet = Helper.PrepareMethod("GET", aURI, m_xContext);
+            connGet.connect();
 
-            Helper.ExecuteMethod( aRequest, m_aHostConfig, aURI, m_xContext, false );
-
-            int nResultCode = aRequest.getStatusCode();
+            int nResultCode = connGet.getResponseCode();
             String sWebPage = null;
-            if ( nResultCode == 200 )
-                sWebPage = aRequest.getResponseBodyAsString();
-
-            aRequest.releaseConnection();
+            if (nResultCode == 200) {
+                sWebPage = Helper.ReadResponseBody(connGet);
+            }
 
             if ( sWebPage != null )
             {
@@ -156,19 +152,19 @@ public class WikiArticle
     }
 
     private void InitArticleHTML()
-        throws java.io.IOException, WikiCancelException
+        throws java.net.URISyntaxException, java.io.IOException, WikiCancelException
     {
-        if ( m_aHostConfig != null )
+        if (m_isLoggedIn)
         {
-            URI aURI = new URI( m_aMainURI.toString() + "index.php?title=" + m_sTitle, false );
-            GetMethod aRequest = new GetMethod( aURI.getEscapedPathQuery() );
+            URI uri = new URI(m_aMainURI.toString() + "index.php?title=" + m_sTitle);
+            HttpURLConnection connGet = Helper.PrepareMethod("GET", uri, m_xContext);
+            connGet.connect();
 
-            Helper.ExecuteMethod( aRequest, m_aHostConfig, aURI, m_xContext, false );
-
-            int nResultCode = aRequest.getStatusCode();
+            int nResultCode = connGet.getResponseCode();
             String sWebPage = null;
-            if ( nResultCode == 200 )
-                sWebPage = aRequest.getResponseBodyAsString();
+            if (nResultCode == 200) {
+                sWebPage = Helper.ReadResponseBody(connGet);
+            }
 
             if ( sWebPage != null )
             {
@@ -192,36 +188,46 @@ public class WikiArticle
     }
 
     protected boolean setArticle( String sWikiCode, String sWikiComment, boolean bMinorEdit )
-        throws java.io.IOException, WikiCancelException
+        throws java.net.URISyntaxException, java.io.IOException, WikiCancelException
     {
         boolean bResult = false;
 
-        if ( m_aHostConfig != null && sWikiCode != null && sWikiComment != null )
+        if (m_isLoggedIn && sWikiCode != null && sWikiComment != null)
         {
             // get the edit time and token
             getArticleWiki();
 
-            URI aURI = new URI( m_aMainURI.getPath() + "index.php?title=" + m_sTitle + "&action=submit", false );
-            PostMethod aPost = new PostMethod();
-            aPost.setPath( aURI.getEscapedPathQuery() );
+            URI uri = new URI(m_aMainURI.toString() + "index.php?title=" + m_sTitle + "&action=submit");
 
-            aPost.addParameter( "wpTextbox1", sWikiCode );
-            aPost.addParameter( "wpSummary", sWikiComment );
-            aPost.addParameter( "wpSection", "" );
-            aPost.addParameter( "wpEdittime", m_sEditTime );
-            aPost.addParameter( "wpSave", "Save page" );
-            aPost.addParameter( "wpEditToken", m_sEditToken );
+            HttpURLConnection connPost = Helper.PrepareMethod("POST", uri, m_xContext);
+            connPost.setDoInput(true);
+            connPost.setDoOutput(true);
+            connPost.connect();
 
-            if ( bMinorEdit )
-                aPost.addParameter( "wpMinoredit", "1" );
+            OutputStreamWriter post = new OutputStreamWriter(connPost.getOutputStream());
+            post.write("wpTextbox1=");
+            post.write(URLEncoder.encode(sWikiCode, "UTF-8"));
+            post.write("&wpSummary=");
+            post.write(URLEncoder.encode(sWikiComment, "UTF-8"));
+            post.write("&wpSection=");
+            post.write("&wpEdittime=");
+            post.write(URLEncoder.encode(m_sEditTime, "UTF-8"));
+            post.write("&wpSave=Save%20page");
+            post.write("&wpEditToken=");
+            post.write(URLEncoder.encode(m_sEditToken, "UTF-8"));
 
-            Helper.ExecuteMethod( aPost, m_aHostConfig, aURI, m_xContext, false );
+            if (bMinorEdit) {
+                post.write("&wpMinoredit=1");
+            }
 
-            int nResultCode = aPost.getStatusCode();
+            post.flush();
+            post.close();
+
+            int nResultCode = connPost.getResponseCode();
             if ( nResultCode < 400 )
                 bResult = true;
 
-            String aResult = aPost.getResponseBodyAsString();
+            String aResult = Helper.ReadResponseBody(connPost);
 
             // TODO: remove the debug printing, try to detect the error
             System.out.print( "nSubmitCode = " + nResultCode + "\n===\n" + aResult );
@@ -231,14 +237,11 @@ public class WikiArticle
     }
 
     private boolean Login()
-        throws java.io.IOException, WikiCancelException
+        throws java.net.URISyntaxException, java.io.IOException, WikiCancelException
     {
-        m_aHostConfig = Helper.Login( m_aMainURI, m_sWikiUser, m_sWikiPass, m_xContext );
-        return ( m_aHostConfig != null );
+        m_isLoggedIn = Helper.Login( m_aMainURI, m_sWikiUser, m_sWikiPass, m_xContext );
+        return m_isLoggedIn;
     }
-
-
-
 
     protected boolean NotExist()
     {
