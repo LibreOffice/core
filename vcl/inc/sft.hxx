@@ -474,7 +474,7 @@ namespace vcl
  */
     int VCL_DLLPUBLIC MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, bool bvertical);
 
-#if defined(WNT) || defined(MACOSX)
+#if defined(WNT) || defined(MACOSX) || defined(IOS)
 /**
  * Maps a Unicode (UCS-2) character to a glyph ID and returns it. Missing glyph has
  * a glyphID of 0 so this function can be used to test if a character is encoded in the font.

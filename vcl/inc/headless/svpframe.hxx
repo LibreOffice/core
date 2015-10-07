@@ -43,12 +43,12 @@ class VCL_DLLPUBLIC SvpSalFrame : public SalFrame
     std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
     SalFrameStyleFlags                  m_nStyle;
     bool                                m_bVisible;
-    bool                                m_bTopDown;
 #ifndef IOS
+    bool                                m_bTopDown;
     basebmp::BitmapDeviceSharedPtr      m_aFrame;
     bool                                m_bDamageTracking;
-#endif
     basebmp::Format                     m_nScanlineFormat;
+#endif
     long                                m_nMinWidth;
     long                                m_nMinHeight;
     long                                m_nMaxWidth;

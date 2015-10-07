@@ -42,8 +42,6 @@ public:
     void GetWorkArea( Rectangle& rRect );
     SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
     SalFrame* CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
-
-    SalFrame *getFocusFrame() const;
 };
 
 #endif // INCLUDED_VCL_INC_IOS_IOSINST_HXX

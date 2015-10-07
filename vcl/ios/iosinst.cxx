@@ -47,28 +47,6 @@ void IosSalInstance::GetWorkArea( Rectangle& rRect )
                        Size( viewWidth, viewHeight ) );
 }
 
-/*
- * Try too hard to get a frame, in the absence of anything better to do
- */
-SalFrame *IosSalInstance::getFocusFrame() const
-{
-    SalFrame *pFocus = SvpSalFrame::GetFocusFrame();
-    if (!pFocus) {
-        const std::list< SalFrame* >& rFrames( getFrames() );
-        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
-        {
-            SvpSalFrame *pFrame = const_cast<SvpSalFrame*>(static_cast<const SvpSalFrame*>(*it));
-            if( pFrame->IsVisible() )
-            {
-                pFrame->GetFocus();
-                pFocus = pFrame;
-                break;
-            }
-        }
-    }
-    return pFocus;
-}
-
 IosSalInstance *IosSalInstance::getInstance()
 {
     if (!ImplGetSVData())
@@ -87,20 +65,6 @@ IosSalInstance::IosSalInstance( SalYieldMutex *pMutex )
 IosSalInstance::~IosSalInstance()
 {
 }
-
-#if 0
-
-bool IosSalInstance::AnyInput( VclInputFlags nType )
-{
-    if( nType & VclInputFlags::TIMER )
-        return CheckTimeout( false );
-
-    // Unfortunately there is no way to check for a specific type of
-    // input being queued. That information is too hidden, sigh.
-    return SvpSalInstance::s_pDefaultInstance->PostedEventsInQueue();
-}
-
-#endif
 
 class IosSalSystem : public SvpSalSystem {
 public:
@@ -122,7 +86,7 @@ class IosSalFrame : public SvpSalFrame
 public:
     IosSalFrame( IosSalInstance *pInstance,
                      SalFrame           *pParent,
-                     sal_uLong           nSalFrameStyle,
+                     SalFrameStyleFlags  nSalFrameStyle,
                      SystemParentData   *pSysParent )
         : SvpSalFrame( pInstance, pParent, nSalFrameStyle,
                        true, basebmp::Format::ThirtyTwoBitTcMaskRGBA,
