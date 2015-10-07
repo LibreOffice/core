@@ -723,7 +723,7 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
     //  at the beginning:   _ or * after Space with the folloeing !Space
     //  at the end:         _ or * before Space (word delimiter?)
 
-    sal_Unicode c, cInsChar = rTxt[ nEndPos ];  // underline or bold
+    sal_Unicode cInsChar = rTxt[ nEndPos ];  // underline or bold
     if( ++nEndPos != rTxt.getLength() &&
         !IsWordDelim( rTxt[ nEndPos ] ) )
         return false;
@@ -737,7 +737,7 @@ bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rT
 
     while( nPos )
     {
-        switch( c = rTxt[ --nPos ] )
+        switch( sal_Unicode c = rTxt[ --nPos ] )
         {
         case '_':
         case '*':
