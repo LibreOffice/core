@@ -110,7 +110,11 @@ void OTableWindowTitle::Command( const CommandEvent& rEvt )
     {
         GrabFocus();
         if ( m_pTabWin )
-            m_pTabWin->Command( rEvt );
+        {
+            // tdf#94709 - protect shutdown code-path.
+            VclPtr<OTableWindow> xTabWin(m_pTabWin);
+            xTabWin->Command( rEvt );
+        }
         else
             Control::Command(rEvt);
     }
