@@ -107,7 +107,6 @@ sal_Int64 SAL_CALL Seekable::getLength() throw( io::IOException, uno::RuntimeExc
             convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
         nSize = getPosition();
         seek(nCurr);
-        bOk = true;
     }
 
     return nSize;
