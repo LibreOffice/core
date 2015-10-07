@@ -775,15 +775,6 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-#else
-    SystemGraphicsData aData;
-    aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
-    // the Size argument is irrelevant, I hope
-    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), (sal_uInt16)0);
-
-    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
-                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-#endif
 
     // Overwrite pBuffer's alpha channel with the separate alpha buffer.
     for (int nRow = 0; nRow < nCanvasHeight; ++nRow)
@@ -795,6 +786,16 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
             pBuffer[nOffset * 4 +3] = 0xff - aAlpha[nOffset];
         }
     }
+
+#else
+    SystemGraphicsData aData;
+    aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
+    // the Size argument is irrelevant, I hope
+    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), (sal_uInt16)0);
+
+    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
+                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+#endif
 
     static bool bDebug = getenv("LOK_DEBUG") != 0;
     if (bDebug)
