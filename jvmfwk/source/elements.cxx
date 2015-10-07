@@ -1090,27 +1090,6 @@ void MergedSettings::getVmParametersArray(
     *size = m_vmParams.size();
 }
 
-void MergedSettings::getJRELocations(
-    rtl_uString *** parLocations, sal_Int32 * size) const
-{
-    osl::MutexGuard guard(FwkMutex::get());
-    assert(parLocations != NULL && size != NULL);
-
-    *parLocations = static_cast<rtl_uString **>(
-        rtl_allocateMemory(sizeof(rtl_uString*) * m_JRELocations.size()));
-    if (*parLocations == NULL)
-        return;
-
-    int j=0;
-    typedef std::vector<OUString>::const_iterator it;
-    for (it i = m_JRELocations.begin(); i != m_JRELocations.end();
-         ++i, ++j)
-    {
-        (*parLocations)[j] = i->pData;
-        rtl_uString_acquire(i->pData);
-    }
-    *size = m_JRELocations.size();
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

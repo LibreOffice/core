@@ -104,20 +104,6 @@ css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::Creat
 }
 
 
-/* Helper functions for *OverflowingText classes  */
-
-ESelection getLastPositionSel(const EditTextObject *pTObj)
-{
-    sal_Int32 nLastPara = pTObj->GetParagraphCount()-1;
-    // If text is empty
-    if (nLastPara < 0 )
-        nLastPara = 0;
-    sal_Int32 nLen = pTObj->GetText(nLastPara).getLength();
-    ESelection aEndPos(nLastPara, nLen, nLastPara, nLen);
-
-    return aEndPos;
-}
-
 // class OverflowingText
 
 OverflowingText::OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent) :
@@ -126,12 +112,6 @@ OverflowingText::OverflowingText(css::uno::Reference< css::datatransfer::XTransf
 
 }
 
-
-ESelection OverflowingText::GetInsertionPointSel()
-{
-    assert(false && "You should never get here");
-    return getLastPositionSel(NULL);
-}
 
 // class NonOverflowingText
 

@@ -540,15 +540,6 @@ inline double GetYearFrac( const css::uno::Reference< css::beans::XPropertySet >
 }
 
 
-inline void AlignDate( sal_uInt16& rD, sal_uInt16 nM, sal_uInt16 nY )
-{
-    sal_uInt16  nMax = DaysInMonth( nM, nY );
-
-    if( rD > nMax )
-        rD = nMax;
-}
-
-
 inline sal_uInt16 FuncData::GetUINameID() const
 {
     return nUINameID;

@@ -165,11 +165,6 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
 
     DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 
-    //Index starts with 1.
-    //Throws an css::lang::IllegalArgumentException, when the index is invalid.
-    void checkIndex(sal_Int32 pos) const;
-
-
     void Init();
 public:
     explicit ExtensionBox_Impl(vcl::Window* pParent);
