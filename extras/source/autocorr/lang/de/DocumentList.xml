@@ -1265,29 +1265,29 @@
   <block-list:block block-list:abbreviated-name=":^u:" block-list:name="ᵘ"/>
   <block-list:block block-list:abbreviated-name=":_u:" block-list:name="ᵤ"/>
   <block-list:block block-list:abbreviated-name=":^U:" block-list:name="ᵁ"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 0:30:" block-list:name="🕧"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 10:30:" block-list:name="🕥"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 0.30:" block-list:name="🕧"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 10.30:" block-list:name="🕥"/>
   <block-list:block block-list:abbreviated-name=":Uhr 10:" block-list:name="🕙"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 11:30:" block-list:name="🕦"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 11.30:" block-list:name="🕦"/>
   <block-list:block block-list:abbreviated-name=":Uhr 11:" block-list:name="🕚"/>
   <block-list:block block-list:abbreviated-name=":Uhr 12:" block-list:name="🕛"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 1:30:" block-list:name="🕜"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 1.30:" block-list:name="🕜"/>
   <block-list:block block-list:abbreviated-name=":Uhr 1:" block-list:name="🕐"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 2:30:" block-list:name="🕝"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 2.30:" block-list:name="🕝"/>
   <block-list:block block-list:abbreviated-name=":Uhr 2:" block-list:name="🕑"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 3:30:" block-list:name="🕞"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 3.30:" block-list:name="🕞"/>
   <block-list:block block-list:abbreviated-name=":Uhr 3:" block-list:name="🕒"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 4:30:" block-list:name="🕟"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 4.30:" block-list:name="🕟"/>
   <block-list:block block-list:abbreviated-name=":Uhr 4:" block-list:name="🕓"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 5:30:" block-list:name="🕠"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 5.30:" block-list:name="🕠"/>
   <block-list:block block-list:abbreviated-name=":Uhr 5:" block-list:name="🕔"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 6:30:" block-list:name="🕡"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 6.30:" block-list:name="🕡"/>
   <block-list:block block-list:abbreviated-name=":Uhr 6:" block-list:name="🕕"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 7:30:" block-list:name="🕢"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 7.30:" block-list:name="🕢"/>
   <block-list:block block-list:abbreviated-name=":Uhr 7:" block-list:name="🕖"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 8:30:" block-list:name="🕣"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 8.30:" block-list:name="🕣"/>
   <block-list:block block-list:abbreviated-name=":Uhr 8:" block-list:name="🕗"/>
-  <block-list:block block-list:abbreviated-name=":Uhr 9:30:" block-list:name="🕤"/>
+  <block-list:block block-list:abbreviated-name=":Uhr 9.30:" block-list:name="🕤"/>
   <block-list:block block-list:abbreviated-name=":Uhr 9:" block-list:name="🕘"/>
   <block-list:block block-list:abbreviated-name=":Uhr:" block-list:name="⌚"/>
   <block-list:block block-list:abbreviated-name=":und:" block-list:name="∧"/>
