@@ -44,15 +44,6 @@ using namespace ::com::sun::star::sheet::ReferenceFlags;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-namespace {
-
-sal_uInt16 lclReadFmlaSize( BiffInputStream& rStrm, BiffType eBiff, const sal_uInt16* pnFmlaSize )
-{
-    return pnFmlaSize ? *pnFmlaSize : ((eBiff == BIFF2) ? rStrm.readuInt8() : rStrm.readuInt16());
-}
-
-} // namespace
-
 // formula finalizer ==========================================================
 
 FormulaFinalizer::FormulaFinalizer( const OpCodeProvider& rOpCodeProv ) :
@@ -441,12 +432,6 @@ public:
                             FormulaType eType,
                             SequenceInputStream& rStrm );
 
-    /** Imports and converts a BIFF2-BIFF8 token array from the passed stream. */
-    virtual ApiTokenSequence importBiffFormula(
-                            const CellAddress& rBaseAddress,
-                            FormulaType eType,
-                            BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize );
-
     /** Tries to resolve the passed ref-id to an OLE target URL. */
     OUString            resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const;
 
@@ -597,12 +582,6 @@ ApiTokenSequence FormulaParserImpl::importOoxFormula( const CellAddress&, const 
 ApiTokenSequence FormulaParserImpl::importBiff12Formula( const CellAddress&, FormulaType, SequenceInputStream& )
 {
     SAL_WARN("sc", "FormulaParserImpl::importBiff12Formula - not implemented" );
-    return ApiTokenSequence();
-}
-
-ApiTokenSequence FormulaParserImpl::importBiffFormula( const CellAddress&, FormulaType, BiffInputStream&, const sal_uInt16* )
-{
-    OSL_FAIL( "FormulaParserImpl::importBiffFormula - not implemented" );
     return ApiTokenSequence();
 }
 
@@ -1842,11 +1821,6 @@ class BiffFormulaParserImpl : public FormulaParserImpl
 public:
     explicit            BiffFormulaParserImpl( const FormulaParser& rParent );
 
-    virtual ApiTokenSequence importBiffFormula(
-                            const CellAddress& rBaseAddr,
-                            FormulaType eType,
-                            BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) override;
-
 private:
     // import token contents and create API formula token ---------------------
 
@@ -1854,7 +1828,6 @@ private:
     bool                importRefTokenNotAvailable( BiffInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
     bool                importStrToken2( BiffInputStream& rStrm );
     bool                importStrToken8( BiffInputStream& rStrm );
-    bool                importAttrToken( BiffInputStream& rStrm );
     bool                importSpaceToken3( BiffInputStream& rStrm );
     bool                importSpaceToken4( BiffInputStream& rStrm );
     bool                importSheetToken2( BiffInputStream& rStrm );
@@ -1862,7 +1835,6 @@ private:
     bool                importEndSheetToken2( BiffInputStream& rStrm );
     bool                importEndSheetToken3( BiffInputStream& rStrm );
     bool                importNlrToken( BiffInputStream& rStrm );
-    bool                importArrayToken( BiffInputStream& rStrm );
     bool                importRefToken2( BiffInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
     bool                importRefToken8( BiffInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
     bool                importAreaToken2( BiffInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
@@ -1871,17 +1843,12 @@ private:
     bool                importRef3dToken8( BiffInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
     bool                importArea3dToken5( BiffInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
     bool                importArea3dToken8( BiffInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
-    bool                importMemAreaToken( BiffInputStream& rStrm, bool bAddData );
-    bool                importMemFuncToken( BiffInputStream& rStrm );
-    bool                importNameToken( BiffInputStream& rStrm );
     bool                importNameXToken( BiffInputStream& rStrm );
     bool                importFuncToken2( BiffInputStream& rStrm );
     bool                importFuncToken4( BiffInputStream& rStrm );
     bool                importFuncVarToken2( BiffInputStream& rStrm );
     bool                importFuncVarToken4( BiffInputStream& rStrm );
     bool                importFuncCEToken( BiffInputStream& rStrm );
-    bool                importExpToken( BiffInputStream& rStrm );
-    bool                importTblToken( BiffInputStream& rStrm );
 
     bool                importNlrAddrToken( BiffInputStream& rStrm, bool bRow );
     bool                importNlrRangeToken( BiffInputStream& rStrm );
@@ -1895,7 +1862,6 @@ private:
     LinkSheetRange      readSheetRange8( BiffInputStream& rStrm );
 
     void                swapStreamPosition( BiffInputStream& rStrm );
-    void                skipMemAreaAddData( BiffInputStream& rStrm );
     bool                readNlrSAddrAddData( BiffNlr& orNlr, BiffInputStream& rStrm, bool bRow );
     bool                readNlrSRangeAddData( BiffNlr& orNlr, bool& orbIsRow, BiffInputStream& rStrm );
 
@@ -2075,110 +2041,6 @@ BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
     }
 }
 
-ApiTokenSequence BiffFormulaParserImpl::importBiffFormula( const CellAddress& rBaseAddr,
-        FormulaType eType, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize )
-{
-    initializeImport( rBaseAddr, eType );
-    mnCurrRefId = 0;
-
-    sal_uInt16 nFmlaSize = lclReadFmlaSize( rStrm, getBiff(), pnFmlaSize );
-    sal_Int64 nEndPos = mnAddDataPos = rStrm.tell() + nFmlaSize;
-
-    bool bOk = true;
-    while( bOk && !rStrm.isEof() && (rStrm.tell() < nEndPos) )
-    {
-        sal_uInt8 nTokenId;
-        rStrm >> nTokenId;
-        sal_uInt8 nTokenClass = nTokenId & BIFF_TOKCLASS_MASK;
-        sal_uInt8 nBaseId = nTokenId & BIFF_TOKID_MASK;
-
-        bOk = !getFlag( nTokenId, BIFF_TOKFLAG_INVALID );
-        if( bOk )
-        {
-            if( nTokenClass == BIFF_TOKCLASS_NONE )
-            {
-                // base tokens
-                switch( nBaseId )
-                {
-                    case BIFF_TOKID_EXP:        bOk = importExpToken( rStrm );                          break;
-                    case BIFF_TOKID_TBL:        bOk = importTblToken( rStrm );                          break;
-                    case BIFF_TOKID_ADD:        bOk = pushBinaryOperator( OPCODE_ADD );                 break;
-                    case BIFF_TOKID_SUB:        bOk = pushBinaryOperator( OPCODE_SUB );                 break;
-                    case BIFF_TOKID_MUL:        bOk = pushBinaryOperator( OPCODE_MULT );                break;
-                    case BIFF_TOKID_DIV:        bOk = pushBinaryOperator( OPCODE_DIV );                 break;
-                    case BIFF_TOKID_POWER:      bOk = pushBinaryOperator( OPCODE_POWER );               break;
-                    case BIFF_TOKID_CONCAT:     bOk = pushBinaryOperator( OPCODE_CONCAT );              break;
-                    case BIFF_TOKID_LT:         bOk = pushBinaryOperator( OPCODE_LESS );                break;
-                    case BIFF_TOKID_LE:         bOk = pushBinaryOperator( OPCODE_LESS_EQUAL );          break;
-                    case BIFF_TOKID_EQ:         bOk = pushBinaryOperator( OPCODE_EQUAL );               break;
-                    case BIFF_TOKID_GE:         bOk = pushBinaryOperator( OPCODE_GREATER_EQUAL );       break;
-                    case BIFF_TOKID_GT:         bOk = pushBinaryOperator( OPCODE_GREATER );             break;
-                    case BIFF_TOKID_NE:         bOk = pushBinaryOperator( OPCODE_NOT_EQUAL );           break;
-                    case BIFF_TOKID_ISECT:      bOk = pushBinaryOperator( OPCODE_INTERSECT );           break;
-                    case BIFF_TOKID_LIST:       bOk = pushBinaryOperator( OPCODE_LIST );                break;
-                    case BIFF_TOKID_RANGE:      bOk = pushBinaryOperator( OPCODE_RANGE );               break;
-                    case BIFF_TOKID_UPLUS:      bOk = pushUnaryPreOperator( OPCODE_PLUS_SIGN );         break;
-                    case BIFF_TOKID_UMINUS:     bOk = pushUnaryPreOperator( OPCODE_MINUS_SIGN );        break;
-                    case BIFF_TOKID_PERCENT:    bOk = pushUnaryPostOperator( OPCODE_PERCENT );          break;
-                    case BIFF_TOKID_PAREN:      bOk = pushParenthesesOperator();                        break;
-                    case BIFF_TOKID_MISSARG:    bOk = pushOperand( OPCODE_MISSING );                    break;
-                    case BIFF_TOKID_STR:        bOk = (this->*mpImportStrToken)( rStrm );               break;
-                    case BIFF_TOKID_NLR:        bOk = (this->*mpImportNlrToken)( rStrm );               break;
-                    case BIFF_TOKID_ATTR:       bOk = importAttrToken( rStrm );                         break;
-                    case BIFF_TOKID_SHEET:      bOk = (this->*mpImportSheetToken)( rStrm );             break;
-                    case BIFF_TOKID_ENDSHEET:   bOk = (this->*mpImportEndSheetToken)( rStrm );          break;
-                    case BIFF_TOKID_ERR:        bOk = pushBiffErrorOperand( rStrm.readuInt8() );        break;
-                    case BIFF_TOKID_BOOL:       bOk = pushBiffBoolOperand( rStrm.readuInt8() );         break;
-                    case BIFF_TOKID_INT:        bOk = pushValueOperand< double >( rStrm.readuInt16() ); break;
-                    case BIFF_TOKID_NUM:        bOk = pushValueOperand( rStrm.readDouble() );           break;
-                    default:                    bOk = false;
-                }
-            }
-            else
-            {
-                // classified tokens
-                switch( nBaseId )
-                {
-                    case BIFF_TOKID_ARRAY:      bOk = importArrayToken( rStrm );                                        break;
-                    case BIFF_TOKID_FUNC:       bOk = (this->*mpImportFuncToken)( rStrm );                              break;
-                    case BIFF_TOKID_FUNCVAR:    bOk = (this->*mpImportFuncVarToken)( rStrm );                           break;
-                    case BIFF_TOKID_NAME:       bOk = importNameToken( rStrm );                                         break;
-                    case BIFF_TOKID_REF:        bOk = (this->*mpImportRefToken)( rStrm, false, false );                 break;
-                    case BIFF_TOKID_AREA:       bOk = (this->*mpImportAreaToken)( rStrm, false, false );                break;
-                    case BIFF_TOKID_MEMAREA:    bOk = importMemAreaToken( rStrm, true );                                break;
-                    case BIFF_TOKID_MEMERR:     bOk = importMemAreaToken( rStrm, false );                               break;
-                    case BIFF_TOKID_MEMNOMEM:   bOk = importMemAreaToken( rStrm, false );                               break;
-                    case BIFF_TOKID_MEMFUNC:    bOk = importMemFuncToken( rStrm );                                      break;
-                    case BIFF_TOKID_REFERR:     bOk = (this->*mpImportRefToken)( rStrm, true, false );                  break;
-                    case BIFF_TOKID_AREAERR:    bOk = (this->*mpImportAreaToken)( rStrm, true, false );                 break;
-                    case BIFF_TOKID_REFN:       bOk = (this->*mpImportRefToken)( rStrm, false, true );                  break;
-                    case BIFF_TOKID_AREAN:      bOk = (this->*mpImportAreaToken)( rStrm, false, true );                 break;
-                    case BIFF_TOKID_MEMAREAN:   bOk = importMemFuncToken( rStrm );                                      break;
-                    case BIFF_TOKID_MEMNOMEMN:  bOk = importMemFuncToken( rStrm );                                      break;
-                    case BIFF_TOKID_FUNCCE:     bOk = (this->*mpImportFuncCEToken)( rStrm );                            break;
-                    case BIFF_TOKID_NAMEX:      bOk = (this->*mpImportNameXToken)( rStrm );                             break;
-                    case BIFF_TOKID_REF3D:      bOk = (this->*mpImportRef3dToken)( rStrm, false, mbRelativeAsOffset );  break;
-                    case BIFF_TOKID_AREA3D:     bOk = (this->*mpImportArea3dToken)( rStrm, false, mbRelativeAsOffset ); break;
-                    case BIFF_TOKID_REFERR3D:   bOk = (this->*mpImportRef3dToken)( rStrm, true, mbRelativeAsOffset );   break;
-                    case BIFF_TOKID_AREAERR3D:  bOk = (this->*mpImportArea3dToken)( rStrm, true, mbRelativeAsOffset );  break;
-                    default:                    bOk = false;
-                }
-            }
-        }
-    }
-
-    // build and finalize the token sequence
-    ApiTokenSequence aFinalTokens;
-    if( bOk && (rStrm.tell() == nEndPos) )
-        aFinalTokens = finalizeImport();
-
-    // seek behind additional token data of tArray, tMemArea, tNlr tokens
-    rStrm.seek( mnAddDataPos );
-
-    // return the final token sequence
-    return aFinalTokens;
-}
-
 // import token contents and create API formula token -------------------------
 
 bool BiffFormulaParserImpl::importTokenNotAvailable( BiffInputStream& )
@@ -2202,37 +2064,6 @@ bool BiffFormulaParserImpl::importStrToken8( BiffInputStream& rStrm )
 {
     // read flags field for empty strings also
     return pushValueOperand( rStrm.readUniStringBody( rStrm.readuInt8(), mbAllowNulChars ) );
-}
-
-bool BiffFormulaParserImpl::importAttrToken( BiffInputStream& rStrm )
-{
-    bool bOk = true;
-    sal_uInt8 nType;
-    rStrm >> nType;
-    switch( nType )
-    {
-        case 0:     // sometimes, tAttrSkip tokens miss the type flag
-        case BIFF_TOK_ATTR_VOLATILE:
-        case BIFF_TOK_ATTR_IF:
-        case BIFF_TOK_ATTR_SKIP:
-        case BIFF_TOK_ATTR_ASSIGN:
-            rStrm.skip( mnAttrDataSize );
-        break;
-        case BIFF_TOK_ATTR_CHOOSE:
-            rStrm.skip( mnAttrDataSize * (1 + ((getBiff() == BIFF2) ? rStrm.readuInt8() : rStrm.readuInt16())) );
-        break;
-        case BIFF_TOK_ATTR_SUM:
-            rStrm.skip( mnAttrDataSize );
-            bOk = pushBiffFunction( BIFF_FUNC_SUM, 1 );
-        break;
-        case BIFF_TOK_ATTR_SPACE:
-        case BIFF_TOK_ATTR_SPACE_VOLATILE:
-            bOk = (this->*mpImportSpaceToken)( rStrm );
-        break;
-        default:
-            bOk = false;
-    }
-    return bOk;
 }
 
 bool BiffFormulaParserImpl::importSpaceToken3( BiffInputStream& rStrm )
@@ -2322,68 +2153,6 @@ bool BiffFormulaParserImpl::importNlrToken( BiffInputStream& rStrm )
     return bOk;
 }
 
-bool BiffFormulaParserImpl::importArrayToken( BiffInputStream& rStrm )
-{
-    rStrm.skip( mnArraySize );
-
-    // start token array with opening brace and leading spaces
-    pushOperand( OPCODE_ARRAY_OPEN );
-    size_t nOpSize = popOperandSize();
-    size_t nOldArraySize = getFormulaSize();
-    bool bBiff8 = getBiff() == BIFF8;
-
-    // read array size
-    swapStreamPosition( rStrm );
-    sal_uInt16 nCols = rStrm.readuInt8();
-    sal_uInt16 nRows = rStrm.readuInt16();
-    if( bBiff8 ) { ++nCols; ++nRows; } else if( nCols == 0 ) nCols = 256;
-    OSL_ENSURE( (nCols > 0) && (nRows > 0), "BiffFormulaParserImpl::importArrayToken - empty array" );
-
-    // read array values and build token array
-    for( sal_uInt16 nRow = 0; !rStrm.isEof() && (nRow < nRows); ++nRow )
-    {
-        if( nRow > 0 )
-            appendRawToken( OPCODE_ARRAY_ROWSEP );
-        for( sal_uInt16 nCol = 0; !rStrm.isEof() && (nCol < nCols); ++nCol )
-        {
-            if( nCol > 0 )
-                appendRawToken( OPCODE_ARRAY_COLSEP );
-            switch( rStrm.readuInt8() )
-            {
-                case BIFF_DATATYPE_EMPTY:
-                    appendRawToken( OPCODE_PUSH ) <<= OUString();
-                    rStrm.skip( 8 );
-                break;
-                case BIFF_DATATYPE_DOUBLE:
-                    appendRawToken( OPCODE_PUSH ) <<= rStrm.readDouble();
-                break;
-                case BIFF_DATATYPE_STRING:
-                    appendRawToken( OPCODE_PUSH ) <<= bBiff8 ?
-                        rStrm.readUniString( mbAllowNulChars ) :
-                        rStrm.readByteStringUC( false, getTextEncoding(), mbAllowNulChars );
-                break;
-                case BIFF_DATATYPE_BOOL:
-                    appendRawToken( OPCODE_PUSH ) <<= (static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 ));
-                    rStrm.skip( 7 );
-                break;
-                case BIFF_DATATYPE_ERROR:
-                    appendRawToken( OPCODE_PUSH ) <<= BiffHelper::calcDoubleFromError( rStrm.readuInt8() );
-                    rStrm.skip( 7 );
-                break;
-                default:
-                    OSL_FAIL( "BiffFormulaParserImpl::importArrayToken - unknown data type" );
-                    appendRawToken( OPCODE_PUSH ) <<= BiffHelper::calcDoubleFromError( BIFF_ERR_NA );
-            }
-        }
-    }
-    swapStreamPosition( rStrm );
-
-    // close token array and set resulting operand size
-    appendRawToken( OPCODE_ARRAY_CLOSE );
-    pushOperandSize( nOpSize + getFormulaSize() - nOldArraySize );
-    return true;
-}
-
 bool BiffFormulaParserImpl::importRefToken2( BiffInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
 {
     BinSingleRef2d aRef;
@@ -2444,26 +2213,6 @@ bool BiffFormulaParserImpl::importArea3dToken8( BiffInputStream& rStrm, bool bDe
     return pushReferenceOperand( aSheetRange, aRef, bDeleted, bRelativeAsOffset );
 }
 
-bool BiffFormulaParserImpl::importMemAreaToken( BiffInputStream& rStrm, bool bAddData )
-{
-    rStrm.skip( mnMemAreaSize );
-    if( bAddData )
-        skipMemAreaAddData( rStrm );
-    return true;
-}
-
-bool BiffFormulaParserImpl::importMemFuncToken( BiffInputStream& rStrm )
-{
-    rStrm.skip( mnMemFuncSize );
-    return true;
-}
-
-bool BiffFormulaParserImpl::importNameToken( BiffInputStream& rStrm )
-{
-    sal_uInt16 nNameId = readNameId( rStrm );
-    return (mnCurrRefId > 0) ? pushBiffExtName( mnCurrRefId, nNameId ) : pushBiffName( nNameId );
-}
-
 bool BiffFormulaParserImpl::importNameXToken( BiffInputStream& rStrm )
 {
     sal_Int32 nRefId = readRefId( rStrm );
@@ -2507,20 +2256,6 @@ bool BiffFormulaParserImpl::importFuncCEToken( BiffInputStream& rStrm )
     sal_uInt16 nCmdId = nFuncId;
     setFlag( nCmdId, BIFF_TOK_FUNCVAR_CMD );
     return pushBiffFunction( nCmdId, nParamCount );
-}
-
-bool BiffFormulaParserImpl::importExpToken( BiffInputStream& rStrm )
-{
-    BinAddress aBaseAddr;
-    aBaseAddr.read( rStrm );
-    return pushSpecialTokenOperand( aBaseAddr, false );
-}
-
-bool BiffFormulaParserImpl::importTblToken( BiffInputStream& rStrm )
-{
-    BinAddress aBaseAddr;
-    aBaseAddr.read( rStrm );
-    return pushSpecialTokenOperand( aBaseAddr, true );
 }
 
 bool BiffFormulaParserImpl::importNlrAddrToken( BiffInputStream& rStrm, bool bRow )
@@ -2597,14 +2332,6 @@ void BiffFormulaParserImpl::swapStreamPosition( BiffInputStream& rStrm )
     sal_Int64 nRecPos = rStrm.tell();
     rStrm.seek( mnAddDataPos );
     mnAddDataPos = nRecPos;
-}
-
-void BiffFormulaParserImpl::skipMemAreaAddData( BiffInputStream& rStrm )
-{
-    swapStreamPosition( rStrm );
-    sal_Int32 nCount = rStrm.readuInt16();
-    rStrm.skip( ((getBiff() == BIFF8) ? 8 : 6) * nCount );
-    swapStreamPosition( rStrm );
 }
 
 bool BiffFormulaParserImpl::readNlrSAddrAddData( BiffNlr& orNlr, BiffInputStream& rStrm, bool bRow )

@@ -212,9 +212,6 @@ public:
     /** @return bits/pixel or 0 **/
     sal_uInt16          GetBitsPerPixel() const { return nBitsPerPixel; }
 
-    /** return number of planes or 0 */
-    sal_uInt16          GetPlanes() const { return nPlanes; }
-
     /** @return filter number that is needed by the GraphFilter to read this format */
     static OUString GetImportFormatShortName( GraphicFileFormat nFormat );
 };
@@ -253,18 +250,16 @@ public:
                     GraphicFilter( bool bUseConfig = true );
                     ~GraphicFilter();
 
-    void            SetFilterPath( const OUString& rFilterPath ) { aFilterPath = rFilterPath; };
-
     sal_uInt16      GetImportFormatCount();
     sal_uInt16      GetImportFormatNumber( const OUString& rFormatName );
-    sal_uInt16      GetImportFormatNumberForMediaType( const OUString& rMediaType );
     sal_uInt16      GetImportFormatNumberForShortName( const OUString& rShortName );
     sal_uInt16      GetImportFormatNumberForTypeName( const OUString& rType );
     OUString        GetImportFormatName( sal_uInt16 nFormat );
     OUString        GetImportFormatTypeName( sal_uInt16 nFormat );
+#ifdef WNT
     OUString        GetImportFormatMediaType( sal_uInt16 nFormat );
+#endif
     OUString        GetImportFormatShortName( sal_uInt16 nFormat );
-    static OUString GetImportOSFileType( sal_uInt16 nFormat );
     OUString        GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
 
     sal_uInt16      GetExportFormatCount();
@@ -274,10 +269,8 @@ public:
     OUString        GetExportInternalFilterName( sal_uInt16 nFormat );
     sal_uInt16      GetExportFormatNumberForTypeName( const OUString& rType );
     OUString        GetExportFormatName( sal_uInt16 nFormat );
-    OUString        GetExportFormatTypeName( sal_uInt16 nFormat );
     OUString        GetExportFormatMediaType( sal_uInt16 nFormat );
     OUString        GetExportFormatShortName( sal_uInt16 nFormat );
-    static OUString GetExportOSFileType( sal_uInt16 nFormat );
     OUString        GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
     bool            IsExportPixelFormat( sal_uInt16 nFormat );
 
@@ -312,8 +305,6 @@ public:
                                    sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                    css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                                    WMF_EXTERNALHEADER *pExtHeader = NULL );
-
-    void                Abort() { bAbort = true; }
 
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();

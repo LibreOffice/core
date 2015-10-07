@@ -664,10 +664,6 @@ public:
 
     /** key.
     */
-    OStorePageKey key() const
-    {
-        return PAGE().m_aNameBlock.m_aKey;
-    }
     void key (OStorePageKey const & rKey)
     {
         PAGE().m_aNameBlock.m_aKey = rKey;

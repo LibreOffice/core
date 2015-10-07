@@ -130,14 +130,6 @@ public:
         p->AddFirstRef();
     }
 
-    inline void insert(const SvRefMemberList& rOther)
-    {
-       for( typename base_t::const_iterator it = rOther.begin(); it != rOther.end(); ++it )
-       {
-           push_back(*it);
-       }
-    }
-
     inline T pop_back()
     {
         T p = base_t::back();

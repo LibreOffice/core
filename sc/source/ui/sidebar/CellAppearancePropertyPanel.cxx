@@ -51,11 +51,6 @@ const char UNO_LINESTYLE[] = ".uno:LineStyle";
 
 namespace sc { namespace sidebar {
 
-svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent)
-{
-    return VclPtr<CellLineStyleControl>::Create(pParent, *this);
-}
-
 void CellAppearancePropertyPanel::EndCellLineStylePopupMode()
 {
     if(mpCellLineStylePopup.get())

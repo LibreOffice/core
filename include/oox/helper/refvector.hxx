@@ -54,10 +54,6 @@ public:
                             return value_type();
                         }
 
-    /** Returns the index of the last element, or -1, if the vector is empty.
-        Does *not* check whether the last element is an empty reference. */
-    sal_Int32           getLastIndex() const { return static_cast< sal_Int32 >( this->size() ) - 1; }
-
     /** Calls the passed functor for every contained object, automatically
         skips all elements that are empty references. */
     template< typename FunctorType >
@@ -107,35 +103,11 @@ public:
                         }
 
     /** Calls the passed member function of ObjType on every contained object.
-        Passes the vector index to the member function. */
-    template< typename FuncType >
-    void                forEachMemWithIndex( FuncType pFunc ) const
-                        {
-                            forEachWithIndex( ::boost::bind( pFunc, _2, _1 ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object.
-        Passes the vector index as first argument to the member function. */
-    template< typename FuncType, typename ParamType >
-    void                forEachMemWithIndex( FuncType pFunc, ParamType aParam ) const
-                        {
-                            forEachWithIndex( ::boost::bind( pFunc, _2, _1, aParam ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object.
         Passes the vector index as first argument to the member function. */
     template< typename FuncType, typename ParamType1, typename ParamType2 >
     void                forEachMemWithIndex( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
                             forEachWithIndex( ::boost::bind( pFunc, _2, _1, aParam1, aParam2 ) );
-                        }
-
-    /** Calls the passed member function of ObjType on every contained object.
-        Passes the vector index as first argument to the member function. */
-    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
-    void                forEachMemWithIndex( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
-                        {
-                            forEachWithIndex( ::boost::bind( pFunc, _2, _1, aParam1, aParam2, aParam3 ) );
                         }
 
     /** Searches for an element by using the passed functor that takes a

@@ -349,17 +349,6 @@ storeError OStoreLockBytes::writeAt (
 }
 
 /*
- * flush.
- */
-storeError OStoreLockBytes::flush()
-{
-    if (!m_xManager.is())
-        return store_E_InvalidAccess;
-
-    return m_xManager->flush();
-}
-
-/*
  * setSize.
  */
 storeError OStoreLockBytes::setSize (sal_uInt32 nSize)
@@ -424,21 +413,6 @@ storeError OStoreLockBytes::setSize (sal_uInt32 nSize)
 
     // Save modified inode.
     return m_xManager->saveObjectAt (aPage, aPage.location());
-}
-
-/*
- * stat.
- */
-storeError OStoreLockBytes::stat (sal_uInt32 &rnSize)
-{
-    rnSize = 0;
-
-    if (!m_xManager.is())
-        return store_E_InvalidAccess;
-
-    OStoreDirectoryPageObject aPage (m_xNode.get());
-    rnSize = aPage.dataLength();
-    return store_E_None;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
