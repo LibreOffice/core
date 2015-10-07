@@ -131,9 +131,11 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( mnCharCount <= 0 )
         return false;
 
+    const sal_Unicode *pStr = rArgs.mrStr.getStr();
+
     // create the CoreText line layout
     CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
-                                                              rArgs.mpStr + mnMinCharPos,
+                                                              pStr + mnMinCharPos,
                                                               mnCharCount,
                                                               kCFAllocatorNull );
     // CFAttributedStringCreate copies the attribues parameter
@@ -146,7 +148,7 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     // reverse search for first 'non-space'...
     for( int i = mnEndCharPos - 1; i >= mnMinCharPos; i--)
     {
-        sal_Unicode nChar = rArgs.mpStr[i];
+        sal_Unicode nChar = pStr[i];
         if ((nChar <= 0x0020) ||                  // blank
             (nChar == 0x00A0) ||                  // non breaking space
             (nChar >= 0x2000 && nChar <= 0x200F) || // whitespace
@@ -209,8 +211,9 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         // recreate the CoreText line layout without trailing spaces
         SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
         CFRelease( mpCTLine );
+        const sal_Unicode *pStr = rArgs.mrStr.getStr();
         CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
-                                                                  rArgs.mpStr + mnMinCharPos,
+                                                                  pStr + mnMinCharPos,
                                                                   mnCharCount - mnTrailingSpaceCount,
                                                                   kCFAllocatorNull );
         CFAttributedStringRef pAttrStr = CFAttributedStringCreate( NULL,
