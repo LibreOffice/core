@@ -114,14 +114,14 @@ void SmCursor::BuildGraph(){
             _anchor = mpAnchor->CaretPos;
         if(mpPosition)
             _position = mpPosition->CaretPos;
-        delete mpGraph;
+        mpGraph.reset();
         //Reset anchor and position as they point into an old graph
         mpAnchor = nullptr;
         mpPosition = nullptr;
     }
 
     //Build the new graph
-    mpGraph = SmCaretPosGraphBuildingVisitor(mpTree).takeGraph();
+    mpGraph.reset(SmCaretPosGraphBuildingVisitor(mpTree).takeGraph());
 
     //Restore anchor and position pointers
     if(_anchor.IsValid() || _position.IsValid()){
