@@ -389,15 +389,17 @@ XPolygon ImpPathCreateUser::GetCirclePoly() const
 
 Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, SdrView* pView)
 {
-    long x=aCsr.X(),x1=x,x2=x;
-    long y=aCsr.Y(),y1=y,y2=y;
+    long x=aCsr.X();
+    long y=aCsr.Y();
     bool bHLin=nDirY==0;
     bool bVLin=nDirX==0;
     if (bHLin) y=0;
     else if (bVLin) x=0;
     else {
-        x1=BigMulDiv(y,nDirX,nDirY);
-        y2=BigMulDiv(x,nDirY,nDirX);
+        long x1=BigMulDiv(y,nDirX,nDirY);
+        long y1=y;
+        long x2=x;
+        long y2=BigMulDiv(x,nDirY,nDirX);
         long l1=std::abs(x1)+std::abs(y1);
         long l2=std::abs(x2)+std::abs(y2);
         if ((l1<=l2) != (pView!=NULL && pView->IsBigOrtho())) {
