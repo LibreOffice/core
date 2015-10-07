@@ -941,7 +941,6 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     }
 
     // Test whether the Which Ranges are different
-    bool bEqual = true;
     sal_uInt16* pWh1 = m_pWhichRanges;
     sal_uInt16* pWh2 = rSet.m_pWhichRanges;
     sal_uInt16 nSize = 0;
@@ -950,13 +949,12 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     {
         if( *pWh1 != *pWh2 )
         {
-            bEqual = false;
             break;
         }
         if( n & 1 )
             nSize += ( *(pWh1) - *(pWh1-1) ) + 1;
     }
-    bEqual = *pWh1 == *pWh2; // Also check for 0
+    bool bEqual = *pWh1 == *pWh2; // Also check for 0
 
     // If the Ranges are identical, we can easily process it
     if( bEqual )
@@ -1009,7 +1007,6 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
         return;
 
    // Test whether the Which Ranges are different
-    bool bEqual = true;
     sal_uInt16* pWh1 = m_pWhichRanges;
     sal_uInt16* pWh2 = rSet.m_pWhichRanges;
     sal_uInt16 nSize = 0;
@@ -1018,13 +1015,12 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
     {
         if( *pWh1 != *pWh2 )
         {
-            bEqual = false;
             break;
         }
         if( n & 1 )
             nSize += ( *(pWh1) - *(pWh1-1) ) + 1;
     }
-    bEqual = *pWh1 == *pWh2; // Also test for 0
+    bool bEqual = *pWh1 == *pWh2; // Also test for 0
 
     // If the Ranges are identical, we can easily process it
     if( bEqual )
@@ -1221,7 +1217,6 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, bool bIgnoreDefaults )
     assert( GetPool() == rSet.GetPool() && "MergeValues with different Pools" );
 
     // Test if the which Ranges are different
-    bool bEqual = true;
     sal_uInt16* pWh1 = m_pWhichRanges;
     sal_uInt16* pWh2 = rSet.m_pWhichRanges;
     sal_uInt16 nSize = 0;
@@ -1230,13 +1225,12 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, bool bIgnoreDefaults )
     {
         if( *pWh1 != *pWh2 )
         {
-            bEqual = false;
             break;
         }
         if( n & 1 )
             nSize += ( *(pWh1) - *(pWh1-1) ) + 1;
     }
-    bEqual = *pWh1 == *pWh2; // Also check for 0
+    bool bEqual = *pWh1 == *pWh2; // Also check for 0
 
     // If the Ranges match, they are easier to process!
     if( bEqual )
