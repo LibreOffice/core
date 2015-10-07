@@ -2848,8 +2848,6 @@ bool SfxObjectShell::PreDoSaveAs_Impl
     bool bOk = false;
     if ( !pNewFile->GetErrorCode() && SaveTo_Impl( *pNewFile, NULL ) )
     {
-        bOk = true;
-
         // transfer a possible error from the medium to the document
         SetError( pNewFile->GetErrorCode(), OUString( OSL_LOG_PREFIX  ) );
 
