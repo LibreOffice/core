@@ -214,9 +214,8 @@ OString MyWin::processCommand( const OString& rCommand )
         else
         {
             ssize_t nBytes = 0;
-            nBytes = write( nSocket, rCommand.getStr(), rCommand.getLength() );
-            nBytes = write( nSocket, "\n", 1 );
-            nBytes = 0;
+            write( nSocket, rCommand.getStr(), rCommand.getLength() );
+            write( nSocket, "\n", 1 );
             char buf[256];
             do
             {
