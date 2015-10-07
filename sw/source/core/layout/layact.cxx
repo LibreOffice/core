@@ -1374,7 +1374,6 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
     if ( pLay->IsFootnoteFrm() ) // no LayFrms as Lower
         return bChanged;
 
-    SwFrmDeleteGuard aDeleteGuard(pLay);
     SwFrm *pLow = pLay->Lower();
     bool bTabChanged = false;
     while ( pLow && pLow->GetUpper() == pLay )
