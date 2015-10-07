@@ -615,7 +615,7 @@ EditNodeIdx* EditNodeIdx::Clone() const
 EditPosition::EditPosition(EditEngine* pEE, EditSelection* pSel) :
     mpEditEngine(pEE), mpCurSel(pSel) {}
 
-SvxPosition* EditPosition::Clone() const
+EditPosition* EditPosition::Clone() const
 {
     return new EditPosition(mpEditEngine, mpCurSel);
 }

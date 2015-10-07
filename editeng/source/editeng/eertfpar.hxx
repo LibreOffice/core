@@ -26,26 +26,7 @@
 
 class EditEngine;
 
-class EditPosition : public SvxPosition
-{
-private:
-    EditEngine*     mpEditEngine;
-    EditSelection*  mpCurSel;
 
-public:
-    EditPosition(EditEngine* pIEE, EditSelection* pSel);
-
-    virtual sal_Int32   GetNodeIdx() const SAL_OVERRIDE;
-    virtual sal_Int32   GetCntIdx() const SAL_OVERRIDE;
-
-    // clone
-    virtual SvxPosition* Clone() const SAL_OVERRIDE;
-
-    // clone NodeIndex
-    virtual EditNodeIdx* MakeNodeIdx() const SAL_OVERRIDE;
-};
-
-#define ACTION_INSERTTEXT       1
 #define ACTION_INSERTPARABRK    2
 
 class EditRTFParser : public SvxRTFParser

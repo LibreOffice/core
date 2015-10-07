@@ -69,18 +69,27 @@ private:
     ContentNode*  mpNode;
 };
 
-class SvxPosition
+class EditSelection;
+class EditPosition
 {
+private:
+    EditEngine*     mpEditEngine;
+    EditSelection*  mpCurSel;
+
 public:
-    virtual ~SvxPosition() {}
+    EditPosition(EditEngine* pIEE, EditSelection* pSel);
 
-    virtual sal_Int32   GetNodeIdx() const = 0;
-    virtual sal_Int32   GetCntIdx() const = 0;
+    sal_Int32   GetNodeIdx() const;
+    sal_Int32   GetCntIdx() const;
 
-    virtual SvxPosition* Clone() const = 0; // Cloning itself
-    virtual EditNodeIdx* MakeNodeIdx() const = 0; // Cloning NodeIndex
+    // clone
+    EditPosition* Clone() const;
+
+    // clone NodeIndex
+    EditNodeIdx* MakeNodeIdx() const;
 };
 
+#define ACTION_INSERTTEXT       1
 
 typedef std::map<short, std::unique_ptr<vcl::Font>> SvxRTFFontTbl;
 typedef std::map<sal_uInt16, std::unique_ptr<SvxRTFStyleType>> SvxRTFStyleTbl;
@@ -187,7 +196,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     std::vector<sal_uInt16> aWhichMap;
     OUString  sBaseURL;
 
-    SvxPosition* pInsPos;
+    EditPosition* pInsPos;
     SfxItemPool* pAttrPool;
     Color*  pDfltColor;
     vcl::Font*   pDfltFont;
@@ -295,7 +304,7 @@ protected:
     void SetCalcValue( bool bFlag )     { bCalcValue = bFlag; }
 
     // Query/Set the current insert position
-    void SetInsPos( const SvxPosition& rNew );
+    void SetInsPos( const EditPosition& rNew );
     SvxRTFStyleTbl& GetStyleTbl()               { return m_StyleTable; }
 
 public:
@@ -340,19 +349,19 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
     void operator=(SvxRTFItemStackType const&) = delete;
 
     SvxRTFItemStackType( SfxItemPool&, const sal_uInt16* pWhichRange,
-                            const SvxPosition& );
+                            const EditPosition& );
 
     void Add(std::unique_ptr<SvxRTFItemStackType>);
     void Compress( const SvxRTFParser& );
 
 public:
-    SvxRTFItemStackType( const SvxRTFItemStackType&, const SvxPosition&,
+    SvxRTFItemStackType( const SvxRTFItemStackType&, const EditPosition&,
                         bool bCopyAttr = false );
     ~SvxRTFItemStackType();
     //cmc, I'm very suspicios about SetStartPos, it doesn't change
     //its children's starting position, and the implementation looks
     //bad, consider this deprecated.
-    void SetStartPos( const SvxPosition& rPos );
+    void SetStartPos( const EditPosition& rPos );
 
     void MoveFullNode(const EditNodeIdx &rOldNode,
         const EditNodeIdx &rNewNode);

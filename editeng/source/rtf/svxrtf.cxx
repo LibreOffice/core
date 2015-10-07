@@ -99,7 +99,7 @@ SvxRTFParser::~SvxRTFParser()
     delete pDfltColor;
 }
 
-void SvxRTFParser::SetInsPos( const SvxPosition& rNew )
+void SvxRTFParser::SetInsPos( const EditPosition& rNew )
 {
     delete pInsPos;
     pInsPos = rNew.Clone();
@@ -1137,7 +1137,7 @@ SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRa
 
 SvxRTFItemStackType::SvxRTFItemStackType(
         SfxItemPool& rPool, const sal_uInt16* pWhichRange,
-        const SvxPosition& rPos )
+        const EditPosition& rPos )
     : aAttrSet( rPool, pWhichRange )
     , m_pChildList( nullptr )
     , nStyleNo( 0 )
@@ -1150,7 +1150,7 @@ SvxRTFItemStackType::SvxRTFItemStackType(
 
 SvxRTFItemStackType::SvxRTFItemStackType(
         const SvxRTFItemStackType& rCpy,
-        const SvxPosition& rPos,
+        const EditPosition& rPos,
         bool const bCopyAttr )
     : aAttrSet( *rCpy.aAttrSet.GetPool(), rCpy.aAttrSet.GetRanges() )
     , m_pChildList( nullptr )
@@ -1182,7 +1182,7 @@ void SvxRTFItemStackType::Add(std::unique_ptr<SvxRTFItemStackType> pIns)
     m_pChildList->push_back(std::move(pIns));
 }
 
-void SvxRTFItemStackType::SetStartPos( const SvxPosition& rPos )
+void SvxRTFItemStackType::SetStartPos( const EditPosition& rPos )
 {
     if (pSttNd != pEndNd)
         delete pEndNd;
