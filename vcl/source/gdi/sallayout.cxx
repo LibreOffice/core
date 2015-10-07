@@ -102,25 +102,27 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
         s << "}";
     }
 
-    s << ",Length=" << rArgs.mnLength;
+    const int nLength = rArgs.mrStr.getLength();
+
+    s << ",Length=" << nLength;
     s << ",MinCharPos=" << rArgs.mnMinCharPos;
     s << ",EndCharPos=" << rArgs.mnEndCharPos;
 
     s << ",Str=\"";
-    int lim = rArgs.mnLength;
+    int lim = nLength;
     if (lim > 10)
         lim = 7;
     for (int i = 0; i < lim; i++) {
-        if (rArgs.mpStr[i] == '\n')
+        if (rArgs.mrStr[i] == '\n')
             s << "\\n";
-        else if (rArgs.mpStr[i] < ' ' || (rArgs.mpStr[i] >= 0x7F && rArgs.mpStr[i] <= 0xFF))
-            s << "\\0x" << std::hex << std::setw(2) << std::setfill('0') << (int) rArgs.mpStr[i] << std::setfill(' ') << std::setw(1) << std::dec;
-        else if (rArgs.mpStr[i] < 0x7F)
-            s << (char) rArgs.mpStr[i];
+        else if (rArgs.mrStr[i] < ' ' || (rArgs.mrStr[i] >= 0x7F && rArgs.mrStr[i] <= 0xFF))
+            s << "\\0x" << std::hex << std::setw(2) << std::setfill('0') << (int) rArgs.mrStr[i] << std::setfill(' ') << std::setw(1) << std::dec;
+        else if (rArgs.mrStr[i] < 0x7F)
+            s << (char) rArgs.mrStr[i];
         else
-            s << "\\u" << std::hex << std::setw(4) << std::setfill('0') << (int) rArgs.mpStr[i] << std::setfill(' ') << std::setw(1) << std::dec;
+            s << "\\u" << std::hex << std::setw(4) << std::setfill('0') << (int) rArgs.mrStr[i] << std::setfill(' ') << std::setw(1) << std::dec;
     }
-    if (rArgs.mnLength > lim)
+    if (nLength > lim)
         s << "...";
     s << "\"";
 
@@ -452,16 +454,15 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
     return true;
 }
 
-ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
+ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr,
     int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags, const LanguageTag& rLanguageTag,
     vcl::TextLayoutCache const*const pLayoutCache)
 :
     maLanguageTag( rLanguageTag ),
     mnFlags( nFlags ),
-    mnLength( nLen ),
+    mrStr( rStr ),
     mnMinCharPos( nMinCharPos ),
     mnEndCharPos( nEndCharPos ),
-    mpStr( pStr ),
     m_pTextLayoutCache(pLayoutCache),
     mpDXArray( NULL ),
     mnLayoutWidth( 0 ),
@@ -488,14 +489,15 @@ ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
         // prepare substring for BiDi analysis
         // TODO: reuse allocated pParaBidi
         UErrorCode rcI18n = U_ZERO_ERROR;
-        UBiDi* pParaBidi = ubidi_openSized( mnLength, 0, &rcI18n );
+        const int nLength = mrStr.getLength();
+        UBiDi* pParaBidi = ubidi_openSized(nLength, 0, &rcI18n);
         if( !pParaBidi )
             return;
-        ubidi_setPara( pParaBidi, reinterpret_cast<const UChar *>(mpStr), mnLength, nLevel, NULL, &rcI18n );    // UChar != sal_Unicode in MinGW
+        ubidi_setPara(pParaBidi, reinterpret_cast<const UChar *>(mrStr.getStr()), nLength, nLevel, NULL, &rcI18n);    // UChar != sal_Unicode in MinGW
 
         UBiDi* pLineBidi = pParaBidi;
         int nSubLength = mnEndCharPos - mnMinCharPos;
-        if( nSubLength != mnLength )
+        if (nSubLength != nLength)
         {
             pLineBidi = ubidi_openSized( nSubLength, 0, &rcI18n );
             ubidi_setLine( pParaBidi, mnMinCharPos, mnEndCharPos, pLineBidi, &rcI18n );
@@ -506,10 +508,10 @@ ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
         //maRuns.resize( 2 * nRunCount );
         for( int i = 0; i < nRunCount; ++i )
         {
-            int32_t nMinPos, nLength;
-            const UBiDiDirection nDir = ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
+            int32_t nMinPos, nRunLength;
+            const UBiDiDirection nDir = ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nRunLength );
             const int nPos0 = nMinPos + mnMinCharPos;
-            const int nPos1 = nPos0 + nLength;
+            const int nPos1 = nPos0 + nRunLength;
 
             const bool bRTL = (nDir == UBIDI_RTL);
             AddRun( nPos0, nPos1, bRTL );
@@ -534,7 +536,7 @@ void ImplLayoutArgs::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
     if( !bRTL )
     {
         for( int i = nCharPos0; i < nCharPos1; ++i )
-            if( IsControlChar( mpStr[i] ) )
+            if( IsControlChar( mrStr[i] ) )
             {
                 // add run until control char
                 maRuns.AddRun( nCharPos0, i, bRTL );
@@ -544,7 +546,7 @@ void ImplLayoutArgs::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
     else
     {
         for( int i = nCharPos1; --i >= nCharPos0; )
-            if( IsControlChar( mpStr[i] ) )
+            if( IsControlChar( mrStr[i] ) )
             {
                 // add run until control char
                 maRuns.AddRun( i+1, nCharPos1, bRTL );
@@ -572,7 +574,7 @@ bool ImplLayoutArgs::PrepareFallback()
     // get the individual fallback requests
     typedef std::vector<int> IntVector;
     IntVector aPosVector;
-    aPosVector.reserve( mnLength );
+    aPosVector.reserve(mrStr.getLength());
     maFallbackRuns.ResetPos();
     for(; maFallbackRuns.GetRun( &nMin, &nEnd, &bRTL ); maFallbackRuns.NextRun() )
         for( int i = nMin; i < nEnd; ++i )
@@ -1136,8 +1138,9 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     }
 }
 
-void GenericSalLayout::ApplyAsianKerning( const sal_Unicode* pStr, int nLength )
+void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
 {
+    const int nLength = rStr.getLength();
     long nOffset = 0;
 
     for( GlyphVector::iterator pGlyphIter = m_GlyphItems.begin(), pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
@@ -1146,10 +1149,10 @@ void GenericSalLayout::ApplyAsianKerning( const sal_Unicode* pStr, int nLength )
         if( n < nLength - 1)
         {
             // ignore code ranges that are not affected by asian punctuation compression
-            const sal_Unicode cHere = pStr[n];
+            const sal_Unicode cHere = rStr[n];
             if( ((0x3000 != (cHere & 0xFF00)) && (0x2010 != (cHere & 0xFFF0))) || (0xFF00 != (cHere & 0xFF00)) )
                 continue;
-            const sal_Unicode cNext = pStr[n+1];
+            const sal_Unicode cNext = rStr[n+1];
             if( ((0x3000 != (cNext & 0xFF00)) && (0x2010 != (cNext & 0xFFF0))) || (0xFF00 != (cNext & 0xFF00)) )
                 continue;
 
@@ -1622,7 +1625,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             nStartNew[ nLevel ], &nGlyphAdv[ nLevel ], &nCharPos[ nLevel ] );
 #ifdef MULTI_SL_DEBUG
         if (nValid[nLevel]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", n, nStartOld[nLevel], nStartNew[nLevel], aPos.X(), (long)nGlyphAdv[nLevel], nCharPos[nLevel],
-            rArgs.mpStr[nCharPos[nLevel]]);
+            rArgs.mrStr[nCharPos[nLevel]]);
 #endif
         if( (n > 0) && !nValid[ nLevel ] )
         {
@@ -1692,7 +1695,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 nValid[0] = mpLayouts[0]->GetNextGlyphs( 1, &nDummy, aPos,
                     nStartNew[0], &nGlyphAdv[0], &nCharPos[0] );
 #ifdef MULTI_SL_DEBUG
-                if (nValid[0]) fprintf(mslLog(), "layout[0]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", nStartOld[0], nStartNew[0], aPos.X(), (long)nGlyphAdv[0], nCharPos[0], rArgs.mpStr[nCharPos[0]]);
+                if (nValid[0]) fprintf(mslLog(), "layout[0]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", nStartOld[0], nStartNew[0], aPos.X(), (long)nGlyphAdv[0], nCharPos[0], rArgs.mrStr[nCharPos[0]]);
 #endif
                 if( !nValid[0] )
                    break;
@@ -1712,7 +1715,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             nValid[n] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
                                                      nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
 #ifdef MULTI_SL_DEBUG
-            if (nValid[n]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d a%d c%d %x\n", n, nStartOld[n], nStartNew[n], (long)nGlyphAdv[n], nCharPos[n], rArgs.mpStr[nCharPos[n]]);
+            if (nValid[n]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d a%d c%d %x\n", n, nStartOld[n], nStartNew[n], (long)nGlyphAdv[n], nCharPos[n], rArgs.mrStr[nCharPos[n]]);
 #endif
             // break after last glyph of active layout
             if( !nValid[n] )

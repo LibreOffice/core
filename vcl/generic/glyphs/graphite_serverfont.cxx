@@ -46,7 +46,6 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
     : ServerFontLayout(rServerFont),
         maImpl(rServerFont.GetGraphiteFace()->face(), rServerFont)
     , mpFeatures(NULL)
-    , mpStr(NULL)
 {
     gr_font * pFont = rServerFont.GetGraphiteFace()->font(rServerFont.GetFontSelData().mnHeight, rServerFont.NeedsArtificialBold(), rServerFont.NeedsArtificialItalic());
     if (!pFont)

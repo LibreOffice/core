@@ -602,8 +602,9 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
     Point aNewPos( 0, 0 );
     GlyphItem aPrevItem;
     rtl_TextEncoding aFontEnc = mrPrinterGfx.GetFontMgr().getFontEncoding( mnFontID );
-
-    Reserve(rArgs.mnLength);
+    const int nLength = rArgs.mrStr.getLength();
+    const sal_Unicode *pStr = rArgs.mrStr.getStr();
+    Reserve(nLength);
 
     for(;;)
     {
@@ -611,7 +612,7 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( !rArgs.GetNextPos( &nCharPos, &bRightToLeft ) )
             break;
 
-        sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
+        sal_Unicode cChar = pStr[ nCharPos ];
         if( bRightToLeft )
             cChar = GetMirroredChar( cChar );
         // symbol font aliasing: 0x0020-0x00ff -> 0xf020 -> 0xf0ff
@@ -680,7 +681,8 @@ PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& r
     mbVertical   = mrPrinterGfx.GetFontVertical();
     mbArtItalic  = mrPrinterGfx.GetArtificialItalic();
     mbArtBold    = mrPrinterGfx.GetArtificialBold();
-    maText       = OUString( rArgs.mpStr + rArgs.mnMinCharPos, rArgs.mnEndCharPos - rArgs.mnMinCharPos+1 );
+    const sal_Unicode *pStr = rArgs.mrStr.getStr();
+    maText       = OUString( pStr + rArgs.mnMinCharPos, rArgs.mnEndCharPos - rArgs.mnMinCharPos+1 );
     mnMinCharPos = rArgs.mnMinCharPos;
 }
 

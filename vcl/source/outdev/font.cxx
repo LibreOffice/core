@@ -2101,8 +2101,8 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     int nCharPos = -1;
     bool bRTL = false;
     OUStringBuffer aMissingCodeBuf;
-    while( rLayoutArgs.GetNextPos( &nCharPos, &bRTL) )
-        aMissingCodeBuf.append( rLayoutArgs.mpStr[ nCharPos ] );
+    while (rLayoutArgs.GetNextPos( &nCharPos, &bRTL))
+        aMissingCodeBuf.append(rLayoutArgs.mrStr[nCharPos]);
     rLayoutArgs.ResetPos();
     OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
 

@@ -58,7 +58,7 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( (rArgs.mnFlags & SalLayoutFlags::KerningAsian)
     && !(rArgs.mnFlags & SalLayoutFlags::Vertical) )
         if( (rArgs.mpDXArray != NULL) || (rArgs.mnLayoutWidth != 0) )
-            ApplyAsianKerning( rArgs.mpStr, rArgs.mnLength );
+            ApplyAsianKerning(rArgs.mrStr);
 
     // insert kashidas where requested by the formatting array
     if( (rArgs.mnFlags & SalLayoutFlags::KashidaJustification) && rArgs.mpDXArray )
@@ -89,13 +89,12 @@ void ServerFontLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
     //if position nCharPos is missing in the font, grab the entire grapheme and
     //mark all glyphs as missing so the whole thing is rendered with the same
     //font
-    OUString aRun(rArgs.mpStr);
     sal_Int32 nDone;
     sal_Int32 nGraphemeStartPos =
-        mxBreak->previousCharacters(aRun, nCharPos+1, aLocale,
+        mxBreak->previousCharacters(rArgs.mrStr, nCharPos+1, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
     sal_Int32 nGraphemeEndPos =
-        mxBreak->nextCharacters(aRun, nCharPos, aLocale,
+        mxBreak->nextCharacters(rArgs.mrStr, nCharPos, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
 
     rArgs.NeedFallback(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
@@ -409,6 +408,9 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     rLayout.Reserve(nGlyphCapacity);
 
+    const int nLength = rArgs.mrStr.getLength();
+    const sal_Unicode *pStr = rArgs.mrStr.getStr();
+
     std::unique_ptr<vcl::TextLayoutCache> pNewScriptRun;
     vcl::TextLayoutCache const* pTextLayout;
     if (rArgs.m_pTextLayoutCache)
@@ -417,7 +419,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
     }
     else
     {
-        pNewScriptRun.reset(new vcl::TextLayoutCache(rArgs.mpStr, rArgs.mnEndCharPos));
+        pNewScriptRun.reset(new vcl::TextLayoutCache(pStr, rArgs.mnEndCharPos));
         pTextLayout = pNewScriptRun.get();
     }
 
@@ -472,7 +474,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             int nHbFlags = HB_BUFFER_FLAGS_DEFAULT;
             if (nMinRunPos == 0)
                 nHbFlags |= HB_BUFFER_FLAG_BOT; /* Beginning-of-text */
-            if (nEndRunPos == rArgs.mnLength)
+            if (nEndRunPos == nLength)
                 nHbFlags |= HB_BUFFER_FLAG_EOT; /* End-of-text */
 
             hb_buffer_t *pHbBuffer = hb_buffer_create();
@@ -481,7 +483,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             hb_buffer_set_script(pHbBuffer, maHbScript);
             hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
             hb_buffer_set_flags(pHbBuffer, (hb_buffer_flags_t) nHbFlags);
-            hb_buffer_add_utf16(pHbBuffer, rArgs.mpStr, rArgs.mnLength, nMinRunPos, nRunLen);
+            hb_buffer_add_utf16(pHbBuffer, pStr, nLength, nMinRunPos, nRunLen);
             hb_shape(pHbFont, pHbBuffer, NULL, 0);
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
@@ -505,7 +507,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 // FixupGlyphIndex() is doing, minus the GSUB part.
                 if (nCharPos >= 0)
                 {
-                    sal_UCS4 aChar = rArgs.mpStr[nCharPos];
+                    sal_UCS4 aChar = rArgs.mrStr[nCharPos];
                     nGlyphIndex = rFont.FixupGlyphIndex(nGlyphIndex, aChar);
                 }
 
