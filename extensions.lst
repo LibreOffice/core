@@ -39,7 +39,7 @@
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
-    045c9cd45d6517c7304e77faeb502776 http://sourceforge.net/projects/aoo-extensions/files/17102/20/dict-en.oxt/download "dict-en.oxt"
+    f5f6aab4cc5d92a34ab13ad15332770c http://sourceforge.net/projects/aoo-extensions/files/17102/21/dict-en.oxt/download "dict-en.oxt"
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
