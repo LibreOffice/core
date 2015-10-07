@@ -1157,7 +1157,7 @@ void FormulaCompiler::Factor()
                 if( eOp != ocClose )
                     SetError( errPairExpected);
                 else
-                    eOp = NextToken();
+                    NextToken();
             }
         }
     }
@@ -1181,7 +1181,7 @@ void FormulaCompiler::Factor()
         if (eOp != ocClose)
             SetError( errPairExpected);
         else
-            eOp = NextToken();
+            NextToken();
     }
     else
     {
@@ -1240,7 +1240,7 @@ void FormulaCompiler::Factor()
                 if (eOp != ocClose)
                     SetError( errPairExpected);
                 PutCode( pFacToken);
-                eOp = NextToken();
+                NextToken();
             }
         }
         // special cases NOT() and NEG()
@@ -1278,7 +1278,7 @@ void FormulaCompiler::Factor()
                 if (eOp != ocClose)
                     SetError( errPairExpected);
                 else
-                    eOp = NextToken();
+                    NextToken();
                 pFacToken->SetByte( nSepCount );
                 if (nSepCount == 2)
                 {
@@ -1305,7 +1305,7 @@ void FormulaCompiler::Factor()
                 else if ( !pArr->GetCodeError() )
                     pFacToken->SetByte( 1 );
                 PutCode( pFacToken );
-                eOp = NextToken();
+                NextToken();
             }
         }
         else if ((SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)
@@ -1355,7 +1355,7 @@ void FormulaCompiler::Factor()
             else if (eOp != ocClose)
                 SetError( errPairExpected);
             else
-                eOp = NextToken();
+                NextToken();
             // Jumps are just normal functions for the FunctionAutoPilot tree view
             if (!mbJumpCommandReorder && pFacToken->GetType() == svJump)
                 pFacToken = new FormulaFAPToken( pFacToken->GetOpCode(), nSepCount, pFacToken );
@@ -1428,7 +1428,7 @@ void FormulaCompiler::Factor()
                 SetError( errPairExpected);
             else
             {
-                eOp = NextToken();
+                NextToken();
                 // always limit to nJumpMax, no arbitrary overwrites
                 if ( ++nJumpCount <= nJumpMax )
                     pFacToken->GetJump()[ nJumpCount ] = pc-1;
@@ -1459,7 +1459,7 @@ void FormulaCompiler::Factor()
         else if ( eOp == ocMissing )
         {
             PutCode( mpToken );
-            eOp = NextToken();
+            NextToken();
         }
         else if ( eOp == ocClose )
         {
@@ -1477,7 +1477,7 @@ void FormulaCompiler::Factor()
         else if ( mpToken->IsExternalRef() )
         {
             PutCode( mpToken);
-            eOp = NextToken();
+            NextToken();
         }
         else
         {
