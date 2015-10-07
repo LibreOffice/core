@@ -1882,7 +1882,6 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                     {
                                         if ( bFirst )
                                         {
-                                            bFirst = false;
                                             rStr = rSepF;
                                             nTypeArray[i] = NF_SYMBOLTYPE_THSEP;
                                         }
