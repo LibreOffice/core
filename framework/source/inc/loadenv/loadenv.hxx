@@ -77,7 +77,7 @@ public:
 
         @descr  The load environment must know, if a content
                 is related to a target frame or not. Only "visible"
-                components, which full fill the requirements of the
+                components, which fullfil the requirements of the
                 model-controller-view paradigm can be loaded into a frame.
                 Such contents are classified as E_CAN_BE_LOADED.
 

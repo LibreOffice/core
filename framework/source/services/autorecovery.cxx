@@ -740,7 +740,7 @@ private:
                 SessionSave/CrashSave => pParams != 0
 
         @return A suggestion, how the timer (if its not already disabled!)
-                should be restarted to full fill the requirements.
+                should be restarted to fulfill the requirements.
 
         @threadsafe
      */

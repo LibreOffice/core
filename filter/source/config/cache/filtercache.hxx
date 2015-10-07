@@ -324,7 +324,7 @@ class FilterCache : public BaseLock
             @throw      An exception if the cache could not be filled really
                         or seems to be invalid afterwards. But there is no reaction
                         at all if this method does nothing inside, because the cache
-                        is already full filled!
+                        is already fully filled!
          */
         void load(EFillState eRequired)
             throw(css::uno::Exception);

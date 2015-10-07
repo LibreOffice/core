@@ -94,7 +94,7 @@ class JobResult
 
         /**
             represent the part "DispatchResult"
-            It's a full filled event type, which was given
+            It's a fulfilled event type, which was given
             back by the executed job. Any user of us can send
             it to his registered result listener directly.
          */
