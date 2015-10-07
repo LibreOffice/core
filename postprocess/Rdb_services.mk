@@ -110,7 +110,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	xmlscript/util/xmlscript \
 	xmlsecurity/util/xmlsecurity \
 	xmlsecurity/util/xsec_fw \
-	$(if $(filter-out ANDROID,$(OS)), \
+	$(if $(filter-out ANDROID IOS,$(OS)), \
 		xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows)) \
 	$(if $(ENABLE_COINMP), \
 		sccomp/source/solver/coinmpsolver \
