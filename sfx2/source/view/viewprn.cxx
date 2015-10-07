@@ -815,7 +815,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             {
                 // PrinterDialog needs a temporary printer
                 VclPtr<SfxPrinter> pDlgPrinter = pPrinter->Clone();
-                nDialogRet = 0;
 
                 // execute PrinterSetupDialog
                 VclPtrInstance<PrinterSetupDialog> pPrintSetupDlg( GetWindow() );
