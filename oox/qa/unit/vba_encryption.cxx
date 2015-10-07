@@ -25,6 +25,8 @@ public:
 
     void testSimple2();
 
+    void testProjKey1();
+
     // avoid the BootstrapFixtureBase::setUp and tearDown
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
@@ -32,6 +34,7 @@ public:
     CPPUNIT_TEST_SUITE(TestVbaEncryption);
     // CPPUNIT_TEST(testSimple1);
     // CPPUNIT_TEST(testSimple2);
+    CPPUNIT_TEST(testProjKey1);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -48,7 +51,6 @@ void TestVbaEncryption::testSimple1()
     VBAEncryption aEncryption(pData, nLength, aEncryptedStream,
             &nSeed, nProjKey);
     aEncryption.write();
-
 }
 
 void TestVbaEncryption::testSimple2()
@@ -71,6 +73,13 @@ void TestVbaEncryption::testSimple2()
         aEncryptedStream.ReadUChar(val);
         CPPUNIT_ASSERT_EQUAL((int)pExpectedData[i], (int)sal_uInt8(val));
     }
+}
+
+void TestVbaEncryption::testProjKey1()
+{
+    OUString aProjectID("{917DED54-440B-4FD1-A5C1-74ACF261E600}");
+    sal_uInt8 nProjKey = VBAEncryption::calculateProjKey(aProjectID);
+    CPPUNIT_ASSERT_EQUAL((int)0xdf, (int)nProjKey);
 }
 
 void TestVbaEncryption::setUp()
