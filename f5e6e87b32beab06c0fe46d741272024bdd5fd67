@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_63a38d9f",
+        "filename": "slideshow/source/engine/slide/layer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-08T21:44:57Z",
+      "side": 1,
+      "message": "As far as I could tell, the two separate for_each loops can be safely condensed into one range-based for-loop",
+      "revId": "f5e6e87b32beab06c0fe46d741272024bdd5fd67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_43a00991",
+        "filename": "slideshow/source/engine/slide/slideimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-08T21:44:57Z",
+      "side": 1,
+      "message": "In my opinion using a functor here doesn\u0027t make much sense now that we are no longer using for_each.\n\nThe true representation of SlideRenderer::operator() in LLVM IR would be something like the following\n\n    define void @\u003cchars\u003eSlideRenderer\u003cchars\u003e( %struct.SlideRenderer* %this, %struct.UnoViewSharedPtr %rView )\n\nSo in my opinion there is no real benefit from using a functor that takes a dereferenced \"this\", just to apply operator() which takes a pointer to the dereferenced \"this\" that was passed to the functors constructor. Seems kind of roundabout to me :-)\n\nIn addition, we eliminate the need to call a the functors constructor.",
+      "revId": "f5e6e87b32beab06c0fe46d741272024bdd5fd67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_a3ada58a",
+        "filename": "slideshow/source/engine/slide/slideimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-08T21:44:57Z",
+      "side": 1,
+      "message": "Again, in my opinion think this is cleaner than using a functor, but I could be easily convinced to do otherwise.",
+      "revId": "f5e6e87b32beab06c0fe46d741272024bdd5fd67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
