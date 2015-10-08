@@ -639,6 +639,9 @@ public class Helper
             ((HttpsURLConnection) conn).setSSLSocketFactory(new WikiProtocolSocketFactory());
         }
 
+// enable this to help debug connections where TLS gets in the way
+//        ((HttpsURLConnection) conn).setSSLSocketFactory(new LoggingProtocolSocketFactory());
+
         conn.setRequestMethod(method);
         // note: don't connect yet so that the caller can do some further setup
 
