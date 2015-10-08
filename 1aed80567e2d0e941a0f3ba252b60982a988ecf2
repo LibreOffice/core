@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_c309b9df",
+        "filename": "sc/source/ui/unoobj/confuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-08T16:50:15Z",
+      "side": 1,
+      "message": "This looks odd. Here we set CONV_A1_XL_A1 if there was no StringRefSyntax set, for any arbitrary property that is passed in. Or am I missing that it should had been set earlier and this is only the \"last resort\" to set the StringRefSyntax in the hope that at least one property will be set if StringRefSyntax wasn\u0027t?\n\nAlso, it looks like this could change the value of meStringRefAddressSyntax unintended whenever something sets a property via UNO, not only when loading a document, because mbHasStringRefSyntax is only set when loading a document, isn\u0027t it?.\n\nChanging calculation settings when not loading a document would also interfere with the AdjustRowHeight() above as that evaluates formulas, so changing the setting should happen before.\n\nHowever, both could be prevented by changing the setting only if (rDoc.IsImportingXML()).\n\nLast but not least, this portion would be executed for each property, copying instances of ScCalcConfig around, and in case of mbHasStringRefSyntax\u003d\u003dfalse even setting them multiple times for each property. As GetCalcConfig() returns a const reference I think it would be better to have something like\n\n     if (!rDoc.GetCalcConfig().mbHasStringRefSyntax \u0026\u0026 rDoc.GetCalcConfig().meStringRefAddressSyntax !\u003d formula::FormulaGrammar::CONV_A1_XL_A1 )\n     {\n         ScCalcConfig aCalcConfig \u003d rDoc.GetCalcConfig();\n         aCalcConfig.meStringRefAddressSyntax \u003d formula::FormulaGrammar::CONV_A1_XL_A1;\n         rDoc.SetCalcConfig(aCalcConfig);\n     }",
+      "revId": "1aed80567e2d0e941a0f3ba252b60982a988ecf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
