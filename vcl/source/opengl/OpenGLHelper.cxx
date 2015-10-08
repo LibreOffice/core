@@ -11,6 +11,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <osl/file.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
@@ -66,6 +67,7 @@ OString loadShader(const OUString& rFilename)
 {
     OUString aFileURL = getShaderFolder() + rFilename +".glsl";
     osl::File aFile(aFileURL);
+    SAL_INFO("vcl.opengl", "Reading " << aFileURL);
     if(aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
     {
         sal_uInt64 nSize = 0;
@@ -83,6 +85,20 @@ OString loadShader(const OUString& rFilename)
     }
 
     return OString();
+}
+
+OString& getShaderSource(const OUString& rFilename)
+{
+    static std::unordered_map<OUString, OString, OUStringHash> aMap;
+    static osl::Mutex aMutex;
+    osl::MutexGuard aGuard(aMutex);
+
+    if (aMap.find(rFilename) == aMap.end())
+    {
+        aMap[rFilename] = loadShader(rFilename);
+    }
+
+    return aMap[rFilename];
 }
 
 }
@@ -189,8 +205,8 @@ namespace
                              const OString& rPreamble )
     {
         // read shaders source
-        OString aVertexShaderSource = loadShader( rVertexShaderName );
-        OString aFragmentShaderSource = loadShader( rFragmentShaderName );
+        OString aVertexShaderSource = getShaderSource( rVertexShaderName );
+        OString aFragmentShaderSource = getShaderSource( rFragmentShaderName );
 
         // get info about the graphic device
 #if defined( SAL_UNX ) && !defined( MACOSX ) && !defined( IOS )&& !defined( ANDROID )
@@ -374,8 +390,8 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     GLint ProgramID = glCreateProgram();
 
     // read shaders from file
-    OString aVertexShaderSource = loadShader(rVertexShaderName);
-    OString aFragmentShaderSource = loadShader(rFragmentShaderName);
+    OString aVertexShaderSource = getShaderSource(rVertexShaderName);
+    OString aFragmentShaderSource = getShaderSource(rFragmentShaderName);
 
     GLint bBinaryResult = GL_FALSE;
     if( GLEW_ARB_get_program_binary && !rDigest.isEmpty() )
