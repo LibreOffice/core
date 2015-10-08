@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_835fc10d",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-08T12:16:26Z",
+      "side": 1,
+      "message": "For good reason.  A client has no guarantee that it receives independent propertyChange events for a given property in the right order.",
+      "revId": "18e79dd1ffaa8f3f98d136c87991d287b73c2f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_23a51504",
+        "filename": "include/comphelper/configurationlistener.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-08T12:16:26Z",
+      "side": 1,
+      "message": "Noel\u0027s loplugin:mergeclasses will arguably fold this",
+      "revId": "18e79dd1ffaa8f3f98d136c87991d287b73c2f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_e39afdc4",
+        "filename": "include/comphelper/configurationlistener.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-08T12:16:26Z",
+      "side": 1,
+      "message": "accessing maValue needs to be protected against data races",
+      "revId": "18e79dd1ffaa8f3f98d136c87991d287b73c2f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_03aa91d4",
+        "filename": "include/comphelper/configurationlistener.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-08T12:16:26Z",
+      "side": 1,
+      "message": "add \"virtual\" to avoid loplugin:saloverride warning",
+      "revId": "18e79dd1ffaa8f3f98d136c87991d287b73c2f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_63af0de4",
+        "filename": "include/comphelper/configurationlistener.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-08T12:16:26Z",
+      "side": 1,
+      "message": "add \"virtual\" to avoid loplugin:saloverride warning",
+      "revId": "18e79dd1ffaa8f3f98d136c87991d287b73c2f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_c39ff9b2",
+        "filename": "include/comphelper/configurationlistener.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-08T12:16:26Z",
+      "side": 1,
+      "message": "the vim mode line is missing",
+      "revId": "18e79dd1ffaa8f3f98d136c87991d287b73c2f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
