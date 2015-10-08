@@ -814,7 +814,7 @@ void StgDataStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
 
     nStart = nPage = nBgn;
     nSize  = nLen;
-    nIncr  = 1;
+    m_nIncr  = 1;
     nOffset = 0;
     if( nLen < 0 && pFat )
     {
@@ -831,7 +831,7 @@ bool StgDataStrm::SetSize( sal_Int32 nBytes )
     if ( !pFat )
         return false;
 
-    nBytes = ( ( nBytes + nIncr - 1 ) / nIncr ) * nIncr;
+    nBytes = ( ( nBytes + m_nIncr - 1 ) / m_nIncr ) * m_nIncr;
     sal_Int32 nOldSz = nSize;
     if( ( nOldSz != nBytes ) )
     {

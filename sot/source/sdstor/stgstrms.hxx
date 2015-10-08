@@ -111,13 +111,13 @@ public:
 
 class StgDataStrm : public StgStrm      // a physical data stream
 {
-    short nIncr;                        // size adjust increment
+    short m_nIncr;                        // size adjust increment
     void Init( sal_Int32 nBgn, sal_Int32 nLen );
 public:
     StgDataStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen=-1 );
     StgDataStrm( StgIo&, StgDirEntry& );
     void* GetPtr( sal_Int32 nPos, bool bForce, bool bDirty );
-    void SetIncrement( short n ) { nIncr = n ; }
+    void SetIncrement( short n ) { m_nIncr = n ; }
     virtual bool SetSize( sal_Int32 ) SAL_OVERRIDE;
     virtual sal_Int32 Read( void*, sal_Int32 ) SAL_OVERRIDE;
     virtual sal_Int32 Write( const void*, sal_Int32 ) SAL_OVERRIDE;
