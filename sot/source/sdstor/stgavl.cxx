@@ -23,14 +23,14 @@
 
 StgAvlNode::StgAvlNode()
 {
-    pLeft = pRight = NULL;
-    nBalance = nId = 0;
+    m_pLeft = m_pRight = NULL;
+    m_nBalance = m_nId = 0;
 }
 
 StgAvlNode::~StgAvlNode()
 {
-    delete pLeft;
-    delete pRight;
+    delete m_pLeft;
+    delete m_pRight;
 }
 
 StgAvlNode* StgAvlNode::Find( StgAvlNode* pFind )
@@ -43,7 +43,7 @@ StgAvlNode* StgAvlNode::Find( StgAvlNode* pFind )
             short nRes = p->Compare( pFind );
             if( !nRes )
                 return p;
-            else p = ( nRes < 0 ) ? p->pLeft : p->pRight;
+            else p = ( nRes < 0 ) ? p->m_pLeft : p->m_pRight;
         }
     }
     return NULL;
@@ -69,14 +69,14 @@ short StgAvlNode::Locate
         while( pCur != NULL )
         {
             // check for pPivot
-            if( pCur->nBalance != 0 )
+            if( pCur->m_nBalance != 0 )
                 *pPivot = pCur, *pParent = *pPrev;
             // save pPrev location and see what direction to go
             *pPrev = pCur;
             nRes = pCur->Compare( pFind );
             if( nRes == 0 )
                 break;
-            else pCur = ( nRes < 0 ) ? pCur->pLeft : pCur->pRight;
+            else pCur = ( nRes < 0 ) ? pCur->m_pLeft : pCur->m_pRight;
         }
     }
 
@@ -93,37 +93,37 @@ short StgAvlNode::Adjust( StgAvlNode** pHeavy, StgAvlNode* pNew )
     // no traversing
     OSL_ENSURE( pHeavy && pNew, "The pointers is not allowed to be NULL!" );
     if( pCur == pNew || !pNew )
-        return nBalance;
+        return m_nBalance;
 
     short nRes = Compare( pNew );
     if( nRes > 0 )
     {
-        *pHeavy = pCur = pRight;
+        *pHeavy = pCur = m_pRight;
         nDelta = -1;
     }
     else
     {
-        *pHeavy = pCur = pLeft;
+        *pHeavy = pCur = m_pLeft;
         nDelta = 1;
     }
-    nBalance = 0;
+    m_nBalance = 0;
     while( pCur != pNew )
     {
         nRes = pCur->Compare( pNew );
         if( nRes > 0 )
         {
             // height of right increases by 1
-            pCur->nBalance = -1;
-            pCur = pCur->pRight;
+            pCur->m_nBalance = -1;
+            pCur = pCur->m_pRight;
         }
         else
         {
             // height of left increases by 1
-            pCur->nBalance = 1;
-            pCur = pCur->pLeft;
+            pCur->m_nBalance = 1;
+            pCur = pCur->m_pLeft;
         }
     }
-    nBalance = nBalance + nDelta;
+    m_nBalance = m_nBalance + nDelta;
     return nDelta;
 }
 
@@ -131,11 +131,11 @@ short StgAvlNode::Adjust( StgAvlNode** pHeavy, StgAvlNode* pNew )
 
 StgAvlNode* StgAvlNode::RotLL()
 {
-    assert(pLeft && "The pointer is not allowed to be NULL!");
-    StgAvlNode *pHeavy = pLeft;
-    pLeft = pHeavy->pRight;
-    pHeavy->pRight = this;
-    pHeavy->nBalance = nBalance = 0;
+    assert(m_pLeft && "The pointer is not allowed to be NULL!");
+    StgAvlNode *pHeavy = m_pLeft;
+    m_pLeft = pHeavy->m_pRight;
+    pHeavy->m_pRight = this;
+    pHeavy->m_nBalance = m_nBalance = 0;
     return pHeavy;
 }
 
@@ -143,71 +143,71 @@ StgAvlNode* StgAvlNode::RotLL()
 
 StgAvlNode* StgAvlNode::RotLR()
 {
-    assert(pLeft && pLeft->pRight && "The pointer is not allowed to be NULL!");
-    StgAvlNode* pHeavy = pLeft;
-    StgAvlNode* pNewRoot = pHeavy->pRight;
+    assert(m_pLeft && m_pLeft->m_pRight && "The pointer is not allowed to be NULL!");
+    StgAvlNode* pHeavy = m_pLeft;
+    StgAvlNode* pNewRoot = pHeavy->m_pRight;
 
-    pHeavy->pRight = pNewRoot->pLeft;
-    pLeft = pNewRoot->pRight;
-    pNewRoot->pLeft = pHeavy;
-    pNewRoot->pRight = this;
+    pHeavy->m_pRight = pNewRoot->m_pLeft;
+    m_pLeft = pNewRoot->m_pRight;
+    pNewRoot->m_pLeft = pHeavy;
+    pNewRoot->m_pRight = this;
 
-    switch( pNewRoot->nBalance )
+    switch( pNewRoot->m_nBalance )
     {
         case 1:     // LR( b )
-            nBalance = -1;
-            pHeavy->nBalance = 0;
+            m_nBalance = -1;
+            pHeavy->m_nBalance = 0;
             break;
         case -1:    // LR( c )
-            pHeavy->nBalance = 1;
-            nBalance = 0;
+            pHeavy->m_nBalance = 1;
+            m_nBalance = 0;
             break;
         case 0:     // LR( a )
-            nBalance = 0;
-            pHeavy->nBalance = 0;
+            m_nBalance = 0;
+            pHeavy->m_nBalance = 0;
             break;
     }
-    pNewRoot->nBalance = 0;
+    pNewRoot->m_nBalance = 0;
     return pNewRoot;
 }
 
 // perform RR rotation and return new root
 StgAvlNode* StgAvlNode::RotRR()
 {
-    assert(pRight && "The pointer is not allowed to be NULL!" );
-    StgAvlNode* pHeavy = pRight;
-    pRight = pHeavy->pLeft;
-    pHeavy->pLeft = this;
-    nBalance = pHeavy->nBalance = 0;
+    assert(m_pRight && "The pointer is not allowed to be NULL!" );
+    StgAvlNode* pHeavy = m_pRight;
+    m_pRight = pHeavy->m_pLeft;
+    pHeavy->m_pLeft = this;
+    m_nBalance = pHeavy->m_nBalance = 0;
     return pHeavy;
 }
 
 // perform the RL rotation and return the new root
 StgAvlNode* StgAvlNode::RotRL()
 {
-    assert(pRight && pRight->pLeft && "The pointer is not allowed to be NULL!");
-    StgAvlNode* pHeavy = pRight;
-    StgAvlNode* pNewRoot = pHeavy->pLeft;
-    pHeavy->pLeft = pNewRoot->pRight;
-    pRight = pNewRoot->pLeft;
-    pNewRoot->pRight = pHeavy;
-    pNewRoot->pLeft = this;
-    switch( pNewRoot->nBalance )
+    assert(m_pRight && m_pRight->m_pLeft && "The pointer is not allowed to be NULL!");
+    StgAvlNode* pHeavy = m_pRight;
+    StgAvlNode* pNewRoot = pHeavy->m_pLeft;
+    pHeavy->m_pLeft = pNewRoot->m_pRight;
+    m_pRight = pNewRoot->m_pLeft;
+    pNewRoot->m_pRight = pHeavy;
+    pNewRoot->m_pLeft = this;
+    switch( pNewRoot->m_nBalance )
     {
         case -1:    // RL( b )
-            nBalance = 1;
-            pHeavy->nBalance = 0;
+            m_nBalance = 1;
+            pHeavy->m_nBalance = 0;
             break;
         case 1:     // RL( c )
-            pHeavy->nBalance = -1;
-            nBalance = 0;
+            pHeavy->m_nBalance = -1;
+            m_nBalance = 0;
             break;
         case 0:     // RL( a )
-            nBalance = 0;
-            pHeavy->nBalance = 0;
+            m_nBalance = 0;
+            pHeavy->m_nBalance = 0;
             break;
     }
-    pNewRoot->nBalance = 0;
+    pNewRoot->m_nBalance = 0;
     return pNewRoot;
 }
 
@@ -222,13 +222,13 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, bool bPtrs )
         if( !nRes )
         {
             // Element found: remove
-            if( !pCur->pRight )
+            if( !pCur->m_pRight )
             {
-                *p = pCur->pLeft; pCur->pLeft = NULL;
+                *p = pCur->m_pLeft; pCur->m_pLeft = NULL;
             }
-            else if( !pCur->pLeft )
+            else if( !pCur->m_pLeft )
             {
-                *p = pCur->pRight; pCur->pRight = NULL;
+                *p = pCur->m_pRight; pCur->m_pRight = NULL;
             }
             else
             {
@@ -238,28 +238,28 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, bool bPtrs )
                 // this element with the element found.
                 StgAvlNode* last = pCur;
                 StgAvlNode* l;
-                for( l = pCur->pLeft;
-                     l->pRight; last = l, l = l->pRight ) {}
+                for( l = pCur->m_pLeft;
+                     l->m_pRight; last = l, l = l->m_pRight ) {}
                 // remove the element from chain
-                if( l == last->pRight )
-                    last->pRight = l->pLeft;
+                if( l == last->m_pRight )
+                    last->m_pRight = l->m_pLeft;
                 else
-                    last->pLeft = l->pLeft;
+                    last->m_pLeft = l->m_pLeft;
                 // perform the replacement
-                l->pLeft = pCur->pLeft;
-                l->pRight = pCur->pRight;
+                l->m_pLeft = pCur->m_pLeft;
+                l->m_pRight = pCur->m_pRight;
                 *p = l;
                 // delete the element
-                pCur->pLeft = pCur->pRight = NULL;
+                pCur->m_pLeft = pCur->m_pRight = NULL;
             }
             return pCur;
         }
         else
         {
             if( nRes < 0 )
-                return Rem( &pCur->pLeft, pDel, bPtrs );
+                return Rem( &pCur->m_pLeft, pDel, bPtrs );
             else
-                return Rem( &pCur->pRight, pDel, bPtrs );
+                return Rem( &pCur->m_pRight, pDel, bPtrs );
         }
     }
     return NULL;
@@ -269,11 +269,11 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, bool bPtrs )
 
 void StgAvlNode::StgEnum( short& n )
 {
-    if( pLeft )
-        pLeft->StgEnum( n );
-    nId = n++;
-    if( pRight )
-        pRight->StgEnum( n );
+    if( m_pLeft )
+        m_pLeft->StgEnum( n );
+    m_nId = n++;
+    if( m_pRight )
+        m_pRight->StgEnum( n );
 }
 
 // Add node to AVL tree.
@@ -300,32 +300,32 @@ bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
 
     // add new node
     if( nRes < 0 )
-        pPrev->pLeft = pIns;
+        pPrev->m_pLeft = pIns;
     else
-        pPrev->pRight = pIns;
+        pPrev->m_pRight = pIns;
     // rebalance tree
     short nDelta = pPivot->Adjust( &pHeavy, pIns );
-    if( pPivot->nBalance >= 2 || pPivot->nBalance <= -2 )
+    if( pPivot->m_nBalance >= 2 || pPivot->m_nBalance <= -2 )
     {
-        pHeavy = ( nDelta < 0 ) ? pPivot->pRight : pPivot->pLeft;
+        pHeavy = ( nDelta < 0 ) ? pPivot->m_pRight : pPivot->m_pLeft;
         // left imbalance
         if( nDelta > 0 )
-            if( pHeavy->nBalance == 1 )
+            if( pHeavy->m_nBalance == 1 )
                 pNewRoot = pPivot->RotLL();
             else
                 pNewRoot = pPivot->RotLR();
         // right imbalance
-        else if( pHeavy->nBalance == -1 )
+        else if( pHeavy->m_nBalance == -1 )
             pNewRoot = pPivot->RotRR();
         else
             pNewRoot = pPivot->RotRL();
         // relink balanced subtree
         if( pParent == NULL )
             *pRoot = pNewRoot;
-        else if( pPivot == pParent->pLeft )
-            pParent->pLeft = pNewRoot;
-        else if( pPivot == pParent->pRight )
-            pParent->pRight = pNewRoot;
+        else if( pPivot == pParent->m_pLeft )
+            pParent->m_pLeft = pNewRoot;
+        else if( pPivot == pParent->m_pRight )
+            pParent->m_pRight = pNewRoot;
     }
     return true;
 }
@@ -385,9 +385,9 @@ StgAvlNode* StgAvlIterator::Find( short n )
     StgAvlNode* p = m_pRoot;
     while( p )
     {
-        if( n == p->nId )
+        if( n == p->m_nId )
             break;
-        else p = ( n < p->nId ) ? p->pLeft : p->pRight;
+        else p = ( n < p->m_nId ) ? p->m_pLeft : p->m_pRight;
     }
     return p;
 }

@@ -116,15 +116,15 @@ void StgDirEntry::Enum( sal_Int32& n )
 {
     sal_Int32 nLeft = STG_FREE, nRight = STG_FREE, nDown = STG_FREE;
     m_nEntry = n++;
-    if( pLeft )
+    if( m_pLeft )
     {
-        static_cast<StgDirEntry*>(pLeft)->Enum( n );
-        nLeft = static_cast<StgDirEntry*>(pLeft)->m_nEntry;
+        static_cast<StgDirEntry*>(m_pLeft)->Enum( n );
+        nLeft = static_cast<StgDirEntry*>(m_pLeft)->m_nEntry;
     }
-    if( pRight )
+    if( m_pRight )
     {
-        static_cast<StgDirEntry*>(pRight)->Enum( n );
-        nRight = static_cast<StgDirEntry*>(pRight)->m_nEntry;
+        static_cast<StgDirEntry*>(m_pRight)->Enum( n );
+        nRight = static_cast<StgDirEntry*>(m_pRight)->m_nEntry;
     }
     if( m_pDown )
     {
@@ -140,10 +140,10 @@ void StgDirEntry::Enum( sal_Int32& n )
 
 void StgDirEntry::DelTemp( bool bForce )
 {
-    if( pLeft )
-        static_cast<StgDirEntry*>(pLeft)->DelTemp( false );
-    if( pRight )
-        static_cast<StgDirEntry*>(pRight)->DelTemp( false );
+    if( m_pLeft )
+        static_cast<StgDirEntry*>(m_pLeft)->DelTemp( false );
+    if( m_pRight )
+        static_cast<StgDirEntry*>(m_pRight)->DelTemp( false );
     if( m_pDown )
     {
         // If the storage is dead, of course all elements are dead, too
@@ -162,7 +162,7 @@ void StgDirEntry::DelTemp( bool bForce )
             StgAvlNode::Remove( reinterpret_cast<StgAvlNode**>(&m_pUp->m_pDown), this, bDel );
             if( !bDel )
             {
-                pLeft = pRight = m_pDown = 0;
+                m_pLeft = m_pRight = m_pDown = 0;
                 m_bInvalid = m_bZombie = true;
             }
         }
@@ -178,11 +178,11 @@ bool StgDirEntry::Store( StgDirStrm& rStrm )
         return false;
     // Do not store the current (maybe not committed) entry
     m_aSave.Store( pEntry );
-    if( pLeft )
-        if( !static_cast<StgDirEntry*>(pLeft)->Store( rStrm ) )
+    if( m_pLeft )
+        if( !static_cast<StgDirEntry*>(m_pLeft)->Store( rStrm ) )
             return false;
-    if( pRight )
-        if( !static_cast<StgDirEntry*>(pRight)->Store( rStrm ) )
+    if( m_pRight )
+        if( !static_cast<StgDirEntry*>(m_pRight)->Store( rStrm ) )
             return false;
     if( m_pDown )
         if( !m_pDown->Store( rStrm ) )
@@ -218,11 +218,11 @@ bool StgDirEntry::StoreStreams( StgIo& rIo )
 {
     if( !StoreStream( rIo ) )
         return false;
-    if( pLeft )
-        if( !static_cast<StgDirEntry*>(pLeft)->StoreStreams( rIo ) )
+    if( m_pLeft )
+        if( !static_cast<StgDirEntry*>(m_pLeft)->StoreStreams( rIo ) )
             return false;
-    if( pRight )
-        if( !static_cast<StgDirEntry*>(pRight)->StoreStreams( rIo ) )
+    if( m_pRight )
+        if( !static_cast<StgDirEntry*>(m_pRight)->StoreStreams( rIo ) )
             return false;
     if( m_pDown )
         if( !m_pDown->StoreStreams( rIo ) )
@@ -235,10 +235,10 @@ bool StgDirEntry::StoreStreams( StgIo& rIo )
 void StgDirEntry::RevertAll()
 {
     m_aEntry = m_aSave;
-    if( pLeft )
-        static_cast<StgDirEntry*>(pLeft)->RevertAll();
-    if( pRight )
-        static_cast<StgDirEntry*>(pRight)->RevertAll();
+    if( m_pLeft )
+        static_cast<StgDirEntry*>(m_pLeft)->RevertAll();
+    if( m_pRight )
+        static_cast<StgDirEntry*>(m_pRight)->RevertAll();
     if( m_pDown )
         m_pDown->RevertAll();
 }
@@ -249,9 +249,9 @@ bool StgDirEntry::IsDirty()
 {
     if( m_bDirty || m_bInvalid )
         return true;
-    if( pLeft && static_cast<StgDirEntry*>(pLeft)->IsDirty() )
+    if( m_pLeft && static_cast<StgDirEntry*>(m_pLeft)->IsDirty() )
         return true;
-    if( pRight && static_cast<StgDirEntry*>(pRight)->IsDirty() )
+    if( m_pRight && static_cast<StgDirEntry*>(m_pRight)->IsDirty() )
         return true;
     if( m_pDown && m_pDown->IsDirty() )
         return true;

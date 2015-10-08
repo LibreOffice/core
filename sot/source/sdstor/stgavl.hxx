@@ -36,9 +36,9 @@ private:
     void   StgEnum( short& );
     static StgAvlNode* Rem( StgAvlNode**, StgAvlNode*, bool );
 protected:
-    short nId;                          // iterator ID
-    short nBalance;                     // indicates tree balance
-    StgAvlNode* pLeft, *pRight;         // leaves
+    short m_nId;                          // iterator ID
+    short m_nBalance;                     // indicates tree balance
+    StgAvlNode* m_pLeft, *m_pRight;         // leaves
     StgAvlNode();
 public:
     virtual ~StgAvlNode();
