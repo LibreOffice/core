@@ -438,7 +438,7 @@ void VBAEncryption::writeDataLengthEnc()
 
 void VBAEncryption::writeDataEnc()
 {
-    for(sal_Int8 i = 0; i < mnLength; i++)
+    for(sal_Int16 i = 0; i < mnLength; i++)
     {
         sal_uInt8 nByteEnc = mpData[i] ^ (mnEncryptedByte2 + mnUnencryptedByte1);
         exportHexString(mrEncryptedData, nByteEnc);
