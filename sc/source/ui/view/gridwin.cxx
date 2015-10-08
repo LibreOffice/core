@@ -134,6 +134,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
+#include <comphelper/string.hxx>
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -5899,9 +5900,8 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
     double nPPTY = pViewData->GetPPTY();
 
     Rectangle aBoundingBox;
-    std::stringstream ss;
+    std::vector<OString> aRectangles;
 
-    bool bIsFirst = true;
     for (auto aRectangle : rRectangles)
     {
         aRectangle.Right() += 1;
@@ -5909,14 +5909,9 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
 
         aBoundingBox.Union(aRectangle);
 
-        if (bIsFirst)
-            bIsFirst = false;
-        else
-            ss << "; ";
-
         Rectangle aRect(aRectangle.Left() / nPPTX, aRectangle.Top() / nPPTY,
                 aRectangle.Right() / nPPTX, aRectangle.Bottom() / nPPTY);
-        ss << aRect.toString().getStr();
+        aRectangles.push_back(aRect.toString());
     }
 
     // selection start handle
@@ -5930,7 +5925,7 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
     pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
 
     // the selection itself
-    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, ss.str().c_str());
+    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, comphelper::string::join("; ", aRectangles).getStr());
 }
 
 void ScGridWindow::UpdateCursorOverlay()

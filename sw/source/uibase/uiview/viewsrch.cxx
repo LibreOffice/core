@@ -60,6 +60,7 @@
 #include <unocrsr.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/string.hxx>
 
 #include <view.hrc>
 #include <SwRewriter.hxx>
@@ -118,20 +119,15 @@ static void lcl_emitSearchResultCallbacks(sal_uInt16 nFound, SvxSearchItem* pSea
             {
                 std::vector<OString> aSelectionRectangles;
                 pShellCrsr->SwSelPaintRects::Show(&aSelectionRectangles);
-                std::stringstream ss;
-                bool bFirst = true;
+                std::vector<OString> aRect;
                 for (size_t i = 0; i < aSelectionRectangles.size(); ++i)
                 {
                     const OString& rSelectionRectangle = aSelectionRectangles[i];
                     if (rSelectionRectangle.isEmpty())
                         continue;
-                    if (bFirst)
-                        bFirst = false;
-                    else
-                        ss << "; ";
-                    ss << rSelectionRectangle.getStr();
+                    aRect.push_back(rSelectionRectangle);
                 }
-                OString sRect = ss.str().c_str();
+                OString sRect = comphelper::string::join("; ", aRect);
                 aMatches.push_back(sRect);
             }
         }

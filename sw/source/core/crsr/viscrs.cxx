@@ -55,6 +55,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/string.hxx>
 #include <paintfrm.hxx>
 
 // Here static members are defined. They will get changed on alteration of the
@@ -392,15 +393,13 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
                 }
             }
 
-            std::stringstream ss;
+            std::vector<OString> aRect;
             for (size_type i = 0; i < size(); ++i)
             {
                 const SwRect& rRect = (*this)[i];
-                if (i)
-                    ss << "; ";
-                ss << rRect.SVRect().toString().getStr();
+                aRect.push_back(rRect.SVRect().toString());
             }
-            OString sRect = ss.str().c_str();
+            OString sRect = comphelper::string::join("; ", aRect);
             if (!pSelectionRectangles)
             {
                 if (comphelper::LibreOfficeKit::isViewCallback())
@@ -606,20 +605,15 @@ void SwShellCrsr::Show()
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        std::stringstream ss;
-        bool bFirst = true;
+        std::vector<OString> aRect;
         for (size_t i = 0; i < aSelectionRectangles.size(); ++i)
         {
             const OString& rSelectionRectangle = aSelectionRectangles[i];
             if (rSelectionRectangle.isEmpty())
                 continue;
-            if (bFirst)
-                bFirst = false;
-            else
-                ss << "; ";
-            ss << rSelectionRectangle.getStr();
+            aRect.push_back(rSelectionRectangle);
         }
-        OString sRect = ss.str().c_str();
+        OString sRect = comphelper::string::join("; ", aRect);
         if (comphelper::LibreOfficeKit::isViewCallback())
             GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
         else
