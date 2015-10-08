@@ -151,7 +151,7 @@ bool SwWrtShell::GoPrevBookmark()
 
 void SwWrtShell::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
 {
-    // OD 11.02.2003 #100556# - execute macro, if it is allowed.
+    // execute macro, if it is allowed.
     if ( IsMacroExecAllowed() )
     {
         GetDoc()->ExecMacro( rMacro, pRet, pArgs );
