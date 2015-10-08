@@ -73,6 +73,7 @@ public:
 
     uno::Reference<lang::XComponent> mxComponent;
     OString m_aTextSelection;
+    std::vector<OString> m_aSearchResultSelection;
 };
 
 LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
@@ -121,6 +122,16 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_TEXT_SELECTION:
     {
         m_aTextSelection = pPayload;
+    }
+    break;
+    case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
+    {
+        m_aSearchResultSelection.clear();
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(pPayload);
+        boost::property_tree::read_json(aStream, aTree);
+        for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("searchResultSelection"))
+            m_aSearchResultSelection.push_back(rValue.second.data().c_str());
     }
     break;
     }
@@ -256,6 +267,8 @@ void DesktopLOKTest::testSearchCalc()
     } while (nIndex >= 0);
     // This was 1, find-all only found one match.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aSelections.size());
+    // Make sure that we get exactly as many rectangle lists as matches.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSearchResultSelection.size());
 
     closeDoc();
     comphelper::LibreOfficeKit::setActive(false);
