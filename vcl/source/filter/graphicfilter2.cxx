@@ -365,16 +365,18 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                     sal_uInt16  nSamplesPerLine = 0;
                                     sal_uInt8   nNumberOfImageComponents = 0;
                                     sal_uInt8   nComponentsIdentifier = 0;
-                                    sal_uInt8   nHorizontalSamplingFactor = 0;
+                                    sal_uInt8   nSamplingFactor = 0;
                                     sal_uInt8   nQuantizationTableDestinationSelector = 0;
                                     rStm.ReadUChar( nSamplePrecision )
                                         .ReadUInt16( nNumberOfLines )
                                         .ReadUInt16( nSamplesPerLine )
                                         .ReadUChar( nNumberOfImageComponents )
                                         .ReadUChar( nComponentsIdentifier )
-                                        .ReadUChar( nHorizontalSamplingFactor )
+                                        .ReadUChar( nSamplingFactor )
                                         .ReadUChar( nQuantizationTableDestinationSelector );
-                                    nHorizontalSamplingFactor >>= 4;
+
+                                    // nSamplingFactor (lower nibble: vertial,
+                                    // upper nibble: horizontal) is unused
 
                                     aPixSize.Height() = nNumberOfLines;
                                     aPixSize.Width() = nSamplesPerLine;
