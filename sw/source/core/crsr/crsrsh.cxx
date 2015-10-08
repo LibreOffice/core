@@ -64,6 +64,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/string.hxx>
 
 using namespace com::sun::star;
 using namespace util;
@@ -1204,14 +1205,19 @@ OUString SwCrsrShell::getPageRectangles()
 {
     CurrShell aCurr(this);
     SwRootFrm* pLayout = GetLayout();
-    std::stringstream ss;
+    std::vector<OString> v;
     for (const SwFrm* pFrm = pLayout->GetLower(); pFrm; pFrm = pFrm->GetNext())
     {
-        if (pFrm != pLayout->GetLower())
-            ss << "; ";
-        ss << pFrm->Frm().Left() << ", " << pFrm->Frm().Top() << ", " << pFrm->Frm().Width() << ", " << pFrm->Frm().Height();
+        std::vector<OString> aRectangle
+        {
+            OString::number(pFrm->Frm().Left()),
+            OString::number(pFrm->Frm().Top()),
+            OString::number(pFrm->Frm().Width()),
+            OString::number(pFrm->Frm().Height())
+        };
+        v.push_back(comphelper::string::join(", ", aRectangle));
     }
-    return OUString::fromUtf8(ss.str().c_str());
+    return OUString::fromUtf8(comphelper::string::join("; ", v).getStr());
 }
 
 /// go to the next SSelection

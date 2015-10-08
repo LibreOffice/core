@@ -46,6 +46,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -350,17 +351,15 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                     libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
                 }
 
-                std::stringstream ss;
+                std::vector<OString> v;
                 for (size_t i = 0; i < aRectangles.size(); ++i)
                 {
                     Rectangle& rRectangle = aRectangles[i];
-                    if (i)
-                        ss << "; ";
                     if (bMm100ToTwip)
                         rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_100TH_MM, MAP_TWIP);
-                    ss << rRectangle.toString().getStr();
+                    v.push_back(rRectangle.toString().getStr());
                 }
-                sRectangle = ss.str().c_str();
+                sRectangle = comphelper::string::join("; ", v);
             }
             libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
         }
