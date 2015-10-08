@@ -310,7 +310,7 @@ class FTPDialog(WizardDialog):
         self.setEnabled(self.btnTestConnection, True)
 
 
-    # To try the conenction I do some actions that
+    # To try the connection I do some actions that
     # seem logical to me: <br/>
     # I get a ucb content.
     # I list the files in this content.
