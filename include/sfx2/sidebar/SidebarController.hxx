@@ -160,6 +160,8 @@ public:
 
     void updateModel(css::uno::Reference<css::frame::XModel> xModel);
 
+    void disposeDecks(css::uno::Reference<css::frame::XController> xController);
+
 private:
 
     VclPtr<Deck> mpCurrentDeck;

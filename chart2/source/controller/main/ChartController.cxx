@@ -807,8 +807,6 @@ void SAL_CALL ChartController::dispose()
     throw(uno::RuntimeException, std::exception)
 {
     m_bDisposed = true;
-    mpSelectionChangeHandler->selectionChanged(css::lang::EventObject());
-    mpSelectionChangeHandler->Disconnect();
 
     if (getModel().is())
     {
@@ -819,6 +817,8 @@ void SAL_CALL ChartController::dispose()
             sfx2::sidebar::SidebarController::unregisterSidebarForFrame(pSidebar, this);
         }
     }
+    mpSelectionChangeHandler->selectionChanged(css::lang::EventObject());
+    mpSelectionChangeHandler->Disconnect();
 
     try
     {

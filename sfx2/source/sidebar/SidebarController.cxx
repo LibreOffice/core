@@ -174,6 +174,7 @@ void SidebarController::registerSidebarForFrame(SidebarController* pController, 
 
 void SidebarController::unregisterSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xController)
 {
+    pController->disposeDecks(xController);
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
@@ -183,22 +184,16 @@ void SidebarController::unregisterSidebarForFrame(SidebarController* pController
             xController);
 }
 
-void SAL_CALL SidebarController::disposing()
+void SidebarController::disposeDecks(css::uno::Reference<css::frame::XController> xController)
 {
-    mpCloseIndicator.disposeAndClear();
-
-    maFocusManager.Clear();
-    mpTabBar.disposeAndClear();
-
-
-        // clear decks
+    // clear decks
     ResourceManager::DeckContextDescriptorContainer aDecks;
 
     mpResourceManager->GetMatchingDecks (
             aDecks,
             GetCurrentContext(),
             IsDocumentReadOnly(),
-            mxFrame->getController());
+            xController);
 
     for (ResourceManager::DeckContextDescriptorContainer::const_iterator
             iDeck(aDecks.begin()), iEnd(aDecks.end());
@@ -206,9 +201,25 @@ void SAL_CALL SidebarController::disposing()
     {
         const DeckDescriptor* deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
         VclPtr<Deck> aDeck = deckDesc->mpDeck;
+        if (aDeck == mpCurrentDeck)
+        {
+            mpCurrentDeck.clear();
+            maFocusManager.Clear();
+        }
         if (aDeck)
+        {
             aDeck.disposeAndClear();
+            mpResourceManager->SetDeckToDescriptor(iDeck->msId, VclPtr<Deck>());
+        }
     }
+}
+
+void SAL_CALL SidebarController::disposing()
+{
+    mpCloseIndicator.disposeAndClear();
+
+    maFocusManager.Clear();
+    mpTabBar.disposeAndClear();
 
     uno::Reference<css::frame::XController> xController = mxFrame->getController();
     if (!xController.is())
