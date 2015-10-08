@@ -212,13 +212,7 @@ removeSpoolDir (const OUString& rSpoolDir)
     }
     OString aSysPathByte =
         OUStringToOString (aSysPath, osl_getThreadTextEncoding());
-    sal_Char  pSystem [128];
-    sal_Int32 nChar = 0;
-
-    nChar  = psp::appendStr ("rm -rf ",     pSystem);
-    nChar += psp::appendStr (aSysPathByte.getStr(), pSystem + nChar);
-
-    if (system (pSystem) == -1)
+    if (system (OString("rm -rf " + aSysPathByte).getStr()) == -1)
         OSL_FAIL( "psprint: couldn't remove spool directory" );
 }
 
