@@ -47,11 +47,15 @@ ParaWin::ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg):
     get(m_pFtArgName, "parname");
     get(m_pFtArgDesc, "pardesc");
 
-    //Space for two lines of text
+    // Space for three lines of text in function description.
+    m_pFtEditDesc->SetText("X\nX\nX\n");
+    long nEditHeight = m_pFtEditDesc->GetOptimalSize().Height();
+    m_pFtEditDesc->set_height_request(nEditHeight);
+    m_pFtEditDesc->SetText("");
+    // Space for two lines of text in parameter description.
     m_pFtArgDesc->SetText("X\nX\n");
-    long nHeight = m_pFtArgDesc->GetOptimalSize().Height();
-    m_pFtEditDesc->set_height_request(nHeight);
-    m_pFtArgDesc->set_height_request(nHeight);
+    long nArgHeight = m_pFtArgDesc->GetOptimalSize().Height();
+    m_pFtArgDesc->set_height_request(nArgHeight);
     m_pFtArgDesc->SetText("");
 
     get(m_pBtnFx1, "FX1");
