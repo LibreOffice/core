@@ -30,7 +30,6 @@ Globals
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
             WINDOWSPATCHLEVEL 8
-            OOOVENDOR The Document Foundation
             OOODOWNLOADNAME 1
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
             64BITPRODUCT @WINDOWS_X64@
