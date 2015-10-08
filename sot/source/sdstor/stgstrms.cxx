@@ -1116,7 +1116,7 @@ StgTmpStrm::StgTmpStrm( sal_uLong nInitSize )
                               ? 16
                             : ( nInitSize ? nInitSize : 16 ), 4096 )
 {
-    pStrm = NULL;
+    m_pStrm = NULL;
     // this calls FlushData, so all members should be set by this time
     SetBufferSize( 0 );
     if( nInitSize > THRESHOLD )
@@ -1155,22 +1155,22 @@ bool StgTmpStrm::Copy( StgTmpStrm& rSrc )
 
 StgTmpStrm::~StgTmpStrm()
 {
-    if( pStrm )
+    if( m_pStrm )
     {
-        pStrm->Close();
-        osl::File::remove( aName );
-        delete pStrm;
+        m_pStrm->Close();
+        osl::File::remove( m_aName );
+        delete m_pStrm;
     }
 }
 
 sal_uLong StgTmpStrm::GetSize() const
 {
     sal_uLong n;
-    if( pStrm )
+    if( m_pStrm )
     {
-        sal_uLong old = pStrm->Tell();
-        n = pStrm->Seek( STREAM_SEEK_TO_END );
-        pStrm->Seek( old );
+        sal_uLong old = m_pStrm->Tell();
+        n = m_pStrm->Seek( STREAM_SEEK_TO_END );
+        m_pStrm->Seek( old );
     }
     else
         n = nEndOfData;
@@ -1179,14 +1179,14 @@ sal_uLong StgTmpStrm::GetSize() const
 
 void StgTmpStrm::SetSize(sal_uInt64 n)
 {
-    if( pStrm )
-        pStrm->SetStreamSize( n );
+    if( m_pStrm )
+        m_pStrm->SetStreamSize( n );
     else
     {
         if( n > THRESHOLD )
         {
-            aName = utl::TempFile(0, false).GetURL();
-            SvFileStream* s = new SvFileStream( aName, STREAM_READWRITE );
+            m_aName = utl::TempFile(0, false).GetURL();
+            SvFileStream* s = new SvFileStream( m_aName, STREAM_READWRITE );
             sal_uLong nCur = Tell();
             sal_uLong i = nEndOfData;
             std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
@@ -1231,7 +1231,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
                 delete s;
                 return;
             }
-            pStrm = s;
+            m_pStrm = s;
             // Shrink the memory to 16 bytes, which seems to be the minimum
             ReAllocateMemory( - ( (long) nEndOfData - 16 ) );
         }
@@ -1249,10 +1249,10 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
 
 sal_uLong StgTmpStrm::GetData( void* pData, sal_uLong n )
 {
-    if( pStrm )
+    if( m_pStrm )
     {
-        n = pStrm->Read( pData, n );
-        SetError( pStrm->GetError() );
+        n = m_pStrm->Read( pData, n );
+        SetError( m_pStrm->GetError() );
         return n;
     }
     else
@@ -1263,16 +1263,16 @@ sal_uLong StgTmpStrm::PutData( const void* pData, sal_uLong n )
 {
     sal_uInt32 nCur = Tell();
     sal_uInt32 nNew = nCur + n;
-    if( nNew > THRESHOLD && !pStrm )
+    if( nNew > THRESHOLD && !m_pStrm )
     {
         SetSize( nNew );
         if( GetError() != SVSTREAM_OK )
             return 0;
     }
-    if( pStrm )
+    if( m_pStrm )
     {
-        nNew = pStrm->Write( pData, n );
-        SetError( pStrm->GetError() );
+        nNew = m_pStrm->Write( pData, n );
+        SetError( m_pStrm->GetError() );
     }
     else
         nNew = SvMemoryStream::PutData( pData, n );
@@ -1285,7 +1285,7 @@ sal_uInt64 StgTmpStrm::SeekPos(sal_uInt64 n)
     assert(n != SAL_MAX_UINT32);
     if( n == STREAM_SEEK_TO_END )
         n = GetSize();
-    if( n && n > THRESHOLD && !pStrm )
+    if( n && n > THRESHOLD && !m_pStrm )
     {
         SetSize( n );
         if( GetError() != SVSTREAM_OK )
@@ -1293,10 +1293,10 @@ sal_uInt64 StgTmpStrm::SeekPos(sal_uInt64 n)
         else
             return n;
     }
-    else if( pStrm )
+    else if( m_pStrm )
     {
-        n = pStrm->Seek( n );
-        SetError( pStrm->GetError() );
+        n = m_pStrm->Seek( n );
+        SetError( m_pStrm->GetError() );
         return n;
     }
     else
@@ -1305,10 +1305,10 @@ sal_uInt64 StgTmpStrm::SeekPos(sal_uInt64 n)
 
 void StgTmpStrm::FlushData()
 {
-    if( pStrm )
+    if( m_pStrm )
     {
-        pStrm->Flush();
-        SetError( pStrm->GetError() );
+        m_pStrm->Flush();
+        SetError( m_pStrm->GetError() );
     }
     else
         SvMemoryStream::FlushData();

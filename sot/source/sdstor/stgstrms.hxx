@@ -142,8 +142,8 @@ public:
 
 class StgTmpStrm : public SvMemoryStream
 {
-    OUString aName;
-    SvFileStream* pStrm;
+    OUString m_aName;
+    SvFileStream* m_pStrm;
     using SvMemoryStream::GetData;
     virtual sal_uLong GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
     virtual sal_uLong PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
