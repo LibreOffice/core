@@ -37,7 +37,7 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
     { "EDATE", "EDATE", "com.sun.star.sheet.addin.Analysis.getEdate", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEDATE" },
     { "WEEKNUM", "WEEKNUM_ADD", "com.sun.star.sheet.addin.Analysis.getWeeknum", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETWEEKNUM" },
     { "EOMONTH", "EOMONTH", "com.sun.star.sheet.addin.Analysis.getEomonth", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEOMONTH" },
-    { "NETWORKDAYS", "NETWORKDAYS_XCL", "com.sun.star.sheet.addin.Analysis.getNetworkdays", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETNETWORKDAYS" },
+    { "NETWORKDAYS", "NETWORKDAYS_ADD", "com.sun.star.sheet.addin.Analysis.getNetworkdays", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETNETWORKDAYS" },
     { "ISEVEN", "ISEVEN_ADD", "com.sun.star.sheet.addin.Analysis.getIseven", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISEVEN" },
     { "ISODD", "ISODD_ADD", "com.sun.star.sheet.addin.Analysis.getIsodd", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISODD" },
     { "MULTINOMIAL", "MULTINOMIAL", "com.sun.star.sheet.addin.Analysis.getMultinomial", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMULTINOMIAL" },
