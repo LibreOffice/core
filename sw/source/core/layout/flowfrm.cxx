@@ -577,10 +577,10 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
     bool bInvaLay;
 
     {
-        //Ensure pParent persists for the lifetime of the Cut/Paste call to
-        //avoid SwSectionFrm::MergeNext removing the pParent we're trying to
-        //reparent into
-        SwFrmDeleteGuard aDeleteGuard(pParent);
+        //JoinLock pParent for the lifetime of the Cut/Paste call to avoid
+        //SwSectionFrm::MergeNext removing the pParent we're trying to reparent
+        //into
+        FlowFrmJoinLockGuard aJoinGuard(pParent);
         pOldParent = CutTree( &m_rThis );
         bInvaLay = PasteTree( &m_rThis, pParent, pSibling, pOldParent );
     }
