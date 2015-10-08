@@ -36,7 +36,7 @@ StgInternalStream::StgInternalStream( BaseStorage& rStg, const OUString& rName, 
     StreamMode nMode = bWr
                  ? StreamMode::WRITE | StreamMode::SHARE_DENYALL
                  : StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE;
-    pStrm = rStg.OpenStream( rName, nMode );
+    m_pStrm = rStg.OpenStream( rName, nMode );
 
     // set the error code right here in the stream
     SetError( rStg.GetError() );
@@ -45,15 +45,15 @@ StgInternalStream::StgInternalStream( BaseStorage& rStg, const OUString& rName, 
 
 StgInternalStream::~StgInternalStream()
 {
-    delete pStrm;
+    delete m_pStrm;
 }
 
 sal_uLong StgInternalStream::GetData( void* pData, sal_uLong nSize )
 {
-    if( pStrm )
+    if( m_pStrm )
     {
-        nSize = pStrm->Read( pData, nSize );
-        SetError( pStrm->GetError() );
+        nSize = m_pStrm->Read( pData, nSize );
+        SetError( m_pStrm->GetError() );
         return nSize;
     }
     else
@@ -62,10 +62,10 @@ sal_uLong StgInternalStream::GetData( void* pData, sal_uLong nSize )
 
 sal_uLong StgInternalStream::PutData( const void* pData, sal_uLong nSize )
 {
-    if( pStrm )
+    if( m_pStrm )
     {
-        nSize = pStrm->Write( pData, nSize );
-        SetError( pStrm->GetError() );
+        nSize = m_pStrm->Write( pData, nSize );
+        SetError( m_pStrm->GetError() );
         return nSize;
     }
     else
@@ -74,22 +74,22 @@ sal_uLong StgInternalStream::PutData( const void* pData, sal_uLong nSize )
 
 sal_uInt64 StgInternalStream::SeekPos(sal_uInt64 const nPos)
 {
-    return pStrm ? pStrm->Seek( nPos ) : 0;
+    return m_pStrm ? m_pStrm->Seek( nPos ) : 0;
 }
 
 void StgInternalStream::FlushData()
 {
-    if( pStrm )
+    if( m_pStrm )
     {
-        pStrm->Flush();
-        SetError( pStrm->GetError() );
+        m_pStrm->Flush();
+        SetError( m_pStrm->GetError() );
     }
 }
 
 void StgInternalStream::Commit()
 {
     Flush();
-    pStrm->Commit();
+    m_pStrm->Commit();
 }
 
 ///////////////////////// class StgCompObjStream
