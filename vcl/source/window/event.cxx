@@ -238,16 +238,17 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
         if ( aDelData.IsDead() )
             return;
 
-        if (!mpWindowImpl->maEventListeners.empty())
+        auto& rChildListeners = pWindow->mpWindowImpl->maChildEventListeners;
+        if (!rChildListeners.empty())
         {
             // Copy the list, because this can be destroyed when calling a Link...
-            std::vector<Link<VclWindowEvent&,void>> aCopy( mpWindowImpl->maChildEventListeners );
+            std::vector<Link<VclWindowEvent&,void>> aCopy( rChildListeners );
             for ( Link<VclWindowEvent&,void>& rLink : aCopy )
             {
                 if (aDelData.IsDead())
                     return;
                 // check this hasn't been removed in some re-enterancy scenario fdo#47368
-                if( std::find(mpWindowImpl->maChildEventListeners.begin(), mpWindowImpl->maChildEventListeners.end(), rLink) != mpWindowImpl->maChildEventListeners.end() )
+                if( std::find(rChildListeners.begin(), rChildListeners.end(), rLink) != rChildListeners.end() )
                     rLink.Call( aEvent );
             }
         }
