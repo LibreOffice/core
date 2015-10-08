@@ -643,6 +643,8 @@ public class Helper
 //        ((HttpsURLConnection) conn).setSSLSocketFactory(new LoggingProtocolSocketFactory());
 
         conn.setRequestMethod(method);
+        // TODO: is it possible to read the version from the extension metadata?
+        conn.setRequestProperty("User-Agent", "LibreOffice Wiki Publisher 1.2.0");
         // note: don't connect yet so that the caller can do some further setup
 
         return conn;
