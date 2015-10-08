@@ -8,21 +8,21 @@ Globals
             UREPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 4.1
-            WINDOWSBASISROOTNAME LibreOffice
-            UNIXBASISROOTNAME libreoffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            WINDOWSBASISROOTNAME Collabora Office
+            UNIXBASISROOTNAME collaboraoffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             HIDELICENSEDIALOG 0
             PACKAGEPREFIX
-            BASISPACKAGEPREFIX libobasis
-            UREPACKAGEPREFIX libreoffice
+            BASISPACKAGEPREFIX collaboraofficebasis
+            UREPACKAGEPREFIX collaboraoffice
             SOLSUREPACKAGEPREFIX libreoffice
             PROGRESSBARCOLOR 0,0,0
-            PROGRESSSIZE 444,8
+            PROGRESSSIZE 460,6
             PROGRESSSIZEHIGH 617,12
-            PROGRESSPOSITION 35,153
+            PROGRESSPOSITION 26,235
             PROGRESSPOSITIONHIGH 46,212
             PROGRESSFRAMECOLOR 102,102,102
-            PROGRESSTEXTBASELINE 145
-            PROGRESSTEXTCOLOR 0,0,0
+            PROGRESSTEXTBASELINE 230
+            PROGRESSTEXTCOLOR 255,255,255
             NATIVEPROGRESS false
             REGISTRYLAYERNAME Layers
             SERVICEPACK 1
@@ -31,6 +31,7 @@ Globals
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
             WINDOWSPATCHLEVEL @LIBO_VERSION_PATCH@
+            OOOVENDOR Collabora Productivity Ltd.
             OOODOWNLOADNAME 1
             64BITPRODUCT @WINDOWS_X64@
             WINDOWSSDKVERSION @WINDOWS_SDK_VERSION@
@@ -38,13 +39,13 @@ Globals
     }
 }
 
-LibreOffice
+CollaboraOffice
 {
     Settings
     {
         variables
         {
-            PRODUCTNAME @PRODUCTNAME@
+            PRODUCTNAME Collabora Office
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION -@LIBO_VERSION_PATCH@
             POSTVERSIONEXTENSION
@@ -68,16 +69,16 @@ LibreOffice
             CHANGETARGETDIR 1
             PATCHCODEFILE ooo_patchcodes.txt
             STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL https://www.libreoffice.org/
+            STARTCENTER_INFO_URL https://collaboraoffice.com/
             STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
             DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
         }
         active          1
         compression     5
         script          setup_osl
-        downloadname    LibreOffice_{productversion}_{os}_install_{languages}
-        langpackdownloadname    LibreOffice_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    LibreOffice_{productversion}_helppack_{os}_install_{languages}
+        downloadname    CollaboraOffice_{productversion}_{os}_install_{languages}
+        langpackdownloadname    CollaboraOffice_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    CollaboraOffice_{productversion}_helppack_{os}_install_{languages}
         include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{packinfopath}
     }
 }

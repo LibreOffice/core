@@ -290,7 +290,7 @@ sub get_downloadname_productname
 
     my $start = "";
 
-    $start = $allvariables->{'PRODUCTNAME'};
+    $start = $allvariables->{'PRODUCTNAME'}; $start =~ s/ /_/g;
 
     return $start;
 }
