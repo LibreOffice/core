@@ -56,11 +56,14 @@ $(eval $(call gb_CppunitTest_use_components,desktop_lib,\
     svtools/util/svt \
     sw/util/sw \
     sw/util/swd \
+    sc/util/sc \
+    sc/util/scd \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
     xmloff/util/xo \
+    i18npool/source/search/i18nsearch \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,desktop_lib))

@@ -16,6 +16,11 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <test/unoapi_test.hxx>
+#include <comphelper/lok.hxx>
+#include <comphelper/dispatchcommand.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <svl/srchitem.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "../../inc/lib/init.hxx"
 
@@ -45,14 +50,17 @@ public:
         UnoApiTest::tearDown();
     };
 
-    LibLODocument_Impl* loadDoc(const char* pName);
+    LibLODocument_Impl* loadDoc(const char* pName, LibreOfficeKitDocumentType eType = LOK_DOCTYPE_TEXT);
     void closeDoc();
+    static void callback(int nType, const char* pPayload, void* pData);
+    void callbackImpl(int nType, const char* pPayload);
 
     void testGetStyles();
     void testGetFonts();
     void testCreateView();
     void testGetFilterTypes();
     void testGetPartPageRectangles();
+    void testSearchCalc();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -60,16 +68,31 @@ public:
     CPPUNIT_TEST(testCreateView);
     CPPUNIT_TEST(testGetFilterTypes);
     CPPUNIT_TEST(testGetPartPageRectangles);
+    CPPUNIT_TEST(testSearchCalc);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
+    OString m_aTextSelection;
 };
 
-LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName)
+LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
 {
     OUString aFileURL;
     createFileURL(OUString::createFromAscii(pName), aFileURL);
-    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.text.TextDocument");
+    OUString aService;
+    switch (eType)
+    {
+    case LOK_DOCTYPE_TEXT:
+        aService = "com.sun.star.text.TextDocument";
+        break;
+    case LOK_DOCTYPE_SPREADSHEET:
+        aService = "com.sun.star.sheet.SpreadsheetDocument";
+        break;
+    default:
+        CPPUNIT_ASSERT(false);
+        break;
+    }
+    mxComponent = loadFromDesktop(aFileURL, aService);
     if (!mxComponent.is())
     {
         CPPUNIT_ASSERT(false);
@@ -83,6 +106,23 @@ void DesktopLOKTest::closeDoc()
     {
         closeDocument(mxComponent);
         mxComponent.clear();
+    }
+}
+
+void DesktopLOKTest::callback(int nType, const char* pPayload, void* pData)
+{
+    static_cast<DesktopLOKTest*>(pData)->callbackImpl(nType, pPayload);
+}
+
+void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
+{
+    switch (nType)
+    {
+    case LOK_CALLBACK_TEXT_SELECTION:
+    {
+        m_aTextSelection = pPayload;
+    }
+    break;
     }
 }
 
@@ -189,6 +229,36 @@ void DesktopLOKTest::testGetFilterTypes()
     CPPUNIT_ASSERT(aTree.size() > 0);
     CPPUNIT_ASSERT_EQUAL(std::string("application/vnd.oasis.opendocument.text"), aTree.get_child("writer8").get_child("MediaType").get_value<std::string>());
     free(pJSON);
+}
+
+void DesktopLOKTest::testSearchCalc()
+{
+    LibLibreOffice_Impl aOffice;
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("search.ods");
+    pDocument->pClass->initializeForRendering(pDocument);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SearchItem.SearchString", uno::makeAny(OUString("foo"))},
+        {"SearchItem.Backward", uno::makeAny(false)},
+        {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+
+    std::vector<OString> aSelections;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OString aToken = m_aTextSelection.getToken(0, ';', nIndex);
+        aSelections.push_back(aToken);
+    } while (nIndex >= 0);
+    // This was 1, find-all only found one match.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aSelections.size());
+
+    closeDoc();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
