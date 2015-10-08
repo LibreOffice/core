@@ -70,43 +70,43 @@ SvStream& WriteClsId( SvStream& r, const ClsId& rId )
 ///////////////////////////// class StgHeader
 
 StgHeader::StgHeader()
-: nVersion( 0 )
-, nByteOrder( 0 )
-, nPageSize( 0 )
-, nDataPageSize( 0 )
-, bDirty( sal_uInt8(false) )
-, nFATSize( 0 )
-, nTOCstrm( 0 )
-, nReserved( 0 )
-, nThreshold( 0 )
-, nDataFAT( 0 )
-, nDataFATSize( 0 )
-, nMasterChain( 0 )
-, nMaster( 0 )
+: m_nVersion( 0 )
+, m_nByteOrder( 0 )
+, m_nPageSize( 0 )
+, m_nDataPageSize( 0 )
+, m_bDirty( sal_uInt8(false) )
+, m_nFATSize( 0 )
+, m_nTOCstrm( 0 )
+, m_nReserved( 0 )
+, m_nThreshold( 0 )
+, m_nDataFAT( 0 )
+, m_nDataFATSize( 0 )
+, m_nMasterChain( 0 )
+, m_nMaster( 0 )
 {
-    memset( cSignature, 0, sizeof( cSignature ) );
-    memset( &aClsId, 0, sizeof( ClsId ) );
-    memset( cReserved, 0, sizeof( cReserved ) );
-    memset( nMasterFAT, 0, sizeof( nMasterFAT ) );
+    memset( m_cSignature, 0, sizeof( m_cSignature ) );
+    memset( &m_aClsId, 0, sizeof( ClsId ) );
+    memset( m_cReserved, 0, sizeof( m_cReserved ) );
+    memset( m_nMasterFAT, 0, sizeof( m_nMasterFAT ) );
 }
 
 void StgHeader::Init()
 {
-    memcpy( cSignature, cStgSignature, 8 );
-    memset( &aClsId, 0, sizeof( ClsId ) );
-    nVersion      = 0x0003003B;
-    nByteOrder    = 0xFFFE;
-    nPageSize     = 9;          // 512 bytes
-    nDataPageSize = 6;          // 64 bytes
-    bDirty = sal_uInt8(false);
-    memset( cReserved, 0, sizeof( cReserved ) );
-    nFATSize = 0;
-    nTOCstrm = 0;
-    nReserved = 0;
-    nThreshold    = 4096;
-    nDataFAT = 0;
-    nDataFATSize  = 0;
-    nMasterChain  = STG_EOF;
+    memcpy( m_cSignature, cStgSignature, 8 );
+    memset( &m_aClsId, 0, sizeof( ClsId ) );
+    m_nVersion      = 0x0003003B;
+    m_nByteOrder    = 0xFFFE;
+    m_nPageSize     = 9;          // 512 bytes
+    m_nDataPageSize = 6;          // 64 bytes
+    m_bDirty = sal_uInt8(false);
+    memset( m_cReserved, 0, sizeof( m_cReserved ) );
+    m_nFATSize = 0;
+    m_nTOCstrm = 0;
+    m_nReserved = 0;
+    m_nThreshold    = 4096;
+    m_nDataFAT = 0;
+    m_nDataFATSize  = 0;
+    m_nMasterChain  = STG_EOF;
 
     SetTOCStart( STG_EOF );
     SetDataFATStart( STG_EOF );
@@ -130,53 +130,53 @@ bool StgHeader::Load( StgIo& rIo )
 bool StgHeader::Load( SvStream& r )
 {
     r.Seek( 0L );
-    r.Read( cSignature, 8 );
-    ReadClsId( r, aClsId );         // 08 Class ID
-    r.ReadInt32( nVersion )                   // 1A version number
-     .ReadUInt16( nByteOrder )                 // 1C Unicode byte order indicator
-     .ReadInt16( nPageSize )                  // 1E 1 << nPageSize = block size
-     .ReadInt16( nDataPageSize );             // 20 1 << this size == data block size
+    r.Read( m_cSignature, 8 );
+    ReadClsId( r, m_aClsId );         // 08 Class ID
+    r.ReadInt32( m_nVersion )                   // 1A version number
+     .ReadUInt16( m_nByteOrder )                 // 1C Unicode byte order indicator
+     .ReadInt16( m_nPageSize )                  // 1E 1 << nPageSize = block size
+     .ReadInt16( m_nDataPageSize );             // 20 1 << this size == data block size
     r.SeekRel( 10 );
-    r.ReadInt32( nFATSize )                   // 2C total number of FAT pages
-     .ReadInt32( nTOCstrm )                   // 30 starting page for the TOC stream
-     .ReadInt32( nReserved )                  // 34
-     .ReadInt32( nThreshold )                 // 38 minimum file size for big data
-     .ReadInt32( nDataFAT )                   // 3C page # of 1st data FAT block
-     .ReadInt32( nDataFATSize )               // 40 # of data FATpages
-     .ReadInt32( nMasterChain )               // 44 chain to the next master block
-     .ReadInt32( nMaster );                   // 48 # of additional master blocks
+    r.ReadInt32( m_nFATSize )                   // 2C total number of FAT pages
+     .ReadInt32( m_nTOCstrm )                   // 30 starting page for the TOC stream
+     .ReadInt32( m_nReserved )                  // 34
+     .ReadInt32( m_nThreshold )                 // 38 minimum file size for big data
+     .ReadInt32( m_nDataFAT )                   // 3C page # of 1st data FAT block
+     .ReadInt32( m_nDataFATSize )               // 40 # of data FATpages
+     .ReadInt32( m_nMasterChain )               // 44 chain to the next master block
+     .ReadInt32( m_nMaster );                   // 48 # of additional master blocks
     for( short i = 0; i < cFATPagesInHeader; i++ )
-        r.ReadInt32( nMasterFAT[ i ] );
+        r.ReadInt32( m_nMasterFAT[ i ] );
 
     return (r.GetErrorCode() == ERRCODE_NONE) && Check();
 }
 
 bool StgHeader::Store( StgIo& rIo )
 {
-    if( !bDirty )
+    if( !m_bDirty )
         return true;
 
     SvStream& r = *rIo.GetStrm();
     r.Seek( 0L );
-    r.Write( cSignature, 8 );
-    WriteClsId( r, aClsId );                   // 08 Class ID
-    r.WriteInt32( nVersion )                   // 1A version number
-     .WriteUInt16( nByteOrder )                 // 1C Unicode byte order indicator
-     .WriteInt16( nPageSize )                  // 1E 1 << nPageSize = block size
-     .WriteInt16( nDataPageSize )              // 20 1 << this size == data block size
+    r.Write( m_cSignature, 8 );
+    WriteClsId( r, m_aClsId );                   // 08 Class ID
+    r.WriteInt32( m_nVersion )                   // 1A version number
+     .WriteUInt16( m_nByteOrder )                 // 1C Unicode byte order indicator
+     .WriteInt16( m_nPageSize )                  // 1E 1 << nPageSize = block size
+     .WriteInt16( m_nDataPageSize )              // 20 1 << this size == data block size
      .WriteInt32( 0 ).WriteInt32( 0 ).WriteInt16( 0 )
-     .WriteInt32( nFATSize )                   // 2C total number of FAT pages
-     .WriteInt32( nTOCstrm )                   // 30 starting page for the TOC stream
-     .WriteInt32( nReserved )                  // 34
-     .WriteInt32( nThreshold )                 // 38 minimum file size for big data
-     .WriteInt32( nDataFAT )                   // 3C page # of 1st data FAT block
-     .WriteInt32( nDataFATSize )               // 40 # of data FAT pages
-     .WriteInt32( nMasterChain )               // 44 chain to the next master block
-     .WriteInt32( nMaster );                   // 48 # of additional master blocks
+     .WriteInt32( m_nFATSize )                   // 2C total number of FAT pages
+     .WriteInt32( m_nTOCstrm )                   // 30 starting page for the TOC stream
+     .WriteInt32( m_nReserved )                  // 34
+     .WriteInt32( m_nThreshold )                 // 38 minimum file size for big data
+     .WriteInt32( m_nDataFAT )                   // 3C page # of 1st data FAT block
+     .WriteInt32( m_nDataFATSize )               // 40 # of data FAT pages
+     .WriteInt32( m_nMasterChain )               // 44 chain to the next master block
+     .WriteInt32( m_nMaster );                   // 48 # of additional master blocks
     for( short i = 0; i < cFATPagesInHeader; i++ )
-        r.WriteInt32( nMasterFAT[ i ] );
-    bDirty = sal_uInt8(!rIo.Good());
-    return !bDirty;
+        r.WriteInt32( m_nMasterFAT[ i ] );
+    m_bDirty = sal_uInt8(!rIo.Good());
+    return !m_bDirty;
 }
 
 static bool lcl_wontoverflow(short shift)
@@ -195,23 +195,23 @@ static bool isKnownSpecial(sal_Int32 nLocation)
 // Perform thorough checks also on unknown variables
 bool StgHeader::Check()
 {
-    return  memcmp( cSignature, cStgSignature, 8 ) == 0
-            && (short) ( nVersion >> 16 ) == 3
-            && nPageSize == 9
-            && lcl_wontoverflow(nPageSize)
-            && lcl_wontoverflow(nDataPageSize)
-            && nFATSize > 0
-            && nTOCstrm >= 0
-            && nThreshold > 0
-            && ( isKnownSpecial(nDataFAT) || ( nDataFAT >= 0 && nDataFATSize > 0 ) )
-            && ( isKnownSpecial(nMasterChain) || nMasterChain >=0 )
-            && nMaster >= 0;
+    return  memcmp( m_cSignature, cStgSignature, 8 ) == 0
+            && (short) ( m_nVersion >> 16 ) == 3
+            && m_nPageSize == 9
+            && lcl_wontoverflow(m_nPageSize)
+            && lcl_wontoverflow(m_nDataPageSize)
+            && m_nFATSize > 0
+            && m_nTOCstrm >= 0
+            && m_nThreshold > 0
+            && ( isKnownSpecial(m_nDataFAT) || ( m_nDataFAT >= 0 && m_nDataFATSize > 0 ) )
+            && ( isKnownSpecial(m_nMasterChain) || m_nMasterChain >=0 )
+            && m_nMaster >= 0;
 }
 
 sal_Int32 StgHeader::GetFATPage( short n ) const
 {
     if( n >= 0 && n < cFATPagesInHeader )
-        return nMasterFAT[ n ];
+        return m_nMasterFAT[ n ];
     else
         return STG_EOF;
 }
@@ -220,40 +220,40 @@ void StgHeader::SetFATPage( short n, sal_Int32 nb )
 {
     if( n >= 0 && n < cFATPagesInHeader )
     {
-        if( nMasterFAT[ n ] != nb )
-            bDirty = sal_uInt8(true), nMasterFAT[ n ] = nb;
+        if( m_nMasterFAT[ n ] != nb )
+            m_bDirty = sal_uInt8(true), m_nMasterFAT[ n ] = nb;
     }
 }
 
 void StgHeader::SetTOCStart( sal_Int32 n )
 {
-    if( n != nTOCstrm ) bDirty = sal_uInt8(true), nTOCstrm = n;
+    if( n != m_nTOCstrm ) m_bDirty = sal_uInt8(true), m_nTOCstrm = n;
 }
 
 void StgHeader::SetDataFATStart( sal_Int32 n )
 {
-    if( n != nDataFAT ) bDirty = sal_uInt8(true), nDataFAT = n;
+    if( n != m_nDataFAT ) m_bDirty = sal_uInt8(true), m_nDataFAT = n;
 }
 
 void StgHeader::SetDataFATSize( sal_Int32 n )
 {
-    if( n != nDataFATSize ) bDirty = sal_uInt8(true), nDataFATSize = n;
+    if( n != m_nDataFATSize ) m_bDirty = sal_uInt8(true), m_nDataFATSize = n;
 }
 
 void StgHeader::SetFATSize( sal_Int32 n )
 {
-    if( n != nFATSize ) bDirty = sal_uInt8(true), nFATSize = n;
+    if( n != m_nFATSize ) m_bDirty = sal_uInt8(true), m_nFATSize = n;
 }
 
 void StgHeader::SetFATChain( sal_Int32 n )
 {
-    if( n != nMasterChain )
-        bDirty = sal_uInt8(true), nMasterChain = n;
+    if( n != m_nMasterChain )
+        m_bDirty = sal_uInt8(true), m_nMasterChain = n;
 }
 
 void StgHeader::SetMasters( sal_Int32 n )
 {
-    if( n != nMaster ) bDirty = sal_uInt8(true), nMaster = n;
+    if( n != m_nMaster ) m_bDirty = sal_uInt8(true), m_nMaster = n;
 }
 
 ///////////////////////////// class StgEntry
