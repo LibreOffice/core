@@ -53,9 +53,11 @@ namespace slideshow
         {
             LayerSharedPtr                      pCurrLayer;
             ViewLayerSharedPtr                  pCurrViewLayer;
-            for( const auto& rShape : maAllShapes )
+            LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
+            const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
+            while( aIter != aEnd )
             {
-                LayerSharedPtr pLayer = rShape.second.lock();
+                LayerSharedPtr pLayer = aIter->second.lock();
                 if( pLayer && pLayer != pCurrLayer )
                 {
                     pCurrLayer = pLayer;
@@ -63,7 +65,9 @@ namespace slideshow
                 }
 
                 if( pCurrViewLayer )
-                    shapeFunc( rShape.first, pCurrViewLayer );
+                    shapeFunc(aIter->first,pCurrViewLayer);
+
+                ++aIter;
             }
         }
 
@@ -91,8 +95,11 @@ namespace slideshow
                         maPageBounds ));
 
             // init views
-            for( const auto& rView : mrViews )
-                this->viewAdded( rView );
+            std::for_each( mrViews.begin(),
+                           mrViews.end(),
+                           ::boost::bind(&LayerManager::viewAdded,
+                                         this,
+                                         _1) );
         }
 
         void LayerManager::activate( bool bSlideBackgoundPainted )
@@ -103,19 +110,24 @@ namespace slideshow
 
             if( !bSlideBackgoundPainted )
             {
-                for( const auto& rView : mrViews )
-                    rView->clearAll();
+                std::for_each(mrViews.begin(),
+                              mrViews.end(),
+                              boost::mem_fn(&View::clearAll));
 
                 // force update of whole slide area
-                for( const auto& pLayer : maLayers )
-                    pLayer->addUpdateRange( maPageBounds );
+                std::for_each( maLayers.begin(),
+                               maLayers.end(),
+                               boost::bind( &Layer::addUpdateRange,
+                                            _1,
+                                            boost::cref(maPageBounds) ));
             }
             else
             {
                 // clear all possibly pending update areas - content
                 // is there, already
-                for( const auto& pLayer : maLayers )
-                    pLayer->clearUpdateRanges();
+                std::for_each( maLayers.begin(),
+                               maLayers.end(),
+                               boost::mem_fn( &Layer::clearUpdateRanges ));
             }
 
             updateShapeLayers( bSlideBackgoundPainted );
@@ -177,8 +189,11 @@ namespace slideshow
 
             // in case we haven't reached all layers from the
             // maAllShapes, issue addView again for good measure
-            for( const auto& pLayer : maLayers )
-                pLayer->addView( rView );
+            std::for_each( maLayers.begin(),
+                           maLayers.end(),
+                           boost::bind( &Layer::addView,
+                                        _1,
+                                        boost::cref(rView) ));
         }
 
         void LayerManager::viewRemoved( const UnoViewSharedPtr& rView )
@@ -199,8 +214,11 @@ namespace slideshow
 
             // in case we haven't reached all layers from the
             // maAllShapes, issue removeView again for good measure
-            for( const auto& pLayer : maLayers )
-                pLayer->removeView( rView );
+            std::for_each( maLayers.begin(),
+                           maLayers.end(),
+                           boost::bind( &Layer::removeView,
+                                        _1,
+                                        boost::cref(rView) ));
         }
 
         void LayerManager::viewChanged( const UnoViewSharedPtr& rView )
@@ -222,14 +240,17 @@ namespace slideshow
                 return;
 
             // clear view area
-            for( const auto& rView : mrViews )
-                rView->clearAll();
+            ::std::for_each( mrViews.begin(),
+                             mrViews.end(),
+                             ::boost::mem_fn(&View::clearAll) );
 
             // TODO(F3): resize and repaint all layers
 
             // render all shapes
-            for( const auto& rShape : maAllShapes )
-                rShape.first->render();
+            std::for_each( maAllShapes.begin(),
+                           maAllShapes.end(),
+                           []( const LayerShapeMap::value_type& cp )
+                           { cp.first->render(); } );
         }
 
         void LayerManager::addShape( const ShapeSharedPtr& rShape )
@@ -466,14 +487,16 @@ namespace slideshow
             // send update() calls to every shape in the
             // maUpdateShapes set, which is _animated_ (i.e. a
             // sprite).
-            for( const auto& pShape : maUpdateShapes )
+            const ShapeUpdateSet::const_iterator aEnd=maUpdateShapes.end();
+            ShapeUpdateSet::const_iterator       aCurrShape=maUpdateShapes.begin();
+            while( aCurrShape != aEnd )
             {
-                if( pShape->isBackgroundDetached() )
+                if( (*aCurrShape)->isBackgroundDetached() )
                 {
                     // can update shape directly, without
                     // affecting layer content (shape is
                     // currently displayed in a sprite)
-                    if( !pShape->update() )
+                    if( !(*aCurrShape)->update() )
                         bRet = false; // delay error exit
                 }
                 else
@@ -486,8 +509,10 @@ namespace slideshow
                     // cannot update shape directly, it's not
                     // animated and update() calls will prolly
                     // overwrite other page content.
-                    addUpdateArea( pShape );
+                    addUpdateArea( *aCurrShape );
                 }
+
+                ++aCurrShape;
             }
 
             maUpdateShapes.clear();
@@ -520,9 +545,11 @@ namespace slideshow
             bool                                bIsCurrLayerUpdating(false);
             Layer::EndUpdater                   aEndUpdater;
             LayerSharedPtr                      pCurrLayer;
-            for( const auto& rShape : maAllShapes )
+            LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
+            const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
+            while( aIter != aEnd )
             {
-                LayerSharedPtr pLayer = rShape.second.lock();
+                LayerSharedPtr pLayer = aIter->second.lock();
                 if( pLayer != pCurrLayer )
                 {
                     pCurrLayer = pLayer;
@@ -533,12 +560,14 @@ namespace slideshow
                 }
 
                 if( bIsCurrLayerUpdating &&
-                    rShape.first->isBackgroundDetached() &&
-                    pCurrLayer->isInsideUpdateArea( rShape.first ) )
+                    !aIter->first->isBackgroundDetached() &&
+                    pCurrLayer->isInsideUpdateArea(aIter->first) )
                 {
-                    if( rShape.first->render() )
+                    if( !aIter->first->render() )
                         bRet = false;
                 }
+
+                ++aIter;
             }
 
             return bRet;
@@ -627,7 +656,9 @@ namespace slideshow
             bool bRet( true );
             ViewLayerSharedPtr pTmpLayer( new DummyLayer( rTargetCanvas ) );
 
-            for( const auto& rShape : maAllShapes )
+            LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
+            const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
+            while( aIter != aEnd )
             {
                 try
                 {
@@ -636,11 +667,11 @@ namespace slideshow
                     // ViewLayer. Since we add the shapes in the
                     // maShapeSet order (which is also the render order),
                     // this is equivalent to a subsequent render() call)
-                    rShape.first->addViewLayer( pTmpLayer,
+                    aIter->first->addViewLayer( pTmpLayer,
                                                 true );
 
                     // and remove again, this is only temporary
-                    rShape.first->removeViewLayer( pTmpLayer );
+                    aIter->first->removeViewLayer( pTmpLayer );
                 }
                 catch( uno::Exception& )
                 {
@@ -653,6 +684,8 @@ namespace slideshow
                     // at least one shape could not be rendered
                     bRet = false;
                 }
+
+                ++aIter;
             }
 
             return bRet;
@@ -711,8 +744,11 @@ namespace slideshow
 
             // create ViewLayers for all registered views, and add to
             // newly created layer.
-            for( const auto& rView : mrViews )
-                pLayer->addView( rView );
+            ::std::for_each( mrViews.begin(),
+                             mrViews.end(),
+                             boost::bind( &Layer::addView,
+                                          boost::cref(pLayer),
+                                          _1 ));
 
             return pLayer;
         }

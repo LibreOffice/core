@@ -45,6 +45,9 @@
 #include "combtransition.hxx"
 #include "tools.hxx"
 
+#include <boost/bind.hpp>
+
+
 /***************************************************
  ***                                             ***
  ***          Slide Transition Effects           ***
@@ -186,8 +189,10 @@ public:
 
     virtual bool operator()( double t ) SAL_OVERRIDE
     {
-        for( const auto& pTransition : maTransitions )
-            pTransition->update( t );
+        std::for_each(maTransitions.begin(),
+                      maTransitions.end(),
+                      boost::bind( &TransitionViewPair::update,
+                                   _1, t) );
         return true;
     }
 

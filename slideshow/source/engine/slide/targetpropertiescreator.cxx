@@ -332,23 +332,27 @@ namespace internal
         uno::Sequence< animations::TargetProperties > aRes( aShapeHash.size() );
 
         ::std::size_t                       nCurrIndex(0);
-        for( const auto& rShapeHash : aShapeHash )
+        XShapeHash::const_iterator          aCurr( aShapeHash.begin() );
+        const XShapeHash::const_iterator    aEnd ( aShapeHash.end()   );
+        while( aCurr != aEnd )
         {
             animations::TargetProperties& rCurrProps( aRes[ nCurrIndex++ ] );
 
-            if( rShapeHash.first.mnParagraphIndex == -1 )
+            if( aCurr->first.mnParagraphIndex == -1 )
             {
-                rCurrProps.Target = uno::makeAny( rShapeHash.first.mxRef );
+                rCurrProps.Target = uno::makeAny( aCurr->first.mxRef );
             }
             else
             {
                 rCurrProps.Target = uno::makeAny(
                     presentation::ParagraphTarget(
-                        rShapeHash.first.mxRef,
-                        rShapeHash.first.mnParagraphIndex ) );
+                        aCurr->first.mxRef,
+                        aCurr->first.mnParagraphIndex ) );
             }
 
-            rCurrProps.Properties = ::comphelper::containerToSequence( rShapeHash.second );
+            rCurrProps.Properties = ::comphelper::containerToSequence( aCurr->second );
+
+            ++aCurr;
         }
 
         return aRes;
