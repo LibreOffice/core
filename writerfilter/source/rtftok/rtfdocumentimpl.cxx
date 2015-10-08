@@ -5410,9 +5410,12 @@ RTFError RTFDocumentImpl::popState()
         OSL_ASSERT(pShape.get());
         if (pShape.get())
             pShape->getAny() >>= xShape;
-        Mapper().startShape(xShape);
-        Mapper().props(pProperties);
-        Mapper().endShape();
+        if (xShape.is())
+        {
+            Mapper().startShape(xShape);
+            Mapper().props(pProperties);
+            Mapper().endShape();
+        }
         m_aObjectAttributes.clear();
         m_aOLEAttributes.clear();
         m_bObject = false;
