@@ -35,13 +35,13 @@ class StgDirEntry;
 
 class StgFAT
 {                                       // FAT allocator
-    StgStrm& rStrm;                     // underlying stream
-    sal_Int32 nMaxPage;                     // highest page allocated so far
-    short nPageSize;                    // physical page size
-    short nEntries;                     // FAT entries per page
-    short nOffset;                      // current offset within page
-    sal_Int32 nLimit;                       // search limit recommendation
-    bool  bPhys;                        // true: physical FAT
+    StgStrm& m_rStrm;                     // underlying stream
+    sal_Int32 m_nMaxPage;                     // highest page allocated so far
+    short m_nPageSize;                    // physical page size
+    short m_nEntries;                     // FAT entries per page
+    short m_nOffset;                      // current offset within page
+    sal_Int32 m_nLimit;                       // search limit recommendation
+    bool  m_bPhys;                        // true: physical FAT
     rtl::Reference< StgPage > GetPhysPage( sal_Int32 nPage );
     bool  MakeChain( sal_Int32 nStart, sal_Int32 nPages );
     bool  InitNew( sal_Int32 nPage1 );
@@ -51,8 +51,8 @@ public:
     sal_Int32 GetNextPage( sal_Int32 nPg );
     sal_Int32 AllocPages( sal_Int32 nStart, sal_Int32 nPages );
     bool  FreePages( sal_Int32 nStart, bool bAll );
-    sal_Int32 GetMaxPage() { return nMaxPage; }
-    void  SetLimit( sal_Int32 n ) { nLimit = n; }
+    sal_Int32 GetMaxPage() { return m_nMaxPage; }
+    void  SetLimit( sal_Int32 n ) { m_nLimit = n; }
 };
 
 // The base stream class provides basic functionality for seeking
