@@ -42,14 +42,14 @@ public:
 
 class StgCompObjStream : public StgInternalStream
 {
-    ClsId       aClsId;
-    OUString    aUserName;
-    SotClipboardFormatId nCbFormat;
+    ClsId       m_aClsId;
+    OUString    m_aUserName;
+    SotClipboardFormatId m_nCbFormat;
 public:
     StgCompObjStream( BaseStorage&, bool );
-    ClsId&     GetClsId()    { return aClsId;    }
-    OUString&  GetUserName() { return aUserName; }
-    SotClipboardFormatId& GetCbFormat() { return nCbFormat; }
+    ClsId&     GetClsId()    { return m_aClsId;    }
+    OUString&  GetUserName() { return m_aUserName; }
+    SotClipboardFormatId& GetCbFormat() { return m_nCbFormat; }
     bool       Load();
     bool       Store();
 };
