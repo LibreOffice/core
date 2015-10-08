@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <cmath>
+#include <random>
 
 #include <oox/ole/vbaexport.hxx>
 
