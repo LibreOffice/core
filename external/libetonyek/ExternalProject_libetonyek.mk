@@ -40,7 +40,7 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			--disable-werror \
 			--disable-weffc \
 			--without-tools \
-			--with-mdds=0.x \
+			--with-mdds=1.0 \
 			$(if $(filter WNT,$(OS_FOR_BUILD)),MKDIR_P="$(shell cygpath -m /usr/bin/mkdir) -p") \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter LINUX,$(OS)), \
