@@ -2531,7 +2531,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
             else
             {
                 sal_Int32 nTmpStart = nStartPos;
-                sal_Int32 nTmpEnd = nEndPos;
+                sal_Int32 nTmpEnd;
                 do
                 {
                     const TextCharAttrib* pAttr = pNode->GetCharAttribs().FindNextAttrib( TEXTATTR_HYPERLINK, nTmpStart, nEndPos );
