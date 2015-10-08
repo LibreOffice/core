@@ -812,12 +812,6 @@ protected:
     virtual void                        ClipToPaintRegion( Rectangle& rDstRect ) override;
     virtual bool                        UsePolyPolygonForComplexGradient() override;
 
-    virtual void DrawGradientWallpaper(long nX, long nY, long nWidth, long nHeight,
-                                       const Wallpaper& rWallpaper) override
-    {
-        OutputDevice::DrawGradientWallpaper(nX, nY, nWidth, nHeight, rWallpaper);
-    }
-
     virtual void ApplySettings(vcl::RenderContext& rRenderContext);
 public:
     bool                                HasMirroredGraphics() const override;
