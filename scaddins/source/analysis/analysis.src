@@ -425,17 +425,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Gcd
     {
-        String 1    // description Gcd_add
+        String 1    // description Gcd_Excel2003
         {
-            Text [ en-US ] = "Returns the greatest common divisor";
+            Text [ en-US ] = "Returns the greatest common divisor.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use GCD instead.";
         };
 
-        String 2 // name of parameter 1         Gcd_add
+        String 2 // name of parameter 1         Gcd_Excel2003
         {
             Text [ en-US ] = "Number(s)";
         };
 
-        String 3 // description of parameter 1  Gcd_add
+        String 3 // description of parameter 1  Gcd_Excel2003
         {
             Text [ en-US ] = "Number or list of numbers";
         };
@@ -443,17 +443,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Lcm
     {
-        String 1    // description Lcm_add
+        String 1    // description Lcm_Excel2003
         {
-            Text [ en-US ] = "Returns the least common multiple";
+            Text [ en-US ] = "Returns the least common multiple.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use LCM instead.";
         };
 
-        String 2 // name of parameter 1         Lcm_add
+        String 2 // name of parameter 1         Lcm_Excel2003
         {
             Text [ en-US ] = "Number(s)";
         };
 
-        String 3 // description of parameter 1  Lcm_add
+        String 3 // description of parameter 1  Lcm_Excel2003
         {
             Text [ en-US ] = "Number or list of numbers";
         };
