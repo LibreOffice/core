@@ -283,19 +283,23 @@ class LayerSpriteContainer
         SpriteVector aValidSprites;
 
         // check all sprites for validity and set new priority
-        for( const auto& rSprite : maSprites )
+        SpriteVector::iterator       aCurrSprite( maSprites.begin() );
+        const SpriteVector::iterator aEnd( maSprites.end() );
+        while( aCurrSprite != aEnd )
         {
-            cppcanvas::CustomSpriteSharedPtr pCurrSprite( rSprite.mpSprite.lock() );
+            cppcanvas::CustomSpriteSharedPtr pCurrSprite( aCurrSprite->mpSprite.lock() );
 
             if( pCurrSprite )
             {
                 // only copy still valid sprites over to the refreshed
                 // sprite vector.
-                aValidSprites.push_back( rSprite );
+                aValidSprites.push_back( *aCurrSprite );
 
                 pCurrSprite->setPriority(
                     getSpritePriority( aValidSprites.size()-1 ));
             }
+
+            ++aCurrSprite;
         }
 
         // replace sprite list with pruned one
@@ -1169,9 +1173,11 @@ void SlideView::pruneLayers( bool bWithViewLayerUpdate ) const
         getTransformation() );
 
     // check all layers for validity, and retain only the live ones
-    for( const auto& rViewLayer : maViewLayers )
+    ViewLayerVector::const_iterator       aCurr( maViewLayers.begin() );
+    const ViewLayerVector::const_iterator aEnd( maViewLayers.end() );
+    while( aCurr != aEnd )
     {
-        std::shared_ptr< SlideViewLayer > xCurrLayer( rViewLayer.lock() );
+        std::shared_ptr< SlideViewLayer > xCurrLayer( aCurr->lock() );
 
         if (xCurrLayer)
         {
@@ -1181,6 +1187,8 @@ void SlideView::pruneLayers( bool bWithViewLayerUpdate ) const
                 xCurrLayer->updateView( rCurrTransform,
                                         maUserSize );
         }
+
+        ++aCurr;
     }
 
     // replace layer list with pruned one

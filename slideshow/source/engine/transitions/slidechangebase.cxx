@@ -29,6 +29,7 @@
 #include "slidechangebase.hxx"
 #include "tools.hxx"
 
+#include <boost/bind.hpp>
 #include <algorithm>
 
 using namespace com::sun::star;
@@ -179,8 +180,11 @@ void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
     mrEventMultiplexer.addViewHandler( shared_from_this() );
 
     // init views and create slide bitmaps
-    for( const auto& rView : mrViewContainer )
-        this->viewAdded( rView );
+    std::for_each( mrViewContainer.begin(),
+                   mrViewContainer.end(),
+                   boost::bind( &SlideChangeBase::viewAdded,
+                                this,
+                                _1 ));
 
     mbPrefetched = true;
 }
@@ -411,9 +415,11 @@ void SlideChangeBase::viewRemoved( const UnoViewSharedPtr& rView )
         std::remove_if(
             maViewData.begin(),
             maViewData.end(),
-            [&rView]( const ViewEntry& rViewEntry )
-            // select and compare view
-            { return rView == rViewEntry.getView(); } ),
+            boost::bind(
+                std::equal_to<UnoViewSharedPtr>(),
+                rView,
+                // select view:
+                boost::bind( &ViewEntry::getView, _1 ))),
         maViewData.end() );
 }
 
@@ -428,8 +434,11 @@ void SlideChangeBase::viewChanged( const UnoViewSharedPtr& rView )
         std::find_if(
             maViewData.begin(),
             maViewData.end(),
-            [&rView]( const ViewEntry& rViewEntry )
-            { return rView == rViewEntry.getView(); } ) );
+            boost::bind(
+                std::equal_to<UnoViewSharedPtr>(),
+                rView,
+                // select view:
+                boost::bind( &ViewEntry::getView, _1 ) )));
 
     OSL_ASSERT( aModifiedEntry != maViewData.end() );
     if( aModifiedEntry == maViewData.end() )

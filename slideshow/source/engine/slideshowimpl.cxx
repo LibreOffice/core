@@ -884,18 +884,19 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
 
 PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawPage> const& xDrawPage)
 {
-    // TODO(P2): optimize research in the map.
-    PolygonMap::iterator aEnd = maPolygons.end();
-    for( auto aIter = maPolygons.begin();
-            aIter != aEnd;
-            ++aIter )
+    // TODO(P2) : Optimze research in the map.
+    bool bFound = false;
+    PolygonMap::iterator aIter=maPolygons.begin();
+
+    while(aIter!=maPolygons.end() && !bFound)
     {
         if(aIter->first == xDrawPage)
-            return aIter;
+            bFound = true;
+        else
+            ++aIter;
     }
-    // if no element is found return the element
-    // one past the last valid element in the map
-    return aEnd;
+
+    return aIter;
 }
 
 SlideSharedPtr SlideShowImpl::makeSlide(
@@ -1129,8 +1130,10 @@ void SlideShowImpl::displaySlide(
             // push new transformation to all views, if size changed
             if( !mpPreviousSlide || oldSlideSize != slideSize )
             {
-                for( const auto& rView : maViewContainer )
-                    rView->setViewSize( slideSize );
+                std::for_each( maViewContainer.begin(),
+                               maViewContainer.end(),
+                               boost::bind( &View::setViewSize, _1,
+                                            boost::cref(slideSize) ));
 
                 // explicitly notify view change here,
                 // because transformation might have changed:
@@ -1443,16 +1446,18 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     aPropLayer <<= false;
     xLayerPropSet->setPropertyValue("IsLocked", aPropLayer);
 
+    PolygonMap::iterator aIter=maPolygons.begin();
+
     PolyPolygonVector aPolygons;
     ::cppcanvas::PolyPolygonSharedPtr pPolyPoly;
     ::basegfx::B2DPolyPolygon b2DPolyPoly;
 
     //Register polygons for each slide
-    for( const auto& rPoly : maPolygons )
+    while(aIter!=maPolygons.end())
     {
-        aPolygons = rPoly.second;
+        aPolygons = aIter->second;
         //Get shapes for the slide
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > Shapes(rPoly.first, ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > Shapes(aIter->first, ::com::sun::star::uno::UNO_QUERY);
         //Retrieve polygons for one slide
         for( PolyPolygonVector::iterator aIterPoly=aPolygons.begin(),
                  aEnd=aPolygons.end();
@@ -1528,6 +1533,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                 }
             }
         }
+        ++aIter;
     }
 }
 
@@ -1954,8 +1960,11 @@ bool SlideShowImpl::requestCursor( sal_Int16 nCursorShape )
     const sal_Int16 nActualCursor = calcActiveCursor(mnCurrentCursor);
 
     // change all views to the requested cursor ID
-    for( const auto& rView : maViewContainer )
-        rView->setCursorShape( nActualCursor );
+    std::for_each( maViewContainer.begin(),
+                   maViewContainer.end(),
+                   boost::bind( &View::setCursorShape,
+                                _1,
+                                nActualCursor ));
 
     return nActualCursor==nCursorShape;
 }
@@ -1964,11 +1973,12 @@ void SlideShowImpl::resetCursor()
 {
     mnCurrentCursor = awt::SystemPointer::ARROW;
 
-    const sal_Int16 nActualCursor = calcActiveCursor( mnCurrentCursor );
-
     // change all views to the default cursor ID
-    for( const auto& rView : maViewContainer )
-        rView->setCursorShape( nActualCursor );
+    std::for_each( maViewContainer.begin(),
+                   maViewContainer.end(),
+                   boost::bind( &View::setCursorShape,
+                                _1,
+                                calcActiveCursor(mnCurrentCursor) ));
 }
 
 sal_Bool SlideShowImpl::update( double & nNextTimeout )
@@ -2110,11 +2120,13 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             (!bRet ||
              nNextTimeout > 1.0) )
         {
-            for( const auto& pView : maViewContainer )
+            UnoViewVector::const_iterator       aCurr(maViewContainer.begin());
+            const UnoViewVector::const_iterator aEnd(maViewContainer.end());
+            while( aCurr != aEnd )
             {
                 try
                 {
-                    uno::Reference< presentation::XSlideShowView > xView( pView->getUnoView(),
+                    uno::Reference< presentation::XSlideShowView > xView( (*aCurr)->getUnoView(),
                                                                           uno::UNO_QUERY_THROW );
                     uno::Reference< util::XUpdatable >             xUpdatable( xView->getCanvas(),
                                                                                uno::UNO_QUERY_THROW );
@@ -2130,6 +2142,8 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
+
+                ++aCurr;
             }
 
             mbSlideShowIdle = true;

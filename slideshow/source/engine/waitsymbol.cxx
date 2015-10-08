@@ -67,8 +67,10 @@ WaitSymbol::WaitSymbol( uno::Reference<rendering::XBitmap> const &   xBitmap,
     mrScreenUpdater( rScreenUpdater ),
     mbVisible(false)
 {
-    for( const auto& pView : rViewContainer )
-        this->viewAdded( pView );
+    std::for_each( rViewContainer.begin(),
+                   rViewContainer.end(),
+                   [this]( const UnoViewSharedPtr& sp )
+                   { this->viewAdded(sp); } );
 }
 
 void WaitSymbol::setVisible( const bool bVisible )
