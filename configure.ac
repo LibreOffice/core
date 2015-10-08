@@ -7859,7 +7859,7 @@ libo_CHECK_SYSTEM_MODULE([libabw],[ABW],[libabw-0.1])
 dnl ===================================================================
 dnl Check for system libwps
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.4])
+libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.4 >= 0.4.2])
 
 dnl ===================================================================
 dnl Check for system libwpg
