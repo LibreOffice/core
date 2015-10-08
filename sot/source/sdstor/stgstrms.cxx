@@ -324,8 +324,8 @@ StgStrm::~StgStrm()
 
 void StgStrm::SetEntry( StgDirEntry& r )
 {
-    r.aEntry.SetLeaf( STG_DATA, nStart );
-    r.aEntry.SetSize( nSize );
+    r.m_aEntry.SetLeaf( STG_DATA, nStart );
+    r.m_aEntry.SetSize( nSize );
     pEntry = &r;
     r.SetDirty();
 }
@@ -525,8 +525,8 @@ bool StgStrm::SetSize( sal_Int32 nBytes )
     {
         // change the dir entry?
         if( !nSize || !nBytes )
-            pEntry->aEntry.SetLeaf( STG_DATA, nStart );
-        pEntry->aEntry.SetSize( nBytes );
+            pEntry->m_aEntry.SetLeaf( STG_DATA, nStart );
+        pEntry->m_aEntry.SetSize( nBytes );
         pEntry->SetDirty();
     }
     nSize = nBytes;
@@ -801,8 +801,8 @@ StgDataStrm::StgDataStrm( StgIo& r, sal_Int32 nBgn, sal_Int32 nLen ) : StgStrm( 
 StgDataStrm::StgDataStrm( StgIo& r, StgDirEntry& p ) : StgStrm( r )
 {
     pEntry = &p;
-    Init( p.aEntry.GetLeaf( STG_DATA ),
-          p.aEntry.GetSize() );
+    Init( p.m_aEntry.GetLeaf( STG_DATA ),
+          p.m_aEntry.GetSize() );
 }
 
 void StgDataStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
@@ -1007,8 +1007,8 @@ StgSmallStrm::StgSmallStrm( StgIo& r, sal_Int32 nBgn, sal_Int32 nLen ) : StgStrm
 StgSmallStrm::StgSmallStrm( StgIo& r, StgDirEntry& p ) : StgStrm( r )
 {
     pEntry = &p;
-    Init( p.aEntry.GetLeaf( STG_DATA ),
-          p.aEntry.GetSize() );
+    Init( p.m_aEntry.GetLeaf( STG_DATA ),
+          p.m_aEntry.GetSize() );
 }
 
 void StgSmallStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )

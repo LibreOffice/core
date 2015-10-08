@@ -34,19 +34,19 @@ class StgDirEntry : public StgAvlNode
 {
     friend class StgIterator;
     friend class StgDirStrm;
-    StgEntry     aSave;                     // original dir entry
-    StgDirEntry*  pUp;                      // parent directory
-    StgDirEntry*  pDown;                    // child directory for storages
-    StgDirEntry** ppRoot;                   // root of TOC tree
-    StgStrm*     pStgStrm;                  // storage stream
-    StgTmpStrm*  pTmpStrm;                  // temporary stream
-    StgTmpStrm*  pCurStrm;                  // temp stream after commit
-    sal_Int32    nEntry;                    // entry # in TOC stream (temp)
-    sal_Int32    nPos;                      // current position
-    bool         bDirty;                    // dirty directory entry
-    bool         bCreated;                  // newly created entry
-    bool         bRemoved;                  // removed per Invalidate()
-    bool         bRenamed;                  // renamed
+    StgEntry     m_aSave;                     // original dir entry
+    StgDirEntry*  m_pUp;                      // parent directory
+    StgDirEntry*  m_pDown;                    // child directory for storages
+    StgDirEntry** m_ppRoot;                   // root of TOC tree
+    StgStrm*     m_pStgStrm;                  // storage stream
+    StgTmpStrm*  m_pTmpStrm;                  // temporary stream
+    StgTmpStrm*  m_pCurStrm;                  // temp stream after commit
+    sal_Int32    m_nEntry;                    // entry # in TOC stream (temp)
+    sal_Int32    m_nPos;                      // current position
+    bool         m_bDirty;                    // dirty directory entry
+    bool         m_bCreated;                  // newly created entry
+    bool         m_bRemoved;                  // removed per Invalidate()
+    bool         m_bRenamed;                  // renamed
     void         InitMembers();             // ctor helper
     virtual short Compare( const StgAvlNode* ) const SAL_OVERRIDE;
     bool         StoreStream( StgIo& );     // store the stream
@@ -55,13 +55,13 @@ class StgDirEntry : public StgAvlNode
     bool         Strm2Tmp();                // copy stgstream to temp file
     bool         Tmp2Strm();                // copy temp file to stgstream
 public:
-    StgEntry     aEntry;                    // entry data
-    sal_Int32        nRefCnt;                   // reference count
-    StreamMode   nMode;                     // open mode
-    bool         bTemp;                     // true: delete on dir flush
-    bool         bDirect;                   // true: direct mode
-    bool         bZombie;                   // true: Removed From StgIo
-    bool         bInvalid;                  // true: invalid entry
+    StgEntry     m_aEntry;                    // entry data
+    sal_Int32        m_nRefCnt;                   // reference count
+    StreamMode   m_nMode;                     // open mode
+    bool         m_bTemp;                     // true: delete on dir flush
+    bool         m_bDirect;                   // true: direct mode
+    bool         m_bZombie;                   // true: Removed From StgIo
+    bool         m_bInvalid;                  // true: invalid entry
     StgDirEntry(const void* pBuffer, sal_uInt32 nBufferLen,
                 sal_uInt64 nUnderlyingStreamSize, bool * pbOk);
     explicit StgDirEntry( const StgEntry& );
@@ -73,7 +73,7 @@ public:
     bool Store( StgDirStrm& );              // save entry into dir strm
     bool IsContained( StgDirEntry* );       // check if subentry
 
-    void SetDirty()  { bDirty = true; }
+    void SetDirty()  { m_bDirty = true; }
     bool IsDirty();
 
     bool Commit();
@@ -108,7 +108,7 @@ public:
 class StgIterator : public StgAvlIterator
 {
 public:
-    explicit StgIterator( StgDirEntry& rStg ) : StgAvlIterator( rStg.pDown ) {}
+    explicit StgIterator( StgDirEntry& rStg ) : StgAvlIterator( rStg.m_pDown ) {}
     StgDirEntry* First() { return static_cast<StgDirEntry*>( StgAvlIterator::First() ); }
     StgDirEntry* Next()  { return static_cast<StgDirEntry*>( StgAvlIterator::Next() );  }
 };

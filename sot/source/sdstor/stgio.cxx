@@ -281,7 +281,7 @@ sal_uLong Validator::MarkAll( StgDirEntry *pEntry )
     sal_uLong nErr = FAT_OK;
     for( StgDirEntry* p = aIter.First(); p ; p = aIter.Next() )
     {
-        if( p->aEntry.GetType() == STG_STORAGE )
+        if( p->m_aEntry.GetType() == STG_STORAGE )
         {
             nErr = MarkAll( p );
             if( nErr != FAT_OK )
@@ -289,11 +289,11 @@ sal_uLong Validator::MarkAll( StgDirEntry *pEntry )
         }
         else
         {
-            sal_Int32 nSize = p->aEntry.GetSize();
+            sal_Int32 nSize = p->m_aEntry.GetSize();
             if( nSize < rIo.aHdr.GetThreshold()  )
-                nErr = aSmallFat.Mark( p->aEntry.GetStartPage(),nSize, -2 );
+                nErr = aSmallFat.Mark( p->m_aEntry.GetStartPage(),nSize, -2 );
             else
-                nErr = aFat.Mark( p->aEntry.GetStartPage(),nSize, -2 );
+                nErr = aFat.Mark( p->m_aEntry.GetStartPage(),nSize, -2 );
             if( nErr != FAT_OK )
                 return nErr;
         }
@@ -311,8 +311,8 @@ sal_uLong Validator::ValidateDirectoryEntries()
     if( nErr != FAT_OK )
         return nErr;
     // Small Data
-    nErr = aFat.Mark( rIo.pTOC->GetRoot()->aEntry.GetStartPage(),
-                 rIo.pTOC->GetRoot()->aEntry.GetSize(), -2 );
+    nErr = aFat.Mark( rIo.pTOC->GetRoot()->m_aEntry.GetStartPage(),
+                 rIo.pTOC->GetRoot()->m_aEntry.GetSize(), -2 );
     if( nErr != FAT_OK )
         return nErr;
     // Small Data FAT
