@@ -53,7 +53,7 @@ const FuncDataBase pFuncDatas[] =
     FUNCDATA( Edate,            UNIQUE,     INTPAR,     2,          FDCat_DateTime ),
     FUNCDATAS( Weeknum,         DOUBLE,     INTPAR,     2,          FDCat_DateTime, "_EXCEL2003" ),
     FUNCDATA( Eomonth,          UNIQUE,     INTPAR,     2,          FDCat_DateTime ),
-    FUNCDATAS( Networkdays,     DOUBLE,     INTPAR,     3,          FDCat_DateTime, "_XCL" ),
+    FUNCDATAS( Networkdays,     DOUBLE,     INTPAR,     3,          FDCat_DateTime, "_EXCEL2003" ),
     FUNCDATA( Iseven,           DOUBLE,     STDPAR,     1,          FDCat_Inf ),
     FUNCDATA( Isodd,            DOUBLE,     STDPAR,     1,          FDCat_Inf ),
     FUNCDATA( Multinomial,      UNIQUE,     STDPAR,     1,          FDCat_Math ),

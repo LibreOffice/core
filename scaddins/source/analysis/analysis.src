@@ -183,37 +183,37 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Networkdays
     {
-        String 1    // description Networkdays
+        String 1    // description Networkdays_Excel2003
         {
             Text [ en-US ] = "Returns the number of workdays between two dates.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use NETWORKDAYS instead.";
         };
 
-        String 2 // name of parameter 1         Networkdays
+        String 2 // name of parameter 1         Networkdays_Excel2003
         {
             Text [ en-US ] = "Start date";
         };
 
-        String 3 // description of parameter 1  Networkdays
+        String 3 // description of parameter 1  Networkdays_Excel2003
         {
             Text [ en-US ] = "The start date";
         };
 
-        String 4 // name of parameter 2         Networkdays
+        String 4 // name of parameter 2         Networkdays_Excel2003
         {
             Text [ en-US ] = "End date";
         };
 
-        String 5 // description of parameter 2  Networkdays
+        String 5 // description of parameter 2  Networkdays_Excel2003
         {
             Text [ en-US ] = "The end date";
         };
 
-        String 6 // name of parameter 3         Networkdays
+        String 6 // name of parameter 3         Networkdays_Excel2003
         {
             Text [ en-US ] = "Holidays";
         };
 
-        String 7 // description of parameter 3  Networkdays
+        String 7 // description of parameter 3  Networkdays_Excel2003
         {
             Text [ en-US ] = "List of date values representing days off (vacation, holidays, etc.)";
         };
