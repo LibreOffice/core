@@ -270,6 +270,17 @@ uno::Sequence< OUString >
     return kws;
 }
 
+OString join(const OString& rSeparator, const std::vector<OString>& rSequence)
+{
+    OStringBuffer aBuffer;
+    for (size_t i = 0; i < rSequence.size(); ++i)
+    {
+        if (i != 0)
+            aBuffer.append(rSeparator);
+        aBuffer.append(rSequence[i]);
+    }
+    return aBuffer.makeStringAndClear();
+}
 
 sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
     const uno::Reference< i18n::XCollator > &rCollator,

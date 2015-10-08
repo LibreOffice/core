@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <vector>
 #include <comphelper/comphelperdllapi.h>
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
@@ -309,6 +310,9 @@ COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(OUString const& rIn,
  */
 COMPHELPER_DLLPUBLIC OUString convertCommaSeparated(
     ::com::sun::star::uno::Sequence< OUString > const & i_rSeq);
+
+/// Return a string which is the concatenation of the strings in the sequence.
+COMPHELPER_DLLPUBLIC OString join(const OString& rSeparator, const std::vector<OString>& rSequence);
 
 /** Convert a decimal string to a number.
 
