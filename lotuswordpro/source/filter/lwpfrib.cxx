@@ -249,10 +249,14 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     XFTextStyle* pStyle = NULL;
     m_StyleName = "";
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
+    XFTextStyle* pNamedStyle = nullptr;
     if (m_pModifiers->HasCharStyle)
     {
-        XFTextStyle* pNamedStyle = static_cast<XFTextStyle*>
+        pNamedStyle = static_cast<XFTextStyle*>
                                 (pFoundry->GetStyleManager()->GetStyle(m_pModifiers->CharStyleID));
+    }
+    if (pNamedStyle)
+    {
         if (m_pModifiers->FontID)
         {
             pStyle = new XFTextStyle();
