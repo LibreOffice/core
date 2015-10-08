@@ -180,11 +180,8 @@ void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
     mrEventMultiplexer.addViewHandler( shared_from_this() );
 
     // init views and create slide bitmaps
-    std::for_each( mrViewContainer.begin(),
-                   mrViewContainer.end(),
-                   boost::bind( &SlideChangeBase::viewAdded,
-                                this,
-                                _1 ));
+    for( const auto& pView : mrViewContainer )
+        this->viewAdded( pView );
 
     mbPrefetched = true;
 }

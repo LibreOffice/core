@@ -64,7 +64,6 @@
 
 #include <boost/bind.hpp>
 #include <iterator>
-#include <algorithm>
 #include <functional>
 #include <iostream>
 
@@ -284,42 +283,30 @@ private:
 
 
 
-class SlideRenderer
+void slideRenderer( SlideImpl* pSlide, const UnoViewSharedPtr& rView )
 {
-public:
-    explicit SlideRenderer( SlideImpl& rSlide ) :
-        mrSlide( rSlide )
-    {
-    }
+    // fully clear view content to background color
+    rView->clearAll();
 
-    void operator()( const UnoViewSharedPtr& rView )
-    {
-        // fully clear view content to background color
-        rView->clearAll();
+    SlideBitmapSharedPtr         pBitmap( pSlide->getCurrentSlideBitmap( rView ) );
+    ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
 
-        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( rView ) );
-        ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
+    const ::basegfx::B2DHomMatrix   aViewTransform( rView->getTransformation() );
+    const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
 
-        const ::basegfx::B2DHomMatrix   aViewTransform( rView->getTransformation() );
-        const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
+    // setup a canvas with device coordinate space, the slide
+    // bitmap already has the correct dimension.
+    ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
+    pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
-        // setup a canvas with device coordinate space, the slide
-        // bitmap already has the correct dimension.
-        ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
-        pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
+    // render at given output position
+    pBitmap->move( aOutPosPixel );
 
-        // render at given output position
-        pBitmap->move( aOutPosPixel );
-
-        // clear clip (might have been changed, e.g. from comb
-        // transition)
-        pBitmap->clip( ::basegfx::B2DPolyPolygon() );
-        pBitmap->draw( pDevicePixelCanvas );
-    }
-
-private:
-    SlideImpl& mrSlide;
-};
+    // clear clip (might have been changed, e.g. from comb
+    // transition)
+    pBitmap->clip( ::basegfx::B2DPolyPolygon() );
+    pBitmap->draw( pDevicePixelCanvas );
+}
 
 
 
@@ -388,11 +375,8 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mbPaintOverlayActive( false )
 {
     // clone already existing views for slide bitmaps
-    std::for_each( rViewContainer.begin(),
-                   rViewContainer.end(),
-                   boost::bind( &SlideImpl::viewAdded,
-                                this,
-                                _1 ));
+    for( const auto& rView : rViewContainer )
+        this->viewAdded( rView );
 
     // register screen update (LayerManager needs to signal pending
     // updates)
@@ -462,13 +446,9 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
     // render slide to screen, if requested
     if( !bSlideBackgoundPainted )
     {
-        std::for_each(maContext.mrViewContainer.begin(),
-                      maContext.mrViewContainer.end(),
-                      boost::mem_fn(&View::clearAll));
+        for( const auto& rContext : maContext.mrViewContainer )
+            slideRenderer( this, rContext );
 
-        std::for_each( maContext.mrViewContainer.begin(),
-                       maContext.mrViewContainer.end(),
-                       SlideRenderer(*this) );
         maContext.mrScreenUpdater.notifyUpdate();
     }
 

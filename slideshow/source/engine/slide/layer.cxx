@@ -129,25 +129,16 @@ namespace slideshow
         {
             rShape->clearAllViewLayers();
 
-            std::for_each( maViewEntries.begin(),
-                           maViewEntries.end(),
-                           boost::bind(&Shape::addViewLayer,
-                                       boost::cref(rShape),
-                                       boost::bind(&ViewEntry::getViewLayer,
-                                                   _1),
-                                       false ));
+            for( const auto& rViewEntry : maViewEntries )
+                rShape->addViewLayer( rViewEntry.getViewLayer(), false );
         }
 
         void Layer::setPriority( const ::basegfx::B1DRange& rPrioRange )
         {
             if( !mbBackgroundLayer )
             {
-                std::for_each( maViewEntries.begin(),
-                               maViewEntries.end(),
-                               boost::bind( &ViewLayer::setPriority,
-                                            boost::bind( &ViewEntry::getViewLayer,
-                                                         _1 ),
-                                            boost::cref(rPrioRange)));
+                for( const auto& rViewEntry : maViewEntries )
+                    rViewEntry.getViewLayer()->setPriority( rPrioRange );
             }
         }
 
@@ -208,13 +199,8 @@ namespace slideshow
         void Layer::clearContent()
         {
             // clear content on all view layers
-            std::for_each( maViewEntries.begin(),
-                           maViewEntries.end(),
-                           boost::bind(
-                               &ViewLayer::clearAll,
-                               boost::bind(
-                                   &ViewEntry::getViewLayer,
-                                   _1)));
+            for( const auto& rViewEntry : maViewEntries )
+                rViewEntry.getViewLayer()->clearAll();
 
             // layer content cleared, update areas are not sensible
             // anymore.
@@ -250,24 +236,16 @@ namespace slideshow
                 // resulting clip polygon will be empty.
                 if( aClip.count() )
                 {
-                    // set clip to all view layers
-                    std::for_each( maViewEntries.begin(),
-                                   maViewEntries.end(),
-                                   boost::bind(
-                                       &ViewLayer::setClip,
-                                       boost::bind(
-                                           &ViewEntry::getViewLayer,
-                                           _1),
-                                       boost::cref(aClip)));
+                    for( const auto& rViewEntry : maViewEntries )
+                    {
+                        ViewLayerSharedPtr pViewLayer = rViewEntry.getViewLayer();
 
-                    // clear update area on all view layers
-                    std::for_each( maViewEntries.begin(),
-                                   maViewEntries.end(),
-                                   boost::bind(
-                                       &ViewLayer::clear,
-                                       boost::bind(
-                                           &ViewEntry::getViewLayer,
-                                           _1)));
+                        // set clip to all view layers and
+                        pViewLayer->setClip( aClip );
+
+                        // clear update area on all view layers
+                        pViewLayer->clear();
+                    }
 
                     mbClipSet = true;
                 }
@@ -283,14 +261,8 @@ namespace slideshow
                 mbClipSet = false;
 
                 basegfx::B2DPolyPolygon aEmptyClip;
-                std::for_each( maViewEntries.begin(),
-                               maViewEntries.end(),
-                               boost::bind(
-                                   &ViewLayer::setClip,
-                                   boost::bind(
-                                       &ViewEntry::getViewLayer,
-                                       _1),
-                                   boost::cref(aEmptyClip)));
+                for( const auto& rViewEntry : maViewEntries )
+                    rViewEntry.getViewLayer()->setClip( aEmptyClip );
             }
 
             clearUpdateRanges();
