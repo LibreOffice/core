@@ -19,7 +19,7 @@
  *
  *************************************************************/
 
-
+#include "precompiled_slideshow.hxx"
 
 #include <cppuhelper/compbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>
