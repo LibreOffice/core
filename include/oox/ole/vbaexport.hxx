@@ -122,6 +122,8 @@ public:
 
     void write();
 
+    static sal_uInt8 calculateProjKey(const OUString& rString);
+
 private:
     const sal_uInt8* mpData; // an array of bytes to be obfuscated
     const sal_uInt16 mnLength; // the length of Data

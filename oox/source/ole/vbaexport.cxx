@@ -384,19 +384,22 @@ void VBAEncryption::writeVersionEnc()
     exportHexString(mrEncryptedData, mnVersionEnc);
 }
 
+sal_uInt8 VBAEncryption::calculateProjKey(const OUString& rProjectKey)
+{
+    sal_uInt8 nProjKey = 0;
+    sal_Int32 n = rProjectKey.getLength();
+    const sal_Unicode* pString = rProjectKey.getStr();
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        sal_Unicode character = pString[i];
+        nProjKey += character;
+    }
+
+    return nProjKey;
+}
+
 void VBAEncryption::writeProjKeyEnc()
 {
-    if(!mnProjKey)
-    {
-        OUString sProjectCLSID = "{9F10AB9C-89AC-4C0F-8AFB-8E9B96D5F170}"; //TODO:Find the real ProjectId.ProjectClSID
-        sal_Int32 n = sProjectCLSID.getLength();
-        const sal_Unicode* pString = sProjectCLSID.getStr();
-        for (sal_Int32 i = 0; i < n; ++i)
-        {
-            sal_Unicode character = pString[i];
-            mnProjKey += character;
-        }
-    }
     sal_uInt8 nProjKeyEnc = mnSeed ^ mnProjKey;
     exportHexString(mrEncryptedData, nProjKeyEnc);
     mnUnencryptedByte1 = mnProjKey;
@@ -861,7 +864,8 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
 
     // section 2.3.1.2 ProjectId
     exportString(rStrm, "ID=\"");
-    exportString(rStrm, "{9F10AB9C-89AC-4C0F-8AFB-8E9B96D5F170}");
+    OUString aProjectID("{9F10AB9C-89AC-4C0F-8AFB-8E9B96D5F170}");
+    exportString(rStrm, aProjectID);
     exportString(rStrm, "\"\r\n");
 
     // section 2.3.1.3 ProjectModule
@@ -894,7 +898,8 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
     SvMemoryStream aProtectedStream(4096, 4096);
     aProtectedStream.WriteUInt32(0x00000000);
     const sal_uInt8* pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
-    VBAEncryption aProtectionState(pData, 4, rStrm, NULL, 0);
+    sal_uInt8 nProjKey = VBAEncryption::calculateProjKey(aProjectID);
+    VBAEncryption aProtectionState(pData, 4, rStrm, NULL, nProjKey);
     aProtectionState.write();
     exportString(rStrm, "\"\r\n");
 #else
@@ -907,7 +912,7 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
     aProtectedStream.Seek(0);
     aProtectedStream.WriteUInt8(0x00);
     pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
-    VBAEncryption aProjectPassword(pData, 1, rStrm, NULL, 0);
+    VBAEncryption aProjectPassword(pData, 1, rStrm, NULL, nProjKey);
     aProjectPassword.write();
     exportString(rStrm, "\"\r\n");
 #else
@@ -920,7 +925,7 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
     aProtectedStream.Seek(0);
     aProtectedStream.WriteUInt8(0xFF);
     pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
-    VBAEncryption aVisibilityState(pData, 1, rStrm, NULL, 0);
+    VBAEncryption aVisibilityState(pData, 1, rStrm, NULL, nProjKey);
     aVisibilityState.write();
     exportString(rStrm, "\"\r\n\r\n");
 #else
