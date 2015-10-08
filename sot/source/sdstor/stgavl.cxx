@@ -373,16 +373,16 @@ bool StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, bool bDel )
 
 StgAvlIterator::StgAvlIterator( StgAvlNode* p )
 {
-    pRoot = p;
-    nCount = 0;
-    nCur = 0;
+    m_pRoot = p;
+    m_nCount = 0;
+    m_nCur = 0;
     if( p )
-        p->StgEnum( nCount );
+        p->StgEnum( m_nCount );
 }
 
 StgAvlNode* StgAvlIterator::Find( short n )
 {
-    StgAvlNode* p = pRoot;
+    StgAvlNode* p = m_pRoot;
     while( p )
     {
         if( n == p->nId )
@@ -394,13 +394,13 @@ StgAvlNode* StgAvlIterator::Find( short n )
 
 StgAvlNode* StgAvlIterator::First()
 {
-    nCur = -1;
+    m_nCur = -1;
     return Next();
 }
 
 StgAvlNode* StgAvlIterator::Next()
 {
-    return Find( ++nCur );
+    return Find( ++m_nCur );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
