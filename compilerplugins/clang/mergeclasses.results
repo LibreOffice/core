@@ -1,5 +1,4 @@
 merge (anonymous namespace)::Data with cppu::PropertySetMixinImpl::Impl
-merge (anonymous namespace)::VCLXToolkit_Impl with (anonymous namespace)::VCLXToolkit
 merge AbstractMailMergeWizard with AbstractMailMergeWizard_Impl
 merge AbstractSearchProgress with AbstractSearchProgress_Impl
 merge AbstractSwInsertDBColAutoPilot with AbstractSwInsertDBColAutoPilot_Impl

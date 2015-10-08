@@ -140,13 +140,13 @@ extern "C" typedef vcl::Window* (SAL_CALL *FN_SvtCreateWindow)(
         vcl::Window* pParent,
         WinBits nWinBits );
 
-class VCLXToolkit_Impl
+class VCLXToolkitMutexHelper
 {
 protected:
     ::osl::Mutex    maMutex;
 };
 
-class VCLXToolkit : public VCLXToolkit_Impl,
+class VCLXToolkit : public VCLXToolkitMutexHelper,
                     public cppu::WeakComponentImplHelper<
                     css::awt::XToolkitExperimental,
                     css::lang::XServiceInfo >
