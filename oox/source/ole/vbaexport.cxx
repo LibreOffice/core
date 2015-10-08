@@ -370,7 +370,13 @@ VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, Sv
     ,mnVersionEnc(0)
 {
     if (!pSeed)
-        mnSeed = 0xBE; // sample seed value TODO:Generate random seed values
+    {
+        // mnSeed = 0xBE;
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, 255);
+        mnSeed = dis(gen);
+    }
 }
 
 void VBAEncryption::writeSeed()
@@ -412,7 +418,7 @@ void VBAEncryption::writeIgnoredEnc()
     mnIgnoredLength = (mnSeed & 6) / 2;
     for(sal_Int32 i = 1; i <= mnIgnoredLength; ++i)
     {
-        sal_uInt8 nTempValue = 0xBE; // TODO:Generate a random value
+        sal_uInt8 nTempValue = 0xBE; // Any value can be assigned here
         sal_uInt8 nByteEnc = nTempValue ^ (mnEncryptedByte2 + mnUnencryptedByte1);
         exportHexString(mrEncryptedData, nByteEnc);
         mnEncryptedByte2 = mnEncryptedByte1;
