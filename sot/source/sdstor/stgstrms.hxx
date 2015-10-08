@@ -130,7 +130,7 @@ public:
 
 class StgSmallStrm : public StgStrm     // a logical data stream
 {
-    StgStrm* pData;                     // the data stream
+    StgStrm* m_pData;                     // the data stream
     void Init( sal_Int32 nBgn, sal_Int32 nLen );
 public:
     StgSmallStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen );

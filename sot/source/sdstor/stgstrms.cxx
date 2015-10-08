@@ -1015,8 +1015,8 @@ void StgSmallStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
 {
     if ( rIo.m_pDataFAT )
         pFat = new StgFAT( *rIo.m_pDataFAT, false );
-    pData = rIo.m_pDataStrm;
-    OSL_ENSURE( pFat && pData, "The pointers should not be empty!" );
+    m_pData = rIo.m_pDataStrm;
+    OSL_ENSURE( pFat && m_pData, "The pointers should not be empty!" );
 
     nPageSize = rIo.GetDataPageSize();
     nStart =
@@ -1042,10 +1042,10 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
             nBytes = (short) n;
         if( nBytes )
         {
-            if( !pData || !pData->Pos2Page( nPage * nPageSize + nOffset ) )
+            if( !m_pData || !m_pData->Pos2Page( nPage * nPageSize + nOffset ) )
                 break;
             // all reading through the stream
-            short nRes = (short) pData->Read( static_cast<sal_uInt8*>(pBuf) + nDone, nBytes );
+            short nRes = (short) m_pData->Read( static_cast<sal_uInt8*>(pBuf) + nDone, nBytes );
             nDone = nDone + nRes;
             nPos += nRes;
             n -= nRes;
@@ -1082,13 +1082,13 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
         {
             // all writing goes through the stream
             sal_Int32 nDataPos = nPage * nPageSize + nOffset;
-            if ( !pData
-              || ( pData->GetSize() < ( nDataPos + nBytes )
-                && !pData->SetSize( nDataPos + nBytes ) ) )
+            if ( !m_pData
+              || ( m_pData->GetSize() < ( nDataPos + nBytes )
+                && !m_pData->SetSize( nDataPos + nBytes ) ) )
                 break;
-            if( !pData->Pos2Page( nDataPos ) )
+            if( !m_pData->Pos2Page( nDataPos ) )
                 break;
-            short nRes = (short) pData->Write( static_cast<sal_uInt8 const *>(pBuf) + nDone, nBytes );
+            short nRes = (short) m_pData->Write( static_cast<sal_uInt8 const *>(pBuf) + nDone, nBytes );
             nDone = nDone + nRes;
             nPos += nRes;
             n -= nRes;
