@@ -45,7 +45,6 @@
 #include "combtransition.hxx"
 #include "tools.hxx"
 
-#include <boost/bind.hpp>
 
 
 /***************************************************
@@ -189,10 +188,8 @@ public:
 
     virtual bool operator()( double t ) SAL_OVERRIDE
     {
-        std::for_each(maTransitions.begin(),
-                      maTransitions.end(),
-                      boost::bind( &TransitionViewPair::update,
-                                   _1, t) );
+        for( const auto& pTransition : maTransitions )
+            pTransition->update( t );
         return true;
     }
 

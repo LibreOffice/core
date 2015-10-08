@@ -106,9 +106,8 @@ namespace slideshow
 
         void UnoViewContainer::dispose()
         {
-            ::std::for_each( maViews.begin(),
-                             maViews.end(),
-                             ::boost::mem_fn(&UnoView::_dispose) );
+            for( const auto& pView : maViews )
+                pView->_dispose();
             maViews.clear();
         }
     }

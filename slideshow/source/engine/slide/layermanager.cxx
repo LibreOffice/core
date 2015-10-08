@@ -95,11 +95,8 @@ namespace slideshow
                         maPageBounds ));
 
             // init views
-            std::for_each( mrViews.begin(),
-                           mrViews.end(),
-                           ::boost::bind(&LayerManager::viewAdded,
-                                         this,
-                                         _1) );
+            for( const auto& rView : mrViews )
+                this->viewAdded( rView );
         }
 
         void LayerManager::activate( bool bSlideBackgoundPainted )
@@ -110,24 +107,19 @@ namespace slideshow
 
             if( !bSlideBackgoundPainted )
             {
-                std::for_each(mrViews.begin(),
-                              mrViews.end(),
-                              boost::mem_fn(&View::clearAll));
+                for( const auto& pView : mrViews )
+                    pView->clearAll();
 
                 // force update of whole slide area
-                std::for_each( maLayers.begin(),
-                               maLayers.end(),
-                               boost::bind( &Layer::addUpdateRange,
-                                            _1,
-                                            boost::cref(maPageBounds) ));
+                for( const auto& pLayer : maLayers )
+                    pLayer->addUpdateRange( maPageBounds );
             }
             else
             {
                 // clear all possibly pending update areas - content
                 // is there, already
-                std::for_each( maLayers.begin(),
-                               maLayers.end(),
-                               boost::mem_fn( &Layer::clearUpdateRanges ));
+                for( const auto& pLayer : maLayers )
+                    pLayer->clearUpdateRanges();
             }
 
             updateShapeLayers( bSlideBackgoundPainted );
@@ -189,11 +181,8 @@ namespace slideshow
 
             // in case we haven't reached all layers from the
             // maAllShapes, issue addView again for good measure
-            std::for_each( maLayers.begin(),
-                           maLayers.end(),
-                           boost::bind( &Layer::addView,
-                                        _1,
-                                        boost::cref(rView) ));
+            for( const auto& pLayer : maLayers )
+                pLayer->addView( rView );
         }
 
         void LayerManager::viewRemoved( const UnoViewSharedPtr& rView )
@@ -214,11 +203,8 @@ namespace slideshow
 
             // in case we haven't reached all layers from the
             // maAllShapes, issue removeView again for good measure
-            std::for_each( maLayers.begin(),
-                           maLayers.end(),
-                           boost::bind( &Layer::removeView,
-                                        _1,
-                                        boost::cref(rView) ));
+            for( const auto& pLayer : maLayers )
+                pLayer->removeView( rView );
         }
 
         void LayerManager::viewChanged( const UnoViewSharedPtr& rView )
@@ -240,17 +226,14 @@ namespace slideshow
                 return;
 
             // clear view area
-            ::std::for_each( mrViews.begin(),
-                             mrViews.end(),
-                             ::boost::mem_fn(&View::clearAll) );
+            for( const auto& pView : mrViews )
+                pView->clearAll();
 
             // TODO(F3): resize and repaint all layers
 
             // render all shapes
-            std::for_each( maAllShapes.begin(),
-                           maAllShapes.end(),
-                           []( const LayerShapeMap::value_type& cp )
-                           { cp.first->render(); } );
+            for( const auto& rShape : maAllShapes )
+                rShape.first->render();
         }
 
         void LayerManager::addShape( const ShapeSharedPtr& rShape )
@@ -744,11 +727,8 @@ namespace slideshow
 
             // create ViewLayers for all registered views, and add to
             // newly created layer.
-            ::std::for_each( mrViews.begin(),
-                             mrViews.end(),
-                             boost::bind( &Layer::addView,
-                                          boost::cref(pLayer),
-                                          _1 ));
+            for( const auto& rView : mrViews )
+                pLayer->addView( rView );
 
             return pLayer;
         }

@@ -1130,10 +1130,8 @@ void SlideShowImpl::displaySlide(
             // push new transformation to all views, if size changed
             if( !mpPreviousSlide || oldSlideSize != slideSize )
             {
-                std::for_each( maViewContainer.begin(),
-                               maViewContainer.end(),
-                               boost::bind( &View::setViewSize, _1,
-                                            boost::cref(slideSize) ));
+                for( const auto& pView : maViewContainer )
+                    pView->setViewSize( slideSize );
 
                 // explicitly notify view change here,
                 // because transformation might have changed:
@@ -1960,11 +1958,8 @@ bool SlideShowImpl::requestCursor( sal_Int16 nCursorShape )
     const sal_Int16 nActualCursor = calcActiveCursor(mnCurrentCursor);
 
     // change all views to the requested cursor ID
-    std::for_each( maViewContainer.begin(),
-                   maViewContainer.end(),
-                   boost::bind( &View::setCursorShape,
-                                _1,
-                                nActualCursor ));
+    for( const auto& pView : maViewContainer )
+        pView->setCursorShape( nActualCursor );
 
     return nActualCursor==nCursorShape;
 }
@@ -1973,12 +1968,10 @@ void SlideShowImpl::resetCursor()
 {
     mnCurrentCursor = awt::SystemPointer::ARROW;
 
+    const sal_Int16 nActualCursor = calcActiveCursor( mnCurrentCursor );
     // change all views to the default cursor ID
-    std::for_each( maViewContainer.begin(),
-                   maViewContainer.end(),
-                   boost::bind( &View::setCursorShape,
-                                _1,
-                                calcActiveCursor(mnCurrentCursor) ));
+    for( const auto& pView : maViewContainer )
+        pView->setCursorShape( nActualCursor );
 }
 
 sal_Bool SlideShowImpl::update( double & nNextTimeout )
