@@ -20,10 +20,12 @@ class TestVbaEncryption : public test::BootstrapFixtureBase
 {
 public:
 
+#if 0
     // an initial test for the encryption taken from the spec
     void testSimple1();
 
     void testSimple2();
+#endif
 
     void testProjKey1();
 
@@ -40,6 +42,7 @@ public:
 private:
 };
 
+#if 0
 void TestVbaEncryption::testSimple1()
 {
     sal_uInt8 nSeed = 0x07;
@@ -74,6 +77,7 @@ void TestVbaEncryption::testSimple2()
         CPPUNIT_ASSERT_EQUAL((int)pExpectedData[i], (int)sal_uInt8(val));
     }
 }
+#endif
 
 void TestVbaEncryption::testProjKey1()
 {
