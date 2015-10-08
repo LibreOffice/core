@@ -569,6 +569,14 @@ static void doc_iniUnoCommands ()
         return;
     }
 
+    if (!xContext.is())
+        xContext = comphelper::getProcessComponentContext();
+    if (!xContext.is())
+    {
+        SAL_WARN("lok", "iniUnoCommands: Component context is not available");
+        return;
+    }
+
     SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
     uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
 
