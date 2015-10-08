@@ -47,7 +47,7 @@ extern "C"
                 classname##_getSupportedServiceNames() );\
         }
 
-XMLOFF_DLLPUBLIC void * SAL_CALL xo_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+XMLOFF_DLLPUBLIC void * SAL_CALL xo_get_implementation( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
     if( pServiceManager )
