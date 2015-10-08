@@ -61,7 +61,7 @@ void OutputDevice::DrawWallpaper( long nX, long nY,
     if( rWallpaper.IsBitmap() )
         DrawBitmapWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
     else if( rWallpaper.IsGradient() )
-        DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
+        assert(false);
     else
         DrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper );
 }
@@ -135,7 +135,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     if( bTransparent )
     {
         if( rWallpaper.IsGradient() )
-            bDrawGradientBackground = true;
+            assert(false);
         else
         {
             if( !pCached && !rWallpaper.GetColor().GetTransparency() )
@@ -153,14 +153,14 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     else if( eStyle != WallpaperStyle::Tile && eStyle != WallpaperStyle::Scale )
     {
         if( rWallpaper.IsGradient() )
-            bDrawGradientBackground = true;
+            assert(false);
         else
             bDrawColorBackground = true;
     }
 
     // background of bitmap?
     if( bDrawGradientBackground )
-        DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
+        assert(false);
     else if( bDrawColorBackground && bTransparent )
     {
         DrawColorWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
@@ -337,30 +337,6 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     }
 
     rWallpaper.ImplGetImpWallpaper()->ImplSetCachedBitmap( aBmpEx );
-
-    Pop();
-    EnableMapMode( bOldMap );
-    mpMetaFile = pOldMetaFile;
-}
-
-void OutputDevice::DrawGradientWallpaper( long nX, long nY,
-                                          long nWidth, long nHeight,
-                                          const Wallpaper& rWallpaper )
-{
-    assert(!is_double_buffered_window());
-
-    Rectangle aBound;
-    GDIMetaFile* pOldMetaFile = mpMetaFile;
-    const bool bOldMap = mbMap;
-
-    aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
-
-    mpMetaFile = NULL;
-    EnableMapMode( false );
-    Push( PushFlags::CLIPREGION );
-    IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
-
-    DrawGradient( aBound, rWallpaper.GetGradient() );
 
     Pop();
     EnableMapMode( bOldMap );
