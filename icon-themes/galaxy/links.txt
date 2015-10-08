@@ -86,3 +86,6 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 
 # FolderTree expanded icon
 svtools/res/folderop.png formula/res/fapopen.png
+
+# Start Center remote documents
+framework/res/remote-documents.png framework/res/folder_32.png
