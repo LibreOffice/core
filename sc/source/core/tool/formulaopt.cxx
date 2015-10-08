@@ -365,6 +365,9 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                             case 2: // Excel R1C1
                                 eConv = formula::FormulaGrammar::CONV_XL_R1C1;
                             break;
+                            case 3: // Calc A1 | Excel A1
+                                eConv = formula::FormulaGrammar::CONV_A1_XL_A1;
+                            break;
                             default:
                                 ;
                         }
@@ -548,6 +551,7 @@ void ScFormulaCfg::ImplCommit()
                     case ::formula::FormulaGrammar::CONV_OOO:     nVal = 0; break;
                     case ::formula::FormulaGrammar::CONV_XL_A1:   nVal = 1; break;
                     case ::formula::FormulaGrammar::CONV_XL_R1C1: nVal = 2; break;
+                    case ::formula::FormulaGrammar::CONV_A1_XL_A1: nVal = 3; break;
                     default: break;
                 }
                 pValues[nProp] <<= nVal;
