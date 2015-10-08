@@ -328,6 +328,21 @@ const vcl::KeyCode* Application::GetReservedKeyCode( sal_uLong i )
         return &ImplReservedKeys::get()->first[i].mKeyCode;
 }
 
+IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplEndAllDialogsMsg, void*, void )
+{
+    vcl::Window* pAppWindow = Application::GetFirstTopLevelWindow();
+    while (pAppWindow)
+    {
+        Dialog::EndAllDialogs(pAppWindow);
+        pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
+    }
+}
+
+void Application::EndAllDialogs()
+{
+    Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplEndAllDialogsMsg ) );
+}
+
 namespace
 {
     bool InjectKeyEvent(SvStream& rStream)
@@ -351,14 +366,8 @@ namespace
 
     void CloseDialogsAndQuit()
     {
-        Scheduler::ProcessTaskScheduling(true);
-        vcl::Window* pAppWindow = Application::GetFirstTopLevelWindow();
-        while (pAppWindow)
-        {
-            Dialog::EndAllDialogs(pAppWindow);
-            pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
-        }
-        Scheduler::ProcessTaskScheduling(true);
+        Scheduler::ProcessTaskScheduling(false);
+        Application::EndAllDialogs();
         Application::Quit();
     }
 }
@@ -375,7 +384,7 @@ IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
     }
     else
     {
-        Scheduler::ProcessTaskScheduling(true);
+        Scheduler::ProcessTaskScheduling(false);
         if (InjectKeyEvent(*mpEventTestInput))
             --mnEventTestLimit;
         if (!mpEventTestInput->good())
@@ -383,7 +392,7 @@ IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
             SAL_INFO("vcl.eventtesting", "Event Input exhausted, exit next cycle");
             mnEventTestLimit = 0;
         }
-        Scheduler::ProcessTaskScheduling(true);
+        Scheduler::ProcessTaskScheduling(false);
         mpEventTestingIdle->Start();
     }
 }
