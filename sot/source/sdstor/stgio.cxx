@@ -51,7 +51,7 @@ StgIo::~StgIo()
 
 bool StgIo::Load()
 {
-    if( pStrm )
+    if( m_pStrm )
     {
         if( aHdr.Load( *this ) )
         {
@@ -126,8 +126,8 @@ bool StgIo::CommitAll()
             aHdr.SetTOCStart( pTOC->GetStart() );
             if( aHdr.Store( *this ) )
             {
-                pStrm->Flush();
-                sal_uLong n = pStrm->GetError();
+                m_pStrm->Flush();
+                sal_uLong n = m_pStrm->GetError();
                 SetError( n );
 #ifdef DBG_UTIL
                 if( n==0 ) ValidateFATs();
@@ -350,7 +350,7 @@ const Link<StgLinkArg&,void>& StgIo::GetErrorLink()
 
 sal_uLong StgIo::ValidateFATs()
 {
-    if( bFile )
+    if( m_bFile )
     {
         Validator *pV = new Validator( *this );
         bool bRet1 = !pV->IsError(), bRet2 = true ;

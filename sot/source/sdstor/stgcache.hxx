@@ -45,36 +45,36 @@ class StgCache
 
     typedef std::vector< rtl::Reference< StgPage > > LRUList;
 
-    sal_uLong nError;                       // error code
-    sal_Int32 nPages;                       // size of data area in pages
-    sal_uInt16 nRef;                        // reference count
+    sal_uLong m_nError;                       // error code
+    sal_Int32 m_nPages;                       // size of data area in pages
+    sal_uInt16 m_nRef;                        // reference count
     IndexToStgPage maDirtyPages;            // hash of all dirty pages
-    int     nReplaceIdx;                    // index into maLRUPages to replace next
+    int     m_nReplaceIdx;                    // index into maLRUPages to replace next
     LRUList maLRUPages;                     // list of last few non-dirty pages.
-    short nPageSize;                        // page size of the file
-    UCBStorageStream* pStorageStream;       // holds reference to UCB storage stream
+    short m_nPageSize;                        // page size of the file
+    UCBStorageStream* m_pStorageStream;       // holds reference to UCB storage stream
 
     void Erase( const rtl::Reference< StgPage >& ); // delete a cache element
     rtl::Reference< StgPage > Create( sal_Int32  ); // create a cached page
 protected:
-    SvStream* pStrm;                        // physical stream
-    bool  bMyStream;                        // true: delete stream in dtor
-    bool  bFile;                            // true: file stream
+    SvStream* m_pStrm;                        // physical stream
+    bool  m_bMyStream;                        // true: delete stream in dtor
+    bool  m_bFile;                            // true: file stream
     sal_Int32 Page2Pos( sal_Int32 );        // page address --> file position
 public:
     StgCache();
     ~StgCache();
-    void  IncRef()                          { nRef++;           }
-    sal_uInt16 DecRef()                     { return --nRef;    }
+    void  IncRef()                          { m_nRef++;           }
+    sal_uInt16 DecRef()                     { return --m_nRef;    }
     void  SetPhysPageSize( short );
-    sal_Int32 GetPhysPages()                { return nPages;    }
-    short GetPhysPageSize()                 { return nPageSize; }
-    SvStream* GetStrm()                     { return pStrm;     }
+    sal_Int32 GetPhysPages()                { return m_nPages;    }
+    short GetPhysPageSize()                 { return m_nPageSize; }
+    SvStream* GetStrm()                     { return m_pStrm;     }
     void  SetStrm( SvStream*, bool );
     void  SetStrm( UCBStorageStream* );
-    bool  IsWritable()                      { return ( pStrm && pStrm->IsWritable() ); }
-    bool  Good()                            { return nError == SVSTREAM_OK; }
-    sal_uLong GetError()                    { return nError;    }
+    bool  IsWritable()                      { return ( m_pStrm && m_pStrm->IsWritable() ); }
+    bool  Good()                            { return m_nError == SVSTREAM_OK; }
+    sal_uLong GetError()                    { return m_nError;    }
     void  MoveError( StorageBase& );
     void  SetError( sal_uLong );
     void  ResetError();

@@ -87,16 +87,16 @@ static sal_Int32 lcl_GetPageCount( sal_uLong nFileSize, short nPageSize )
 }
 
 StgCache::StgCache()
-   : nError( SVSTREAM_OK )
-   , nPages( 0 )
-   , nRef( 0 )
-   , nReplaceIdx( 0 )
+   : m_nError( SVSTREAM_OK )
+   , m_nPages( 0 )
+   , m_nRef( 0 )
+   , m_nReplaceIdx( 0 )
    , maLRUPages( 8 ) // entries in the LRU lookup
-   , nPageSize( 512 )
-   , pStorageStream( NULL )
-   , pStrm( NULL )
-   , bMyStream( false )
-   , bFile( false )
+   , m_nPageSize( 512 )
+   , m_pStorageStream( NULL )
+   , m_pStrm( NULL )
+   , m_bMyStream( false )
+   , m_bFile( false )
 {
 }
 
@@ -111,11 +111,11 @@ void StgCache::SetPhysPageSize( short n )
     OSL_ENSURE( n >= 512, "Unexpecte page size is provided!" );
     if ( n >= 512 )
     {
-        nPageSize = n;
-        sal_uLong nPos = pStrm->Tell();
-        sal_uLong nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
-        nPages = lcl_GetPageCount( nFileSize, nPageSize );
-        pStrm->Seek( nPos );
+        m_nPageSize = n;
+        sal_uLong nPos = m_pStrm->Tell();
+        sal_uLong nFileSize = m_pStrm->Seek( STREAM_SEEK_TO_END );
+        m_nPages = lcl_GetPageCount( nFileSize, m_nPageSize );
+        m_pStrm->Seek( nPos );
     }
 }
 
@@ -123,8 +123,8 @@ void StgCache::SetPhysPageSize( short n )
 
 rtl::Reference< StgPage > StgCache::Create( sal_Int32 nPg )
 {
-    rtl::Reference< StgPage > xElem( StgPage::Create( nPageSize, nPg ) );
-    maLRUPages[ nReplaceIdx++ % maLRUPages.size() ] = xElem;
+    rtl::Reference< StgPage > xElem( StgPage::Create( m_nPageSize, nPg ) );
+    maLRUPages[ m_nReplaceIdx++ % maLRUPages.size() ] = xElem;
     return xElem;
 }
 
@@ -230,8 +230,8 @@ bool StgCache::Commit()
 
     maDirtyPages.clear();
 
-    pStrm->Flush();
-    SetError( pStrm->GetError() );
+    m_pStrm->Flush();
+    SetError( m_pStrm->GetError() );
 
     return true;
 }
@@ -240,36 +240,36 @@ bool StgCache::Commit()
 
 void StgCache::SetStrm( SvStream* p, bool bMy )
 {
-    if( pStorageStream )
+    if( m_pStorageStream )
     {
-        pStorageStream->ReleaseRef();
-        pStorageStream = NULL;
+        m_pStorageStream->ReleaseRef();
+        m_pStorageStream = NULL;
     }
 
-    if( bMyStream )
-        delete pStrm;
-    pStrm = p;
-    bMyStream = bMy;
+    if( m_bMyStream )
+        delete m_pStrm;
+    m_pStrm = p;
+    m_bMyStream = bMy;
 }
 
 void StgCache::SetStrm( UCBStorageStream* pStgStream )
 {
-    if( pStorageStream )
-        pStorageStream->ReleaseRef();
-    pStorageStream = pStgStream;
+    if( m_pStorageStream )
+        m_pStorageStream->ReleaseRef();
+    m_pStorageStream = pStgStream;
 
-    if( bMyStream )
-        delete pStrm;
+    if( m_bMyStream )
+        delete m_pStrm;
 
-    pStrm = NULL;
+    m_pStrm = NULL;
 
-    if ( pStorageStream )
+    if ( m_pStorageStream )
     {
-        pStorageStream->AddFirstRef();
-        pStrm = pStorageStream->GetModifySvStream();
+        m_pStorageStream->AddFirstRef();
+        m_pStrm = m_pStorageStream->GetModifySvStream();
     }
 
-    bMyStream = false;
+    m_bMyStream = false;
 }
 
 void StgCache::SetDirty( const rtl::Reference< StgPage > &rPage )
@@ -296,23 +296,23 @@ bool StgCache::Open( const OUString& rName, StreamMode nMode )
     SetStrm( pFileStrm, true );
     if( pFileStrm->IsOpen() )
     {
-        sal_uLong nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
-        nPages = lcl_GetPageCount( nFileSize, nPageSize );
-        pStrm->Seek( 0L );
+        sal_uLong nFileSize = m_pStrm->Seek( STREAM_SEEK_TO_END );
+        m_nPages = lcl_GetPageCount( nFileSize, m_nPageSize );
+        m_pStrm->Seek( 0L );
     }
     else
-        nPages = 0;
-    bFile = true;
-    SetError( bAccessDenied ? ERRCODE_IO_ACCESSDENIED : pStrm->GetError() );
+        m_nPages = 0;
+    m_bFile = true;
+    SetError( bAccessDenied ? ERRCODE_IO_ACCESSDENIED : m_pStrm->GetError() );
     return Good();
 }
 
 void StgCache::Close()
 {
-    if( bFile )
+    if( m_bFile )
     {
-        static_cast<SvFileStream*>(pStrm)->Close();
-        SetError( pStrm->GetError() );
+        static_cast<SvFileStream*>(m_pStrm)->Close();
+        SetError( m_pStrm->GetError() );
     }
 }
 
@@ -326,28 +326,28 @@ bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
             last valid page (see document attached to the issue). In that case
             (if nPage==nPages), just do nothing here and let the caller work on
             the empty zero-filled buffer. */
-        if ( nPage > nPages )
+        if ( nPage > m_nPages )
             SetError( SVSTREAM_READ_ERROR );
-        else if ( nPage < nPages )
+        else if ( nPage < m_nPages )
         {
             sal_uInt32 nPos = Page2Pos( nPage );
-            sal_Int32 nPg2 = ( ( nPage + nPg ) > nPages ) ? nPages - nPage : nPg;
-            sal_uInt32 nBytes = nPg2 * nPageSize;
+            sal_Int32 nPg2 = ( ( nPage + nPg ) > m_nPages ) ? m_nPages - nPage : nPg;
+            sal_uInt32 nBytes = nPg2 * m_nPageSize;
             // fixed address and size for the header
             if( nPage == -1 )
             {
                 nPos = 0L, nBytes = 512;
                 nPg2 = nPg;
             }
-            if( pStrm->Tell() != nPos )
+            if( m_pStrm->Tell() != nPos )
             {
-                pStrm->Seek(nPos);
+                m_pStrm->Seek(nPos);
             }
-            pStrm->Read( pBuf, nBytes );
+            m_pStrm->Read( pBuf, nBytes );
             if ( nPg != nPg2 )
                 SetError( SVSTREAM_READ_ERROR );
             else
-                SetError( pStrm->GetError() );
+                SetError( m_pStrm->GetError() );
         }
     }
     return Good();
@@ -359,22 +359,22 @@ bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
     {
         sal_uInt32 nPos = Page2Pos( nPage );
         sal_uInt32 nBytes = 0;
-        if ( SAL_MAX_INT32 / nPg > nPageSize )
-            nBytes = nPg * nPageSize;
+        if ( SAL_MAX_INT32 / nPg > m_nPageSize )
+            nBytes = nPg * m_nPageSize;
 
         // fixed address and size for the header
         // nPageSize must be >= 512, otherwise the header can not be written here, we check it on import
         if( nPage == -1 )
             nPos = 0L, nBytes = 512;
-        if( pStrm->Tell() != nPos )
+        if( m_pStrm->Tell() != nPos )
         {
-            pStrm->Seek(nPos);
+            m_pStrm->Seek(nPos);
         }
-        sal_uLong nRes = pStrm->Write( pBuf, nBytes );
+        sal_uLong nRes = m_pStrm->Write( pBuf, nBytes );
         if( nRes != nBytes )
             SetError( SVSTREAM_WRITE_ERROR );
         else
-            SetError( pStrm->GetError() );
+            SetError( m_pStrm->GetError() );
     }
     return Good();
 }
@@ -384,31 +384,31 @@ bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
 bool StgCache::SetSize( sal_Int32 n )
 {
     // Add the file header
-    sal_Int32 nSize = n * nPageSize + 512;
-    pStrm->SetStreamSize( nSize );
-    SetError( pStrm->GetError() );
-    if( !nError )
-        nPages = n;
+    sal_Int32 nSize = n * m_nPageSize + 512;
+    m_pStrm->SetStreamSize( nSize );
+    SetError( m_pStrm->GetError() );
+    if( !m_nError )
+        m_nPages = n;
     return Good();
 }
 
 void StgCache::SetError( sal_uLong n )
 {
-    if( n && !nError )
-        nError = n;
+    if( n && !m_nError )
+        m_nError = n;
 }
 
 void StgCache::ResetError()
 {
-    nError = SVSTREAM_OK;
-    pStrm->ResetError();
+    m_nError = SVSTREAM_OK;
+    m_pStrm->ResetError();
 }
 
 void StgCache::MoveError( StorageBase& r )
 {
-    if( nError != SVSTREAM_OK )
+    if( m_nError != SVSTREAM_OK )
     {
-        r.SetError( nError );
+        r.SetError( m_nError );
         ResetError();
     }
 }
@@ -418,7 +418,7 @@ void StgCache::MoveError( StorageBase& r )
 sal_Int32 StgCache::Page2Pos( sal_Int32 nPage )
 {
     if( nPage < 0 ) nPage = 0;
-    return( nPage * nPageSize ) + nPageSize;
+    return( nPage * m_nPageSize ) + m_nPageSize;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
