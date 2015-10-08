@@ -684,7 +684,6 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                                 rStm.ReadUInt32( nTemp32 );
                                 aPixSize.Width() = nTemp32;
                             }
-                            nCount += 12;
 
                             // height
                             rStm.SeekRel( 2 );
@@ -701,7 +700,6 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                                 rStm.ReadUInt32( nTemp32 );
                                 aPixSize.Height() = nTemp32;
                             }
-                            nCount += 12;
 
                             // Bits/Pixel
                             rStm.ReadUInt16( nTemp16 );
@@ -711,7 +709,6 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                                 rStm.ReadUInt16( nTemp16 );
                                 nBitsPerPixel = nTemp16;
                                 rStm.SeekRel( 2 );
-                                nCount += 12;
                             }
                             else
                                 rStm.SeekRel( -2 );
@@ -724,7 +721,6 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                                 rStm.ReadUInt16( nTemp16 );
                                 bCompressed = ( nTemp16 > 1 );
                                 rStm.SeekRel( 2 );
-                                nCount += 12;
                             }
                             else
                                 rStm.SeekRel( -2 );
