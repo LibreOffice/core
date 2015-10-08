@@ -86,6 +86,7 @@ static const struct osl_file_error_entry errtable[] = {
   {  ERROR_FILE_CHECKED_OUT,       osl_File_E_ACCES    },  /* 220 */
   {  ERROR_DIRECTORY,              osl_File_E_NOENT    },  /* 267 */
   {  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    },  /* 1816 */
+  {  ERROR_CANT_ACCESS_FILE,       osl_File_E_ACCES    },  /* 1920 */
   {  ERROR_UNEXP_NET_ERR,          osl_File_E_NETWORK  }   /* 59 */
 };
 
