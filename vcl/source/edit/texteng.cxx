@@ -912,7 +912,6 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
 
         pLine = & ( pPortion->GetLines().back() );
         nY -= mnCharHeight;
-        nCurIndex = nCurIndex - pLine->GetLen();
     }
 
     Rectangle aEditCursor;
