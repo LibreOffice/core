@@ -86,6 +86,7 @@
 #include <columnspanset.hxx>
 #include <rowheightcontext.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -1737,7 +1738,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             if (nCommand == SvxSearchCmd::FIND_ALL || nCommand == SvxSearchCmd::REPLACE_ALL)
             {
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                if (pViewFrm)
+                if (pViewFrm && !comphelper::LibreOfficeKit::isActive())
                 {
                     pViewFrm->ShowChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId(), true);
                     SfxChildWindow* pWnd = pViewFrm->GetChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
