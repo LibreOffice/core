@@ -42,7 +42,7 @@ public:
     }
     virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
     {
-        if( Index != 1 )
+        if( Index != 0 )
             throw lang::IndexOutOfBoundsException();
         return uno::makeAny( uno::Reference< word::XPane >( new SwVbaPane( mxParent,  mxContext, mxModel ) ) );
     }
