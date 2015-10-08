@@ -614,7 +614,6 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     }
     else if( rFormatExtension.startsWith( "XPM" ) )
     {
-        bSomethingTested = true;
         return true;
     }
 
@@ -639,7 +638,6 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     }
     else if( rFormatExtension.startsWith( "XBM" ) )
     {
-        bSomethingTested = true;
         return true;
     }
 
@@ -725,7 +723,6 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     }
     else if( rFormatExtension.startsWith( "SVG" ) )
     {
-        bSomethingTested = true;
         return true;
     }
 
@@ -767,7 +764,6 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             (sFirstBytes[ 4 ] == 'm' && sFirstBytes[ 5 ] == 'o' && sFirstBytes[ 6 ] == 'o' &&
              sFirstBytes[ 7 ] == 'v' && sFirstBytes[ 11 ] == 'l' && sFirstBytes[ 12 ] == 'm'))
         {
-            bSomethingTested=true;
             rFormatExtension = "MOV";
             return true;
         }
