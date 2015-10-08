@@ -108,7 +108,7 @@ IMPL_LINK(AboutDialog, HandleClick, weld::Button&, rButton, void)
     else if (&rButton == m_xWebsiteButton.get())
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
-        localizeWebserviceURI(sURL);
+        // localizeWebserviceURI(sURL);
     }
     else if (&rButton == m_xReleaseNotesButton.get())
     {
