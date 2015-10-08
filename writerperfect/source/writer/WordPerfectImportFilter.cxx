@@ -84,6 +84,9 @@ static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, libr
     if (!libwpg::WPGraphics::parse(input.getDataStream(), &aSVGGenerator, fileFormat))
         return false;
 
+    if (svgOutput.empty())
+        return false;
+
     assert(1 == svgOutput.size());
 
     output.clear();
