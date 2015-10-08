@@ -262,7 +262,7 @@ bool StgDirEntry::IsDirty()
 
 void StgDirEntry::OpenStream( StgIo& rIo, bool bForceBig )
 {
-    sal_Int32 nThreshold = (sal_uInt16) rIo.aHdr.GetThreshold();
+    sal_Int32 nThreshold = (sal_uInt16) rIo.m_aHdr.GetThreshold();
     delete m_pStgStrm;
     if( !bForceBig && m_aEntry.GetSize() < nThreshold )
         m_pStgStrm = new StgSmallStrm( rIo, *this );
@@ -331,7 +331,7 @@ bool StgDirEntry::SetSize( sal_Int32 nNewSize )
 
         bool bRes = false;
         StgIo& rIo = m_pStgStrm->GetIo();
-        sal_Int32 nThreshold = rIo.aHdr.GetThreshold();
+        sal_Int32 nThreshold = rIo.m_aHdr.GetThreshold();
         // ensure the correct storage stream!
         StgStrm* pOld = NULL;
         sal_uInt16 nOldSize = 0;
@@ -625,7 +625,7 @@ bool StgDirEntry::Tmp2Strm()
         sal_uLong n = m_pTmpStrm->GetSize();
         StgStrm* pNewStrm;
         StgIo& rIo = m_pStgStrm->GetIo();
-        sal_uLong nThreshold = (sal_uLong) rIo.aHdr.GetThreshold();
+        sal_uLong nThreshold = (sal_uLong) rIo.m_aHdr.GetThreshold();
         if( n < nThreshold )
             pNewStrm = new StgSmallStrm( rIo, STG_EOF, 0 );
         else
@@ -719,7 +719,7 @@ void StgDirEntry::Invalidate( bool bDel )
 // This specialized stream is the maintenance stream for the directory tree.
 
 StgDirStrm::StgDirStrm( StgIo& r )
-          : StgDataStrm( r, r.aHdr.GetTOCStart(), -1 )
+          : StgDataStrm( r, r.m_aHdr.GetTOCStart(), -1 )
           , pRoot( NULL )
           , nEntries( 0 )
 {
@@ -907,7 +907,7 @@ bool StgDirStrm::Store()
     }
     // Now we can release the old stream
     pFat->FreePages( nOldStart, true );
-    rIo.aHdr.SetTOCStart( nStart );
+    rIo.m_aHdr.SetTOCStart( nStart );
     return true;
 }
 

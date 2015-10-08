@@ -118,7 +118,7 @@ OLEStorageBase::~OLEStorageBase()
 bool OLEStorageBase::Validate_Impl( bool bWrite ) const
 {
     if( pIo
-        && pIo->pTOC
+        && pIo->m_pTOC
         && pEntry
         && !pEntry->m_bInvalid
         &&  ( !bWrite || !pEntry->m_bDirect || ( nStreamMode & StreamMode::WRITE ) ) )
@@ -469,9 +469,9 @@ void Storage::Init( bool bCreate )
     // the file is empty
     if( !bHdrLoaded )
         pIo->Init();
-    if( pIo->Good() && pIo->pTOC )
+    if( pIo->Good() && pIo->m_pTOC )
     {
-        pEntry = pIo->pTOC->GetRoot();
+        pEntry = pIo->m_pTOC->GetRoot();
         pEntry->m_nRefCnt++;
     }
 }
@@ -560,7 +560,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
     if( bDirect && !pEntry->m_bDirect )
         bDirect = false;
 
-    StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
+    StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
     if( !p )
     {
         if( !( m & StreamMode::NOCREATE ) )
@@ -573,7 +573,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
                 aNewName = "Temp Stg " + OUString::number( ++nTmpCount );
                 bTemp = true;
             }
-            p = pIo->pTOC->Create( *pEntry, aNewName, STG_STORAGE );
+            p = pIo->m_pTOC->Create( *pEntry, aNewName, STG_STORAGE );
             if( p )
                 p->m_bTemp = bTemp;
         }
@@ -614,7 +614,7 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
 
     if( !Validate() || !ValidateMode( m ) )
         return new StorageStream( pIo, NULL, m );
-    StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
+    StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
     bool bTemp = false;
     if( !p )
     {
@@ -628,7 +628,7 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
                 aNewName = "Temp Strm " + OUString::number( ++nTmpCount );
                 bTemp = true;
             }
-            p = pIo->pTOC->Create( *pEntry, aNewName, STG_STREAM );
+            p = pIo->m_pTOC->Create( *pEntry, aNewName, STG_STREAM );
         }
         if( !p )
             pIo->SetError( ( m & StreamMode::WRITE )
@@ -659,7 +659,7 @@ bool Storage::Remove( const OUString& rName )
 {
     if( !Validate( true ) )
         return false;
-    StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
+    StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
     if( p )
     {
         p->Invalidate( true );
@@ -678,7 +678,7 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
 {
     if( !Validate() || !pDest || !pDest->Validate( true ) )
         return false;
-    StgDirEntry* pElem = pIo->pTOC->Find( *pEntry, rElem );
+    StgDirEntry* pElem = pIo->m_pTOC->Find( *pEntry, rElem );
     if( pElem )
     {
         if( pElem->m_aEntry.GetType() == STG_STORAGE )
@@ -770,7 +770,7 @@ bool Storage::IsStorage( const OUString& rName ) const
 {
     if( Validate() )
     {
-        StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
+        StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
         if( p )
             return p->m_aEntry.GetType() == STG_STORAGE;
     }
@@ -781,7 +781,7 @@ bool Storage::IsStream( const OUString& rName ) const
 {
     if( Validate() )
     {
-        StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
+        StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
         if( p )
             return p->m_aEntry.GetType() == STG_STREAM;
     }
@@ -791,7 +791,7 @@ bool Storage::IsStream( const OUString& rName ) const
 bool Storage::IsContained( const OUString& rName ) const
 {
     if( Validate() )
-        return pIo->pTOC->Find( *pEntry, rName ) != NULL;
+        return pIo->m_pTOC->Find( *pEntry, rName ) != NULL;
     else
         return false;
 }

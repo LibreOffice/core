@@ -50,15 +50,15 @@ struct StgLinkArg
 
 class StgIo : public StgCache {
     void SetupStreams();            // load all internal streams
-    bool         bCopied;
+    bool         m_bCopied;
 public:
     StgIo();
    ~StgIo();
-    StgHeader    aHdr;              // storage file header
-    StgFATStrm*  pFAT;              // FAT stream
-    StgDirStrm*  pTOC;              // TOC stream
-    StgDataStrm* pDataFAT;          // small data FAT stream
-    StgDataStrm* pDataStrm;         // small data stream
+    StgHeader    m_aHdr;              // storage file header
+    StgFATStrm*  m_pFAT;              // FAT stream
+    StgDirStrm*  m_pTOC;              // TOC stream
+    StgDataStrm* m_pDataFAT;          // small data FAT stream
+    StgDataStrm* m_pDataStrm;         // small data stream
     short        GetDataPageSize(); // get the logical data page size
     bool Load();                    // load a storage file
     bool Init();                    // set up an empty file

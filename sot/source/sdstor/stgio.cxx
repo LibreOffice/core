@@ -32,19 +32,19 @@
 
 StgIo::StgIo() : StgCache()
 {
-    pTOC      = NULL;
-    pDataFAT  = NULL;
-    pDataStrm = NULL;
-    pFAT      = NULL;
-    bCopied   = false;
+    m_pTOC      = NULL;
+    m_pDataFAT  = NULL;
+    m_pDataStrm = NULL;
+    m_pFAT      = NULL;
+    m_bCopied   = false;
 }
 
 StgIo::~StgIo()
 {
-    delete pTOC;
-    delete pDataFAT;
-    delete pDataStrm;
-    delete pFAT;
+    delete m_pTOC;
+    delete m_pDataFAT;
+    delete m_pDataStrm;
+    delete m_pFAT;
 }
 
 // Load the header. Do not set an error code if the header is invalid.
@@ -53,9 +53,9 @@ bool StgIo::Load()
 {
     if( m_pStrm )
     {
-        if( aHdr.Load( *this ) )
+        if( m_aHdr.Load( *this ) )
         {
-            if( aHdr.Check() )
+            if( m_aHdr.Check() )
                 SetupStreams();
             else
                 return false;
@@ -70,35 +70,35 @@ bool StgIo::Load()
 
 bool StgIo::Init()
 {
-    aHdr.Init();
+    m_aHdr.Init();
     SetupStreams();
     return CommitAll();
 }
 
 void StgIo::SetupStreams()
 {
-    delete pTOC;
-    delete pDataFAT;
-    delete pDataStrm;
-    delete pFAT;
-    pTOC      = NULL;
-    pDataFAT  = NULL;
-    pDataStrm = NULL;
-    pFAT      = NULL;
+    delete m_pTOC;
+    delete m_pDataFAT;
+    delete m_pDataStrm;
+    delete m_pFAT;
+    m_pTOC      = NULL;
+    m_pDataFAT  = NULL;
+    m_pDataStrm = NULL;
+    m_pFAT      = NULL;
     ResetError();
-    SetPhysPageSize( 1 << aHdr.GetPageSize() );
-    pFAT = new StgFATStrm( *this );
-    pTOC = new StgDirStrm( *this );
+    SetPhysPageSize( 1 << m_aHdr.GetPageSize() );
+    m_pFAT = new StgFATStrm( *this );
+    m_pTOC = new StgDirStrm( *this );
     if( !GetError() )
     {
-        StgDirEntry* pRoot = pTOC->GetRoot();
+        StgDirEntry* pRoot = m_pTOC->GetRoot();
         if( pRoot )
         {
-            pDataFAT = new StgDataStrm( *this, aHdr.GetDataFATStart(), -1 );
-            pDataStrm = new StgDataStrm( *this, *pRoot );
-            pDataFAT->SetIncrement( 1 << aHdr.GetPageSize() );
-            pDataStrm->SetIncrement( GetDataPageSize() );
-            pDataStrm->SetEntry( *pRoot );
+            m_pDataFAT = new StgDataStrm( *this, m_aHdr.GetDataFATStart(), -1 );
+            m_pDataStrm = new StgDataStrm( *this, *pRoot );
+            m_pDataFAT->SetIncrement( 1 << m_aHdr.GetPageSize() );
+            m_pDataStrm->SetIncrement( GetDataPageSize() );
+            m_pDataStrm->SetEntry( *pRoot );
         }
         else
             SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -109,7 +109,7 @@ void StgIo::SetupStreams()
 
 short StgIo::GetDataPageSize()
 {
-    return 1 << aHdr.GetDataPageSize();
+    return 1 << m_aHdr.GetDataPageSize();
 }
 
 // Commit everything
@@ -117,14 +117,14 @@ short StgIo::GetDataPageSize()
 bool StgIo::CommitAll()
 {
     // Store the data (all streams and the TOC)
-    if( pTOC && pTOC->Store() && pDataFAT )
+    if( m_pTOC && m_pTOC->Store() && m_pDataFAT )
     {
         if( Commit() )
         {
-            aHdr.SetDataFATStart( pDataFAT->GetStart() );
-            aHdr.SetDataFATSize( pDataFAT->GetPages() );
-            aHdr.SetTOCStart( pTOC->GetStart() );
-            if( aHdr.Store( *this ) )
+            m_aHdr.SetDataFATStart( m_pDataFAT->GetStart() );
+            m_aHdr.SetDataFATSize( m_pDataFAT->GetPages() );
+            m_aHdr.SetTOCStart( m_pTOC->GetStart() );
+            if( m_aHdr.Store( *this ) )
             {
                 m_pStrm->Flush();
                 sal_uLong n = m_pStrm->GetError();
@@ -166,7 +166,7 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
     pFree = new bool[ nPages ];
 
     rtl::Reference< StgPage > pPage;
-    sal_Int32 nFatPageSize = (1 << rIo.aHdr.GetPageSize()) - 2;
+    sal_Int32 nFatPageSize = (1 << rIo.m_aHdr.GetPageSize()) - 2;
 
     for( sal_Int32 nPage = 0; nPage < nPages; nPage++ )
     {
@@ -239,8 +239,8 @@ public:
 };
 
 Validator::Validator( StgIo &rIoP )
-    : aSmallFat( rIoP, rIoP.pDataFAT, 1 << rIoP.aHdr.GetDataPageSize() ),
-      aFat( rIoP, rIoP.pFAT, 1 << rIoP.aHdr.GetPageSize() ),
+    : aSmallFat( rIoP, rIoP.m_pDataFAT, 1 << rIoP.m_aHdr.GetDataPageSize() ),
+      aFat( rIoP, rIoP.m_pFAT, 1 << rIoP.m_aHdr.GetPageSize() ),
       rIo( rIoP )
 {
     sal_uLong nErr = nError = FAT_OK;
@@ -255,18 +255,18 @@ Validator::Validator( StgIo &rIoP )
 
 sal_uLong Validator::ValidateMasterFATs()
 {
-    sal_Int32 nCount = rIo.aHdr.GetFATSize();
+    sal_Int32 nCount = rIo.m_aHdr.GetFATSize();
     sal_uLong nErr;
-    if ( !rIo.pFAT )
+    if ( !rIo.m_pFAT )
         return FAT_INMEMORYERROR;
 
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        if( ( nErr = aFat.Mark(rIo.pFAT->GetPage( short(i), false ), aFat.GetPageSize(), -3 )) != FAT_OK )
+        if( ( nErr = aFat.Mark(rIo.m_pFAT->GetPage( short(i), false ), aFat.GetPageSize(), -3 )) != FAT_OK )
             return nErr;
     }
-    if( rIo.aHdr.GetMasters() )
-        if( ( nErr = aFat.Mark(rIo.aHdr.GetFATChain( ), aFat.GetPageSize(), -4 )) != FAT_OK )
+    if( rIo.m_aHdr.GetMasters() )
+        if( ( nErr = aFat.Mark(rIo.m_aHdr.GetFATChain( ), aFat.GetPageSize(), -4 )) != FAT_OK )
             return nErr;
 
     return FAT_OK;
@@ -290,7 +290,7 @@ sal_uLong Validator::MarkAll( StgDirEntry *pEntry )
         else
         {
             sal_Int32 nSize = p->m_aEntry.GetSize();
-            if( nSize < rIo.aHdr.GetThreshold()  )
+            if( nSize < rIo.m_aHdr.GetThreshold()  )
                 nErr = aSmallFat.Mark( p->m_aEntry.GetStartPage(),nSize, -2 );
             else
                 nErr = aFat.Mark( p->m_aEntry.GetStartPage(),nSize, -2 );
@@ -303,27 +303,27 @@ sal_uLong Validator::MarkAll( StgDirEntry *pEntry )
 
 sal_uLong Validator::ValidateDirectoryEntries()
 {
-    if ( !rIo.pTOC )
+    if ( !rIo.m_pTOC )
         return FAT_INMEMORYERROR;
 
     // Normale DirEntries
-    sal_uLong nErr = MarkAll( rIo.pTOC->GetRoot() );
+    sal_uLong nErr = MarkAll( rIo.m_pTOC->GetRoot() );
     if( nErr != FAT_OK )
         return nErr;
     // Small Data
-    nErr = aFat.Mark( rIo.pTOC->GetRoot()->m_aEntry.GetStartPage(),
-                 rIo.pTOC->GetRoot()->m_aEntry.GetSize(), -2 );
+    nErr = aFat.Mark( rIo.m_pTOC->GetRoot()->m_aEntry.GetStartPage(),
+                 rIo.m_pTOC->GetRoot()->m_aEntry.GetSize(), -2 );
     if( nErr != FAT_OK )
         return nErr;
     // Small Data FAT
     nErr = aFat.Mark(
-        rIo.aHdr.GetDataFATStart(),
-        rIo.aHdr.GetDataFATSize() * aFat.GetPageSize(), -2 );
+        rIo.m_aHdr.GetDataFATStart(),
+        rIo.m_aHdr.GetDataFATSize() * aFat.GetPageSize(), -2 );
     if( nErr != FAT_OK )
         return nErr;
     // TOC
     nErr = aFat.Mark(
-        rIo.aHdr.GetTOCStart(), -1, -2 );
+        rIo.m_aHdr.GetTOCStart(), -1, -2 );
     return nErr;
 }
 
@@ -374,13 +374,13 @@ sal_uLong StgIo::ValidateFATs()
         if( bRet1 != bRet2 )
             nErr = bRet1 ? FAT_ONFILEERROR : FAT_INMEMORYERROR;
         else nErr = bRet1 ? FAT_OK : FAT_BOTHERROR;
-        if( nErr != FAT_OK && !bCopied )
+        if( nErr != FAT_OK && !m_bCopied )
         {
             StgLinkArg aArg;
             aArg.aFile = pFileStrm->GetFileName();
             aArg.nErr = nErr;
             ErrorLink::get().Call( aArg );
-            bCopied = true;
+            m_bCopied = true;
         }
 //      DBG_ASSERT( nErr == FAT_OK ,"Storage kaputt");
         return nErr;

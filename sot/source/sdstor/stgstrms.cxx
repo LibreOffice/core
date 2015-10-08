@@ -546,7 +546,7 @@ bool StgStrm::SetSize( sal_Int32 nBytes )
 StgFATStrm::StgFATStrm( StgIo& r ) : StgStrm( r )
 {
     pFat = new StgFAT( *this, true );
-    nSize = rIo.aHdr.GetFATSize() * nPageSize;
+    nSize = rIo.m_aHdr.GetFATSize() * nPageSize;
 }
 
 bool StgFATStrm::Pos2Page( sal_Int32 nBytePos )
@@ -568,7 +568,7 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
     OSL_ENSURE( nOff >= 0, "The offset may not be negative!" );
     if( pnMasterAlloc ) *pnMasterAlloc = 0;
     if( nOff < StgHeader::GetFAT1Size() )
-        return rIo.aHdr.GetFATPage( nOff );
+        return rIo.m_aHdr.GetFATPage( nOff );
     sal_Int32 nMaxPage = nSize >> 2;
     nOff = nOff - StgHeader::GetFAT1Size();
     // Anzahl der Masterpages, durch die wir iterieren muessen
@@ -579,7 +579,7 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
 
     rtl::Reference< StgPage > pOldPage;
     rtl::Reference< StgPage > pMaster;
-    sal_Int32 nFAT = rIo.aHdr.GetFATChain();
+    sal_Int32 nFAT = rIo.m_aHdr.GetFATChain();
     for( sal_uInt16 nCount = 0; nCount <= nBlocks; nCount++ )
     {
         if( nFAT == STG_EOF || nFAT == STG_FREE )
@@ -597,7 +597,7 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
                         rIo.SetToPage( pMaster, k, STG_FREE );
                     // Verkettung herstellen
                     if( !pOldPage.is() )
-                        rIo.aHdr.SetFATChain( nFAT );
+                        rIo.m_aHdr.SetFATChain( nFAT );
                     else
                         rIo.SetToPage( pOldPage, nMasterCount, nFAT );
                     if( nMaxPage >= rIo.GetPhysPages() )
@@ -616,7 +616,7 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
                     }
                     else
                         (*pnMasterAlloc)++;
-                    rIo.aHdr.SetMasters( nCount + 1 );
+                    rIo.m_aHdr.SetMasters( nCount + 1 );
                     pOldPage = pMaster;
                 }
             }
@@ -647,7 +647,7 @@ bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
 
     bool bRes = true;
     if( nOff < StgHeader::GetFAT1Size() )
-        rIo.aHdr.SetFATPage( nOff, nNewPage );
+        rIo.m_aHdr.SetFATPage( nOff, nNewPage );
     else
     {
         nOff = nOff - StgHeader::GetFAT1Size();
@@ -658,7 +658,7 @@ bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
         nOff = nOff % nMasterCount;
 
         rtl::Reference< StgPage > pMaster;
-        sal_Int32 nFAT = rIo.aHdr.GetFATChain();
+        sal_Int32 nFAT = rIo.m_aHdr.GetFATChain();
         for( sal_uInt16 nCount = 0; nCount <= nBlocks; nCount++ )
         {
             if( nFAT == STG_EOF || nFAT == STG_FREE )
@@ -755,8 +755,8 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
 
             // MegaMasterPages were created, mark it them as used
 
-            sal_uInt32 nMax = rIo.aHdr.GetMasters( );
-            sal_uInt32 nFAT = rIo.aHdr.GetFATChain();
+            sal_uInt32 nMax = rIo.m_aHdr.GetMasters( );
+            sal_uInt32 nFAT = rIo.m_aHdr.GetFATChain();
             if( nMasterAlloc )
                 for( sal_uInt32 nCount = 0; nCount < nMax; nCount++ )
                 {
@@ -782,7 +782,7 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
         }
     }
     nSize = nNew * nPageSize;
-    rIo.aHdr.SetFATSize( nNew );
+    rIo.m_aHdr.SetFATSize( nNew );
     return true;
 }
 
@@ -807,8 +807,8 @@ StgDataStrm::StgDataStrm( StgIo& r, StgDirEntry& p ) : StgStrm( r )
 
 void StgDataStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
 {
-    if ( rIo.pFAT )
-        pFat = new StgFAT( *rIo.pFAT, true );
+    if ( rIo.m_pFAT )
+        pFat = new StgFAT( *rIo.m_pFAT, true );
 
     OSL_ENSURE( pFat, "The pointer should not be empty!" );
 
@@ -1013,9 +1013,9 @@ StgSmallStrm::StgSmallStrm( StgIo& r, StgDirEntry& p ) : StgStrm( r )
 
 void StgSmallStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
 {
-    if ( rIo.pDataFAT )
-        pFat = new StgFAT( *rIo.pDataFAT, false );
-    pData = rIo.pDataStrm;
+    if ( rIo.m_pDataFAT )
+        pFat = new StgFAT( *rIo.m_pDataFAT, false );
+    pData = rIo.m_pDataStrm;
     OSL_ENSURE( pFat && pData, "The pointers should not be empty!" );
 
     nPageSize = rIo.GetDataPageSize();
