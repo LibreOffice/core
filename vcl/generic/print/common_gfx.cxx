@@ -802,7 +802,7 @@ PrinterGfx::PSSetFont ()
             nChar += psp::appendStr  (" 0 0] makefont setfont\n", pSetFont + nChar);
         }
 
-        WritePS (mpPageBody, pSetFont);
+        WritePS (mpPageBody, pSetFont, nChar);
     }
 }
 
@@ -827,7 +827,7 @@ PrinterGfx::PSRotate (sal_Int32 nAngle)
     nChar += psp::getValueOf (nTenthAngle, pRotate + nChar);
     nChar += psp::appendStr (" rotate\n",  pRotate + nChar);
 
-    WritePS (mpPageBody, pRotate);
+    WritePS (mpPageBody, pRotate, nChar);
 }
 
 void
@@ -994,7 +994,7 @@ PrinterGfx::PSScale (double fScaleX, double fScaleY)
     nChar += psp::getValueOfDouble (pScale + nChar, fScaleY, 5);
     nChar += psp::appendStr        (" scale\n", pScale + nChar);
 
-    WritePS (mpPageBody, pScale);
+    WritePS (mpPageBody, pScale, nChar);
 }
 
 /* psshowtext helper routines: draw an hex string for show/xshow */
@@ -1044,7 +1044,7 @@ PrinterGfx::PSDeltaArray (const sal_Int32 *pArray, sal_Int16 nEntries)
     }
 
     nChar  += psp::appendStr (" 0]\n", pPSArray + nChar);
-    WritePS (mpPageBody, pPSArray);
+    WritePS (mpPageBody, pPSArray, nChar);
 }
 
 /* the DrawText equivalent, pDeltaArray may be NULL. For Type1 fonts or single byte

@@ -489,7 +489,7 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
     nChar += psp::appendStr  (" string readhexstring pop}\n",   pGrayImage + nChar);
     nChar += psp::appendStr  ("image\n",                        pGrayImage + nChar);
 
-    WritePS (mpPageBody, pGrayImage);
+    WritePS (mpPageBody, pGrayImage, nChar);
 
     // image body
     std::unique_ptr<HexEncoder> xEncoder(new HexEncoder (mpPageBody));
@@ -540,7 +540,7 @@ PrinterGfx::writePS2ImageHeader (const Rectangle& rArea, psp::ImageType nType)
     nChar += psp::getValueOf (nCompressType,     pImage + nChar);
     nChar += psp::appendStr  (" psp_imagedict image\n", pImage + nChar);
 
-    WritePS (mpPageBody, pImage);
+    WritePS (mpPageBody, pImage, nChar);
 }
 
 void
@@ -573,7 +573,7 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
                 nChar += psp::appendStr ("\npsp_lzwstring\n", pImage + nChar);
             else
                 nChar += psp::appendStr ("\npsp_ascii85string\n", pImage + nChar);
-            WritePS (mpPageBody, pImage);
+            WritePS (mpPageBody, pImage, nChar);
 
             std::unique_ptr<ByteEncoder> xEncoder(mbCompressBmp ? new LZWEncoder(mpPageBody)
                                                     : new Ascii85Encoder(mpPageBody));

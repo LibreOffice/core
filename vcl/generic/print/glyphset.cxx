@@ -408,7 +408,7 @@ GlyphSet::PSDefineReencodedFont (osl::File* pOutFile, sal_Int32 nGlyphSetID)
     nSize += psp::appendStr (" psp_definefont\n",
                                   pEncodingVector + nSize);
 
-    psp::WritePS (pOutFile, pEncodingVector);
+    psp::WritePS (pOutFile, pEncodingVector, nSize);
 }
 
 OString
@@ -672,7 +672,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
         }
 
         nSize += psp::appendStr ("] def\n", pEncodingVector + nSize);
-        psp::WritePS (pOutFile, pEncodingVector);
+        psp::WritePS (pOutFile, pEncodingVector, nSize);
 
         PSDefineReencodedFont (pOutFile, nGlyphSetID);
     }

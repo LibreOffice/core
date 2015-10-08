@@ -627,7 +627,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     nChar += psp::getValueOf (mnHeightPt - mnTMarginPt, pBBox + nChar);
     nChar += psp::appendStr  ("\n",                     pBBox + nChar);
 
-    WritePS (pPageHeader, pBBox);
+    WritePS (pPageHeader, pBBox, nChar);
 
     /* #i7262# #i65491# write setup only before first page
      *  (to %%Begin(End)Setup, instead of %%Begin(End)PageSetup)
@@ -666,7 +666,7 @@ PrinterJob::EndPage ()
     nChar  = psp::appendStr ("grestore grestore\n", pTrailer);
     nChar += psp::appendStr ("showpage\n",          pTrailer + nChar);
     nChar += psp::appendStr ("%%PageTrailer\n\n",   pTrailer + nChar);
-    WritePS (pPageBody, pTrailer);
+    WritePS (pPageBody, pTrailer, nChar);
 
     // this page is done for now, close it to avoid having too many open fd's
 
@@ -814,7 +814,7 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob, bool bWr
                                  pTranslate + nChar);
     }
 
-    WritePS (pFile, pTranslate);
+    WritePS (pFile, pTranslate, nChar);
 
     return bSuccess;
 }
