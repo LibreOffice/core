@@ -424,7 +424,7 @@ void VBAEncryption::writeIgnoredEnc()
 void VBAEncryption::writeDataLengthEnc()
 {
     sal_uInt16 temp = mnLength;
-    for(sal_Int8 i = 0; i < 2; ++i)
+    for(sal_Int8 i = 0; i < 4; ++i)
     {
         sal_uInt8 nByte = temp & 0xFF;
         sal_uInt8 nByteEnc = nByte ^ (mnEncryptedByte2 + mnUnencryptedByte1);
