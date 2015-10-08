@@ -309,7 +309,7 @@ sub get_downloadname_productname
 
     elsif ( $allvariables->{'PRODUCTNAME'} eq "" ) { $start = "LibreOffice"; }
 
-    else  { $start = $allvariables->{'PRODUCTNAME'}; }
+    else  { $start = $allvariables->{'PRODUCTNAME'}; $start =~ s/ /_/g;}
 
     return $start;
 }
