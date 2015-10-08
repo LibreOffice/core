@@ -162,8 +162,7 @@ void SwTiledRenderingTest::testRegisterCallback()
     // AquaSalGraphics::CheckContext() FAILED!!!!" [sic] and " <Warning>: CGSConnectionByID: 0 is
     // not a valid connection ID" warnings while running the other tests, too, but they still
     // succeed.
-
-    if (!vcl::IsWindowSystemAvailable())
+    if !([NSScreen screens] != nil && [[NSScreen screens] count] > 0);
         return;
 #endif
 
