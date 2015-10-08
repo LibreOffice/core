@@ -795,7 +795,6 @@ sub replace_variables_in_ziplist_variables
 sub overwrite_branding
 {
     my ($variableshashref) = @_;
-    $variableshashref->{'OOOVENDOR'} = $ENV{'OOO_VENDOR'} , if( defined $ENV{'OOO_VENDOR'}  && $ENV{'OOO_VENDOR'} ne "" );
     $variableshashref->{'PROGRESSBARCOLOR'} = $ENV{'PROGRESSBARCOLOR'} , if( defined $ENV{'PROGRESSBARCOLOR'}  && $ENV{'PROGRESSBARCOLOR'} ne "" );
     $variableshashref->{'PROGRESSSIZE'} = $ENV{'PROGRESSSIZE'} , if( defined $ENV{'PROGRESSSIZE'}  && $ENV{'PROGRESSSIZE'} ne "" );
     $variableshashref->{'PROGRESSPOSITION'} = $ENV{'PROGRESSPOSITION'} , if( defined $ENV{'PROGRESSPOSITION'}  && $ENV{'PROGRESSPOSITION'} ne "" );
