@@ -158,6 +158,7 @@ if test -n "$with_product_name" -a "$with_product_name" != no; then
 fi
 if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     PRODUCTNAME="${PRODUCTNAME}Dev"
+    PRODUCTNAME=AC_PACKAGE_NAME
 fi
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
