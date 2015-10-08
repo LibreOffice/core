@@ -108,21 +108,21 @@ enum StgEntryTime {                     // time codes:
 //StructuredStorageDirectoryEntry
 class StgEntry
 {                        // directory entry
-    sal_uInt16  nName[ 32 ];                // 00 name as WCHAR
-    sal_uInt16  nNameLen;                   // 40 size of name in bytes including 00H
-    sal_uInt8   cType;                      // 42 entry type
-    sal_uInt8   cFlags;                     // 43 0 or 1 (tree balance?)
-    sal_Int32   nLeft;                      // 44 left node entry
-    sal_Int32   nRight;                     // 48 right node entry
-    sal_Int32   nChild;                     // 4C 1st child entry if storage
-    ClsId       aClsId;                     // 50 class ID (optional)
-    sal_Int32   nFlags;                     // 60 state flags(?)
-    sal_Int32   nMtime[ 2 ];                // 64 modification time
-    sal_Int32   nAtime[ 2 ];                // 6C creation and access time
-    sal_Int32   nPage1;                     // 74 starting block (either direct or translated)
-    sal_Int32   nSize;                      // 78 file size
-    sal_Int32   nUnknown;                   // 7C unknown
-    OUString    aName;                      // Name as Compare String (ascii, upper)
+    sal_uInt16  m_nName[ 32 ];                // 00 name as WCHAR
+    sal_uInt16  m_nNameLen;                   // 40 size of name in bytes including 00H
+    sal_uInt8   m_cType;                      // 42 entry type
+    sal_uInt8   m_cFlags;                     // 43 0 or 1 (tree balance?)
+    sal_Int32   m_nLeft;                      // 44 left node entry
+    sal_Int32   m_nRight;                     // 48 right node entry
+    sal_Int32   m_nChild;                     // 4C 1st child entry if storage
+    ClsId       m_aClsId;                     // 50 class ID (optional)
+    sal_Int32   m_nFlags;                     // 60 state flags(?)
+    sal_Int32   m_nMtime[ 2 ];                // 64 modification time
+    sal_Int32   m_nAtime[ 2 ];                // 6C creation and access time
+    sal_Int32   m_nPage1;                     // 74 starting block (either direct or translated)
+    sal_Int32   m_nSize;                      // 78 file size
+    sal_Int32   m_nUnknown;                   // 7C unknown
+    OUString    m_aName;                      // Name as Compare String (ascii, upper)
 public:
     bool        Init();                     // initialize the data
     bool        SetName( const OUString& );   // store a name (ASCII, up to 32 chars)
@@ -131,12 +131,12 @@ public:
     sal_Int32   Compare( const StgEntry& ) const;   // compare two entries
     bool        Load( const void* pBuffer, sal_uInt32 nBufSize, sal_uInt64 nUnderlyingStreamSize );
     void        Store( void* );
-    StgEntryType GetType() const            { return (StgEntryType) cType;  }
-    sal_Int32   GetStartPage() const        { return nPage1; }
-    void        SetType( StgEntryType t )   { cType = (sal_uInt8) t; }
-    sal_Int32   GetSize() const             { return nSize; }
-    void        SetSize( sal_Int32 n )      { nSize = n; }
-    const ClsId& GetClassId() const         { return aClsId; }
+    StgEntryType GetType() const            { return (StgEntryType) m_cType;  }
+    sal_Int32   GetStartPage() const        { return m_nPage1; }
+    void        SetType( StgEntryType t )   { m_cType = (sal_uInt8) t; }
+    sal_Int32   GetSize() const             { return m_nSize; }
+    void        SetSize( sal_Int32 n )      { m_nSize = n; }
+    const ClsId& GetClassId() const         { return m_aClsId; }
     void        SetClassId( const ClsId& );
     sal_Int32   GetLeaf( StgEntryRef ) const;
     void        SetLeaf( StgEntryRef, sal_Int32 );

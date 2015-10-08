@@ -260,20 +260,20 @@ void StgHeader::SetMasters( sal_Int32 n )
 
 bool StgEntry::Init()
 {
-    memset( nName, 0, sizeof( nName ) );
-    nNameLen = 0;
-    cType = 0;
-    cFlags = 0;
-    nLeft = 0;
-    nRight = 0;
-    nChild = 0;
-    memset( &aClsId, 0, sizeof( aClsId ) );
-    nFlags = 0;
-    nMtime[0] = 0; nMtime[1] = 0;
-    nAtime[0] = 0; nAtime[1] = 0;
-    nPage1 = 0;
-    nSize = 0;
-    nUnknown = 0;
+    memset( m_nName, 0, sizeof( m_nName ) );
+    m_nNameLen = 0;
+    m_cType = 0;
+    m_cFlags = 0;
+    m_nLeft = 0;
+    m_nRight = 0;
+    m_nChild = 0;
+    memset( &m_aClsId, 0, sizeof( m_aClsId ) );
+    m_nFlags = 0;
+    m_nMtime[0] = 0; m_nMtime[1] = 0;
+    m_nAtime[0] = 0; m_nAtime[1] = 0;
+    m_nPage1 = 0;
+    m_nSize = 0;
+    m_nUnknown = 0;
 
     SetLeaf( STG_LEFT,  STG_FREE );
     SetLeaf( STG_RIGHT, STG_FREE );
@@ -292,22 +292,22 @@ static OUString ToUpperUnicode( const OUString & rStr )
 bool StgEntry::SetName( const OUString& rName )
 {
     // I don't know the locale, so en_US is hopefully fine
-    aName = ToUpperUnicode( rName );
-    if(aName.getLength() > nMaxLegalStr)
+    m_aName = ToUpperUnicode( rName );
+    if(m_aName.getLength() > nMaxLegalStr)
     {
-        aName = aName.copy(0, nMaxLegalStr);
+        m_aName = m_aName.copy(0, nMaxLegalStr);
     }
 
     sal_uInt16 i;
     for( i = 0; i < rName.getLength() && i <= nMaxLegalStr; i++ )
     {
-        nName[ i ] = rName[ i ];
+        m_nName[ i ] = rName[ i ];
     }
     while (i <= nMaxLegalStr)
     {
-        nName[ i++ ] = 0;
+        m_nName[ i++ ] = 0;
     }
-    nNameLen = ( rName.getLength() + 1 ) << 1;
+    m_nNameLen = ( rName.getLength() + 1 ) << 1;
     return true;
 }
 
@@ -316,10 +316,10 @@ sal_Int32 StgEntry::GetLeaf( StgEntryRef eRef ) const
     sal_Int32 n = -1;
     switch( eRef )
     {
-    case STG_LEFT:  n = nLeft;  break;
-    case STG_RIGHT: n = nRight; break;
-    case STG_CHILD: n = nChild; break;
-    case STG_DATA:  n = nPage1; break;
+    case STG_LEFT:  n = m_nLeft;  break;
+    case STG_RIGHT: n = m_nRight; break;
+    case STG_CHILD: n = m_nChild; break;
+    case STG_DATA:  n = m_nPage1; break;
     }
     return n;
 }
@@ -328,34 +328,34 @@ void StgEntry::SetLeaf( StgEntryRef eRef, sal_Int32 nPage )
 {
     switch( eRef )
     {
-    case STG_LEFT:  nLeft  = nPage; break;
-    case STG_RIGHT: nRight = nPage; break;
-    case STG_CHILD: nChild = nPage; break;
-    case STG_DATA:  nPage1 = nPage; break;
+    case STG_LEFT:  m_nLeft  = nPage; break;
+    case STG_RIGHT: m_nRight = nPage; break;
+    case STG_CHILD: m_nChild = nPage; break;
+    case STG_DATA:  m_nPage1 = nPage; break;
     }
 }
 
 void StgEntry::SetClassId( const ClsId& r )
 {
-    memcpy( &aClsId, &r, sizeof( ClsId ) );
+    memcpy( &m_aClsId, &r, sizeof( ClsId ) );
 }
 
 void StgEntry::GetName( OUString& rName ) const
 {
-    sal_uInt16 n = nNameLen;
+    sal_uInt16 n = m_nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
-    rName = OUString(nName, n);
+    rName = OUString(m_nName, n);
 }
 
 // Compare two entries. Do this case-insensitive.
 
 sal_Int32 StgEntry::Compare( const StgEntry& r ) const
 {
-    if (r.nNameLen != nNameLen)
-        return r.nNameLen > nNameLen ? 1 : -1;
+    if (r.m_nNameLen != m_nNameLen)
+        return r.m_nNameLen > m_nNameLen ? 1 : -1;
     else
-        return r.aName.compareTo(aName);
+        return r.m_aName.compareTo(m_aName);
 }
 
 // These load/store operations are a bit more complicated,
@@ -368,45 +368,45 @@ bool StgEntry::Load(const void* pFrom, sal_uInt32 nBufSize, sal_uInt64 nUnderlyi
 
     SvMemoryStream r( const_cast<void *>(pFrom), nBufSize, StreamMode::READ );
     for( short i = 0; i < 32; i++ )
-        r.ReadUInt16( nName[ i ] );            // 00 name as WCHAR
-    r.ReadUInt16( nNameLen )                   // 40 size of name in bytes including 00H
-     .ReadUChar( cType )                      // 42 entry type
-     .ReadUChar( cFlags )                     // 43 0 or 1 (tree balance?)
-     .ReadInt32( nLeft )                      // 44 left node entry
-     .ReadInt32( nRight )                     // 48 right node entry
-     .ReadInt32( nChild );                    // 4C 1st child entry if storage
-    ReadClsId( r, aClsId );         // 50 class ID (optional)
-    r.ReadInt32( nFlags )                     // 60 state flags(?)
-     .ReadInt32( nMtime[ 0 ] )                // 64 modification time
-     .ReadInt32( nMtime[ 1 ] )                // 64 modification time
-     .ReadInt32( nAtime[ 0 ] )                // 6C creation and access time
-     .ReadInt32( nAtime[ 1 ] )                // 6C creation and access time
-     .ReadInt32( nPage1 )                     // 74 starting block (either direct or translated)
-     .ReadInt32( nSize )                      // 78 file size
-     .ReadInt32( nUnknown );                  // 7C unknown
+        r.ReadUInt16( m_nName[ i ] );            // 00 name as WCHAR
+    r.ReadUInt16( m_nNameLen )                   // 40 size of name in bytes including 00H
+     .ReadUChar( m_cType )                      // 42 entry type
+     .ReadUChar( m_cFlags )                     // 43 0 or 1 (tree balance?)
+     .ReadInt32( m_nLeft )                      // 44 left node entry
+     .ReadInt32( m_nRight )                     // 48 right node entry
+     .ReadInt32( m_nChild );                    // 4C 1st child entry if storage
+    ReadClsId( r, m_aClsId );         // 50 class ID (optional)
+    r.ReadInt32( m_nFlags )                     // 60 state flags(?)
+     .ReadInt32( m_nMtime[ 0 ] )                // 64 modification time
+     .ReadInt32( m_nMtime[ 1 ] )                // 64 modification time
+     .ReadInt32( m_nAtime[ 0 ] )                // 6C creation and access time
+     .ReadInt32( m_nAtime[ 1 ] )                // 6C creation and access time
+     .ReadInt32( m_nPage1 )                     // 74 starting block (either direct or translated)
+     .ReadInt32( m_nSize )                      // 78 file size
+     .ReadInt32( m_nUnknown );                  // 7C unknown
 
-    sal_uInt16 n = nNameLen;
+    sal_uInt16 n = m_nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
 
     if (n > nMaxLegalStr)
         return false;
 
-    if (cType != STG_STORAGE)
+    if (m_cType != STG_STORAGE)
     {
-        if (nPage1 < 0 && !isKnownSpecial(nPage1))
+        if (m_nPage1 < 0 && !isKnownSpecial(m_nPage1))
         {
             //bad pageid
             return false;
         }
-        if (nSize < 0)
+        if (m_nSize < 0)
         {
             // the size makes no sense for the substorage
             // TODO/LATER: actually the size should be an unsigned value, but
             // in this case it would mean a stream of more than 2Gb
             return false;
         }
-        if (static_cast<sal_uInt64>(nSize) > nUnderlyingStreamSize)
+        if (static_cast<sal_uInt64>(m_nSize) > nUnderlyingStreamSize)
         {
             // surely an entry cannot be larger than the underlying file
             return false;
@@ -414,12 +414,12 @@ bool StgEntry::Load(const void* pFrom, sal_uInt32 nBufSize, sal_uInt64 nUnderlyi
 
     }
 
-    aName = OUString(nName , n);
+    m_aName = OUString(m_nName , n);
     // I don't know the locale, so en_US is hopefully fine
-    aName = ToUpperUnicode( aName );
-    if(aName.getLength() > nMaxLegalStr)
+    m_aName = ToUpperUnicode( m_aName );
+    if(m_aName.getLength() > nMaxLegalStr)
     {
-        aName = aName.copy(0, nMaxLegalStr);
+        m_aName = m_aName.copy(0, nMaxLegalStr);
     }
 
     return true;
@@ -429,22 +429,22 @@ void StgEntry::Store( void* pTo )
 {
     SvMemoryStream r( pTo, 128, StreamMode::WRITE );
     for( short i = 0; i < 32; i++ )
-        r.WriteUInt16( nName[ i ] );            // 00 name as WCHAR
-    r.WriteUInt16( nNameLen )                   // 40 size of name in bytes including 00H
-     .WriteUChar( cType )                      // 42 entry type
-     .WriteUChar( cFlags )                     // 43 0 or 1 (tree balance?)
-     .WriteInt32( nLeft )                      // 44 left node entry
-     .WriteInt32( nRight )                     // 48 right node entry
-     .WriteInt32( nChild );                    // 4C 1st child entry if storage;
-    WriteClsId( r, aClsId );                   // 50 class ID (optional)
-    r.WriteInt32( nFlags )                     // 60 state flags(?)
-     .WriteInt32( nMtime[ 0 ] )                // 64 modification time
-     .WriteInt32( nMtime[ 1 ] )                // 64 modification time
-     .WriteInt32( nAtime[ 0 ] )                // 6C creation and access time
-     .WriteInt32( nAtime[ 1 ] )                // 6C creation and access time
-     .WriteInt32( nPage1 )                     // 74 starting block (either direct or translated)
-     .WriteInt32( nSize )                      // 78 file size
-     .WriteInt32( nUnknown );                  // 7C unknown
+        r.WriteUInt16( m_nName[ i ] );            // 00 name as WCHAR
+    r.WriteUInt16( m_nNameLen )                   // 40 size of name in bytes including 00H
+     .WriteUChar( m_cType )                      // 42 entry type
+     .WriteUChar( m_cFlags )                     // 43 0 or 1 (tree balance?)
+     .WriteInt32( m_nLeft )                      // 44 left node entry
+     .WriteInt32( m_nRight )                     // 48 right node entry
+     .WriteInt32( m_nChild );                    // 4C 1st child entry if storage;
+    WriteClsId( r, m_aClsId );                   // 50 class ID (optional)
+    r.WriteInt32( m_nFlags )                     // 60 state flags(?)
+     .WriteInt32( m_nMtime[ 0 ] )                // 64 modification time
+     .WriteInt32( m_nMtime[ 1 ] )                // 64 modification time
+     .WriteInt32( m_nAtime[ 0 ] )                // 6C creation and access time
+     .WriteInt32( m_nAtime[ 1 ] )                // 6C creation and access time
+     .WriteInt32( m_nPage1 )                     // 74 starting block (either direct or translated)
+     .WriteInt32( m_nSize )                      // 78 file size
+     .WriteInt32( m_nUnknown );                  // 7C unknown
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
