@@ -10,6 +10,13 @@
 #include <string>
 #include <boost/property_tree/json_parser.hpp>
 
+#ifdef MACOSX
+#define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
+#include <premac.h>
+#include <AppKit/AppKit.h>
+#include <postmac.h>
+#endif
+
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/dispatchcommand.hxx>
@@ -18,7 +25,6 @@
 #include <comphelper/lok.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
-#include <vcl/svapp.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/srchitem.hxx>
@@ -162,8 +168,7 @@ void SwTiledRenderingTest::testRegisterCallback()
     // AquaSalGraphics::CheckContext() FAILED!!!!" [sic] and " <Warning>: CGSConnectionByID: 0 is
     // not a valid connection ID" warnings while running the other tests, too, but they still
     // succeed.
-
-    if (!vcl::IsWindowSystemAvailable())
+    if !([NSScreen screens] != nil && [[NSScreen screens] count] > 0);
         return;
 #endif
 
