@@ -5886,8 +5886,12 @@ void ScGridWindow::UpdateCopySourceOverlay()
         SetMapMode( aOldMode );
 }
 
-/// Turn the selection ranges rRectangles into the LibreOfficeKit selection, and call the callback.
-static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pDrawLayer, const std::vector<Rectangle>& rRectangles)
+/**
+ * Turn the selection ranges rRectangles into the LibreOfficeKit selection, and call the callback.
+ *
+ * @param pLogicRects - if not 0, then don't invoke the callback, just collect the rectangles in the pointed vector.
+ */
+static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pDrawLayer, const std::vector<Rectangle>& rRectangles, std::vector<Rectangle>* pLogicRects = 0)
 {
     if (!pDrawLayer->isTiledRendering())
         return;
@@ -5907,8 +5911,14 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
 
         Rectangle aRect(aRectangle.Left() / nPPTX, aRectangle.Top() / nPPTY,
                 aRectangle.Right() / nPPTX, aRectangle.Bottom() / nPPTY);
-        aRectangles.push_back(aRect.toString());
+        if (pLogicRects)
+            pLogicRects->push_back(aRect);
+        else
+            aRectangles.push_back(aRect.toString());
     }
+
+    if (pLogicRects)
+        return;
 
     // selection start handle
     Rectangle aStart(aBoundingBox.Left() / nPPTX, aBoundingBox.Top() / nPPTY,
@@ -6091,6 +6101,13 @@ void ScGridWindow::UpdateCursorOverlay()
 
     if ( aOldMode != aDrawMode )
         SetMapMode( aOldMode );
+}
+
+void ScGridWindow::GetCellSelection(std::vector<Rectangle>& rLogicRects)
+{
+    std::vector<Rectangle> aPixelRects;
+    GetSelectionRects(aPixelRects);
+    updateLibreOfficeKitSelection(pViewData, pViewData->GetDocument()->GetDrawLayer(), aPixelRects, &rLogicRects);
 }
 
 void ScGridWindow::DeleteSelectionOverlay()

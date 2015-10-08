@@ -89,6 +89,7 @@
 
 #include <vector>
 #include <memory>
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace com::sun::star;
 using ::editeng::SvxBorderLine;
@@ -1837,19 +1838,42 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
         SetCursor( nCol, nRow, true );
 
-        // Don't move cell selection handles for find-all: selection of all but the first result would be lost.
-        if (rDoc.GetDrawLayer()->isTiledRendering() && nCommand == SvxSearchCmd::FIND)
+        if (rDoc.GetDrawLayer()->isTiledRendering())
         {
             Point aCurPos = GetViewData().GetScrPos(nCol, nRow, GetViewData().GetActivePart());
 
             // just update the cell selection
             ScGridWindow* pGridWindow = GetViewData().GetActiveWin();
-            if (pGridWindow)
+            // Don't move cell selection handles for find-all: selection of all but the first result would be lost.
+            if (pGridWindow && nCommand == SvxSearchCmd::FIND)
             {
                 // move the cell selection handles
                 pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_RESET, aCurPos.X(), aCurPos.Y());
                 pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_START, aCurPos.X(), aCurPos.Y());
                 pGridWindow->SetCellSelectionPixel(LOK_SETTEXTSELECTION_END, aCurPos.X(), aCurPos.Y());
+            }
+
+            if (pGridWindow)
+            {
+                std::vector<Rectangle> aLogicRects;
+                pGridWindow->GetCellSelection(aLogicRects);
+
+                boost::property_tree::ptree aTree;
+                aTree.put("searchString", pSearchItem->GetSearchString().toUtf8().getStr());
+
+                boost::property_tree::ptree aSelections;
+                for (const Rectangle& rLogicRect : aLogicRects)
+                {
+                    boost::property_tree::ptree aSelection;
+                    aSelection.put("", rLogicRect.toString().getStr());
+                    aSelections.push_back(std::make_pair("", aSelection));
+                }
+                aTree.add_child("searchResultSelection", aSelections);
+
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, aTree);
+                OString aPayload = aStream.str().c_str();
+                rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
             }
         }
 

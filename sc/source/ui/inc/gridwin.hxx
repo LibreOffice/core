@@ -336,6 +336,8 @@ public:
     /// @see vcl::ITiledRenderable::setTextSelection() for the values of nType.
     /// Coordinates are in pixels.
     void SetCellSelectionPixel(int nType, int nPixelX, int nPixelY);
+    /// Get the cell selection, coordinates are in logic units.
+    void GetCellSelection(std::vector<Rectangle>& rLogicRects);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
