@@ -83,6 +83,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">framework/res/recent-documents.png</property>
   </object>
+  <object class="GtkImage" id="open_all_image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">framework/res/remote-documents.png</property>
+  </object>
   <object class="GtkImage" id="templates_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -137,13 +142,13 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="open_remote">
-                    <property name="label" translatable="yes">_Open Remote File</property>
+                    <property name="label" translatable="yes">Remote _Files</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="margin_left">6</property>
                     <property name="margin_right">6</property>
-                    <property name="image">open_all_image</property>
+                    <property name="image">open_all_image2</property>
                     <property name="relief">none</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
