@@ -720,34 +720,34 @@ void StgDirEntry::Invalidate( bool bDel )
 
 StgDirStrm::StgDirStrm( StgIo& r )
           : StgDataStrm( r, r.m_aHdr.GetTOCStart(), -1 )
-          , pRoot( NULL )
-          , nEntries( 0 )
+          , m_pRoot( NULL )
+          , m_nEntries( 0 )
 {
     if( r.GetError() )
         return;
-    nEntries = nPageSize / STGENTRY_SIZE;
+    m_nEntries = nPageSize / STGENTRY_SIZE;
     if( nStart == STG_EOF )
     {
         StgEntry aRoot;
         aRoot.Init();
         aRoot.SetName( OUString("Root Entry") );
         aRoot.SetType( STG_ROOT );
-        pRoot = new StgDirEntry( aRoot );
-        pRoot->SetDirty();
+        m_pRoot = new StgDirEntry( aRoot );
+        m_pRoot->SetDirty();
     }
     else
     {
         // temporarily use this instance as owner, so
         // the TOC pages can be removed.
         pEntry = reinterpret_cast<StgDirEntry*>(this); // just for a bit pattern
-        SetupEntry( 0, pRoot );
+        SetupEntry( 0, m_pRoot );
         pEntry = NULL;
     }
 }
 
 StgDirStrm::~StgDirStrm()
 {
-    delete pRoot;
+    delete m_pRoot;
 }
 
 // Recursively parse the directory tree during reading the TOC stream
@@ -814,10 +814,10 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
             }
 
             if( StgAvlNode::Insert
-                ( reinterpret_cast<StgAvlNode**>( pUpper ? &pUpper->m_pDown : &pRoot ), pCur ) )
+                ( reinterpret_cast<StgAvlNode**>( pUpper ? &pUpper->m_pDown : &m_pRoot ), pCur ) )
             {
                 pCur->m_pUp    = pUpper;
-                pCur->m_ppRoot = &pRoot;
+                pCur->m_ppRoot = &m_pRoot;
             }
             else
             {
@@ -855,13 +855,13 @@ bool StgDirStrm::SetSize( sal_Int32 nBytes )
 
 bool StgDirStrm::Store()
 {
-    if( !pRoot || !pRoot->IsDirty() )
+    if( !m_pRoot || !m_pRoot->IsDirty() )
         return true;
-    if( !pRoot->StoreStreams( rIo ) )
+    if( !m_pRoot->StoreStreams( rIo ) )
         return false;
     // After writing all streams, the data FAT stream has changed,
     // so we have to commit the root again
-    pRoot->Commit();
+    m_pRoot->Commit();
     // We want a completely new stream, so fake an empty stream
     sal_Int32 nOldStart = nStart;       // save for later deletion
     sal_Int32 nOldSize  = nSize;
@@ -869,26 +869,26 @@ bool StgDirStrm::Store()
     nSize  = nPos = 0;
     nOffset = 0;
     // Delete all temporary entries
-    pRoot->DelTemp( false );
+    m_pRoot->DelTemp( false );
     // set the entry numbers
     sal_Int32 n = 0;
-    pRoot->Enum( n );
+    m_pRoot->Enum( n );
     if( !SetSize( n * STGENTRY_SIZE ) )
     {
         nStart = nOldStart; nSize = nOldSize;
-        pRoot->RevertAll();
+        m_pRoot->RevertAll();
         return false;
     }
     // set up the cache elements for the new stream
     if( !Copy( STG_FREE, nSize ) )
     {
-        pRoot->RevertAll();
+        m_pRoot->RevertAll();
         return false;
     }
     // Write the data to the new stream
-    if( !pRoot->Store( *this ) )
+    if( !m_pRoot->Store( *this ) )
     {
-        pRoot->RevertAll();
+        m_pRoot->RevertAll();
         return false;
     }
     // fill any remaining entries with empty data
@@ -900,7 +900,7 @@ bool StgDirStrm::Store()
         void* p = GetEntry( n++, true );
         if( !p )
         {
-            pRoot->RevertAll();
+            m_pRoot->RevertAll();
             return false;
         }
         aEmpty.Store( p );
@@ -972,7 +972,7 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
         if( StgAvlNode::Insert( reinterpret_cast<StgAvlNode**>(&rStg.m_pDown), pRes ) )
         {
             pRes->m_pUp    = &rStg;
-            pRes->m_ppRoot = &pRoot;
+            pRes->m_ppRoot = &m_pRoot;
             pRes->m_bCreated =
             pRes->m_bDirty = true;
         }
