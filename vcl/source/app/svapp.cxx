@@ -347,7 +347,9 @@ namespace
 {
     bool InjectKeyEvent(SvStream& rStream)
     {
-        VclPtr<vcl::Window> xWin(Application::GetActiveTopWindow());
+        VclPtr<vcl::Window> xWin(Application::GetFocusWindow());
+        if (!xWin)
+            xWin.reset(Application::GetActiveTopWindow());
         if (!xWin)
             return false;
 
