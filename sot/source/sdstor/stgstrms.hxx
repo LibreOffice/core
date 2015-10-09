@@ -39,7 +39,7 @@ class StgFAT
     sal_Int32 nMaxPage;                     // highest page allocated so far
     short nPageSize;                    // physical page size
     short nEntries;                     // FAT entries per page
-    short nOffset;                      // current offset within page
+    short mnOffset;                      // current offset within page
     sal_Int32 nLimit;                       // search limit recommendation
     bool  bPhys;                        // true: physical FAT
     rtl::Reference< StgPage > GetPhysPage( sal_Int32 nPage );
@@ -62,13 +62,13 @@ public:
 class StgStrm {                         // base class for all streams
 protected:
     StgIo& rIo;                         // I/O system
-    StgFAT* pFat;                       // FAT stream for allocations
+    StgFAT* mpFat;                       // FAT stream for allocations
     StgDirEntry* pEntry;                // dir entry (for ownership)
     sal_Int32 nStart;                       // 1st data page
     sal_Int32 nSize;                        // stream size in bytes
-    sal_Int32 nPos;                         // current byte position
+    sal_Int32 mnPos;                         // current byte position
     sal_Int32 nPage;                        // current logical page
-    short nOffset;                      // offset into current page
+    short mnOffset;                      // offset into current page
     short nPageSize;                    // logical page size
     std::vector<sal_Int32> m_aPagesCache;
     void scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize = NULL);
@@ -77,12 +77,12 @@ protected:
 public:
     virtual ~StgStrm();
     StgIo&  GetIo()     { return rIo;    }
-    sal_Int32   GetPos() const   { return nPos;   }
+    sal_Int32   GetPos() const   { return mnPos;   }
     sal_Int32   GetStart() const { return nStart; }
     sal_Int32   GetSize() const  { return nSize;  }
     sal_Int32   GetPage() const  { return nPage;  }
     sal_Int32   GetPages() const { return ( nSize + nPageSize - 1 ) / nPageSize;}
-    short       GetOffset() const { return nOffset;}
+    short       GetOffset() const { return mnOffset;}
     void        SetEntry( StgDirEntry& );
     virtual bool SetSize( sal_Int32 );
     virtual bool Pos2Page( sal_Int32 nBytePos );
@@ -116,7 +116,7 @@ class StgDataStrm : public StgStrm      // a physical data stream
 public:
     StgDataStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen=-1 );
     StgDataStrm( StgIo&, StgDirEntry& );
-    void* GetPtr( sal_Int32 nPos, bool bForce, bool bDirty );
+    void* GetPtr( sal_Int32 mnPos, bool bForce, bool bDirty );
     void SetIncrement( short n ) { nIncr = n ; }
     virtual bool SetSize( sal_Int32 ) SAL_OVERRIDE;
     virtual sal_Int32 Read( void*, sal_Int32 ) SAL_OVERRIDE;
@@ -147,7 +147,7 @@ class StgTmpStrm : public SvMemoryStream
     using SvMemoryStream::GetData;
     virtual sal_uLong GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
     virtual sal_uLong PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
+    virtual sal_uInt64 SeekPos( sal_uInt64 mnPos ) SAL_OVERRIDE;
     virtual void FlushData() SAL_OVERRIDE;
 
 public:

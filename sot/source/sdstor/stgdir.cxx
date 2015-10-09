@@ -866,8 +866,8 @@ bool StgDirStrm::Store()
     sal_Int32 nOldStart = nStart;       // save for later deletion
     sal_Int32 nOldSize  = nSize;
     nStart = nPage = STG_EOF;
-    nSize  = nPos = 0;
-    nOffset = 0;
+    nSize  = mnPos = 0;
+    mnOffset = 0;
     // Delete all temporary entries
     pRoot->DelTemp( false );
     // set the entry numbers
@@ -906,7 +906,7 @@ bool StgDirStrm::Store()
         aEmpty.Store( p );
     }
     // Now we can release the old stream
-    pFat->FreePages( nOldStart, true );
+    mpFat->FreePages( nOldStart, true );
     rIo.aHdr.SetTOCStart( nStart );
     return true;
 }
