@@ -46,7 +46,7 @@
 #include <stardiv/one/sheet/scdata.hxx>
 #include <stardiv/one/sheet/scattr.hxx>
 
-//! das muss als Konstante in irgendeine idl-Datei!!!!
+//! this needs be in some IDL file as a constant !!!!
 #define TEXTCONTROLCHAR_PARAGRAPH_BREAK         0
 
 class MyFixedText : public FixedText
@@ -194,7 +194,7 @@ MyWindow::MyWindow( vcl::Window *pParent ) :
     aCountField.SetValue(1);
 
     aCountButton.SetPosSizePixel( Point(10,40), Size(100,30) );
-    aCountButton.SetText("hochzaehlen");
+    aCountButton.SetText("increment");
 
     aTimeText.SetPosSizePixel( Point(10,80), Size(100,20) );
 
@@ -211,10 +211,10 @@ MyWindow::MyWindow( vcl::Window *pParent ) :
     aBlaButton.SetText("Bla");
 
     aTabButton.SetPosSizePixel( Point(10,310), Size(100,30) );
-    aTabButton.SetText("Tabellen");
+    aTabButton.SetText("sheets");
 
     aViewButton.SetPosSizePixel( Point(10,360), Size(100,30) );
-    aViewButton.SetText("Pfui");
+    aViewButton.SetText("Ugh");
 
     aCountButton.SetClickHdl(LINK(this, MyWindow, CountHdl));
     aTextButton.SetClickHdl(LINK(this, MyWindow, TextHdl));
@@ -239,7 +239,7 @@ MyWindow::MyWindow( vcl::Window *pParent ) :
 XSpreadsheetDocumentRef lcl_GetDocument()
 {
     XServiceManagerRef xProv = getGlobalServiceManager();
-    OSL_ENSURE( xProv.is(), "Kein ServiceManager!" );
+    OSL_ENSURE( xProv.is(), "no ServiceManager!" );
 
     XServiceRegistryRef xReg = (XServiceRegistry*)xProv->queryInterface(XServiceRegistry::getSmartUik());
     if ( !xReg )
@@ -254,8 +254,8 @@ XSpreadsheetDocumentRef lcl_GetDocument()
                         xSSI->newInstance()->queryInterface( XModelCollection::getSmartUik() );
     sal_uInt16 nCount = aCollRef->getCount();
 
-    XSpreadsheetDocumentRef xModel;                         // Calc-Model
-    for (sal_uInt16 nMod=0; nMod<nCount && !xModel; nMod++)     // Calc-Doc suchen
+    XSpreadsheetDocumentRef xModel;                         // calc model
+    for (sal_uInt16 nMod=0; nMod<nCount && !xModel; nMod++)     // search calc doc
     {
         XModelRef aRef = aCollRef->getItemByIndex( nMod );
         if ( aRef )
@@ -271,9 +271,9 @@ XSpreadsheetDocumentRef lcl_GetDocument()
 XInterfaceRef lcl_GetView()
 {
     XInterfaceRef xView;
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (xDoc)
-        xView = xDoc->getDDELinks();        //! temporaer zum Testen !!!!!!!!!
+        xView = xDoc->getDDELinks();        //! temporary for test !!!!!!!!!
 
     return xView;
 }
@@ -322,24 +322,24 @@ void lcl_SetText( const XTextRef& xText )
     XParagraphCursorRef xPara = (XParagraphCursor*)
                             xCursor->queryInterface(XParagraphCursor::getSmartUik());
 
-    if (!xPos.is() || !xControl.is() || !xPara.is()) return;    // PropertySet kann fehlen
+    if (!xPos.is() || !xControl.is() || !xPara.is()) return;    // PropertySet can be missing
 
-    xText->setText(L"bla fasel");
+    xText->setText(L"bla babbel");
     xCursor->gotoEnd(false);
     xControl->insertControlCharacter( TEXTCONTROLCHAR_PARAGRAPH_BREAK );
     xPos->collapseToEnd();
-    xPos->setText(L"s\xFClz");      // zweiter Absatz
+    xPos->setText(L"s\xFClz");      // second paragraph
 
     xCursor->gotoStart(false);
     xPara->gotoEndOfParagraph(false);
-    xCursor->goLeft(5, true);               // letzte 5 Zeichen im 1. Absatz
+    xCursor->goLeft(5, true);               // last 5 characters in the first paragraph
     if (xProp.is())
         xProp->setPropertyValue(L"Bold", UsrAny((sal_Bool)true));
 }
 
 void lcl_DoCount()
 {
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (xDoc)
     {
         XActionLockableRef xLock = (XActionLockable*)
@@ -347,7 +347,7 @@ void lcl_DoCount()
         XCalculateRef xCalc = (XCalculate*)
                             xDoc->queryInterface(XCalculate::getSmartUik());
         if (xLock)
-            xLock->addActionLock();                         // nicht zwischendurch painten
+            xLock->addActionLock();                         // don't paint in between
         if (xCalc)
             xCalc->setAutomaticCalculation(false);
 
@@ -363,8 +363,7 @@ void lcl_DoCount()
                 XCellRef xCell = xDoc->getCell(aPos);
                 if ( xCell )
                 {
-                    //  Wert der Zelle um 1 hochzaehlen
-
+                    // increment value in cell by 1
                     double fVal = xCell->getValue();
                     fVal += 1.0;
                     xCell->setValue( fVal );
@@ -391,7 +390,7 @@ void lcl_GlobalCell()
 
 void lcl_Annotations( FixedText& aTimeText )
 {
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (xDoc)
     {
         CellAddress aPos;
@@ -455,7 +454,7 @@ void lcl_Annotations( FixedText& aTimeText )
 void lcl_Cursor( FixedText& aTimeText )
 {
     aTimeText.SetText( "..." );
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (xDoc)
     {
         XActionLockableRef xLock = (XActionLockable*)
@@ -489,11 +488,11 @@ void lcl_Cursor( FixedText& aTimeText )
                         xColl = xCC->getRanges();
                         if ( xColl )
                         {
-                            //  XText ist drin, wenn's ne einzelne Zelle ist
+                            // XText is there, if it's a single cell
                             xText = (XText*)xColl->queryInterface(XText::getSmartUik());
                             if ( xText )
                             {
-                                xText->setText(L"fasel");
+                                xText->setText(L"babbel");
                             }
                         }
 
@@ -559,7 +558,7 @@ void lcl_Cursor( FixedText& aTimeText )
                                 }
                             }
 
-                            // XIndexAccess gibts nur wenn's mehrere sind (??!??!)
+                            // XIndexAccess, only if there are several (??! ??!)
                             XIndexAccessRef xIndex = (XIndexAccess*)
                                                 xColl->queryInterface(XIndexAccess::getSmartUik());
                             if ( xIndex )
@@ -581,7 +580,7 @@ void lcl_Cursor( FixedText& aTimeText )
 void lcl_Cells( FixedText& aTimeText )
 {
     aTimeText.SetText( "..." );
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (xDoc)
     {
         long nCount = 0;
@@ -635,7 +634,7 @@ void lcl_Cells( FixedText& aTimeText )
 void lcl_Sheet( FixedText& aTimeText )
 {
     aTimeText.SetText( "..." );
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XSpreadsheetsRef xSheets = xDoc->getSheets();
     if (!xSheets) return;
@@ -707,7 +706,7 @@ void lcl_Sheet( FixedText& aTimeText )
 void lcl_Names( FixedText& aTimeText )
 {
     aTimeText.SetText( "..." );
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XNamedRangesRef xNames = xDoc->getNamedRanges();
     if (!xNames) return;
@@ -731,7 +730,7 @@ void lcl_Names( FixedText& aTimeText )
 void lcl_Sheets( FixedText& aTimeText )
 {
     aTimeText.SetText( "..." );
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XSpreadsheetsRef xSheets = xDoc->getSheets();
     if (!xSheets) return;
@@ -742,7 +741,7 @@ void lcl_Sheets( FixedText& aTimeText )
 
 void lcl_Goal( FixedText& aTimeText )
 {
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XGoalSeekRef xGoal = (XGoalSeek*)xDoc->queryInterface(XGoalSeek::getSmartUik());
     if (!xGoal) return;
@@ -773,8 +772,8 @@ void lcl_Goal( FixedText& aTimeText )
 
 void lcl_TabOp( FixedText& aTimeText )
 {
-    //  Mehrfachoperation auf Tabelle2
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    // Multiple operations on sheet2
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
 
     XCellRangeRef xRange;
@@ -795,7 +794,7 @@ void lcl_TabOp( FixedText& aTimeText )
     aFormulaRange.StartRow      = 5;
     aFormulaRange.EndColumn     = 2;
     aFormulaRange.EndRow        = 6;
-    aColumnCell.Sheet           = 0;    // nicht benutzt
+    aColumnCell.Sheet           = 0;    // not used
     aColumnCell.Column          = 0;
     aColumnCell.Row             = 0;
     aRowCell.Sheet              = 1;    // c5
@@ -822,7 +821,7 @@ void lcl_TabOp( FixedText& aTimeText )
     aColumnCell.Sheet           = 1;    // b16
     aColumnCell.Column          = 1;
     aColumnCell.Row             = 15;
-    aRowCell.Sheet              = 0;    // nicht benutzt
+    aRowCell.Sheet              = 0;    // not used
     aRowCell.Column             = 0;
     aRowCell.Row                = 0;
     nMode = TABLEOP_COLUMN;
@@ -880,7 +879,7 @@ void lcl_Fill( FixedText& aTimeText )
 void lcl_Audi( FixedText& aTimeText )
 {
     aTimeText.SetText( "..." );
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XSpreadsheetsRef xSheets = xDoc->getSheets();
     if (!xSheets) return;
@@ -899,7 +898,7 @@ void lcl_Audi( FixedText& aTimeText )
 
 void lcl_Consoli( FixedText& aTimeText )
 {
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XConsolidationRef xCons = (XConsolidation*)xDoc->queryInterface(XConsolidation::getSmartUik());
     if (!xCons) return;
@@ -924,12 +923,12 @@ void lcl_Sort( FixedText& aTimeText )
     Sequence<SortField> aFields = xDesc->getSortFields();
     if (aFields.getLen())
     {
-        //  1.Feld umkehren
+        // reverse first field
         SortField* pAry = aFields.getArray();
         if (!pAry) return;
         pAry[0].Ascending = !pAry[0].Ascending;
     }
-    else    // neue Sequence, 1. Spalte aufsteigend
+    else    // new sequence, 1st column in ascending order
     {
         aFields = Sequence<SortField>(1);
         SortField* pAry = aFields.getArray();
@@ -971,7 +970,7 @@ void lcl_Filter( FixedText& aTimeText )
     XFilterableRef xFilter = (XFilterable*)xSelInt->queryInterface(XFilterable::getSmartUik());
     if (!xFilter) return;
 
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     CellRangeAddress aAddress;
     aAddress.Sheet       = 3;
@@ -988,10 +987,10 @@ void lcl_Filter( FixedText& aTimeText )
     XTableFilterDescriptorRef xDesc = xSource->createAdvancedFilter(xFilter);
     if (!xDesc)
     {
-        aTimeText.SetText("kein Filter");
+        aTimeText.SetText("no filter");
         return;
     }
-    aTimeText.SetText("Filter gefunden");
+    aTimeText.SetText("filter found");
     xFilter->filter(xDesc);
 }
 
@@ -1034,7 +1033,7 @@ void lcl_Outline( FixedText& aTimeText )
 {
     static sal_Bool bOutline = false;
 
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XSpreadsheetsRef xSheets = xDoc->getSheets();
     if (!xSheets) return;
@@ -1066,19 +1065,19 @@ void lcl_Bla( FixedText& aTimeText )
 {
     aTimeText.SetText("...");
 
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XActionLockableRef xLock = (XActionLockable*)xDoc->queryInterface(XActionLockable::getSmartUik());
     if (!xLock) return;
     xLock->addActionLock();
     xLock->addActionLock();
-    sal_uInt16 nCount = xLock->resetActionLocks();      // sollte 2 sein
+    sal_uInt16 nCount = xLock->resetActionLocks();      // should be 2
     String aBla = nCount;
     xLock->setActionLocks(nCount);
     xLock->removeActionLock();
     xLock->removeActionLock();
 
-    aBla += '/'; aBla += xLock->resetActionLocks(); // sollte 0 sein
+    aBla += '/'; aBla += xLock->resetActionLocks(); // should be 0
 
     aTimeText.SetText(aBla);
 }
@@ -1140,7 +1139,7 @@ void lcl_CellCursor( FixedText& aTimeText )
 void lcl_Notes( FixedText& aTimeText )
 {
     aTimeText.SetText( "..." );
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XSpreadsheetsRef xSheets = xDoc->getSheets();
     if (!xSheets) return;
@@ -1156,7 +1155,7 @@ void lcl_Notes( FixedText& aTimeText )
     aPos.Column = 0;
     aPos.Row    = 0;
     aPos.Sheet  = 0;
-    xNotes->addAnnotation( L"neu", aPos );
+    xNotes->addAnnotation( L"new", aPos );
 
     sal_uLong nCount = xNIndex->getCount();
     for (sal_uLong i=0; i<nCount; i++)
@@ -1175,7 +1174,7 @@ void lcl_Notes( FixedText& aTimeText )
 void lcl_Scenario( FixedText& aTimeText )
 {
     aTimeText.SetText( "..." );
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XSpreadsheetsRef xSheets = xDoc->getSheets();
     if (!xSheets) return;
@@ -1231,7 +1230,7 @@ void lcl_Formula( FixedText& aTimeText )
 {
     aTimeText.SetText("...");
 
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     CellAddress aPos;
     aPos.Sheet  = 0;
@@ -1253,7 +1252,7 @@ void lcl_DBRange( FixedText& aTimeText )    // 23
 {
     aTimeText.SetText("...");
 
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XDatabaseRangesRef xDBs = xDoc->getDatabaseRanges();
     if (!xDBs) return;
@@ -1354,7 +1353,7 @@ void lcl_CellAttrib( FixedText& aTimeText ) // 26
 void lcl_Styles( FixedText& aTimeText ) // 27
 {
     aTimeText.SetText("...");
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XStyleFamiliesRef xFamilies = xDoc->getStyleFamilies();
     if (!xFamilies) return;
@@ -1364,7 +1363,7 @@ void lcl_Styles( FixedText& aTimeText ) // 27
     long nCount = xFamily->getCount();
     aTimeText.SetText(nCount);
 
-    XStyleRef xStyle = xFamily->getStyleByName(L"rot");
+    XStyleRef xStyle = xFamily->getStyleByName(L"red");
     if (!xStyle) return;
 //  XPropertySetRef xProp = (XPropertySet*)xStyle->queryInterface(XPropertySet::getSmartUik());
 //  if (!xProp) return;
@@ -1382,14 +1381,14 @@ void lcl_Styles( FixedText& aTimeText ) // 27
     aAny.setUINT32(0xffff00);
     xProp->setPropertyValue(L"BackgroundColor", aAny);
 
-    xFamily->removeStyle( L"rot" );
+    xFamily->removeStyle( L"red" );
 }
 
 void lcl_PageStyle( FixedText& aTimeText )  // 28
 {
     aTimeText.SetText("...");
 
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
     XStyleFamiliesRef xFamilies = xDoc->getStyleFamilies();
     if (!xFamilies) return;
@@ -1403,7 +1402,7 @@ void lcl_PageStyle( FixedText& aTimeText )  // 28
     UsrAny aAny;
     aAny = xProp->getPropertyValue(L"RightPageHeaderContent");
 
-    // geht nicht:
+    // does not work:
 //  if ( !XHeaderFooterContent_getReflection()->equals(*aAny.getReflection()) )
 //      return;
 
@@ -1458,7 +1457,7 @@ void lcl_AutoForm( FixedText& aTimeText )   // 29
 
 void lcl_Pivot( FixedText& aTimeText )  // 30
 {
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (!xDoc) return;
 
     XSpreadsheetsRef xSheets = xDoc->getSheets();
@@ -1621,7 +1620,7 @@ IMPL_LINK_NOARG(MyWindow, TextHdl)
 
     aTimeText.SetText("...");
 
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (xDoc)
     {
         sal_uInt16 nTab = 0;
@@ -1662,7 +1661,7 @@ IMPL_LINK_NOARG(MyWindow, BlaHdl)
 {
     aTimeText.SetText("...");
 
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (xDoc)
     {
         CellAddress aPos;
@@ -1686,7 +1685,7 @@ IMPL_LINK_NOARG(MyWindow, BlaHdl)
                     if ( xCursor && xType )
                     {
 
-                        //  letztes Feld loeschen
+                        // delete last field
                         XIndexAccessRef xIndex = (XIndexAccess*)
                                     xType->queryInterface(XIndexAccess::getSmartUik());
                         if (xIndex)
@@ -1708,7 +1707,7 @@ IMPL_LINK_NOARG(MyWindow, BlaHdl)
                                                         xProp->getPropertyValue(L"URL") ),
                                                     CHARSET_SYSTEM );
                                     }
-                                    if ( i+1 == nCount )        // letztes
+                                    if ( i+1 == nCount )        // last
                                     {
                                         XTextFieldRef xField = (XTextField*)xInt->
                                                     queryInterface(XTextField::getSmartUik());
@@ -1733,7 +1732,7 @@ IMPL_LINK_NOARG(MyWindow, TabHdl)
 {
     String aResult;
 
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     if (xDoc)
     {
         XSpreadsheetsRef xSheets = xDoc->getSheets();
@@ -1822,7 +1821,7 @@ void lcl_FillCells(XCellCollectionRef xColl)
 
 IMPL_LINK_NOARG(MyWindow, ViewHdl)
 {
-    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
+    XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     XInterfaceRef xInt = lcl_GetView();
     if (!xInt) return 0;
     XDocumentViewRef xView = (XDocumentView*)xInt->queryInterface(XDocumentView::getSmartUik());
@@ -1881,12 +1880,12 @@ IMPL_LINK_NOARG(MyWindow, ViewHdl)
     XActionLockableRef xLock = (XActionLockable*)
                         xDoc->queryInterface(XActionLockable::getSmartUik());
     if (xLock)
-        xLock->addActionLock();                         // nicht zwischendurch painten
+        xLock->addActionLock();                         // don't paint in between
 
 //  lcl_FillCells(xColl);
 
     if (xLock)
-        xLock->removeActionLock();                          // nicht zwischendurch painten
+        xLock->removeActionLock();                      // don't paint in between
 
     XStarCalcViewRef xCalc = (XStarCalcView*)xInt->queryInterface(XStarCalcView::getSmartUik());
     if (!xCalc) return 0;
