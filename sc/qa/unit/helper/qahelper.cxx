@@ -425,6 +425,7 @@ ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
 
 bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected)
 {
+
     ScTokenArray* pCode = getTokens(rDoc, rPos);
     if (!pCode)
     {

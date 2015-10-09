@@ -3793,19 +3793,16 @@ void Test::testCutPasteRefUndo()
     m_pDoc->CopyFromClip(ScAddress(2,1,0), aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc, true, false);
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(0,1,0));
 
-    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "C2"))
-        CPPUNIT_FAIL("A2 should be referencing C2.");
+    checkFormula(*m_pDoc, ScAddress(0,1,0), "C2", "A2 should be referencing C2.");
 
     // At this point, the ref undo document should contain a formula cell at A2 that references B2.
-    if (!checkFormula(*pUndoDoc, ScAddress(0,1,0), "B2"))
-        CPPUNIT_FAIL("A2 in the undo document should be referencing B2.");
+    checkFormula(*pUndoDoc, ScAddress(0,1,0), "B2", "A2 in the undo document should be referencing B2.");
 
     ScUndoPaste aUndo(&getDocShell(), ScRange(ScAddress(2,1,0)), aMark, pUndoDoc, NULL, IDF_CONTENTS, NULL, false, NULL);
     aUndo.Undo();
 
     // Now A2 should be referencing B2 once again.
-    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "B2"))
-        CPPUNIT_FAIL("A2 should be referencing B2 after undo.");
+    checkFormula(*m_pDoc, ScAddress(0,1,0), "B2", "A2 should be referencing B2 after undo.");
 
     m_pDoc->DeleteTab(0);
 }
@@ -3828,10 +3825,8 @@ void Test::testMoveRefBetweenSheets()
     CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0,2,0)));
 
     // These formulas should not display the sheet name.
-    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "A1"))
-        CPPUNIT_FAIL("Wrong formula!");
-    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM(A1:C1)"))
-        CPPUNIT_FAIL("Wrong formula!");
+    checkFormula(*m_pDoc, ScAddress(0,1,0), "A1", "Wrong formula!");
+    checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM(A1:C1)", "Wrong formula!");
 
     // Move Test1.A2:A3 to Test2.A2:A3.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
@@ -3843,10 +3838,8 @@ void Test::testMoveRefBetweenSheets()
     CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0,2,1)));
 
     // The reference in the pasted formula should display sheet name after the move.
-    if (!checkFormula(*m_pDoc, ScAddress(0,1,1), "Test1.A1"))
-        CPPUNIT_FAIL("Wrong formula!");
-    if (!checkFormula(*m_pDoc, ScAddress(0,2,1), "SUM(Test1.A1:C1)"))
-        CPPUNIT_FAIL("Wrong formula!");
+    checkFormula(*m_pDoc, ScAddress(0,1,1), "Test1.A1", "Wrong formula!");
+    checkFormula(*m_pDoc, ScAddress(0,2,1), "SUM(Test1.A1:C1)", "Wrong formula!");
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -4155,8 +4148,7 @@ void Test::testCopyPasteMixedReferenceFormula()
 
     // Insert formula to A1 with mixed relative/absolute addressing.
     m_pDoc->SetString(0,0,0, "=SUM(B:$C)");
-    if (!checkFormula(*m_pDoc, ScAddress(0,0,0), "SUM(B:$C)"))
-        CPPUNIT_FAIL("Wrong formula.");
+    checkFormula(*m_pDoc, ScAddress(0,0,0), "SUM(B:$C)", "Wrong formula.");
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0,0,0));
 
     // Copy formula in A1 to clipboard.
@@ -4167,16 +4159,14 @@ void Test::testCopyPasteMixedReferenceFormula()
     // Paste formula to B1.
     aRange = ScAddress(1,0,0);
     pasteFromClip(m_pDoc, aRange, &aClipDoc);
-    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "SUM(C:$C)"))
-        CPPUNIT_FAIL("Wrong formula.");
+    checkFormula(*m_pDoc, ScAddress(1,0,0), "SUM(C:$C)", "Wrong formula.");
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0,0,0));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(1,0,0));
 
     // Paste formula to C1. All three results now must be circular reference.
     aRange = ScAddress(2,0,0);
     pasteFromClip(m_pDoc, aRange, &aClipDoc);
-    if (!checkFormula(*m_pDoc, ScAddress(2,0,0), "SUM($C:D)"))  // reference put in order
-        CPPUNIT_FAIL("Wrong formula.");
+    checkFormula(*m_pDoc, ScAddress(2,0,0), "SUM($C:D)", "Wrong formula."); // reference put in order
     CPPUNIT_ASSERT_EQUAL(OUString("Err:522"), m_pDoc->GetString(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("Err:522"), m_pDoc->GetString(1,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("Err:522"), m_pDoc->GetString(2,0,0));

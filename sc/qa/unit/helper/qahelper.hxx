@@ -9,7 +9,7 @@
 
 #ifndef INCLUDED_SC_QA_UNIT_HELPER_QAHELPER_HXX
 #define INCLUDED_SC_QA_UNIT_HELPER_QAHELPER_HXX
-
+#include <unistd.h>
 #include "scdllapi.h"
 #include "debughelper.hxx"
 #include "docsh.hxx"
@@ -126,7 +126,10 @@ SCQAHELPER_DLLPUBLIC std::vector<OUString> getChartRangeRepresentations(const Sd
 
 SCQAHELPER_DLLPUBLIC ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj);
 
-SCQAHELPER_DLLPUBLIC bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);
+SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected, const char * pFailMessage, bool&);
+SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected, const char * pFailMessage);
+SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument&, const ScAddress&, const char*, const char*)
+
 
 SCQAHELPER_DLLPUBLIC bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos);
 SCQAHELPER_DLLPUBLIC bool checkFormulaPositions(
