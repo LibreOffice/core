@@ -162,7 +162,6 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
     if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) // F6
     {
         bool bSplitterOnly;
-        bool bFocusInList = false;
 
         bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
 
@@ -173,8 +172,6 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
             vcl::Window *pWin = *p;
             if( pWin->HasChildPathFocus( true ) )
             {
-                bFocusInList = true;
-
                 // Ctrl-F6 goes directly to the document
                 if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
                 {
@@ -214,18 +211,15 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
         }
 
         // the focus is not in the list: activate first float if F6 was pressed
-        if( !bFocusInList )
+        vcl::Window *pWin;
+        if( bSplitterOnly )
+            pWin = FindNextSplitter( NULL );
+        else
+            pWin = FindNextFloat( NULL, bForward );
+        if( pWin )
         {
-            vcl::Window *pWin;
-            if( bSplitterOnly )
-                pWin = FindNextSplitter( NULL );
-            else
-                pWin = FindNextFloat( NULL, bForward );
-            if( pWin )
-            {
-                ImplTaskPaneListGrabFocus( pWin, bForward );
-                return true;
-            }
+            ImplTaskPaneListGrabFocus( pWin, bForward );
+            return true;
         }
     }
 
