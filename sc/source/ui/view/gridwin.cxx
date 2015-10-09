@@ -3420,7 +3420,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         pViewData->GetView()->UpdateCopySourceOverlay();
         return;
     }
-    // wenn semi-Modeless-SfxChildWindow-Dialog oben, keine KeyInputs:
+    // if semi-modeless SfxChildWindow dialog above, then no KeyInputs:
     else if( !pViewData->IsAnyFillMode() )
     {
         if (rKeyCode.GetCode() == KEY_ESCAPE)
@@ -5249,7 +5249,7 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
         // only redrawing what has been changed...
         lcl_PaintRefChanged( pDocSh, aOld, aNew );
 
-        // oly redraw new frame (synchronously)
+        // only redraw new frame (synchronously)
         pDocSh->Broadcast( ScIndexHint( SC_HINT_SHOWRANGEFINDER, nRFIndex ) );
 
         Update();   // what you move, will be seen immediately
