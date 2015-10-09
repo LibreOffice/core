@@ -1431,74 +1431,60 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
 
         if ( pData->mnTitleType & (BORDERWINDOW_TITLE_NORMAL | BORDERWINDOW_TITLE_SMALL) )
         {
-            long nLeft          = pData->maTitleRect.Left();
-            long nRight         = pData->maTitleRect.Right();
-            long nItemTop       = pData->maTitleRect.Top();
-            long nItemBottom    = pData->maTitleRect.Bottom();
-            nLeft              += 1;
-            nRight             -= 3;
-            nItemTop           += 2;
-            nItemBottom        -= 2;
+            long nLeft          = pData->maTitleRect.Left() + 1;
+            long nRight         = pData->maTitleRect.Right() - 3;
+            long const nItemTop = pData->maTitleRect.Top() + 2;
+            long const nItemBottom = pData->maTitleRect.Bottom() - 2;
+
+            auto addOnLeft = [&nLeft, nItemTop, nItemBottom](
+                Rectangle & rect, long width, long gap)
+            {
+                rect.Top() = nItemTop;
+                rect.Bottom() = nItemBottom;
+                rect.Left() = nLeft;
+                rect.Right() = rect.Left() + width;
+                nLeft += rect.GetWidth() + gap;
+            };
+            auto addSquareOnRight = [&nRight, nItemTop, nItemBottom](
+                Rectangle & rect, long gap)
+            {
+                rect.Top() = nItemTop;
+                rect.Bottom() = nItemBottom;
+                rect.Right() = nRight;
+                rect.Left() = rect.Right() - rect.GetHeight() + 1;
+                nRight -= rect.GetWidth() + gap;
+            };
 
             if ( pBorderWindow->GetStyle() & WB_PINABLE )
             {
                 Image aImage;
                 ImplGetPinImage( DrawButtonFlags::NONE, false, aImage );
-                pData->maPinRect.Top()    = nItemTop;
-                pData->maPinRect.Bottom() = nItemBottom;
-                pData->maPinRect.Left()   = nLeft;
-                pData->maPinRect.Right()  = pData->maPinRect.Left()+aImage.GetSizePixel().Width();
-                nLeft += pData->maPinRect.GetWidth()+3;
+                addOnLeft(pData->maPinRect, aImage.GetSizePixel().Width(), 3);
             }
 
             if ( pBorderWindow->GetStyle() & WB_CLOSEABLE )
             {
-                pData->maCloseRect.Top()    = nItemTop;
-                pData->maCloseRect.Bottom() = nItemBottom;
-                pData->maCloseRect.Right()  = nRight;
-                pData->maCloseRect.Left()   = pData->maCloseRect.Right()-pData->maCloseRect.GetHeight()+1;
-                nRight -= pData->maCloseRect.GetWidth()+3;
+                addSquareOnRight(pData->maCloseRect, 3);
             }
 
             if ( pBorderWindow->mbMenuBtn )
             {
-                pData->maMenuRect.Top()    = nItemTop;
-                pData->maMenuRect.Bottom() = nItemBottom;
-                pData->maMenuRect.Right()  = nRight;
-                pData->maMenuRect.Left()   = pData->maMenuRect.Right()-pData->maMenuRect.GetHeight()+1;
-                nRight -= pData->maMenuRect.GetWidth();
+                addSquareOnRight(pData->maMenuRect, 0);
             }
 
             if ( pBorderWindow->mbDockBtn )
             {
-                pData->maDockRect.Top()    = nItemTop;
-                pData->maDockRect.Bottom() = nItemBottom;
-                pData->maDockRect.Right()  = nRight;
-                pData->maDockRect.Left()   = pData->maDockRect.Right()-pData->maDockRect.GetHeight()+1;
-                nRight -= pData->maDockRect.GetWidth();
-                if ( !pBorderWindow->mbHideBtn &&
-                     !(pBorderWindow->GetStyle() & WB_ROLLABLE) )
-                    nRight -= 3;
+                addSquareOnRight(pData->maDockRect, 0);
             }
 
             if ( pBorderWindow->mbHideBtn )
             {
-                pData->maHideRect.Top()    = nItemTop;
-                pData->maHideRect.Bottom() = nItemBottom;
-                pData->maHideRect.Right()  = nRight;
-                pData->maHideRect.Left()   = pData->maHideRect.Right()-pData->maHideRect.GetHeight()+1;
-                nRight -= pData->maHideRect.GetWidth();
-                if ( !(pBorderWindow->GetStyle() & WB_ROLLABLE) )
-                    nRight -= 3;
+                addSquareOnRight(pData->maHideRect, 0);
             }
 
             if ( pBorderWindow->GetStyle() & WB_ROLLABLE )
             {
-                pData->maRollRect.Top()    = nItemTop;
-                pData->maRollRect.Bottom() = nItemBottom;
-                pData->maRollRect.Right()  = nRight;
-                pData->maRollRect.Left()   = pData->maRollRect.Right()-pData->maRollRect.GetHeight()+1;
-                nRight -= pData->maRollRect.GetWidth();
+                addSquareOnRight(pData->maRollRect, 0);
             }
         }
         else
