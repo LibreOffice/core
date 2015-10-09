@@ -12,6 +12,7 @@
 #include <string.h>
 #include <vector>
 #include <string>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
 #define LOK_USE_UNSTABLE_API
@@ -227,8 +228,6 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_STATUS_INDICATOR_FINISH";
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
         return "LOK_CALLBACK_SEARCH_NOT_FOUND";
-    case LOK_CALLBACK_SEARCH_RESULT_COUNT:
-        return "LOK_CALLBACK_SEARCH_RESULT_COUNT";
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
         return "LOK_CALLBACK_DOCUMENT_SIZE_CHANGED";
     case LOK_CALLBACK_SET_PART:
@@ -661,12 +660,6 @@ callback (gpointer pData)
         searchNotFound(pDocView, pCallback->m_aPayload);
     }
     break;
-    case LOK_CALLBACK_SEARCH_RESULT_COUNT:
-    {
-        size_t nPos = pCallback->m_aPayload.find_first_of(";");
-        searchResultCount(pDocView, pCallback->m_aPayload.substr(0, nPos));
-    }
-    break;
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
         payloadToSize(pCallback->m_aPayload.c_str(), priv->m_nDocumentWidthTwips, priv->m_nDocumentHeightTwips);
@@ -684,6 +677,11 @@ callback (gpointer pData)
     break;
     case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
     {
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(pCallback->m_aPayload);
+        boost::property_tree::read_json(aStream, aTree);
+        int nCount = aTree.get_child("searchResultSelection").size();
+        searchResultCount(pDocView, std::to_string(nCount));
     }
     break;
     default:
