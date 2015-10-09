@@ -378,7 +378,6 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             {
                 if (nPolyCount > pWMF->remainingSize() / sizeof(sal_uInt16))
                 {
-                    bRecordOk = false;
                     break;
                 }
 
