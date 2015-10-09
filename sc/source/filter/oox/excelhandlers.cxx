@@ -42,10 +42,6 @@ WorksheetFragmentBase::WorksheetFragmentBase(
 {
 }
 
-BiffContextHandler::~BiffContextHandler()
-{
-}
-
 BiffWorksheetContextBase::BiffWorksheetContextBase( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
 {

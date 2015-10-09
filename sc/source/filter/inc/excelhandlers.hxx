@@ -74,28 +74,22 @@ public:
                             const OUString& rFragmentPath );
 };
 
-/** Base class for all BIFF context handlers.
-
-    Derived handlers have to implement the importRecord() function that has to
-    import the record the passed BIFF input stream currently points to.
- */
-class BiffContextHandler
-{
-public:
-    virtual             ~BiffContextHandler();
-
-    /** Derived classes have to implement importing the current record. */
-    virtual void        importRecord( BiffInputStream& rStrm ) = 0;
-};
 
 /** Context handler derived from the WorksheetHelper helper class.
+    Base class for all BIFF context handlers.
 
     Used to import contexts in sheet fragments.
  */
-class BiffWorksheetContextBase : public BiffContextHandler, public WorksheetHelper
+class BiffWorksheetContextBase : public WorksheetHelper
 {
 protected:
     explicit            BiffWorksheetContextBase( const WorksheetHelper& rHelper );
+public:
+    /*
+    Derived handlers have to implement the importRecord() function that has to
+    import the record the passed BIFF input stream currently points to.
+    */
+    virtual void        importRecord( BiffInputStream& rStrm ) = 0;
 };
 
 /** An enumeration for all types of fragments in a BIFF workbook stream. */

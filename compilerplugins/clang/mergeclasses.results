@@ -136,7 +136,6 @@ merge oox::dump::Address with oox::dump::TokenAddress
 merge oox::dump::ItemFormat with oox::dump::CombiList::ExtItemFormat
 merge oox::formulaimport::XmlStream with oox::formulaimport::XmlStreamBuilder
 merge oox::ole::OleObjectInfo with oox::vml::OleObjectInfo
-merge oox::xls::BiffContextHandler with oox::xls::BiffWorksheetContextBase
 merge oox::xls::IWorksheetProgress with oox::xls::WorksheetGlobals
 merge pcr::(anonymous namespace)::ISQLCommandPropertyUI with pcr::(anonymous namespace)::SQLCommandPropertyUI
 merge pcr::IButtonClickListener with pcr::OBrowserListBox
