@@ -1510,13 +1510,12 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
                 //step6, initialize the last 16 bytes of the encrypted user password to 0
                 for(sal_uInt32 i = MD5_DIGEST_SIZE; i < sal_uInt32(io_rProperties.UValue.size()); i++)
                     io_rProperties.UValue[i] = 0;
-                //step 2
-                rtlDigestError nError = rtl_digest_updateMD5( aDigest, s_nPadString, sizeof( s_nPadString ) );
-                //step 3
-                if( nError == rtl_Digest_E_None )
-                    nError = rtl_digest_updateMD5( aDigest, &io_rProperties.DocumentIdentifier[0], sal_Int32(io_rProperties.DocumentIdentifier.size()) );
-                else
+                //steps 2 and 3
+                if (rtl_digest_updateMD5( aDigest, s_nPadString, sizeof( s_nPadString ) ) != rtl_Digest_E_None
+                    || rtl_digest_updateMD5( aDigest, &io_rProperties.DocumentIdentifier[0], sal_Int32(io_rProperties.DocumentIdentifier.size()) ) != rtl_Digest_E_None)
+                {
                     bSuccess = false;
+                }
 
                 sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
                 rtl_digest_getMD5( aDigest, nMD5Sum, sizeof(nMD5Sum) );
