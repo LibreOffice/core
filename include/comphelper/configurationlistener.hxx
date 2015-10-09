@@ -37,6 +37,7 @@ public:
     void dispose() { mxListener.clear(); }
 };
 
+/// Access to this class must be protected by the SolarMutex
 template< typename uno_type > class ConfigurationListenerProperty : public ConfigurationListenerPropertyBase
 {
     uno_type maValue;
