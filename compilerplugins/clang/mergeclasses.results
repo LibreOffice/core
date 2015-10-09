@@ -112,7 +112,6 @@ merge dbaccess::IPropertyContainer with dbaccess::OColumn
 merge dbaccess::IRefreshListener with dbaccess::OConnection
 merge dbaui::(anonymous namespace)::IImageProvider with dbaui::(anonymous namespace)::ImageProvider
 merge dbaui::(anonymous namespace)::ILabelProvider with dbaui::(anonymous namespace)::LabelProvider
-merge dbaui::IApplicationController with dbaui::OApplicationController
 merge dbaui::IEntryFilter with dbaui::(anonymous namespace)::FilterByEntryDataId
 merge dbaui::OOdbcLibWrapper with dbaui::OOdbcEnumeration
 merge dbaui::SbaGridListener with dbaui::SbaXDataBrowserController

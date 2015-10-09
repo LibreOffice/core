@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_APPCONTROLLER_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPCONTROLLER_HXX
 
-#include "IApplicationController.hxx"
 #include "AppElementType.hxx"
 #include "callbacks.hxx"
 #include "commontypes.hxx"
@@ -80,7 +79,8 @@ namespace dbaui
     class OApplicationController
             :public OGenericUnoController
             ,public OApplicationController_Base
-            ,public IApplicationController
+            ,public IControlActionListener
+            ,public IContextMenuProvider
     {
     public:
         typedef ::std::vector< css::uno::Reference< css::container::XContainer > >  TContainerVector;
@@ -481,18 +481,41 @@ namespace dbaui
         */
         void refreshTables();
 
-        // IApplicationController
-        virtual bool onEntryDoubleClick(SvTreeListBox& _rTree) SAL_OVERRIDE;
-        virtual bool onContainerSelect(ElementType _eType) SAL_OVERRIDE;
-        virtual void onSelectionChanged() SAL_OVERRIDE;
-        virtual void onCutEntry() SAL_OVERRIDE;
-        virtual void onCopyEntry() SAL_OVERRIDE;
-        virtual void onPasteEntry() SAL_OVERRIDE;
-        virtual void onDeleteEntry() SAL_OVERRIDE;
-        virtual void previewChanged( sal_Int32 _nMode) SAL_OVERRIDE;
-        virtual void containerFound( const css::uno::Reference< css::container::XContainer >& _xContainer) SAL_OVERRIDE;
+        /** called when an entry in a tree list box has been double-clicked
+            @param  _rTree
+                The tree list box.
+            @return
+                <TRUE/> if the double click event has been handled by the called, and should not
+                be processed further.
+        */
+        bool onEntryDoubleClick(SvTreeListBox& _rTree);
+        /** called when a container (category) in the application view has been selected
+            @param  _pTree
+                The tree list box.
+            @return
+                <TRUE/> if the cotainer could be changed otherwise <FALSE/>
+        */
+        bool onContainerSelect(ElementType _eType);
+        /** called when an entry in a tree view has been selected
+            @param  _pEntry
+                the selected entry
+        */
+        void onSelectionChanged();
+        /** called when a "Copy" command is executed in a tree view
+        */
+        void onCopyEntry();
+        /** called when a "Paste" command is executed in a tree view
+        */
+        void onPasteEntry();
+        /** called when a "Delete" command is executed in a tree view
+        */
+        void onDeleteEntry();
+        /// called when the preview mode was changed
+        void previewChanged( sal_Int32 _nMode);
+        /// called when an object container of any kind was found during enumerating tree view elements
+        void containerFound( const css::uno::Reference< css::container::XContainer >& _xContainer);
 
-        // IController (base of IApplicationController)
+        // IController
         virtual void        executeUnChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
         virtual void        executeChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
         virtual void        executeUnChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
@@ -512,7 +535,7 @@ namespace dbaui
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) SAL_OVERRIDE;
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) SAL_OVERRIDE;
 
-        // IContextMenuProvider (base of IApplicationController)
+        // IContextMenuProvider
         virtual PopupMenu*      getContextMenu( Control& _rControl ) const SAL_OVERRIDE;
         virtual IController&    getCommandController() SAL_OVERRIDE;
         virtual ::cppu::OInterfaceContainerHelper*

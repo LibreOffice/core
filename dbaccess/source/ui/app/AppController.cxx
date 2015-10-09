@@ -2248,10 +2248,6 @@ void OApplicationController::OnInvalidateClipboard()
     InvalidateFeature(SID_DB_APP_PASTE_SPECIAL);
 }
 
-void OApplicationController::onCutEntry()
-{
-}
-
 void OApplicationController::onCopyEntry()
 {
     Execute(ID_BROWSER_COPY,Sequence<PropertyValue>());
@@ -2344,7 +2340,7 @@ PopupMenu* OApplicationController::getContextMenu( Control& /*_rControl*/ ) cons
 
 IController& OApplicationController::getCommandController()
 {
-    return *static_cast< IApplicationController* >( this );
+    return *this;
 }
 
 ::cppu::OInterfaceContainerHelper* OApplicationController::getContextMenuInterceptors()

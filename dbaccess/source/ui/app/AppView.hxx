@@ -37,11 +37,12 @@ class MnemonicGenerator;
 
 namespace dbaui
 {
-    class IApplicationController;
     class OApplicationView;
     class OApplicationDetailView;
     class OApplicationSwapWindow;
     class OTitleWindow;
+    class OApplicationController;
+
     class OAppBorderWindow : public vcl::Window
     {
         VclPtr<OTitleWindow>                m_pPanel;
@@ -81,7 +82,7 @@ namespace dbaui
         css::uno::Reference< css::lang::XComponent >
                                             m_xObject;
         VclPtr<OAppBorderWindow>            m_pWin;
-        IApplicationController&             m_rAppController;
+        OApplicationController&             m_rAppController;
         ChildFocusState                     m_eChildFocus;
 
         IClipboardTest* getActiveChild() const;
@@ -100,7 +101,7 @@ namespace dbaui
     public:
         OApplicationView(   vcl::Window* pParent
                             ,const css::uno::Reference< css::uno::XComponentContext >&
-                            ,IApplicationController&            _rAppController
+                            ,OApplicationController&            _rAppController
                             ,PreviewMode _ePreviewMode
                             );
         virtual ~OApplicationView();
@@ -116,7 +117,7 @@ namespace dbaui
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 
-        inline IApplicationController&                  getAppController() const { return m_rAppController; }
+        inline OApplicationController&                  getAppController() const { return m_rAppController; }
 
         // IClipboardTest
         virtual bool isCutAllowed() SAL_OVERRIDE;

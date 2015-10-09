@@ -43,7 +43,7 @@
 #include <dbaccess/IController.hxx>
 #include "browserids.hxx"
 #include <unotools/pathoptions.hxx>
-#include "IApplicationController.hxx"
+#include "AppController.hxx"
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -179,7 +179,7 @@ OApplicationSwapWindow* OAppBorderWindow::getPanel() const
 // class OApplicationView
 OApplicationView::OApplicationView( vcl::Window* pParent
                                     ,const Reference< XComponentContext >& _rxOrb
-                                    ,IApplicationController& _rAppController
+                                    ,OApplicationController& _rAppController
                                     ,PreviewMode _ePreviewMode
                                    ) :
     ODataView( pParent, _rAppController, _rxOrb, WB_DIALOGCONTROL )

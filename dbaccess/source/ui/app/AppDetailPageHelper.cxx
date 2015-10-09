@@ -62,8 +62,8 @@
 #include <vcl/settings.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "IApplicationController.hxx"
 #include "svtools/treelistentry.hxx"
+#include "AppController.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
@@ -759,7 +759,6 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
     _pTreeView->SetEnterKeyHdl(LINK(this, OAppDetailPageHelper, OnEntryEnterKey));
     _pTreeView->SetSelChangeHdl(LINK(this, OAppDetailPageHelper, OnEntrySelChange));
 
-    _pTreeView->setCutHandler(LINK(this, OAppDetailPageHelper, OnCutEntry));
     _pTreeView->setCopyHandler(LINK(this, OAppDetailPageHelper, OnCopyEntry));
     _pTreeView->setPasteHandler(LINK(this, OAppDetailPageHelper, OnPasteEntry));
     _pTreeView->setDeleteHandler(LINK(this, OAppDetailPageHelper, OnDeleteEntry));
@@ -918,11 +917,6 @@ IMPL_LINK_TYPED(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree
 IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnEntrySelChange, LinkParamNone*, void)
 {
     getBorderWin().getView()->getAppController().onSelectionChanged();
-}
-
-IMPL_LINK_NOARG_TYPED( OAppDetailPageHelper, OnCutEntry, LinkParamNone*, void )
-{
-    getBorderWin().getView()->getAppController().onCutEntry();
 }
 
 IMPL_LINK_NOARG_TYPED( OAppDetailPageHelper, OnCopyEntry, LinkParamNone*, void )

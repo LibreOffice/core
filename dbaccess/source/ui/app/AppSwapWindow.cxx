@@ -27,7 +27,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
-#include "IApplicationController.hxx"
+#include "AppController.hxx"
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;

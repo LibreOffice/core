@@ -155,7 +155,6 @@ namespace dbaui
         DECL_LINK_TYPED( OnEntryEnterKey,       DBTreeListBox*, void );
         DECL_LINK_TYPED( OnEntrySelChange,      LinkParamNone*, void );
 
-        DECL_LINK_TYPED( OnCutEntry,            LinkParamNone*, void );
         DECL_LINK_TYPED( OnCopyEntry,           LinkParamNone*, void );
         DECL_LINK_TYPED( OnPasteEntry,          LinkParamNone*, void );
         DECL_LINK_TYPED( OnDeleteEntry,         LinkParamNone*, void );
