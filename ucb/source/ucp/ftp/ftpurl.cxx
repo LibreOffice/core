@@ -35,7 +35,7 @@
 
 #include "ftpstrcont.hxx"
 #include "ftpurl.hxx"
-#include "ftphandleprovider.hxx"
+#include "ftpcontentprovider.hxx"
 #include "ftpcfunc.hxx"
 #include "ftpcontainer.hxx"
 #include <memory>
@@ -126,7 +126,7 @@ FTPURL::FTPURL(const FTPURL& r)
 
 
 FTPURL::FTPURL(const OUString& url,
-               FTPHandleProvider* pFCP)
+               FTPContentProvider* pFCP)
     throw(
         malformed_exception
     )

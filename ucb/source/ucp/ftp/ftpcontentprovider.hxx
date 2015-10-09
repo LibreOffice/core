@@ -25,7 +25,6 @@
 #include <ucbhelper/proxydecider.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
-#include "ftphandleprovider.hxx"
 #include "ftpurl.hxx"
 
 // UNO service name for the provider. This name will be used by the UCB to
@@ -42,8 +41,7 @@ namespace ftp
     class FTPLoaderThread;
 
     class FTPContentProvider:
-        public ::ucbhelper::ContentProviderImplHelper,
-        public FTPHandleProvider
+        public ::ucbhelper::ContentProviderImplHelper
     {
     public:
 
@@ -93,21 +91,22 @@ namespace ftp
                    css::uno::RuntimeException,
                    std::exception ) SAL_OVERRIDE;
 
-        // FTPHandleProvider.
+        CURL* handle();
 
-        virtual CURL* handle() SAL_OVERRIDE;
+        /** host is in the form host:port.
+         */
 
-        virtual bool forHost(const OUString& host,
+        bool forHost(const OUString& host,
                              const OUString& port,
                              const OUString& username,
                              OUString& password,
-                             OUString& account) SAL_OVERRIDE;
+                             OUString& account);
 
-        virtual bool setHost(const OUString& host,
+        bool setHost(const OUString& host,
                              const OUString& port,
                              const OUString& username,
                              const OUString& password,
-                             const OUString& account) SAL_OVERRIDE;
+                             const OUString& account);
 
         struct ServerInfo
         {

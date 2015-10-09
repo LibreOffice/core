@@ -43,7 +43,7 @@ namespace ftp {
     /** Forward declarations.
      */
 
-    class FTPHandleProvider;
+    class FTPContentProvider;
 
 
     enum FTPErrors { FILE_EXIST_DURING_INSERT = CURL_LAST +1,
@@ -84,7 +84,7 @@ namespace ftp {
 
         FTPURL(
             const OUString& aIdent,
-            FTPHandleProvider* pFCP = 0
+            FTPContentProvider* pFCP = 0
         )
             throw(
                 malformed_exception
@@ -142,7 +142,7 @@ namespace ftp {
 
     private:
 
-        FTPHandleProvider *m_pFCP;
+        FTPContentProvider *m_pFCP;
 
         mutable OUString m_aUsername;
         bool m_bShowPassword;

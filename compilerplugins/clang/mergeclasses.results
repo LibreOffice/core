@@ -128,7 +128,6 @@ merge frm::IMultiAttributeDispatcher with frm::RichTextControl
 merge frm::ITextAttributeListener with frm::OAttributeDispatcher
 merge frm::ITextSelectionListener with frm::ORichTextPeer
 merge ftp::CurlInput with InsertData
-merge ftp::FTPHandleProvider with ftp::FTPContentProvider
 merge ftp::ResultSetFactory with ResultSetFactoryI
 merge helpdatafileproxy::hdf_internal::Noncopyable with helpdatafileproxy::Hdf
 merge i_xml_parser_event_handler with (anonymous namespace)::recently_used_file_filter
