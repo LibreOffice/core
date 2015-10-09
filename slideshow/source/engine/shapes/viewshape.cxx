@@ -231,15 +231,11 @@ namespace slideshow
 
 
                 bool bRet(true);
-                VectorOfDocTreeNodes::const_iterator        aIter( rSubsets.begin() );
-                const VectorOfDocTreeNodes::const_iterator  aEnd ( rSubsets.end() );
-                while( aIter != aEnd )
+                for( const auto& rSubset : rSubsets )
                 {
-                    if( !pRenderer->drawSubset( aIter->getStartIndex(),
-                                                aIter->getEndIndex() ) )
+                    if( !pRenderer->drawSubset( rSubset.getStartIndex(),
+                                                rSubset.getEndIndex() ) )
                         bRet = false;
-
-                    ++aIter;
                 }
 
                 return bRet;

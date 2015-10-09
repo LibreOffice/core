@@ -77,19 +77,15 @@ void WaitSymbol::setVisible( const bool bVisible )
     {
         mbVisible = bVisible;
 
-        ViewsVecT::const_iterator       aIter( maViews.begin() );
-        ViewsVecT::const_iterator const aEnd ( maViews.end() );
-        while( aIter != aEnd )
+        for( const auto& rView : maViews )
         {
-            if( aIter->second )
+            if( rView.second )
             {
                 if( bVisible )
-                    aIter->second->show();
+                    rView.second->show();
                 else
-                    aIter->second->hide();
+                    rView.second->hide();
             }
-
-            ++aIter;
         }
 
         // sprites changed, need a screen update for this frame.
@@ -176,14 +172,11 @@ void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
 void WaitSymbol::viewsChanged()
 {
     // reposition sprites on all views
-    ViewsVecT::const_iterator       aIter( maViews.begin() );
-    ViewsVecT::const_iterator const aEnd ( maViews.end() );
-    while( aIter != aEnd )
+    for( const auto& rView : maViews )
     {
-        if( aIter->second )
-            aIter->second->movePixel(
-                calcSpritePos( aIter->first ));
-        ++aIter;
+        if( rView.second )
+            rView.second->movePixel(
+                calcSpritePos( rView.first ) );
     }
 }
 
