@@ -2800,7 +2800,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,openldap/include) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_external_project,$(1),openldap)
+$(call gb_LinkTarget_use_external_project,$(1),openldap,full)
 $(call gb_LinkTarget_add_libs,$(1), \
 	$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap/.libs/libldap.a \
 	$(call gb_UnpackedTarball_get_dir,openldap)/libraries/liblber/.libs/liblber.a \
