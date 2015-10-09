@@ -25,7 +25,8 @@ with open("mergeclasses.log") as txt:
             idx1 = line.find("\t")
             idx2 = line.find("\t", idx1+1)
             clazzName = line[idx1+1 : idx2]
-            fileName  = line[idx2+1 : len(line)-1]
+            # the +2 is so we skip the leading /
+            fileName  = line[idx2+2 : len(line)-1]
             definitionSet.add(clazzName)
             definitionToFileDict[clazzName] = fileName
             
@@ -63,7 +64,7 @@ for clazz in sorted(definitionSet - instantiatedSet):
         continue
     # ignore base class that contain the word "mutex", they are normally there to
     # help with the WeakComponentImpl template magic
-    if clazz.find("mutex") != -1 or clazz.find("Mutex") != -1:
+    if ("mutex" in clazz) or ("Mutex" in clazz):
         continue
     otherclazz = next(iter(parentChildDict[clazz]))
     # exclude combinations that span modules because we often use those to make cross-module dependencies more manageable.
