@@ -2176,7 +2176,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             else
                 Query( aQueryParam, NULL, false );
 
-            //  bei nicht-inplace kann die Tabelle umgestellt worden sein
+            // if not inplace the sheet may have changed
             if ( !aQueryParam.bInplace && aQueryParam.nDestTab != nTab )
                 SetTabNo( nTab );
         }
