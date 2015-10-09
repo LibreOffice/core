@@ -26,8 +26,15 @@
 
 namespace comphelper {
 
-/** SolarMutex interface, needed for Application::GetSolarMutex().
-*/
+/**
+ * Abstract SolarMutex interface, needed for VCL's
+ * Application::GetSolarMutex().
+ *
+ * The SolarMutex is the one big recursive code lock used
+ * to protect the vast majority of the LibreOffice code-base,
+ * in particular anything that is graphical and the cores of
+ * the applications.
+ */
 class COMPHELPER_DLLPUBLIC SolarMutex {
 public:
     virtual void acquire() = 0;
@@ -35,6 +42,12 @@ public:
     virtual void release() = 0;
 
     virtual bool tryToAcquire() = 0;
+
+    /// Help components to get the SolarMutex easily.
+    static SolarMutex *get();
+
+    /// semi-private: allow VCL to push its one-big-lock down here.
+    static void setSolarMutex( SolarMutex *pMutex );
 
 protected:
     SolarMutex();
