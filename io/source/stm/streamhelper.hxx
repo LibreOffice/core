@@ -37,32 +37,6 @@
 namespace io_stm
 {
 
-class I_FIFO_OutOfBoundsException :
-    public Exception
-{};
-
-class I_FIFO_OutOfMemoryException :
-    public Exception
-{};
-
-class I_FIFO
-{
-public:
-
-
-    virtual void    write( const Sequence<sal_Int8> &) throw( I_FIFO_OutOfMemoryException,
-            I_FIFO_OutOfBoundsException )=0;
-
-    virtual void    read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead )
-    throw( I_FIFO_OutOfBoundsException )=0;
-    virtual void    skip( sal_Int32 nBytesToSkip )
-    throw( I_FIFO_OutOfBoundsException )=0;
-    virtual sal_Int32   getSize() const throw(  )  =0;
-
-    virtual ~I_FIFO() {};
-};
-
-
 class IRingBuffer_OutOfBoundsException :
     public Exception
 {};
@@ -110,20 +84,28 @@ private:
 };
 
 
+class I_FIFO_OutOfBoundsException :
+    public Exception
+{};
+
+class I_FIFO_OutOfMemoryException :
+    public Exception
+{};
+
 class MemFIFO :
-    public  I_FIFO,
     private MemRingBuffer
 {
 public:
-    virtual void    write( const Sequence<sal_Int8> &) throw( I_FIFO_OutOfMemoryException,
-            I_FIFO_OutOfBoundsException ) SAL_OVERRIDE;
-    virtual void    read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead )
-    throw( I_FIFO_OutOfBoundsException ) SAL_OVERRIDE;
-    virtual void    skip( sal_Int32 nBytesToSkip ) throw( I_FIFO_OutOfBoundsException ) SAL_OVERRIDE;
-    virtual sal_Int32   getSize()  const throw(  ) SAL_OVERRIDE
-    { return MemRingBuffer::getSize(); }
-    virtual void    shrink() throw() SAL_OVERRIDE
-    { MemRingBuffer::shrink(); }
+    void          write( const Sequence<sal_Int8> &)
+                  throw( I_FIFO_OutOfMemoryException, I_FIFO_OutOfBoundsException );
+    void          read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead )
+                  throw( I_FIFO_OutOfBoundsException );
+    void          skip( sal_Int32 nBytesToSkip )
+                  throw( I_FIFO_OutOfBoundsException );
+    sal_Int32     getSize() const throw()
+                  { return MemRingBuffer::getSize(); }
+    virtual void  shrink() throw() SAL_OVERRIDE
+                  { MemRingBuffer::shrink(); }
 
 };
 

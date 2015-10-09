@@ -117,8 +117,8 @@ private:
     bool m_bInputStreamClosed;
 
     osl::Condition m_conditionBytesAvail;
-    Mutex     m_mutexAccess;
-    I_FIFO      *m_pFIFO;
+    Mutex          m_mutexAccess;
+    MemFIFO       *m_pFIFO;
 };
 
 
