@@ -72,23 +72,40 @@ void exportUTF16String(SvStream& rStrm, const OUString& rString)
     }
 }
 
-void exportHexString(SvStream& rStrm, const sal_uInt8 nByte)
-{
-    sal_uInt8 nNibble = (nByte & 0xF0) >> 4;
-    for(sal_uInt8 i = 0; i < 2; i++)
-    {
-        if(nNibble > 9)
-            rStrm.WriteUInt8(nNibble + 55);
-        else
-            rStrm.WriteUInt8(nNibble + 48);
-        nNibble = nByte & 0xF;
-    }
-}
-
 bool isWorkbook(css::uno::Reference<css::uno::XInterface> xInterface)
 {
     css::uno::Reference<ooo::vba::excel::XWorkbook> xWorkbook(xInterface, css::uno::UNO_QUERY);
     return xWorkbook.is();
+}
+
+OUString createHexStringFromDigit(sal_uInt8 nDigit)
+{
+    OUString aString = OUString::number( nDigit, 16 );
+    if(aString.getLength() == 1)
+        aString = OUString::number(0) + aString;
+    return aString.toAsciiUpperCase();
+}
+
+OUString createGuidStringFromInt(sal_uInt8 nGuid[16])
+{
+    OUStringBuffer aBuffer;
+    aBuffer.append('{');
+    for(size_t i = 0; i < 16; ++i)
+    {
+        aBuffer.append(createHexStringFromDigit(nGuid[i]));
+        if(i == 3|| i == 5 || i == 7 || i == 9 )
+            aBuffer.append('-');
+    }
+    aBuffer.append('}');
+    OUString aString = aBuffer.makeStringAndClear();
+    return aString.toAsciiUpperCase();
+}
+
+OUString generateGUIDString()
+{
+    sal_uInt8 nGuid[16];
+    rtl_createUuid(nGuid, NULL, true);
+    return createGuidStringFromInt(nGuid);
 }
 
 }
@@ -372,7 +389,6 @@ VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, Sv
 {
     if (!pSeed)
     {
-        // mnSeed = 0xBE;
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dis(0, 255);
@@ -382,13 +398,13 @@ VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, Sv
 
 void VBAEncryption::writeSeed()
 {
-    exportHexString(mrEncryptedData, mnSeed);
+    exportString(mrEncryptedData, createHexStringFromDigit(mnSeed));
 }
 
 void VBAEncryption::writeVersionEnc()
 {
     mnVersionEnc = mnSeed ^ mnVersion;
-    exportHexString(mrEncryptedData, mnVersionEnc);
+    exportString(mrEncryptedData, createHexStringFromDigit(mnVersionEnc));
 }
 
 sal_uInt8 VBAEncryption::calculateProjKey(const OUString& rProjectKey)
@@ -408,7 +424,7 @@ sal_uInt8 VBAEncryption::calculateProjKey(const OUString& rProjectKey)
 void VBAEncryption::writeProjKeyEnc()
 {
     sal_uInt8 nProjKeyEnc = mnSeed ^ mnProjKey;
-    exportHexString(mrEncryptedData, nProjKeyEnc);
+    exportString(mrEncryptedData, createHexStringFromDigit(nProjKeyEnc));
     mnUnencryptedByte1 = mnProjKey;
     mnEncryptedByte1 = nProjKeyEnc; // ProjKeyEnc
     mnEncryptedByte2 = mnVersionEnc; // VersionEnc
@@ -421,7 +437,7 @@ void VBAEncryption::writeIgnoredEnc()
     {
         sal_uInt8 nTempValue = 0xBE; // Any value can be assigned here
         sal_uInt8 nByteEnc = nTempValue ^ (mnEncryptedByte2 + mnUnencryptedByte1);
-        exportHexString(mrEncryptedData, nByteEnc);
+        exportString(mrEncryptedData, createHexStringFromDigit(nByteEnc));
         mnEncryptedByte2 = mnEncryptedByte1;
         mnEncryptedByte1 = nByteEnc;
         mnUnencryptedByte1 = nTempValue;
@@ -435,7 +451,7 @@ void VBAEncryption::writeDataLengthEnc()
     {
         sal_uInt8 nByte = temp & 0xFF;
         sal_uInt8 nByteEnc = nByte ^ (mnEncryptedByte2 + mnUnencryptedByte1);
-        exportHexString(mrEncryptedData, nByteEnc);
+        exportString(mrEncryptedData, createHexStringFromDigit(nByteEnc));
         mnEncryptedByte2 = mnEncryptedByte1;
         mnEncryptedByte1 = nByteEnc;
         mnUnencryptedByte1 = nByte;
@@ -448,7 +464,7 @@ void VBAEncryption::writeDataEnc()
     for(sal_Int16 i = 0; i < mnLength; i++)
     {
         sal_uInt8 nByteEnc = mpData[i] ^ (mnEncryptedByte2 + mnUnencryptedByte1);
-        exportHexString(mrEncryptedData, nByteEnc);
+        exportString(mrEncryptedData, createHexStringFromDigit(nByteEnc));
         mnEncryptedByte2 = mnEncryptedByte1;
         mnEncryptedByte1 = nByteEnc;
         mnUnencryptedByte1 = mpData[i];
@@ -672,11 +688,11 @@ void writeMODULEDOCSTRING(SvStream& rStrm)
 }
 
 // section 2.3.4.2.3.2.5
-void writeMODULEOFFSET(SvStream& rStrm, sal_uInt32 offset)
+void writeMODULEOFFSET(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x0031); // id
     rStrm.WriteUInt32(0x00000004); // sizeOfTextOffset
-    rStrm.WriteUInt32(offset); // TextOffset
+    rStrm.WriteUInt32(0x00000000); // TextOffset
 }
 
 // section 2.3.4.2.3.2.6
@@ -706,13 +722,13 @@ void writeMODULETYPE(SvStream& rStrm, const sal_uInt16 type)
 }
 
 // section 2.3.4.2.3.2
-void writePROJECTMODULE(SvStream& rStrm, const OUString& name, const OUString& streamName, sal_uInt32 offset, const sal_uInt16 type)
+void writePROJECTMODULE(SvStream& rStrm, const OUString& name, const sal_uInt16 type)
 {
     writeMODULENAME(rStrm, name);
     writeMODULENAMEUNICODE(rStrm, name);
-    writeMODULESTREAMNAME(rStrm, streamName);
+    writeMODULESTREAMNAME(rStrm, name);
     writeMODULEDOCSTRING(rStrm);
-    writeMODULEOFFSET(rStrm, offset);
+    writeMODULEOFFSET(rStrm);
     writeMODULEHELPCONTEXT(rStrm);
     writeMODULECOOKIE(rStrm);
     writeMODULETYPE(rStrm, type);
@@ -739,7 +755,7 @@ void writePROJECTMODULES(SvStream& rStrm, css::uno::Reference<css::container::XN
     {
         const OUString& rModuleName = aElementNames[rLibrayMap[i]];
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
-        writePROJECTMODULE(rStrm, rModuleName, rModuleName, 0x00000000, aModuleInfo.ModuleType);
+        writePROJECTMODULE(rStrm, rModuleName, aModuleInfo.ModuleType);
     }
 }
 
@@ -823,36 +839,6 @@ void exportVBAProjectStream(SvStream& rStrm)
     rStrm.WriteUInt16(0xFFFF); // Version
     rStrm.WriteUInt8(0x00); // Reserved2
     rStrm.WriteUInt16(0x0000); // Undefined
-}
-
-OUString createHexStringFromDigit(sal_uInt8 nDigit)
-{
-    OUString aString = OUString::number( nDigit, 16 );
-    if(aString.getLength() == 1)
-        aString = OUString::number(0) + aString;
-    return aString.toAsciiUpperCase();
-}
-
-OUString createGuidStringFromInt(sal_uInt8 nGuid[16])
-{
-    OUStringBuffer aBuffer;
-    aBuffer.append('{');
-    for(size_t i = 0; i < 16; ++i)
-    {
-        aBuffer.append(createHexStringFromDigit(nGuid[i]));
-        if(i == 3|| i == 5 || i == 7 || i == 9 )
-            aBuffer.append('-');
-    }
-    aBuffer.append('}');
-    OUString aString = aBuffer.makeStringAndClear();
-    return aString.toAsciiUpperCase();
-}
-
-OUString generateGUIDString()
-{
-    sal_uInt8 nGuid[16];
-    rtl_createUuid(nGuid, NULL, true);
-    return createGuidStringFromInt(nGuid);
 }
 
 // section 2.3.1 PROJECT Stream
