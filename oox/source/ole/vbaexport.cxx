@@ -824,18 +824,17 @@ void exportVBAProjectStream(SvStream& rStrm)
     rStrm.WriteUInt16(0x0000); // Undefined
 }
 
-/*
-OString createHexStringFromDigit(sal_uInt8 nDigit)
+OUString createHexStringFromDigit(sal_uInt8 nDigit)
 {
-    OString aString = OString::number( nDigit, 16 );
+    OUString aString = OUString::number( nDigit, 16 );
     if(aString.getLength() == 1)
-        aString = aString + OString::number(0);
+        aString = aString + OUString::number(0);
     return aString;
 }
 
-OString createGuidStringFromInt(sal_uInt8 nGuid[16])
+OUString createGuidStringFromInt(sal_uInt8 nGuid[16])
 {
-    OStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     aBuffer.append('{');
     for(size_t i = 0; i < 16; ++i)
     {
@@ -844,18 +843,16 @@ OString createGuidStringFromInt(sal_uInt8 nGuid[16])
             aBuffer.append('-');
     }
     aBuffer.append('}');
-    OString aString = aBuffer.makeStringAndClear();
+    OUString aString = aBuffer.makeStringAndClear();
     return aString.toAsciiUpperCase();
 }
 
-OString generateGUIDString()
+OUString generateGUIDString()
 {
     sal_uInt8 nGuid[16];
     rtl_createUuid(nGuid, NULL, true);
     return createGuidStringFromInt(nGuid);
 }
-
-*/
 
 // section 2.3.1 PROJECT Stream
 void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer,
@@ -870,7 +867,7 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
 
     // section 2.3.1.2 ProjectId
     exportString(rStrm, "ID=\"");
-    OUString aProjectID("{9F10AB9C-89AC-4C0F-8AFB-8E9B96D5F170}");
+    OUString aProjectID = generateGUIDString();
     exportString(rStrm, aProjectID);
     exportString(rStrm, "\"\r\n");
 
