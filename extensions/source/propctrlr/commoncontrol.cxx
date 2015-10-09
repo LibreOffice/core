@@ -36,13 +36,11 @@ namespace pcr
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::inspection::XPropertyControl;
 
-    CommonBehaviourControlHelper::CommonBehaviourControlHelper( vcl::Window* _pControlWindow, sal_Int16 _nControlType, XPropertyControl& _rAntiImpl )
-        :m_pControlWindow( _pControlWindow )
-        ,m_nControlType( _nControlType )
+    CommonBehaviourControlHelper::CommonBehaviourControlHelper( sal_Int16 _nControlType, XPropertyControl& _rAntiImpl )
+        :m_nControlType( _nControlType )
         ,m_rAntiImpl( _rAntiImpl )
         ,m_bModified( false )
     {
-        DBG_ASSERT( m_pControlWindow != nullptr, "CommonBehaviourControlHelper::CommonBehaviourControlHelper: invalid window!" );
     }
 
 
@@ -54,15 +52,6 @@ namespace pcr
     {
         m_xContext = _controlcontext;
     }
-
-
-    Reference< XWindow > SAL_CALL CommonBehaviourControlHelper::getControlWindow() throw (RuntimeException)
-    {
-        return VCLUnoHelper::GetInterface( m_pControlWindow );
-    }
-
-
-
 
     void SAL_CALL CommonBehaviourControlHelper::notifyModifiedValue(  ) throw (RuntimeException)
     {
@@ -81,21 +70,11 @@ namespace pcr
     }
 
 
-    void SAL_CALL CommonBehaviourControlHelper::dispose()
-    {
-        m_pControlWindow.disposeAndClear();
-    }
-
-
     void CommonBehaviourControlHelper::autoSizeWindow()
     {
-        OSL_PRECOND( m_pControlWindow, "CommonBehaviourControlHelper::autoSizeWindow: no window!" );
-        if ( !m_pControlWindow )
-            return;
-
-        ScopedVclPtrInstance< ComboBox > aComboBox(m_pControlWindow, WB_DROPDOWN);
+        ScopedVclPtrInstance< ComboBox > aComboBox(getVclWindow(), WB_DROPDOWN);
         aComboBox->SetPosSizePixel(Point(0,0), Size(100,100));
-        m_pControlWindow->SetSizePixel(aComboBox->GetSizePixel());
+        getVclWindow()->SetSizePixel(aComboBox->GetSizePixel());
 
         // TODO/UNOize: why do the controls this themselves? Shouldn't this be the task
         // of the browser listbox/line?

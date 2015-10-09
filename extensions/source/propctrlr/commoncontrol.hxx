@@ -26,6 +26,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 class NotifyEvent;
 class Control;
@@ -65,7 +66,6 @@ namespace pcr
     class CommonBehaviourControlHelper
     {
     private:
-        VclPtr<vcl::Window>             m_pControlWindow;
         sal_Int16                       m_nControlType;
         css::uno::Reference< css::inspection::XPropertyControlContext >
                                         m_xContext;
@@ -75,10 +75,6 @@ namespace pcr
 
     public:
         /** creates the instance
-            @param  _rControlWindow
-                the window which is associated with the <type scope="css::inspection">XPropertyControl</type>.
-                Must not be <NULL/>.<br/>
-                Ownership for this window is taken by the CommonBehaviourControlHelper - it will be deleted in <member>disposing</member>.
             @param  _nControlType
                 the type of the control - one of the <type scope="css::inspection">PropertyControlType</type>
                 constants
@@ -87,14 +83,10 @@ namespace pcr
                 which is why we hold it without acquiring it/
         */
         CommonBehaviourControlHelper(
-            vcl::Window* _pControlWindow,
             sal_Int16 _nControlType,
             css::inspection::XPropertyControl& _rAntiImpl);
 
         virtual ~CommonBehaviourControlHelper();
-
-        inline       vcl::Window* getVclControlWindow()       { return m_pControlWindow; }
-        inline const vcl::Window* getVclControlWindow() const { return m_pControlWindow; }
 
         virtual void modified() { m_bModified = true; }
 
@@ -102,12 +94,8 @@ namespace pcr
         ::sal_Int16 SAL_CALL getControlType() throw (css::uno::RuntimeException) { return m_nControlType; }
         css::uno::Reference< css::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (css::uno::RuntimeException) { return m_xContext; }
         void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext ) throw (css::uno::RuntimeException);
-        css::uno::Reference< css::awt::XWindow > SAL_CALL getControlWindow() throw (css::uno::RuntimeException);
         bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException) { return m_bModified; }
         void SAL_CALL notifyModifiedValue(  ) throw (css::uno::RuntimeException);
-
-        // XComponent
-        void SAL_CALL dispose();
 
         /** (fail-safe) wrapper around calling our context's activateNextControl
         */
@@ -115,6 +103,8 @@ namespace pcr
 
         /// automatically size the window given in the ctor
         void    autoSizeWindow();
+
+        virtual vcl::Window* getVclWindow() = 0;
 
         /// may be used by derived classes, they forward the event to the PropCtrListener
         DECL_LINK( ModifiedHdl, vcl::Window* );
@@ -152,7 +142,7 @@ namespace pcr
         virtual void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext ) throw (css::uno::RuntimeException) SAL_OVERRIDE
             { CommonBehaviourControlHelper::setControlContext( _controlcontext ); }
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getControlWindow() throw (css::uno::RuntimeException) SAL_OVERRIDE
-            { return CommonBehaviourControlHelper::getControlWindow(); }
+            { return VCLUnoHelper::GetInterface( m_pControlWindow ); }
         virtual sal_Bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
             { return CommonBehaviourControlHelper::isModified(); }
         virtual void SAL_CALL notifyModifiedValue(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
@@ -160,20 +150,24 @@ namespace pcr
 
         // XComponent
         virtual void SAL_CALL disposing() SAL_OVERRIDE
-            { CommonBehaviourControlHelper::dispose(); }
+            { m_pControlWindow.disposeAndClear(); }
 
-        /// returns a typed pointer to our control window
+       //  CommonBehaviourControlHelper::getVclWindow
+        virtual vcl::Window*  getVclWindow() SAL_OVERRIDE
+            { return m_pControlWindow.get(); }
+
         TControlWindow*       getTypedControlWindow()
-            { return static_cast< TControlWindow* >( CommonBehaviourControlHelper::getVclControlWindow() ); }
+            { return m_pControlWindow.get(); }
         const TControlWindow* getTypedControlWindow() const
-            { return static_cast< const TControlWindow* >( CommonBehaviourControlHelper::getVclControlWindow() ); }
+            { return m_pControlWindow.get(); }
 
-    protected:
         /** checks whether the instance is already disposed
             @throws DisposedException
                 if the instance is already disposed
         */
         inline void impl_checkDisposed_throw();
+    private:
+        VclPtr<TControlWindow>         m_pControlWindow;
     };
 
 
@@ -183,15 +177,15 @@ namespace pcr
     template< class TControlInterface, class TControlWindow >
     inline CommonBehaviourControl< TControlInterface, TControlWindow >::CommonBehaviourControl ( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers )
         :ComponentBaseClass( m_aMutex )
-        ,CommonBehaviourControlHelper( new TControlWindow( _pParentWindow, _nWindowStyle ), _nControlType, *this )
+        ,CommonBehaviourControlHelper( _nControlType, *this )
+        ,m_pControlWindow( new TControlWindow( _pParentWindow, _nWindowStyle ) )
     {
-        TControlWindow* pControlWindow( getTypedControlWindow() );
-        pControlWindow->setControlHelper( *this );
+        m_pControlWindow->setControlHelper( *this );
         if ( _bDoSetHandlers )
         {
-            pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, ModifiedHdl ) );
-            pControlWindow->SetGetFocusHdl( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );
-            pControlWindow->SetLoseFocusHdl( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
+            m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, ModifiedHdl ) );
+            m_pControlWindow->SetGetFocusHdl( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );
+            m_pControlWindow->SetLoseFocusHdl( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
         }
         autoSizeWindow();
     }
