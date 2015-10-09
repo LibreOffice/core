@@ -1599,7 +1599,10 @@ void ScInterpreter::ScLogNormDist( int nMinParamCount ) //expanded, see #i100119
 
 void ScInterpreter::ScStdNormDist()
 {
-    PushDouble(integralPhi(GetDouble()));
+    double fVal = GetDouble();
+    if (!rtl::math::isNan(fVal))
+        fVal = integralPhi(fVal);
+    PushDouble(fVal);
 }
 
 void ScInterpreter::ScStdNormDist_MS()
