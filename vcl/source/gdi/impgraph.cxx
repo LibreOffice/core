@@ -947,7 +947,6 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     Size            aSize;
     sal_uInt32      nId;
     sal_Int32       nType;
-    sal_Int32       nLen;
     const SvStreamEndian nOldFormat = rIStm.GetEndian();
     bool            bRet = false;
 
@@ -961,6 +960,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         VersionCompat* pCompat = new VersionCompat( rIStm, StreamMode::READ );
 
         rIStm.ReadInt32( nType );
+        sal_Int32 nLen;
         rIStm.ReadInt32( nLen );
         ReadPair( rIStm, aSize );
         ReadMapMode( rIStm, aMapMode );
@@ -976,6 +976,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
 
         rIStm.SeekRel( -4L );
 
+        sal_Int32 nLen;
         rIStm.ReadInt32( nType ).ReadInt32( nLen ).ReadInt32( nWidth ).ReadInt32( nHeight );
         rIStm.ReadInt32( nMapMode ).ReadInt32( nScaleNumX ).ReadInt32( nScaleDenomX ).ReadInt32( nScaleNumY );
         rIStm.ReadInt32( nScaleDenomY ).ReadInt32( nOffsX ).ReadInt32( nOffsY );
@@ -984,7 +985,6 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         if( nType > 100L )
         {
             nType = OSL_SWAPDWORD( nType );
-            nLen = OSL_SWAPDWORD( nLen );
             nWidth = OSL_SWAPDWORD( nWidth );
             nHeight = OSL_SWAPDWORD( nHeight );
             nMapMode = OSL_SWAPDWORD( nMapMode );
