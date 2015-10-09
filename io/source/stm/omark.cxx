@@ -138,7 +138,7 @@ private:
     Reference< XOutputStream >  m_output;
     bool m_bValidStream;
 
-    IRingBuffer *m_pBuffer;
+    MemRingBuffer *m_pBuffer;
     map<sal_Int32,sal_Int32,less< sal_Int32 > > m_mapMarks;
     sal_Int32 m_nCurrentPos;
     sal_Int32 m_nCurrentMark;
@@ -553,7 +553,7 @@ private:
     Reference< XInputStream > m_input;
     bool m_bValidStream;
 
-    IRingBuffer *m_pBuffer;
+    MemRingBuffer *m_pBuffer;
     map<sal_Int32,sal_Int32,less< sal_Int32 > > m_mapMarks;
     sal_Int32 m_nCurrentPos;
     sal_Int32 m_nCurrentMark;

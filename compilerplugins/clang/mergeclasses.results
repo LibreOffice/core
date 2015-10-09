@@ -130,7 +130,6 @@ merge frm::ITextSelectionListener with frm::ORichTextPeer
 merge ftp::CurlInput with InsertData
 merge ftp::ResultSetFactory with ResultSetFactoryI
 merge i_xml_parser_event_handler with (anonymous namespace)::recently_used_file_filter
-merge io_stm::IRingBuffer with io_stm::MemRingBuffer
 merge io_stm::I_FIFO with io_stm::MemFIFO
 merge oglcanvas::CanvasHelper with oglcanvas::BitmapCanvasHelper
 merge oglcanvas::IBufferContext with oglcanvas::(anonymous namespace)::BufferContextImpl
