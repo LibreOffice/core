@@ -91,22 +91,22 @@ enum SmNodeType
 
 class SmNode : public SmRect
 {
-    SmFace      aFace;
+    SmFace      maFace;
 
-    SmToken     aNodeToken;
-    SmNodeType      eType;
-    SmScaleMode     eScaleMode;
-    RectHorAlign    eRectHorAlign;
-    sal_uInt16          nFlags,
-                    nAttributes;
-    bool            bIsPhantom;
-    bool            bIsSelected;
+    SmToken     maNodeToken;
+    SmNodeType      meType;
+    SmScaleMode     meScaleMode;
+    RectHorAlign    meRectHorAlign;
+    sal_uInt16      mnFlags,
+                    mnAttributes;
+    bool            mbIsPhantom;
+    bool            mbIsSelected;
 
 protected:
     SmNode(SmNodeType eNodeType, const SmToken &rNodeToken);
 
     // index in accessible text -1 if not (yet) applicable
-    sal_Int32       nAccIndex;
+    sal_Int32       mnAccIndex;
 
 public:
     virtual             ~SmNode();
@@ -126,18 +126,18 @@ public:
                 return const_cast<SmNode *>(this)->GetLeftMost();
             }
 
-            sal_uInt16 &    Flags() { return nFlags; }
-            sal_uInt16 &    Attributes() { return nAttributes; }
+            sal_uInt16 &    Flags() { return mnFlags; }
+            sal_uInt16 &    Attributes() { return mnAttributes; }
 
-            bool IsPhantom() const { return bIsPhantom; }
+            bool IsPhantom() const { return mbIsPhantom; }
             void SetPhantom(bool bIsPhantom);
             void SetColor(const Color &rColor);
 
             void SetAttribut(sal_uInt16 nAttrib);
             void ClearAttribut(sal_uInt16 nAttrib);
 
-            const SmFace & GetFont() const { return aFace; };
-                  SmFace & GetFont()       { return aFace; };
+            const SmFace & GetFont() const { return maFace; };
+                  SmFace & GetFont()       { return maFace; };
 
             void SetFont(const SmFace &rFace);
             void SetFontSize(const Fraction &rRelSize, FontSizeType nType);
@@ -149,7 +149,7 @@ public:
     sal_uInt16 FindIndex() const;
 
     void         SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree = true );
-    RectHorAlign GetRectHorAlign() const { return eRectHorAlign; }
+    RectHorAlign GetRectHorAlign() const { return meRectHorAlign; }
 
     const SmRect & GetRect() const { return *this; }
           SmRect & GetRect()       { return *this; }
@@ -160,20 +160,20 @@ public:
     virtual void CreateTextFromNode(OUString &rText);
 
     virtual void    GetAccessibleText( OUStringBuffer &rText ) const;
-    sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
+    sal_Int32       GetAccessibleIndex() const { return mnAccIndex; }
     const SmNode *  FindNodeWithAccessibleIndex(sal_Int32 nAccIndex) const;
 
-    sal_uInt16  GetRow() const    { return (sal_uInt16)aNodeToken.nRow; }
-    sal_uInt16  GetColumn() const { return (sal_uInt16)aNodeToken.nCol; }
+    sal_uInt16  GetRow() const    { return (sal_uInt16)maNodeToken.nRow; }
+    sal_uInt16  GetColumn() const { return (sal_uInt16)maNodeToken.nCol; }
 
-    SmScaleMode     GetScaleMode() const { return eScaleMode; }
-    void            SetScaleMode(SmScaleMode eMode) { eScaleMode = eMode; }
+    SmScaleMode     GetScaleMode() const { return meScaleMode; }
+    void            SetScaleMode(SmScaleMode eMode) { meScaleMode = eMode; }
 
     virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth);
     virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
 
-    SmNodeType      GetType() const  { return eType; }
-    const SmToken & GetToken() const { return aNodeToken; }
+    SmNodeType      GetType() const  { return meType; }
+    const SmToken & GetToken() const { return maNodeToken; }
 
     const SmNode *  FindTokenAt(sal_uInt16 nRow, sal_uInt16 nCol) const;
     const SmNode *  FindRectClosestTo(const Point &rPoint) const;
@@ -186,8 +186,8 @@ public:
     virtual void Accept(SmVisitor* pVisitor);
 
     /** True if this node is selected */
-    bool IsSelected() const {return bIsSelected;}
-    void SetSelected(bool Selected = true) {bIsSelected = Selected;}
+    bool IsSelected() const {return mbIsSelected;}
+    void SetSelected(bool Selected = true) {mbIsSelected = Selected;}
 
 #ifdef DEBUG_ENABLE_DUMPASDOT
     /** The tree as dot graph for graphviz, usable for debugging
@@ -200,11 +200,11 @@ public:
 #endif /* DEBUG_ENABLE_DUMPASDOT */
 
     /** Get the parent node of this node */
-    SmStructureNode* GetParent(){ return aParentNode; }
-    const SmStructureNode* GetParent() const { return aParentNode; }
+    SmStructureNode* GetParent(){ return mpParentNode; }
+    const SmStructureNode* GetParent() const { return mpParentNode; }
     /** Set the parent node */
     void SetParent(SmStructureNode* parent){
-        aParentNode = parent;
+        mpParentNode = parent;
     }
 
     /** Get the index of a child node
@@ -220,11 +220,11 @@ public:
     }
     /** Set the token for this node */
     void SetToken(SmToken& token){
-        aNodeToken = token;
+        maNodeToken = token;
     }
 
 private:
-    SmStructureNode* aParentNode;
+    SmStructureNode* mpParentNode;
 };
 
 

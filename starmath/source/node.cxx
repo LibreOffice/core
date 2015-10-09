@@ -55,16 +55,16 @@ void ForEachNonNull(SmNode *pNode, F && f)
 }
 
 SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    : aNodeToken( rNodeToken )
-    , eType( eNodeType )
-    , eScaleMode( SCALE_NONE )
-    , eRectHorAlign( RHA_LEFT )
-    , nFlags( 0 )
-    , nAttributes( 0 )
-    , bIsPhantom( false )
-    , bIsSelected( false )
-    , nAccIndex( -1 )
-    , aParentNode( NULL )
+    : maNodeToken( rNodeToken )
+    , meType( eNodeType )
+    , meScaleMode( SCALE_NONE )
+    , meRectHorAlign( RHA_LEFT )
+    , mnFlags( 0 )
+    , mnAttributes( 0 )
+    , mbIsPhantom( false )
+    , mbIsSelected( false )
+    , mnAccIndex( -1 )
+    , mpParentNode( nullptr )
 {
 }
 
@@ -107,9 +107,9 @@ SmNode * SmNode::GetLeftMost()
 void SmNode::SetPhantom(bool bIsPhantomP)
 {
     if (! (Flags() & FLG_VISIBLE))
-        bIsPhantom = bIsPhantomP;
+        mbIsPhantom = bIsPhantomP;
 
-    bool b = bIsPhantom;
+    bool b = mbIsPhantom;
     ForEachNonNull(this, [b](SmNode *pNode){pNode->SetPhantom(b);});
 }
 
@@ -130,7 +130,7 @@ void SmNode::SetAttribut(sal_uInt16 nAttrib)
         (nAttrib == ATTR_ITALIC && !(Flags() & FLG_ITALIC))
        )
     {
-        nAttributes |= nAttrib;
+        mnAttributes |= nAttrib;
     }
 
     ForEachNonNull(this, [nAttrib](SmNode *pNode){pNode->SetAttribut(nAttrib);});
@@ -144,7 +144,7 @@ void SmNode::ClearAttribut(sal_uInt16 nAttrib)
         (nAttrib == ATTR_ITALIC && !(Flags() & FLG_ITALIC))
        )
     {
-        nAttributes &= ~nAttrib;
+        mnAttributes &= ~nAttrib;
     }
 
     ForEachNonNull(this, [nAttrib](SmNode *pNode){pNode->ClearAttribut(nAttrib);});
@@ -222,7 +222,7 @@ void SmNode::SetSize(const Fraction &rSize)
 void SmNode::SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree )
 {
     if (!(Flags() & FLG_HORALIGN))
-        eRectHorAlign = eHorAlign;
+        meRectHorAlign = eHorAlign;
 
     if (bApplyToSubTree)
         ForEachNonNull(this, [eHorAlign](SmNode *pNode){pNode->SetRectHorAlign(eHorAlign);});
@@ -238,14 +238,14 @@ void SmNode::PrepareAttributes()
 
 void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
-    bIsPhantom  = false;
-    nFlags      = 0;
-    nAttributes = 0;
+    mbIsPhantom  = false;
+    mnFlags      = 0;
+    mnAttributes = 0;
 
     switch (rFormat.GetHorAlign())
-    {   case AlignLeft:     eRectHorAlign = RHA_LEFT;   break;
-        case AlignCenter:   eRectHorAlign = RHA_CENTER; break;
-        case AlignRight:    eRectHorAlign = RHA_RIGHT;  break;
+    {   case AlignLeft:     meRectHorAlign = RHA_LEFT;   break;
+        case AlignCenter:   meRectHorAlign = RHA_CENTER; break;
+        case AlignRight:    meRectHorAlign = RHA_RIGHT;  break;
     }
 
     GetFont() = rFormat.GetFont(FNT_MATH);
@@ -617,7 +617,7 @@ void SmStructureNode::GetAccessibleText( OUStringBuffer &rText ) const
         if (pNode)
         {
             if (pNode->IsVisible())
-                static_cast<SmStructureNode *>(pNode)->nAccIndex = rText.getLength();
+                static_cast<SmStructureNode *>(pNode)->mnAccIndex = rText.getLength();
             pNode->GetAccessibleText( rText );
         }
     }
