@@ -1,14 +1,5 @@
 export ABW_MD5SUM := 7a3815b506d064313ba309617b6f5a0b
 export ABW_TARBALL := libabw-0.1.1.tar.bz2
-export APACHE_COMMONS_CODEC_TARBALL := $(if $(filter TRUE,$(HAVE_JAVA6))\
-  ,048751f3271906db5126ab76870444c4-commons-codec-1.9-src.zip\
-  ,2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz\
-)
-export APACHE_COMMONS_HTTPCLIENT_TARBALL := 2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz
-export APACHE_COMMONS_LANG_TARBALL := $(if $(filter TRUE,$(HAVE_JAVA6))\
-  ,8ab049135b2d15313da5d9f0656894a1-commons-lang3-3.3.1-src.tar.gz\
-  ,625ff5f2f968dd908bca43c9469d6e6b-commons-lang-2.4-src.tar.gz\
-)
 export APACHE_COMMONS_LOGGING_MD5SUM := ce977548f1cbf46918e93cd38ac35163
 export APACHE_COMMONS_LOGGING_TARBALL := commons-logging-1.2-src.tar.gz
 export APR_MD5SUM := eff9d741b0999a9bbab96862dd2a2a3d

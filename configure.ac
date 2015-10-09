@@ -10829,84 +10829,24 @@ AC_SUBST(LIBSERIALIZER_JAR)
 # this has to be here because both the Wiki Publisher and the SRB use
 # commons-logging
 COMMONS_LOGGING_VERSION=1.2
-if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
+if test "$ENABLE_REPORTBUILDER" = "TRUE"; then
     AC_MSG_CHECKING([which Apache commons-* libs to use])
     if test "$with_system_apache_commons" = "yes"; then
         SYSTEM_APACHE_COMMONS=TRUE
         AC_MSG_RESULT([external])
-        if test "$ENABLE_MEDIAWIKI" = "TRUE"; then
-            if test -z $COMMONS_CODEC_JAR; then
-                _commons_codec_path=""
-                if test "$HAVE_JAVA6" = "TRUE"; then
-                    _commons_codec_path="/usr/share/java/commons-codec-1.9.jar"
-                else
-                    _commons_codec_path="/usr/share/java/commons-codec-1.6.jar"
-                fi
-                AC_CHECK_FILE($_commons_codec_path,
-                    [ COMMONS_CODEC_JAR=$_commons_codec_path ],
-                    [
-                        AC_CHECK_FILE(/usr/share/java/commons-codec.jar,
-                            [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar ],
-                            [AC_MSG_ERROR(commons-codec.jar replacement not found.)]
-                        )
-                    ]
-                )
-            else
-                AC_CHECK_FILE($COMMONS_CODEC_JAR, [],
-                    [AC_MSG_ERROR(commons-codec.jar not found.)], [])
-            fi
-
-            if test -z $COMMONS_LANG_JAR; then
-                _commons_lang_path=""
-                if test "$HAVE_JAVA6" = "TRUE"; then
-                    _commons_lang_path="/usr/share/java/commons-lang3-3.3.1-src.tar.gz"
-                else
-                    _commons_lang_path="/usr/share/java/commons-lang-2.4.jar"
-                fi
-                AC_CHECK_FILE($_commons_lang_path,
-                    [ COMMONS_LANG_JAR=$commons_lang_path ],
-                    [
-                        AC_CHECK_FILE(/usr/share/java/commons-lang.jar,
-                            [ COMMONS_LANG_JAR=/usr/share/java/commons-lang.jar ],
-                            [AC_MSG_ERROR(commons-lang.jar replacement not found.)]
-                            )
-                    ]
-                )
-            else
-                AC_CHECK_FILE($COMMONS_LANG_JAR, [],
-                    [AC_MSG_ERROR(commons-lang.jar not found.)], [])
-            fi
-
-            if test -z $COMMONS_HTTPCLIENT_JAR; then
-                AC_CHECK_FILE(/usr/share/java/commons-httpclient-3.1.jar,
-                    [ COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient-3.1.jar ],
-                    [
-                        AC_CHECK_FILE(/usr/share/java/commons-httpclient.jar,
-                            [ COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient.jar ],
-                            [AC_MSG_ERROR(commons-httpclient.jar replacement not found.)]
-                        )
-                    ]
-                )
-            else
-                AC_CHECK_FILE($COMMONS_HTTPCLIENT_JAR, [],
-                    [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
-            fi
-        fi
-        if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
-            if test -z $COMMONS_LOGGING_JAR; then
-                AC_CHECK_FILE(/usr/share/java/commons-logging-${COMMONS_LOGGING_VERSION}.jar,
-                   [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-${COMMONS_LOGGING_VERSION}.jar ],
-                   [
-                        AC_CHECK_FILE(/usr/share/java/commons-logging.jar,
-                            [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar ],
-                            [AC_MSG_ERROR(commons-logging.jar replacement not found.)]
-                        )
-                    ]
-                )
-            else
-                AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
-                    [AC_MSG_ERROR(commons-logging.jar not found.)], [])
-            fi
+        if test -z $COMMONS_LOGGING_JAR; then
+            AC_CHECK_FILE(/usr/share/java/commons-logging-${COMMONS_LOGGING_VERSION}.jar,
+               [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-${COMMONS_LOGGING_VERSION}.jar ],
+               [
+                    AC_CHECK_FILE(/usr/share/java/commons-logging.jar,
+                        [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar ],
+                        [AC_MSG_ERROR(commons-logging.jar replacement not found.)]
+                    )
+                ]
+            )
+        else
+            AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
+                [AC_MSG_ERROR(commons-logging.jar not found.)], [])
         fi
     else
         AC_MSG_RESULT([internal])
@@ -10915,9 +10855,6 @@ if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
     fi
 fi
 AC_SUBST(SYSTEM_APACHE_COMMONS)
-AC_SUBST(COMMONS_CODEC_JAR)
-AC_SUBST(COMMONS_LANG_JAR)
-AC_SUBST(COMMONS_HTTPCLIENT_JAR)
 AC_SUBST(COMMONS_LOGGING_JAR)
 AC_SUBST(COMMONS_LOGGING_VERSION)
 

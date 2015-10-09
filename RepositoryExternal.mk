@@ -3640,21 +3640,6 @@ endif
 
 ifneq ($(SYSTEM_APACHE_COMMONS),)
 
-define gb_Jar__use_commons-codec
-$(call gb_Jar_use_system_jar,$(1),$(COMMONS_CODEC_JAR))
-endef
-gb_ExternalProject__use_commons-codec :=
-
-define gb_Jar__use_commons-httpclient
-$(call gb_Jar_use_system_jar,$(1),$(COMMONS_HTTPCLIENT_JAR))
-endef
-gb_ExternalProject__use_commons-httpclient :=
-
-define gb_Jar__use_commons-lang
-$(call gb_Jar_usadd_linked_libse_system_jar,$(1),$(COMMONS_LANG_JAR))
-endef
-gb_ExternalProject__use_commons-lang :=
-
 define gb_Jar__use_commons-logging
 $(call gb_Jar_use_system_jar,$(1),$(COMMONS_LOGGING_JAR))
 endef
@@ -3667,41 +3652,6 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
 	commons-logging-$(COMMONS_LOGGING_VERSION) \
 ))
 endif
-$(eval $(call gb_Helper_register_jars,OXT,\
-	$(if $(filter TRUE,$(HAVE_JAVA6)),commons-codec-1.9,commons-codec-1.6) \
-	commons-httpclient-3.1 \
-	$(if $(filter TRUE,$(HAVE_JAVA6)),commons-lang3-3.3.1.jar,commons-lang-2.4) \
-))
-
-define gb_Jar__use_commons-codec
-$(call gb_Jar_use_external_project,$(1),apache_commons_codec)
-$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_codec)\
-$(if $(filter TRUE,$(HAVE_JAVA6)),/dist/commons-codec-1.9.jar,/dist/commons-codec-1.6.jar),\
-$(if $(filter TRUE,$(HAVE_JAVA6)),commons-codec-1.9.jar,commons-codec-1.6.jar)\
-)
-endef
-define gb_ExternalProject__use_commons-codec
-$(call gb_ExternalProject_use_external_project,$(1),apache_commons_codec)
-endef
-
-define gb_Jar__use_commons-httpclient
-$(call gb_Jar_use_external_project,$(1),apache_commons_httpclient)
-$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_httpclient)/dist/commons-httpclient.jar,commons-httpclient-3.1.jar)
-endef
-define gb_ExternalProject__use_commons-httpclient
-$(call gb_ExternalProject_use_external_project,$(1),apache_commons_httpclient)
-endef
-
-define gb_Jar__use_commons-lang
-$(call gb_Jar_use_external_project,$(1),apache_commons_lang)
-$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_lang)\
-$(if $(filter TRUE,$(HAVE_JAVA6)),/target/commons-lang3-3.3.1.jar,/dist/commons-lang-2.4.jar),\
-$(if $(filter TRUE,$(HAVE_JAVA6)),commons-lang3-3.3.1.jar,commons-lang-2.4.jar)\
-)
-endef
-define gb_ExternalProject__use_commons-lang
-$(call gb_ExternalProject_use_external_project,$(1),apache_commons_lang)
-endef
 
 define gb_Jar__use_commons-logging
 $(call gb_Jar_use_external_project,$(1),apache_commons_logging)
