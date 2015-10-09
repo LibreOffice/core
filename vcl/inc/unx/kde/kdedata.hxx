@@ -59,7 +59,7 @@ class KDESalFrame : public X11SalFrame
     GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
 public:
-    KDESalFrame( SalFrame* pParent, sal_uLong );
+    KDESalFrame( SalFrame* pParent, SalFrameStyleFlags );
     virtual ~KDESalFrame();
 
     virtual SalGraphics* AcquireGraphics() SAL_OVERRIDE;
@@ -75,7 +75,7 @@ public:
     KDESalInstance( SalYieldMutex* pMutex )
             : X11SalInstance( pMutex ) {}
     virtual ~KDESalInstance() {}
-    virtual SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
+    virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) SAL_OVERRIDE;
 
     virtual bool hasNativeFileSelection() const SAL_OVERRIDE { return true; }
 

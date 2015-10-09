@@ -1725,7 +1725,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
 // KDESalFrame implementation
 
-KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nStyle ) :
+KDESalFrame::KDESalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) :
     X11SalFrame( pParent, nStyle )
 {
 }
@@ -2096,8 +2096,7 @@ KDESalFrame::GraphicsHolder::~GraphicsHolder()
 
 // KDESalInstance implementation
 
-SalFrame *
-KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nStyle )
+SalFrame * KDESalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nStyle )
 {
     return new KDESalFrame( pParent, nStyle );
 }
