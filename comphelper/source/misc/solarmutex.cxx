@@ -18,11 +18,30 @@
  */
 
 #include <sal/config.h>
-
+#include <assert.h>
 #include <comphelper/solarmutex.hxx>
 
-comphelper::SolarMutex::SolarMutex() {}
+namespace comphelper {
 
-comphelper::SolarMutex::~SolarMutex() {}
+SolarMutex::SolarMutex() {}
+
+SolarMutex::~SolarMutex() {}
+
+namespace {
+    static SolarMutex* pSolarMutex = 0;
+}
+
+void SolarMutex::setSolarMutex( SolarMutex *pMutex )
+{
+    assert((pMutex && !pSolarMutex) || !pMutex);
+    pSolarMutex = pMutex;
+}
+
+SolarMutex *SolarMutex::get()
+{
+    return pSolarMutex;
+}
+
+} // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

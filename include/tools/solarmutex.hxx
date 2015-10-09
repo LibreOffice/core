@@ -24,10 +24,10 @@
 
 namespace tools
 {
+    /// Deprecated in favour of comphelper::SolarMutex
     class TOOLS_DLLPUBLIC SolarMutex
     {
     public:
-        static void SetSolarMutex( comphelper::SolarMutex* pMutex );
         static bool Acquire();
         static void Release();
     };

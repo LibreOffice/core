@@ -21,15 +21,9 @@
 
 namespace tools
 {
-    static comphelper::SolarMutex* pSolarMutex = 0;
-
-    void SolarMutex::SetSolarMutex( comphelper::SolarMutex* pMutex )
-    {
-        pSolarMutex = pMutex;
-    }
-
     bool SolarMutex::Acquire()
     {
+        comphelper::SolarMutex *pSolarMutex = comphelper::SolarMutex::get();
         if ( pSolarMutex )
             pSolarMutex->acquire();
         else
@@ -39,6 +33,7 @@ namespace tools
 
     void SolarMutex::Release()
     {
+        comphelper::SolarMutex *pSolarMutex = comphelper::SolarMutex::get();
         if ( pSolarMutex )
             pSolarMutex->release();
     }

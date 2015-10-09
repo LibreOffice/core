@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 #include <osl/module.hxx>
-#include <tools/solarmutex.hxx>
+#include <comphelper/solarmutex.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
 #include "generic/geninst.h"
@@ -32,12 +32,12 @@ SalYieldMutex::SalYieldMutex()
 {
     mnCount     = 0;
     mnThreadId  = 0;
-    ::tools::SolarMutex::SetSolarMutex( this );
+    ::comphelper::SolarMutex::setSolarMutex( this );
 }
 
 SalYieldMutex::~SalYieldMutex()
 {
-    ::tools::SolarMutex::SetSolarMutex( NULL );
+    ::comphelper::SolarMutex::setSolarMutex( NULL );
 }
 
 void SalYieldMutex::acquire()
@@ -125,7 +125,6 @@ bool SalGenericInstance::CheckYieldMutex()
 
 SalGenericInstance::~SalGenericInstance()
 {
-    ::tools::SolarMutex::SetSolarMutex( 0 );
     delete mpSalYieldMutex;
 }
 

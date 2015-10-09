@@ -40,7 +40,8 @@
 #include <com/sun/star/util/XStringEscape.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <osl/diagnose.h>
-#include <tools/solarmutex.hxx>
+#include <comphelper/solarmutex.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace utl;
@@ -155,11 +156,12 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
     }
     if( nNotify )
     {
-        if ( ::tools::SolarMutex::Acquire() )
+        ::comphelper::SolarMutex *pMutex = ::comphelper::SolarMutex::get();
+        if ( pMutex )
         {
+            rtl::Reference< comphelper::SolarMutex > aGuard( pMutex );
             aChangedNames.realloc(nNotify);
             pParent->CallNotify(aChangedNames);
-            ::tools::SolarMutex::Release();
         }
     }
 }

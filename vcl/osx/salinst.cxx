@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 
-#include <tools/solarmutex.hxx>
+#include <comphelper/solarmutex.hxx>
 
 #include "comphelper/lok.hxx"
 
@@ -350,7 +350,7 @@ AquaSalInstance::AquaSalInstance()
 {
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
-    ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
+    ::comphelper::SolarMutex::setSolarMutex( mpSalYieldMutex );
     maMainThread = osl::Thread::getCurrentIdentifier();
     mbWaitingYield = false;
     maUserEventListMutex = osl_createMutex();
@@ -360,7 +360,7 @@ AquaSalInstance::AquaSalInstance()
 
 AquaSalInstance::~AquaSalInstance()
 {
-    ::tools::SolarMutex::SetSolarMutex( 0 );
+    ::comphelper::SolarMutex::setSolarMutex( 0 );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     osl_destroyMutex( maUserEventListMutex );
