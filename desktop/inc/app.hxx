@@ -27,6 +27,7 @@
 #include <vcl/timer.hxx>
 #include <tools/resmgr.hxx>
 #include <unotools/bootstrap.hxx>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
@@ -155,6 +156,12 @@ class Desktop : public Application
             respective flag in the configuration is reset.</p>
         */
         void                    CheckFirstRun( );
+
+        /** for ui-testing provide a mechanism to pseudo-restart by closing the
+            open frames and reopen the frame that appeared post initial startup
+        */
+        void CloseFrameAndReopen(css::uno::Reference<css::frame::XDesktop2> xDesktop);
+        void DoExecute(css::uno::Reference<css::frame::XDesktop2> xDesktop);
 
         /// does initializations which are necessary for the first run of the office
         static void             DoFirstRunInitializations();
