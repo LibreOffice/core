@@ -25,31 +25,8 @@
 
 #include <stdio.h>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase6.hxx>
-#include <cppuhelper/implbase7.hxx>
-#include <cppuhelper/implbase8.hxx>
-#include <cppuhelper/implbase9.hxx>
-#include <cppuhelper/implbase10.hxx>
-#include <cppuhelper/implbase11.hxx>
-#include <cppuhelper/implbase12.hxx>
-
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/compbase3.hxx>
-#include <cppuhelper/compbase4.hxx>
-#include <cppuhelper/compbase5.hxx>
-#include <cppuhelper/compbase6.hxx>
-#include <cppuhelper/compbase7.hxx>
-#include <cppuhelper/compbase8.hxx>
-#include <cppuhelper/compbase9.hxx>
-#include <cppuhelper/compbase10.hxx>
-#include <cppuhelper/compbase11.hxx>
-#include <cppuhelper/compbase12.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <osl/diagnose.h>
 #include <cppuhelper/servicefactory.hxx>
@@ -78,7 +55,7 @@ using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
 
-struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
+struct TestImpl : public ImplHelper< CA, DBA, FE, G >
 {
     sal_Int32 nRef;
 
@@ -86,7 +63,7 @@ struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
         { OSL_TRACE( "> TestImpl dtor called... <\n" ); }
 
     virtual Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException)
-        { return ImplHelper4< CA, DBA, FE, G >::queryInterface( rType ); }
+        { return ImplHelper< CA, DBA, FE, G >::queryInterface( rType ); }
     virtual void SAL_CALL acquire(  ) throw()
         { ++nRef; }
     virtual void SAL_CALL release(  ) throw()
@@ -116,7 +93,7 @@ struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
 };
 
 
-struct TestWeakAggImpl : public WeakAggImplHelper4< CA, DBA, FE, G >
+struct TestWeakAggImpl : public WeakAggImplHelper< CA, DBA, FE, G >
 {
     virtual ~TestWeakAggImpl()
         { OSL_TRACE( "> TestWeakAggImpl dtor called... <\n" ); }
@@ -145,7 +122,7 @@ struct TestWeakAggImpl : public WeakAggImplHelper4< CA, DBA, FE, G >
 };
 
 
-struct TestWeakImpl : public WeakImplHelper4< CA, DBA, FE, G >
+struct TestWeakImpl : public WeakImplHelper< CA, DBA, FE, G >
 {
     TestWeakImpl() {}
 
@@ -189,11 +166,11 @@ protected:
 };
 
 
-struct TestWeakComponentImpl : public WeakComponentImplHelper4< CA, DBA, FE, G >
+struct TestWeakComponentImpl : public WeakComponentImplHelper< CA, DBA, FE, G >
 {
     Mutex m;
     TestWeakComponentImpl()
-        : WeakComponentImplHelper4< CA, DBA, FE, G >( m )
+        : WeakComponentImplHelper< CA, DBA, FE, G >( m )
         {}
     virtual ~TestWeakComponentImpl()
         { OSL_TRACE( "> TestWeakComponentImpl dtor called... <\n" ); }
@@ -225,11 +202,11 @@ struct TestWeakComponentImpl : public WeakComponentImplHelper4< CA, DBA, FE, G >
 };
 
 
-struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper4< CA, DBA, FE, G >
+struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper< CA, DBA, FE, G >
 {
     Mutex m;
     TestWeakAggComponentImpl()
-        : WeakAggComponentImplHelper4< CA, DBA, FE, G >( m )
+        : WeakAggComponentImplHelper< CA, DBA, FE, G >( m )
         {}
     virtual ~TestWeakAggComponentImpl()
         { OSL_TRACE( "> TestWeakAggComponentImpl dtor called... <\n" ); }
@@ -261,27 +238,27 @@ struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper4< CA, DBA, F
 };
 
 
-struct TestImplInh : public ImplInheritanceHelper2< TestWeakImpl, H, I >
+struct TestImplInh : public ImplInheritanceHelper< TestWeakImpl, H, I >
 {
     TestImplInh() {}
 
     explicit TestImplInh(int):
-        ImplInheritanceHelper2< TestWeakImpl, H, I >(1) {}
+        ImplInheritanceHelper< TestWeakImpl, H, I >(1) {}
 
     TestImplInh(int, int):
-        ImplInheritanceHelper2< TestWeakImpl, H, I >(1, 2) {}
+        ImplInheritanceHelper< TestWeakImpl, H, I >(1, 2) {}
 
     TestImplInh(int, int, int):
-        ImplInheritanceHelper2< TestWeakImpl, H, I >(1, 2, 3) {}
+        ImplInheritanceHelper< TestWeakImpl, H, I >(1, 2, 3) {}
 
     TestImplInh(int, int, int, int):
-        ImplInheritanceHelper2< TestWeakImpl, H, I >(1, 2, 3, 4) {}
+        ImplInheritanceHelper< TestWeakImpl, H, I >(1, 2, 3, 4) {}
 
     TestImplInh(int, int, int, int, int):
-        ImplInheritanceHelper2< TestWeakImpl, H, I >(1, 2, 3, 4, 5) {}
+        ImplInheritanceHelper< TestWeakImpl, H, I >(1, 2, 3, 4, 5) {}
 
     TestImplInh(int, int, int, int, int, int):
-        ImplInheritanceHelper2< TestWeakImpl, H, I >(1, 2, 3, 4, 5, 6) {}
+        ImplInheritanceHelper< TestWeakImpl, H, I >(1, 2, 3, 4, 5, 6) {}
 
     virtual ~TestImplInh()
         { OSL_TRACE( "> TestWeakImplInh dtor called... <\n" ); }
@@ -295,7 +272,7 @@ struct TestImplInh : public ImplInheritanceHelper2< TestWeakImpl, H, I >
 };
 
 
-struct TestAggImplInh : public AggImplInheritanceHelper2< TestWeakAggImpl, H, I >
+struct TestAggImplInh : public AggImplInheritanceHelper< TestWeakAggImpl, H, I >
 {
     virtual ~TestAggImplInh()
         { OSL_TRACE( "> TestAggImplInh dtor called... <\n" ); }
