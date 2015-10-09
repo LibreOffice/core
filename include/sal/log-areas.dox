@@ -179,6 +179,7 @@ certain functionality.
 @li @c filter.pdf
 @li @c filter.pict
 @li @c filter.tiff
+@li @c filter.xmlfa
 @li @c filter.xslt - xslt import/export
 
 @section oox

@@ -108,8 +108,8 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
 
 
     Reference < XDocumentHandler > xHandler( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( sXMLImportService, aAnys, mxContext ), UNO_QUERY );
-    if(! xHandler.is()) {
-        OSL_FAIL("XMLReader::Read: %s Unable to create service instance xHandler\n" );
+    if (!xHandler.is()) {
+        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: unable to create service " << sXMLImportService);
         return false;
     }
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
@@ -123,8 +123,8 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
     // Creating a ConverterBridge instance
 
     Reference< XInterface > xConvBridge(mxContext->getServiceManager()->createInstanceWithContext(udConvertClass, mxContext), UNO_QUERY);
-    if(! xConvBridge.is()){
-        OSL_FAIL( "XMLReader::Read: %s service missing\n" );
+    if (!xConvBridge.is()) {
+        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: unable to create service " << udConvertClass);
         return false;
     }
     if (xStatusIndicator.is())
@@ -174,7 +174,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
         if (xStatusIndicator.is())
                xStatusIndicator->end();
 
-        OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: exception: " << e.Message);
         return false;
     }
     if (xStatusIndicator.is()) {
@@ -203,9 +203,9 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::Property
 
     // Set up converter bridge.
     Reference< css::xml::XExportFilter > xConverter(mxContext->getServiceManager()->createInstanceWithContext( udConvertClass, mxContext ), UNO_QUERY);
-    if(! xConverter.is()){
-      OSL_FAIL( "xml export sub service missing" );
-      return false;
+    if (!xConverter.is()) {
+        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: unable to create service " << udConvertClass);
+        return false;
     }
 
     if (xStatusIndicator.is())
@@ -287,9 +287,9 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::Property
             return false;
         }
     }
-    catch( const Exception& exE )
+    catch (const Exception& e)
     {
-        OSL_FAIL( OUStringToOString( exE.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: exception: " << e.Message);
         if (xStatusIndicator.is())
             xStatusIndicator->end();
         return false;
