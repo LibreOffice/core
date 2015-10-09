@@ -346,8 +346,6 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
     rFormStart = nFormStart;
 
     // find end of template
-    nFormEnd = nFormStart;
-    pTempWindow = pSWindow;
     sal_Int32 nIteration = 0;
     do
     {
