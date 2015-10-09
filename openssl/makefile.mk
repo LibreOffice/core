@@ -42,10 +42,10 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8o
+OPENSSL_NAME=openssl-0.9.8zg
 
 TARFILE_NAME=$(OPENSSL_NAME)
-TARFILE_MD5=63ddc5116488985e820075e65fbe6aa4
+TARFILE_MD5=0a912b6623ac95a8627ea2bd0e0abf1b
 
 CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
@@ -63,8 +63,8 @@ UNAME=$(shell uname)
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8o.map \
-        libssl_OOo_0_9_8o.map
+        libcrypto_OOo_0_9_8zg.map \
+        libssl_OOo_0_9_8zg.map
     .IF "$(CPU)" == "I"
         .IF "$(UNAME)" == "GNU/kFreeBSD"
             CONFIGURE_ACTION=Configure debian-kfreebsd-i386
@@ -87,8 +87,8 @@ UNAME=$(shell uname)
 .IF "$(OS)" == "SOLARIS"
     PATCH_FILES=opensslsol.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8o.map \
-        libssl_OOo_0_9_8o.map
+        libcrypto_OOo_0_9_8zg.map \
+        libssl_OOo_0_9_8zg.map
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
 
     # Use BUILD64 when 1 to select new specific 64bit Configurations if necessary
@@ -159,7 +159,7 @@ OUT2BIN += out/libeay32.dll
     .ENDIF
 .ENDIF
 
-PATCH_FILES += openssl-0.9.8o-clang.patch
+PATCH_FILES += openssl-0.9.8zg-clang.patch
 
 #set INCLUDE=D:\sol_temp\n\msvc7net3\PlatformSDK\include;D:\sol_temp\n\msvc7net3\include\ && set path=%path%;D:\sol_temp\r\btw\SRC680\perl\bin &&
 
