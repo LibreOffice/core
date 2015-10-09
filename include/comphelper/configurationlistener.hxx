@@ -54,7 +54,7 @@ public:
     inline ConfigurationListenerProperty(const rtl::Reference< ConfigurationListener > &xListener,
                                              const OUString &rProp );
 
-    inline ~ConfigurationListenerProperty();
+    virtual inline ~ConfigurationListenerProperty();
 
     uno_type get() { return maValue; }
 };
