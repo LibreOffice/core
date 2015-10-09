@@ -70,7 +70,6 @@ namespace dbaui
     class OApplicationController;
     class OApplicationView;
     class OLinkedDocumentsAccess;
-    typedef OGenericUnoController   OApplicationController_CBASE;
     typedef ::cppu::ImplHelper5 <   css::container::XContainerListener
                                 ,   css::beans::XPropertyChangeListener
                                 ,   css::sdb::application::XDatabaseDocumentUI
@@ -81,7 +80,7 @@ namespace dbaui
     class SelectionNotifier;
 
     class OApplicationController
-            :public OApplicationController_CBASE
+            :public OGenericUnoController
             ,public OApplicationController_Base
             ,public IApplicationController
     {
@@ -531,7 +530,7 @@ namespace dbaui
         void OnFirstControllerConnected();
 
     protected:
-        using OApplicationController_CBASE::connect;
+        using OGenericUnoController::connect;
 
         /** disconnects from our XConnection, and cleans up this connection
         */

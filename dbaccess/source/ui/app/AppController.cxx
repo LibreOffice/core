@@ -269,7 +269,7 @@ private:
 
 // OApplicationController
 OApplicationController::OApplicationController(const Reference< XComponentContext >& _rxORB)
-    :OApplicationController_CBASE( _rxORB )
+    :OGenericUnoController( _rxORB )
     ,m_aContextMenuInterceptors( getMutex() )
     ,m_pSubComponentManager( new SubComponentManager( *this, getSharedMutex() ) )
     ,m_aTypeCollection( _rxORB )
@@ -297,8 +297,8 @@ OApplicationController::~OApplicationController()
     clearView();
 }
 
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(OApplicationController,OApplicationController_CBASE,OApplicationController_Base)
-IMPLEMENT_FORWARD_XINTERFACE2(OApplicationController,OApplicationController_CBASE,OApplicationController_Base)
+IMPLEMENT_FORWARD_XTYPEPROVIDER2(OApplicationController,OGenericUnoController,OApplicationController_Base)
+IMPLEMENT_FORWARD_XINTERFACE2(OApplicationController,OGenericUnoController,OApplicationController_Base)
 void OApplicationController::disconnect()
 {
     if ( m_xDataSourceConnection.is() )
@@ -412,7 +412,7 @@ void SAL_CALL OApplicationController::disposing()
     }
 
     clearView();
-    OApplicationController_CBASE::disposing(); // here the m_refCount must be equal 5
+    OGenericUnoController::disposing(); // here the m_refCount must be equal 5
 }
 
 bool OApplicationController::Construct(vcl::Window* _pParent)
@@ -449,7 +449,7 @@ bool OApplicationController::Construct(vcl::Window* _pParent)
     m_pClipbordNotifier->acquire();
     m_pClipbordNotifier->AddRemoveListener( getView(), true );
 
-    OApplicationController_CBASE::Construct( _pParent );
+    OGenericUnoController::Construct( _pParent );
     getView()->Show();
 
     return true;
@@ -489,7 +489,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
             if ( aFind != m_aCurrentContainers.end() )
                 m_aCurrentContainers.erase(aFind);
         }
-        OApplicationController_CBASE::disposing( _rSource );
+        OGenericUnoController::disposing( _rSource );
     }
 }
 
@@ -930,7 +930,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 }
                 break;
             default:
-                aReturn = OApplicationController_CBASE::GetState(_nId);
+                aReturn = OGenericUnoController::GetState(_nId);
         }
     }
     catch(const Exception& )
@@ -977,7 +977,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 
     if ( isUserDefinedFeature( _nId ) )
     {
-        OApplicationController_CBASE::Execute( _nId, aArgs );
+        OGenericUnoController::Execute( _nId, aArgs );
         return;
     }
 
@@ -1391,7 +1391,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 
 void OApplicationController::describeSupportedFeatures()
 {
-    OApplicationController_CBASE::describeSupportedFeatures();
+    OGenericUnoController::describeSupportedFeatures();
 
     implDescribeSupportedFeature( ".uno:Save",               ID_BROWSER_SAVEDOC,        CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:SaveAs",             ID_BROWSER_SAVEASDOC,      CommandGroup::DOCUMENT );
@@ -2289,52 +2289,52 @@ void OApplicationController::onDeleteEntry()
 
 void OApplicationController::executeUnChecked(const URL& _rCommand, const Sequence< PropertyValue>& aArgs)
 {
-    OApplicationController_CBASE::executeUnChecked( _rCommand, aArgs );
+    OGenericUnoController::executeUnChecked( _rCommand, aArgs );
 }
 
 void OApplicationController::executeChecked(const URL& _rCommand, const Sequence< PropertyValue>& aArgs)
 {
-    OApplicationController_CBASE::executeChecked( _rCommand, aArgs );
+    OGenericUnoController::executeChecked( _rCommand, aArgs );
 }
 
 void OApplicationController::executeUnChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue>& aArgs)
 {
-    OApplicationController_CBASE::executeUnChecked( _nCommandId, aArgs );
+    OGenericUnoController::executeUnChecked( _nCommandId, aArgs );
 }
 
 void OApplicationController::executeChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue>& aArgs)
 {
-    OApplicationController_CBASE::executeChecked( _nCommandId, aArgs );
+    OGenericUnoController::executeChecked( _nCommandId, aArgs );
 }
 
 bool OApplicationController::isCommandEnabled(sal_uInt16 _nCommandId) const
 {
-    return OApplicationController_CBASE::isCommandEnabled( _nCommandId );
+    return OGenericUnoController::isCommandEnabled( _nCommandId );
 }
 
 bool OApplicationController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const
 {
-    return OApplicationController_CBASE::isCommandEnabled( _rCompleteCommandURL );
+    return OGenericUnoController::isCommandEnabled( _rCompleteCommandURL );
 }
 
 sal_uInt16 OApplicationController::registerCommandURL( const OUString& _rCompleteCommandURL )
 {
-    return OApplicationController_CBASE::registerCommandURL( _rCompleteCommandURL );
+    return OGenericUnoController::registerCommandURL( _rCompleteCommandURL );
 }
 
 void OApplicationController::notifyHiContrastChanged()
 {
-    OApplicationController_CBASE::notifyHiContrastChanged();
+    OGenericUnoController::notifyHiContrastChanged();
 }
 
 Reference< XController > OApplicationController::getXController() throw( RuntimeException )
 {
-    return OApplicationController_CBASE::getXController();
+    return OGenericUnoController::getXController();
 }
 
 bool OApplicationController::interceptUserInput( const NotifyEvent& _rEvent )
 {
-    return OApplicationController_CBASE::interceptUserInput( _rEvent );
+    return OGenericUnoController::interceptUserInput( _rEvent );
 }
 
 PopupMenu* OApplicationController::getContextMenu( Control& /*_rControl*/ ) const
@@ -2617,7 +2617,7 @@ void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
-    OApplicationController_CBASE::attachFrame( i_rxFrame );
+    OGenericUnoController::attachFrame( i_rxFrame );
     if ( getFrame().is() )
         onAttachedFrame();
 }
