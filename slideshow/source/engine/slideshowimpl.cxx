@@ -885,18 +885,14 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
 PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawPage> const& xDrawPage)
 {
     // TODO(P2) : Optimze research in the map.
-    bool bFound = false;
-    PolygonMap::iterator aIter=maPolygons.begin();
+    PolygonMap::iterator aEnd = maPolygons.end();
+    for( PolygonMap::iterator aIter = maPolygons.begin();
+         aIter != aEnd;
+         ++aIter )
+        if( aIter->first == xDrawPage )
+            return aIter;
 
-    while(aIter!=maPolygons.end() && !bFound)
-    {
-        if(aIter->first == xDrawPage)
-            bFound = true;
-        else
-            ++aIter;
-    }
-
-    return aIter;
+    return aEnd;
 }
 
 SlideSharedPtr SlideShowImpl::makeSlide(
@@ -1444,25 +1440,16 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     aPropLayer <<= false;
     xLayerPropSet->setPropertyValue("IsLocked", aPropLayer);
 
-    PolygonMap::iterator aIter=maPolygons.begin();
-
-    PolyPolygonVector aPolygons;
-    ::cppcanvas::PolyPolygonSharedPtr pPolyPoly;
-    ::basegfx::B2DPolyPolygon b2DPolyPoly;
-
     //Register polygons for each slide
-    while(aIter!=maPolygons.end())
+    for( const auto& rPoly : maPolygons )
     {
-        aPolygons = aIter->second;
+        PolyPolygonVector aPolygons = rPoly.second;
         //Get shapes for the slide
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > Shapes(aIter->first, ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > Shapes(rPoly.first, ::com::sun::star::uno::UNO_QUERY);
         //Retrieve polygons for one slide
-        for( PolyPolygonVector::iterator aIterPoly=aPolygons.begin(),
-                 aEnd=aPolygons.end();
-             aIterPoly!=aEnd; ++aIterPoly )
+        for( const auto pPolyPoly : aPolygons )
         {
-            pPolyPoly = (*aIterPoly);
-            b2DPolyPoly = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(pPolyPoly->getUNOPolyPolygon());
+            ::basegfx::B2DPolyPolygon b2DPolyPoly = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(pPolyPoly->getUNOPolyPolygon());
 
             //Normally there is only one polygon
             for(sal_uInt32 i=0; i< b2DPolyPoly.count();i++)
@@ -1531,7 +1518,6 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                 }
             }
         }
-        ++aIter;
     }
 }
 
@@ -2113,13 +2099,11 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             (!bRet ||
              nNextTimeout > 1.0) )
         {
-            UnoViewVector::const_iterator       aCurr(maViewContainer.begin());
-            const UnoViewVector::const_iterator aEnd(maViewContainer.end());
-            while( aCurr != aEnd )
+            for( const auto& pView : maViewContainer )
             {
                 try
                 {
-                    uno::Reference< presentation::XSlideShowView > xView( (*aCurr)->getUnoView(),
+                    uno::Reference< presentation::XSlideShowView > xView( pView->getUnoView(),
                                                                           uno::UNO_QUERY_THROW );
                     uno::Reference< util::XUpdatable >             xUpdatable( xView->getCanvas(),
                                                                                uno::UNO_QUERY_THROW );
@@ -2135,8 +2119,6 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
-
-                ++aCurr;
             }
 
             mbSlideShowIdle = true;

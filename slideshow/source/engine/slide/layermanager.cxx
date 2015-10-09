@@ -53,11 +53,9 @@ namespace slideshow
         {
             LayerSharedPtr                      pCurrLayer;
             ViewLayerSharedPtr                  pCurrViewLayer;
-            LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
-            const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
-            while( aIter != aEnd )
+            for( const auto& rShape : maAllShapes )
             {
-                LayerSharedPtr pLayer = aIter->second.lock();
+                LayerSharedPtr pLayer = rShape.second.lock();
                 if( pLayer && pLayer != pCurrLayer )
                 {
                     pCurrLayer = pLayer;
@@ -65,9 +63,7 @@ namespace slideshow
                 }
 
                 if( pCurrViewLayer )
-                    shapeFunc(aIter->first,pCurrViewLayer);
-
-                ++aIter;
+                    shapeFunc(rShape.first,pCurrViewLayer);
             }
         }
 
@@ -470,16 +466,14 @@ namespace slideshow
             // send update() calls to every shape in the
             // maUpdateShapes set, which is _animated_ (i.e. a
             // sprite).
-            const ShapeUpdateSet::const_iterator aEnd=maUpdateShapes.end();
-            ShapeUpdateSet::const_iterator       aCurrShape=maUpdateShapes.begin();
-            while( aCurrShape != aEnd )
+            for( const auto& pShape : maUpdateShapes )
             {
-                if( (*aCurrShape)->isBackgroundDetached() )
+                if( pShape->isBackgroundDetached() )
                 {
                     // can update shape directly, without
                     // affecting layer content (shape is
                     // currently displayed in a sprite)
-                    if( !(*aCurrShape)->update() )
+                    if( !pShape->update() )
                         bRet = false; // delay error exit
                 }
                 else
@@ -492,10 +486,8 @@ namespace slideshow
                     // cannot update shape directly, it's not
                     // animated and update() calls will prolly
                     // overwrite other page content.
-                    addUpdateArea( *aCurrShape );
+                    addUpdateArea( pShape );
                 }
-
-                ++aCurrShape;
             }
 
             maUpdateShapes.clear();
@@ -528,11 +520,9 @@ namespace slideshow
             bool                                bIsCurrLayerUpdating(false);
             Layer::EndUpdater                   aEndUpdater;
             LayerSharedPtr                      pCurrLayer;
-            LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
-            const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
-            while( aIter != aEnd )
+            for( const auto& rShape : maAllShapes )
             {
-                LayerSharedPtr pLayer = aIter->second.lock();
+                LayerSharedPtr pLayer = rShape.second.lock();
                 if( pLayer != pCurrLayer )
                 {
                     pCurrLayer = pLayer;
@@ -543,14 +533,12 @@ namespace slideshow
                 }
 
                 if( bIsCurrLayerUpdating &&
-                    !aIter->first->isBackgroundDetached() &&
-                    pCurrLayer->isInsideUpdateArea(aIter->first) )
+                    !rShape.first->isBackgroundDetached() &&
+                    pCurrLayer->isInsideUpdateArea(rShape.first) )
                 {
-                    if( !aIter->first->render() )
+                    if( !rShape.first->render() )
                         bRet = false;
                 }
-
-                ++aIter;
             }
 
             return bRet;
@@ -639,9 +627,7 @@ namespace slideshow
             bool bRet( true );
             ViewLayerSharedPtr pTmpLayer( new DummyLayer( rTargetCanvas ) );
 
-            LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
-            const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
-            while( aIter != aEnd )
+            for( const auto& rShape : maAllShapes )
             {
                 try
                 {
@@ -650,11 +636,11 @@ namespace slideshow
                     // ViewLayer. Since we add the shapes in the
                     // maShapeSet order (which is also the render order),
                     // this is equivalent to a subsequent render() call)
-                    aIter->first->addViewLayer( pTmpLayer,
+                    rShape.first->addViewLayer( pTmpLayer,
                                                 true );
 
                     // and remove again, this is only temporary
-                    aIter->first->removeViewLayer( pTmpLayer );
+                    rShape.first->removeViewLayer( pTmpLayer );
                 }
                 catch( uno::Exception& )
                 {
@@ -667,8 +653,6 @@ namespace slideshow
                     // at least one shape could not be rendered
                     bRet = false;
                 }
-
-                ++aIter;
             }
 
             return bRet;

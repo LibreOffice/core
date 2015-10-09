@@ -102,19 +102,15 @@ template< typename ListenerT > struct ListenerOperations
                                     FuncT       func )
     {
         bool bRet(false);
-        typename ContainerT::const_iterator       aCurr( rContainer.begin() );
-        typename ContainerT::const_iterator const aEnd ( rContainer.end() );
-        while( aCurr != aEnd )
+        for( const auto& rCurr : rContainer )
         {
             if( FunctionApply< typename FuncT::result_type,
                                typename ContainerT::value_type >::apply(
                                    func,
-                                   *aCurr) )
+                                   rCurr) )
             {
                 bRet = true;
             }
-
-            ++aCurr;
         }
 
         // true: at least one handler returned true
@@ -137,16 +133,12 @@ struct ListenerOperations< boost::weak_ptr<ListenerTargetT> >
     static bool notifySingleListener( ContainerT& rContainer,
                                       FuncT       func )
     {
-        typename ContainerT::const_iterator       aCurr( rContainer.begin() );
-        typename ContainerT::const_iterator const aEnd ( rContainer.end() );
-        while( aCurr != aEnd )
+        for( const auto& rCurr : rContainer )
         {
-            boost::shared_ptr<ListenerTargetT> pListener( aCurr->lock() );
+            boost::shared_ptr<ListenerTargetT> pListener( rCurr.lock() );
 
             if( pListener && func(pListener) )
                 return true;
-
-            ++aCurr;
         }
 
         return false;
@@ -158,11 +150,9 @@ struct ListenerOperations< boost::weak_ptr<ListenerTargetT> >
                                     FuncT       func )
     {
         bool bRet(false);
-        typename ContainerT::const_iterator       aCurr( rContainer.begin() );
-        typename ContainerT::const_iterator const aEnd ( rContainer.end() );
-        while( aCurr != aEnd )
+        for( const auto& rCurr : rContainer )
         {
-            boost::shared_ptr<ListenerTargetT> pListener( aCurr->lock() );
+            boost::shared_ptr<ListenerTargetT> pListener( rCurr.lock() );
 
             if( pListener.get() &&
                 FunctionApply< typename FuncT::result_type,
@@ -170,8 +160,6 @@ struct ListenerOperations< boost::weak_ptr<ListenerTargetT> >
             {
                 bRet = true;
             }
-
-            ++aCurr;
         }
 
         return bRet;
@@ -186,14 +174,10 @@ struct ListenerOperations< boost::weak_ptr<ListenerTargetT> >
         ContainerT aAliveListeners;
         aAliveListeners.reserve(rContainer.size());
 
-        typename ContainerT::const_iterator       aCurr( rContainer.begin() );
-        typename ContainerT::const_iterator const aEnd ( rContainer.end() );
-        while( aCurr != aEnd )
+        for( const auto& rCurr : rContainer )
         {
-            if( !aCurr->expired() )
-                aAliveListeners.push_back( *aCurr );
-
-            ++aCurr;
+            if( !rCurr.expired() )
+                aAliveListeners.push_back( rCurr );
         }
 
         std::swap( rContainer, aAliveListeners );

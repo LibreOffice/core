@@ -453,16 +453,12 @@ void SlideChangeBase::viewsChanged()
     if( mbFinished )
         return;
 
-    ViewsVecT::iterator       aIter( maViewData.begin() );
-    ViewsVecT::iterator const aEnd ( maViewData.end() );
-    while( aIter != aEnd )
+    for( auto& pView : maViewData )
     {
         // clear stale info (both bitmaps and sprites prolly need a
         // resize)
-        clearViewEntry( *aIter );
-        addSprites( *aIter );
-
-        ++aIter;
+        clearViewEntry( pView );
+        addSprites( pView );
     }
 }
 

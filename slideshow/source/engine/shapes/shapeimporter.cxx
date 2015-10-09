@@ -490,12 +490,10 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
         aPoint.setY((*pInnerSequence).Y);
         aPoly.append( aPoint );
     }
-    UnoViewVector::const_iterator aIter=(mrContext.mrViewContainer).begin();
-    UnoViewVector::const_iterator aEnd=(mrContext.mrViewContainer).end();
-    while(aIter != aEnd)
+    for( const auto& pView : mrContext.mrViewContainer )
     {
         ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-            ::cppcanvas::BaseGfxFactory::createPolyPolygon( (*aIter)->getCanvas(),
+            ::cppcanvas::BaseGfxFactory::createPolyPolygon( pView->getCanvas(),
                                                             aPoly ) );
         if( pPolyPoly )
         {
@@ -504,7 +502,6 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
                 pPolyPoly->draw();
                 maPolygons.push_back(pPolyPoly);
         }
-        ++aIter;
     }
 }
 
