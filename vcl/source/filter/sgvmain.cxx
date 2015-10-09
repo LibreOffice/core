@@ -816,7 +816,6 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
       ReadPageType( rInp, aPage );
       if(Num==1 && aPage.nList!=0L) DrawObjkList( rInp,*pOutDev );
       rInp.Seek(nCharPos);
-      nCharPos=rInp.Tell();
       ReadPageType( rInp, aPage );
     }
     if (aPage.nList!=0L) DrawObjkList(rInp,*pOutDev );
