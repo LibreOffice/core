@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_a3776501",
+        "filename": "writerperfect/source/writer/WordPerfectImportFilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-10-09T09:36:27Z",
+      "side": 1,
+      "message": "If libwpg failed to parse any content, it should really signalize it by returning false... But writerperfect does the same check, so I\u0027m going to accept this.",
+      "revId": "d65306f420ad4d56ece307dd1ad3fba7203aa4b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
