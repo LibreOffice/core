@@ -62,13 +62,13 @@ public:
 class StgStrm {                         // base class for all streams
 protected:
     StgIo& rIo;                         // I/O system
-    StgFAT* pFat;                       // FAT stream for allocations
+    StgFAT* m_pFat;                       // FAT stream for allocations
     StgDirEntry* pEntry;                // dir entry (for ownership)
     sal_Int32 nStart;                       // 1st data page
     sal_Int32 nSize;                        // stream size in bytes
-    sal_Int32 nPos;                         // current byte position
+    sal_Int32 m_nPos;                         // current byte position
     sal_Int32 nPage;                        // current logical page
-    short nOffset;                      // offset into current page
+    short m_nOffset;                      // offset into current page
     short nPageSize;                    // logical page size
     std::vector<sal_Int32> m_aPagesCache;
     void scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize = NULL);
@@ -77,12 +77,12 @@ protected:
 public:
     virtual ~StgStrm();
     StgIo&  GetIo()     { return rIo;    }
-    sal_Int32   GetPos() const   { return nPos;   }
+    sal_Int32   GetPos() const   { return m_nPos;   }
     sal_Int32   GetStart() const { return nStart; }
     sal_Int32   GetSize() const  { return nSize;  }
     sal_Int32   GetPage() const  { return nPage;  }
     sal_Int32   GetPages() const { return ( nSize + nPageSize - 1 ) / nPageSize;}
-    short       GetOffset() const { return nOffset;}
+    short       GetOffset() const { return m_nOffset;}
     void        SetEntry( StgDirEntry& );
     virtual bool SetSize( sal_Int32 );
     virtual bool Pos2Page( sal_Int32 nBytePos );
