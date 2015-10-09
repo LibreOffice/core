@@ -160,8 +160,8 @@ class Desktop : public Application
         /** for ui-testing provide a mechanism to pseudo-restart by closing the
             open frames and reopen the frame that appeared post initial startup
         */
-        void CloseFrameAndReopen(css::uno::Reference<css::frame::XDesktop2> xDesktop);
-        void DoExecute(css::uno::Reference<css::frame::XDesktop2> xDesktop);
+        static void CloseFrameAndReopen(css::uno::Reference<css::frame::XDesktop2> xDesktop);
+        static void DoExecute(css::uno::Reference<css::frame::XDesktop2> xDesktop);
 
         /// does initializations which are necessary for the first run of the office
         static void             DoFirstRunInitializations();
