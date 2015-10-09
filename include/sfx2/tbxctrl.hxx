@@ -61,31 +61,15 @@ struct SfxTbxCtrlFactory
 
 
 
-class SfxFrameStatusListener : public svt::FrameStatusListener
-{
-    public:
-        SfxFrameStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
-                                SfxStatusListenerInterface* pCallee );
-        virtual ~SfxFrameStatusListener();
-
-        // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    private:
-        SfxStatusListenerInterface* m_pCallee;
-};
-
-
 
 /* Floating windows that can be torn from tool boxes should be derived from
    this class. Since it is also derived from SfxControllerItem, its instances
    will also receive the StateChanged calls.
 */
-
-class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusListenerInterface
+class SfxFrameStatusListener;
+class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow
 {
+friend class SfxFrameStatusListener;
     bool                                                                             m_bFloating;
     bool                                                                             m_bCascading;
     Link<SfxPopupWindow*,void>                                                       m_aDeleteLink;
@@ -116,7 +100,7 @@ protected:
     // SfxStatusListenerInterface
     using FloatingWindow::StateChanged;
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                          const SfxPoolItem* pState ) SAL_OVERRIDE;
+                                          const SfxPoolItem* pState );
 
 public:
                             SfxPopupWindow( sal_uInt16 nId,

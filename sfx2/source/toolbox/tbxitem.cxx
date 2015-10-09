@@ -745,10 +745,25 @@ VclPtr<vcl::Window> SfxToolBoxControl::CreateItemWindow( vcl::Window * )
     return VclPtr<vcl::Window>();
 }
 
+class SfxFrameStatusListener : public svt::FrameStatusListener
+{
+    public:
+        SfxFrameStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+                                SfxPopupWindow* pCallee );
+        virtual ~SfxFrameStatusListener();
+
+        // XStatusListener
+        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    private:
+        VclPtr<SfxPopupWindow> m_pCallee;
+};
 SfxFrameStatusListener::SfxFrameStatusListener(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame,
-    SfxStatusListenerInterface* pCallee ) :
+    SfxPopupWindow* pCallee ) :
     svt::FrameStatusListener( rxContext, xFrame ),
     m_pCallee( pCallee )
 {
@@ -958,6 +973,7 @@ void SfxPopupWindow::dispose()
     {
         m_xStatusListener->dispose();
         m_xStatusListener.clear();
+        m_pStatusListener = nullptr;
     }
 
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );

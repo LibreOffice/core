@@ -32,16 +32,6 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-// Interface for implementations which needs to get notifications about state changes
-class SfxStatusListenerInterface
-{
-    public:
-        virtual void StateChanged( sal_uInt16 nSlotId, SfxItemState eState, const SfxPoolItem* pState ) = 0;
-
-    protected:
-        ~SfxStatusListenerInterface() {}
-};
-
 class SFX2_DLLPUBLIC SfxStatusListener : public ::cppu::WeakImplHelper2<
                           css::frame::XStatusListener,
                           css::lang::XComponent>

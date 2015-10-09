@@ -65,7 +65,6 @@ merge SdTransferable::UserData with sd::slidesorter::controller::TransferableDat
 merge SdwTextBoxRecord with SdwTextArt
 merge ServerFontLayoutEngine with HbLayoutEngine
 merge SfxSingleRecordReader with SfxMultiRecordReader
-merge SfxStatusListenerInterface with SfxPopupWindow
 merge StarSymbolToMSMultiFont with StarSymbolToMSMultiFontImpl
 merge StgReader with WW8Reader
 merge SvListView with SvTreeListBox
