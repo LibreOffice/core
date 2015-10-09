@@ -61,7 +61,7 @@ namespace pcr
             }
         }
 
-        return BaseClass::PreNotify( rNEvt );
+        return FormattedField::PreNotify( rNEvt );
     }
 
 
@@ -90,6 +90,7 @@ namespace pcr
     OFormatSampleControl::OFormatSampleControl( vcl::Window* pParent, WinBits nWinStyle )
         :OFormatSampleControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
     {
+        getTypedControlWindow()->setControlHelper(*this);
     }
 
 

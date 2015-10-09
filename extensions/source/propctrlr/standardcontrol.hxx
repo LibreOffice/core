@@ -52,24 +52,21 @@ namespace pcr
         as all other windows.
     */
     template< class TListboxWindow >
-    class ListLikeControlWithModifyHandler : public ControlWindow< TListboxWindow >
+    class ListLikeControlWithModifyHandler : public TListboxWindow
     {
-    protected:
-        typedef ControlWindow< TListboxWindow >  ListBoxType;
-
     public:
         ListLikeControlWithModifyHandler( vcl::Window* _pParent, WinBits _nStyle )
-            :ListBoxType( _pParent, _nStyle )
+            : TListboxWindow( _pParent, _nStyle )
         {
         }
 
-        void SetModifyHdl( const Link<>& _rLink ) { ListBoxType::SetSelectHdl( _rLink ); }
+        void SetModifyHdl( const Link<>& _rLink ) { TListboxWindow::SetSelectHdl( _rLink ); }
     };
 
 
     //= OTimeControl
 
-    typedef CommonBehaviourControl< css::inspection::XPropertyControl, ControlWindow< TimeField > > OTimeControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XPropertyControl, TimeField > OTimeControl_Base;
     class OTimeControl : public OTimeControl_Base
     {
     public:
@@ -84,7 +81,7 @@ namespace pcr
 
     //= ODateControl
 
-    typedef CommonBehaviourControl< css::inspection::XPropertyControl, ControlWindow< CalendarField > > ODateControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XPropertyControl, CalendarField > ODateControl_Base;
     class ODateControl : public ODateControl_Base
     {
     public:
@@ -99,7 +96,7 @@ namespace pcr
 
     //= OEditControl
 
-    typedef CommonBehaviourControl< css::inspection::XPropertyControl, ControlWindow< Edit > > OEditControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XPropertyControl, Edit > OEditControl_Base;
     class OEditControl : public OEditControl_Base
     {
     protected:
@@ -121,7 +118,7 @@ namespace pcr
 
     //= ODateTimeControl
 
-    typedef CommonBehaviourControl< css::inspection::XPropertyControl, ControlWindow< FormattedField > > ODateTimeControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XPropertyControl, FormattedField > ODateTimeControl_Base;
     class ODateTimeControl : public ODateTimeControl_Base
     {
     public:
@@ -164,7 +161,7 @@ namespace pcr
 
     //= OHyperlinkControl
 
-    typedef CommonBehaviourControl< css::inspection::XHyperlinkControl, ControlWindow< HyperlinkInput > > OHyperlinkControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XHyperlinkControl, HyperlinkInput > OHyperlinkControl_Base;
     class OHyperlinkControl : public OHyperlinkControl_Base
     {
     private:
@@ -193,13 +190,11 @@ namespace pcr
 
     //= CustomConvertibleNumericField
 
-    class CustomConvertibleNumericField : public ControlWindow< MetricField >
+    class CustomConvertibleNumericField : public MetricField
     {
-        typedef ControlWindow< MetricField > BaseClass;
-
     public:
         CustomConvertibleNumericField( vcl::Window* _pParent, WinBits _nStyle )
-            :BaseClass( _pParent, _nStyle )
+            :MetricField( _pParent, _nStyle )
         {
         }
 
@@ -310,7 +305,7 @@ namespace pcr
 
     //= OComboboxControl
 
-    typedef CommonBehaviourControl< css::inspection::XStringListControl, ControlWindow< ComboBox > > OComboboxControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XStringListControl, ComboBox > OComboboxControl_Base;
     class OComboboxControl : public OComboboxControl_Base
     {
     public:
@@ -343,23 +338,24 @@ namespace pcr
     //= DropDownEditControl
 
     class OMultilineFloatingEdit;
-    typedef ControlWindow< Edit > DropDownEditControl_Base;
     /** an Edit field which can be used as ControlWindow, and has a drop-down button
     */
-    class DropDownEditControl : public DropDownEditControl_Base
+    class DropDownEditControl : public Edit
     {
     private:
-        VclPtr<OMultilineFloatingEdit>             m_pFloatingEdit;
+        VclPtr<OMultilineFloatingEdit>      m_pFloatingEdit;
         VclPtr<MultiLineEdit>               m_pImplEdit;
-        VclPtr<PushButton>                         m_pDropdownButton;
+        VclPtr<PushButton>                  m_pDropdownButton;
         MultiLineOperationMode              m_nOperationMode;
         bool                                m_bDropdown : 1;
+        CommonBehaviourControlHelper*       m_pHelper;
 
     public:
         DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle );
         virtual ~DropDownEditControl();
         virtual void dispose() SAL_OVERRIDE;
 
+        void           setControlHelper( CommonBehaviourControlHelper& _rControlHelper );
         void setOperationMode( MultiLineOperationMode _eMode ) { m_nOperationMode = _eMode; }
         MultiLineOperationMode getOperationMode() const { return m_nOperationMode; }
 
@@ -369,9 +365,6 @@ namespace pcr
         void            SetStringListValue( const StlSyntaxSequence< OUString >& _rStrings );
         StlSyntaxSequence< OUString >
                         GetStringListValue() const;
-
-        // ControlWindow overridables
-        virtual void setControlHelper( CommonBehaviourControlHelper& _rControlHelper ) SAL_OVERRIDE;
 
     protected:
         // Window overridables

@@ -35,27 +35,6 @@ namespace pcr
 {
 
 
-    class CommonBehaviourControlHelper;
-
-    template< class TControlWindow >
-    class ControlWindow : public TControlWindow
-    {
-    protected:
-        CommonBehaviourControlHelper*  m_pHelper;
-
-    public:
-        ControlWindow( vcl::Window* _pParent, WinBits _nStyle )
-            :TControlWindow( _pParent, _nStyle )
-            ,m_pHelper( NULL )
-        {
-        }
-
-        /// sets a CommonBehaviourControlHelper instance which some functionality is delegated to
-        virtual void setControlHelper( CommonBehaviourControlHelper& _rControlHelper )
-        { m_pHelper = &_rControlHelper; }
-    };
-
-
     //= CommonBehaviourControlHelper
 
     /** A helper class for implementing the <type scope="css::inspection">XPropertyControl</type>
@@ -121,7 +100,7 @@ namespace pcr
         @param TControlInterface
             an interface class which is derived from (or identical to) <type scope="css::inspection">XPropertyControl</type>
         @param TControlWindow
-            a class which is derived from ControlWindow
+            a class which is derived from vcl::Window
     */
     template < class TControlInterface, class TControlWindow >
     class CommonBehaviourControl    :public ::comphelper::OBaseMutex
@@ -180,7 +159,6 @@ namespace pcr
         ,CommonBehaviourControlHelper( _nControlType, *this )
         ,m_pControlWindow( new TControlWindow( _pParentWindow, _nWindowStyle ) )
     {
-        m_pControlWindow->setControlHelper( *this );
         if ( _bDoSetHandlers )
         {
             m_pControlWindow->SetModifyHdl( LINK( this, CommonBehaviourControlHelper, ModifiedHdl ) );

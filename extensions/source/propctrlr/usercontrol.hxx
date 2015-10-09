@@ -35,21 +35,21 @@ namespace pcr
 
     //= NumberFormatSampleField
 
-    class NumberFormatSampleField : public ControlWindow< FormattedField >
+    class NumberFormatSampleField : public FormattedField
     {
-    private:
-        typedef ControlWindow< FormattedField > BaseClass;
-
     public:
         NumberFormatSampleField( vcl::Window* _pParent, WinBits _nStyle )
-            :BaseClass( _pParent, _nStyle )
+            :FormattedField( _pParent, _nStyle )
         {
         }
 
-        void SetFormatSupplier( const SvNumberFormatsSupplierObj* pSupplier );
+        void         SetFormatSupplier( const SvNumberFormatsSupplierObj* pSupplier );
+        void         setControlHelper( CommonBehaviourControlHelper& _rControlHelper ) { m_pHelper = &_rControlHelper; }
 
     protected:
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    private:
+        CommonBehaviourControlHelper* m_pHelper;
     };
 
 
@@ -95,7 +95,7 @@ namespace pcr
 
     //= OFormattedNumericControl
 
-    typedef CommonBehaviourControl< css::inspection::XPropertyControl, ControlWindow< FormattedField > > OFormattedNumericControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XPropertyControl, FormattedField > OFormattedNumericControl_Base;
     class OFormattedNumericControl : public OFormattedNumericControl_Base
     {
     private:
@@ -124,7 +124,7 @@ namespace pcr
 
     //= OFileUrlControl
 
-    typedef CommonBehaviourControl< css::inspection::XPropertyControl, ControlWindow< ::svt::FileURLBox > > OFileUrlControl_Base;
+    typedef CommonBehaviourControl< css::inspection::XPropertyControl, ::svt::FileURLBox > OFileUrlControl_Base;
     class OFileUrlControl : public OFileUrlControl_Base
     {
     public:

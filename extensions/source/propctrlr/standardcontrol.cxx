@@ -115,7 +115,7 @@ namespace pcr
     ODateControl::ODateControl( vcl::Window* pParent, WinBits nWinStyle )
         :ODateControl_Base( PropertyControlType::DateField, pParent, nWinStyle | WB_DROPDOWN )
     {
-        ControlWindow<CalendarField>* pControlWindow = getTypedControlWindow();
+        CalendarField* pControlWindow = getTypedControlWindow();
         pControlWindow->SetStrictFormat(true);
 
         pControlWindow->SetMin( ::Date( 1,1,1600 ) );
@@ -1031,7 +1031,7 @@ namespace pcr
 
 
     DropDownEditControl::DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle )
-        :DropDownEditControl_Base( _pParent, _nStyle )
+        :Edit( _pParent, _nStyle )
         ,m_pFloatingEdit( NULL )
         ,m_pDropdownButton( NULL )
         ,m_nOperationMode( eStringList )
@@ -1060,7 +1060,7 @@ namespace pcr
 
     void DropDownEditControl::setControlHelper( CommonBehaviourControlHelper& _rControlHelper )
     {
-        DropDownEditControl_Base::setControlHelper( _rControlHelper );
+        m_pHelper = &_rControlHelper;
         m_pFloatingEdit->getEdit().SetModifyHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, ModifiedHdl ) );
         m_pImplEdit->SetGetFocusHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, GetFocusHdl ) );
         m_pImplEdit->SetModifyHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, ModifiedHdl ) );
@@ -1079,7 +1079,7 @@ namespace pcr
         m_pImplEdit.disposeAndClear();
         m_pFloatingEdit.disposeAndClear();
         m_pDropdownButton.disposeAndClear();
-        DropDownEditControl_Base::dispose();
+        Edit::dispose();
     }
 
 
@@ -1127,7 +1127,7 @@ namespace pcr
                     ||  m_nOperationMode == eMultiLineText
                     )
             {
-                bResult = DropDownEditControl_Base::PreNotify( rNEvt );
+                bResult = Edit::PreNotify( rNEvt );
             }
             else if ( m_nOperationMode == eStringList )
             {
@@ -1151,7 +1151,7 @@ namespace pcr
             }
         }
         else
-            bResult = DropDownEditControl_Base::PreNotify(rNEvt);
+            bResult = Edit::PreNotify(rNEvt);
 
         return bResult;
     }
@@ -1362,6 +1362,7 @@ namespace pcr
                                    , false )
     {
         getTypedControlWindow()->setOperationMode( _eMode );
+        getTypedControlWindow()->setControlHelper( *this );
     }
 
 
