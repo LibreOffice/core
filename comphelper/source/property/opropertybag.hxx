@@ -29,7 +29,7 @@
 #include <com/sun/star/container/XSet.hpp>
 
 #include <boost/noncopyable.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertybag.hxx>
@@ -58,7 +58,7 @@ namespace comphelper
     typedef ::std::map< sal_Int32, css::uno::Any >     MapInt2Any;
     typedef ::std::set< css::uno::Type, UnoTypeLess >  TypeBag;
 
-    typedef ::cppu::WeakAggImplHelper5  <   css::beans::XPropertyBag
+    typedef ::cppu::WeakAggImplHelper   <   css::beans::XPropertyBag
                                         ,   css::util::XModifiable
                                         ,   css::lang::XServiceInfo
                                         ,   css::lang::XInitialization
