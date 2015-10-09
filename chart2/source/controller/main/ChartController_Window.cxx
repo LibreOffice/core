@@ -719,10 +719,6 @@ void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
     impl_SetMousePointer( rMEvt );
 }
 
-void ChartController::execute_Tracking( const TrackingEvent& )
-{
-}
-
 void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 {
     ControllerLockGuardUNO aCLGuard( getModel() );
@@ -929,28 +925,6 @@ void ChartController::execute_Resize()
     SolarMutexGuard aGuard;
     if(m_pChartWindow)
         m_pChartWindow->Invalidate();
-}
-
-void ChartController::execute_Activate()
-{
-    ///// pDrawViewWrapper->SetEditMode(sal_True);
-}
-
-void ChartController::execute_Deactivate()
-{
-    /*
-    pDrawViewWrapper->SetEditMode(sal_False);
-    this->ReleaseMouse();
-    */
-}
-
-void ChartController::execute_GetFocus()
-{
-}
-
-void ChartController::execute_LoseFocus()
-{
-    //this->ReleaseMouse();
 }
 
 void ChartController::execute_Command( const CommandEvent& rCEvt )

@@ -96,7 +96,6 @@ merge chart::ExplicitValueProvider with chart::ChartView
 merge chart::LegendEntryProvider with chart::VSeriesPlotter
 merge chart::MarkHandleProvider with chart::SelectionHelper
 merge chart::ResourceChangeListener with chart::ChartTypeTabPage
-merge chart::WindowController with chart::ChartController
 merge comphelper::NameContainerImpl with comphelper::NameContainer
 merge comphelper::OSeekableInputWrapper_BASE with comphelper::OSeekableInputWrapper
 merge comphelper::PropertySetInfo_BASE with comphelper::PropertySetInfo

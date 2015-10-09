@@ -142,9 +142,7 @@ void ChartWindow::MouseMove( const MouseEvent& rMEvt )
 
 void ChartWindow::Tracking( const TrackingEvent& rTEvt )
 {
-    if( m_pWindowController )
-        m_pWindowController->execute_Tracking( rTEvt );
-    else
+    if( !m_pWindowController )
         Window::Tracking( rTEvt );
 }
 
@@ -169,30 +167,22 @@ void ChartWindow::Resize()
 
 void ChartWindow::Activate()
 {
-    if( m_pWindowController )
-        m_pWindowController->execute_Activate();
-    else
+    if( !m_pWindowController )
         Window::Activate();
 }
 void ChartWindow::Deactivate()
 {
-    if( m_pWindowController )
-        m_pWindowController->execute_Deactivate();
-    else
+    if( !m_pWindowController )
         Window::Deactivate();
 }
 void ChartWindow::GetFocus()
 {
-    if( m_pWindowController )
-        m_pWindowController->execute_GetFocus();
-    else
+    if( !m_pWindowController )
         Window::GetFocus();
 }
 void ChartWindow::LoseFocus()
 {
-    if( m_pWindowController )
-        m_pWindowController->execute_LoseFocus();
-    else
+    if( !m_pWindowController )
         Window::LoseFocus();
 }
 

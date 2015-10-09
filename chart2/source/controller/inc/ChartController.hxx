@@ -77,56 +77,14 @@ namespace chart
 {
 
 class UndoGuard;
-
-enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
-
-class WindowController
-{
-public:
-    virtual ~WindowController() {};
-
-    virtual void PrePaint(vcl::RenderContext& rRenderContext) = 0;
-    virtual void execute_Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) = 0;
-    virtual void execute_MouseButtonDown( const MouseEvent& rMEvt ) = 0;
-    virtual void execute_MouseMove( const MouseEvent& rMEvt ) = 0;
-    virtual void execute_Tracking( const TrackingEvent& rTEvt ) = 0;
-    virtual void execute_MouseButtonUp( const MouseEvent& rMEvt ) = 0;
-    virtual void execute_Resize() = 0;
-    virtual void execute_Activate() = 0;
-    virtual void execute_Deactivate() = 0;
-    virtual void execute_GetFocus() = 0;
-    virtual void execute_LoseFocus() = 0;
-    virtual void execute_Command( const CommandEvent& rCEvt ) = 0;
-    virtual bool execute_KeyInput( const KeyEvent& rKEvt ) = 0;
-
-    /** get help text to be shown in a quick help
-
-        @param aAtLogicPosition the position in logic coordinates (of the
-                                window) of the mouse cursor to determine for
-                                which object help is requested.
-
-        @param bIsBalloonHelp determines whether to return the long text version
-                              (balloon help) or the shorter one (quick help).
-
-        @param rOutQuickHelpText is filled with the quick help text
-
-        @param rOutEqualRect is filled with a rectangle that denotes the region
-                             in which the quick help does not change.
-
-        @return </sal_True>, if a quick help should be shown.
-     */
-    virtual bool requestQuickHelp(
-        ::Point aAtLogicPosition, bool bIsBalloonHelp,
-        OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect ) = 0;
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() = 0;
-};
-
 class ChartWindow;
 class DrawModelWrapper;
 class DrawViewWrapper;
 class ReferenceSizeProvider;
 class ViewElementListProvider;
+
+enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
+
 
 class ChartController   : public ::cppu::WeakImplHelper <
          ::com::sun::star::frame::XController   //comprehends XComponent (required interface)
@@ -142,7 +100,6 @@ class ChartController   : public ::cppu::WeakImplHelper <
         ,::com::sun::star::util::XModeChangeListener
         ,::com::sun::star::frame::XLayoutManagerListener
         >
-        , public WindowController
 {
     friend class DrawCommandDispatch;
     friend class ShapeController;
@@ -406,26 +363,37 @@ public:
         const ::com::sun::star::uno::Any& aInfo )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // chart2::WindowController
-    virtual void PrePaint(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
-    virtual void execute_Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual void execute_MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void execute_MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void execute_Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void execute_MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void execute_Resize() SAL_OVERRIDE;
-    virtual void execute_Activate() SAL_OVERRIDE;
-    virtual void execute_Deactivate() SAL_OVERRIDE;
-    virtual void execute_GetFocus() SAL_OVERRIDE;
-    virtual void execute_LoseFocus() SAL_OVERRIDE;
-    virtual void execute_Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual bool execute_KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    // WindowController stuff
+    void PrePaint(vcl::RenderContext& rRenderContext);
+    void execute_Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    void execute_MouseButtonDown( const MouseEvent& rMEvt );
+    void execute_MouseMove( const MouseEvent& rMEvt );
+    void execute_MouseButtonUp( const MouseEvent& rMEvt );
+    void execute_Resize();
+    void execute_Command( const CommandEvent& rCEvt );
+    virtual bool execute_KeyInput( const KeyEvent& rKEvt );
 
-    virtual bool requestQuickHelp(
+    /** get help text to be shown in a quick help
+
+        @param aAtLogicPosition the position in logic coordinates (of the
+                                window) of the mouse cursor to determine for
+                                which object help is requested.
+
+        @param bIsBalloonHelp determines whether to return the long text version
+                              (balloon help) or the shorter one (quick help).
+
+        @param rOutQuickHelpText is filled with the quick help text
+
+        @param rOutEqualRect is filled with a rectangle that denotes the region
+                             in which the quick help does not change.
+
+        @return </sal_True>, if a quick help should be shown.
+     */
+    bool requestQuickHelp(
         ::Point aAtLogicPosition, bool bIsBalloonHelp,
-        OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect ) SAL_OVERRIDE;
+        OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     static bool isObjectDeleteable( const ::com::sun::star::uno::Any& rSelection );
 
