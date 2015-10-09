@@ -119,7 +119,6 @@ merge dbmm::IMigrationProgress with dbmm::ProgressPage
 merge dbmm::IProgressConsumer with dbmm::ProgressDelegator
 merge dbp::OModuleResourceClient with dbp::OUnoAutoPilot
 merge dbtools::ISQLStatementHelper with connectivity::mysql::OTables
-merge frm::IAttributeHandler with frm::AttributeHandler
 merge frm::ICommandDescriptionProvider with frm::DefaultCommandDescriptionProvider
 merge frm::ICommandImageProvider with frm::DocumentCommandImageProvider
 merge frm::IEngineStatusListener with frm::RichTextControlImpl

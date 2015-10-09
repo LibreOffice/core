@@ -185,7 +185,7 @@ namespace frm
         AttributeHandlerPool::const_iterator aHandlerPos = m_aAttributeHandlers.find( _nAttributeId  );
         if ( aHandlerPos == m_aAttributeHandlers.end() )
         {
-            ::rtl::Reference< IAttributeHandler > aHandler = AttributeHandlerFactory::getHandlerFor( _nAttributeId, *m_pEngine->GetEmptyItemSet().GetPool() );
+            ::rtl::Reference< AttributeHandler > aHandler = AttributeHandlerFactory::getHandlerFor( _nAttributeId, *m_pEngine->GetEmptyItemSet().GetPool() );
             OSL_ENSURE( aHandler.is(), "RichTextControlImpl::enableAttributeNotification: no handler available for this attribute!" );
             if ( !aHandler.is() )
                 return;

@@ -114,9 +114,9 @@ namespace frm
         }
     }
 
-    ::rtl::Reference< IAttributeHandler > AttributeHandlerFactory::getHandlerFor( AttributeId _nAttributeId, const SfxItemPool& _rEditEnginePool )
+    ::rtl::Reference< AttributeHandler > AttributeHandlerFactory::getHandlerFor( AttributeId _nAttributeId, const SfxItemPool& _rEditEnginePool )
     {
-        ::rtl::Reference< IAttributeHandler > pReturn;
+        ::rtl::Reference< AttributeHandler > pReturn;
         switch ( _nAttributeId )
         {
         case SID_ATTR_PARA_ADJUST_LEFT  :

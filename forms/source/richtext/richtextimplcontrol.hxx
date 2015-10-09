@@ -43,7 +43,7 @@ namespace frm
     class RichTextControlImpl : public IEngineStatusListener
     {
         typedef ::std::map< AttributeId, AttributeState >                           StateCache;
-        typedef ::std::map< AttributeId, ::rtl::Reference< IAttributeHandler > >    AttributeHandlerPool;
+        typedef ::std::map< AttributeId, ::rtl::Reference< AttributeHandler > >    AttributeHandlerPool;
         typedef ::std::map< AttributeId, ITextAttributeListener* >                  AttributeListenerPool;
 
         StateCache              m_aLastKnownStates;
