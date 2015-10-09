@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_f6459917",
+        "filename": "cui/source/options/optbasic.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-10-09T17:49:10Z",
+      "side": 1,
+      "message": "I think that this is maybe not the best idea.\n\nDisabling is a good idea but changing the value of the checkbox that has been disabled already seems strange. Maybe one of the UX person should have a look at it.",
+      "revId": "d9faa96a6f28c2892e193870416997ebbc0bdea4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
