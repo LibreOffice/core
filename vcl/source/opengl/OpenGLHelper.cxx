@@ -823,7 +823,6 @@ void OpenGLWatchdogThread::execute()
                 {
                     SAL_WARN("vcl.opengl", "Watchdog gave up: aborting");
                     gbWatchdogFiring = true;
-                    nUnchanged = 0;
                     std::abort();
                 }
                 // coverity[dead_error_line] - we might have caught SIGABRT and failed to exit yet
