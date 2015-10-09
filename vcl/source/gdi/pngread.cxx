@@ -1298,7 +1298,6 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         {
                             int nLineBytes = maOrigSize.Width();
                             mpAcc->CopyScanline( nY, pTmp, BMP_FORMAT_8BIT_PAL, nLineBytes );
-                            pTmp += nLineBytes;
                         }
                         else
                         {
