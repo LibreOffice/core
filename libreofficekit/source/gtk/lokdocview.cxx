@@ -698,7 +698,7 @@ static void callbackWorker (int nType, const char* pPayload, void* pData)
     LOKDocView* pDocView = LOK_DOC_VIEW (pData);
 
     CallbackData* pCallback = new CallbackData(nType, pPayload ? pPayload : "(nil)", pDocView);
-    g_info("lok_doc_view_callbackWorker: %s, '%s'", callbackTypeToString(nType), pPayload);
+    g_info("callbackWorker: %s, '%s'", callbackTypeToString(nType), pPayload);
     gdk_threads_add_idle(callback, pCallback);
 }
 
@@ -1365,6 +1365,9 @@ postCommandInThread (gpointer data)
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+    std::stringstream ss;
+    ss << "lok::Document::postUnoCommand(" << pLOEvent->m_pCommand << ", " << pLOEvent->m_pArguments << ")";
+    g_info(ss.str().c_str());
     priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pLOEvent->m_pCommand, pLOEvent->m_pArguments);
 }
 
