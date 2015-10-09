@@ -821,7 +821,7 @@ double ScInterpreter::PopDouble()
     }
     else
         SetError( errUnknownStackVariable);
-    return CreateDoubleError( nGlobalError);
+    return 0.0;
 }
 
 svl::SharedString ScInterpreter::PopString()
@@ -1925,10 +1925,7 @@ bool ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& r
 double ScInterpreter::GetDoubleFromMatrix(const ScMatrixRef& pMat)
 {
     if (!pMat)
-    {
-        SetError( errParameterExpected);
-        return CreateDoubleError( nGlobalError);
-    }
+        return 0.0;
 
     if ( !pJumpMatrix )
         return pMat->GetDouble( 0 );
@@ -1941,7 +1938,7 @@ double ScInterpreter::GetDoubleFromMatrix(const ScMatrixRef& pMat)
         return pMat->GetDouble( nC, nR);
 
     SetError( errNoValue);
-    return CreateDoubleError( nGlobalError);
+    return 0.0;
 }
 
 double ScInterpreter::GetDouble()
@@ -1975,6 +1972,8 @@ double ScInterpreter::GetDouble()
                 aCell.assign(*pDok, aAdr);
                 nVal = GetCellValue(aAdr, aCell);
             }
+            else
+                nVal = 0.0;
         }
         break;
         case svExternalSingleRef:
@@ -2003,6 +2002,7 @@ double ScInterpreter::GetDouble()
         break;
         case svError:
             PopError();
+            nVal = 0.0;
         break;
         case svEmptyCell:
         case svMissing:
@@ -2012,16 +2012,8 @@ double ScInterpreter::GetDouble()
         default:
             PopError();
             SetError( errIllegalParameter);
+            nVal = 0.0;
     }
-
-    // Propagate error also as double error, so matrix operations where one
-    // operand is a scalar get that propagated if there is no specific
-    // nGlobalError check, and when the matrix is pushed the error is cleared
-    // because the matrix is assumed to hold double errors at the corresponding
-    // positions. See PushMatrix().
-    if (nGlobalError)
-        nVal = CreateDoubleError( nGlobalError);
-
     if ( nFuncFmtType == nCurFmtType )
         nFuncFmtIndex = nCurFmtIndex;
     return nVal;
