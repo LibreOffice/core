@@ -1697,7 +1697,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                 case W_META_STRETCHDIB:
                 {
                     sal_Int32   nWinROP;
-                    sal_uInt16  nSx, nSy, nSxe, nSye, nUsage;
+                    sal_uInt16  nSx, nSy, nUsage;
                     pStm->ReadInt32( nWinROP );
 
                     if( nFunction == W_META_STRETCHDIB )
@@ -1705,9 +1705,10 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 
                     // nSye and nSxe is the number of pixels that has to been used
                     if( nFunction == W_META_STRETCHDIB || nFunction == W_META_STRETCHBLT || nFunction == W_META_DIBSTRETCHBLT )
+                    {
+                        sal_uInt16 nSxe, nSye;
                         pStm->ReadUInt16( nSye ).ReadUInt16( nSxe );
-                    else
-                        nSye = nSxe = 0;    // set this to zero as indicator not to scale the bitmap later
+                    }
 
                     // nSy and nx is the offset of the first pixel
                     pStm->ReadUInt16( nSy ).ReadUInt16( nSx );
