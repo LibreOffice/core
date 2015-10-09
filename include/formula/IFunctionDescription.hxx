@@ -109,19 +109,6 @@ namespace formula
         ~IFormulaToken() {}
     };
 
-    class SAL_NO_VTABLE IStructHelper
-    {
-    public:
-        IStructHelper(){}
-        virtual SvTreeListEntry*    InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
-                                sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL) = 0;
-
-        virtual OUString        GetEntryText(SvTreeListEntry* pEntry) const = 0;
-
-    protected:
-        ~IStructHelper() {}
-    };
-
     class SAL_NO_VTABLE IFormulaEditorHelper
     {
     public:

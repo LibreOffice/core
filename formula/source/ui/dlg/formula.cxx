@@ -85,8 +85,8 @@ public:
     sal_Int32       GetFunctionPos(sal_Int32 nPos);
     void            ClearAllParas();
 
-    void            MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count);
-    void            fillTree(IStructHelper* _pTree);
+    void            MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count);
+    void            fillTree(StructPage* _pTree);
     void            UpdateTokenArray( const OUString& rStrExp);
     OUString        RepairFormula(const OUString& aFormula);
     void            FillDialog(bool bFlag=true);
@@ -654,7 +654,7 @@ bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp)
 }
 
 
-void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count)
+void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count)
 {
     if( _pToken != NULL && Count > 0 )
     {
@@ -767,7 +767,7 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,Fo
     }
 }
 
-void FormulaDlg_Impl::fillTree(IStructHelper* _pTree)
+void FormulaDlg_Impl::fillTree(StructPage* _pTree)
 {
     GetFormulaOpCodeMapper();
     FormulaToken* pToken = m_pTokenArray->LastRPN();

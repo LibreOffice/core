@@ -67,7 +67,6 @@ public:
 
 
 class StructPage : public TabPage
-                    , public IStructHelper
 {
 private:
     OModuleClient           m_aModuleClient;
@@ -94,10 +93,10 @@ public:
     virtual void    dispose() SAL_OVERRIDE;
 
     void            ClearStruct();
-    virtual SvTreeListEntry*    InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
-                                sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL) SAL_OVERRIDE;
+    SvTreeListEntry* InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
+                                sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL);
 
-    virtual OUString            GetEntryText(SvTreeListEntry* pEntry) const SAL_OVERRIDE;
+    OUString        GetEntryText(SvTreeListEntry* pEntry) const;
 
     void            SetSelectionHdl( const Link<StructPage&,void>& rLink ) { aSelLink = rLink; }
 
