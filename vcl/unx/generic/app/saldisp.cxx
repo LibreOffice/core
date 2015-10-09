@@ -108,7 +108,7 @@ static int sal_Shift( Pixel nMask )
     if( nMask < 0x01000000 ) { nMask <<=  8; i -=  8; }
     if( nMask < 0x10000000 ) { nMask <<=  4; i -=  4; }
     if( nMask < 0x40000000 ) { nMask <<=  2; i -=  2; }
-    if( nMask < 0x80000000 ) { nMask <<=  1; i -=  1; }
+    if( nMask < 0x80000000 ) {               i -=  1; }
     return i;
 }
 
