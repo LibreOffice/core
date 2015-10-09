@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/solarmutex.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/configurationlistener.hxx>
 #include <rtl/instance.hxx>
@@ -248,6 +249,12 @@ void SAL_CALL comphelper::ConfigurationListener::propertyChange(
     css::beans::PropertyChangeEvent const &rEvt )
     throw (css::uno::RuntimeException, std::exception)
 {
+    // Code is commonly used inside the SolarMutexGuard
+    // so to avoid concurrent writes to the property,
+    // and allow fast, lock-less access, guard here.
+    rtl::Reference< comphelper::SolarMutex > xMutexGuard(
+        comphelper::SolarMutex::get() );
+
     assert( rEvt.Source == mxConfig );
     for ( auto it = maListeners.begin(); it != maListeners.end(); ++it )
     {
