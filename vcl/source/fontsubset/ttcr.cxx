@@ -412,9 +412,8 @@ static sal_uInt8 *ttmalloc(sal_uInt32 nbytes)
     sal_uInt32 n;
 
     n = (nbytes + 3) & (sal_uInt32) ~3;
-    sal_uInt8* res = static_cast<sal_uInt8*>(malloc(n));
+    sal_uInt8* res = static_cast<sal_uInt8*>(calloc(n, 1));
     assert(res != 0);
-    memset(res, 0, n);
 
     return res;
 }
