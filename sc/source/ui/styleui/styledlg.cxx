@@ -69,7 +69,7 @@ ScStyleDlg::ScStyleDlg( vcl::Window*             pParent,
     OSL_ENSURE(pFact, "Dialog creation failed!");
     switch ( nRscId )
     {
-        case RID_SCDLG_STYLES_PAR:  // Zellformatvorlagen
+        case RID_SCDLG_STYLES_PAR:  // cell format styles
             {
                 SvtCJKOptions aCJKOptions;
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");
@@ -102,7 +102,7 @@ ScStyleDlg::ScStyleDlg( vcl::Window*             pParent,
             }
             break;
 
-        case RID_SCDLG_STYLES_PAGE: // Seitenvorlagen
+        case RID_SCDLG_STYLES_PAGE: // page styles
             {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");
@@ -135,7 +135,7 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
             const SfxPoolItem* pInfoItem
                 = pDocSh->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
 
-            OSL_ENSURE( pInfoItem, "NumberInfoItem nicht gefunden!" );
+            OSL_ENSURE( pInfoItem, "NumberInfoItem not found!" );
 
             aSet.Put (SvxNumberInfoItem( static_cast<const SvxNumberInfoItem&>(*pInfoItem) ) );
             rTabPage.PageCreated(aSet);
@@ -145,7 +145,7 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
             const SfxPoolItem* pInfoItem
                 = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
 
-            OSL_ENSURE( pInfoItem, "FontListItem nicht gefunden!" );
+            OSL_ENSURE( pInfoItem, "FontListItem not found!" );
 
             aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(*pInfoItem).GetFontList(), SID_ATTR_CHAR_FONTLIST));
             rTabPage.PageCreated(aSet);
