@@ -55,6 +55,7 @@
 #include "scmatrix.hxx"
 #include <columnspanset.hxx>
 #include <column.hxx>
+#include <com/sun/star/document/MacroExecMode.hpp>
 
 #include <memory>
 #include <algorithm>
@@ -2388,6 +2389,21 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
 
     // make medium hidden to prevent assertion from progress bar
     pSet->Put( SfxBoolItem(SID_HIDDEN, true) );
+
+    // If the current document is allowed to execute macros then the referenced
+    // document may execute macros according to the security configuration.
+    SfxObjectShell* pShell = mpDoc->GetDocumentShell();
+    if (pShell)
+    {
+        SfxMedium* pMedium = pShell->GetMedium();
+        if (pMedium)
+        {
+            const SfxPoolItem* pItem;
+            if (pMedium->GetItemSet()->GetItemState( SID_MACROEXECMODE, false, &pItem ) == SfxItemState::SET &&
+                    static_cast<const SfxUInt16Item*>(pItem)->GetValue() != css::document::MacroExecMode::NEVER_EXECUTE)
+                pSet->Put( SfxUInt16Item( SID_MACROEXECMODE, css::document::MacroExecMode::USE_CONFIG));
+        }
+    }
 
     unique_ptr<SfxMedium> pMedium(new SfxMedium(aFile, STREAM_STD_READ, pFilter, pSet));
     if (pMedium->GetError() != ERRCODE_NONE)
