@@ -403,6 +403,7 @@ void Application::Execute()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mbInAppExecute = true;
+    pSVData->maAppData.mbAppQuit = false;
 
     sal_uInt16 n = GetCommandLineParamCount();
     for (sal_uInt16 i = 0; i != n; ++i)
