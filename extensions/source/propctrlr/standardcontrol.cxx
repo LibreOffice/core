@@ -223,7 +223,7 @@ namespace pcr
 
         // for password controls, we fire a commit for every single change
         if ( m_bIsPassword )
-            m_aImplControl.notifyModifiedValue();
+            notifyModifiedValue();
     }
 
 
@@ -787,7 +787,7 @@ namespace pcr
 
         if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit
-            m_aImplControl.notifyModifiedValue();
+            notifyModifiedValue();
     }
 
 
@@ -879,7 +879,7 @@ namespace pcr
 
         if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit
-            m_aImplControl.notifyModifiedValue();
+            notifyModifiedValue();
     }
 
 
@@ -947,7 +947,7 @@ namespace pcr
     {
         if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit
-            m_aImplControl.notifyModifiedValue();
+            notifyModifiedValue();
         return 0L;
     }
 
@@ -1058,13 +1058,13 @@ namespace pcr
     }
 
 
-    void DropDownEditControl::setControlHelper( ControlHelper& _rControlHelper )
+    void DropDownEditControl::setControlHelper( CommonBehaviourControlHelper& _rControlHelper )
     {
         DropDownEditControl_Base::setControlHelper( _rControlHelper );
-        m_pFloatingEdit->getEdit().SetModifyHdl( LINK( &_rControlHelper, ControlHelper, ModifiedHdl ) );
-        m_pImplEdit->SetGetFocusHdl( LINK( &_rControlHelper, ControlHelper, GetFocusHdl ) );
-        m_pImplEdit->SetModifyHdl( LINK( &_rControlHelper, ControlHelper, ModifiedHdl ) );
-        m_pImplEdit->SetLoseFocusHdl( LINK( &_rControlHelper, ControlHelper, LoseFocusHdl ) );
+        m_pFloatingEdit->getEdit().SetModifyHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, ModifiedHdl ) );
+        m_pImplEdit->SetGetFocusHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, GetFocusHdl ) );
+        m_pImplEdit->SetModifyHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, ModifiedHdl ) );
+        m_pImplEdit->SetLoseFocusHdl( LINK( &_rControlHelper, CommonBehaviourControlHelper, LoseFocusHdl ) );
     }
 
 

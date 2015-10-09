@@ -114,6 +114,7 @@ namespace pcr
         virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
+        // CommonBehaviourControlHelper::modified
         virtual void modified() SAL_OVERRIDE;
     };
 
@@ -275,6 +276,7 @@ namespace pcr
         virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
+        // CommonBehaviourControlHelper::modified
         virtual void modified() SAL_OVERRIDE;
     };
 
@@ -301,6 +303,7 @@ namespace pcr
         virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
+        // CommonBehaviourControlHelper::modified
         virtual void modified() SAL_OVERRIDE;
     };
 
@@ -368,7 +371,7 @@ namespace pcr
                         GetStringListValue() const;
 
         // ControlWindow overridables
-        virtual void setControlHelper( ControlHelper& _rControlHelper ) SAL_OVERRIDE;
+        virtual void setControlHelper( CommonBehaviourControlHelper& _rControlHelper ) SAL_OVERRIDE;
 
     protected:
         // Window overridables
