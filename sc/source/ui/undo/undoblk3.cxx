@@ -102,6 +102,7 @@ ScUndoDeleteContents::ScUndoDeleteContents(
 
 ScUndoDeleteContents::~ScUndoDeleteContents()
 {
+    pUndoDoc.reset();
     DeleteSdrUndoAction( pDrawUndo );
 }
 
