@@ -72,13 +72,11 @@ private:
     Size m_aDocumentSize;
     OString m_aTextSelection;
     bool m_bFound;
-    sal_Int32 m_nSearchResultCount;
     std::vector<OString> m_aSearchResultSelection;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
-    : m_bFound(true),
-      m_nSearchResultCount(0)
+    : m_bFound(true)
 {
 }
 
@@ -132,12 +130,6 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
     {
         m_bFound = false;
-    }
-    break;
-    case LOK_CALLBACK_SEARCH_RESULT_COUNT:
-    {
-        std::string aStrPayload(pPayload);
-        m_nSearchResultCount = std::stoi(aStrPayload.substr(0, aStrPayload.find_first_of(";")));
     }
     break;
     case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
@@ -485,8 +477,6 @@ void SwTiledRenderingTest::testSearchAll()
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was 0; should be 2 results in the body text.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nSearchResultCount);
-    // Make sure that we get exactly as many rectangle lists as matches.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSearchResultSelection.size());
 
     comphelper::LibreOfficeKit::setActive(false);
