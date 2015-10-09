@@ -63,13 +63,12 @@ namespace com { namespace sun { namespace star {
 
 namespace dbaui
 {
-
     class SubComponentManager;
-
-    // OApplicationController
     class OApplicationController;
     class OApplicationView;
     class OLinkedDocumentsAccess;
+    class SelectionNotifier;
+
     typedef ::cppu::ImplHelper5 <   css::container::XContainerListener
                                 ,   css::beans::XPropertyChangeListener
                                 ,   css::sdb::application::XDatabaseDocumentUI
@@ -77,7 +76,6 @@ namespace dbaui
                                 ,   css::view::XSelectionSupplier
                                 >   OApplicationController_Base;
 
-    class SelectionNotifier;
 
     class OApplicationController
             :public OGenericUnoController
@@ -115,11 +113,11 @@ namespace dbaui
         TransferableClipboardListener*
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard
         ImplSVEvent *           m_nAsyncDrop;
-        OAsynchronousLink        m_aSelectContainerEvent;
+        OAsynchronousLink       m_aSelectContainerEvent;
         PreviewMode             m_ePreviewMode;             // the mode of the preview
         ElementType             m_eCurrentType;
-        bool                m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date
-        bool                m_bSuspended;               // is true when the controller was already suspended
+        bool                    m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date
+        bool                    m_bSuspended;               // is true when the controller was already suspended
 
         ::std::unique_ptr< SelectionNotifier >
                                 m_pSelectionNotifier;
