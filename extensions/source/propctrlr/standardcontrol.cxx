@@ -217,9 +217,9 @@ namespace pcr
     }
 
 
-    void OEditControl::modified()
+    void OEditControl::setModified()
     {
-        OEditControl_Base::modified();
+        OEditControl_Base::setModified();
 
         // for password controls, we fire a commit for every single change
         if ( m_bIsPassword )
@@ -781,9 +781,9 @@ namespace pcr
     }
 
 
-    void OColorControl::modified()
+    void OColorControl::setModified()
     {
-        OColorControl_Base::modified();
+        OColorControl_Base::setModified();
 
         if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit
@@ -873,9 +873,9 @@ namespace pcr
     }
 
 
-    void OListboxControl::modified()
+    void OListboxControl::setModified()
     {
-        OListboxControl_Base::modified();
+        OListboxControl_Base::setModified();
 
         if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit

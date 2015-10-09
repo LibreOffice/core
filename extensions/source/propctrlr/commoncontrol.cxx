@@ -97,7 +97,7 @@ namespace pcr
 
     IMPL_LINK( CommonBehaviourControlHelper, ModifiedHdl, vcl::Window*, /*_pWin*/ )
     {
-        modified();
+        setModified();
         return 0;
     }
 

@@ -112,7 +112,7 @@ namespace pcr
 
     protected:
         // CommonBehaviourControlHelper::modified
-        virtual void modified() SAL_OVERRIDE;
+        virtual void setModified() SAL_OVERRIDE;
     };
 
 
@@ -271,8 +271,8 @@ namespace pcr
         virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        // CommonBehaviourControlHelper::modified
-        virtual void modified() SAL_OVERRIDE;
+        // CommonBehaviourControlHelper::setModified
+        virtual void setModified() SAL_OVERRIDE;
     };
 
 
@@ -298,8 +298,8 @@ namespace pcr
         virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        // CommonBehaviourControlHelper::modified
-        virtual void modified() SAL_OVERRIDE;
+        // CommonBehaviourControlHelper::setModified
+        virtual void setModified() SAL_OVERRIDE;
     };
 
 

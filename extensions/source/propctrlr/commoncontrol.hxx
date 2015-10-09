@@ -67,7 +67,7 @@ namespace pcr
 
         virtual ~CommonBehaviourControlHelper();
 
-        virtual void modified() { m_bModified = true; }
+        virtual void setModified() { m_bModified = true; }
 
         // XPropertyControl
         ::sal_Int16 SAL_CALL getControlType() throw (css::uno::RuntimeException) { return m_nControlType; }
@@ -108,7 +108,6 @@ namespace pcr
                                     ,public CommonBehaviourControlHelper
     {
     protected:
-        typedef ::comphelper::OBaseMutex                                MutexBaseClass;
         typedef ::cppu::WeakComponentImplHelper< TControlInterface >    ComponentBaseClass;
 
         inline CommonBehaviourControl( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers = true );
