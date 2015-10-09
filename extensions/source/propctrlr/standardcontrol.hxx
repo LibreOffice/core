@@ -51,11 +51,11 @@ namespace pcr
         thus giving this class the same API (as far as the CommonBehaviourControl is concerned)
         as all other windows.
     */
-    template< class LISTBOX_WINDOW >
-    class ListLikeControlWithModifyHandler : public ControlWindow< LISTBOX_WINDOW >
+    template< class TListboxWindow >
+    class ListLikeControlWithModifyHandler : public ControlWindow< TListboxWindow >
     {
     protected:
-        typedef ControlWindow< LISTBOX_WINDOW >  ListBoxType;
+        typedef ControlWindow< TListboxWindow >  ListBoxType;
 
     public:
         ListLikeControlWithModifyHandler( vcl::Window* _pParent, WinBits _nStyle )

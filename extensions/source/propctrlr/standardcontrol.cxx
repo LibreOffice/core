@@ -115,7 +115,7 @@ namespace pcr
     ODateControl::ODateControl( vcl::Window* pParent, WinBits nWinStyle )
         :ODateControl_Base( PropertyControlType::DateField, pParent, nWinStyle | WB_DROPDOWN )
     {
-        WindowType* pControlWindow = getTypedControlWindow();
+        ControlWindow<CalendarField>* pControlWindow = getTypedControlWindow();
         pControlWindow->SetStrictFormat(true);
 
         pControlWindow->SetMin( ::Date( 1,1,1600 ) );
