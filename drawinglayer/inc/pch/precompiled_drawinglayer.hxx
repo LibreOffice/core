@@ -110,8 +110,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/weakref.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
