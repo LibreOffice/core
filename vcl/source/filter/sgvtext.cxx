@@ -788,7 +788,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
         nChars++; Line[nChars]=R->ChrXP; // to assure AbsatzEnde is read
         Line[nChars+1]=R->ChrXP;         // as the width of CR or #0 is very small
         if (TBuf[R->Index-1]!=AbsatzEnd &&  TBuf[R->Index-1]!=TextEnd) {
-            c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,false); // small correction needed, if 1st word read
+            GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,false); // small correction needed, if 1st word read
         }
     }
 
