@@ -295,7 +295,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p, bool bIns )
 {
     if( p->HasValidRange() )
     {
-        std::pair<_SwRedlineTable::const_iterator, bool> rv = insert( p );
+        std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         size_t nP = rv.first - begin();
         p->CallDisplayFunc(0, nP);
         return rv.second;
@@ -311,7 +311,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p, sal_uInt16& rP, bool bIns )
 {
     if( p->HasValidRange() )
     {
-        std::pair<_SwRedlineTable::const_iterator, bool> rv = insert( p );
+        std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         rP = rv.first - begin();
         p->CallDisplayFunc(0, rP);
         return rv.second;
@@ -439,17 +439,17 @@ bool CompareSwRedlineTable::operator()(SwRangeRedline* const &lhs, SwRangeRedlin
     return *lhs < *rhs;
 }
 
-_SwRedlineTable::~_SwRedlineTable()
+SwRedlineTable::~SwRedlineTable()
 {
-    DeleteAndDestroyAll();
+   maVector.DeleteAndDestroyAll();
 }
 
 sal_uInt16 SwRedlineTable::GetPos(const SwRangeRedline* p) const
 {
-    const_iterator it = find(const_cast<SwRangeRedline* const>(p));
-    if( it == end() )
+    vector_type::const_iterator it = maVector.find(const_cast<SwRangeRedline* const>(p));
+    if( it == maVector.end() )
         return USHRT_MAX;
-    return it - begin();
+    return it - maVector.begin();
 }
 
 bool SwRedlineTable::Remove( const SwRangeRedline* p )
@@ -465,9 +465,9 @@ void SwRedlineTable::Remove( sal_uInt16 nP )
 {
     SwDoc* pDoc = 0;
     if( !nP && 1 == size() )
-        pDoc = front()->GetDoc();
+        pDoc = maVector.front()->GetDoc();
 
-    erase( begin() + nP );
+    maVector.erase( maVector.begin() + nP );
 
     SwViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
@@ -484,11 +484,11 @@ void SwRedlineTable::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 {
     SwDoc* pDoc = 0;
     if( !nP && nL && nL == size() )
-        pDoc = front()->GetDoc();
+        pDoc = maVector.front()->GetDoc();
 
-    for( const_iterator it = begin() + nP; it != begin() + nP + nL; ++it )
+    for( vector_type::const_iterator it = maVector.begin() + nP; it != maVector.begin() + nP + nL; ++it )
         delete *it;
-    erase( begin() + nP, begin() + nP + nL );
+    maVector.erase( maVector.begin() + nP, maVector.begin() + nP + nL );
 
     SwViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
@@ -563,7 +563,7 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
                                         bool bNext ) const
 {
     const SwRangeRedline* pFnd = 0;
-    for( ; rPos < size() ; ++rPos )
+    for( ; rPos < maVector.size() ; ++rPos )
     {
         const SwRangeRedline* pTmp = (*this)[ rPos ];
         if( pTmp->HasMark() && pTmp->IsVisible() )

@@ -83,7 +83,6 @@ merge XFDate with XFDateStart
 merge XFDateTimePart with XFTimePart
 merge XMLTransformer with XMLTransformerBase
 merge XclDebugObjCounter with XclRootData
-merge _SwRedlineTable with SwRedlineTable
 merge abp::OModuleResourceClient with abp::OABSPilotUno
 merge accessibility::IComboListBoxHelper with VCLListBoxHelper
 merge basctl::docs::IDocumentDescriptorFilter with basctl::(anonymous namespace)::FilterDocuments

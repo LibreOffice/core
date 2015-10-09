@@ -183,18 +183,18 @@ struct CompareSwRedlineTable
 {
     bool operator()(SwRangeRedline* const &lhs, SwRangeRedline* const &rhs) const;
 };
-class _SwRedlineTable
-    : public o3tl::sorted_vector<SwRangeRedline*, CompareSwRedlineTable,
-                o3tl::find_partialorder_ptrequals>
-{
-public:
-    ~_SwRedlineTable();
-};
 
-class SwRedlineTable : private _SwRedlineTable
+class SwRedlineTable
 {
 public:
-    bool Contains(const SwRangeRedline* p) const { return find(const_cast<SwRangeRedline* const>(p)) != end(); }
+    typedef o3tl::sorted_vector<SwRangeRedline*, CompareSwRedlineTable,
+                o3tl::find_partialorder_ptrequals> vector_type;
+    typedef vector_type::size_type size_type;
+private:
+    vector_type maVector;
+public:
+    ~SwRedlineTable();
+    bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline* const>(p)) != maVector.end(); }
     sal_uInt16 GetPos(const SwRangeRedline* p) const;
 
     bool Insert( SwRangeRedline* p, bool bIns = true );
@@ -227,14 +227,12 @@ public:
     */
     const SwRangeRedline* FindAtPosition( const SwPosition& startPosition, sal_uInt16& tableIndex, bool next = true ) const;
 
-    using _SwRedlineTable::const_iterator;
-    using _SwRedlineTable::begin;
-    using _SwRedlineTable::end;
-    using _SwRedlineTable::size;
-    using _SwRedlineTable::size_type;
-    using _SwRedlineTable::operator[];
-    using _SwRedlineTable::empty;
-    using _SwRedlineTable::Resort;
+    bool                        empty() const { return maVector.empty(); }
+    size_type                   size() const { return maVector.size(); }
+    SwRangeRedline*             operator[]( size_type idx ) const { return maVector[idx]; }
+    vector_type::const_iterator begin() const { return maVector.begin(); }
+    vector_type::const_iterator end() const { return maVector.end(); }
+    void                        Resort() { maVector.Resort(); }
 };
 
 /// Table that holds 'extra' redlines, such as 'table row insert\delete', 'paragraph moves' etc...
