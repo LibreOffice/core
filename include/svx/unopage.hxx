@@ -36,7 +36,7 @@
 #include <editeng/mutxhelp.hxx>
 #include <svx/svxdllapi.h>
 
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <svx/unoprov.hxx>
@@ -56,7 +56,7 @@ class SvxShapeConnector;
 #define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
 #define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 
-class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< ::com::sun::star::drawing::XDrawPage,
+class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper < ::com::sun::star::drawing::XDrawPage,
                                                ::com::sun::star::drawing::XShapeGrouper,
                                                ::com::sun::star::drawing::XShapes2,
                                                ::com::sun::star::lang::XServiceInfo,
