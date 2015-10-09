@@ -7877,17 +7877,17 @@ void ScInterpreter::ScFind()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        double fAnz;
+        sal_Int32 nAnz;
         if (nParamCount == 3)
-            fAnz = GetDouble();
+            nAnz = GetDouble();
         else
-            fAnz = 1.0;
+            nAnz = 1;
         OUString sStr = GetString().getString();
-        if( fAnz < 1.0 || fAnz > (double) sStr.getLength() )
+        if (nAnz < 1 || nAnz > sStr.getLength())
             PushNoValue();
         else
         {
-            sal_Int32 nPos = sStr.indexOf(GetString().getString(), static_cast<sal_Int32>(fAnz - 1));
+            sal_Int32 nPos = sStr.indexOf(GetString().getString(), nAnz - 1);
             if (nPos == -1)
                 PushNoValue();
             else
