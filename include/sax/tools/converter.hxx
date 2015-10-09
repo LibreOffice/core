@@ -139,6 +139,12 @@ public:
     /** convert string to double number (using ::rtl::math) without unit conversion */
     static bool convertDouble(double& rValue, const OUString& rString);
 
+    /** convert number, 10th of degrees with range [0..3600] to SVG angle */
+    static void convertAngle(OUStringBuffer& rBuffer, sal_Int16 nAngle);
+
+    /** convert SVG angle to number, 10th of degrees with range [0..3600] */
+    static bool convertAngle(sal_Int16& rAngle, OUString const& rString);
+
     /** convert double to ISO "duration" string; negative durations allowed */
     static void convertDuration(OUStringBuffer& rBuffer,
                                 const double fTime);

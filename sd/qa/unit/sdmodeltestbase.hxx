@@ -48,6 +48,7 @@ struct FileFormat
 #define PPTX_FORMAT_TYPE ( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER | SfxFilterFlags::PREFERED )
 #define HTML_FORMAT_TYPE ( SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN )
 #define PDF_FORMAT_TYPE  ( SfxFilterFlags::STARONEFILTER | SfxFilterFlags::ALIEN | SfxFilterFlags::IMPORT | SfxFilterFlags::PREFERED )
+#define FODG_FORMAT_TYPE  (SfxFilterFlags::STARONEFILTER | SfxFilterFlags::OWN | SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT)
 
 /** List of file formats we support in Impress unit tests.
 
@@ -64,6 +65,7 @@ FileFormat aFileFormats[] =
     { "pptx", "Impress Office Open XML", "Office Open XML Presentation", "", PPTX_FORMAT_TYPE },
     { "html", "graphic_HTML", "graphic_HTML", "", HTML_FORMAT_TYPE },
     { "pdf",  "draw_pdf_import", "pdf_Portable_Document_Format", "", PDF_FORMAT_TYPE },
+    { "fodg",  "OpenDocument Drawing Flat XML", "Flat XML ODF Drawing", "", FODG_FORMAT_TYPE },
     { 0, 0, 0, 0, SfxFilterFlags::NONE }
 };
 
@@ -72,6 +74,7 @@ FileFormat aFileFormats[] =
 #define PPTX 2
 #define HTML 3
 #define PDF  4
+#define FODG 5
 
 /// Base class for filter tests loading or roundtriping a document, and asserting the document model.
 class SdModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
