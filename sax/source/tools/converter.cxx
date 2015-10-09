@@ -640,6 +640,62 @@ bool Converter::convertDouble(double& rValue, const OUString& rString)
     return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
+/** convert number, 10th of degrees with range [0..3600] to SVG angle */
+void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle)
+{
+#if 1
+    // wrong, but backward compatible with OOo/LO < 4.4
+    ::sax::Converter::convertNumber(rBuffer, nAngle);
+#else
+    // maybe in the future... (see other convertAngle)
+    double fAngle(double(nAngle) / 10.0);
+    ::sax::Converter::convertDouble(rBuffer, fAngle);
+    rBuffer.append("deg");
+#endif
+}
+
+/** convert SVG angle to number, 10th of degrees with range [0..3600] */
+bool Converter::convertAngle(sal_Int16& rAngle, OUString const& rString)
+{
+    // ODF 1.1 leaves it undefined what the number means, but ODF 1.2 says it's
+    // degrees, while OOo has historically used 10th of degrees :(
+    // So import degrees when we see the "deg" suffix but continue with 10th of
+    // degrees for now for the sake of existing OOo/LO documents, until the
+    // new versions that can read "deg" suffix are widely deployed and we can
+    // start to write the "deg" suffix.
+    sal_Int32 nValue(0);
+    double fValue(0.0);
+    bool bRet = ::sax::Converter::convertDouble(fValue, rString);
+    if (-1 != rString.indexOf("deg"))
+    {
+        nValue = fValue * 10.0;
+    }
+    else if (-1 != rString.indexOf("grad"))
+    {
+        nValue = (fValue * 9.0 / 10.0) * 10.0;
+    }
+    else if (-1 != rString.indexOf("rad"))
+    {
+        nValue = (fValue * 180.0 / M_PI) * 10.0;
+    }
+    else // no explicit unit
+    {
+        nValue = fValue; // wrong, but backward compatible with OOo/LO < 4.4
+    }
+    // limit to valid range [0..3600]
+    nValue = nValue % 3600;
+    if (nValue < 0)
+    {
+        nValue += 3600;
+    }
+    assert(0 <= nValue && nValue <= 3600);
+    if (bRet)
+    {
+        rAngle = sal::static_int_cast<sal_Int16>(nValue);
+    }
+    return bRet;
+}
+
 /** convert double to ISO "duration" string; negative durations allowed */
 void Converter::convertDuration(OUStringBuffer& rBuffer,
                                 const double fTime)
