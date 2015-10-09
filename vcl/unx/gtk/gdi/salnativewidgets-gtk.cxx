@@ -2018,10 +2018,6 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
                                       "has-backward-stepper", &has_backward,
                                          "has-secondary-backward-stepper", &has_backward2, nullptr );
     gint magic = trough_border ? 1 : 0;
-    gint nFirst = 0;
-
-    if ( has_backward )  nFirst  += 1;
-    if ( has_forward2 )  nFirst  += 1;
 
     if ( nPart == PART_DRAW_BACKGROUND_HORZ )
     {
