@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_56af25e3",
+        "filename": "slideshow/source/engine/slideshowimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-09T16:05:36Z",
+      "side": 1,
+      "message": "Return the iterator if the polygon is found, otherwise return the end",
+      "revId": "d5ef1e91397857c576d432e612423511e7126658",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_96b9bd31",
+        "filename": "slideshow/source/engine/slideshowimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-09T16:05:36Z",
+      "side": 1,
+      "message": "We make the copy here so there is no need for pPolyPoly \u003d ( *aIterPoly );",
+      "revId": "d5ef1e91397857c576d432e612423511e7126658",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_76b6a93e",
+        "filename": "slideshow/source/engine/transitions/slidetransitionfactory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-09T16:05:36Z",
+      "side": 1,
+      "message": "I tried to simplify this function. Let me know if the previous method is preferred.",
+      "revId": "d5ef1e91397857c576d432e612423511e7126658",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

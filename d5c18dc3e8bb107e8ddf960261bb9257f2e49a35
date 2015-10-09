@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_36ac31ed",
+        "filename": "slideshow/source/engine/slideshowimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-10-09T16:05:36Z",
+      "side": 0,
+      "message": "I\u0027d prefer to remove these as they are not used in this scope, but I could be convinced otherwise.",
+      "revId": "d5c18dc3e8bb107e8ddf960261bb9257f2e49a35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
