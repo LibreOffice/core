@@ -128,6 +128,66 @@ public:
     { WeakComponentImplHelperBase::removeEventListener(aListener); }
 };
 
+/** Implementation helper supporting com::sun::star::lang::XTypeProvider
+    and com::sun::star::lang::XComponent.
+
+    Upon disposing objects of this class, sub-classes receive a disposing()
+    call.  Objects of this class can be held weakly, i.e. by a
+    com::sun::star::uno::WeakReference.  Object of this class can be
+    aggregated, i.e. incoming queryInterface() calls are delegated.
+
+    @attention
+    The life-cycle of the passed mutex reference has to be longer than objects of this class.
+
+    @derive
+    Inherit from this class giving your interface(s) to be implemented as template argument(s).
+    Your sub class defines method implementations for these interface(s).
+
+    @deprecated
+*/
+template< typename... Ifc >
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggComponentImplHelper
+    : public WeakAggComponentImplHelperBase
+    , public ::com::sun::star::lang::XTypeProvider
+    , public Ifc...
+{
+    struct cd :
+        public rtl::StaticAggregate<
+            class_data, detail::ImplClassData < WeakAggComponentImplHelper, Ifc... > >
+    {};
+
+public:
+    inline WeakAggComponentImplHelper( ::osl::Mutex & rMutex )
+        throw ()
+    : WeakAggComponentImplHelperBase( rMutex )
+    {}
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return WeakAggComponentImplHelperBase::queryInterface( rType ); }
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return WeakAggComponentImplHelper_queryAgg( rType, cd::get(), this, static_cast<WeakAggComponentImplHelperBase *>(this) ); }
+
+    virtual void SAL_CALL acquire()
+        throw () SAL_OVERRIDE
+    { WeakAggComponentImplHelperBase::acquire(); }
+
+    virtual void SAL_CALL release()
+        throw () SAL_OVERRIDE
+    { WeakAggComponentImplHelperBase::release(); }
+
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return WeakAggComponentImplHelper_getTypes( cd::get() ); }
+
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return ImplHelper_getImplementationId( cd::get() ); }
+
+};
+
 }
 
 #endif
