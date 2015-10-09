@@ -1153,6 +1153,14 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else
                 bRet = true;
         }
+        else if (aFltName == "Gnumeric Spreadsheet")
+        {
+            ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+            if (!pOrcus)
+                return false;
+
+            bRet = pOrcus->importGnumeric(aDocument, rMedium);
+        }
         else if (aFltName == pFilterAscii)
         {
             SfxItemSet*  pSet = rMedium.GetItemSet();

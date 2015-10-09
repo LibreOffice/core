@@ -28,7 +28,7 @@
       constructor="com_sun_star_comp_oox_xls_FormulaParser_get_implementation">
     <service name="com.sun.star.sheet.FilterFormulaParser"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sc.OrcusFormatDetect"
+  <implementation name="com.sun.star.comp.sc.OrcusFilterDetect"
       constructor="com_sun_star_comp_sc_OrcusFormatDetect_get_implementation">
     <service name="com.sun.star.frame.ExtendedTypeDetection"/>
   </implementation>
