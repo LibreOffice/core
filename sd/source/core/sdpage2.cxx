@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <libxml/xmlwriter.h>
 
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
@@ -632,6 +633,31 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
         pModel->SetChanged();
         NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), "OnAnnotationRemoved", Reference<XInterface>( xAnnotation, UNO_QUERY ) );
     }
+}
+
+void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdPage"));
+
+    const char* pPageKind = 0;
+    switch (mePageKind)
+    {
+    case PK_STANDARD:
+        pPageKind = "PK_STANDARD";
+    break;
+    case PK_NOTES:
+        pPageKind = "PK_NOTES";
+        break;
+    case PK_HANDOUT:
+        pPageKind = "PK_HANDOUT";
+        break;
+    }
+    if (pPageKind)
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mePageKind"), BAD_CAST(pPageKind));
+
+
+    FmFormPage::dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

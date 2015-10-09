@@ -374,6 +374,7 @@ public:
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
     sal_Int32 getHash() const;
     OString stringify() const;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 
 private:
     bool mbIsPrecious;

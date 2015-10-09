@@ -241,7 +241,7 @@ public:
     void SetNavigationOrder (const css::uno::Reference<
                              css::container::XIndexAccess>& rxOrder);
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
     class WeakSdrObjectContainerType;
