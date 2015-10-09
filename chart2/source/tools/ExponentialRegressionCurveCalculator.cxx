@@ -177,7 +177,7 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
           ( !bHasSlope && m_fLogIntercept != 0.0 ) )    // show logarithmic output, if intercept and slope both are near one
         {                                               // otherwise drop output of intercept, which is 1 here
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
-            aBuf.append( (m_fLogSlope < 0.0) ? " " : " + ");
+            aBuf.append( (m_fLogSlope < 0.0) ? OUStringLiteral(" ") : OUStringLiteral(" + "));
         }
     }
     if ( m_fLogSlope < 0.0 )
