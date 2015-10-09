@@ -2675,7 +2675,6 @@ dbus_uninhibit_gsm (guint cookie)
         if (error != NULL) {
                 g_debug ("Uninhibit problem : %s", error->message);
                 g_error_free (error);
-                cookie = -1;
         }
         g_object_unref (G_OBJECT (proxy));
 }
