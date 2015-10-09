@@ -27,18 +27,6 @@
 
 namespace helpdatafileproxy {
 
-    namespace hdf_internal
-    {
-        class Noncopyable
-        {
-            Noncopyable(const Noncopyable&) SAL_DELETED_FUNCTION;
-            void operator=(const Noncopyable&) SAL_DELETED_FUNCTION;
-        protected:
-            Noncopyable() {}
-            ~Noncopyable() {}
-        };
-    }
-
     class HDFData
     {
         friend class        Hdf;
@@ -65,7 +53,7 @@ namespace helpdatafileproxy {
     typedef std::unordered_map< OString,std::pair<int,int>,OStringHash >   StringToValPosMap;
     typedef std::unordered_map< OString,OString,OStringHash >     StringToDataMap;
 
-    class Hdf : hdf_internal::Noncopyable
+    class Hdf
     {
         OUString       m_aFileURL;
         StringToDataMap*    m_pStringToDataMap;
@@ -108,7 +96,10 @@ namespace helpdatafileproxy {
         bool startIteration();
         bool getNextKeyAndValue( HDFData& rKey, HDFData& rValue );
         void stopIteration();
+        Hdf(const Hdf&) SAL_DELETED_FUNCTION;
+        void operator=(const Hdf&) SAL_DELETED_FUNCTION;
     };
+
 }
 
 #endif
