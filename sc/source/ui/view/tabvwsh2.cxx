@@ -26,7 +26,6 @@
 #include <sfx2/dispatch.hxx>
 
 #include "tabvwsh.hxx"
-#include "drawattr.hxx"
 #include "drawsh.hxx"
 #include "drawview.hxx"
 #include "fupoor.hxx"
@@ -101,10 +100,11 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if (nNewId == SID_INSERT_DRAW && pArgs)
     {
         const SfxPoolItem* pItem;
+        const SfxAllEnumItem* pEnumItem = nullptr;
         if ( pArgs->GetItemState( SID_INSERT_DRAW, true, &pItem ) == SfxItemState::SET &&
-             dynamic_cast<const SvxDrawToolItem*>( pItem) !=  nullptr )
+             ( pEnumItem = dynamic_cast<const SfxAllEnumItem*>( pItem ) ) )
         {
-            SvxDrawToolEnum eSel = (SvxDrawToolEnum)static_cast<const SvxDrawToolItem*>(pItem)->GetValue();
+            SvxDrawToolEnum eSel = (SvxDrawToolEnum)pEnumItem->GetValue();
             switch (eSel)
             {
                 case SVX_SNAP_DRAW_SELECT:          nNewId = SID_OBJECT_SELECT;         break;
