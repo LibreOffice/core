@@ -72,6 +72,7 @@ public:
     void testN759180();
     void testN778859();
     void testMasterPageStyleParent();
+    void testGradientAngle();
     void testFdo64512();
     void testFdo71075();
     void testN828390_2();
@@ -113,6 +114,7 @@ public:
     CPPUNIT_TEST(testN759180);
     CPPUNIT_TEST(testN778859);
     CPPUNIT_TEST(testMasterPageStyleParent);
+    CPPUNIT_TEST(testGradientAngle);
     CPPUNIT_TEST(testFdo64512);
     CPPUNIT_TEST(testFdo71075);
     CPPUNIT_TEST(testN828390_2);
@@ -437,6 +439,62 @@ void SdImportTest::testMasterPageStyleParent()
     CPPUNIT_ASSERT_EQUAL(16, parents);
 
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testGradientAngle()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odg/gradient-angle.fodg"), FODG);
+
+    uno::Reference<lang::XMultiServiceFactory> const xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+
+    awt::Gradient gradient;
+    uno::Reference<container::XNameAccess> const xGradients(
+        xDoc->createInstance("com.sun.star.drawing.GradientTable"),
+        uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT(xGradients->getByName("Gradient 38") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), gradient.Angle); // was: 3600
+
+    CPPUNIT_ASSERT(xGradients->getByName("Gradient 10") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(270), gradient.Angle); // 27deg
+
+    CPPUNIT_ASSERT(xGradients->getByName("Gradient 11") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1145), gradient.Angle); // 2rad
+
+    CPPUNIT_ASSERT(xGradients->getByName("Gradient 12") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(900), gradient.Angle); // 100grad
+
+    CPPUNIT_ASSERT(xGradients->getByName("Gradient 13") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3599), gradient.Angle); // -1
+
+    CPPUNIT_ASSERT(xGradients->getByName("Gradient 14") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3028), gradient.Angle); // -1rad
+
+    CPPUNIT_ASSERT(xGradients->getByName("Gradient 15") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(300), gradient.Angle); // 3900
+
+    CPPUNIT_ASSERT(xGradients->getByName("Gradient 16") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(105), gradient.Angle); // 10.5deg
+
+    CPPUNIT_ASSERT(xGradients->getByName("Gradient 17") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1800), gradient.Angle); // \pi rad
+
+    uno::Reference<container::XNameAccess> const xTranspGradients(
+        xDoc->createInstance("com.sun.star.drawing.TransparencyGradientTable"),
+        uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT(xTranspGradients->getByName("Transparency 2") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(10), gradient.Angle); // 1
+
+    CPPUNIT_ASSERT(xTranspGradients->getByName("Transparency 1") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(900), gradient.Angle); // 90deg
+
+    CPPUNIT_ASSERT(xTranspGradients->getByName("Transparency 3") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(572), gradient.Angle); // 1.0rad
+
+    CPPUNIT_ASSERT(xTranspGradients->getByName("Transparency 4") >>= gradient);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1800), gradient.Angle); // 1000grad
 }
 
 void SdImportTest::testN778859()
