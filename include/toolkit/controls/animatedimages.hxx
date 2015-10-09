@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <memory>
 
 namespace toolkit
@@ -33,7 +33,7 @@ namespace toolkit
 
 
     struct AnimatedImagesControlModel_Data;
-    typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
+    typedef ::cppu::AggImplInheritanceHelper    <   UnoControlModel
                                                 ,   css::awt::XAnimatedImages
                                                 >   AnimatedImagesControlModel_Base;
     class AnimatedImagesControlModel : public AnimatedImagesControlModel_Base

@@ -23,6 +23,7 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -38,7 +39,7 @@ namespace toolkit
 
 
     typedef ::comphelper::OAccessibleComponentHelper    OAccessibleControlContext_Base;
-    typedef ::cppu::ImplHelper1 <   css::lang::XEventListener
+    typedef ::cppu::ImplHelper  <   css::lang::XEventListener
                                 >   OAccessibleControlContext_IBase;
 
     /** class implementing the AccessibleContext for an UNO control - to be used in design mode of the control.

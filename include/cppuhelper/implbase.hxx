@@ -38,14 +38,6 @@
 
 #if defined LIBO_INTERNAL_ONLY
 
-// A replacement for ImplHelperN has deliberately been left out, as ImplHelperN
-// is unlikely ever be a better choice than WeakImplHelper, so all their
-// existing uses are probably confused and should use WeakImplHelper instead.
-//
-// Replacements for WeakAggImplHelperN and AggImplInheritanceHelper1 have
-// deliberately been left out, as the underlying aggregation mechanism is known
-// broken in general and should not be used.
-
 namespace cppu {
 
 /// @cond INTERNAL
@@ -80,6 +72,42 @@ template<typename Impl, typename... Ifc> struct ImplClassData {
 }
 
 /// @endcond
+
+/** Implementation helper implementing interface com::sun::star::lang::XTypeProvider
+    and method XInterface::queryInterface(), but no reference counting.
+
+    @derive
+    Inherit from this class giving your interface(s) to be implemented as template argument(s).
+    Your sub class defines method implementations for these interface(s) including acquire()/
+    release() and delegates incoming queryInterface() calls to this base class.
+*/
+template< typename... Ifc >
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelper
+    : public css::lang::XTypeProvider, public Ifc...
+{
+    struct cd :
+        public rtl::StaticAggregate<
+            class_data, detail::ImplClassData < ImplHelper, Ifc... > >
+    {};
+
+public:
+    css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return ImplHelper_query( rType, cd::get(), this ); }
+
+    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return ImplHelper_getTypes( cd::get() ); }
+
+    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return ImplHelper_getImplementationId( cd::get() ); }
+
+protected:
+    ImplHelper() {}
+
+    virtual ~ImplHelper() {}
+};
 
 /** Implementation helper implementing interfaces
     css::uno::XInterface, css::lang::XTypeProvider, and
@@ -119,6 +147,61 @@ public:
     css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
         throw (css::uno::RuntimeException, std::exception) override
     { return css::uno::Sequence<sal_Int8>(); }
+};
+
+/** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider
+    and com::sun::star::uno::XInterface which supports weak mechanism to be held weakly
+    (supporting com::sun::star::uno::XWeak thru ::cppu::OWeakAggObject).
+    In addition, it supports also aggregation meaning object of this class can be aggregated
+    (com::sun::star::uno::XAggregation thru ::cppu::OWeakAggObject).
+    If a delegator is set (this object is aggregated), then incoming queryInterface()
+    calls are delegated to the delegator object. If the delegator does not support the
+    demanded interface, it calls queryAggregation() on its aggregated objects.
+
+    @derive
+    Inherit from this class giving your interface(s) to be implemented as template argument(s).
+    Your sub class defines method implementations for these interface(s).
+*/
+template< typename... Ifc >
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggImplHelper
+        : public OWeakAggObject
+        , public css::lang::XTypeProvider
+        , public Ifc...
+{
+    struct cd :
+        public rtl::StaticAggregate<
+            class_data, detail::ImplClassData < WeakAggImplHelper, Ifc... > >
+    {};
+
+protected:
+    WeakAggImplHelper() {}
+
+    virtual ~WeakAggImplHelper() {}
+
+public:
+    css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return OWeakAggObject::queryInterface( rType ); }
+
+    css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return WeakAggImplHelper_queryAgg( rType, cd::get(), this, static_cast<OWeakAggObject *>(this) ); }
+
+    void SAL_CALL acquire()
+        throw () SAL_OVERRIDE
+    { OWeakAggObject::acquire(); }
+
+    void SAL_CALL release()
+        throw () SAL_OVERRIDE
+    { OWeakAggObject::release(); }
+
+    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return WeakAggImplHelper_getTypes( cd::get() ); }
+
+    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return ImplHelper_getImplementationId( cd::get() ); }
 };
 
 /** Implementation helper implementing interfaces
@@ -173,6 +256,68 @@ public:
     css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
         throw (css::uno::RuntimeException, std::exception) override
     { return css::uno::Sequence<sal_Int8>(); }
+};
+
+/** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider
+    and com::sun::star::uno::XInterface inherting from a BaseClass.
+    All acquire(),  release() and queryInterface() calls are delegated to the BaseClass.
+    Upon queryAggregation(), if a demanded interface is not supported by this class directly,
+    the request is delegated to the BaseClass.
+
+    @attention
+    The BaseClass has to be complete in a sense, that com::sun::star::uno::XInterface,
+    com::sun::star::uno::XAggregation and com::sun::star::lang::XTypeProvider
+    are implemented properly.  The BaseClass must have at least one ctor
+    that can be called with six or fewer arguments, of which none is of
+    non-const reference type.
+
+    @derive
+    Inherit from this class giving your additional interface(s) to be implemented as
+    template argument(s). Your sub class defines method implementations for these interface(s).
+*/
+template< typename BaseClass, typename... Ifc >
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE AggImplInheritanceHelper
+    : public BaseClass, public Ifc...
+{
+    struct cd :
+        public rtl::StaticAggregate<
+            class_data, detail::ImplClassData < AggImplInheritanceHelper, Ifc... > >
+    {};
+
+protected:
+    template< typename... Arg > AggImplInheritanceHelper(Arg &&... arg):
+        BaseClass(std::forward<Arg>(arg)...)
+    {}
+
+    virtual ~AggImplInheritanceHelper() {}
+
+public:
+    css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return BaseClass::queryInterface( rType ); }
+
+    css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    {
+        css::uno::Any aRet( ImplHelper_queryNoXInterface( rType, cd::get(), this ) );
+        return (aRet.hasValue()) ? aRet : BaseClass::queryAggregation( rType );
+    }
+
+    void SAL_CALL acquire()
+        throw ( ) SAL_OVERRIDE
+    { BaseClass::acquire(); }
+
+    void SAL_CALL release()
+        throw ( ) SAL_OVERRIDE
+    { BaseClass::release(); }
+
+    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return ImplInhHelper_getTypes( cd::get(), BaseClass::getTypes() ); }
+
+    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return ImplHelper_getImplementationId( cd::get() ); }
 };
 
 }

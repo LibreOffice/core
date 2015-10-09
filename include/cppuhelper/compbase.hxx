@@ -42,10 +42,6 @@ namespace osl { class Mutex; }
 
 #if defined LIBO_INTERNAL_ONLY
 
-// A replacement for WeakAggComponentImplHelper1 has deliberately been left out,
-// as the underlying aggregation mechanism is known broken in general and should
-// not be used.
-
 namespace cppu {
 
 /** Implementation helper implementing interfaces
@@ -130,6 +126,66 @@ public:
         css::uno::Reference<css::lang::XEventListener> const & aListener)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { WeakComponentImplHelperBase::removeEventListener(aListener); }
+};
+
+/** Implementation helper supporting com::sun::star::lang::XTypeProvider
+    and com::sun::star::lang::XComponent.
+
+    Upon disposing objects of this class, sub-classes receive a disposing()
+    call.  Objects of this class can be held weakly, i.e. by a
+    com::sun::star::uno::WeakReference.  Object of this class can be
+    aggregated, i.e. incoming queryInterface() calls are delegated.
+
+    @attention
+    The life-cycle of the passed mutex reference has to be longer than objects of this class.
+
+    @derive
+    Inherit from this class giving your interface(s) to be implemented as template argument(s).
+    Your sub class defines method implementations for these interface(s).
+
+    @deprecated
+*/
+template< typename... Ifc >
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggComponentImplHelper
+    : public WeakAggComponentImplHelperBase
+    , public css::lang::XTypeProvider
+    , public Ifc...
+{
+    struct cd :
+        public rtl::StaticAggregate<
+            class_data, detail::ImplClassData < WeakAggComponentImplHelper, Ifc... > >
+    {};
+
+public:
+    inline WeakAggComponentImplHelper( ::osl::Mutex & rMutex )
+        throw ()
+    : WeakAggComponentImplHelperBase( rMutex )
+    {}
+
+    css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return WeakAggComponentImplHelperBase::queryInterface( rType ); }
+
+    css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return WeakAggComponentImplHelper_queryAgg( rType, cd::get(), this, static_cast<WeakAggComponentImplHelperBase *>(this) ); }
+
+    void SAL_CALL acquire()
+        throw ( ) SAL_OVERRIDE
+    { WeakAggComponentImplHelperBase::acquire(); }
+
+    void SAL_CALL release()
+        throw ( ) SAL_OVERRIDE
+    { WeakAggComponentImplHelperBase::release(); }
+
+    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return WeakAggComponentImplHelper_getTypes( cd::get() ); }
+
+    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    { return ImplHelper_getImplementationId( cd::get() ); }
+
 };
 
 }
