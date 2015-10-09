@@ -24,8 +24,6 @@
 #include <osl/file.hxx>
 #include <comphelper/solarmutex.hxx>
 
-#include <tools/solarmutex.hxx>
-
 #include <vcl/apptypes.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -580,12 +578,12 @@ WinSalInstance::WinSalInstance()
     mpSalWaitMutex           = new osl::Mutex;
     mnYieldWaitCount         = 0;
     mpSalYieldMutex->acquire();
-    ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
+    ::comphelper::SolarMutex::setSolarMutex( mpSalYieldMutex );
 }
 
 WinSalInstance::~WinSalInstance()
 {
-    ::tools::SolarMutex::SetSolarMutex( 0 );
+    ::comphelper::SolarMutex::setSolarMutex( 0 );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     delete mpSalWaitMutex;
