@@ -22,7 +22,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -62,24 +62,6 @@ static inline void OutputDebugStringFormat( LPCSTR, ... )
 }
 #endif
 
-static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
-{
-    std::_tstring result;
-    TCHAR szDummy[1] = TEXT("");
-    DWORD nChars = 0;
-
-    if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
-    {
-        DWORD nBytes = ++nChars * sizeof(TCHAR);
-        LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-        ZeroMemory( buffer, nBytes );
-        MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-        result = buffer;
-    }
-
-    return result;
-}
-
 static void SetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
     MsiSetProperty( handle, sProperty.c_str(), TEXT("1") );
@@ -87,8 +69,8 @@ static void SetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 
 extern "C" UINT __stdcall CheckPatchList( MSIHANDLE handle )
 {
-    std::_tstring sPatchList = GetMsiProperty( handle, TEXT("PATCH") );
-    std::_tstring sRequiredPatch = GetMsiProperty( handle, TEXT("PREREQUIREDPATCH") );
+    std::_tstring sPatchList = GetMsiPropValue( handle, TEXT("PATCH") );
+    std::_tstring sRequiredPatch = GetMsiPropValue( handle, TEXT("PREREQUIREDPATCH") );
 
     OutputDebugStringFormat( "CheckPatchList called with PATCH=%s and PRQ= %s\n", sPatchList.c_str(), sRequiredPatch.c_str() );
 
@@ -96,7 +78,7 @@ extern "C" UINT __stdcall CheckPatchList( MSIHANDLE handle )
     {
         if ( _tcsstr( sPatchList.c_str(), sRequiredPatch.c_str() ) )
         {
-            SetMsiProperty( handle, TEXT("IGNOREPREREQUIREDPATCH") );
+            MsiSetProperty( handle, TEXT("IGNOREPREREQUIREDPATCH") );
             OutputDebugStringFormat( "Set Property IgnorePrerequiredPatch!\n" );
         }
     }
