@@ -11,6 +11,7 @@ package org.libreoffice.kit;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
+import android.content.res.AssetManager;
 import android.util.Log;
 
 import java.io.File;
@@ -24,6 +25,7 @@ import java.nio.ByteBuffer;
 public final class LibreOfficeKit
 {
     private static String LOGTAG = LibreOfficeKit.class.getSimpleName();
+    private static AssetManager mgr;
 
     // private constructor because instantiating would be meaningless
     private LibreOfficeKit() {
@@ -34,7 +36,7 @@ public final class LibreOfficeKit
     }
 
     // Trigger initialization on the JNI - LOKit side.
-    private static native boolean initializeNative(String dataDir, String cacheDir, String apkFile);
+    private static native boolean initializeNative(String dataDir, String cacheDir, String apkFile, AssetManager mgr);
 
     public static native ByteBuffer getLibreOfficeKitHandle();
 
@@ -54,6 +56,8 @@ public final class LibreOfficeKit
         if (initializeDone) {
             return;
         }
+
+        mgr = activity.getResources().getAssets();
 
         ApplicationInfo applicationInfo = activity.getApplicationInfo();
         String dataDir = applicationInfo.dataDir;
@@ -83,7 +87,7 @@ public final class LibreOfficeKit
         // TMPDIR is used by osl_getTempDirURL()
         putenv("TMPDIR=" + cacheDir);
 
-        if (!initializeNative(dataDir, cacheDir, apkFile)) {
+        if (!initializeNative(dataDir, cacheDir, apkFile, mgr)) {
             Log.e(LOGTAG, "Initialize native failed!");
             return;
         }
