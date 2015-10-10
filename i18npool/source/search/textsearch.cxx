@@ -241,10 +241,18 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
 
         sres = (this->*fnForward)( in_str, newStartPos, newEndPos );
 
+        sal_Int32 nOffsetLength = offset.getLength();
+        sal_Int32 nStartOffset = 0;
         for ( int k = 0; k < sres.startOffset.getLength(); k++ )
         {
-            if (sres.startOffset[k])
-          sres.startOffset[k] = offset[sres.startOffset[k]];
+            nStartOffset = sres.startOffset[k];
+            if ( nStartOffset )
+            {
+                if ( nStartOffset < nOffsetLength )
+                    sres.startOffset[k] = offset[nStartOffset];
+                else
+                    sres.startOffset[k] = offset[offset.getLength()-1] +1;
+            }
             // JP 20.6.2001: end is ever exclusive and then don't return
             //               the position of the next character - return the
             //               next position behind the last found character!
@@ -330,6 +338,8 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
 
         sres = (this->*fnBackward)( in_str, newStartPos, newEndPos );
 
+        sal_Int32 nOffsetLength = offset.getLength();
+        sal_Int32 nEndOffset = 0;
         for ( int k = 0; k < sres.startOffset.getLength(); k++ )
         {
             if (sres.startOffset[k])
@@ -338,8 +348,14 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
             //               the position of the next character - return the
             //               next position behind the last found character!
             //               "a b c" find "b" must return 2,3 and not 2,4!!!
-            if (sres.endOffset[k])
-          sres.endOffset[k] = offset[sres.endOffset[k]];
+            nEndOffset = sres.endOffset[k];
+            if ( nEndOffset )
+            {
+                if ( nEndOffset < nOffsetLength )
+                    sres.endOffset[k] = offset[nEndOffset];
+                else
+                    sres.endOffset[k] = offset[offset.getLength()-1] +1;
+            }
         }
     }
     else
