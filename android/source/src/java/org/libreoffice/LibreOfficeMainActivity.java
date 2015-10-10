@@ -6,6 +6,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,9 +36,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +52,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private static final String LOGTAG = "LibreOfficeMainActivity";
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
     private static final String ENABLE_EXPERIMENTAL_PREFS_KEY = "ENABLE_EXPERIMENTAL";
+    private static final String ASSETS_EXTRACTED_PREFS_KEY = "ASSETS_EXTRACTED";
 
     public static LibreOfficeMainActivity mAppContext;
 
@@ -147,9 +153,15 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         mAppContext = this;
         super.onCreate(savedInstanceState);
 
-        mEnableEditing = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                                          .getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
 
+        SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mEnableEditing = sPrefs.getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
+
+        if (sPrefs.getInt(ASSETS_EXTRACTED_PREFS_KEY, 0) != BuildConfig.VERSION_CODE) {
+            if(copyFromAssets(getAssets(), "unpack", getApplicationInfo().dataDir)) {
+                sPrefs.edit().putInt(ASSETS_EXTRACTED_PREFS_KEY, BuildConfig.VERSION_CODE).apply();
+            }
+        }
         mMainHandler = new Handler();
 
         setContentView(R.layout.activity_main);
@@ -165,6 +177,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                     Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
                 } else {
                     // TODO: can't open the file
+                    Log.e(LOGTAG, "couldn't create temporary file from "+getIntent().getData());
                 }
             } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
                 mInputFile = new File(getIntent().getData().getPath());
@@ -217,38 +230,42 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
     private boolean copyFileToTemp() {
         ContentResolver contentResolver = getContentResolver();
-        InputStream inputStream = null;
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        // CSV files need a .csv suffix to be opened in Calc.
+        String suffix = null;
+        String intentType = getIntent().getType();
+        // K-9 mail uses the first, GMail uses the second variant.
+        if ("text/comma-separated-values".equals(intentType) || "text/csv".equals(intentType))
+            suffix = ".csv";
+
         try {
-            inputStream = contentResolver.openInputStream(getIntent().getData());
-
-            // CSV files need a .csv suffix to be opened in Calc.
-            String suffix = null;
-            String intentType = getIntent().getType();
-            // K-9 mail uses the first, GMail uses the second variant.
-            if ("text/comma-separated-values".equals(intentType) || "text/csv".equals(intentType))
-                suffix = ".csv";
-            mTempFile = File.createTempFile("LibreOffice", suffix, this.getCacheDir());
-
-            OutputStream outputStream = new FileOutputStream(mTempFile);
-            byte[] buffer = new byte[4096];
-            int len = 0;
-            while ((len = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, len);
-            }
-            inputStream.close();
-            outputStream.close();
-            return true;
-        } catch (FileNotFoundException e) {
-        } catch (IOException e) {
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
+            try {
+                AssetFileDescriptor assetFD = contentResolver.openAssetFileDescriptor(getIntent().getData(), "r");
+                if (assetFD == null) {
+                    Log.e(LOGTAG, "couldn't create assetfiledescriptor from "+getIntent().getDataString());
+                    return false;
                 }
+                inputChannel = assetFD.createInputStream().getChannel();
+                mTempFile = File.createTempFile("LibreOffice", suffix, this.getCacheDir());
+
+                outputChannel = new FileOutputStream(mTempFile).getChannel();
+                long bytesTransferred = 0;
+                // might not  copy all at once, so make sure everything gets copied....
+                while (bytesTransferred < inputChannel.size()) {
+                    bytesTransferred += outputChannel.transferFrom(inputChannel, bytesTransferred, inputChannel.size());
+                }
+                Log.e(LOGTAG, "Success copying "+bytesTransferred+ " bytes");
+                return true;
+            } finally {
+                if (inputChannel != null) inputChannel.close();
+                if (outputChannel != null) outputChannel.close();
             }
+        } catch (FileNotFoundException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -362,6 +379,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
         if (isFinishing()) { // Not an orientation change
             if (mTempFile != null) {
+                //noinspection ResultOfMethodCallIgnored
                 mTempFile.delete();
             }
         }
@@ -423,8 +441,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
      * Hides software keyboard.
      */
     private void hideSoftKeyboardDirect() {
-        LayerView layerView = (LayerView) findViewById(R.id.layer_view);
-
         if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -469,6 +485,63 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             DocumentPartView partView = mDocumentPartViewListAdapter.getItem(position);
             LOKitShell.sendChangePartEvent(partView.partIndex);
             mDrawerLayout.closeDrawer(mDrawerList);
+        }
+    }
+
+    private static boolean copyFromAssets(AssetManager assetManager,
+                                           String fromAssetPath, String targetDir) {
+        try {
+            String[] files = assetManager.list(fromAssetPath);
+
+            boolean res = true;
+            for (String file : files) {
+                String[] dirOrFile = assetManager.list(fromAssetPath+"/"+file);
+                if ( dirOrFile.length == 0) {
+                    //noinspection ResultOfMethodCallIgnored
+                    new File(targetDir).mkdirs();
+                    res &= copyAsset(assetManager,
+                            fromAssetPath + "/" + file,
+                            targetDir + "/" + file);
+                } else
+                    res &= copyFromAssets(assetManager,
+                            fromAssetPath + "/" + file,
+                            targetDir + "/" + file);
+            }
+            return res;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOGTAG, "copyFromAssets failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private static boolean copyAsset(AssetManager assetManager, String fromAssetPath, String toPath) {
+        ReadableByteChannel source = null;
+        FileChannel dest = null;
+        try {
+            try {
+                source = Channels.newChannel(assetManager.open(fromAssetPath));
+                dest = new FileOutputStream(toPath).getChannel();
+                long bytesTransferred = 0;
+                // might not  copy all at once, so make sure everything gets copied....
+                ByteBuffer buffer = ByteBuffer.allocate(4096);
+                while (source.read(buffer)>0) {
+                    buffer.flip();
+                    bytesTransferred += dest.write(buffer);
+                    buffer.clear();
+                }
+                Log.v(LOGTAG, "Success copying "+fromAssetPath+" to "+toPath + " bytes: "+bytesTransferred);
+                return true;
+            } finally {
+                if (dest != null) dest.close();
+                if (source != null) source.close();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e(LOGTAG, "file " + fromAssetPath + " not found! " + e.getMessage());
+            return false;
+        } catch (IOException e) {
+            Log.e(LOGTAG, "failed to copy file " + fromAssetPath + " from assets to " + toPath + " - " + e.getMessage());
+            return false;
         }
     }
 }

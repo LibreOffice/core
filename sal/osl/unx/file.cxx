@@ -57,6 +57,8 @@
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
+#include <android/log.h>
+#include <android/asset_manager.h>
 #endif
 
 /*******************************************************************
@@ -830,6 +832,21 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
      */
     if (strncmp (cpFilePath, "/assets/", sizeof ("/assets/") - 1) == 0)
     {
+        void* address;
+        size_t size;
+        AAssetManager* mgr = lo_get_native_assetmgr();
+        AAsset* asset = AAssetManager_open(mgr, cpFilePath + sizeof("/assets/")-1, AASSET_MODE_BUFFER);
+        if (NULL == asset) {
+            address = NULL;
+            errno = ENOENT;
+            __android_log_print(ANDROID_LOG_ERROR,"libo:sal/osl/unx/file", "failed to open %s", cpFilePath);
+            return osl_File_E_NOENT;
+        } else {
+            size = AAsset_getLength(asset);
+            address = malloc (sizeof(char)*size);
+            AAsset_read (asset,address,size);
+            AAsset_close(asset);
+        }
         if (uFlags & osl_File_OpenFlag_Write)
         {
             // It seems to work better to silently "open" it read-only
@@ -837,15 +854,7 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
             // loading a document from /assets fails with that idiotic
             // "General Error" dialog...
         }
-        void *address;
-        size_t size;
-        address = lo_apkentry(cpFilePath, &size);
         SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ") => " << address);
-        if (address == NULL)
-        {
-            errno = ENOENT;
-            return osl_File_E_NOENT;
-        }
         return openMemoryAsFile(address, size, pHandle, cpFilePath);
     }
 #endif
@@ -1043,6 +1052,10 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
 
     if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
     {
+#ifdef ANDROID
+        free(pImpl->m_buffer);
+        pImpl->m_buffer = NULL;
+#endif
         delete pImpl;
         return osl_File_E_None;
     }

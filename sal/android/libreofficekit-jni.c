@@ -21,6 +21,8 @@
 #include <jni.h>
 
 #include <android/log.h>
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
 
 #include <osl/detail/android-bootstrap.h>
 
@@ -34,6 +36,7 @@ extern const char* data_dir;
 extern const char* cache_dir;
 extern void* apk_file;
 extern int apk_file_size;
+AAssetManager* native_asset_manager;
 
 extern void Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env, jobject clazz, jstring string);
 extern void Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env, jobject clazz, jboolean state);
@@ -63,7 +66,7 @@ void Java_org_libreoffice_kit_LibreOfficeKit_redirectStdio
 __attribute__ ((visibility("default")))
 jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
     (JNIEnv* env, jobject clazz,
-     jstring dataDir, jstring cacheDir, jstring apkFile)
+     jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager)
 {
     struct stat st;
     int fd;
@@ -75,6 +78,8 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
     size_t data_dir_len;
 
     (void) clazz;
+
+    native_asset_manager = AAssetManager_fromJava(env, assetManager);
 
     dataDirPath = (*env)->GetStringUTFChars(env, dataDir, NULL);
     data_dir = strdup(dataDirPath);
@@ -122,10 +127,6 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
         return JNI_FALSE;
     }
 
-    // Extract files from the .apk that can't be used mmapped directly from it
-    extract_files(UNPACK_TREE, UNPACK_TREE, 0);
-    extract_files(UNPACK_TREE_GZ, UNPACK_TREE_GZ, 1);
-
     // LibreOfficeKit expects a path to the program/ directory
     free(full_program_dir);
     data_dir_len = strlen(data_dir);
@@ -159,5 +160,13 @@ jobject Java_org_libreoffice_kit_LibreOfficeKit_getLibreOfficeKitHandle
 
     return (*env)->NewDirectByteBuffer(env, (void*) aOffice, sizeof(LibreOfficeKit));
 }
+
+__attribute__ ((visibility("default")))
+AAssetManager *
+lo_get_native_assetmgr(void)
+{
+        return native_asset_manager;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

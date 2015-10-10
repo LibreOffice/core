@@ -20,6 +20,7 @@ extern "C" {
 #endif
 
 #include <osl/detail/component-mapping.h>
+#include <android/asset_manager.h>
 
 typedef struct lo_apk_dir lo_apk_dir;
 
@@ -38,12 +39,10 @@ JavaVM *lo_get_javavm(void);
 
 const char *lo_get_app_data_dir(void);
 
-#define UNPACK_TREE "/assets/unpack"
-#define UNPACK_TREE_GZ "/assets/gz.unpack"
+AAssetManager *lo_get_native_assetmgr(void);
 
 int setup_cdir(void);
 int setup_assets_tree(void);
-void extract_files(const char *root, const char *prefix, int gzipped);
 
 #ifdef __cplusplus
 }
