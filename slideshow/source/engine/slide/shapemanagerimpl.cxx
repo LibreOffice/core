@@ -26,7 +26,7 @@
 
 #include "shapemanagerimpl.hxx"
 
-#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
 
 using namespace com::sun::star;
 
@@ -151,10 +151,8 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
 
             // DON'T do anything with /this/ after this point!
             pCont->forEach<presentation::XShapeEventListener>(
-                boost::bind( &presentation::XShapeEventListener::click,
-                             _1,
-                             boost::cref(xShape),
-                             boost::cref(e) ));
+                [&xShape, &e]( const uno::Reference< presentation::XShapeEventListener >& rListener )
+                { return rListener->click( xShape, e ); } );
 
             return true; // handled this event
         }

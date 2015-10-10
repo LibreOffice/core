@@ -27,8 +27,6 @@
 
 #include <basegfx/numeric/ftools.hxx>
 
-#include <boost/bind.hpp>
-
 #include <cmath>
 #include <algorithm>
 #include <functional>
@@ -169,11 +167,8 @@ namespace slideshow
             // already added?
             if( ::std::any_of( maViewShapes.begin(),
                                maViewShapes.end(),
-                               ::boost::bind<bool>(
-                                    ::std::equal_to< ViewLayerSharedPtr >(),
-                                    ::boost::bind( &ViewBackgroundShape::getViewLayer,
-                                                   _1 ),
-                                    ::boost::cref( rNewLayer ) ) ) )
+                               [&rNewLayer]( const ViewBackgroundShapeSharedPtr& pBgShape )
+                               { return pBgShape->getViewLayer() == rNewLayer; } ) )
             {
                 // yes, nothing to do
                 return;
@@ -195,22 +190,16 @@ namespace slideshow
 
             OSL_ENSURE( ::std::count_if(maViewShapes.begin(),
                                         aEnd,
-                                        ::boost::bind<bool>(
-                                            ::std::equal_to< ViewLayerSharedPtr >(),
-                                            ::boost::bind( &ViewBackgroundShape::getViewLayer,
-                                                           _1 ),
-                                            ::boost::cref( rLayer ) ) ) < 2,
+                                        [&rLayer]( const ViewBackgroundShapeSharedPtr& pBgShape )
+                                        { return pBgShape->getViewLayer() == rLayer; } ) < 2,
                         "BackgroundShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
             ViewBackgroundShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewShapes.begin(),
                                          aEnd,
-                                         ::boost::bind<bool>(
-                                             ::std::equal_to< ViewLayerSharedPtr >(),
-                                             ::boost::bind( &ViewBackgroundShape::getViewLayer,
-                                                            _1 ),
-                                             ::boost::cref( rLayer ) ) )) == aEnd )
+                                         [&rLayer]( const ViewBackgroundShapeSharedPtr& pBgShape )
+                                         { return pBgShape->getViewLayer() == rLayer; } )) == aEnd )
             {
                 // view layer seemingly was not added, failed
                 return false;
@@ -280,9 +269,8 @@ namespace slideshow
             // redraw all view shapes, by calling their render() method
             if( ::std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
-                                 ::boost::bind( &ViewBackgroundShape::render,
-                                                _1,
-                                                ::boost::cref( mpMtf ) ) )
+                                 [this]( const ViewBackgroundShapeSharedPtr& pBgShape )
+                                 { return pBgShape->render( this->mpMtf ); } )
                 != static_cast<ViewBackgroundShapeVector::difference_type>(maViewShapes.size()) )
             {
                 // at least one of the ViewBackgroundShape::render() calls did return

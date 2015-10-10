@@ -25,12 +25,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-#include <boost/noncopyable.hpp>
 
 #include "layer.hxx"
-
-#include <boost/bind.hpp>
-
 
 using namespace ::com::sun::star;
 
@@ -69,10 +65,8 @@ namespace slideshow
             const ViewEntryVector::iterator aEnd( maViewEntries.end() );
             if( (aIter=std::find_if( maViewEntries.begin(),
                                      aEnd,
-                                     boost::bind<bool>(
-                                         std::equal_to< ViewSharedPtr >(),
-                                         boost::bind( &ViewEntry::getView, _1 ),
-                                         boost::cref( rNewView )))) != aEnd )
+                                     [&rNewView]( const ViewEntry& rViewEntry )
+                                     { return rViewEntry.getView() == rNewView; } ) ) != aEnd )
             {
                 // already added - just return existing layer
                 return aIter->mpViewLayer;
@@ -102,10 +96,8 @@ namespace slideshow
             const ViewEntryVector::iterator aEnd( maViewEntries.end() );
             if( (aIter=std::find_if( maViewEntries.begin(),
                                        aEnd,
-                                       boost::bind<bool>(
-                                           std::equal_to< ViewSharedPtr >(),
-                                           boost::bind( &ViewEntry::getView, _1 ),
-                                           boost::cref( rView )))) == aEnd )
+                                       [&rView]( const ViewEntry& rViewEntry )
+                                       { return rViewEntry.getView() == rView; } ) ) == aEnd )
             {
                 // View was not added/is already removed
                 return ViewLayerSharedPtr();
@@ -113,10 +105,8 @@ namespace slideshow
 
             OSL_ENSURE( std::count_if( maViewEntries.begin(),
                                        aEnd,
-                                       boost::bind<bool>(
-                                           std::equal_to< ViewSharedPtr >(),
-                                           boost::bind( &ViewEntry::getView, _1 ),
-                                           boost::cref( rView ))) == 1,
+                                       [&rView]( const ViewEntry& rViewEntry )
+                                       { return rViewEntry.getView() == rView; } ) == 1,
                         "Layer::removeView(): view added multiple times" );
 
             ViewLayerSharedPtr pRet( aIter->mpViewLayer );
@@ -176,10 +166,9 @@ namespace slideshow
             maBounds = maNewBounds;
             if( std::count_if( maViewEntries.begin(),
                                maViewEntries.end(),
-                               boost::bind( &ViewLayer::resize,
-                                            boost::bind( &ViewEntry::getViewLayer,
-                                                         _1 ),
-                                            boost::cref(maBounds)) ) == 0 )
+                               [this]( const ViewEntry& rViewEntry )
+                               { return rViewEntry.getViewLayer()->resize( this->maBounds ); }
+                               ) == 0 )
             {
                 return false;
             }
@@ -207,9 +196,11 @@ namespace slideshow
             clearUpdateRanges();
         }
 
-        class LayerEndUpdate : private boost::noncopyable
+        class LayerEndUpdate
         {
         public:
+            LayerEndUpdate( const LayerEndUpdate& ) = delete;
+            LayerEndUpdate& operator=( const LayerEndUpdate& ) = delete;
             explicit LayerEndUpdate( LayerSharedPtr const& rLayer ) :
                 mpLayer( rLayer )
             {}
