@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_f6af5992",
+        "filename": "sot/source/sdstor/stgstrms.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2015-10-10T12:36:00Z",
+      "side": 1,
+      "message": "It\u0027s not a member variable here",
+      "range": {
+        "startLine": 169,
+        "startChar": 14,
+        "endLine": 169,
+        "endChar": 19
+      },
+      "revId": "3fe22a131233f5629b8099a4df2a392da741d92c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
