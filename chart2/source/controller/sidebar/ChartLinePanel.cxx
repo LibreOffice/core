@@ -136,7 +136,7 @@ ChartLinePanel::ChartLinePanel(vcl::Window* pParent,
     mbModelValid(true),
     maLineColorWrapper(mxModel, getColorToolBoxControl(mpTBColor.get()), "LineColor")
 {
-    std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM, OBJECTTYPE_DATA_SERIES, OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND};
+    std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM, OBJECTTYPE_DATA_SERIES, OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND, OBJECTTYPE_DATA_CURVE, OBJECTTYPE_DATA_AVERAGE_LINE};
     mxSelectionListener->setAcceptedTypes(aAcceptedTypes);
     Initialize();
 }
