@@ -25,7 +25,7 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
 #include <algorithm>
 
 #include "layermanager.hxx"
@@ -166,14 +166,10 @@ namespace slideshow
 
             // add View to all registered shapes
             manageViews(
-                boost::bind(&Layer::addView,
-                            _1,
-                            boost::cref(rView)),
-                // repaint on view add
-                boost::bind(&Shape::addViewLayer,
-                            _1,
-                            _2,
-                            true) );
+                [&rView]( const LayerSharedPtr& pLayer )
+                { return pLayer->addView( rView ); },
+                []( const ShapeSharedPtr& pShape, const ViewLayerSharedPtr& pLayer )
+                { return pShape->addViewLayer( pLayer, true ); } );
 
             // in case we haven't reached all layers from the
             // maAllShapes, issue addView again for good measure
@@ -190,12 +186,10 @@ namespace slideshow
 
             // remove View from all registered shapes
             manageViews(
-                boost::bind(&Layer::removeView,
-                            _1,
-                            boost::cref(rView)),
-                boost::bind(&Shape::removeViewLayer,
-                            _1,
-                            _2) );
+                [&rView]( const LayerSharedPtr& pLayer )
+                { return pLayer->removeView( rView ); },
+                []( const ShapeSharedPtr& pShape, const ViewLayerSharedPtr& pLayer )
+                { return pShape->removeViewLayer( pLayer ); } );
 
             // in case we haven't reached all layers from the
             // maAllShapes, issue removeView again for good measure

@@ -95,9 +95,7 @@
 #include "framerate.hxx"
 #include "pointersymbol.hxx"
 
-#include <boost/noncopyable.hpp>
-#include <boost/bind.hpp>
-
+#include <boost/mem_fn.hpp>
 #include <map>
 #include <vector>
 #include <iterator>
@@ -505,8 +503,7 @@ private:
 struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
                                              public ViewRepaintHandler,
                                              public HyperlinkHandler,
-                                             public AnimationEventHandler,
-                                             private boost::noncopyable
+                                             public AnimationEventHandler
 {
     SlideShowImpl& mrShow;
     ScreenUpdater& mrScreenUpdater;
@@ -519,6 +516,9 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
         mrScreenUpdater( rScreenUpdater ),
         mrEventQueue( rEventQueue )
     {}
+
+    SeparateListenerImpl( const SeparateListenerImpl& ) = delete;
+    SeparateListenerImpl& operator=( const SeparateListenerImpl& ) = delete;
 
     // EventHandler
     virtual bool handleEvent() SAL_OVERRIDE
@@ -1241,8 +1241,8 @@ sal_Bool SlideShowImpl::previousEffect() throw (uno::RuntimeException, std::exce
     {
         return maEffectRewinder.rewind(
             maScreenUpdater.createLock(false),
-            ::boost::bind<void>(::boost::mem_fn(&SlideShowImpl::redisplayCurrentSlide), this),
-            ::boost::bind<void>(::boost::mem_fn(&SlideShowImpl::rewindEffectToPreviousSlide), this));
+            [this]() { return this->redisplayCurrentSlide(); },
+            [this]() { return this->rewindEffectToPreviousSlide(); } );
     }
 }
 
@@ -1996,8 +1996,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             //::dispose clearing mpPresTimer
             std::shared_ptr<canvas::tools::ElapsedTime> xTimer(mpPresTimer);
             comphelper::ScopeGuard scopeGuard(
-                boost::bind( &canvas::tools::ElapsedTime::releaseTimer,
-                             boost::cref(xTimer) ) );
+                [&xTimer]() { return xTimer->releaseTimer(); } );
             xTimer->holdTimer();
 
             // process queues
@@ -2206,7 +2205,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
         // schedule a slide end event, with automatic mode's
         // delay
         aNotificationEvents = makeInterruptableDelay(
-            boost::bind<void>( boost::mem_fn(&SlideShowImpl::notifySlideEnded), this, false ),
+            [this]() { return this->notifySlideEnded( false ); },
             maEventMultiplexer.getAutomaticTimeout() );
     }
     else
@@ -2231,7 +2230,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             bHasAutomaticNextSlide )
         {
             aNotificationEvents = makeInterruptableDelay(
-                boost::bind<void>( boost::mem_fn(&SlideShowImpl::notifySlideEnded), this, false ),
+                [this]() { return this->notifySlideEnded( false ); },
                 nAutomaticNextSlideTimeout);
 
             // TODO(F2): Provide a mechanism to let the user override
@@ -2331,10 +2330,8 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
                  // GIF) will not be stopped.
 
     maListenerContainer.forEach<presentation::XSlideShowListener>(
-        boost::bind<void>(
-            ::boost::mem_fn(&presentation::XSlideShowListener::slideEnded),
-            _1,
-            bReverse));
+        [&bReverse]( const uno::Reference< presentation::XSlideShowListener >& xListener )
+        { return xListener->slideEnded( bReverse ); } );
 }
 
 bool SlideShowImpl::notifyHyperLinkClicked( OUString const& hyperLink )
@@ -2342,9 +2339,8 @@ bool SlideShowImpl::notifyHyperLinkClicked( OUString const& hyperLink )
     osl::MutexGuard const guard( m_aMutex );
 
     maListenerContainer.forEach<presentation::XSlideShowListener>(
-        boost::bind( &presentation::XSlideShowListener::hyperLinkClicked,
-                     _1,
-                     boost::cref(hyperLink) ));
+        [&hyperLink]( const uno::Reference< presentation::XSlideShowListener >& xListener )
+        { return xListener->hyperLinkClicked( hyperLink ); } );
     return true;
 }
 
@@ -2361,17 +2357,15 @@ bool SlideShowImpl::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
     {
     case AnimationNode::ACTIVE:
         maListenerContainer.forEach<presentation::XSlideShowListener>(
-            boost::bind( &animations::XAnimationListener::beginEvent,
-                         _1,
-                         boost::cref(xNode) ));
+            [&xNode]( const uno::Reference< animations::XAnimationListener >& xListener )
+            { return xListener->beginEvent( xNode ); } );
         break;
 
     case AnimationNode::FROZEN:
     case AnimationNode::ENDED:
         maListenerContainer.forEach<presentation::XSlideShowListener>(
-            boost::bind( &animations::XAnimationListener::endEvent,
-                         _1,
-                         boost::cref(xNode) ));
+            [&xNode]( const uno::Reference< animations::XAnimationListener >& xListener )
+            { return xListener->endEvent( xNode ); } );
         if(mpCurrentSlide->isPaintOverlayActive())
            mpCurrentSlide->drawPolygons();
         break;

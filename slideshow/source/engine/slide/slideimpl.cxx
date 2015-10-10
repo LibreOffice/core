@@ -61,8 +61,6 @@
 #include "targetpropertiescreator.hxx"
 #include "tools.hxx"
 
-
-#include <boost/bind.hpp>
 #include <iterator>
 #include <functional>
 #include <iostream>
