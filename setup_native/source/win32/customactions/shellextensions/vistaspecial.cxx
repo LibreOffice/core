@@ -22,7 +22,7 @@
 #endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <msiquery.h>
+#include <../tools/msiprop.hxx>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -62,24 +62,6 @@ static inline void OutputDebugStringFormat( LPCSTR, ... )
 {
 }
 #endif
-
-static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
-{
-    std::_tstring result;
-    TCHAR szDummy[1] = TEXT("");
-    DWORD nChars = 0;
-
-    if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
-    {
-        DWORD nBytes = ++nChars * sizeof(TCHAR);
-        LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-        ZeroMemory( buffer, nBytes );
-        MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-        result = buffer;
-    }
-
-    return result;
-}
 
 static BOOL RemoveCompleteDirectory(const std::_tstring& rPath)
 {
@@ -139,7 +121,7 @@ static BOOL RemoveCompleteDirectory(const std::_tstring& rPath)
 
 extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
 {
-    std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+    std::_tstring sOfficeInstallPath = GetMsiPropValue(handle, TEXT("INSTALLLOCATION"));
 
     std::_tstring sRenameSrc = sOfficeInstallPath + TEXT("program");
     std::_tstring sRenameDst = sOfficeInstallPath + TEXT("program_old");
@@ -163,7 +145,7 @@ extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
 
 extern "C" UINT __stdcall RemovePrgFolder( MSIHANDLE handle )
 {
-    std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+    std::_tstring sOfficeInstallPath = GetMsiPropValue(handle, TEXT("INSTALLLOCATION"));
     std::_tstring sRemoveDir = sOfficeInstallPath + TEXT("program_old");
 
     RemoveCompleteDirectory( sRemoveDir );
