@@ -67,33 +67,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 # CppunitTest_sc_chart_regression_test \
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
-    JunitTest_sc_complex \
-    JunitTest_sc_unoapi_1 \
-    JunitTest_sc_unoapi_2 \
-    JunitTest_sc_unoapi_3 \
-    JunitTest_sc_unoapi_4 \
-    JunitTest_sc_unoapi_5 \
-    JunitTest_sc_unoapi_6 \
-    JunitTest_sc_unoapi_7 \
-    CppunitTest_sc_annotationshapeobj \
-    CppunitTest_sc_outlineobj \
-    CppunitTest_sc_styleloaderobj \
-    CppunitTest_sc_recordchanges \
-    CppunitTest_sc_annotationobj \
-    CppunitTest_sc_annotationsobj \
-    CppunitTest_sc_cellrangeobj \
-    $(if $(filter-out $(OS),IOS), \
-            CppunitTest_sc_databaserangeobj) \
-    CppunitTest_sc_datapilottableobj \
-    CppunitTest_sc_datapilotfieldobj \
-    CppunitTest_sc_macros_test \
-    CppunitTest_sc_namedrangeobj \
-    CppunitTest_sc_namedrangesobj \
-    CppunitTest_sc_tablesheetobj \
-    CppunitTest_sc_tablesheetsobj \
-    CppunitTest_sc_editfieldobj_cell \
-    CppunitTest_sc_editfieldobj_header \
-    CppunitTest_sc_modelobj \
+    CppunitTest_sc_vba_export_test \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
