@@ -137,6 +137,7 @@ bool HostDetailsContainer::setUrl( const INetURLObject& rUrl )
 
     if ( bSuccess )
     {
+        m_sHost = rUrl.GetHost( );
         m_pEDHost->SetText( rUrl.GetHost( ) );
         m_pEDPort->SetValue( rUrl.GetPort( ) );
         m_pEDRoot->SetText( rUrl.GetURLPath() );
