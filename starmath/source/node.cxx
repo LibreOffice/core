@@ -34,6 +34,7 @@
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 
+#include <cassert>
 #include <math.h>
 #include <float.h>
 #include <vector>
@@ -259,16 +260,15 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 
 sal_uInt16 SmNode::FindIndex() const
 {
-    const SmStructureNode* pParent = GetParent();
-    if (!pParent) { return 0; }
+    assert(mpParentNode != nullptr && "FindIndex() requires this is a subnode.");
 
-    for (sal_uInt16 i = 0; i < pParent->GetNumSubNodes(); ++i) {
-        if (pParent->GetSubNode(i) == this) {
+    for (sal_uInt16 i = 0; i < mpParentNode->GetNumSubNodes(); ++i) {
+        if (mpParentNode->GetSubNode(i) == this) {
             return i;
         }
     }
 
-    DBG_ASSERT(false, "Connection between parent and child is inconsistent.");
+    assert(false && "Connection between parent and child is inconsistent.");
     return 0;
 }
 
