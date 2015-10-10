@@ -64,6 +64,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     get( m_pBTOk, "ok" );
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
+    get( m_pBTRepoRefresh, "repositoriesRefresh" );
     get( m_pTypeGrid, "TypeGrid" );
     get( m_pCBPassword, "rememberPassword" );
     get( m_pEDPassword, "password" );
@@ -91,13 +92,17 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
         bSuccess = m_aDetailsContainers[i]->setUrl( rUrl );
         if ( bSuccess )
         {
-            m_pLBServerType->SelectEntryPos( i );
-            SelectTypeHdl( m_pLBServerType );
-
             // Fill the Username field
             if ( rUrl.HasUserData( ) )
+            {
                 m_pEDUsername->SetText( INetURLObject::decode( rUrl.GetUser( ),
                                                               INetURLObject::DECODE_WITH_CHARSET ) );
+                m_aDetailsContainers[i]->setUsername( INetURLObject::decode( rUrl.GetUser( ),
+                                                              INetURLObject::DECODE_WITH_CHARSET ) );
+            }
+
+            m_pLBServerType->SelectEntryPos( i );
+            SelectTypeHdl( m_pLBServerType );
         }
     }
 
