@@ -1312,6 +1312,7 @@
             Chart, ErrorBar, visible ;
             Chart, Axis, visible ;
             Chart, Grid, visible ;
+            Chart, Trendline, visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">

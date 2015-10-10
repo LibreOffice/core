@@ -336,6 +336,9 @@ OUString ChartController::GetContextName()
         case OBJECTTYPE_DIAGRAM:
             if (xChartType->getChartType() == "com.sun.star.chart2.PieChartType")
                 return OUString("ChartElements");
+        case OBJECTTYPE_DATA_CURVE:
+        case OBJECTTYPE_DATA_AVERAGE_LINE:
+            return OUString("Trendline");
         default:
         break;
     }
