@@ -23,8 +23,8 @@ release-apk: build
 	rm -f $(SIGNED_APK)
 
 	# the actual signing
-	jarsigner --verbose -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/.keystore $(BUILDDIR)/android/source/bin/LibreOfficeViewer-release-unsigned.apk $(key)
-	$(ANDROID_SDK_HOME)/build-tools/*/zipalign -v 4 $(BUILDDIR)/android/source/bin/LibreOfficeViewer-release-unsigned.apk $(SIGNED_APK)
+	jarsigner --verbose -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/.keystore $(BUILDDIR)/android/source/build/outputs/apk/LibreOfficeViewer-strippedUI-release-unsigned.apk $(key)
+	$(ANDROID_SDK_HOME)/build-tools/*/zipalign -v 4 $(BUILDDIR)/android/source/build/outputs/apk/LibreOfficeViewer-strippedUI-release-unsigned.apk $(SIGNED_APK)
 
 	@echo
 	@echo "Resulting signed apk: $(SIGNED_APK)"

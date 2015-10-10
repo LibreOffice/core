@@ -20,7 +20,7 @@ $(loandroid3_DIR)/done : $(call gb_Postprocess_get_target,AllModulesButInstsetNa
 # still looks for the .apk, and we want fresh daily builds to be uploaded.
 # Us "foo" instead of the old INPATH
 	mkdir -p $(BUILDDIR)/instsetoo_native/foo/bin; \
-	cp $(SRCDIR)/android/source/bin/*-debug.apk $(BUILDDIR)/instsetoo_native/foo/bin
+	cp $(SRCDIR)/android/source/build/outputs/apk/*-debug.apk $(BUILDDIR)/instsetoo_native/foo/bin
 
 $(call gb_CustomTarget_get_clean_target,android/loandroid3) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),MAK,2)

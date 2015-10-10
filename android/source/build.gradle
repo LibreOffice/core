@@ -1,0 +1,273 @@
+project.ext.set("archivesBaseName", "LibreOfficeViewer")
+//build-time dependencies - android plugin for gradle
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.3.1'
+    }
+}
+
+apply plugin: 'com.android.application'
+// buildhost settings - paths and the like
+apply from: 'liboSettings.gradle'
+
+// compile-time dependencies
+dependencies {
+    compile fileTree(dir: "${liboInstdir}/${liboUREJavaFolder}", include: [
+            "java_uno.jar",
+            "juh.jar",
+            "jurt.jar",
+            "ridl.jar",
+            "unoloader.jar"
+    ])
+    compile files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
+    compile files("${liboWorkdir}/UnpackedTarball/owncloud_android_lib/bin/owncloud-android-library.jar")
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+    compileOptions {
+        // silence some java-language features hints
+        sourceCompatibility 6
+    }
+    // uses non-conventional source layout, so need to reconfigure accordingly
+    // ToDo move to conventional layout, so stuff can be stripped down.
+    sourceSets {
+        main.manifest.srcFile 'AndroidManifest.xml'
+        main.assets.srcDirs = ['assets']
+        main.res.srcDirs = ['res']
+        main.java.srcDirs = ['../Bootstrap/src', 'src/java']
+        main.jniLibs.srcDirs = ['jniLibs']
+        main.jni.srcDirs = [] // don't attempt to build native-lib via gradle
+        // gdbserver stuff from separate dir
+        debug.jniLibs.srcDirs "jniLibs_debug"
+        // the configuration data that might be stripped or not
+        fullUI.assets.srcDirs 'assets_fullUI'
+        strippedUI.assets.srcDirs 'assets_strippedUI'
+    }
+    // defaults for Manifest
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 23
+        manifestPlaceholders = [installLocation: "preferExternal"]
+    }
+    buildTypes {
+        debug {
+            // make android studio happy...
+            jniDebuggable true
+            // would work just fine with external, but setting emulator up is a little more work
+            manifestPlaceholders = [installLocation: "internalOnly"]
+        }
+    }
+    productFlavors {
+        strippedUI
+        fullUI
+    }
+}
+
+/* remark inherited from makefile:
+Then "assets". Let the directory structure under assets mimic
+that under solver for now.
+
+Please note that I have no idea what all of this is really necessary and for
+much of this stuff being copied, no idea whether it makes any sense at all.
+Much of this is copy-pasted from android/qa/sc/Makefile (where a couple of
+unit tests for sc are built, and those do seem to mostly work) and
+android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some
+extent)
+ */
+
+// Assets that are unpacked at run-time into the app's data directory. These
+// are files read by non-LO code, fontconfig and freetype for now, that doesn't
+// understand "/assets" paths.
+task copyUnpackAssets(type: Copy) {
+    description "copies assets that need to be extracted on the device"
+    into 'assets/unpack'
+    into('program') {
+        from("${liboInstdir}/${liboEtcFolder}/types") {
+            includes = [
+                    "offapi.rdb",
+                    "oovbaapi.rdb"
+            ]
+        }
+        from("${liboInstdir}/${liboUreMiscFolder}") {
+            includes = ["types.rdb"]
+            rename 'types.rdb', 'udkapi.rdb'
+        }
+    }
+    into('user/fonts') {
+        from "${liboInstdir}/share/fonts/truetype"
+        // Note: restrict list of fonts due to size considerations - no technical reason anymore
+        // ToDo: fonts would be good candidate for using Expansion Files instead
+        includes = [
+                "Liberation*.ttf",
+                "Caladea-*.ttf",
+                "Carlito-*.ttf",
+                "Gen*.ttf",
+                "opens___.ttf"
+        ]
+    }
+    into('etc/fonts') {
+        from "./"
+        includes = ['fonts.conf']
+        filter {
+            String line ->
+                line.replaceAll(
+                        '@@APPLICATION_ID@@', new String("${android.defaultConfig.applicationId}")
+                )
+        }
+    }
+}
+
+task copyAssets(type: Copy) {
+    description "copies assets that can be accessed within the installed apk"
+    into 'assets'
+    from("${liboSrcRoot}/readlicense_oo/license/") {
+        includes = ["LICENSE", "NOTICE"]
+        rename "LICENSE", "license.txt"
+        rename "NOTICE", "notice.txt"
+    }
+    from("${liboExampleDocument}") {
+        rename ".*", "example.odt"
+    }
+    into('program') {
+        from "${liboInstdir}/program"
+        includes = ['services.rdb', 'services/services.rdb']
+
+        into('resource') {
+            from "${liboInstdir}/${liboSharedResFolder}"
+            includes = ['*en-US.res']
+        }
+    }
+    into('share') {
+        from "${liboInstdir}/share"
+        // Filter data is needed by e.g. the drawingML preset shape import.
+        includes = ['registry/**', 'filter/**']
+        // those two get processed by mobile-config.py
+        excludes = ['registry/main.xcd', 'registry/res/registry_en-US.xcd']
+    }
+}
+
+task createFullConfig(type: Copy) {
+    // grab dir to clear whole hierarchy on clean target
+    outputs.dir "assets_fullUI"
+    into 'assets_fullUI/share/config/soffice.cfg'
+    from "${liboInstdir}/share/config/soffice.cfg"
+}
+
+task createStrippedConfig {
+    def preserveDir = file("assets_strippedUI/share/share/config/soffice.cfg/empty")
+    outputs.dir "assets_strippedUI"
+    outputs.dir "assets_strippedUI/share/registry/res"
+    outputs.file preserveDir
+
+    doLast {
+        file('assets_strippedUI/share/registry/res').mkdirs()
+        file("assets_strippedUI/share/share/config/soffice.cfg").mkdirs()
+        // just empty file
+        preserveDir.text = ""
+    }
+}
+
+
+task createStrippedConfigMain(type: Exec) {
+    dependsOn 'createStrippedConfig'
+    inputs.files "${liboInstdir}/share/registry/main.xcd", "${liboSrcRoot}/android/mobile-config.py"
+    outputs.file "assets_strippedUI/share/registry/main.xcd"
+    executable "${liboSrcRoot}/android/mobile-config.py"
+    args = ["${liboInstdir}/share/registry/main.xcd", "assets_strippedUI/share/registry/main.xcd"]
+}
+
+task createStrippedConfigRegistry(type: Exec) {
+    dependsOn 'createStrippedConfig'
+    inputs.files "${liboInstdir}/share/registry/res/registry_en-US.xcd", "${liboSrcRoot}/android/mobile-config.py"
+    outputs.file "assets_strippedUI/share/registry/res/registry_en-US.xcd"
+    executable "${liboSrcRoot}/android/mobile-config.py"
+    args = ["${liboInstdir}/share/registry/res/registry_en-US.xcd", "assets_strippedUI/share/registry/res/registry_en-US.xcd"]
+    doFirst {
+        file('assets_strippedUI/share/registry/res').mkdirs()
+    }
+}
+
+task copyNdkDebugServer(type: Copy) {
+    description "copies gdbserver into and creates gdb.setup in the debug-type only native directory"
+    inputs.file "liboSettings.gradle"
+    def gdbsetup = file("jniLibs_debug/${liboAndroidAppAbi}/gdb.setup")
+    outputs.file gdbsetup
+    outputs.dir 'jniLibs_debug' // own the directory, so it is removed on this task's clean
+    into "jniLibs_debug/${liboAndroidAppAbi}"
+    from "${liboNdkGdbserver}"
+    doLast {
+        gdbsetup.text = "set solib-search-path ./obj/local/${liboAndroidAppAbi}"
+    }
+}
+
+task createRCfiles {
+    inputs.file "liboSettings.gradle"
+    dependsOn copyUnpackAssets, copyAssets
+    def sofficerc     = file('assets/unpack/program/sofficerc')
+    def fundamentalrc = file('assets/program/fundamentalrc')
+    def bootstraprc   = file('assets/program/bootstraprc')
+    def unorc         = file('assets/program/unorc')
+    def versionrc     = file('assets/program/versionrc')
+
+    outputs.files sofficerc, fundamentalrc, unorc, bootstraprc, versionrc
+
+    doLast {
+        sofficerc.text = '''\
+            [Bootstrap]
+            Logo=1
+            NativeProgress=1
+            URE_BOOTSTRAP=file:///assets/program/fundamentalrc
+            HOME=$APP_DATA_DIR/cache
+            OSL_SOCKET_PATH=$APP_DATA_DIR/cache
+            '''.stripIndent()
+
+        fundamentalrc.text =  '''\
+            [Bootstrap]
+            LO_LIB_DIR=file://$APP_DATA_DIR/lib/
+            BRAND_BASE_DIR=file:///assets
+            CONFIGURATION_LAYERS=xcsxcu:${BRAND_BASE_DIR}/share/registry res:${BRAND_BASE_DIR}/share/registry
+            URE_BIN_DIR=file:///assets/ure/bin/dir/nothing-here/we-can/exec-anyway
+            '''.stripIndent()
+
+        bootstraprc.text =  '''\
+            [Bootstrap]
+            InstallMode=<installmode>
+            ProductKey=LibreOffice '''+ "${liboVersionMajor}.${liboVersionMinor}" + '''
+            UserInstallation=file://$APP_DATA_DIR
+            '''.stripIndent()
+
+        unorc.text = '''\
+            [Bootstrap]
+            URE_INTERNAL_LIB_DIR=file://$APP_DATA_DIR/lib/
+            UNO_TYPES=file://$APP_DATA_DIR/program/udkapi.rdb file://$APP_DATA_DIR/program/offapi.rdb file://$APP_DATA_DIR/program/oovbaapi.rdb
+            UNO_SERVICES=file:///assets/program/services.rdb file:///assets/program/services/services.rdb
+            '''.stripIndent()
+
+        versionrc.text = '''\
+            [Version]
+            AllLanguages=en-US
+            BuildVersion=
+            buildid=''' + "${liboGitFullCommit}" + '''
+            ReferenceOOoMajorMinor=4.1
+            '''.stripIndent()
+    }
+}
+
+// creating the UI stuff is cheap, don't bother only applying it for the flavor..
+preBuild.dependsOn 'createRCfiles',
+        'createStrippedConfigMain',
+        'createStrippedConfigRegistry',
+        'createFullConfig',
+        'copyNdkDebugServer'
+
+clean.dependsOn 'cleanCopyAssets',
+        'cleanCreateStrippedConfig',
+        'cleanCreateFullConfig',
+        'cleanCopyNdkDebugServer'

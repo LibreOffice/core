@@ -13,71 +13,16 @@
 # (and iOS), etc. We don't really win anything by having so many layers of
 # configurability on platforms like Android and iOS where apps based on LO
 # code are very much self-contained pre-packaged thingies.
-APP_DATA_PATH=/data/data/$(APP_PACKAGE)
 
-SODEST=libs/$(ANDROID_APP_ABI)
+SODEST=jniLibs/$(ANDROID_APP_ABI)
 OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
-
-APPCOMPATDIR=$(BOOTSTRAPDIR)/../AppCompat-v7
-
-define COPYSO
-       $(error COPYSO should not be used now with DISABLE_DYNLOADING)
-endef
-
-define COPYJAR
-mkdir -p libs && cp $(1) libs
-endef
 
 #
 # Helpful rules ...
 #
 
-#
-# The Android SDK recommends you copy/paste some big -package-resources
-# rule in order to not pack certain kinds of resources. Unfortunately this
-# rule interacts with the rest of the ant code in horrible ways such that
-# upgrading your SDK auto-breaks everything.
-#
-# Horrors below:
-#
-$(BOOTSTRAPDIR)/no-resource-compress.xml : $(ANDROID_SDK_HOME)/tools/ant/build.xml $(BOOTSTRAPDIR)/no-resource-compress-*.xml
-	( \
-	android_sdk_ver=`grep 'Pkg.Revision' $(ANDROID_SDK_HOME)/tools/source.properties | sed 's/^.*=//' | sed 's/\..*//'` ; \
-	sed 's/@ANDROID_PACKAGE_NAME@/$(ANDROID_PACKAGE_NAME)/' < $(BOOTSTRAPDIR)/no-resource-compress-$$android_sdk_ver.xml > $@ ; \
-	if ! test -f $(BOOTSTRAPDIR)/no-resource-compress.xml; then \
-	   echo "Unknown Android SDK version: $$android_sdk_ver"; \
-	   exit 1; \
-	fi \
-	)
-
-android_version_setup : $(BOOTSTRAPDIR)/no-resource-compress.xml
-
-prepare-appcompat:
-	mkdir $(APPCOMPATDIR) 2>/dev/null; true
-	cp -rf $(ANDROID_SDK_HOME)/extras/android/support/v7/appcompat/* $(APPCOMPATDIR)
-	$(ANDROID_SDK_HOME)/tools/android update lib-project --target android-23 --path $(APPCOMPATDIR)
-
-properties:
+local.properties:
 	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
-	echo sdk.dir=$(ANDROID_SDK_HOME) >../Bootstrap/local.properties
-	echo "# File needed by ndk-gdb" >jni/Application.mk
-	echo "APP_ABI := $(ANDROID_APP_ABI)" > jni/Application.mk
-	echo "APP_PLATFORM := android-21" >> jni/Application.mk
-
-install:
-	unset JAVA_HOME && $(ANT) debug install
-	@echo
-	@echo 'Run it with "make run"'
-	@echo
-
-uninstall:
-	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
-
-clean: android_version_setup properties
-	$(ANT) $(if $(verbose),,-quiet) -keep-going clean
-	rm -rf assets libs $(SODEST) $(OBJLOCAL) $(BOOTSTRAPDIR)/no-resource-compress.xml
-	rm -f native-code.cxx
-	rm -rf $(APPCOMPATDIR)
 
 #
 # Build / link the single .so for this app
@@ -107,8 +52,6 @@ $(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
 	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
 	#to keep some symbols, eg.: $(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so -w -K 'Java*'
 
-# shrinkme $(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
-
 link-so: $(SODEST)/liblo-native-code.so
 
 # If you reinstall an app several times *on the emulator*, even if you
@@ -119,109 +62,30 @@ link-so: $(SODEST)/liblo-native-code.so
 stop-start-cycle:
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10
 
-copy-stuff:
-# Then "assets". Let the directory structure under assets mimic
-# that under solver for now.
-#
-# Please note that I have no idea what all of this is really necessary and for
-# much of this stuff being copied, no idea whether it makes any sense at all.
-# Much of this is copy-pasted from android/qa/sc/Makefile (where a couple of
-# unit tests for sc are built, and those do seem to mostly work) and
-# android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some
-# extent).
-#
-	mkdir -p assets/lib assets/program/services assets/gz.unpack/program
-	gzip -9 <$(INSTDIR)/$(LIBO_ETC_FOLDER)/types/offapi.rdb >assets/gz.unpack/program/offapi.rdb
-	gzip -9 <$(INSTDIR)/$(LIBO_ETC_FOLDER)/types/oovbaapi.rdb >assets/gz.unpack/program/oovbaapi.rdb
-	gzip -9 <$(INSTDIR)/$(LIBO_URE_MISC_FOLDER)/types.rdb >assets/gz.unpack/program/udkapi.rdb
-# For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
-	for F in program/services/services program/services; do \
-		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$$APP_DATA_DIR/lib/!g' <$(INSTDIR)/$$F.rdb >assets/$$F.rdb; \
-	done
-	cp $(if $(exampleDocument),$(exampleDocument),$(SRC_ROOT)/android/default-document/example.odt) assets/example.odt
-	cp $(SRC_ROOT)/readlicense_oo/license/LICENSE assets/license.txt
-	cp $(SRC_ROOT)/readlicense_oo/license/NOTICE assets/notice.txt
-#
-	rm -Rf assets/share # pre-clean it
-	mkdir -p assets/share/config
-	cp -R $(INSTDIR)/share/registry assets/share
-# Filter data is needed by e.g. the drawingML preset shape import.
-	cp -R $(INSTDIR)/share/filter assets/share
-# Make sure the soffice.cfg directory is always created, it's not possible to hit any keys without it.
-	if ! test z$(DISABLE_UI) = zTRUE; then \
-		echo "Copying UI files into the apk"; \
-		cp -R $(INSTDIR)/share/config/soffice.cfg assets/share/config; \
-	else \
-		echo "Skipping UI files"; \
-		mkdir -p assets/share/config/soffice.cfg; \
-		echo > assets/share/config/soffice.cfg/empty; \
-		for F in main.xcd res/registry_en-US.xcd; do \
-			$(SRC_ROOT)/android/mobile-config.py assets/share/registry/$$F assets/share/registry/$$F.new && mv assets/share/registry/$$F.new assets/share/registry/$$F; \
-		done; \
-	fi
-
-	mkdir -p assets/unpack/program
-	echo '[Bootstrap]' > assets/unpack/program/sofficerc
-	echo 'Logo=1' >> assets/unpack/program/sofficerc
-	echo 'NativeProgress=1' >> assets/unpack/program/sofficerc
-	echo 'URE_BOOTSTRAP=file:///assets/program/fundamentalrc' >> assets/unpack/program/sofficerc
-	echo 'HOME=$$APP_DATA_DIR/cache' >> assets/unpack/program/sofficerc
-	echo 'OSL_SOCKET_PATH=$$APP_DATA_DIR/cache' >> assets/unpack/program/sofficerc
-#
-# Set up fundamentalrc
-	echo '[Bootstrap]' > assets/program/fundamentalrc
-	echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/fundamentalrc
-	echo 'BRAND_BASE_DIR=file:///assets' >> assets/program/fundamentalrc
-	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
-	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/nothing-here/we-can/exec-anyway' >> assets/program/fundamentalrc
-#
-# Set up unorc
-	echo '[Bootstrap]' > assets/program/unorc
-	echo 'URE_INTERNAL_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/unorc
-	echo 'UNO_TYPES=file://$$APP_DATA_DIR/program/udkapi.rdb file://$$APP_DATA_DIR/program/offapi.rdb file://$$APP_DATA_DIR/program/oovbaapi.rdb' >> assets/program/unorc
-	echo 'UNO_SERVICES=file:///assets/program/services.rdb file:///assets/program/services/services.rdb' >> assets/program/unorc
-#
-# Set up bootstraprc
-	echo '[Bootstrap]' > assets/program/bootstraprc
-	echo 'InstallMode=<installmode>' >> assets/program/bootstraprc
-	echo 'ProductKey=LibreOffice $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)' >> assets/program/bootstraprc
-	echo 'UserInstallation=file://$$APP_DATA_DIR' >> assets/program/bootstraprc
-#
-# Set up versionrc
-	echo '[Version]' > assets/program/versionrc
-	echo 'AllLanguages=en-US' >> assets/program/versionrc
-	echo 'BuildVersion=' >> assets/program/versionrc
-	echo 'buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)' >> assets/program/versionrc
-	echo 'ReferenceOOoMajorMinor=4.1' >> assets/program/versionrc
-	sed -e 's|@ANDROID_DEBUGGABLE@|$(if $(ENABLE_DEBUG),android:debuggable="true",)|' \
-	    -e 's|@ANDROID_INSTALL_LOCATION@|$(if $(ENABLE_DEBUG),internalOnly,preferExternal)|' \
-	    -e 's|@ANDROID_VERSION_NAME@|$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)/$(shell cd $(SRCDIR) && git log -1 --format=%h)/$(OOO_VENDOR)|' \
-	    -e 's|@ANDROID_VERSION_NUMBER@|$(if $(versionCode),$(versionCode),1)|' \
-	    < AndroidManifest.xml.in > AndroidManifest.xml
-#
-# .res files
-	mkdir -p assets/program/resource
-	cp $(INSTDIR)/$(LIBO_SHARE_RESOURCE_FOLDER)/*en-US.res assets/program/resource
-#
-# Assets that are unpacked at run-time into the app's data directory. These
-# are files read by non-LO code, fontconfig and freetype for now, that doesn't
-# understand "/assets" paths.
-	mkdir -p assets/unpack/etc/fonts
-	cp fonts.conf assets/unpack/etc/fonts
-# $UserInstallation/user/fonts is added to the fontconfig path in
-# vcl/generic/fontmanager/helper.cxx: psp::getFontPath(). UserInstallation is
-# set to the app's data dir above.
-	mkdir -p assets/gz.unpack/user/fonts
-	for F in $(INSTDIR)/share/fonts/truetype/Liberation*.ttf \
-	         $(INSTDIR)/share/fonts/truetype/Caladea-*.ttf \
-	         $(INSTDIR)/share/fonts/truetype/Carlito-*.ttf \
-	         $(INSTDIR)/share/fonts/truetype/Gen*.ttf \
-		 $(INSTDIR)/share/fonts/truetype/opens___.ttf; do \
-		gzip -9 <$$F >assets/gz.unpack/user/fonts/`basename $$F`; \
-	done
-#
-# Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
-#
-	mkdir -p $(SODEST)
-	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
-	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
+# build-host specific stuff (build paths and the like) to keep build.gradle static
+liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk
+	@echo "creating $@"
+	( \
+		echo "// created by Makefile.shared - your changes will be overridden" \
+		&& echo "ext {" \
+		&& echo "    liboSrcRoot         = '$(SRC_ROOT)'" \
+		&& echo "    liboWorkdir         = '$(WORKDIR)'" \
+		&& echo "    liboInstdir         = '$(INSTDIR)'" \
+		&& echo "    liboEtcFolder       = '$(LIBO_ETC_FOLDER)'" \
+		&& echo "    liboUreMiscFolder   = '$(LIBO_URE_MISC_FOLDER)'" \
+		&& echo "    liboSharedResFolder = '$(LIBO_SHARE_RESOURCE_FOLDER)'" \
+		&& echo "    liboUREJavaFolder   = '$(LIBO_URE_SHARE_JAVA_FOLDER)'" \
+		&& echo "    liboShareJavaFolder = '$(LIBO_SHARE_JAVA_FOLDER)'" \
+		&& echo "    liboExampleDocument = '$(if $(exampleDocument),$(exampleDocument),$(SRC_ROOT)/android/default-document/example.odt)'" \
+		&& echo "    liboVersionMajor    = '$(LIBO_VERSION_MAJOR)'" \
+		&& echo "    liboVersionMinor    = '$(LIBO_VERSION_MINOR)'" \
+		&& echo "    liboGitFullCommit   = '$(shell cd $(SRCDIR) && git log -1 --format=%H)'" \
+		&& echo "    liboNdkGdbserver    = '$(ANDROID_NDK_GDBSERVER)'" \
+		&& echo "    liboAndroidAppAbi   = '$(ANDROID_APP_ABI)'" \
+		&& echo "}" \
+		&& echo "android.defaultConfig {" \
+		&& echo "    applicationId '$(ANDROID_PACKAGE_NAME)'" \
+		&& echo "    versionCode project.hasProperty('cmdVersionCode') ? cmdVersionCode.toInteger() : $(if $(versionCode),$(versionCode),1)" \
+		&& echo "    versionName '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)/$(shell cd $(SRCDIR) && git log -1 --format=%h)/$(OOO_VENDOR)'" \
+		&& echo "}" \
+	) > $@

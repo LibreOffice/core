@@ -31,7 +31,6 @@
 
 # autoconf generated stuff
 /aclocal.m4
-/android/source/AndroidManifest.xml
 /autom4te.cache
 /autogen.input
 /autogen.lastrun
