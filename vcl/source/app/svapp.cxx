@@ -347,9 +347,16 @@ namespace
 {
     bool InjectKeyEvent(SvStream& rStream)
     {
-        VclPtr<vcl::Window> xWin(Application::GetFocusWindow());
-        if (!xWin)
-            xWin.reset(Application::GetActiveTopWindow());
+        if (Application::AnyInput())
+            return false;
+
+        VclPtr<vcl::Window> xWin(Application::GetFirstTopLevelWindow());
+        while (xWin)
+        {
+            if (xWin->IsVisible())
+                break;
+            xWin.reset(Application::GetNextTopLevelWindow(xWin));
+        }
         if (!xWin)
             return false;
 

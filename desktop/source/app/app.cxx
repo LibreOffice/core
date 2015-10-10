@@ -1282,23 +1282,32 @@ unsigned int persist_cnt;
 //the application post start-up for ui-testing
 void Desktop::CloseFrameAndReopen(Reference<XDesktop2> xDesktop)
 {
-    Reference<css::frame::XFrame> xFrame = xDesktop->getActiveFrame();
-    Reference<css::frame::XDispatchProvider> xProvider(xFrame, css::uno::UNO_QUERY);
+    css::uno::Reference<css::container::XIndexAccess> xTaskContainer(
+        xDesktop->getFrames(), css::uno::UNO_QUERY_THROW);
+    sal_Int32 c = xTaskContainer->getCount();
+    for (sal_Int32 i = 0; i < c; ++i)
+    {
+        css::uno::Reference< css::frame::XFrame > xFrame;
+        xTaskContainer->getByIndex(i) >>= xFrame;
+        if (!xFrame.is())
+            continue;
+        Reference<css::frame::XDispatchProvider> xProvider(xFrame, css::uno::UNO_QUERY);
 
-    css::uno::Reference<css::frame::XController > xController = xFrame->getController();
-    css::uno::Reference<css::frame::XModel> xModel = xController->getModel();
-    css::uno::Reference< css::util::XModifiable > xModifiable(xModel, css::uno::UNO_QUERY);
-    xModifiable->setModified(false);
+        css::uno::Reference<css::frame::XController > xController = xFrame->getController();
+        css::uno::Reference<css::frame::XModel> xModel = xController->getModel();
+        css::uno::Reference< css::util::XModifiable > xModifiable(xModel, css::uno::UNO_QUERY);
+        xModifiable->setModified(false);
 
-    css::util::URL aCommand;
-    aCommand.Complete = ".uno:CloseDoc";
+        css::util::URL aCommand;
+        aCommand.Complete = ".uno:CloseDoc";
 
-    css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(xContext);
-    xParser->parseStrict(aCommand);
+        css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+        Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(xContext);
+        xParser->parseStrict(aCommand);
 
-    css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aCommand, OUString(), 0);
-    xDispatch->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());
+        css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aCommand, OUString(), 0);
+        xDispatch->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());
+    }
 
     OpenDefault();
 }
