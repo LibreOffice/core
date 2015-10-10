@@ -35,6 +35,7 @@ public:
     void testPieChartLabels3();
     void testPieChartLabels4();
     void testTdf76649TrendLineBug();
+    void testTdf88154LabelRotatedLayout();
 
     CPPUNIT_TEST_SUITE(Chart2XShapeTest);
     CPPUNIT_TEST(testFdo75075);
@@ -44,6 +45,7 @@ public:
     CPPUNIT_TEST(testPieChartLabels3);
     CPPUNIT_TEST(testPieChartLabels4);
     CPPUNIT_TEST(testTdf76649TrendLineBug);
+    CPPUNIT_TEST(testTdf88154LabelRotatedLayout);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -153,6 +155,72 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
     // Check if the regression curve exists (which means a XShape with a certain
     // name should exist in the dump)
     assertXPath(pXmlDoc, "//XShape[@name='CID/D=0:CS=0:CT=0:Series=0:Curve=0']", 1);
+}
+
+void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
+{
+    load("chart2/qa/extras/xshape/data/pptx/", "tdf88154_LabelRotatedLayout.pptx");
+    uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromDrawImpress(0,6);
+    uno::Reference< qa::XDumper > xDumper( xChartDoc, UNO_QUERY_THROW );
+    OUString rDump = xDumper->dump();
+    OString aXmlDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
+    xmlDocPtr pXmlDoc = xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr()));
+
+    {
+        OString aPath( "//XShape[@text='Oct-12']/Transformation" );
+        assertXPath(pXmlDoc, aPath, 1);
+        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
+        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
+        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1").toDouble();
+        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2").toDouble();
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fT11, -fT21, 1e-8);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
+    }
+    {
+        OString aPath( "//XShape[@text='Nov-12']/Transformation" );
+        assertXPath(pXmlDoc, aPath, 1);
+        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
+        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
+        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1").toDouble();
+        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2").toDouble();
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fT11, -fT21, 1e-8);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
+    }
+    {
+        OString aPath( "//XShape[@text='Dec-12']/Transformation" );
+        assertXPath(pXmlDoc, aPath, 1);
+        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
+        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
+        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1").toDouble();
+        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2").toDouble();
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fT11, -fT21, 1e-8);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
+    }
+    {
+        OString aPath( "//XShape[@text='May-13']/Transformation" );
+        assertXPath(pXmlDoc, aPath, 1);
+        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
+        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
+        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1").toDouble();
+        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2").toDouble();
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fT11, -fT21, 1e-8);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
+    }
+    {
+        OString aPath( "//XShape[@text='Jan-14']/Transformation" );
+        assertXPath(pXmlDoc, aPath, 1);
+        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
+        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
+        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1").toDouble();
+        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2").toDouble();
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fT11, -fT21, 1e-8);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2XShapeTest);
