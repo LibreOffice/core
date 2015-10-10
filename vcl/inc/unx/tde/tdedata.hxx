@@ -69,7 +69,7 @@ class TDESalFrame : public X11SalFrame
     GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
 public:
-    TDESalFrame( SalFrame* pParent, sal_uLong );
+    TDESalFrame( SalFrame* pParent, SalFrameStyleFlags );
     virtual ~TDESalFrame();
 
     virtual SalGraphics* AcquireGraphics();
@@ -85,7 +85,7 @@ public:
     TDESalInstance( SalYieldMutex* pMutex )
             : X11SalInstance( pMutex ) {}
     virtual ~TDESalInstance() {}
-    virtual SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
+    virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
 };
 
 class TDEXLib : public SalXLib
