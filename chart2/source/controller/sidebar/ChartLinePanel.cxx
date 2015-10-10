@@ -20,6 +20,7 @@
 
 #include <svx/tbcontrl.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
@@ -178,6 +179,7 @@ void ChartLinePanel::updateData()
     if (!mbUpdate || !mbModelValid)
         return;
 
+    SolarMutexGuard aGuard;
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
