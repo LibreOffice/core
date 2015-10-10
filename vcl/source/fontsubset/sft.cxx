@@ -2631,8 +2631,10 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
 
     if (length > 0) {
         const sal_uInt8* srcptr = glyf + ttf->goffsets[glyphID];
-        d->ptr = static_cast<sal_uInt8*>(malloc((length + 1) & ~1)); assert(d->ptr != 0);
-        memcpy( d->ptr, srcptr, length );
+        const size_t nChunkLen = ((length + 1) & ~1);
+        d->ptr = static_cast<sal_uInt8*>(malloc(nChunkLen)); assert(d->ptr != 0);
+        memcpy(d->ptr, srcptr, length);
+        memset(d->ptr + length, 0, nChunkLen - length);
         d->compflag = (GetInt16( srcptr, 0, 1 ) < 0);
     } else {
         d->ptr = 0;
