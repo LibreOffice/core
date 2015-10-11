@@ -418,7 +418,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(PCHOBJS) $(NATIVERES))) && \
 	$(gb_LINK) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
 		$(if $(filter GoogleTest Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(LDFLAGS) \
@@ -458,8 +458,7 @@ gb_Library_PLAINLIBS_NONE += \
 	uuid \
 	uwinapi \
 	winspool \
-	z \
-	cppunit
+	z
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
@@ -619,30 +618,6 @@ gb_GoogleTest_GTESTPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 gb_GoogleTest_get_filename = $(1)$(gb_Executable_EXT)
 
 define gb_GoogleTest_GoogleTest_platform
-endef
-
-# CppunitTest class
-
-gb_CppunitTest_CPPTESTPRECOMMAND :=
-gb_CppunitTest_SYSPRE := itest_
-gb_CppunitTest_EXT := .lib
-gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
-gb_CppunitTest_get_libfilename = test_$(1).dll
-
-define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
-
-$(call gb_LinkTarget_set_auxtargets,$(2),\
-	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
-	$(3).manifest \
-	$(patsubst %.dll,%.pdb,$(3)) \
-	$(call gb_LinkTarget_get_pdbfile,$(2)) \
-	$(patsubst %.dll,%.ilk,$(3)) \
-)
-
-$(call gb_LinkTarget_get_target,$(2)) \
-$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
-
 endef
 
 # JunitTest class

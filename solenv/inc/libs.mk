@@ -273,11 +273,6 @@ JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CPPUNITLIB = $(CPPUNIT_LIBS)
-.ELSE
-CPPUNITLIB = -lcppunit
-.ENDIF
 
 GTESTLIB= -lgtest
 
@@ -474,7 +469,6 @@ PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
 XSLTLIB = libxslt.lib $(LIBXML2LIB)
-CPPUNITLIB = icppunit_dll.lib
 GTESTLIB = igtest.lib
 
 REDLANDLIB = librdf.lib

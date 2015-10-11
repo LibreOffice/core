@@ -49,11 +49,11 @@ my_file = file://
 .IF "$(UPDATER)" == "YES" && "$(SHIPDRIVE)" != "" && \
     "$(CWS_WORK_STAMP)" == "" && "$(SOLARENV:s/$(SOL_TMP)//" == "$(SOLARENV)"
 my_instsets = $(shell ls -dt \
-    $(SHIPDRIVE)/$(INPATH)/OpenOffice/archive/$(WORK_STAMP)_$(LAST_MINOR)_native_packed-*_$(defaultlangiso).$(BUILD))
+    $(SHIPDRIVE)/$(INPATH)/Apache_OpenOffice/archive/$(WORK_STAMP)_$(LAST_MINOR)_native_packed-*_$(defaultlangiso).$(BUILD))
 installationtest_instset = $(my_instsets:1)
 .ELSE
 installationtest_instset = \
-    $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)
+    $(SOLARSRC)/instsetoo_native/$(INPATH)/Apache_OpenOffice/archive/install/$(defaultlangiso)
 .END
 
 .IF "$(OS)" == "WNT"
@@ -100,23 +100,6 @@ $(MISC)/$(TARGET)/installation.flag : $(shell \
     $(COMMAND_ECHO)unzip -q $(installationtest_instset)/Apache_OpenOffice_*_install-arc_$(defaultlangiso).zip -d "$(OOO_EXTRACT_TO)"
     $(COMMAND_ECHO)mv "$(OOO_EXTRACT_TO)"/Apache_OpenOffice_*_install-arc_$(defaultlangiso) "$(OOO_EXTRACT_TO)"/opt
     $(COMMAND_ECHO)echo "$(OOO_EXTRACT_TO)" > $@
-.END
-
-cpptest .PHONY :
-    $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
-    $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
-    $(CPPUNITTESTER) \
-        -env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb \
-        -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
-        -env:arg-soffice=$(my_soffice) -env:arg-user=$(MISC)/$(TARGET)/user \
-        $(my_cppenv) $(TEST_ARGUMENTS:^"-env:arg-testarg.") --protector \
-        $(SOLARSHAREDBIN)/unoexceptionprotector$(DLLPOST) \
-        unoexceptionprotector $(CPPTEST_LIBRARY)
-# As a workaround for #i111400#, ignore failure of $(RM):
-    $(COMMAND_ECHO)- $(RM) -r $(MISC)/$(TARGET)/user
-.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
-    $(COMMAND_ECHO)$(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
-cpptest : $(MISC)/$(TARGET)/installation.flag
 .END
 
 .IF "$(SOLAR_JAVA)" == "TRUE" && "$(OOO_JUNIT_JAR)" != ""

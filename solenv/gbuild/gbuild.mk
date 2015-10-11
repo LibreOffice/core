@@ -236,7 +236,6 @@ include $(foreach class, \
 	Package \
 	CustomTarget \
 	PrecompiledHeaders \
-	CppunitTest \
 	GoogleTest \
 	JavaClassSet \
 	JunitTest \

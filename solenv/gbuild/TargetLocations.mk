@@ -44,7 +44,6 @@ endef
 gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
-gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
 gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)_$(1).done
 gb_CustomTarget_get_target = $(WORKDIR)/CustomTarget/$(1).done
 gb_CustomTarget_get_workdir = $(WORKDIR)/CustomTarget/$(1)
@@ -110,7 +109,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ResTarget \
 	SdiTarget \
 	SrsTarget \
-	CppunitTest \
 	GoogleTest \
 	CustomTarget \
 ))
@@ -156,7 +154,6 @@ endef
 
 gb_Library_OUTDIRLOCATION = $(OUTDIR)/lib
 gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
-gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest
 gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 
 # vim: set noet sw=4 ts=4:

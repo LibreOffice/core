@@ -222,7 +222,7 @@ define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(subst \d,$$,$(RPATH)) $(LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
@@ -245,7 +245,7 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Library CppunitTest GoogleTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1)))
+$(if $(filter Library GoogleTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1)))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
@@ -282,8 +282,7 @@ gb_Library_PLAINLIBS_NONE += \
 	Xext \
 	SM \
 	ICE \
-	z \
-	cppunit
+	z
 
 gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
@@ -364,19 +363,6 @@ gb_GoogleTest_get_filename = $(1)$(gb_Executable_EXT)
 
 define gb_GoogleTest_GoogleTest_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH := -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
-endef
-
-# CppunitTest class
-
-gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
-gb_CppunitTest_SYSPRE := libtest_
-gb_CppunitTest_EXT := .so
-gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
-gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
-
-define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
-
 endef
 
 # JunitTest class

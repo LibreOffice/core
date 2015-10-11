@@ -263,14 +263,14 @@ $(call gb_Helper_abbreviate_dirs,\
 	DYLIB_FILE=`$(gb_MKTEMP)` && \
 	$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(subst \d,$$,$(RPATH)) $(LDFLAGS) \
 		$(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
 		$(patsubst %,-l%,$(EXTERNAL_LIBS)) \
 		> $${DYLIB_FILE} && \
 	$(gb_CXX) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(subst \d,$$,$(RPATH)) $(LDFLAGS) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -280,7 +280,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		-o $(1) \
 		`cat $${DYLIB_FILE}` && \
-	$(if $(filter Library CppunitTest,$(TARGETTYPE)),\
+	$(if $(filter Library,$(TARGETTYPE)),\
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(1) && \
 		ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
 	rm -f $${DYLIB_FILE})
@@ -300,7 +300,7 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Library CppunitTest GoogleTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
+$(if $(filter Library GoogleTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
@@ -326,8 +326,7 @@ gb_Library_PLAINLIBS_NONE += \
 	jpeg \
 	m \
 	pthread \
-	z \
-	cppunit
+	z
 
 gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
@@ -409,20 +408,6 @@ gb_GoogleTest_get_filename = $(1)$(gb_Executable_EXT)
 
 define gb_GoogleTest_GoogleTest_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH :=
-endef
-
-# CppunitTest class
-
-gb_CppunitTest_CPPTESTPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
-gb_CppunitTest_SYSPRE := libtest_
-gb_CppunitTest_EXT := .dylib
-gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
-gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
-
-define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
-$(call gb_LinkTarget_get_target,$(2)) : LAYER := NONE
-
 endef
 
 # JunitTest class
