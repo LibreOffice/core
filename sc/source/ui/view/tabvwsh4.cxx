@@ -116,7 +116,7 @@ void ScTabViewShell::Activate(bool bMDI)
 
         ActivateView( true, bFirstActivate );
 
-        // implement AutoCorrect, if Writer has newly created this
+        // update AutoCorrect, if Writer has newly created this
         UpdateDrawTextOutliner();
 
         // RegisterNewTargetNames does not exist anymore
@@ -125,8 +125,8 @@ void ScTabViewShell::Activate(bool bMDI)
         if ( pInputHandler && pThisFrame->HasChildWindow(FID_INPUTLINE_STATUS) )
         {
             // actually only required for Reload (last version):
-            // The InputWindow stops, but the View along with the InputHandler is created,
-            // that is why the InputHandler must be set in the InputWindow.
+            // The InputWindow remains, but the View along with the InputHandler is newly created,
+            // that is why the InputHandler must be set at the InputWindow.
             SfxChildWindow* pChild = pThisFrame->GetChildWindow(FID_INPUTLINE_STATUS);
             if (pChild)
             {
@@ -391,7 +391,7 @@ void ScTabViewShell::OuterResizePixel( const Point &rOfs, const Size &rSize )
 
 void ScTabViewShell::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
 {
-    //  for OLE...
+    // for OLE...
 
     Fraction aFrac20( 1,5 );
     Fraction aFrac400( 4,1 );
@@ -419,7 +419,7 @@ void ScTabViewShell::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoo
 
 void ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
 {
-    // adjust for all cells (in 1/100 mm)
+    // adjust to entire cells (in 1/100 mm)
 
     Size aPixelSize = rRect.GetSize();
     vcl::Window* pWin = const_cast<ScTabViewShell*>(this)->GetActiveWin();
@@ -934,7 +934,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
 
                 if ( !pAuditingShell )
                 {
-                    pDocSh->MakeDrawLayer();    // die Wartezeit lieber jetzt als beim Klick
+                    pDocSh->MakeDrawLayer();    // now rather the waiting time as for the click
 
                     pAuditingShell = new ScAuditingShell( &GetViewData() );
                     pAuditingShell->SetRepeatTarget( &aTarget );
@@ -978,7 +978,7 @@ IMPL_LINK_NOARG_TYPED(ScTabViewShell, FormControlActivated, LinkParamNone*, void
 }
 
 // GetMySubShell / SetMySubShell: simulate old ratio,
-// tso that there is only one SubShell (only whithin the 5 own SubShells)
+// so that there is only one SubShell (only whithin the 5 own SubShells)
 
 SfxShell* ScTabViewShell::GetMySubShell() const
 {
@@ -1038,7 +1038,7 @@ ScTabViewShell* ScTabViewShell::GetActiveViewShell()
 
 SfxPrinter* ScTabViewShell::GetPrinter( bool bCreate )
 {
-    // printer is always present (is created for the FontList already when starting)
+    // printer is always present (is created for the FontList already on start-up)
     return GetViewData().GetDocShell()->GetPrinter(bCreate);
 }
 
@@ -1224,7 +1224,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
                     bIsType = bControl && !bAlt;        // Control, Shift-Control-Return
                     if ( !bIsType && nModi == 0 )
                     {
-                        //  Will der InputHandler auch ein einfaches Return?
+                        // will the Input Handler also have a simple return??
 
                         ScInputHandler* pHdl = pScMod->GetInputHdl(this);
                         bIsType = pHdl && pHdl->TakesReturn();
@@ -1246,13 +1246,13 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         if( !bUsed )
             bUsed = SfxViewShell::KeyInput( rKEvt );    // accelerators
 
-        if ( !bUsed && !bIsType && nCode != KEY_RETURN )    // afterwards input once again
+        if ( !bUsed && !bIsType && nCode != KEY_RETURN )    // afterwards Enter once again
             bUsed = pScMod->InputKeyEvent( rKEvt );
     }
     else
     {
         // special case: copy/cut for multiselect  -> error message
-        //  (Slot is disabled, so SfxViewShell::KeyInput was swallowed without a comment)
+        //  (Slot is disabled, so SfxViewShell::KeyInput would be swallowed without a comment)
         KeyFuncType eFunc = aCode.GetFunction();
         if ( eFunc == KeyFuncType::CUT )
         {
@@ -1323,8 +1323,8 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
                         if ( bOnRefSheet )
                             ShowAllCursors();
 
-                        // here no UpdateInputHandler, since for refrence input the input
-                        // is entered into another document which is not this ViewShell
+                        // here no UpdateInputHandler, since during reference input on another
+                        // document this ViewShell is not the one that is used for input.
 
                         bUsed = true;
                     }
@@ -1333,7 +1333,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         }
     }
 
-    // hard-code Alt key, since Alt is not configurable
+    // hard-code Alt-Cursor key, since Alt is not configurable
 
     if ( !bUsed && bAlt && !bControl )
     {
@@ -1440,7 +1440,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
 
     EnableAutoSpell(rDoc.GetDocOptions().IsAutoSpell());
 
-    SetName(OUString("View")); // fuer SBX
+    SetName(OUString("View")); // for SBX
     Color aColBlack( COL_BLACK );
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( GetActiveWin() );
@@ -1488,14 +1488,13 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     }
 
     // ViewInputHandler
-    // each task has now its own InputWindow,
-    // therefore must either each task gets it own InputHandler or
-    // register the InputWindow in the App-InputHandler, when the tasks gets
-    // active, or the InputWindow has to create the InputHandler by itself
-    // (then always search through the InputWindow, and only take the InputHandler from
-    // the app when it is not here).
-    // as intermediate solution each View gets its own InputHandler, this gives
-    // nothing more then trouble when there are two Views in one tast window.
+    // Each task now has its own InputWindow,
+    // therefore either should each task get its own InputHandler,
+    // or the InputWindow should create its own InputHandler
+    // (then always search via InputWindow and only if not found
+    // use the InputHandler of the App).
+    // As an intermediate solution each View gets its own InputHandler,
+    // which only yields problems if two Views are in one task window.
 
     pInputHandler = new ScInputHandler;
 
@@ -1503,14 +1502,14 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     //  if ( !GetViewFrame()->ISA(SfxTopViewFrame) )        // OLE or Plug-In
     //      pInputHandler = new ScInputHandler;
 
-            // create FormShell before MakeDrawView, so that DrawView can be registered in the
+            // create FormShell before MakeDrawView, so that DrawView can be registered at the
             // FormShell in every case
             // the FormShell is pushed in the first activate
     pFormShell = new FmFormShell(this);
     pFormShell->SetControlActivationHandler( LINK( this, ScTabViewShell, FormControlActivated ) );
 
-            // DrawView should ot be accessed in TabView - ctor,
-            // when the ViewShell is not yet constructed...
+            // DrawView must not be created in TabView - ctor,
+            // if the ViewShell is not yet constructed...
     if (rDoc.GetDrawLayer())
         MakeDrawView( nForceDesignMode );
     ViewOptionsHasChanged(false);   // possibly also creates rawView
@@ -1550,7 +1549,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
 
         // ReadExtOptions is now in Activate
 
-        //  Link-Update nicht verschachteln
+        // link update no nesting
         if ( pDocSh->GetCreateMode() != SfxObjectCreateMode::INTERNAL &&
              pDocSh->IsUpdateEnabled() )  // #105575#; update only in the first creation of the ViewShell
         {
@@ -1734,7 +1733,7 @@ ScTabViewShell::~ScTabViewShell()
     RemoveSubShell();           // all
     SetWindow(0);
 
-    // all to NULL, if still trying to access it in TabView-dtor
+    // all to NULL, in case the TabView-dtor tries to access them
     //! (should not really! ??!?!)
     if (pInputHandler)
         pInputHandler->SetDocumentDisposing(true);
@@ -1795,7 +1794,7 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     rData.nPageNo       = 1;
     rData.nTotalPages   = 99;
 
-    // eNumType is aware of the dialog
+    // eNumType is known by of the dialog
 }
 
 bool ScTabViewShell::GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const
