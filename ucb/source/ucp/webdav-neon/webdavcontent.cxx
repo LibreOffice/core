@@ -2842,7 +2842,7 @@ Content::ResourceType Content::resourceTypeForLocks(
                     std::vector< DAVPropertyValue >::iterator it;
 
                     for ( it = resources[0].properties.begin();
-                          it != resources[0].properties.end(); it++)
+                          it != resources[0].properties.end(); ++it)
                     {
                         if ( (*it).Name ==  DAVProperties::SUPPORTEDLOCK )
                         {

@@ -832,7 +832,7 @@ void NeonSession::PROPFIND( const OUString & inPath,
         SAL_INFO( "ucb.ucp.webdav", "PROPFIND - inPath: <" << inPath << "> inDepth: " << inDepth );
         OUString aProps;
         for(std::vector< OUString >::const_iterator it = inPropNames.begin();
-            it < inPropNames.end(); it++)
+            it < inPropNames.end(); ++it)
         {
             aProps += *it;
             aProps += ", ";
@@ -880,11 +880,11 @@ void NeonSession::PROPFIND( const OUString & inPath,
 #if defined SAL_LOG_INFO
     { //debug
         for ( std::vector< DAVResourceInfo >::const_iterator itres = ioResInfo.begin();
-              itres < ioResInfo.end(); itres++)
+              itres < ioResInfo.end(); ++itres)
         {
             OUString aProps;
             for ( std::vector< OUString >::const_iterator it = (*itres).properties.begin();
-                  it < (*itres).properties.end(); it++)
+                  it < (*itres).properties.end(); ++it)
             {
                 aProps += *it;
                 aProps += ", ";
