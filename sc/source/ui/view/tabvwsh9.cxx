@@ -157,7 +157,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
         {
             case SID_IMAP:
                 {
-                    //  Disabled wird nicht mehr...
+                    // disabled is no more...
 
                     bool bThere = false;
                     SfxViewFrame* pThisFrame = GetViewFrame();
