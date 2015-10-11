@@ -23,14 +23,13 @@
 #include <i18nlangtag/lang.h>
 #include <basic/sbxdef.hxx>
 #include <basic/basicdllapi.h>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 
 class SbxFactory;
 class SbxVariable;
 class SbxBasicFormater;
 
-typedef boost::ptr_vector<SbxFactory> SbxFacs;
+typedef std::vector<std::unique_ptr<SbxFactory>> SbxFacs;
 
 // AppData structure for SBX:
 struct SbxAppData
