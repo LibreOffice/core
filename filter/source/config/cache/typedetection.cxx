@@ -1040,14 +1040,14 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
         sDeepType = xDetector->detect(lDescriptor);
         rDescriptor << lDescriptor;
     }
-    catch(const css::uno::Exception&)
-        {
-            // We should ignore errors here.
-            // Thrown exceptions mostly will end in crash recovery ...
-            // But might be we find another deep detection service which can detect the same
-            // document without a problem .-)
-            sDeepType.clear();
-        }
+    catch (...)
+    {
+        // We should ignore errors here.
+        // Thrown exceptions mostly will end in crash recovery ...
+        // But might be we find another deep detection service which can detect the same
+        // document without a problem .-)
+        sDeepType.clear();
+    }
 
     // seek to 0 is an optional feature to be more robust against
     // "simple implemented detect services" .-)
