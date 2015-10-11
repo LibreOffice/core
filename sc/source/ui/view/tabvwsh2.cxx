@@ -50,7 +50,7 @@
 
 SdrView* ScTabViewShell::GetDrawView() const
 {
-    return const_cast<ScTabViewShell*>(this)->GetScDrawView();    // GetScDrawView ist nicht-const
+    return const_cast<ScTabViewShell*>(this)->GetScDrawView();    // GetScDrawView is non-const
 }
 
 void ScTabViewShell::WindowChanged()
@@ -94,8 +94,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         return;
     }
 
-    //  Pseudo-Slots von Draw-Toolbox auswerten
-    //! wird das ueberhaupt noch gebraucht ?????
+    // evaluate pseudo slots in draw toolbox
+    //! is this still really needed ?????
 
     if (nNewId == SID_INSERT_DRAW && pArgs)
     {
@@ -124,7 +124,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 case SVX_SNAP_DRAW_CAPTION_VERTICAL: nNewId = SID_DRAW_CAPTION_VERTICAL; break;
             }
         }
-        else                    // sal_uInt16-Item vom Controller
+        else                    // sal_uInt16 item from controller
         {
             rReq.Done();
             return;
@@ -152,7 +152,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     }
     bool bSwitchCustom = ( !sStringItemValue.isEmpty() && !sDrawCustom.isEmpty() && sStringItemValue != sDrawCustom );
 
-    if (nNewId == SID_INSERT_FRAME)                     // vom Tbx-Button
+    if (nNewId == SID_INSERT_FRAME)                     // from Tbx button
         nNewId = SID_DRAW_TEXT;
 
     //  CTRL-SID_OBJECT_SELECT is used to select the first object,
@@ -171,17 +171,17 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     else if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
                                     nNewFormId == nFormSfxId || nNewFormId == 0 ) && !bSwitchCustom )
     {
-        //  #i52871# if a different custom shape is selected, the slot id can be the same,
-        //  so the custom shape type string has to be compared, too.
+        // #i52871# if a different custom shape is selected, the slot id can be the same,
+        // so the custom shape type string has to be compared, too.
 
-        //  SID_FM_CREATE_CONTROL mit nNewFormId==0 (ohne Parameter) kommt beim Deaktivieren
-        //  aus FuConstruct::SimpleMouseButtonUp
-        //  Execute fuer die Form-Shell, um im Controller zu deselektieren
+        // SID_FM_CREATE_CONTROL with nNewFormId==0 (without parameter) comes
+        // from FuConstruct::SimpleMouseButtonUp when deactivating
+        // Execute for the form shell, to deselect the controller
         if ( nNewId == SID_FM_CREATE_CONTROL )
         {
             GetViewData().GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
             GetViewFrame()->GetBindings().InvalidateAll(false);
-            //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
+            //! what kind of slot does the weird controller really need to display this????
         }
 
         bEx = !bEx;
@@ -192,10 +192,10 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if ( nDrawSfxId == SID_FM_CREATE_CONTROL && nNewId != nDrawSfxId )
     {
-        //  Wechsel von Control- zu Zeichenfunktion -> im Control-Controller deselektieren
+        // switching from control- to paint function -> deselect in control-controller
         GetViewData().GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
         GetViewFrame()->GetBindings().InvalidateAll(false);
-        //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
+        //! what kind of slot does the weird controller really need to display this????
     }
 
     SetDrawSelMode(bEx);
@@ -204,7 +204,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if ( bSelectFirst )
     {
-        //  select first draw object if none is selected yet
+        // select first draw object if none is selected yet
         if(!pView->AreObjectsMarked())
         {
             // select first object
@@ -220,7 +220,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     nDrawSfxId = nNewId;
     sDrawCustom.clear();    // value is set below for custom shapes
 
-    if ( nNewId != SID_DRAW_CHART )             // Chart nicht mit DrawShell
+    if ( nNewId != SID_DRAW_CHART )             // chart not with DrawShell
     {
         if ( nNewId == SID_DRAW_TEXT || nNewId == SID_DRAW_TEXT_VERTICAL ||
                 nNewId == SID_DRAW_TEXT_MARQUEE || nNewId == SID_DRAW_NOTEEDIT )
@@ -391,11 +391,11 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
         {
             case SID_INSERT_DRAW:
                 {
-                    //  SID_OBJECT_SELECT nur, wenn "harter" Selektionsmodus
+                    //  SID_OBJECT_SELECT only if "harder" selection mode
                     sal_uInt16 nPutId = nDrawSfxId;
                     if ( nPutId == SID_OBJECT_SELECT && !IsDrawSelMode() )
                         nPutId = USHRT_MAX;
-                    // nur die Images, die auch auf dem Controller liegen
+                    // only the images that are also in the controller
                     if ( nPutId != SID_OBJECT_SELECT &&
                          nPutId != SID_DRAW_LINE &&
                          nPutId != SID_DRAW_RECT &&
@@ -430,7 +430,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
                 }
                 break;
 
-            case SID_OBJECT_SELECT:     // wichtig fuer den ollen Control-Controller
+            case SID_OBJECT_SELECT:     // important for the old control-controller
                 rSet.Put( SfxBoolItem( nWhich, nDrawSfxId == SID_OBJECT_SELECT && IsDrawSelMode() ) );
                 break;
 
