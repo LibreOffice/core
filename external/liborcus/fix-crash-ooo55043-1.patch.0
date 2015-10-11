@@ -1,0 +1,17 @@
+--- src/parser/zip_archive_stream.cpp
++++ src/parser/zip_archive_stream.cpp
+@@ -91,8 +91,13 @@
+ 
+ void zip_archive_stream_blob::read(unsigned char* buffer, size_t length) const
+ {
++    if (!length)
++        return;
+     // First, make sure we have enough blob to satisfy the requested stream length.
+-    size_t length_available = m_size - tell();
++    const size_t pos = tell();
++    if (pos > m_size)
++        throw zip_error("Stream is seeked past end. No data available");
++    const size_t length_available = m_size - pos;
+     if (length_available < length)
+         throw zip_error("There is not enough stream left to fill requested length.");
+ 
