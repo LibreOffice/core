@@ -138,10 +138,11 @@ ImplImage::~ImplImage()
     }
 }
 
-ImplImageBmp::ImplImageBmp() :
-    mpDisplayBmp( NULL ),
-    mpInfoAry( NULL ),
-    mnSize( 0 )
+ImplImageBmp::ImplImageBmp()
+    : maBitmapChecksum(0)
+    , mpDisplayBmp(nullptr)
+    , mpInfoAry(nullptr)
+    , mnSize(0)
 {
 }
 
