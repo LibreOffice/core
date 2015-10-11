@@ -42,10 +42,10 @@ void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine 
 bool ScTabViewShell::HasSelection( bool bText ) const
 {
     bool bHas = false;
-    ScViewData* pData = const_cast<ScViewData*>(&GetViewData());     // const weggecasted
+    ScViewData* pData = const_cast<ScViewData*>(&GetViewData());
     if ( bText )
     {
-        //  Text enthalten: Anzahl2 >= 1
+        // Content contained: Count2 >= 1
         ScDocument* pDoc = pData->GetDocument();
         ScMarkData& rMark = pData->GetMarkData();
         ScAddress aCursor( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
@@ -69,11 +69,11 @@ void ScTabViewShell::UIDeactivated( SfxInPlaceClient* pClient )
 {
     ClearHighlightRanges();
 
-    //  Move an der ViewShell soll eigentlich vom Sfx gerufen werden, wenn sich
-    //  das Frame-Window wegen unterschiedlicher Toolboxen o.ae. verschiebt
-    //  (um nicht aus Versehen z.B. Zeichenobjekte zu verschieben, #56515#).
-    //  Dieser Mechanismus funktioniert aber momentan nicht, darum hier der Aufruf
-    //  per Hand (im Move wird verglichen, ob die Position wirklich geaendert ist).
+    // Move in the ViewShell should really be called from Sfx, when the
+    // frame window is moved due to different toolboxes or other things
+    // (to not  move painted objects by mistake, #56515#).
+    // this mechanism does however not work at the moment, that is why this
+    // call is here (in Move it is checked if the position has really changed).
     ForceMove();
     SfxViewShell::UIDeactivated( pClient );
 }
