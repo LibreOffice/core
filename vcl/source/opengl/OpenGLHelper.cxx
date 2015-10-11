@@ -11,7 +11,6 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
@@ -90,8 +89,6 @@ OString loadShader(const OUString& rFilename)
 OString& getShaderSource(const OUString& rFilename)
 {
     static std::unordered_map<OUString, OString, OUStringHash> aMap;
-    static osl::Mutex aMutex;
-    osl::MutexGuard aGuard(aMutex);
 
     if (aMap.find(rFilename) == aMap.end())
     {
