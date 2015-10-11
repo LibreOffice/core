@@ -44,8 +44,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-#include <boost/noncopyable.hpp>
-#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
 
 #include <algorithm>
 #include <vector>
@@ -118,8 +117,7 @@ typedef cppu::WeakComponentImplHelper<
     EventQueue indirection, to force the events into the main thread)
  */
 class EventMultiplexerListener : private cppu::BaseMutex,
-                                 public Listener_UnoBase,
-                                 private ::boost::noncopyable
+                                 public Listener_UnoBase
 {
 public:
     EventMultiplexerListener( EventQueue&           rEventQueue,
@@ -129,6 +127,9 @@ public:
         mpEventMultiplexer( &rEventMultiplexer )
     {
     }
+
+    EventMultiplexerListener( const EventMultiplexerListener& ) = delete;
+    EventMultiplexerListener& operator=( const EventMultiplexerListener& ) = delete;
 
     // WeakComponentImplHelperBase::disposing
     virtual void SAL_CALL disposing() override;
@@ -421,8 +422,8 @@ bool EventMultiplexerImpl::notifyAllAnimationHandlers( ImplAnimationHandlers con
                                                        AnimationNodeSharedPtr const& rNode )
 {
     return rContainer.applyAll(
-        boost::bind( &AnimationEventHandler::handleAnimationEvent,
-                     _1, boost::cref(rNode) ) );
+        [&rNode]( const AnimationEventHandlerSharedPtr& pEventHandler )
+        { return pEventHandler->handleAnimationEvent( rNode ); } );
 }
 
 template <typename XSlideShowViewFunc>
@@ -455,10 +456,8 @@ UnoViewSharedPtr EventMultiplexerImpl::findUnoView(
     const UnoViewVector::const_iterator aEnd ( mrViewContainer.end() );
     if( (aIter=std::find_if( mrViewContainer.begin(),
                              aEnd,
-                             boost::bind(
-                                 std::equal_to<uno::Reference<presentation::XSlideShowView> >(),
-                                 boost::cref( xView ),
-                                 boost::bind( &UnoView::getUnoView, _1 )))) == aEnd )
+                             [&xView]( const UnoViewSharedPtr& pView )
+                             { return xView == pView->getUnoView(); } )) == aEnd )
     {
         OSL_FAIL("EventMultiplexer::findUnoView(): unexpected message source" );
         return UnoViewSharedPtr();
@@ -607,10 +606,8 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
     if( (aIter=::std::find_if(
              mrViewContainer.begin(),
              aEnd,
-             boost::bind( std::equal_to< uno::Reference<
-                          presentation::XSlideShowView > >(),
-                          boost::cref( xView ),
-                          boost::bind( &UnoView::getUnoView, _1 ) ) ) ) == aEnd)
+             [&xView]( const UnoViewSharedPtr& pView )
+             { return xView == pView->getUnoView(); } )) == aEnd )
     {
         ENSURE_OR_RETURN_FALSE(
             false, "EventMultiplexer::notifyHandlers(): "
@@ -633,12 +630,8 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
     // one high-priority handler rejects the event
     // (i.e. returns false), try next handler.
     return rQueue.apply(
-        boost::bind(
-            pHandlerMethod,
-            boost::bind(
-                &ImplMouseHandlers::container_type::value_type::getHandler,
-                _1 ),
-            aEvent ));
+        [&pHandlerMethod, &aEvent]( const ImplMouseHandlerEntry& rMouseHandler )
+        { return ( ( *rMouseHandler.getHandler() ).*pHandlerMethod )( aEvent ); } );
 }
 
 void EventMultiplexerImpl::mousePressed( const awt::MouseEvent& e )
@@ -705,11 +698,8 @@ bool EventMultiplexerImpl::notifyNextEffect()
     // high-priority handler rejects the event (i.e. returns false),
     // try next handler.
     return maNextEffectHandlers.apply(
-        boost::bind(
-            &EventHandler::handleEvent,
-            boost::bind(
-                &ImplNextEffectHandlers::container_type::value_type::getHandler,
-                _1 )) );
+        []( const PrioritizedHandlerEntry< EventHandler >& pHandler )
+        { return pHandler.getHandler()->handleEvent(); } );
 }
 
 
@@ -1008,10 +998,8 @@ bool EventMultiplexer::notifyShapeListenerAdded(
     const uno::Reference<drawing::XShape>&                   xShape )
 {
     return mpImpl->maShapeListenerHandlers.applyAll(
-        boost::bind(&ShapeListenerEventHandler::listenerAdded,
-                    _1,
-                    boost::cref(xListener),
-                    boost::cref(xShape)) );
+        [&xListener, &xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
+        { return pHandler->listenerAdded( xListener, xShape ); } );
 }
 
 bool EventMultiplexer::notifyShapeListenerRemoved(
@@ -1019,10 +1007,8 @@ bool EventMultiplexer::notifyShapeListenerRemoved(
     const uno::Reference<drawing::XShape>&                   xShape )
 {
     return mpImpl->maShapeListenerHandlers.applyAll(
-        boost::bind(&ShapeListenerEventHandler::listenerRemoved,
-                    _1,
-                    boost::cref(xListener),
-                    boost::cref(xShape)) );
+        [&xListener, &xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
+        { return pHandler->listenerRemoved( xListener, xShape ); } );
 }
 
 bool EventMultiplexer::notifyShapeCursorChange(
@@ -1030,26 +1016,22 @@ bool EventMultiplexer::notifyShapeCursorChange(
     sal_Int16                               nPointerShape )
 {
     return mpImpl->maShapeCursorHandlers.applyAll(
-        boost::bind(&ShapeCursorEventHandler::cursorChanged,
-                    _1,
-                    boost::cref(xShape),
-                    nPointerShape));
+        [&xShape, &nPointerShape]( const ShapeCursorEventHandlerSharedPtr& pHandler )
+        { return pHandler->cursorChanged( xShape, nPointerShape ); } );
 }
 
 bool EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::bind(&UserPaintEventHandler::colorChanged,
-                    _1,
-                    boost::cref(rUserColor)));
+        [&rUserColor]( const UserPaintEventHandlerSharedPtr& pHandler )
+        { return pHandler->colorChanged( rUserColor ); } );
 }
 
 bool EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::bind(&UserPaintEventHandler::widthChanged,
-            _1,
-                    rUserStrokeWidth));
+        [&rUserStrokeWidth]( const UserPaintEventHandlerSharedPtr& pHandler )
+        { return pHandler->widthChanged( rUserStrokeWidth ); } );
 }
 
 bool EventMultiplexer::notifyUserPaintDisabled()
@@ -1072,18 +1054,16 @@ bool EventMultiplexer::notifySwitchEraserMode(){
 bool EventMultiplexer::notifyEraseAllInk( bool const& rEraseAllInk )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::bind(&UserPaintEventHandler::eraseAllInkChanged,
-                    _1,
-                    boost::cref(rEraseAllInk)));
+        [&rEraseAllInk]( const UserPaintEventHandlerSharedPtr& pHandler )
+        { return pHandler->eraseAllInkChanged( rEraseAllInk ); } );
 }
 
 //adding erasing features with UserPaintOverlay
 bool EventMultiplexer::notifyEraseInkWidth( sal_Int32 rEraseInkSize )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::bind(&UserPaintEventHandler::eraseInkWidthChanged,
-                    _1,
-                    boost::cref(rEraseInkSize)));
+        [&rEraseInkSize]( const UserPaintEventHandlerSharedPtr& pHandler )
+        { return pHandler->eraseInkWidthChanged( rEraseInkSize ); } );
 }
 
 bool EventMultiplexer::notifyNextEffect()
@@ -1142,8 +1122,8 @@ bool EventMultiplexer::notifyCommandStopAudio(
 bool EventMultiplexer::notifyPauseMode( bool bPauseShow )
 {
     return mpImpl->maPauseHandlers.applyAll(
-        boost::bind( &PauseEventHandler::handlePause,
-                     _1, bPauseShow ));
+        [&bPauseShow]( const PauseEventHandlerSharedPtr& pHandler )
+        { return pHandler->handlePause( bPauseShow ); } );
 }
 
 bool EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
@@ -1163,9 +1143,8 @@ bool EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
             mpImpl->mxListener.get() );
 
     return mpImpl->maViewHandlers.applyAll(
-        boost::bind( &ViewEventHandler::viewAdded,
-                     _1,
-                     boost::cref(rView) ));
+        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
+        { return pHandler.lock()->viewAdded( rView ); } );
 }
 
 bool EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
@@ -1186,17 +1165,15 @@ bool EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
             mpImpl->mxListener.get() );
 
     return mpImpl->maViewHandlers.applyAll(
-        boost::bind( &ViewEventHandler::viewRemoved,
-                     _1,
-                     boost::cref(rView) ));
+        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
+        { return pHandler.lock()->viewRemoved( rView ); } );
 }
 
 bool EventMultiplexer::notifyViewChanged( const UnoViewSharedPtr& rView )
 {
     return mpImpl->maViewHandlers.applyAll(
-        boost::bind( &ViewEventHandler::viewChanged,
-                     _1,
-                     boost::cref(rView) ));
+        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
+        { return pHandler.lock()->viewChanged( rView ); } );
 }
 
 bool EventMultiplexer::notifyViewChanged( const uno::Reference<presentation::XSlideShowView>& xView )
@@ -1224,18 +1201,16 @@ bool EventMultiplexer::notifyViewClobbered(
         return false; // view not registered here
 
     return mpImpl->maViewRepaintHandlers.applyAll(
-        boost::bind( &ViewRepaintHandler::viewClobbered,
-                     _1,
-                     boost::cref(pView) ));
+        [&pView]( const ViewRepaintHandlerSharedPtr& pHandler )
+        { return pHandler->viewClobbered( pView ); } );
 }
 
 bool EventMultiplexer::notifyHyperlinkClicked(
     OUString const& hyperLink )
 {
     return mpImpl->maHyperlinkHandlers.apply(
-        boost::bind(&HyperlinkHandler::handleHyperlink,
-                    _1,
-                    boost::cref(hyperLink)) );
+        [&hyperLink]( const PrioritizedHandlerEntry< HyperlinkHandler >& pHandler )
+        { return pHandler.getHandler()->handleHyperlink( hyperLink ); } );
 }
 
 } // namespace internal
