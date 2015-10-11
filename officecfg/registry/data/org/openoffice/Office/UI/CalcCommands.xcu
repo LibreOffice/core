@@ -1976,7 +1976,7 @@
       </node>
       <node oor:name=".uno:ExportAsGraphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Export as graphic</value>
+          <value xml:lang="en-US">Export as image</value>
         </prop>
       </node>
       <node oor:name=".uno:EditShapeHyperlink" oor:op="replace">
