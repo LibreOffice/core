@@ -22,7 +22,7 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLTABLE_HXX
 
 #include "accessibility/extended/AccessibleGridControlTableBase.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <accessibility/extended/AccessibleGridControlTableCell.hxx>
 
@@ -31,12 +31,12 @@
 namespace accessibility {
 
 
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
-        AccessibleGridControlTableImplHelper1;
+typedef ::cppu::ImplHelper < css::accessibility::XAccessibleSelection >
+        AccessibleGridControlTableSelectionImplHelper;
 /** This class represents the accessible object of the data table of a
     Grid control. */
 class AccessibleGridControlTable : public AccessibleGridControlTableBase,
-                                public AccessibleGridControlTableImplHelper1
+                                public AccessibleGridControlTableSelectionImplHelper
 {
 public:
     AccessibleGridControlTable(
