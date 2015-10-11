@@ -54,6 +54,8 @@
  *
  ************************************************************************/
 
+#include <tools/stream.hxx>
+
 #include "lwpsdwgrouploaderv0102.hxx"
 #include "lwpdrawobj.hxx"
 #include "lwptools.hxx"

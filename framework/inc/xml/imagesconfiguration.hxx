@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_XML_IMAGESCONFIGURATION_HXX
 
 #include <framework/fwedllapi.h>
-#include <tools/stream.hxx>
 #include <tools/color.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

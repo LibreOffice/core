@@ -28,7 +28,6 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <vcl/field.hxx>
 #include <i18nlangtag/lang.h>
-#include <tools/stream.hxx>
 #include <comphelper/stl_types.hxx>
 #include <o3tl/sorted_vector.hxx>
 

@@ -23,9 +23,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include <tools/stream.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 #include <com/sun/star/lang/Locale.hpp>

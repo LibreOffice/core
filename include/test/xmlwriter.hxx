@@ -16,7 +16,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
-#include <tools/stream.hxx>
+class SvStream;
 
 class OOO_DLLPUBLIC_TEST XmlWriter
 {

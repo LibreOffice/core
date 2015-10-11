@@ -14,6 +14,7 @@
 #include <cppunit/TestFixture.h>
 
 #include <oox/ole/vbaexport.hxx>
+#include <tools/stream.hxx>
 #include <algorithm>
 
 class TestVbaCompression : public test::BootstrapFixtureBase

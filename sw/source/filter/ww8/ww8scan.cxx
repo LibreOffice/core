@@ -40,6 +40,8 @@
 #include <i18nlangtag/lang.h>
 #include <editeng/unolingu.hxx>
 
+#include <tools/stream.hxx>
+
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

@@ -24,7 +24,6 @@
 #include <vector>
 #include <tools/solar.h>
 #include <tools/gen.hxx>
-#include <tools/stream.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <svtools/grfmgr.hxx>
 #include <com/sun/star/awt/Size.hpp>
@@ -556,7 +555,8 @@ enum MSOPATHTYPE
 
 const sal_uInt32 DFF_DGG_CLUSTER_SIZE       = 0x00000400;   /// Shape IDs per cluster in DGG atom.
 
-
+class SvStream;
+class SvMemoryStream;
 
 namespace com { namespace sun { namespace star {
     namespace awt {

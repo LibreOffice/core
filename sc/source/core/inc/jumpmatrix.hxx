@@ -22,6 +22,7 @@
 
 #include <formula/token.hxx>
 #include <formula/errorcodes.hxx>
+#include <limits.h>
 #include <vector>
 #include "types.hxx"
 #include "address.hxx"

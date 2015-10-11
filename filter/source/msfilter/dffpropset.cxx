@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <filter/msfilter/dffpropset.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/stream.hxx>
 
 static const DffPropSetEntry mso_PropSetDefaults[] = {
 

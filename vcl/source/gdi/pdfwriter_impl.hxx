@@ -33,7 +33,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
@@ -53,6 +52,8 @@ class ZCodec;
 class EncHashTransporter;
 struct BitStreamState;
 class PhysicalFontFace;
+class SvStream;
+class SvMemoryStream;
 
 // the maximum password length
 #define ENCRYPTED_PWD_SIZE     32

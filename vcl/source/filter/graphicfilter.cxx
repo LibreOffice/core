@@ -24,9 +24,10 @@
 #include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
-#include <tools/fract.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/pngread.hxx>

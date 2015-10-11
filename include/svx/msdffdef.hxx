@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVX_MSDFFDEF_HXX
 #define INCLUDED_SVX_MSDFFDEF_HXX
 
+#include <limits.h>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
-#include <tools/stream.hxx>
 
 #define DFF_COMMON_RECORD_HEADER_SIZE           8
 

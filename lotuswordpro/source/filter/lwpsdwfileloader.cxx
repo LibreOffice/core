@@ -54,6 +54,8 @@
  *
  ************************************************************************/
 
+#include <tools/stream.hxx>
+
 #include "lwpsdwfileloader.hxx"
 #include "lwpsdwgrouploaderv0102.hxx"
 

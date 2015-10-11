@@ -19,6 +19,7 @@
 
 
 #include "lzwdecom.hxx"
+#include <tools/stream.hxx>
 #include <algorithm>
 #include <set>
 

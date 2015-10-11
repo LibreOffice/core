@@ -13,9 +13,10 @@
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/stream.hxx>
 #include <vector>
 #include <svtools/svtdllapi.h>
+
+class SvStream;
 
 class SVT_DLLPUBLIC HtmlWriter
 {

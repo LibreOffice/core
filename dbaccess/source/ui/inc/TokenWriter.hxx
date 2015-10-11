@@ -35,7 +35,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <tools/stream.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -43,6 +42,8 @@ namespace com { namespace sun { namespace star {
         class XRowUpdate;
     }
 }}}
+
+class SvStream;
 
 namespace dbaui
 {

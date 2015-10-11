@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EDITENG_EDITOBJ_HXX
 #define INCLUDED_EDITENG_EDITOBJ_HXX
 
-#include <tools/stream.hxx>
 #include <rsc/rscsfx.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
@@ -38,6 +37,7 @@ class SfxItemPool;
 class SfxStyleSheetPool;
 class SvxFieldItem;
 class SvxFieldData;
+class SvStream;
 
 namespace editeng {
 

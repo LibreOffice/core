@@ -21,8 +21,9 @@
 
 #include <filter/msfilter/msfilterdllapi.h>
 #include <filter/msfilter/dffrecordheader.hxx>
-#include <tools/stream.hxx>
 #include <vector>
+
+class SvStream;
 
 struct DffPropFlags
 {

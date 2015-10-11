@@ -21,7 +21,6 @@
 #define INCLUDED_SD_INC_CUSSHOW_HXX
 
 #include <vector>
-#include <tools/stream.hxx>
 #include <cppuhelper/weakref.hxx>
 #include "sddllapi.h"
 

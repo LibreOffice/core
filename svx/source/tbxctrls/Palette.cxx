@@ -18,6 +18,7 @@
  */
 
 #include <svx/Palette.hxx>
+#include <tools/stream.hxx>
 
 
 Palette::~Palette()

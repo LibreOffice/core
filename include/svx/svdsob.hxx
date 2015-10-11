@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SVDSOB_HXX
 
 #include <com/sun/star/uno/Any.hxx>
-#include <tools/stream.hxx>
 
 #include <svx/svxdllapi.h>
 

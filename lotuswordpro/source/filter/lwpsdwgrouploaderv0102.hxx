@@ -60,11 +60,11 @@
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>
-#include <tools/stream.hxx>
 
 #include "lwpheader.hxx"
 #include "lwpsdwdrawheader.hxx"
 
+class SvStream;
 class XFFrame;
 class XFDrawGroup;
 class LwpGraphicObject;

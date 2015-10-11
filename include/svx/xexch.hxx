@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_XEXCH_HXX
 
 
-#include <tools/stream.hxx>
 #include <svx/svxdllapi.h>
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -30,7 +29,7 @@
 
 class XFillAttrSetItem;
 class SfxItemPool;
-
+class SvStream;
 
 
 class SVX_DLLPUBLIC XFillExchangeData

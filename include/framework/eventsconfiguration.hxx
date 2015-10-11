@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_EVENTSCONFIGURATION_HXX
 
 #include <framework/fwedllapi.h>
-#include <tools/stream.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 

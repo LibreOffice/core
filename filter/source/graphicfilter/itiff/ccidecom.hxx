@@ -20,8 +20,8 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_CCIDECOM_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_CCIDECOM_HXX
 
-#include <tools/stream.hxx>
-
+#include <sal/types.h>
+#include <tools/solar.h>
 
 #define CCI_OPTION_2D               1       // 2D compression (instead of 1D)
 #define CCI_OPTION_EOL              2       // There are EOL-Codes at the end of each line.
@@ -43,6 +43,7 @@ struct CCILookUpTableEntry {
     sal_uInt16 nCodeBits;
 };
 
+class SvStream;
 
 class CCIDecompressor {
 

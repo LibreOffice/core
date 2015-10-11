@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_ADDRESS_HXX
 #define INCLUDED_SC_INC_ADDRESS_HXX
 
-#include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/endian.h>

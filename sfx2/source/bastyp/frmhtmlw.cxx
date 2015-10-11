@@ -24,6 +24,7 @@
 #include <unotools/configmgr.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/datetime.hxx>
+#include <tools/stream.hxx>
 
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/evntconf.hxx>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_SCANNER_SCANNER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_SCANNER_SCANNER_HXX
 
-#include <tools/stream.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>

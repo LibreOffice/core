@@ -16,6 +16,8 @@
 #include <svl/listener.hxx>
 #include <vector>
 
+#include <vector>
+
 class ScFormulaCell;
 class ScDocument;
 class ScColumn;

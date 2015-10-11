@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <tools/stream.hxx>
 
 
 class SvOutputStreamOpenLockBytes: public SvOpenLockBytes

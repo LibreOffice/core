@@ -20,6 +20,7 @@
 #include "TokenWriter.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/stream.hxx>
 #include <osl/diagnose.h>
 #include "RtfReader.hxx"
 #include "HtmlReader.hxx"

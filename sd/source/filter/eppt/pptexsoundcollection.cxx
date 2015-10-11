@@ -19,6 +19,7 @@
 
 #include <pptexsoundcollection.hxx>
 #include "epptdef.hxx"
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>

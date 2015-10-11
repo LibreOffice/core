@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_USERLIST_HXX
 #define INCLUDED_SC_INC_USERLIST_HXX
 
-#include <tools/stream.hxx>
 #include "scdllapi.h"
 
 #include <boost/ptr_container/ptr_vector.hpp>

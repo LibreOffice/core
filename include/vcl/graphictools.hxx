@@ -25,11 +25,12 @@
 #include <rtl/string.hxx>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
-#include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 
 #include <memory>
 #include <vector>
+
+class SvStream;
 
 /** Encapsulates geometry and associated attributes of a graphical 'pen stroke'
 

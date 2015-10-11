@@ -21,6 +21,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>

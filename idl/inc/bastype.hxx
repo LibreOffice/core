@@ -23,10 +23,10 @@
 
 #include <sal/types.h>
 #include <tools/globname.hxx>
-#include <tools/stream.hxx>
 
 class SvStringHashEntry;
 class SvIdlDataBase;
+class SvStream;
 class SvTokenStream;
 
 class Svint

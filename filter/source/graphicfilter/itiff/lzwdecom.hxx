@@ -20,13 +20,16 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_LZWDECOM_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_LZWDECOM_HXX
 
-#include <tools/stream.hxx>
+#include <sal/types.h>
+#include <tools/solar.h>
 
 struct LZWTableEntry {
     sal_uInt16 nPrevCode;
     sal_uInt16 nDataCount;
     sal_uInt8 nData;
 };
+
+class SvStream;
 
 class LZWDecompressor {
 

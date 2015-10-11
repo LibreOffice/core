@@ -18,6 +18,7 @@
  */
 
 #include <osl/file.h>
+#include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/debug.hxx>
 #include <unotools/ucbstreamhelper.hxx>

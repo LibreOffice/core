@@ -31,6 +31,7 @@
 #include "unotools/streamwrap.hxx"
 
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 
 #include "comphelper/processfactory.hxx"
 

@@ -57,7 +57,8 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFILTER_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <tools/stream.hxx>
+
+class SvStream;
 
 //test code
 int ReadWordproFile(SvStream &rStream, css::uno::Reference<css::xml::sax::XDocumentHandler>& XDoc);

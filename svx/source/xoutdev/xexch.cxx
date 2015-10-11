@@ -18,6 +18,7 @@
  */
 
 #include <sot/formats.hxx>
+#include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/xfillit0.hxx>

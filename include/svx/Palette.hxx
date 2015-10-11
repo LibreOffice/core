@@ -23,8 +23,8 @@
 #include <svx/xtable.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
-#include <tools/stream.hxx>
 
+class SvFileStream;
 
 typedef std::pair<Color, OUString> NamedColor;
 typedef std::vector< NamedColor > ColorList;

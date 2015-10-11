@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_GRAPHICFILTER_HXX
 
 #include <tools/gen.hxx>
-#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/field.hxx>
@@ -32,6 +31,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 class FilterConfigCache;
+class SvStream;
 struct WMF_EXTERNALHEADER;
 struct ConvertData;
 

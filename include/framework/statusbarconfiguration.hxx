@@ -20,7 +20,6 @@
 #define INCLUDED_FRAMEWORK_STATUSBARCONFIGURATION_HXX
 
 #include <framework/fwedllapi.h>
-#include <tools/stream.hxx>
 #include <vcl/status.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

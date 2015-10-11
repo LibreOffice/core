@@ -12,11 +12,11 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <tools/stream.hxx>
-
 #include <oox/dllapi.h>
 
 class SotStorage;
+class SvStream;
+class SvMemoryStream;
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }

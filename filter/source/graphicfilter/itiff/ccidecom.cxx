@@ -19,6 +19,7 @@
 
 
 #include "ccidecom.hxx"
+#include <tools/stream.hxx>
 
 //=============================== Huffman tables ========================
 

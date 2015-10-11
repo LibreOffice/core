@@ -21,11 +21,12 @@
 #define INCLUDED_VCL_GFXLINK_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/stream.hxx>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
+
+class SvStream;
 
 
 // - ImpBuffer -

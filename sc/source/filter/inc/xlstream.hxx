@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLSTREAM_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLSTREAM_HXX
 
-#include <tools/stream.hxx>
 #include <svx/svxerr.hxx>
 #include "ftools.hxx"
 

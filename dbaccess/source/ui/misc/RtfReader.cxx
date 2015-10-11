@@ -19,6 +19,7 @@
 
 #include "RtfReader.hxx"
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>

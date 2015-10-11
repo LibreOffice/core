@@ -26,7 +26,8 @@
 #include <stdio.h>
 #endif
 #include <rtl/ustring.hxx>
-#include <tools/stream.hxx>
+
+class SvStream;
 
 namespace ppt
 {

@@ -20,9 +20,10 @@
 #define INCLUDED_FILTER_SOURCE_MSFILTER_VISCACHE_HXX
 
 #include <sfx2/objsh.hxx>
-#include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/bitmap.hxx>
+
+class SvStream;
 
 class Impl_OlePres
 {

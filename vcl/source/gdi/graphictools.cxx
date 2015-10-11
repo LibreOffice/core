@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 
 #include <vcl/graphictools.hxx>

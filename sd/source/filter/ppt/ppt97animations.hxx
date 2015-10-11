@@ -20,10 +20,12 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPT97ANIMATIONS_HXX
 #define INCLUDED_SD_SOURCE_FILTER_PPT_PPT97ANIMATIONS_HXX
 
-#include <tools/stream.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 class SdrObject;
 class Ppt97Animation;
+class SvStream;
 
 /// helper class for reading PPT AnimationInfoAtom
 class Ppt97AnimationInfoAtom

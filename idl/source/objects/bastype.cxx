@@ -26,6 +26,7 @@
 #include <hash.hxx>
 #include <database.hxx>
 #include <osl/diagnose.h>
+#include <tools/stream.hxx>
 
 static bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
                             sal_uLong nMin, sal_uLong nMax, sal_uLong* pValue )

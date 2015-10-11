@@ -22,7 +22,8 @@
 #include <vector>
 #include <svtools/parrtf.hxx>
 #include "DExport.hxx"
-#include <tools/stream.hxx>
+
+class SvStream;
 
 namespace dbaui
 {

@@ -18,6 +18,7 @@
  */
 
 #include <libxml/xmlstring.h>
+#include <tools/stream.hxx>
 #include <test/xmlwriter.hxx>
 
 namespace

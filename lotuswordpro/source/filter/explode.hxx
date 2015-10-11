@@ -56,7 +56,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_EXPLODE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_EXPLODE_HXX
 
-#include <tools/stream.hxx>
+#include <sal/types.h>
+
+class SvStream;
 
 class HuffmanTreeNode
 {

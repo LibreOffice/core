@@ -21,7 +21,6 @@
 
 #include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
-#include <tools/stream.hxx>
 #include <tools/gen.hxx>
 #include <editeng/svxfont.hxx>
 #include <swtypes.hxx>

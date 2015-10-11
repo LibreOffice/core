@@ -22,6 +22,7 @@
 #include <svx/svdobj.hxx>
 #include "sdpage.hxx"
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <svx/unoapi.hxx>
 #include "EffectMigration.hxx"
 #include <CustomAnimationPreset.hxx>

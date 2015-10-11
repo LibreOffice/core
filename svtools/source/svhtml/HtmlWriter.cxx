@@ -9,6 +9,7 @@
  */
 
 #include <svtools/HtmlWriter.hxx>
+#include <tools/stream.hxx>
 
 HtmlWriter::HtmlWriter(SvStream& rStream) :
     mrStream(rStream),

@@ -62,11 +62,11 @@
 #include <vector>
 
 #include <rtl/ref.hxx>
-#include <tools/stream.hxx>
 
 #include "lwpheader.hxx"
 #include "xfilter/ixfstream.hxx"
 
+class SvStream;
 class XFFrame;
 class LwpGraphicObject;
 class LwpSdwFileLoader

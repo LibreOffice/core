@@ -67,6 +67,7 @@
 
 #include <osl/file.h>
 #include <osl/file.hxx>
+#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <xmloff/attrlist.hxx>
 #include <com/sun/star/io/IOException.hpp>

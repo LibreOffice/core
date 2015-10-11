@@ -26,12 +26,12 @@
 #include <sfx2/frmdescr.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <tools/stream.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 
 class SfxFrame;
+class SvStream;
 
 namespace com { namespace sun { namespace star {
     namespace document {

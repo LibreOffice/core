@@ -24,6 +24,7 @@
 #include <cstdio>
 #include <osl/endian.h>
 #include <rtl/ustrbuf.hxx>
+#include <tools/stream.hxx>
 
 namespace ww8
 {

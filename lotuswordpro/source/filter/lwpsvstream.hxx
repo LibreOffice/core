@@ -58,7 +58,8 @@
 
 #include "lwpheader.hxx"
 #include "xfilter/xfglobal.hxx"
-#include <tools/stream.hxx>
+
+class SvStream;
 
 /**
  * @brief   encapsulate XInputStream to provide SvStream like interfaces
