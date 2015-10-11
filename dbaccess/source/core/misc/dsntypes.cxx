@@ -401,6 +401,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         KnownPrefix( "sdbc:mysql:jdbc:",    DST_MYSQL_JDBC,         false ),
         KnownPrefix( "sdbc:mysql:mysqlc:",  DST_MYSQL_NATIVE,       false ),
         KnownPrefix( "sdbc:mysqlc:",        DST_MYSQL_NATIVE_DIRECT,false ),
+        KnownPrefix( "sdbc:postgresql:",    DST_POSTGRES,false ),
 
         KnownPrefix( "sdbc:address:mozilla:",           DST_MOZILLA,            true ),
         KnownPrefix( "sdbc:address:thunderbird:",       DST_THUNDERBIRD,        true ),

@@ -61,6 +61,7 @@ enum DATASOURCE_TYPE
     DST_MYSQL_NATIVE_DIRECT = 25,
     DST_FIREBIRD            = 26,
     DST_EMBEDDED_FIREBIRD    = 27,
+    DST_POSTGRES = 28,
 
     DST_USERDEFINE1,    /// first user defined driver
     DST_USERDEFINE2,
