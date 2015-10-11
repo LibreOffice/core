@@ -275,6 +275,7 @@ calc_constructor_list = [
 
 draw_factory_list = [
     ("libsdlo.a", "sd_component_getFactory"),
+    ("libsvgiolo.a", "svgio_component_getFactory"),
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
     ("libdeployment.a", "deployment_component_getFactory"),
     ("libemboleobj.a", "emboleobj_component_getFactory"),
