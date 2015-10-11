@@ -82,6 +82,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
     private IFile currentDirectory;
 
     private static final String CURRENT_DIRECTORY_KEY = "CURRENT_DIRECTORY";
+    private static final String DOC_PROIVDER_KEY = "CURRENT_DOCUMENT_PROVIDER";
     private static final String FILTER_MODE_KEY = "FILTER_MODE";
     public static final String EXPLORER_VIEW_TYPE_KEY = "EXPLORER_VIEW_TYPE";
     public static final String EXPLORER_PREFS_KEY = "EXPLORER_PREFS";
@@ -610,8 +611,9 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
         // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);
         outState.putString(CURRENT_DIRECTORY_KEY, currentDirectory.getUri().toString());
-        outState.putInt(FILTER_MODE_KEY , filterMode);
+        outState.putInt(FILTER_MODE_KEY, filterMode);
         outState.putInt(EXPLORER_VIEW_TYPE_KEY , viewMode);
+        outState.putInt(DOC_PROIVDER_KEY, documentProvider.getId());
 
         Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
         //prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
@@ -625,14 +627,19 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements ActionBa
         if (savedInstanceState.isEmpty()){
             return;
         }
+        if (documentProvider == null) {
+            Log.d(LOGTAG, "onRestoreInstanceState - documentProvider is null");
+            documentProvider = DocumentProviderFactory.getInstance()
+                    .getProvider(savedInstanceState.getInt(DOC_PROIVDER_KEY));
+        }
         try {
             currentDirectory = documentProvider.createFromUri(new URI(
                     savedInstanceState.getString(CURRENT_DIRECTORY_KEY)));
         } catch (URISyntaxException e) {
             currentDirectory = documentProvider.getRootDirectory();
         }
-        filterMode = savedInstanceState.getInt(FILTER_MODE_KEY , FileUtilities.ALL) ;
-        viewMode = savedInstanceState.getInt(EXPLORER_VIEW_TYPE_KEY , GRID_VIEW);
+        filterMode = savedInstanceState.getInt(FILTER_MODE_KEY, FileUtilities.ALL);
+        viewMode = savedInstanceState.getInt(EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
         //openDirectory(currentDirectory);
         Log.d(LOGTAG, "onRestoreInstanceState");
         Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
