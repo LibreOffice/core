@@ -121,10 +121,8 @@ namespace DOM
         Context::NamespaceVectorType::value_type::const_iterator aIter;
         if( (aIter=std::find_if(rContext.maNamespaces.back().begin(),
                                 rContext.maNamespaces.back().end(),
-                                boost::bind(std::equal_to<OString>(),
-                                            boost::bind(&Context::Namespace::getPrefix,
-                                                        _1),
-                                            boost::cref(prefix)))) != rContext.maNamespaces.back().end() )
+                                [&prefix](const Context::Namespace &aNamespace){ return aNamespace.getPrefix() == prefix; } )) !=
+                                            rContext.maNamespaces.back().end() )
         {
             nNamespaceToken = aIter->mnToken;
             sal_Int32 nNameToken = getToken( rContext, pName );
