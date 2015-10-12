@@ -2,7 +2,6 @@ merge (anonymous namespace)::Data with cppu::PropertySetMixinImpl::Impl
 merge AbstractMailMergeWizard with AbstractMailMergeWizard_Impl
 merge AbstractSwInsertDBColAutoPilot with AbstractSwInsertDBColAutoPilot_Impl
 merge CffGlobal with CffSubsetterContext
-merge CompareLine with SwCompareLine
 merge DomVisitor with DomExport
 merge DownloadInteractionHandler with UpdateCheck
 merge EscherPersistTable with EscherEx

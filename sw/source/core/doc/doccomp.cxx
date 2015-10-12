@@ -54,15 +54,31 @@ using namespace ::com::sun::star;
 
 using ::std::vector;
 
-class CompareLine
+class SwCompareLine
 {
+    const SwNode& rNode;
 public:
-    CompareLine() {}
-    virtual ~CompareLine();
+    explicit SwCompareLine( const SwNode& rNd ) : rNode( rNd ) {}
 
-    virtual sal_uLong GetHashValue() const = 0;
-    virtual bool Compare( const CompareLine& rLine ) const = 0;
+    sal_uLong GetHashValue() const;
+    bool Compare( const SwCompareLine& rLine ) const;
+
+    static sal_uLong GetTextNodeHashValue( const SwTextNode& rNd, sal_uLong nVal );
+    static bool CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd );
+    static bool CompareTextNd( const SwTextNode& rDstNd,
+                              const SwTextNode& rSrcNd );
+
+    bool ChangesInLine( const SwCompareLine& rLine,
+                            SwPaM *& rpInsRing, SwPaM*& rpDelRing ) const;
+
+    const SwNode& GetNode() const { return rNode; }
+
+    const SwNode& GetEndNode() const;
+
+    // for debugging
+    OUString GetText() const;
 };
+
 
 class CompareData
 {
@@ -77,7 +93,7 @@ private:
     static sal_uLong PrevIdx( const SwNode* pNd );
     static sal_uLong NextIdx( const SwNode* pNd );
 
-    vector< CompareLine* > aLines;
+    vector< SwCompareLine* > aLines;
     bool m_bRecordDiff;
 
     // Truncate beginning and end and add all others to the LinesArray
@@ -124,9 +140,9 @@ public:
         }
 
     size_t GetLineCount() const     { return aLines.size(); }
-    const CompareLine* GetLine( size_t nLine ) const
+    const SwCompareLine* GetLine( size_t nLine ) const
             { return aLines[ nLine ]; }
-    void InsertLine( CompareLine* pLine )
+    void InsertLine( SwCompareLine* pLine )
         { aLines.push_back( pLine ); }
 
     void SetRedlinesToDoc( bool bUseDocInfo );
@@ -167,7 +183,7 @@ class Hash
     struct _HashData
     {
         sal_uLong nNext, nHash;
-        const CompareLine* pLine;
+        const SwCompareLine* pLine;
 
         _HashData()
             : nNext( 0 ), nHash( 0 ), pLine(0) {}
@@ -372,8 +388,6 @@ public:
     }
 };
 
-CompareLine::~CompareLine() {}
-
 CompareData::~CompareData()
 {
     if( pDelRing )
@@ -541,7 +555,7 @@ void Hash::CalcHashValue( CompareData& rData )
     {
         for( size_t n = 0; n < rData.GetLineCount(); ++n )
         {
-            const CompareLine* pLine = rData.GetLine( n );
+            const SwCompareLine* pLine = rData.GetLine( n );
             OSL_ENSURE( pLine, "where is the line?" );
             sal_uLong nH = pLine->GetHashValue();
 
@@ -989,41 +1003,6 @@ void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
     lcl_ShiftBoundariesOneway(&rData2, &rData1);
 }
 
-class SwCompareLine : public CompareLine
-{
-    const SwNode& rNode;
-public:
-    explicit SwCompareLine( const SwNode& rNd );
-    virtual ~SwCompareLine();
-
-    virtual sal_uLong GetHashValue() const override;
-    virtual bool Compare( const CompareLine& rLine ) const override;
-
-    static sal_uLong GetTextNodeHashValue( const SwTextNode& rNd, sal_uLong nVal );
-    static bool CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd );
-    static bool CompareTextNd( const SwTextNode& rDstNd,
-                              const SwTextNode& rSrcNd );
-
-    bool ChangesInLine( const SwCompareLine& rLine,
-                            SwPaM *& rpInsRing, SwPaM*& rpDelRing ) const;
-
-    const SwNode& GetNode() const { return rNode; }
-
-    const SwNode& GetEndNode() const;
-
-    // for debugging
-    OUString GetText() const;
-};
-
-SwCompareLine::SwCompareLine( const SwNode& rNd )
-    : rNode( rNd )
-{
-}
-
-SwCompareLine::~SwCompareLine()
-{
-}
-
 sal_uLong SwCompareLine::GetHashValue() const
 {
     sal_uLong nRet = 0;
@@ -1083,7 +1062,7 @@ const SwNode& SwCompareLine::GetEndNode() const
     return *pNd;
 }
 
-bool SwCompareLine::Compare( const CompareLine& rLine ) const
+bool SwCompareLine::Compare( const SwCompareLine& rLine ) const
 {
     return CompareNode( rNode, static_cast<const SwCompareLine&>(rLine).rNode );
 }
@@ -1522,7 +1501,7 @@ void CompareData::ShowDelete(
         static_cast<const SwCompareLine*>(rData.GetLine( nEnd-1 ))->GetEndNode(), 1 );
 
     sal_uInt16 nOffset = 0;
-    const CompareLine* pLine = 0;
+    const SwCompareLine* pLine = 0;
     if( nInsPos >= 1 )
     {
         if( GetLineCount() == nInsPos )
