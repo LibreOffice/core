@@ -3155,7 +3155,6 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
             {
                 const double shim = 0.2;
 
-#if GTK_CHECK_VERSION(2,10,0)
                 gint separator_height, separator_width, wide_separators = 0;
 
                 gtk_widget_style_get (gWidgetData[m_nXScreen].gSeparator,
@@ -3180,7 +3179,6 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
                                        w * (1 - 2*shim), separator_width);
                 }
                 else
-#endif
                 {
                     if (nPart == PART_SEPARATOR_VERT)
                         gtk_paint_vline (gWidgetData[m_nXScreen].gSeparator->style, gdkDrawable,
@@ -4009,23 +4007,20 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetHighlightColor( aHighlightColor );
     aStyleSet.SetHighlightTextColor( aHighlightTextColor );
 
-    if( ! gtk_check_version( 2, 10, 0 ) ) // link colors came in with 2.10, avoid an assertion
+    // hyperlink colors
+    GdkColor *link_color = NULL;
+    gtk_widget_style_get (m_pWindow, "link-color", &link_color, NULL);
+    if (link_color)
     {
-        // hyperlink colors
-        GdkColor *link_color = NULL;
-        gtk_widget_style_get (m_pWindow, "link-color", &link_color, NULL);
-        if (link_color)
-        {
-            aStyleSet.SetLinkColor(getColor(*link_color));
-            gdk_color_free (link_color);
-            link_color = NULL;
-        }
-        gtk_widget_style_get (m_pWindow, "visited-link-color", &link_color, NULL);
-        if (link_color)
-        {
-            aStyleSet.SetVisitedLinkColor(getColor(*link_color));
-            gdk_color_free (link_color);
-        }
+        aStyleSet.SetLinkColor(getColor(*link_color));
+        gdk_color_free (link_color);
+        link_color = NULL;
+    }
+    gtk_widget_style_get (m_pWindow, "visited-link-color", &link_color, NULL);
+    if (link_color)
+    {
+        aStyleSet.SetVisitedLinkColor(getColor(*link_color));
+        gdk_color_free (link_color);
     }
 
     // Tab colors

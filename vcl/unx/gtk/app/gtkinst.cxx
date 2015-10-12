@@ -89,14 +89,12 @@ extern "C"
         }
 
         const gchar* pVersion = gtk_check_version( 3, 2, 0 );
-#else
-        const gchar* pVersion = gtk_check_version( 2, 2, 0 );
-#endif
         if( pVersion )
         {
             SAL_WARN("vcl.gtk", "gtk version conflict: " << pVersion);
             return NULL;
         }
+#endif
 
         GtkYieldMutex *pYieldMutex;
 
