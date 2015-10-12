@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_59411639",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-12T10:49:29Z",
+      "side": 1,
+      "message": "Please provide real descriptions of your changes.",
+      "revId": "5636ededaf9aeb1fed49c92c6957e5c47214a6c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_5968f6ba",
+        "filename": "sc/qa/unit/helper/qahelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-12T10:49:29Z",
+      "side": 1,
+      "message": "There\u0027s no implementation change corresponding to the declaration change. This doesn\u0027t even compile, see Jenkins console log.",
+      "revId": "5636ededaf9aeb1fed49c92c6957e5c47214a6c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_f972aaac",
+        "filename": "sc/qa/unit/helper/qahelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-12T10:49:29Z",
+      "side": 1,
+      "message": "There\u0027s no implementation of the new function.",
+      "revId": "5636ededaf9aeb1fed49c92c6957e5c47214a6c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a061dce_994bae59",
+        "filename": "sc/qa/unit/helper/qahelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-12T10:49:29Z",
+      "side": 1,
+      "message": "These two declarations are identical to the compiler.",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 95
+      },
+      "revId": "5636ededaf9aeb1fed49c92c6957e5c47214a6c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_d97366b3",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3797,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-12T10:49:29Z",
+      "side": 0,
+      "message": "Removing those CPPUNIT_FAIL() lines from the source removes also information where the test failed in case it failed. No line number will be output, which unnecessarily complicates chasing down the error.",
+      "revId": "f91d6f6282cd0c80a5d19a42495f344842b384e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
