@@ -29,6 +29,10 @@
 #include <image.h>
 #include <boost/scoped_array.hpp>
 
+#if defined WNT
+#include <vcl/opengl/OpenGLHelper.hxx>
+#endif
+
 #define IMPSYSIMAGEITEM_MASK        ( 0x01 )
 #define IMPSYSIMAGEITEM_ALPHA       ( 0x02 )
 
@@ -336,7 +340,7 @@ pOutDev
     if( !mpDisplayBmp && !maBmpEx.IsEmpty() )
     {
 #if defined WNT
-        if( !maBmpEx.IsAlpha() )
+        if( !maBmpEx.IsAlpha() && !OpenGLHelper::isVCLOpenGLEnabled())
         {
             // FIXME: this looks like rather an obsolete code-path to me.
             const Bitmap aBmp( maBmpEx.GetBitmap().CreateDisplayBitmap( pOutDev ) );
