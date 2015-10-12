@@ -179,7 +179,8 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     maIMGNone(SVX_RES(IMG_NONE_ICON)),
     mpIMGWidthIcon(),
     mxFrame(rxFrame),
-    mbWidthValuable(true)
+    mbWidthValuable(true),
+    mbArrowSupported(true)
 {
     get(mpFTWidth, "widthlabel");
     get(mpTBWidth, "width");
@@ -396,7 +397,8 @@ void LinePropertyPanelBase::updateLineStart(bool bDisabled, bool bSetOrDefault,
     }
     else
     {
-        mpLBStart->Enable();
+        if (mbArrowSupported)
+            mpLBStart->Enable();
     }
 
     if(bSetOrDefault)
@@ -422,7 +424,8 @@ void LinePropertyPanelBase::updateLineEnd(bool bDisabled, bool bSetOrDefault,
     }
     else
     {
-        mpLBEnd->Enable();
+        if (mbArrowSupported)
+            mpLBEnd->Enable();
     }
 
     if(bSetOrDefault)
@@ -931,6 +934,13 @@ void LinePropertyPanelBase::ActivateControls()
 void LinePropertyPanelBase::setMapUnit(SfxMapUnit eMapUnit)
 {
     meMapUnit = eMapUnit;
+}
+
+void LinePropertyPanelBase::disableArrowHead()
+{
+    mbArrowSupported = false;
+    mpLBStart->Hide();
+    mpLBEnd->Hide();
 }
 
 }} // end of namespace svx::sidebar

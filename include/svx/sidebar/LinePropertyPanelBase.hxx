@@ -118,6 +118,8 @@ protected:
 
     void setMapUnit(SfxMapUnit eMapUnit);
 
+    void disableArrowHead();
+
 protected:
 
     VclPtr<sfx2::sidebar::SidebarToolBox> mpTBColor;
@@ -162,6 +164,7 @@ private:
 
     /// bitfield
     bool                mbWidthValuable : 1;
+    bool mbArrowSupported;
 
     void Initialize();
 
