@@ -269,11 +269,11 @@ public:
     void SetBox( const SwTableBox& rBox );
 };
 
-class _UndoTableCpyTable_Entries;
+class SwUndoTableCpyTable_Entries;
 
 class SwUndoTableCpyTable : public SwUndo
 {
-    _UndoTableCpyTable_Entries* pArr;
+    SwUndoTableCpyTable_Entries* m_pArr;
     SwUndoTableNdsChg* pInsRowUndo;
 
     //b6341295: When redlining is active, PrepareRedline has to create the

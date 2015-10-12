@@ -108,7 +108,7 @@ struct _UndoTableCpyTable_Entry
     explicit _UndoTableCpyTable_Entry( const SwTableBox& rBox );
     ~_UndoTableCpyTable_Entry();
 };
-class _UndoTableCpyTable_Entries : public boost::ptr_vector<_UndoTableCpyTable_Entry> {};
+class SwUndoTableCpyTable_Entries : public std::vector<std::unique_ptr<_UndoTableCpyTable_Entry>> {};
 
 class _SaveBox;
 class _SaveLine;
@@ -2416,14 +2416,15 @@ _UndoTableCpyTable_Entry::~_UndoTableCpyTable_Entry()
 }
 
 SwUndoTableCpyTable::SwUndoTableCpyTable()
-    : SwUndo( UNDO_TBLCPYTBL ), pInsRowUndo( 0 )
+    : SwUndo( UNDO_TBLCPYTBL )
+    , m_pArr(new SwUndoTableCpyTable_Entries)
+    , pInsRowUndo(nullptr)
 {
-    pArr = new _UndoTableCpyTable_Entries;
 }
 
 SwUndoTableCpyTable::~SwUndoTableCpyTable()
 {
-    delete pArr;
+    delete m_pArr;
     delete pInsRowUndo;
 }
 
@@ -2433,9 +2434,9 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
     _DEBUG_REDLINE( &rDoc )
 
     SwTableNode* pTableNd = 0;
-    for( size_t n = pArr->size(); n; )
+    for (size_t n = m_pArr->size(); n; )
     {
-        _UndoTableCpyTable_Entry* pEntry = &(*pArr)[ --n ];
+        _UndoTableCpyTable_Entry *const pEntry = (*m_pArr)[ --n ].get();
         sal_uLong nSttPos = pEntry->nBoxIdx + pEntry->nOffset;
         SwStartNode* pSNd = rDoc.GetNodes()[ nSttPos ]->StartOfSectionNode();
         if( !pTableNd )
@@ -2584,9 +2585,9 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 
     SwTableNode* pTableNd = 0;
-    for( size_t n = 0; n < pArr->size(); ++n )
+    for (size_t n = 0; n < m_pArr->size(); ++n)
     {
-        _UndoTableCpyTable_Entry* pEntry = &(*pArr)[ n ];
+        _UndoTableCpyTable_Entry *const pEntry = (*m_pArr)[ n ].get();
         sal_uLong nSttPos = pEntry->nBoxIdx + pEntry->nOffset;
         SwStartNode* pSNd = rDoc.GetNodes()[ nSttPos ]->StartOfSectionNode();
         if( !pTableNd )
@@ -2661,11 +2662,11 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent )
 {
-    if( !pArr->empty() && !bDelContent )
+    if (!m_pArr->empty() && !bDelContent)
         return;
 
     _UndoTableCpyTable_Entry* pEntry = new _UndoTableCpyTable_Entry( rBox );
-    pArr->push_back( pEntry );
+    m_pArr->push_back(std::unique_ptr<_UndoTableCpyTable_Entry>(pEntry));
 
     SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
     _DEBUG_REDLINE( pDoc )
@@ -2690,7 +2691,7 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
 
 void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, bool bDelContent )
 {
-    _UndoTableCpyTable_Entry* pEntry = &(*pArr).back();
+    _UndoTableCpyTable_Entry *const pEntry = (*m_pArr).back().get();
 
     // If the content was deleted than remove also the temporarily created node
     if( bDelContent )
@@ -2809,7 +2810,7 @@ bool SwUndoTableCpyTable::InsertRow( SwTable& rTable, const SwSelBoxes& rBoxes,
 
 bool SwUndoTableCpyTable::IsEmpty() const
 {
-    return !pInsRowUndo && pArr->empty();
+    return !pInsRowUndo && m_pArr->empty();
 }
 
 SwUndoCpyTable::SwUndoCpyTable()
