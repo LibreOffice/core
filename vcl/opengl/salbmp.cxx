@@ -428,13 +428,14 @@ GLuint OpenGLSalBitmap::CreateTexture()
         {
             VCL_GL_INFO( "vcl.opengl", "::CreateTexture - convert from " << mnBits << " to 24 bits" );
 
-            // convert to 32 bits RGBA using palette
-            pData = new sal_uInt8[mnBufHeight * mnBufWidth * 4];
+            // convert to 24 bits RGB using palette
+            pData = new sal_uInt8[mnBufHeight * mnBufWidth * 3];
             bAllocated = true;
-            nFormat = GL_RGBA;
+            nFormat = GL_RGB;
             nType = GL_UNSIGNED_BYTE;
 
-            ImplPixelFormat* pSrcFormat = ImplPixelFormat::GetFormat( mnBits, maPalette );
+            std::unique_ptr<ImplPixelFormat> pSrcFormat(ImplPixelFormat::GetFormat(mnBits, maPalette));
+
             sal_uInt8* pSrcData = maUserBuffer.get();
             sal_uInt8* pDstData = pData;
 
@@ -451,12 +452,10 @@ GLuint OpenGLSalBitmap::CreateTexture()
                     *pDstData++ = c.GetRed();
                     *pDstData++ = c.GetGreen();
                     *pDstData++ = c.GetBlue();
-                    *pDstData++ = 255;
                 }
 
                 pSrcData += mnBytesPerRow;
             }
-            delete pSrcFormat;
         }
     }
 
