@@ -63,10 +63,8 @@
 #include <memory>
 #include <unordered_map>
 #include <string.h>
-#ifdef WNT
 #include <stdlib.h>
 #include <ctype.h>
-#endif
 
 #include "rtl/bootstrap.h"
 
