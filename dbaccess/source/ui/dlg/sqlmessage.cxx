@@ -55,14 +55,6 @@ namespace dbaui
 
 namespace
 {
-    class IImageProvider
-    {
-    public:
-        virtual Image   getImage() const = 0;
-
-        virtual ~IImageProvider() { }
-    };
-
     class ILabelProvider
     {
     public:
@@ -71,7 +63,7 @@ namespace
         virtual ~ILabelProvider() { };
     };
 
-    class ImageProvider : public IImageProvider
+    class ImageProvider
     {
     private:
         sal_uInt16  m_defaultImageID;
@@ -84,7 +76,7 @@ namespace
         {
         }
 
-        virtual Image getImage() const override
+        Image getImage() const
         {
             if ( !m_defaultImage )
                 m_defaultImage = Image( ModuleRes( m_defaultImageID ) );
@@ -111,9 +103,9 @@ namespace
     class ProviderFactory
     {
     private:
-        mutable std::shared_ptr< IImageProvider >   m_pErrorImage;
-        mutable std::shared_ptr< IImageProvider >   m_pWarningsImage;
-        mutable std::shared_ptr< IImageProvider >   m_pInfoImage;
+        mutable std::shared_ptr< ImageProvider >   m_pErrorImage;
+        mutable std::shared_ptr< ImageProvider >   m_pWarningsImage;
+        mutable std::shared_ptr< ImageProvider >   m_pInfoImage;
         mutable std::shared_ptr< ILabelProvider >   m_pErrorLabel;
         mutable std::shared_ptr< ILabelProvider >   m_pWarningsLabel;
         mutable std::shared_ptr< ILabelProvider >   m_pInfoLabel;
@@ -123,9 +115,9 @@ namespace
         {
         }
 
-        std::shared_ptr< IImageProvider >   getImageProvider( SQLExceptionInfo::TYPE _eType ) const
+        std::shared_ptr< ImageProvider >   getImageProvider( SQLExceptionInfo::TYPE _eType ) const
         {
-            std::shared_ptr< IImageProvider >* ppProvider( &m_pErrorImage );
+            std::shared_ptr< ImageProvider >* ppProvider( &m_pErrorImage );
             sal_uInt16 nNormalImageID( BMP_EXCEPTION_ERROR );
 
             switch ( _eType )
@@ -181,8 +173,8 @@ namespace
     {
         SQLExceptionInfo::TYPE                  eType;
 
-        std::shared_ptr< IImageProvider >   pImageProvider;
-        std::shared_ptr< ILabelProvider >   pLabelProvider;
+        std::shared_ptr< ImageProvider >        pImageProvider;
+        std::shared_ptr< ILabelProvider >       pLabelProvider;
 
         bool                                    bSubEntry;
 
