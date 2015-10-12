@@ -203,8 +203,8 @@ private:
     bool            m_bLongLastingCallRegistered;
 
 private:
-    LifeTimeGuard( const LifeTimeGuard& ) SAL_DELETED_FUNCTION;
-    LifeTimeGuard& operator= ( const LifeTimeGuard& ) SAL_DELETED_FUNCTION;
+    LifeTimeGuard( const LifeTimeGuard& ) = delete;
+    LifeTimeGuard& operator= ( const LifeTimeGuard& ) = delete;
 };
 
 template<class T>

@@ -40,8 +40,8 @@ namespace rptxml
                     const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
     private:
-        OXMLFixedContent(const OXMLFixedContent&) SAL_DELETED_FUNCTION;
-        OXMLFixedContent& operator =(const OXMLFixedContent&) SAL_DELETED_FUNCTION;
+        OXMLFixedContent(const OXMLFixedContent&) = delete;
+        OXMLFixedContent& operator =(const OXMLFixedContent&) = delete;
     public:
 
         OXMLFixedContent( ORptFilter& rImport, sal_uInt16 nPrfx,

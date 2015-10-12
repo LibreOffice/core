@@ -54,8 +54,8 @@ protected:
 
     virtual ~SolarMutex();
 private:
-    SolarMutex(const SolarMutex&) SAL_DELETED_FUNCTION;
-    SolarMutex& operator=(const SolarMutex&) SAL_DELETED_FUNCTION;
+    SolarMutex(const SolarMutex&) = delete;
+    SolarMutex& operator=(const SolarMutex&) = delete;
 };
 
 }

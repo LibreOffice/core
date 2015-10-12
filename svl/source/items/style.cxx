@@ -86,8 +86,8 @@ SfxStyleSheetHint::SfxStyleSheetHint
 class SfxStyleSheetBasePool_Impl
 {
 private:
-    SfxStyleSheetBasePool_Impl(const SfxStyleSheetBasePool_Impl&) SAL_DELETED_FUNCTION;
-    SfxStyleSheetBasePool_Impl& operator=(const SfxStyleSheetBasePool_Impl&) SAL_DELETED_FUNCTION;
+    SfxStyleSheetBasePool_Impl(const SfxStyleSheetBasePool_Impl&) = delete;
+    SfxStyleSheetBasePool_Impl& operator=(const SfxStyleSheetBasePool_Impl&) = delete;
 public:
     SfxStyleSheetIteratorPtr pIter;
 

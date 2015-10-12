@@ -55,8 +55,8 @@ namespace cppcanvas
             virtual css::uno::Reference< css::rendering::XBitmap >  getUNOBitmap() const SAL_OVERRIDE;
 
         private:
-            ImplBitmap(const ImplBitmap&) SAL_DELETED_FUNCTION;
-            ImplBitmap& operator=( const ImplBitmap& ) SAL_DELETED_FUNCTION;
+            ImplBitmap(const ImplBitmap&) = delete;
+            ImplBitmap& operator=( const ImplBitmap& ) = delete;
 
             const css::uno::Reference< css::rendering::XBitmap > mxBitmap;
             BitmapCanvasSharedPtr                                mpBitmapCanvas;

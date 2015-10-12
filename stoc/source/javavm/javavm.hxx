@@ -119,8 +119,8 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    JavaVirtualMachine(JavaVirtualMachine &) SAL_DELETED_FUNCTION;
-    void operator =(const JavaVirtualMachine&) SAL_DELETED_FUNCTION;
+    JavaVirtualMachine(JavaVirtualMachine &) = delete;
+    void operator =(const JavaVirtualMachine&) = delete;
 
     virtual ~JavaVirtualMachine();
 

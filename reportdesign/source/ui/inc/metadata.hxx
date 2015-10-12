@@ -37,8 +37,8 @@ namespace rptui
     class OPropertyInfoService
         :public OModuleClient
     {
-        OPropertyInfoService(const OPropertyInfoService&) SAL_DELETED_FUNCTION;
-        void operator =(const OPropertyInfoService&) SAL_DELETED_FUNCTION;
+        OPropertyInfoService(const OPropertyInfoService&) = delete;
+        void operator =(const OPropertyInfoService&) = delete;
     protected:
         static sal_uInt16               s_nCount;
         static OPropertyInfoImpl*       s_pPropertyInfos;

@@ -57,8 +57,8 @@ private:
     void ensureReplacement();
     void ensureSequenceAndRange();
 
-    SvgData(const SvgData&) SAL_DELETED_FUNCTION;
-    SvgData& operator=(const SvgData&) SAL_DELETED_FUNCTION;
+    SvgData(const SvgData&) = delete;
+    SvgData& operator=(const SvgData&) = delete;
 
 public:
     SvgData(const SvgDataArray& rSvgDataArray, const OUString& rPath);

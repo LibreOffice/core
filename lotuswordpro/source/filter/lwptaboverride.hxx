@@ -96,7 +96,7 @@ protected:
     LwpTabOverride(LwpTabOverride const& rOther);
 
 private:
-    LwpTabOverride& operator=(LwpTabOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpTabOverride& operator=(LwpTabOverride const& rOther) = delete;
 
 private:
     LwpObjectID m_aTabRackID;

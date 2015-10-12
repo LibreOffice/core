@@ -80,8 +80,8 @@ namespace svx
 
     protected:
         ::cppu::OWeakObject&    getContext() const { return m_rContext; }
-        PropertyValueProvider(const PropertyValueProvider&) SAL_DELETED_FUNCTION;
-        PropertyValueProvider& operator=(const PropertyValueProvider&) SAL_DELETED_FUNCTION;
+        PropertyValueProvider(const PropertyValueProvider&) = delete;
+        PropertyValueProvider& operator=(const PropertyValueProvider&) = delete;
 
     private:
         ::cppu::OWeakObject&    m_rContext;
@@ -129,8 +129,8 @@ namespace svx
         void    disposing();
 
     private:
-        PropertyChangeNotifier(const PropertyChangeNotifier&) SAL_DELETED_FUNCTION;
-        PropertyChangeNotifier& operator=(const PropertyChangeNotifier&) SAL_DELETED_FUNCTION;
+        PropertyChangeNotifier(const PropertyChangeNotifier&) = delete;
+        PropertyChangeNotifier& operator=(const PropertyChangeNotifier&) = delete;
 
         std::unique_ptr< PropertyChangeNotifier_Data >  m_xData;
     };

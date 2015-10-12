@@ -57,8 +57,8 @@ namespace cppcanvas
                 css::rendering::XSprite >  getUNOSprite() const SAL_OVERRIDE;
 
         private:
-            ImplSprite(const ImplSprite&) SAL_DELETED_FUNCTION;
-            ImplSprite& operator=( const ImplSprite& ) SAL_DELETED_FUNCTION;
+            ImplSprite(const ImplSprite&) = delete;
+            ImplSprite& operator=( const ImplSprite& ) = delete;
 
             css::uno::Reference< css::rendering::XGraphicDevice >         mxGraphicDevice;
             const css::uno::Reference< css::rendering::XSprite >          mxSprite;

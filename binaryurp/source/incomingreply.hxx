@@ -30,8 +30,8 @@ namespace binaryurp {
 
 struct IncomingReply {
 private:
-    IncomingReply(const IncomingReply&) SAL_DELETED_FUNCTION;
-    IncomingReply& operator=(const IncomingReply&) SAL_DELETED_FUNCTION;
+    IncomingReply(const IncomingReply&) = delete;
+    IncomingReply& operator=(const IncomingReply&) = delete;
 public:
     IncomingReply(
         bool theException, BinaryAny const & theReturnValue,

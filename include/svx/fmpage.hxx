@@ -40,7 +40,7 @@ class HelpEvent;
 
 class SVX_DLLPUBLIC FmFormPage : public SdrPage
 {
-    FmFormPage& operator=(const FmFormPage&) SAL_DELETED_FUNCTION;
+    FmFormPage& operator=(const FmFormPage&) = delete;
 
     friend class FmFormObj;
     FmFormPageImpl*     m_pImpl;

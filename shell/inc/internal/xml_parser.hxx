@@ -113,8 +113,8 @@ private:
     XML_Parser xml_parser_;
 
 private:
-    xml_parser(const xml_parser&) SAL_DELETED_FUNCTION;
-    xml_parser& operator=(const xml_parser&) SAL_DELETED_FUNCTION;
+    xml_parser(const xml_parser&) = delete;
+    xml_parser& operator=(const xml_parser&) = delete;
 };
 
 #endif

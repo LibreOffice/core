@@ -171,8 +171,8 @@ namespace pcr
         bool impl_trySuspendDesigner_nothrow() const;
 
     private:
-        SQLCommandDesigner( const SQLCommandDesigner& ) SAL_DELETED_FUNCTION;
-        SQLCommandDesigner& operator=( const SQLCommandDesigner& ) SAL_DELETED_FUNCTION;
+        SQLCommandDesigner( const SQLCommandDesigner& ) = delete;
+        SQLCommandDesigner& operator=( const SQLCommandDesigner& ) = delete;
     };
 
 

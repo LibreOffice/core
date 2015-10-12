@@ -292,8 +292,8 @@ struct ExceptionType
     }
 
     // Copy assignment is forbidden and not implemented.
-    ExceptionType (const ExceptionType &) SAL_DELETED_FUNCTION;
-    ExceptionType & operator= (const ExceptionType &) SAL_DELETED_FUNCTION;
+    ExceptionType (const ExceptionType &) = delete;
+    ExceptionType & operator= (const ExceptionType &) = delete;
 };
 
 struct RaiseInfo

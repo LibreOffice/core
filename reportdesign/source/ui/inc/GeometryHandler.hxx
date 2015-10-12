@@ -276,8 +276,8 @@ namespace rptui
     protected:
         virtual ~GeometryHandler();
     private:
-        GeometryHandler(GeometryHandler &) SAL_DELETED_FUNCTION;
-        void operator =(GeometryHandler &) SAL_DELETED_FUNCTION;
+        GeometryHandler(GeometryHandler &) = delete;
+        void operator =(GeometryHandler &) = delete;
 
         // override WeakComponentImplHelperBase::disposing()
         // This function is called upon disposing the component,

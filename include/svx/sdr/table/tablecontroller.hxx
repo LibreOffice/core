@@ -114,8 +114,8 @@ public:
     bool isColumnHeader();
     sdr::table::SdrTableObj* GetTableObj() { return dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() ); }
 private:
-    SvxTableController(SvxTableController &) SAL_DELETED_FUNCTION;
-    void operator =(SvxTableController &) SAL_DELETED_FUNCTION;
+    SvxTableController(SvxTableController &) = delete;
+    void operator =(SvxTableController &) = delete;
 
     // internals
     SVX_DLLPRIVATE void ApplyBorderAttr( const SfxItemSet& rAttr );

@@ -40,8 +40,8 @@ namespace binaryurp {
 
 class IncomingRequest {
 private:
-    IncomingRequest(const IncomingRequest&) SAL_DELETED_FUNCTION;
-    IncomingRequest& operator=(const IncomingRequest&) SAL_DELETED_FUNCTION;
+    IncomingRequest(const IncomingRequest&) = delete;
+    IncomingRequest& operator=(const IncomingRequest&) = delete;
 public:
     IncomingRequest(
         rtl::Reference< Bridge > const & bridge, rtl::ByteSequence const & tid,

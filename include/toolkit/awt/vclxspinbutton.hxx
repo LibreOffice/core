@@ -80,8 +80,8 @@ namespace toolkit
         void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent ) SAL_OVERRIDE;
 
     private:
-        VCLXSpinButton( const VCLXSpinButton& ) SAL_DELETED_FUNCTION;
-        VCLXSpinButton& operator=( const VCLXSpinButton& ) SAL_DELETED_FUNCTION;
+        VCLXSpinButton( const VCLXSpinButton& ) = delete;
+        VCLXSpinButton& operator=( const VCLXSpinButton& ) = delete;
     };
 
 

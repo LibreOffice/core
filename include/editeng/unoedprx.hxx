@@ -156,8 +156,8 @@ public:
     bool        IsValid() const { return mbEditSourceValid;}
 
 private:
-    SvxEditSourceAdapter( const SvxEditSourceAdapter& ) SAL_DELETED_FUNCTION;
-    SvxEditSourceAdapter& operator= ( const SvxEditSourceAdapter& ) SAL_DELETED_FUNCTION;
+    SvxEditSourceAdapter( const SvxEditSourceAdapter& ) = delete;
+    SvxEditSourceAdapter& operator= ( const SvxEditSourceAdapter& ) = delete;
 
     ::std::unique_ptr< SvxEditSource >    mpAdaptee;
 

@@ -135,9 +135,9 @@ private:
     bool mbIsMouseOver : 1;
     bool mbHasTransition : 1;
 
-    PageDescriptor (const PageDescriptor& rDescriptor) SAL_DELETED_FUNCTION;
+    PageDescriptor (const PageDescriptor& rDescriptor) = delete;
 
-    PageDescriptor& operator= (const PageDescriptor& rDescriptor) SAL_DELETED_FUNCTION;
+    PageDescriptor& operator= (const PageDescriptor& rDescriptor) = delete;
 };
 
 } } } // end of namespace ::sd::slidesorter::model

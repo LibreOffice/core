@@ -37,8 +37,8 @@ class LookUpComboBox : public ComboBox
     Idle                        m_aModifyIdle;
     VclPtr<SvxThesaurusDialog>         m_pDialog;
 
-    LookUpComboBox( const LookUpComboBox & ) SAL_DELETED_FUNCTION;
-    LookUpComboBox& operator = ( const LookUpComboBox & ) SAL_DELETED_FUNCTION;
+    LookUpComboBox( const LookUpComboBox & ) = delete;
+    LookUpComboBox& operator = ( const LookUpComboBox & ) = delete;
 
 public:
     LookUpComboBox(vcl::Window *pParent);
@@ -78,8 +78,8 @@ class ThesaurusAlternativesCtrl
     typedef std::map< const SvTreeListEntry *, AlternativesExtraData >  UserDataMap_t;
     UserDataMap_t           m_aUserData;
 
-    ThesaurusAlternativesCtrl( const ThesaurusAlternativesCtrl & ) SAL_DELETED_FUNCTION;
-    ThesaurusAlternativesCtrl & operator = ( const ThesaurusAlternativesCtrl & ) SAL_DELETED_FUNCTION;
+    ThesaurusAlternativesCtrl( const ThesaurusAlternativesCtrl & ) = delete;
+    ThesaurusAlternativesCtrl & operator = ( const ThesaurusAlternativesCtrl & ) = delete;
 
 public:
     ThesaurusAlternativesCtrl(vcl::Window* pParent);
@@ -102,8 +102,8 @@ class ReplaceEdit : public Edit
 {
     VclPtr<Button>       m_pBtn;
 
-    ReplaceEdit( const ReplaceEdit & ) SAL_DELETED_FUNCTION;
-    ReplaceEdit & operator = ( const ReplaceEdit & ) SAL_DELETED_FUNCTION;
+    ReplaceEdit( const ReplaceEdit & ) = delete;
+    ReplaceEdit & operator = ( const ReplaceEdit & ) = delete;
 
 public:
     ReplaceEdit(vcl::Window *pParent);

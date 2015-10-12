@@ -28,8 +28,8 @@ namespace rptxml
     class OXMLCondPrtExpr : public SvXMLImportContext
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xComponent;
-        OXMLCondPrtExpr(const OXMLCondPrtExpr&) SAL_DELETED_FUNCTION;
-        void operator =(const OXMLCondPrtExpr&) SAL_DELETED_FUNCTION;
+        OXMLCondPrtExpr(const OXMLCondPrtExpr&) = delete;
+        void operator =(const OXMLCondPrtExpr&) = delete;
     public:
 
         OXMLCondPrtExpr( ORptFilter& _rImport

@@ -80,8 +80,8 @@ namespace canvas
         virtual ~CachedPrimitiveBase(); // we're a ref-counted UNO class. _We_ destroy ourselves.
 
     private:
-        CachedPrimitiveBase( const CachedPrimitiveBase& ) SAL_DELETED_FUNCTION;
-        CachedPrimitiveBase& operator=( const CachedPrimitiveBase& ) SAL_DELETED_FUNCTION;
+        CachedPrimitiveBase( const CachedPrimitiveBase& ) = delete;
+        CachedPrimitiveBase& operator=( const CachedPrimitiveBase& ) = delete;
 
         /** Actually perform the requested redraw.
 

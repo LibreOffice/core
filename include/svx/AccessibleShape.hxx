@@ -459,8 +459,8 @@ protected:
     void UpdateStates();
 
 private:
-    AccessibleShape (const AccessibleShape&) SAL_DELETED_FUNCTION;
-    AccessibleShape& operator= (const AccessibleShape&) SAL_DELETED_FUNCTION;
+    AccessibleShape (const AccessibleShape&) = delete;
+    AccessibleShape& operator= (const AccessibleShape&) = delete;
     //Old accessible name
     OUString aAccName;
 

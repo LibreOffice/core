@@ -81,8 +81,8 @@ public:
     virtual ~Options() = 0;
 
 private:
-    Options(Options &) SAL_DELETED_FUNCTION;
-    void operator =(Options &) SAL_DELETED_FUNCTION;
+    Options(Options &) = delete;
+    void operator =(Options &) = delete;
 
 protected:
     virtual void ConfigurationChanged( ::utl::ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) SAL_OVERRIDE;

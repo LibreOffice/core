@@ -117,8 +117,8 @@ namespace pcr
                         Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     private:
-        DialogController( const DialogController& ) SAL_DELETED_FUNCTION;
-        DialogController& operator=( const DialogController& ) SAL_DELETED_FUNCTION;
+        DialogController( const DialogController& ) = delete;
+        DialogController& operator=( const DialogController& ) = delete;
     };
 
 } // namespace pcr

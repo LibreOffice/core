@@ -42,8 +42,8 @@ private:
     bool            m_bOpenInDesignMode : 1;
     bool            m_bAutoControlFocus : 1;
 
-    FmFormModel( const FmFormModel& ) SAL_DELETED_FUNCTION;
-    void operator=(const FmFormModel& rSrcModel) SAL_DELETED_FUNCTION;
+    FmFormModel( const FmFormModel& ) = delete;
+    void operator=(const FmFormModel& rSrcModel) = delete;
 
 public:
     TYPEINFO_OVERRIDE();

@@ -145,8 +145,8 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ShapeContextHandler(ShapeContextHandler &) SAL_DELETED_FUNCTION;
-    void operator =(ShapeContextHandler &) SAL_DELETED_FUNCTION;
+    ShapeContextHandler(ShapeContextHandler &) = delete;
+    void operator =(ShapeContextHandler &) = delete;
 
     ::sal_uInt32 mnStartToken;
     css::awt::Point maPosition;

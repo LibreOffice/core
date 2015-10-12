@@ -40,8 +40,8 @@ class SvtSearchOptions_Impl : public ConfigItem
     sal_Int32   nFlags;
     bool    bModified;
 
-    SvtSearchOptions_Impl(const SvtSearchOptions_Impl&) SAL_DELETED_FUNCTION;
-    SvtSearchOptions_Impl& operator=(const SvtSearchOptions_Impl&) SAL_DELETED_FUNCTION;
+    SvtSearchOptions_Impl(const SvtSearchOptions_Impl&) = delete;
+    SvtSearchOptions_Impl& operator=(const SvtSearchOptions_Impl&) = delete;
 
     // ConfigItem
     virtual void    ImplCommit() SAL_OVERRIDE;

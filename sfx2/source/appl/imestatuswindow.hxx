@@ -88,8 +88,8 @@ public:
     using ImeStatusWindow_Impl::operator delete;
 
 private:
-    ImeStatusWindow(ImeStatusWindow &) SAL_DELETED_FUNCTION;
-    void operator =(const ImeStatusWindow&) SAL_DELETED_FUNCTION;
+    ImeStatusWindow(ImeStatusWindow &) = delete;
+    void operator =(const ImeStatusWindow&) = delete;
 
     virtual ~ImeStatusWindow();
 

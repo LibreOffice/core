@@ -107,8 +107,8 @@ protected:
     explicit            BinaryStreamBase( bool bSeekable ) : mbEof( false ), mbSeekable( bSeekable ) {}
 
 private:
-                        BinaryStreamBase( const BinaryStreamBase& ) SAL_DELETED_FUNCTION;
-    BinaryStreamBase&   operator=( const BinaryStreamBase& ) SAL_DELETED_FUNCTION;
+                        BinaryStreamBase( const BinaryStreamBase& ) = delete;
+    BinaryStreamBase&   operator=( const BinaryStreamBase& ) = delete;
 
 protected:
     bool                mbEof;          ///< End of stream flag.

@@ -96,8 +96,8 @@ public:
         css::uno::Sequence< css::uno::Sequence< OUString > > &rItemList );
 
 private:
-    UpdateDialog(UpdateDialog &) SAL_DELETED_FUNCTION;
-    void operator =(UpdateDialog &) SAL_DELETED_FUNCTION;
+    UpdateDialog(UpdateDialog &) = delete;
+    void operator =(UpdateDialog &) = delete;
 
     struct DisabledUpdate;
     struct SpecificError;
@@ -115,8 +115,8 @@ private:
         sal_uInt16 getItemCount() const;
 
     private:
-        explicit CheckListBox(UpdateDialog::CheckListBox &) SAL_DELETED_FUNCTION;
-        void operator =(UpdateDialog::CheckListBox &) SAL_DELETED_FUNCTION;
+        explicit CheckListBox(UpdateDialog::CheckListBox &) = delete;
+        void operator =(UpdateDialog::CheckListBox &) = delete;
 
         virtual void MouseButtonDown(MouseEvent const & event) SAL_OVERRIDE;
         virtual void MouseButtonUp(MouseEvent const & event) SAL_OVERRIDE;

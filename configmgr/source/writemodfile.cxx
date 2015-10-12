@@ -152,7 +152,7 @@ void writeData_(TempFile &handle, char const * begin, sal_Int32 length) {
     handle.writeString(begin, length);
 }
 
-void writeValueContent_(TempFile &, bool) SAL_DELETED_FUNCTION;
+void writeValueContent_(TempFile &, bool) = delete;
     // silence loplugin:salbool
 void writeValueContent_(TempFile &handle, sal_Bool value) {
     if (value) {

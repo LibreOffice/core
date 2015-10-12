@@ -449,7 +449,7 @@ private:
         comphelper::UniquePtrValueLess<ScConditionalFormat>> ConditionalFormatContainer;
     ConditionalFormatContainer m_ConditionalFormats;
 
-    void operator =(ScConditionalFormatList const &) SAL_DELETED_FUNCTION;
+    void operator =(ScConditionalFormatList const &) = delete;
 
 public:
     ScConditionalFormatList() {}

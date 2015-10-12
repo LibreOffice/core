@@ -110,8 +110,8 @@ namespace comphelper
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        OProxyAggregation( const OProxyAggregation& ) SAL_DELETED_FUNCTION;
-        OProxyAggregation& operator=( const OProxyAggregation& ) SAL_DELETED_FUNCTION;
+        OProxyAggregation( const OProxyAggregation& ) = delete;
+        OProxyAggregation& operator=( const OProxyAggregation& ) = delete;
     };
 
 
@@ -170,8 +170,8 @@ namespace comphelper
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) = 0;
 
     private:
-        OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& ) SAL_DELETED_FUNCTION;
-        OComponentProxyAggregationHelper& operator=( const OComponentProxyAggregationHelper& ) SAL_DELETED_FUNCTION;
+        OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& ) = delete;
+        OComponentProxyAggregationHelper& operator=( const OComponentProxyAggregationHelper& ) = delete;
     };
 
 
@@ -208,8 +208,8 @@ namespace comphelper
         void implEnsureDisposeInDtor( );
 
     private:
-        OComponentProxyAggregation( const OComponentProxyAggregation& ) SAL_DELETED_FUNCTION;
-        OComponentProxyAggregation& operator=( const OComponentProxyAggregation& ) SAL_DELETED_FUNCTION;
+        OComponentProxyAggregation( const OComponentProxyAggregation& ) = delete;
+        OComponentProxyAggregation& operator=( const OComponentProxyAggregation& ) = delete;
     };
 
 

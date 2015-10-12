@@ -191,9 +191,9 @@ protected:
     sal_uInt16                      nVersion;
 
 private:
-    void operator=(const SdrObjUserData& rData) SAL_DELETED_FUNCTION;
-    bool operator==(const SdrObjUserData& rData) const SAL_DELETED_FUNCTION;
-    bool operator!=(const SdrObjUserData& rData) const SAL_DELETED_FUNCTION;
+    void operator=(const SdrObjUserData& rData) = delete;
+    bool operator==(const SdrObjUserData& rData) const = delete;
+    bool operator!=(const SdrObjUserData& rData) const = delete;
 
 public:
     SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId, sal_uInt16 nVer);
@@ -265,7 +265,7 @@ private:
     struct Impl;
     Impl* mpImpl;
 
-    SdrObject( const SdrObject& ) SAL_DELETED_FUNCTION;
+    SdrObject( const SdrObject& ) = delete;
 
 public:
     void AddObjectUser(sdr::ObjectUser& rNewUser);

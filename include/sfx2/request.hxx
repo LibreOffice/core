@@ -107,7 +107,7 @@ public:
     void                ForgetAllArgs();
 
 private:
-    const SfxRequest&   operator=(const SfxRequest &) SAL_DELETED_FUNCTION;
+    const SfxRequest&   operator=(const SfxRequest &) = delete;
 };
 
 template<class T> bool checkSfxPoolItem(const SfxPoolItem* pItem)

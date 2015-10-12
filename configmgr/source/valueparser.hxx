@@ -68,8 +68,8 @@ public:
     OString separator_;
 
 private:
-    ValueParser(const ValueParser&) SAL_DELETED_FUNCTION;
-    ValueParser& operator=(const ValueParser&) SAL_DELETED_FUNCTION;
+    ValueParser(const ValueParser&) = delete;
+    ValueParser& operator=(const ValueParser&) = delete;
 
     template< typename T > css::uno::Any convertItems();
 

@@ -25,8 +25,8 @@
 
 class XMLOFF_DLLPUBLIC XMLCharContext : public SvXMLImportContext
 {
-    XMLCharContext(const XMLCharContext&) SAL_DELETED_FUNCTION;
-    void operator =(const XMLCharContext&) SAL_DELETED_FUNCTION;
+    XMLCharContext(const XMLCharContext&) = delete;
+    void operator =(const XMLCharContext&) = delete;
 protected:
     sal_Int16   m_nControl;
     sal_uInt16  m_nCount;

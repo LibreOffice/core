@@ -105,9 +105,9 @@ protected:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    AccessibleOLEShape (const AccessibleOLEShape&) SAL_DELETED_FUNCTION;
+    AccessibleOLEShape (const AccessibleOLEShape&) = delete;
 
-    AccessibleOLEShape& operator= (const AccessibleOLEShape&) SAL_DELETED_FUNCTION;
+    AccessibleOLEShape& operator= (const AccessibleOLEShape&) = delete;
 };
 
 } // end of namespace accessibility

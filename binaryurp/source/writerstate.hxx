@@ -32,8 +32,8 @@ namespace binaryurp {
 
 struct WriterState {
 private:
-    WriterState(const WriterState&) SAL_DELETED_FUNCTION;
-    WriterState& operator=(const WriterState&) SAL_DELETED_FUNCTION;
+    WriterState(const WriterState&) = delete;
+    WriterState& operator=(const WriterState&) = delete;
 public:
     WriterState():
         typeCache(cache::size), oidCache(cache::size), tidCache(cache::size) {}

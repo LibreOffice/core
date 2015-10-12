@@ -74,8 +74,8 @@ private:
 
     void exportTableRows();
 private:
-    ExportDocumentHandler(ExportDocumentHandler &) SAL_DELETED_FUNCTION;
-    void operator =(ExportDocumentHandler &) SAL_DELETED_FUNCTION;
+    ExportDocumentHandler(ExportDocumentHandler &) = delete;
+    void operator =(ExportDocumentHandler &) = delete;
 
     virtual ~ExportDocumentHandler();
 

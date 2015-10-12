@@ -166,7 +166,7 @@ class SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
 
     SwPaM* MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg = 0 );
 
-    SwPaM(SwPaM const& rPaM) SAL_DELETED_FUNCTION;
+    SwPaM(SwPaM const& rPaM) = delete;
 
 public:
     explicit SwPaM( const SwPosition& rPos, SwPaM* pRing = 0 );

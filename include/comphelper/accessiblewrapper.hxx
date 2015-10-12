@@ -116,8 +116,8 @@ namespace comphelper
         virtual ~OAccessibleWrapper( );
 
     private:
-        OAccessibleWrapper( const OAccessibleWrapper& ) SAL_DELETED_FUNCTION;
-        OAccessibleWrapper& operator=( const OAccessibleWrapper& ) SAL_DELETED_FUNCTION;
+        OAccessibleWrapper( const OAccessibleWrapper& ) = delete;
+        OAccessibleWrapper& operator=( const OAccessibleWrapper& ) = delete;
     };
 
 
@@ -303,8 +303,8 @@ namespace comphelper
         virtual ~OAccessibleContextWrapper();
 
     private:
-        OAccessibleContextWrapper( const OAccessibleContextWrapper& ) SAL_DELETED_FUNCTION;
-        OAccessibleContextWrapper& operator=( const OAccessibleContextWrapper& ) SAL_DELETED_FUNCTION;
+        OAccessibleContextWrapper( const OAccessibleContextWrapper& ) = delete;
+        OAccessibleContextWrapper& operator=( const OAccessibleContextWrapper& ) = delete;
     };
 
 
@@ -390,8 +390,8 @@ namespace comphelper
         virtual ~OWrappedAccessibleChildrenManager( );
 
     private:
-        OWrappedAccessibleChildrenManager( const OWrappedAccessibleChildrenManager& ) SAL_DELETED_FUNCTION;
-        OWrappedAccessibleChildrenManager& operator=( const OWrappedAccessibleChildrenManager& ) SAL_DELETED_FUNCTION;
+        OWrappedAccessibleChildrenManager( const OWrappedAccessibleChildrenManager& ) = delete;
+        OWrappedAccessibleChildrenManager& operator=( const OWrappedAccessibleChildrenManager& ) = delete;
     };
 
 

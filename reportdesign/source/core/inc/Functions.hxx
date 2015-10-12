@@ -43,8 +43,8 @@ namespace reportdesign
         ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XFunctionsSupplier >    m_xParent;
         TFunctions                                                                              m_aFunctions;
     private:
-        OFunctions& operator=(const OFunctions&) SAL_DELETED_FUNCTION;
-        OFunctions(const OFunctions&) SAL_DELETED_FUNCTION;
+        OFunctions& operator=(const OFunctions&) = delete;
+        OFunctions(const OFunctions&) = delete;
         void checkIndex(sal_Int32 _nIndex);
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!

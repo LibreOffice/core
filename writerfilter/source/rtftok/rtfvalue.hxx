@@ -57,7 +57,7 @@ public:
     RTFShape& getShape() const;
     bool equals(RTFValue& rOther);
 private:
-    RTFValue& operator=(RTFValue const& rOther) SAL_DELETED_FUNCTION;
+    RTFValue& operator=(RTFValue const& rOther) = delete;
     int m_nValue;
     OUString m_sValue;
     std::shared_ptr<RTFSprms> m_pAttributes;

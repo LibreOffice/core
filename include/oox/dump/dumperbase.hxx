@@ -1094,8 +1094,8 @@ public:
     explicit            IndentGuard( const OutputRef& rxOut ) : mrOut( *rxOut ) { mrOut.incIndent(); }
                         ~IndentGuard() { mrOut.decIndent(); }
 private:
-                        IndentGuard( const IndentGuard& ) SAL_DELETED_FUNCTION;
-    IndentGuard&        operator=( const IndentGuard& ) SAL_DELETED_FUNCTION;
+                        IndentGuard( const IndentGuard& ) = delete;
+    IndentGuard&        operator=( const IndentGuard& ) = delete;
 private:
     Output&             mrOut;
 };
@@ -1117,8 +1117,8 @@ public:
                         ~TableGuard() { mrOut.endTable(); }
     void                tab( size_t nCol ) { mrOut.tab( nCol ); }
 private:
-                        TableGuard( const TableGuard& ) SAL_DELETED_FUNCTION;
-    TableGuard&         operator=( const TableGuard& ) SAL_DELETED_FUNCTION;
+                        TableGuard( const TableGuard& ) = delete;
+    TableGuard&         operator=( const TableGuard& ) = delete;
 private:
     Output&             mrOut;
 };
@@ -1133,8 +1133,8 @@ public:
                         ~ItemGuard() { mrOut.endItem(); }
     void                cont() { mrOut.contItem(); }
 private:
-                        ItemGuard( const ItemGuard& ) SAL_DELETED_FUNCTION;
-    ItemGuard&          operator=( const ItemGuard& ) SAL_DELETED_FUNCTION;
+                        ItemGuard( const ItemGuard& ) = delete;
+    ItemGuard&          operator=( const ItemGuard& ) = delete;
 private:
     Output&             mrOut;
 };
@@ -1147,8 +1147,8 @@ public:
     explicit            MultiItemsGuard( const OutputRef& rxOut ) : mrOut( *rxOut ) { mrOut.startMultiItems(); }
                         ~MultiItemsGuard() { mrOut.endMultiItems(); }
 private:
-                        MultiItemsGuard( const MultiItemsGuard& ) SAL_DELETED_FUNCTION;
-    MultiItemsGuard&    operator=( const MultiItemsGuard& ) SAL_DELETED_FUNCTION;
+                        MultiItemsGuard( const MultiItemsGuard& ) = delete;
+    MultiItemsGuard&    operator=( const MultiItemsGuard& ) = delete;
 private:
     Output&             mrOut;
 };

@@ -36,7 +36,7 @@ class ScDBData;
 
 class ScSimpleUndo: public SfxUndoAction
 {
-    ScSimpleUndo(const ScSimpleUndo&) SAL_DELETED_FUNCTION;
+    ScSimpleUndo(const ScSimpleUndo&) = delete;
 
 public:
     typedef boost::ptr_map<SCTAB,sc::ColumnSpanSet> DataSpansType;

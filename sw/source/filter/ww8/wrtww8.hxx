@@ -242,8 +242,8 @@ class WW8_WrPlcSepx : public MSWordSections
     bool m_bHeaderFooterWritten;
     WW8_WrPlc0* pTextPos;        // Position of the headers/footers
 
-    WW8_WrPlcSepx( const WW8_WrPlcSepx& ) SAL_DELETED_FUNCTION;
-    WW8_WrPlcSepx& operator=( const WW8_WrPlcSepx& ) SAL_DELETED_FUNCTION;
+    WW8_WrPlcSepx( const WW8_WrPlcSepx& ) = delete;
+    WW8_WrPlcSepx& operator=( const WW8_WrPlcSepx& ) = delete;
 
 public:
     explicit WW8_WrPlcSepx( MSWordExportBase& rExport );
@@ -376,8 +376,8 @@ public:
     DrawObjVector &GetObjArr() { return maDrawObjs; }
     virtual ~PlcDrawObj();
 private:
-    PlcDrawObj(const PlcDrawObj&) SAL_DELETED_FUNCTION;
-    PlcDrawObj& operator=(const PlcDrawObj&) SAL_DELETED_FUNCTION;
+    PlcDrawObj(const PlcDrawObj&) = delete;
+    PlcDrawObj& operator=(const PlcDrawObj&) = delete;
 };
 
 class MainTextPlcDrawObj : public PlcDrawObj
@@ -389,8 +389,8 @@ private:
         sal_uInt32 nLen) const SAL_OVERRIDE;
     virtual WW8_CP GetCpOffset(const WW8Fib &) const SAL_OVERRIDE;
 private:
-    MainTextPlcDrawObj(const MainTextPlcDrawObj&) SAL_DELETED_FUNCTION;
-    MainTextPlcDrawObj& operator=(const MainTextPlcDrawObj&) SAL_DELETED_FUNCTION;
+    MainTextPlcDrawObj(const MainTextPlcDrawObj&) = delete;
+    MainTextPlcDrawObj& operator=(const MainTextPlcDrawObj&) = delete;
 };
 
 class HdFtPlcDrawObj : public PlcDrawObj
@@ -402,8 +402,8 @@ private:
         sal_uInt32 nLen) const SAL_OVERRIDE;
     virtual WW8_CP GetCpOffset(const WW8Fib &rFib) const SAL_OVERRIDE;
 private:
-    HdFtPlcDrawObj(const HdFtPlcDrawObj&) SAL_DELETED_FUNCTION;
-    HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&) SAL_DELETED_FUNCTION;
+    HdFtPlcDrawObj(const HdFtPlcDrawObj&) = delete;
+    HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&) = delete;
 };
 
 typedef ::std::pair<OUString, sal_uLong> aBookmarkPair;
@@ -878,8 +878,8 @@ public:
     static void CorrectTabStopInSet( SfxItemSet& rSet, sal_uInt16 nAbsLeft );
 
 private:
-    MSWordExportBase( const MSWordExportBase& ) SAL_DELETED_FUNCTION;
-    MSWordExportBase& operator=( const MSWordExportBase& ) SAL_DELETED_FUNCTION;
+    MSWordExportBase( const MSWordExportBase& ) = delete;
+    MSWordExportBase& operator=( const MSWordExportBase& ) = delete;
 };
 
 /// The writer class that gets called for the WW8 filter.
@@ -935,8 +935,8 @@ public:
     SfxMedium* GetMedia() { return mpMedium; }
 
 private:
-    SwWW8Writer(const SwWW8Writer&) SAL_DELETED_FUNCTION;
-    SwWW8Writer& operator=(const SwWW8Writer&) SAL_DELETED_FUNCTION;
+    SwWW8Writer(const SwWW8Writer&) = delete;
+    SwWW8Writer& operator=(const SwWW8Writer&) = delete;
 };
 
 /// Exporter of the binary Word file formats.
@@ -1153,15 +1153,15 @@ protected:
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum ) SAL_OVERRIDE;
 
 private:
-    WW8Export(const WW8Export&) SAL_DELETED_FUNCTION;
-    WW8Export& operator=(const WW8Export&) SAL_DELETED_FUNCTION;
+    WW8Export(const WW8Export&) = delete;
+    WW8Export& operator=(const WW8Export&) = delete;
 };
 
 class WW8_WrPlcSubDoc   // double Plc for Footnotes/Endnotes and Postits
 {
 private:
-    WW8_WrPlcSubDoc(const WW8_WrPlcSubDoc&) SAL_DELETED_FUNCTION;
-    WW8_WrPlcSubDoc& operator=(const WW8_WrPlcSubDoc&) SAL_DELETED_FUNCTION;
+    WW8_WrPlcSubDoc(const WW8_WrPlcSubDoc&) = delete;
+    WW8_WrPlcSubDoc& operator=(const WW8_WrPlcSubDoc&) = delete;
 protected:
     std::vector<WW8_CP> aCps;
     std::vector<const void*> aContent;                // PTRARR of SwFormatFootnote/PostIts/..
@@ -1184,8 +1184,8 @@ class WW8_WrPlcFootnoteEdn : public WW8_WrPlcSubDoc
 private:
     sal_uInt8 nTyp;
 
-    WW8_WrPlcFootnoteEdn(const WW8_WrPlcFootnoteEdn&) SAL_DELETED_FUNCTION;
-    WW8_WrPlcFootnoteEdn& operator=(WW8_WrPlcFootnoteEdn &) SAL_DELETED_FUNCTION;
+    WW8_WrPlcFootnoteEdn(const WW8_WrPlcFootnoteEdn&) = delete;
+    WW8_WrPlcFootnoteEdn& operator=(WW8_WrPlcFootnoteEdn &) = delete;
 public:
     explicit WW8_WrPlcFootnoteEdn( sal_uInt8 nTTyp ) : nTyp( nTTyp ) {}
 
@@ -1210,8 +1210,8 @@ struct WW8_Annotation
 class WW8_WrPlcAnnotations : public WW8_WrPlcSubDoc  // double Plc for Postits
 {
 private:
-    WW8_WrPlcAnnotations(const WW8_WrPlcAnnotations&) SAL_DELETED_FUNCTION;
-    WW8_WrPlcAnnotations& operator=(WW8_WrPlcAnnotations&) SAL_DELETED_FUNCTION;
+    WW8_WrPlcAnnotations(const WW8_WrPlcAnnotations&) = delete;
+    WW8_WrPlcAnnotations& operator=(WW8_WrPlcAnnotations&) = delete;
     std::set<const SwRedlineData*> maProcessedRedlines;
 
     std::map<const OUString, WW8_CP> m_aRangeStartPositions;
@@ -1234,8 +1234,8 @@ private:
     std::vector<sal_uInt32> aShapeIds;        // VARARR of ShapeIds for the SwFrameFormats
     virtual const std::vector<sal_uInt32>* GetShapeIdArr() const SAL_OVERRIDE;
 
-    WW8_WrPlcTextBoxes(const WW8_WrPlcTextBoxes&) SAL_DELETED_FUNCTION;
-    WW8_WrPlcTextBoxes& operator=(WW8_WrPlcTextBoxes&) SAL_DELETED_FUNCTION;
+    WW8_WrPlcTextBoxes(const WW8_WrPlcTextBoxes&) = delete;
+    WW8_WrPlcTextBoxes& operator=(WW8_WrPlcTextBoxes&) = delete;
 public:
     explicit WW8_WrPlcTextBoxes( sal_uInt8 nTTyp ) : nTyp( nTTyp ) {}
 
@@ -1263,8 +1263,8 @@ private:
     sal_uInt16 nFkpStartPage;
     ePLCFT ePlc;
 
-    WW8_WrPlcPn(const WW8_WrPlcPn&) SAL_DELETED_FUNCTION;
-    WW8_WrPlcPn& operator=(const WW8_WrPlcPn&) SAL_DELETED_FUNCTION;
+    WW8_WrPlcPn(const WW8_WrPlcPn&) = delete;
+    WW8_WrPlcPn& operator=(const WW8_WrPlcPn&) = delete;
 public:
     WW8_WrPlcPn( WW8Export& rWrt, ePLCFT ePl, WW8_FC nStartFc );
     ~WW8_WrPlcPn();
@@ -1283,8 +1283,8 @@ private:
     sal_uLong nDataLen;
     sal_uInt16 nStructSiz;
 
-    WW8_WrPlc1(const WW8_WrPlc1&) SAL_DELETED_FUNCTION;
-    WW8_WrPlc1& operator=(const WW8_WrPlc1&) SAL_DELETED_FUNCTION;
+    WW8_WrPlc1(const WW8_WrPlc1&) = delete;
+    WW8_WrPlc1& operator=(const WW8_WrPlc1&) = delete;
 protected:
     sal_uInt16 Count() const { return aPos.size(); }
     void Write( SvStream& rStrm );
@@ -1303,8 +1303,8 @@ private:
     sal_uInt8 nTextTyp;
     sal_uInt16 nResults;
 
-    WW8_WrPlcField(const WW8_WrPlcField&) SAL_DELETED_FUNCTION;
-    WW8_WrPlcField& operator=(const WW8_WrPlcField&) SAL_DELETED_FUNCTION;
+    WW8_WrPlcField(const WW8_WrPlcField&) = delete;
+    WW8_WrPlcField& operator=(const WW8_WrPlcField&) = delete;
 public:
     WW8_WrPlcField( sal_uInt16 nStructSz, sal_uInt8 nTTyp )
         : WW8_WrPlc1( nStructSz ), nTextTyp( nTTyp ), nResults(0)
@@ -1317,8 +1317,8 @@ public:
 class WW8_WrMagicTable : public WW8_WrPlc1
 {
 private:
-    WW8_WrMagicTable(const WW8_WrMagicTable&) SAL_DELETED_FUNCTION;
-    WW8_WrMagicTable& operator=(const WW8_WrMagicTable&) SAL_DELETED_FUNCTION;
+    WW8_WrMagicTable(const WW8_WrMagicTable&) = delete;
+    WW8_WrMagicTable& operator=(const WW8_WrMagicTable&) = delete;
 public:
     WW8_WrMagicTable() : WW8_WrPlc1( 4 ) {Append(0,0);}
     void Append( WW8_CP nCp, sal_uLong nData );
@@ -1368,8 +1368,8 @@ private:
     static void WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf, sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight);
     void WriteGrfForBullet(SvStream& rStrm,  const Graphic &rGrf, sal_uInt16 nWidth, sal_uInt16 nHeight);
 
-    SwWW8WrGrf(const SwWW8WrGrf&) SAL_DELETED_FUNCTION;
-    SwWW8WrGrf& operator=(const SwWW8WrGrf&) SAL_DELETED_FUNCTION;
+    SwWW8WrGrf(const SwWW8WrGrf&) = delete;
+    SwWW8WrGrf& operator=(const SwWW8WrGrf&) = delete;
 public:
     explicit SwWW8WrGrf( WW8Export& rW ) : rWrt( rW ), mnIdx( 0 ) {}
     void Insert(const sw::Frame &rFly);
@@ -1385,8 +1385,8 @@ class MSWordAttrIter
 {
 private:
     MSWordAttrIter* pOld;
-    MSWordAttrIter(const MSWordAttrIter&) SAL_DELETED_FUNCTION;
-    MSWordAttrIter& operator=(const MSWordAttrIter&) SAL_DELETED_FUNCTION;
+    MSWordAttrIter(const MSWordAttrIter&) = delete;
+    MSWordAttrIter& operator=(const MSWordAttrIter&) = delete;
 protected:
     MSWordExportBase& m_rExport;
 public:
@@ -1418,8 +1418,8 @@ private:
 
     void SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemSet& rSet);
 
-    MSWord_SdrAttrIter(const MSWord_SdrAttrIter&) SAL_DELETED_FUNCTION;
-    MSWord_SdrAttrIter& operator=(const MSWord_SdrAttrIter&) SAL_DELETED_FUNCTION;
+    MSWord_SdrAttrIter(const MSWord_SdrAttrIter&) = delete;
+    MSWord_SdrAttrIter& operator=(const MSWord_SdrAttrIter&) = delete;
 public:
     MSWord_SdrAttrIter( MSWordExportBase& rWr, const EditTextObject& rEditObj,
         sal_uInt8 nType );
@@ -1475,8 +1475,8 @@ private:
 
     void IterToCurrent();
 
-    SwWW8AttrIter(const SwWW8AttrIter&) SAL_DELETED_FUNCTION;
-    SwWW8AttrIter& operator=(const SwWW8AttrIter&) SAL_DELETED_FUNCTION;
+    SwWW8AttrIter(const SwWW8AttrIter&) = delete;
+    SwWW8AttrIter& operator=(const SwWW8AttrIter&) = delete;
 public:
     SwWW8AttrIter( MSWordExportBase& rWr, const SwTextNode& rNd );
 
@@ -1544,8 +1544,8 @@ class MSWordStyles
     void OutputStyle( SwFormat* pFormat, sal_uInt16 nPos );
     void OutputStyle( const SwNumRule* pNumRule, sal_uInt16 nPos );
 
-    MSWordStyles( const MSWordStyles& ) SAL_DELETED_FUNCTION;
-    MSWordStyles& operator=( const MSWordStyles& ) SAL_DELETED_FUNCTION;
+    MSWordStyles( const MSWordStyles& ) = delete;
+    MSWordStyles& operator=( const MSWordStyles& ) = delete;
 
 public:
     MSWordStyles( MSWordExportBase& rExport, bool bListStyles = false );

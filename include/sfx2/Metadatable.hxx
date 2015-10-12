@@ -120,8 +120,8 @@ public:
         ::com::sun::star::rdf::XMetadatable > MakeUnoObject() = 0;
 
 private:
-    Metadatable(const Metadatable&) SAL_DELETED_FUNCTION;
-    Metadatable& operator=(const Metadatable&) SAL_DELETED_FUNCTION;
+    Metadatable(const Metadatable&) = delete;
+    Metadatable& operator=(const Metadatable&) = delete;
 
     friend class MetadatableClipboard;
     friend class MetadatableUndo;

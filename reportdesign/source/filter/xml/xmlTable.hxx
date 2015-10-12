@@ -50,8 +50,8 @@ namespace rptxml
         sal_Int32                                                                           m_nColumnIndex;
         ORptFilter& GetOwnImport();
 
-        OXMLTable(const OXMLTable&) SAL_DELETED_FUNCTION;
-        void operator =(const OXMLTable&) SAL_DELETED_FUNCTION;
+        OXMLTable(const OXMLTable&) = delete;
+        void operator =(const OXMLTable&) = delete;
     public:
 
         OXMLTable( ORptFilter& rImport

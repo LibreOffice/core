@@ -53,8 +53,8 @@ public:
         context_(context) {}
 
 private:
-    Service(const Service&) SAL_DELETED_FUNCTION;
-    Service& operator=(const Service&) SAL_DELETED_FUNCTION;
+    Service(const Service&) = delete;
+    Service& operator=(const Service&) = delete;
 
     virtual ~Service() {}
 

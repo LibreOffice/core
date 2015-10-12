@@ -78,8 +78,8 @@ public:
 class XMLOFF_DLLPUBLIC SvXMLUnitConverter
 {
 private:
-    SvXMLUnitConverter(const SvXMLUnitConverter&) SAL_DELETED_FUNCTION;
-    SvXMLUnitConverter& operator=(const SvXMLUnitConverter&) SAL_DELETED_FUNCTION;
+    SvXMLUnitConverter(const SvXMLUnitConverter&) = delete;
+    SvXMLUnitConverter& operator=(const SvXMLUnitConverter&) = delete;
 
     struct Impl;
     ::std::unique_ptr<Impl> m_pImpl;

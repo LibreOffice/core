@@ -72,8 +72,8 @@ namespace frm
         virtual ~ElementDescription();
 
     private:
-        ElementDescription( const ElementDescription& ) SAL_DELETED_FUNCTION;
-        ElementDescription& operator=( const ElementDescription& ) SAL_DELETED_FUNCTION;
+        ElementDescription( const ElementDescription& ) = delete;
+        ElementDescription& operator=( const ElementDescription& ) = delete;
     };
 
 typedef std::vector<css::uno::Reference<css::uno::XInterface>> OInterfaceArray;

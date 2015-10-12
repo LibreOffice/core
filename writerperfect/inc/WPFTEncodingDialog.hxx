@@ -47,8 +47,8 @@ private:
 
     void dispose() SAL_OVERRIDE;
 
-    WPFTEncodingDialog(WPFTEncodingDialog const &) SAL_DELETED_FUNCTION;
-    WPFTEncodingDialog &operator=(WPFTEncodingDialog const &) SAL_DELETED_FUNCTION;
+    WPFTEncodingDialog(WPFTEncodingDialog const &) = delete;
+    WPFTEncodingDialog &operator=(WPFTEncodingDialog const &) = delete;
 };
 
 }

@@ -46,8 +46,8 @@ protected:
     { SetAuto(false); }
 
 private:
-    SwFormatColl(const SwFormatColl & ) SAL_DELETED_FUNCTION;
-    const SwFormatColl &operator=(const SwFormatColl &) SAL_DELETED_FUNCTION;
+    SwFormatColl(const SwFormatColl & ) = delete;
+    const SwFormatColl &operator=(const SwFormatColl &) = delete;
 };
 
 /// Represents the style of a paragraph.
@@ -56,7 +56,7 @@ class SW_DLLPUBLIC SwTextFormatColl: public SwFormatColl
     friend class SwDoc;
     friend class ::sw::DocumentStylePoolManager;
 
-    SwTextFormatColl(const SwTextFormatColl & rRef) SAL_DELETED_FUNCTION;
+    SwTextFormatColl(const SwTextFormatColl & rRef) = delete;
 
     bool mbStayAssignedToListLevelOfOutlineStyle;
 
@@ -196,7 +196,7 @@ public:
     SwCollCondition( const SwCollCondition& rCpy );
 private:
     /// @@@ public copy ctor, but no copy assignment?
-    SwCollCondition & operator= (const SwCollCondition &) SAL_DELETED_FUNCTION;
+    SwCollCondition & operator= (const SwCollCondition &) = delete;
 public:
 
     bool operator==( const SwCollCondition& rCmp ) const;

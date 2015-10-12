@@ -32,8 +32,8 @@ class PasswordToOpenModifyDialog : public SfxModalDialog
 {
     std::unique_ptr< PasswordToOpenModifyDialog_Impl >  m_pImpl;
 
-    PasswordToOpenModifyDialog( const PasswordToOpenModifyDialog & ) SAL_DELETED_FUNCTION;
-    PasswordToOpenModifyDialog & operator = ( const PasswordToOpenModifyDialog & ) SAL_DELETED_FUNCTION;
+    PasswordToOpenModifyDialog( const PasswordToOpenModifyDialog & ) = delete;
+    PasswordToOpenModifyDialog & operator = ( const PasswordToOpenModifyDialog & ) = delete;
 
 public:
     PasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMinPasswdLen,

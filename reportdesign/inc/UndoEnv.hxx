@@ -42,8 +42,8 @@ namespace rptui
     {
         const ::std::unique_ptr<OXUndoEnvironmentImpl> m_pImpl;
 
-        OXUndoEnvironment(const OXUndoEnvironment&) SAL_DELETED_FUNCTION;
-        OXUndoEnvironment& operator=(const OXUndoEnvironment&) SAL_DELETED_FUNCTION;
+        OXUndoEnvironment(const OXUndoEnvironment&) = delete;
+        OXUndoEnvironment& operator=(const OXUndoEnvironment&) = delete;
 
     protected:
         virtual ~OXUndoEnvironment();

@@ -29,8 +29,8 @@ namespace rptxml
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel >   m_xComponent;
         ORptFilter& GetOwnImport();
-        OXMLReportElement(const OXMLReportElement&) SAL_DELETED_FUNCTION;
-        void operator =(const OXMLReportElement&) SAL_DELETED_FUNCTION;
+        OXMLReportElement(const OXMLReportElement&) = delete;
+        void operator =(const OXMLReportElement&) = delete;
     public:
 
         OXMLReportElement( ORptFilter& rImport, sal_uInt16 nPrfx,

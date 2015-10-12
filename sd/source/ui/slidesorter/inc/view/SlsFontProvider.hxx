@@ -65,8 +65,8 @@ private:
     FontProvider();
     virtual ~FontProvider();
 
-    FontProvider (const FontProvider&) SAL_DELETED_FUNCTION;
-    FontProvider& operator= (const FontProvider&) SAL_DELETED_FUNCTION;
+    FontProvider (const FontProvider&) = delete;
+    FontProvider& operator= (const FontProvider&) = delete;
 };
 
 } } } // end of namespace ::sd::slidesorter::view

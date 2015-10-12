@@ -43,8 +43,8 @@ public:
     Containment contains(Path const & path) const;
 
 private:
-    Partial(const Partial&) SAL_DELETED_FUNCTION;
-    Partial& operator=(const Partial&) SAL_DELETED_FUNCTION;
+    Partial(const Partial&) = delete;
+    Partial& operator=(const Partial&) = delete;
 
     struct Node {
         typedef boost::unordered_map< OUString, Node, OUStringHash > Children;

@@ -122,8 +122,8 @@ class SC_DLLPUBLIC ScMatrix
     // only delete via Delete()
     ~ScMatrix();
 
-    ScMatrix( const ScMatrix& ) SAL_DELETED_FUNCTION;
-    ScMatrix& operator=( const ScMatrix&) SAL_DELETED_FUNCTION;
+    ScMatrix( const ScMatrix& ) = delete;
+    ScMatrix& operator=( const ScMatrix&) = delete;
 
 public:
     enum Op { Add, Sub, Mul, Div };

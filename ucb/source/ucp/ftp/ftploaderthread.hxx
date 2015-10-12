@@ -47,8 +47,8 @@ namespace ftp {
 
 
     private:
-        FTPLoaderThread(const FTPLoaderThread&) SAL_DELETED_FUNCTION;
-        FTPLoaderThread& operator=(const FTPLoaderThread&) SAL_DELETED_FUNCTION;
+        FTPLoaderThread(const FTPLoaderThread&) = delete;
+        FTPLoaderThread& operator=(const FTPLoaderThread&) = delete;
 
         oslThreadKey m_threadKey;
 

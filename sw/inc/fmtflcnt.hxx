@@ -34,7 +34,7 @@ class SwFormatFlyCnt : public SfxPoolItem
     friend class SwTextFlyCnt;
     SwTextFlyCnt* pTextAttr;
     SwFrameFormat* pFormat; ///< My Fly/DrawFrame-format.
-    SwFormatFlyCnt& operator=(const SwFormatFlyCnt& rFlyCnt) SAL_DELETED_FUNCTION;
+    SwFormatFlyCnt& operator=(const SwFormatFlyCnt& rFlyCnt) = delete;
 
 public:
     SwFormatFlyCnt( SwFrameFormat *pFrameFormat );

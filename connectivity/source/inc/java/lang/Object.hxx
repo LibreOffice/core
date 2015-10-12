@@ -44,8 +44,8 @@ namespace connectivity
     class SDBThreadAttach
     {
         jvmaccess::VirtualMachine::AttachGuard m_aGuard;
-        SDBThreadAttach(SDBThreadAttach&) SAL_DELETED_FUNCTION;
-        SDBThreadAttach& operator= (SDBThreadAttach&) SAL_DELETED_FUNCTION;
+        SDBThreadAttach(SDBThreadAttach&) = delete;
+        SDBThreadAttach& operator= (SDBThreadAttach&) = delete;
     public:
         SDBThreadAttach();
         ~SDBThreadAttach();
@@ -66,8 +66,8 @@ namespace connectivity
 
     class  java_lang_Object
     {
-        java_lang_Object& operator= (java_lang_Object&) SAL_DELETED_FUNCTION;
-        java_lang_Object(java_lang_Object&) SAL_DELETED_FUNCTION;
+        java_lang_Object& operator= (java_lang_Object&) = delete;
+        java_lang_Object(java_lang_Object&) = delete;
 
     protected:
         // The Java handle to this class

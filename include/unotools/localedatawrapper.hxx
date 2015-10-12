@@ -331,8 +331,8 @@ public:
     static  void                outputCheckMessage( const OUString& rMsg );
     static  void                outputCheckMessage( const char* pStr);
 
-    LocaleDataWrapper(const LocaleDataWrapper&) SAL_DELETED_FUNCTION;
-    LocaleDataWrapper& operator=(const LocaleDataWrapper&) SAL_DELETED_FUNCTION;
+    LocaleDataWrapper(const LocaleDataWrapper&) = delete;
+    LocaleDataWrapper& operator=(const LocaleDataWrapper&) = delete;
 
 private:
 

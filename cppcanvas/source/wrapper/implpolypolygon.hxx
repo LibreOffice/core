@@ -61,8 +61,8 @@ namespace cppcanvas
                 css::rendering::XPolyPolygon2D > getUNOPolyPolygon() const SAL_OVERRIDE;
 
         private:
-            ImplPolyPolygon(const ImplPolyPolygon&) SAL_DELETED_FUNCTION;
-            ImplPolyPolygon& operator= ( const ImplPolyPolygon& ) SAL_DELETED_FUNCTION;
+            ImplPolyPolygon(const ImplPolyPolygon&) = delete;
+            ImplPolyPolygon& operator= ( const ImplPolyPolygon& ) = delete;
 
             const css::uno::Reference< css::rendering::XPolyPolygon2D > mxPolyPoly;
 

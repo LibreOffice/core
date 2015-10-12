@@ -28,8 +28,8 @@ class UNOTOOLS_DLLPUBLIC SvtSearchOptions
 {
     SvtSearchOptions_Impl   *pImpl;
 
-    SvtSearchOptions( const SvtSearchOptions & ) SAL_DELETED_FUNCTION;
-    SvtSearchOptions & operator = ( const SvtSearchOptions & ) SAL_DELETED_FUNCTION;
+    SvtSearchOptions( const SvtSearchOptions & ) = delete;
+    SvtSearchOptions & operator = ( const SvtSearchOptions & ) = delete;
 
 public:
     SvtSearchOptions();

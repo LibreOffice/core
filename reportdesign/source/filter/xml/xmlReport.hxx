@@ -30,8 +30,8 @@ namespace rptxml
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition > m_xComponent;
         ::std::vector< OUString> m_aMasterFields;
         ::std::vector< OUString> m_aDetailFields;
-        OXMLReport(const OXMLReport&) SAL_DELETED_FUNCTION;
-        void operator =(const OXMLReport&) SAL_DELETED_FUNCTION;
+        OXMLReport(const OXMLReport&) = delete;
+        void operator =(const OXMLReport&) = delete;
     public:
 
         OXMLReport( ORptFilter& rImport, sal_uInt16 nPrfx,

@@ -29,8 +29,8 @@ namespace rptui
 {
     class OColorListener : public vcl::Window, public SfxListener
     {
-        OColorListener(const OColorListener&) SAL_DELETED_FUNCTION;
-        void operator =(const OColorListener&) SAL_DELETED_FUNCTION;
+        OColorListener(const OColorListener&) = delete;
+        void operator =(const OColorListener&) = delete;
     protected:
         OModuleClient                       m_aModuleClient;
         Link<OColorListener&,void>          m_aCollapsedLink;

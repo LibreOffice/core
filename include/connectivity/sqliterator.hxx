@@ -129,7 +129,7 @@ namespace connectivity
 
 
       private:
-        OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter) SAL_DELETED_FUNCTION;
+        OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter) = delete;
 
       public:
         OSQLParseTreeIterator(

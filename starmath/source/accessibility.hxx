@@ -72,8 +72,8 @@ class SmGraphicAccessible :
 
     VclPtr<SmGraphicWindow>             pWin;
 
-    SmGraphicAccessible( const SmGraphicAccessible & ) SAL_DELETED_FUNCTION;
-    SmGraphicAccessible & operator = ( const SmGraphicAccessible & ) SAL_DELETED_FUNCTION;
+    SmGraphicAccessible( const SmGraphicAccessible & ) = delete;
+    SmGraphicAccessible & operator = ( const SmGraphicAccessible & ) = delete;
 
 protected:
     SmDocShell *    GetDoc_Impl();
@@ -162,8 +162,8 @@ class SmViewForwarder :
 {
     SmEditAccessible &          rEditAcc;
 
-    SmViewForwarder( const SmViewForwarder & ) SAL_DELETED_FUNCTION;
-    SmViewForwarder & operator = ( const SmViewForwarder & ) SAL_DELETED_FUNCTION;
+    SmViewForwarder( const SmViewForwarder & ) = delete;
+    SmViewForwarder & operator = ( const SmViewForwarder & ) = delete;
 
 public:
     explicit SmViewForwarder( SmEditAccessible &rAcc );
@@ -184,8 +184,8 @@ class SmTextForwarder :     /* analog to SvxEditEngineForwarder */
 
     DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
 
-    SmTextForwarder( const SmTextForwarder & ) SAL_DELETED_FUNCTION;
-    SmTextForwarder & operator = ( const SmTextForwarder & ) SAL_DELETED_FUNCTION;
+    SmTextForwarder( const SmTextForwarder & ) = delete;
+    SmTextForwarder & operator = ( const SmTextForwarder & ) = delete;
 
 public:
     SmTextForwarder( SmEditAccessible& rAcc, SmEditSource & rSource );
@@ -250,8 +250,8 @@ class SmEditViewForwarder :     /* analog to SvxEditEngineViewForwarder */
 {
     SmEditAccessible&       rEditAcc;
 
-    SmEditViewForwarder( const SmEditViewForwarder & ) SAL_DELETED_FUNCTION;
-    SmEditViewForwarder & operator = ( const SmEditViewForwarder & ) SAL_DELETED_FUNCTION;
+    SmEditViewForwarder( const SmEditViewForwarder & ) = delete;
+    SmEditViewForwarder & operator = ( const SmEditViewForwarder & ) = delete;
 
 public:
     explicit SmEditViewForwarder( SmEditAccessible& rAcc );
@@ -282,7 +282,7 @@ class SmEditSource :
     SmEditAccessible&       rEditAcc;
 
     SmEditSource( const SmEditSource &rSrc );
-    SmEditSource & operator = ( const SmEditSource & ) SAL_DELETED_FUNCTION;
+    SmEditSource & operator = ( const SmEditSource & ) = delete;
 
 public:
             SmEditSource( SmEditWindow *pWin, SmEditAccessible &rAcc );
@@ -317,8 +317,8 @@ class SmEditAccessible :
     ::accessibility::AccessibleTextHelper    *pTextHelper;
     VclPtr<SmEditWindow>                    pWin;
 
-    SmEditAccessible( const SmEditAccessible & ) SAL_DELETED_FUNCTION;
-    SmEditAccessible & operator = ( const SmEditAccessible & ) SAL_DELETED_FUNCTION;
+    SmEditAccessible( const SmEditAccessible & ) = delete;
+    SmEditAccessible & operator = ( const SmEditAccessible & ) = delete;
 
 public:
     explicit SmEditAccessible( SmEditWindow *pEditWin );

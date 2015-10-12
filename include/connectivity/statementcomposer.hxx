@@ -88,9 +88,9 @@ namespace dbtools
                 getQuery();
 
     private:
-        StatementComposer(const StatementComposer&) SAL_DELETED_FUNCTION;
-        StatementComposer& operator=(const StatementComposer&) SAL_DELETED_FUNCTION;
-        StatementComposer() SAL_DELETED_FUNCTION;
+        StatementComposer(const StatementComposer&) = delete;
+        StatementComposer& operator=(const StatementComposer&) = delete;
+        StatementComposer() = delete;
     };
 
 

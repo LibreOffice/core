@@ -95,8 +95,8 @@ namespace pcr
         virtual OUString            SAL_CALL getDescriptionForValue( const css::uno::Any& _rEnumValue ) const SAL_OVERRIDE;
 
     private:
-        DefaultEnumRepresentation( const DefaultEnumRepresentation& ) SAL_DELETED_FUNCTION;
-        DefaultEnumRepresentation& operator=( const DefaultEnumRepresentation& ) SAL_DELETED_FUNCTION;
+        DefaultEnumRepresentation( const DefaultEnumRepresentation& ) = delete;
+        DefaultEnumRepresentation& operator=( const DefaultEnumRepresentation& ) = delete;
     };
 
 

@@ -131,8 +131,8 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     void SetDataForDragAndDrop( const Point& rSttPos );
 
-                                    SwTransferable( const SwTransferable& ) SAL_DELETED_FUNCTION;
-    SwTransferable&                 operator=( const SwTransferable& ) SAL_DELETED_FUNCTION;
+                                    SwTransferable( const SwTransferable& ) = delete;
+    SwTransferable&                 operator=( const SwTransferable& ) = delete;
 
 protected:
     virtual void        AddSupportedFormats() SAL_OVERRIDE;

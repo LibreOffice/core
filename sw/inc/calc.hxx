@@ -178,8 +178,8 @@ class SwCalc
     static OUString  GetColumnName( const OUString& rName );
     OUString  GetDBName( const OUString& rName );
 
-    SwCalc( const SwCalc& ) SAL_DELETED_FUNCTION;
-    SwCalc& operator=( const SwCalc& ) SAL_DELETED_FUNCTION;
+    SwCalc( const SwCalc& ) = delete;
+    SwCalc& operator=( const SwCalc& ) = delete;
 
 public:
         SwCalc( SwDoc& rD );

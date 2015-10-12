@@ -109,8 +109,8 @@ class LngSvcMgr :
 
     bool bDisposing;
 
-    LngSvcMgr(const LngSvcMgr &) SAL_DELETED_FUNCTION;
-    LngSvcMgr & operator = (const LngSvcMgr &) SAL_DELETED_FUNCTION;
+    LngSvcMgr(const LngSvcMgr &) = delete;
+    LngSvcMgr & operator = (const LngSvcMgr &) = delete;
 
     void    GetAvailableSpellSvcs_Impl();
     void    GetAvailableGrammarSvcs_Impl();

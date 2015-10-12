@@ -51,8 +51,8 @@ private:
     void        ImplUpdateDisabledBmpEx();
 
 private:
-    ImplImageBmp( const ImplImageBmp& ) SAL_DELETED_FUNCTION;
-    void operator=( const ImplImageBmp& ) SAL_DELETED_FUNCTION;
+    ImplImageBmp( const ImplImageBmp& ) = delete;
+    void operator=( const ImplImageBmp& ) = delete;
 };
 
 // - ImageTypes -
@@ -137,8 +137,8 @@ struct ImplImage
                     ~ImplImage();
 
 private:
-            ImplImage( const ImplImage&) SAL_DELETED_FUNCTION;
-    void    operator=( const ImplImage&) SAL_DELETED_FUNCTION;
+            ImplImage( const ImplImage&) = delete;
+    void    operator=( const ImplImage&) = delete;
 };
 
 #endif // INCLUDED_VCL_INC_IMAGE_H

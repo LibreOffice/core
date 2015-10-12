@@ -112,8 +112,8 @@ namespace avmedia
         static BitmapEx getEmptyLogo();
 
     private:
-        MediaWindow(const MediaWindow&) SAL_DELETED_FUNCTION;
-        MediaWindow& operator =( const MediaWindow& ) SAL_DELETED_FUNCTION;
+        MediaWindow(const MediaWindow&) = delete;
+        MediaWindow& operator =( const MediaWindow& ) = delete;
 
         css::uno::Reference< css::uno::XInterface >   mxIFace;
         VclPtr<priv::MediaWindowImpl>                 mpImpl;

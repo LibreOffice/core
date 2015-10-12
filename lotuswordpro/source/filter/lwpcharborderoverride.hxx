@@ -80,7 +80,7 @@ protected:
     LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther);
 
 private:
-    LwpCharacterBorderOverride& operator=(LwpCharacterBorderOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpCharacterBorderOverride& operator=(LwpCharacterBorderOverride const& rOther) = delete;
 
 private:
     LwpBorderStuff* m_pBorderStuff;

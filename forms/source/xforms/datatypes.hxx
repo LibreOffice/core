@@ -70,8 +70,8 @@ namespace xforms
         sal_Int16   getTypeClass() const    { return m_nTypeClass; }
 
     private:
-        OXSDDataType( const OXSDDataType& ) SAL_DELETED_FUNCTION;
-        OXSDDataType& operator=( const OXSDDataType& ) SAL_DELETED_FUNCTION;
+        OXSDDataType( const OXSDDataType& ) = delete;
+        OXSDDataType& operator=( const OXSDDataType& ) = delete;
 
     protected:
         // create basic data type

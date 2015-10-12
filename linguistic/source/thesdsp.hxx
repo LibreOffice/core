@@ -58,8 +58,8 @@ class ThesaurusDispatcher :
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguProperties >     xPropSet;
 
-    ThesaurusDispatcher(const ThesaurusDispatcher &) SAL_DELETED_FUNCTION;
-    ThesaurusDispatcher & operator = (const ThesaurusDispatcher &) SAL_DELETED_FUNCTION;
+    ThesaurusDispatcher(const ThesaurusDispatcher &) = delete;
+    ThesaurusDispatcher & operator = (const ThesaurusDispatcher &) = delete;
 
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguProperties >

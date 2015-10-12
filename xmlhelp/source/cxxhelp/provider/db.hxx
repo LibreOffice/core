@@ -96,8 +96,8 @@ namespace helpdatafileproxy {
         bool startIteration();
         bool getNextKeyAndValue( HDFData& rKey, HDFData& rValue );
         void stopIteration();
-        Hdf(const Hdf&) SAL_DELETED_FUNCTION;
-        void operator=(const Hdf&) SAL_DELETED_FUNCTION;
+        Hdf(const Hdf&) = delete;
+        void operator=(const Hdf&) = delete;
     };
 
 }

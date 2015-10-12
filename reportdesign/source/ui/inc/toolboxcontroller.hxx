@@ -45,8 +45,8 @@ namespace rptui
         TToolbarHelper  m_pToolbarController;
         sal_uInt16      m_nToolBoxId;
         sal_uInt16      m_nSlotId;
-        OToolboxController(const OToolboxController&) SAL_DELETED_FUNCTION;
-        void operator =(const OToolboxController&) SAL_DELETED_FUNCTION;
+        OToolboxController(const OToolboxController&) = delete;
+        void operator =(const OToolboxController&) = delete;
     public:
         OToolboxController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
         virtual ~OToolboxController();

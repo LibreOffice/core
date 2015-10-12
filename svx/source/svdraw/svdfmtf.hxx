@@ -154,8 +154,8 @@ protected:
 
 private:
     // Copy assignment is forbidden and not implemented.
-    ImpSdrGDIMetaFileImport (const ImpSdrGDIMetaFileImport &) SAL_DELETED_FUNCTION;
-    ImpSdrGDIMetaFileImport & operator= (const ImpSdrGDIMetaFileImport &) SAL_DELETED_FUNCTION;
+    ImpSdrGDIMetaFileImport (const ImpSdrGDIMetaFileImport &) = delete;
+    ImpSdrGDIMetaFileImport & operator= (const ImpSdrGDIMetaFileImport &) = delete;
 
 public:
     ImpSdrGDIMetaFileImport(

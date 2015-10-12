@@ -47,7 +47,7 @@ namespace sdr
         // ViewContact part
         sdr::contact::ViewContact*                      mpViewContact;
 
-        void operator=(const MasterPageDescriptor& rCandidate) SAL_DELETED_FUNCTION;
+        void operator=(const MasterPageDescriptor& rCandidate) = delete;
 
     protected:
         sdr::contact::ViewContact* CreateObjectSpecificViewContact();

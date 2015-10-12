@@ -45,8 +45,8 @@ public:
     virtual OUString SAL_CALL abbreviateString(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    UriAbbreviation(UriAbbreviation &) SAL_DELETED_FUNCTION;
-    void operator =(UriAbbreviation &) SAL_DELETED_FUNCTION;
+    UriAbbreviation(UriAbbreviation &) = delete;
+    void operator =(UriAbbreviation &) = delete;
 
     virtual ~UriAbbreviation() {}
 

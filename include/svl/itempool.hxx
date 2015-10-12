@@ -221,7 +221,7 @@ public:
     static const SfxItemPool*       GetStoringPool();
 
 private:
-    const SfxItemPool&              operator=(const SfxItemPool &) SAL_DELETED_FUNCTION;
+    const SfxItemPool&              operator=(const SfxItemPool &) = delete;
 
     static const SfxItemPool*       pStoringPool_;
 };

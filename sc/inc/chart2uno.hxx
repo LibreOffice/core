@@ -373,7 +373,7 @@ private:
     DECL_LINK_TYPED( ValueListenerHdl, const SfxHint&, void );
 
 private:
-    ScChart2DataSequence(const ScChart2DataSequence& r) SAL_DELETED_FUNCTION;
+    ScChart2DataSequence(const ScChart2DataSequence& r) = delete;
 
     class ExternalRefListener : public ScExternalRefManager::LinkListener
     {
@@ -386,7 +386,7 @@ private:
         const std::unordered_set<sal_uInt16>& getAllFileIds() { return maFileIds;}
 
     private:
-        ExternalRefListener(const ExternalRefListener& r) SAL_DELETED_FUNCTION;
+        ExternalRefListener(const ExternalRefListener& r) = delete;
 
         ScChart2DataSequence&       mrParent;
         std::unordered_set<sal_uInt16> maFileIds;

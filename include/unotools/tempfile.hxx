@@ -49,8 +49,8 @@ class UNOTOOLS_DLLPUBLIC TempFile
     bool        bIsDirectory;
     bool        bKillingFileEnabled;
 
-    TempFile( const TempFile& ) SAL_DELETED_FUNCTION;
-    TempFile& operator=(const TempFile&) SAL_DELETED_FUNCTION;
+    TempFile( const TempFile& ) = delete;
+    TempFile& operator=(const TempFile&) = delete;
 
 public:
                     /**

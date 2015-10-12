@@ -112,7 +112,7 @@ private:
     DECL_LINK_TYPED( SignatureVerifyResultListener, XMLSignatureVerifyResult&, void );
     DECL_LINK_TYPED( StartVerifySignatureElement, LinkParamNone*, void );
 
-    XMLSignatureHelper(const XMLSignatureHelper&) SAL_DELETED_FUNCTION;
+    XMLSignatureHelper(const XMLSignatureHelper&) = delete;
 
 public:
     XMLSignatureHelper(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& mrCtx );

@@ -39,8 +39,8 @@ private:
     MapUnit             meUnit;
     bool                mbState;
 
-                        MoreButton( const MoreButton & ) SAL_DELETED_FUNCTION;
-                        MoreButton& operator=( const MoreButton & ) SAL_DELETED_FUNCTION;
+                        MoreButton( const MoreButton & ) = delete;
+                        MoreButton& operator=( const MoreButton & ) = delete;
     SAL_DLLPRIVATE void ShowState();
 
 protected:

@@ -33,8 +33,8 @@
 class HHConvDic :
     public ConvDic
 {
-    HHConvDic(const HHConvDic &) SAL_DELETED_FUNCTION;
-    HHConvDic & operator = (const HHConvDic &) SAL_DELETED_FUNCTION;
+    HHConvDic(const HHConvDic &) = delete;
+    HHConvDic & operator = (const HHConvDic &) = delete;
 
 public:
     HHConvDic( const OUString &rName, const OUString &rMainURL );

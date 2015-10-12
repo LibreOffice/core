@@ -102,7 +102,7 @@ class SW_DLLPUBLIC SwWriteTableRow
     // Forbidden and not implemented.
     SwWriteTableRow();
 
-    SwWriteTableRow & operator= (const SwWriteTableRow &) SAL_DELETED_FUNCTION;
+    SwWriteTableRow & operator= (const SwWriteTableRow &) = delete;
 
 protected:
     // GCC >= 3.4 needs accessible T (const T&) to pass T as const T& argument.

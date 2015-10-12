@@ -38,8 +38,8 @@ private:
     VclPtr<OReportSection>     m_pSectionWindow;
 
     void ObjectRemovedInAliveMode( const SdrObject* pObject );
-    OSectionView(const OSectionView&) SAL_DELETED_FUNCTION;
-    void operator =(const OSectionView&) SAL_DELETED_FUNCTION;
+    OSectionView(const OSectionView&) = delete;
+    void operator =(const OSectionView&) = delete;
 public:
     TYPEINFO_OVERRIDE();
 

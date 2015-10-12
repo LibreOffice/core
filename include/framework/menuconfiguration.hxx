@@ -76,7 +76,7 @@ private:
     {
     }
 
-    MenuAttributes(const MenuAttributes&) SAL_DELETED_FUNCTION;
+    MenuAttributes(const MenuAttributes&) = delete;
 
 public:
     OUString aTargetFrame;

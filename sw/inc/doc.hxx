@@ -410,7 +410,7 @@ private:
                                 const SwFrameFormat& rSrcFormat, SwFrameFormat& rDestFormat );
     static SwFormat* FindFormatByName( const SwFormatsBase& rFormatArr, const OUString& rName );
 
-    SwDoc( const SwDoc &) SAL_DELETED_FUNCTION;
+    SwDoc( const SwDoc &) = delete;
 
     // Database fields:
     void AddUsedDBToList( std::vector<OUString>& rDBNameList,

@@ -131,8 +131,8 @@ protected:
     AccessibleTableShape *pAccTable;
 
 private:
-    AccessibleCell(const AccessibleCell&) SAL_DELETED_FUNCTION;
-    AccessibleCell& operator=(const AccessibleCell&) SAL_DELETED_FUNCTION;
+    AccessibleCell(const AccessibleCell&) = delete;
+    AccessibleCell& operator=(const AccessibleCell&) = delete;
 };
 
 } // end of namespace accessibility

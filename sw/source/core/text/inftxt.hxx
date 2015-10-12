@@ -371,7 +371,7 @@ class SwTextPaintInfo : public SwTextSizeInfo
                    const bool bSmartTag = false,
                    const bool bGrammarCheck = false );
 
-    SwTextPaintInfo &operator=(const SwTextPaintInfo&) SAL_DELETED_FUNCTION;
+    SwTextPaintInfo &operator=(const SwTextPaintInfo&) = delete;
     void _NotifyURL( const SwLinePortion &rPor ) const;
 
 protected:

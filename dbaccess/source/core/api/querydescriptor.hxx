@@ -112,8 +112,8 @@ class OQueryDescriptor : public comphelper::OMutexAndBroadcastHelper
                         ,public ::comphelper::OPropertyArrayUsageHelper< OQueryDescriptor_Base >
                         ,public ODataSettings
 {
-    OQueryDescriptor(const OQueryDescriptor&) SAL_DELETED_FUNCTION;
-    void operator =(const OQueryDescriptor&) SAL_DELETED_FUNCTION;
+    OQueryDescriptor(const OQueryDescriptor&) = delete;
+    void operator =(const OQueryDescriptor&) = delete;
     // helper
     void registerProperties();
 protected:

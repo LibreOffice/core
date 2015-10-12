@@ -81,8 +81,8 @@ class EDITENG_DLLPUBLIC LinguMgr
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >    GetChangeAll();
 
-    LinguMgr(const LinguMgr &) SAL_DELETED_FUNCTION;
-    LinguMgr & operator = (const LinguMgr &) SAL_DELETED_FUNCTION;
+    LinguMgr(const LinguMgr &) = delete;
+    LinguMgr & operator = (const LinguMgr &) = delete;
 
 public:
 
@@ -146,8 +146,8 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSearchableDictionaryList >    xDicList;
 
-    SvxDicListChgClamp(const SvxDicListChgClamp &) SAL_DELETED_FUNCTION;
-    SvxDicListChgClamp & operator = (const SvxDicListChgClamp &) SAL_DELETED_FUNCTION;
+    SvxDicListChgClamp(const SvxDicListChgClamp &) = delete;
+    SvxDicListChgClamp & operator = (const SvxDicListChgClamp &) = delete;
 
 public:
     SvxDicListChgClamp( ::com::sun::star::uno::Reference<

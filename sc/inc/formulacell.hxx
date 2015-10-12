@@ -147,7 +147,7 @@ private:
     bool UpdateReferenceOnCopy(
         const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, const ScAddress* pUndoCellPos );
 
-    ScFormulaCell( const ScFormulaCell& ) SAL_DELETED_FUNCTION;
+    ScFormulaCell( const ScFormulaCell& ) = delete;
 public:
 
     enum CompareState { NotEqual = 0, EqualInvariant, EqualRelativeRef };

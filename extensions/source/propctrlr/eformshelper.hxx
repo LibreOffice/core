@@ -246,8 +246,8 @@ namespace pcr
             impl_toggleBindingPropertyListening_throw( bool _bDoListen, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxConcreteListenerOrNull );
 
     private:
-        EFormsHelper( const EFormsHelper& ) SAL_DELETED_FUNCTION;
-        EFormsHelper& operator=( const EFormsHelper& ) SAL_DELETED_FUNCTION;
+        EFormsHelper( const EFormsHelper& ) = delete;
+        EFormsHelper& operator=( const EFormsHelper& ) = delete;
     };
 
 

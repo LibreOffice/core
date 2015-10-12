@@ -41,8 +41,8 @@ class SW_DLLPUBLIC SwNoTextNode : public SwContentNode
     // graphics-attributes (only called by SwContentNode).
     virtual void NewAttrSet( SwAttrPool& ) SAL_OVERRIDE;
 
-    SwNoTextNode( const SwNoTextNode& ) SAL_DELETED_FUNCTION;
-    SwNoTextNode &operator=( const SwNoTextNode& ) SAL_DELETED_FUNCTION;
+    SwNoTextNode( const SwNoTextNode& ) = delete;
+    SwNoTextNode &operator=( const SwNoTextNode& ) = delete;
 
 protected:
     SwNoTextNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,

@@ -75,8 +75,8 @@ public:
     explicit Service(css::uno::Reference< css::uno::XComponentContext > const & context);
 
 private:
-    Service(const Service&) SAL_DELETED_FUNCTION;
-    Service& operator=(const Service&) SAL_DELETED_FUNCTION;
+    Service(const Service&) = delete;
+    Service& operator=(const Service&) = delete;
 
     virtual ~Service() {}
 
@@ -158,8 +158,8 @@ public:
         service_(service), value_(value) {}
 
 private:
-    RegistryKey(const RegistryKey&) SAL_DELETED_FUNCTION;
-    RegistryKey& operator=(const RegistryKey&) SAL_DELETED_FUNCTION;
+    RegistryKey(const RegistryKey&) = delete;
+    RegistryKey& operator=(const RegistryKey&) = delete;
 
     virtual ~RegistryKey() {}
 

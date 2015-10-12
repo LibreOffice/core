@@ -53,8 +53,8 @@ public:
     void commit() const;
 
 private:
-    ConfigurationChanges(const ConfigurationChanges&) SAL_DELETED_FUNCTION;
-    ConfigurationChanges& operator=(const ConfigurationChanges&) SAL_DELETED_FUNCTION;
+    ConfigurationChanges(const ConfigurationChanges&) = delete;
+    ConfigurationChanges& operator=(const ConfigurationChanges&) = delete;
 
     SAL_DLLPRIVATE ConfigurationChanges(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -129,8 +129,8 @@ public:
     std::shared_ptr< ConfigurationChanges > createChanges() const;
 
 private:
-    ConfigurationWrapper(const ConfigurationWrapper&) SAL_DELETED_FUNCTION;
-    ConfigurationWrapper& operator=(const ConfigurationWrapper&) SAL_DELETED_FUNCTION;
+    ConfigurationWrapper(const ConfigurationWrapper&) = delete;
+    ConfigurationWrapper& operator=(const ConfigurationWrapper&) = delete;
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         context_;
@@ -152,11 +152,11 @@ template< typename T > struct Convert {
     { return value.get< T >(); }
 
 private:
-    Convert(const Convert&) SAL_DELETED_FUNCTION;
-    Convert& operator=(const Convert&) SAL_DELETED_FUNCTION;
+    Convert(const Convert&) = delete;
+    Convert& operator=(const Convert&) = delete;
 
-    Convert() SAL_DELETED_FUNCTION;
-    ~Convert() SAL_DELETED_FUNCTION;
+    Convert() = delete;
+    ~Convert() = delete;
 };
 
 /// @internal
@@ -175,11 +175,11 @@ template< typename T > struct Convert< boost::optional< T > >
     }
 
 private:
-    Convert(const Convert&) SAL_DELETED_FUNCTION;
-    Convert& operator=(const Convert&) SAL_DELETED_FUNCTION;
+    Convert(const Convert&) = delete;
+    Convert& operator=(const Convert&) = delete;
 
-    Convert() SAL_DELETED_FUNCTION;
-    ~Convert() SAL_DELETED_FUNCTION;
+    Convert() = delete;
+    ~Convert() = delete;
 };
 
 }
@@ -228,11 +228,11 @@ template< typename T, typename U > struct ConfigurationProperty
     }
 
 private:
-    ConfigurationProperty(const ConfigurationProperty&) SAL_DELETED_FUNCTION;
-    ConfigurationProperty& operator=(const ConfigurationProperty&) SAL_DELETED_FUNCTION;
+    ConfigurationProperty(const ConfigurationProperty&) = delete;
+    ConfigurationProperty& operator=(const ConfigurationProperty&) = delete;
 
-    ConfigurationProperty() SAL_DELETED_FUNCTION;
-    ~ConfigurationProperty() SAL_DELETED_FUNCTION;
+    ConfigurationProperty() = delete;
+    ~ConfigurationProperty() = delete;
 };
 
 /// A type-safe wrapper around a localized configuration property.
@@ -274,11 +274,11 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty
     }
 
 private:
-    ConfigurationLocalizedProperty(const ConfigurationLocalizedProperty&) SAL_DELETED_FUNCTION;
-    ConfigurationLocalizedProperty& operator=(const ConfigurationLocalizedProperty&) SAL_DELETED_FUNCTION;
+    ConfigurationLocalizedProperty(const ConfigurationLocalizedProperty&) = delete;
+    ConfigurationLocalizedProperty& operator=(const ConfigurationLocalizedProperty&) = delete;
 
-    ConfigurationLocalizedProperty() SAL_DELETED_FUNCTION;
-    ~ConfigurationLocalizedProperty() SAL_DELETED_FUNCTION;
+    ConfigurationLocalizedProperty() = delete;
+    ~ConfigurationLocalizedProperty() = delete;
 };
 
 /// A type-safe wrapper around a configuration group.
@@ -308,11 +308,11 @@ template< typename T > struct ConfigurationGroup {
     }
 
 private:
-    ConfigurationGroup(const ConfigurationGroup&) SAL_DELETED_FUNCTION;
-    ConfigurationGroup& operator=(const ConfigurationGroup&) SAL_DELETED_FUNCTION;
+    ConfigurationGroup(const ConfigurationGroup&) = delete;
+    ConfigurationGroup& operator=(const ConfigurationGroup&) = delete;
 
-    ConfigurationGroup() SAL_DELETED_FUNCTION;
-    ~ConfigurationGroup() SAL_DELETED_FUNCTION;
+    ConfigurationGroup() = delete;
+    ~ConfigurationGroup() = delete;
 };
 
 /// A type-safe wrapper around a configuration set.
@@ -342,11 +342,11 @@ template< typename T > struct ConfigurationSet {
     }
 
 private:
-    ConfigurationSet(const ConfigurationSet&) SAL_DELETED_FUNCTION;
-    ConfigurationSet& operator=(const ConfigurationSet&) SAL_DELETED_FUNCTION;
+    ConfigurationSet(const ConfigurationSet&) = delete;
+    ConfigurationSet& operator=(const ConfigurationSet&) = delete;
 
-    ConfigurationSet() SAL_DELETED_FUNCTION;
-    ~ConfigurationSet() SAL_DELETED_FUNCTION;
+    ConfigurationSet() = delete;
+    ~ConfigurationSet() = delete;
 };
 
 }

@@ -451,8 +451,8 @@ namespace svt
         };
 
     private:
-        EditBrowseBox(EditBrowseBox&) SAL_DELETED_FUNCTION;
-        EditBrowseBox& operator=(EditBrowseBox&) SAL_DELETED_FUNCTION;
+        EditBrowseBox(EditBrowseBox&) = delete;
+        EditBrowseBox& operator=(EditBrowseBox&) = delete;
 
         class BrowserMouseEventPtr
         {

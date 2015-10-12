@@ -28,8 +28,8 @@ namespace rptxml
     class OXMLRptPropHdlFactory : public XMLPropertyHandlerFactory
     {
     private:
-        OXMLRptPropHdlFactory(const OXMLRptPropHdlFactory&) SAL_DELETED_FUNCTION;
-        void operator =(const OXMLRptPropHdlFactory&) SAL_DELETED_FUNCTION;
+        OXMLRptPropHdlFactory(const OXMLRptPropHdlFactory&) = delete;
+        void operator =(const OXMLRptPropHdlFactory&) = delete;
     public:
         OXMLRptPropHdlFactory();
         virtual ~OXMLRptPropHdlFactory();

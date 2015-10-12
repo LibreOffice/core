@@ -64,8 +64,8 @@ class ConvDicList :
 
     bool                                    bDisposing;
 
-    ConvDicList( const ConvDicList & ) SAL_DELETED_FUNCTION;
-    ConvDicList & operator = (const ConvDicList &) SAL_DELETED_FUNCTION;
+    ConvDicList( const ConvDicList & ) = delete;
+    ConvDicList & operator = (const ConvDicList &) = delete;
 
     ConvDicNameContainer &  GetNameContainer();
 

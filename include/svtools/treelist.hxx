@@ -127,8 +127,8 @@ class SVT_DLLPUBLIC SvTreeList
     SVT_DLLPRIVATE void ResortChildren( SvTreeListEntry* pParent );
     SVT_DLLPRIVATE void ReverseChildren( SvTreeListEntry* pParent );
 
-    SvTreeList(const SvTreeList&) SAL_DELETED_FUNCTION;
-    SvTreeList& operator= (const SvTreeList&) SAL_DELETED_FUNCTION;
+    SvTreeList(const SvTreeList&) = delete;
+    SvTreeList& operator= (const SvTreeList&) = delete;
 
 protected:
     SvTreeListEntry*        pRootItem;

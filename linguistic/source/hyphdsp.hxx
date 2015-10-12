@@ -60,8 +60,8 @@ class HyphenatorDispatcher :
 
     LngSvcMgr      &rMgr;
 
-    HyphenatorDispatcher(const HyphenatorDispatcher &) SAL_DELETED_FUNCTION;
-    HyphenatorDispatcher & operator = (const HyphenatorDispatcher &) SAL_DELETED_FUNCTION;
+    HyphenatorDispatcher(const HyphenatorDispatcher &) = delete;
+    HyphenatorDispatcher & operator = (const HyphenatorDispatcher &) = delete;
 
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguProperties >

@@ -92,8 +92,8 @@ public:
     sal_uInt32      Close( bool bSeekToEndOfRec = true );
 
 private:
-    SfxMiniRecordWriter( const SfxMiniRecordWriter& ) SAL_DELETED_FUNCTION;
-    SfxMiniRecordWriter& operator=(const SfxMiniRecordWriter&) SAL_DELETED_FUNCTION;
+    SfxMiniRecordWriter( const SfxMiniRecordWriter& ) = delete;
+    SfxMiniRecordWriter& operator=(const SfxMiniRecordWriter&) = delete;
 };
 
 /** Reads simple record from a stream
@@ -262,8 +262,8 @@ public:
     inline void         Skip();
 
 private:
-    SfxMiniRecordReader( const SfxMiniRecordReader& ) SAL_DELETED_FUNCTION;
-    SfxMiniRecordReader& operator=(const SfxMiniRecordReader&) SAL_DELETED_FUNCTION;
+    SfxMiniRecordReader( const SfxMiniRecordReader& ) = delete;
+    SfxMiniRecordReader& operator=(const SfxMiniRecordReader&) = delete;
 };
 
 /**

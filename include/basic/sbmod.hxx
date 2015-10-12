@@ -57,8 +57,8 @@ class BASIC_DLLPUBLIC SbModule : public SbxObject
 
     BASIC_DLLPRIVATE void implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
 
-    SbModule(const SbModule&) SAL_DELETED_FUNCTION;
-    SbModule& operator=(const SbModule&) SAL_DELETED_FUNCTION;
+    SbModule(const SbModule&) = delete;
+    SbModule& operator=(const SbModule&) = delete;
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
     OUString            aOUSource;

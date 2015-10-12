@@ -151,8 +151,8 @@ class UNOTOOLS_DLLPUBLIC SvtLinguConfig: public utl::detail::Options
 
     OUString GetVendorImageUrl_Impl( const OUString &rServiceImplName, const OUString &rImageName ) const;
 
-    SvtLinguConfig( const SvtLinguConfig & ) SAL_DELETED_FUNCTION;
-    SvtLinguConfig & operator = ( const SvtLinguConfig & ) SAL_DELETED_FUNCTION;
+    SvtLinguConfig( const SvtLinguConfig & ) = delete;
+    SvtLinguConfig & operator = ( const SvtLinguConfig & ) = delete;
 
 public:
     SvtLinguConfig();

@@ -65,8 +65,8 @@ class SpellChecker :
     linguistic::PropertyHelper_Spelling*    pPropHelper;
     bool                                    bDisposing;
 
-    SpellChecker(const SpellChecker &) SAL_DELETED_FUNCTION;
-    SpellChecker & operator = (const SpellChecker &) SAL_DELETED_FUNCTION;
+    SpellChecker(const SpellChecker &) = delete;
+    SpellChecker & operator = (const SpellChecker &) = delete;
 
     linguistic::PropertyHelper_Spelling&  GetPropHelper_Impl();
     linguistic::PropertyHelper_Spelling&  GetPropHelper()

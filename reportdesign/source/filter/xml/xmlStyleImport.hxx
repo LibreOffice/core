@@ -47,8 +47,8 @@ namespace rptxml
 
         ORptFilter& GetOwnImport() const { return m_rImport;}
 
-        OControlStyleContext(const OControlStyleContext&) SAL_DELETED_FUNCTION;
-        void operator =(const OControlStyleContext&) SAL_DELETED_FUNCTION;
+        OControlStyleContext(const OControlStyleContext&) = delete;
+        void operator =(const OControlStyleContext&) = delete;
     protected:
 
         virtual void SetAttribute( sal_uInt16 nPrefixKey,
@@ -102,8 +102,8 @@ namespace rptxml
 
         ORptFilter& GetOwnImport() const { return m_rImport;}
 
-        OReportStylesContext(const OReportStylesContext&) SAL_DELETED_FUNCTION;
-        void operator =(const OReportStylesContext&) SAL_DELETED_FUNCTION;
+        OReportStylesContext(const OReportStylesContext&) = delete;
+        void operator =(const OReportStylesContext&) = delete;
     protected:
 
         // Create a style context.

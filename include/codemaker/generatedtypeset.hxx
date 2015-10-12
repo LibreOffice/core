@@ -60,8 +60,8 @@ public:
     { return m_set.find(type) != m_set.end(); }
 
 private:
-    GeneratedTypeSet(GeneratedTypeSet &) SAL_DELETED_FUNCTION;
-    void operator =(const GeneratedTypeSet&) SAL_DELETED_FUNCTION;
+    GeneratedTypeSet(GeneratedTypeSet &) = delete;
+    void operator =(const GeneratedTypeSet&) = delete;
 
     std::unordered_set< OString, OStringHash > m_set;
 };

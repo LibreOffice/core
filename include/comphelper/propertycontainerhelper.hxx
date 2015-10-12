@@ -186,8 +186,8 @@ private:
     COMPHELPER_DLLPRIVATE PropertiesIterator    searchHandle(sal_Int32 _nHandle);
 
 private:
-    OPropertyContainerHelper( const OPropertyContainerHelper& ) SAL_DELETED_FUNCTION;
-    OPropertyContainerHelper& operator=( const OPropertyContainerHelper& ) SAL_DELETED_FUNCTION;
+    OPropertyContainerHelper( const OPropertyContainerHelper& ) = delete;
+    OPropertyContainerHelper& operator=( const OPropertyContainerHelper& ) = delete;
 };
 
 

@@ -94,7 +94,7 @@ class FormulaTokenArray;
 class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
 {
     OpCode                      eOp;
-            FormulaToken&            operator=( const FormulaToken& ) SAL_DELETED_FUNCTION;
+            FormulaToken&            operator=( const FormulaToken& ) = delete;
 protected:
 
             const StackVar      eType;          // type of data

@@ -40,7 +40,7 @@ class SwFormatRefMark
     friend class SwTextRefMark;
     SwTextRefMark* pTextAttr;
 
-    SwFormatRefMark& operator=(const SwFormatRefMark& rRefMark) SAL_DELETED_FUNCTION;
+    SwFormatRefMark& operator=(const SwFormatRefMark& rRefMark) = delete;
     OUString aRefName;
 
     css::uno::WeakReference<css::text::XTextContent> m_wXReferenceMark;

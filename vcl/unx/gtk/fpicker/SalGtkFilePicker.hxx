@@ -166,8 +166,8 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         // FilePicker Event functions
 
     private:
-        SalGtkFilePicker( const SalGtkFilePicker& ) SAL_DELETED_FUNCTION;
-        SalGtkFilePicker& operator=( const SalGtkFilePicker& ) SAL_DELETED_FUNCTION;
+        SalGtkFilePicker( const SalGtkFilePicker& ) = delete;
+        SalGtkFilePicker& operator=( const SalGtkFilePicker& ) = delete;
 
         bool FilterNameExists( const OUString& rTitle );
         bool FilterNameExists( const UnoFilterList& _rGroupedFilters );

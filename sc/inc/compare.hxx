@@ -56,8 +56,8 @@ struct CompareOptions
 
     CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg );
 private:
-    CompareOptions( const CompareOptions & ) SAL_DELETED_FUNCTION;
-    CompareOptions& operator=( const CompareOptions & ) SAL_DELETED_FUNCTION;
+    CompareOptions( const CompareOptions & ) = delete;
+    CompareOptions& operator=( const CompareOptions & ) = delete;
 };
 
 /** @param pOptions

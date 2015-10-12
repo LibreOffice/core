@@ -27,8 +27,8 @@ private:
     std::unique_ptr<T> m_xItem;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTerminateListener> m_xTerminateListener;
 
-    unique_disposing_ptr(const unique_disposing_ptr&) SAL_DELETED_FUNCTION;
-    unique_disposing_ptr& operator=(const unique_disposing_ptr&) SAL_DELETED_FUNCTION;
+    unique_disposing_ptr(const unique_disposing_ptr&) = delete;
+    unique_disposing_ptr& operator=(const unique_disposing_ptr&) = delete;
 public:
     unique_disposing_ptr( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent, T * p = 0 )
         : m_xItem(p)

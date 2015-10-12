@@ -51,7 +51,7 @@ struct BreakPoint
 class BreakPointList
 {
 private:
-    void operator =(BreakPointList) SAL_DELETED_FUNCTION;
+    void operator =(BreakPointList) = delete;
     ::std::vector<BreakPoint*> maBreakPoints;
 
 public:

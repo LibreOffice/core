@@ -69,7 +69,7 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
 
     using SwPaM::Find;
 
-    SwCursor(SwCursor const& rPaM) SAL_DELETED_FUNCTION;
+    SwCursor(SwCursor const& rPaM) = delete;
 
 protected:
     _SwCursor_SavePos* CreateNewSavePos() const;

@@ -226,8 +226,8 @@ private:
     // helper methods
     TOOLS_DLLPRIVATE void ImpInit();
 
-                    SvStream ( const SvStream& rStream ) SAL_DELETED_FUNCTION;
-    SvStream&       operator=( const SvStream& rStream ) SAL_DELETED_FUNCTION;
+                    SvStream ( const SvStream& rStream ) = delete;
+    SvStream&       operator=( const SvStream& rStream ) = delete;
 
 protected:
     sal_uInt64      m_nBufFilePos; ///< File position of pBuf[0]
@@ -622,8 +622,8 @@ private:
     sal_uInt16      nLockCounter;
     bool            bIsOpen;
 
-    SvFileStream (const SvFileStream&) SAL_DELETED_FUNCTION;
-    SvFileStream & operator= (const SvFileStream&) SAL_DELETED_FUNCTION;
+    SvFileStream (const SvFileStream&) = delete;
+    SvFileStream & operator= (const SvFileStream&) = delete;
 
     bool LockRange( sal_Size nByteOffset, sal_Size nBytes );
     bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
@@ -656,8 +656,8 @@ public:
 
 class TOOLS_DLLPUBLIC SvMemoryStream : public SvStream
 {
-    SvMemoryStream (const SvMemoryStream&) SAL_DELETED_FUNCTION;
-    SvMemoryStream & operator= (const SvMemoryStream&) SAL_DELETED_FUNCTION;
+    SvMemoryStream (const SvMemoryStream&) = delete;
+    SvMemoryStream & operator= (const SvMemoryStream&) = delete;
 
 protected:
     sal_Size        nSize;

@@ -183,8 +183,8 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
 
     SAL_DLLPRIVATE const SvXMLTokenMap& GetStyleStylesElemTokenMap();
 
-    SvXMLStylesContext(SvXMLStylesContext &) SAL_DELETED_FUNCTION;
-    void operator =(SvXMLStylesContext &) SAL_DELETED_FUNCTION;
+    SvXMLStylesContext(SvXMLStylesContext &) = delete;
+    void operator =(SvXMLStylesContext &) = delete;
 
 protected:
 

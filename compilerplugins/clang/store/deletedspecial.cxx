@@ -17,7 +17,7 @@
 // Second-guess that certain private special member function declarations for
 // which no definition can be found are left undefined to prevent them from
 // being implicitly declared.  Such situations are better expressed by marking
-// the function as SAL_DELETED_FUNCTION (it e.g. helps compilers determine
+// the function as = delete (it e.g. helps compilers determine
 // whether class members are unused if all of a class's member definitions are
 // seen in a compilation unit).  (Default constructors for classes with multiple
 // constructors are exempted as they would not be implicitly declared.

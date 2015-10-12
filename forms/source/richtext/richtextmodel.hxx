@@ -173,8 +173,8 @@ namespace frm
         static  css::uno::Sequence< sal_Int8 > getEditEngineTunnelId();
 
     private:
-        ORichTextModel( const ORichTextModel& ) SAL_DELETED_FUNCTION;
-        ORichTextModel& operator=( const ORichTextModel& ) SAL_DELETED_FUNCTION;
+        ORichTextModel( const ORichTextModel& ) = delete;
+        ORichTextModel& operator=( const ORichTextModel& ) = delete;
     };
 
 

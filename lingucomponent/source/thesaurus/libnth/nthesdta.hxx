@@ -40,8 +40,8 @@ class Meaning :
         sal_Bool                bIsGermanPreReform;
 #endif
 
-    Meaning(const Meaning &) SAL_DELETED_FUNCTION;
-    Meaning & operator = (const Meaning &) SAL_DELETED_FUNCTION;
+    Meaning(const Meaning &) = delete;
+    Meaning & operator = (const Meaning &) = delete;
 
 public:
     Meaning(const OUString &rTerm);

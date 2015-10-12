@@ -136,8 +136,8 @@ namespace pcr
                 impl_getEnumConverter( const css::uno::Type& _rEnumType );
 
     private:
-        GenericPropertyHandler( const GenericPropertyHandler& ) SAL_DELETED_FUNCTION;
-        GenericPropertyHandler& operator=( const GenericPropertyHandler& ) SAL_DELETED_FUNCTION;
+        GenericPropertyHandler( const GenericPropertyHandler& ) = delete;
+        GenericPropertyHandler& operator=( const GenericPropertyHandler& ) = delete;
     };
 
 

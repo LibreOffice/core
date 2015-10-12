@@ -71,8 +71,8 @@ namespace utl
     private:
         Reference< XCloseable > m_xCloseable;
 
-        CloseableComponentImpl(const CloseableComponentImpl&) SAL_DELETED_FUNCTION;
-        CloseableComponentImpl& operator=(const CloseableComponentImpl&) SAL_DELETED_FUNCTION;
+        CloseableComponentImpl(const CloseableComponentImpl&) = delete;
+        CloseableComponentImpl& operator=(const CloseableComponentImpl&) = delete;
 
     public:
         explicit CloseableComponentImpl( const Reference< XInterface >& _rxComponent );

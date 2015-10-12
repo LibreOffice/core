@@ -149,7 +149,7 @@ protected:
     std::unique_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;
 
 private:
-    SdStyleSheet& operator=( const SdStyleSheet& ) SAL_DELETED_FUNCTION;
+    SdStyleSheet& operator=( const SdStyleSheet& ) = delete;
 };
 
 typedef rtl::Reference< SdStyleSheet > SdStyleSheetRef;

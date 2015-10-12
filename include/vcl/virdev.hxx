@@ -51,8 +51,8 @@ private:
                                                 const basebmp::RawMemorySharedArray &pAlphaBuffer,
                                                 const bool bTopDown );
 
-    VirtualDevice (const VirtualDevice &) SAL_DELETED_FUNCTION;
-    VirtualDevice & operator= (const VirtualDevice &) SAL_DELETED_FUNCTION;
+    VirtualDevice (const VirtualDevice &) = delete;
+    VirtualDevice & operator= (const VirtualDevice &) = delete;
 
     /** Used for alpha VDev, to set areas to opaque
 

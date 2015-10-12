@@ -197,8 +197,8 @@ protected:
     ChildrenManagerImpl* mpImpl;
 
 private:
-    ChildrenManager (const ChildrenManager&) SAL_DELETED_FUNCTION;
-    ChildrenManager& operator= (const ChildrenManager&) SAL_DELETED_FUNCTION;
+    ChildrenManager (const ChildrenManager&) = delete;
+    ChildrenManager& operator= (const ChildrenManager&) = delete;
 };
 
 } // end of namespace accessibility

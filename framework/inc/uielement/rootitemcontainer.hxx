@@ -125,8 +125,8 @@ class RootItemContainer :   private cppu::BaseMutex,
         static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
     private:
-        RootItemContainer& operator=( const RootItemContainer& ) SAL_DELETED_FUNCTION;
-        RootItemContainer( const RootItemContainer& ) SAL_DELETED_FUNCTION;
+        RootItemContainer& operator=( const RootItemContainer& ) = delete;
+        RootItemContainer( const RootItemContainer& ) = delete;
 
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > deepCopyContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rSubContainer );
 

@@ -47,8 +47,8 @@ namespace reportdesign
         OReportControlModel                 m_aProps;
         OUString                     m_sLabel;
     private:
-        OFixedText(const OFixedText&) SAL_DELETED_FUNCTION;
-        OFixedText& operator=(const OFixedText&) SAL_DELETED_FUNCTION;
+        OFixedText(const OFixedText&) = delete;
+        OFixedText& operator=(const OFixedText&) = delete;
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value

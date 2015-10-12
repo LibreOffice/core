@@ -61,8 +61,8 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC OGroupHelper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup > m_xGroup;
-        OGroupHelper(const OGroupHelper&) SAL_DELETED_FUNCTION;
-        OGroupHelper& operator=(const OGroupHelper&) SAL_DELETED_FUNCTION;
+        OGroupHelper(const OGroupHelper&) = delete;
+        OGroupHelper& operator=(const OGroupHelper&) = delete;
     public:
         OGroupHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup)
             :m_xGroup(_xGroup)
@@ -169,8 +169,8 @@ namespace rptui
 
     class REPORTDESIGN_DLLPUBLIC OUndoContainerAction: public OCommentUndoAction
     {
-        OUndoContainerAction(OUndoContainerAction&) SAL_DELETED_FUNCTION;
-        void operator =(OUndoContainerAction&) SAL_DELETED_FUNCTION;
+        OUndoContainerAction(OUndoContainerAction&) = delete;
+        void operator =(OUndoContainerAction&) = delete;
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         m_xElement;     // object not owned by the action

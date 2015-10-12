@@ -74,8 +74,8 @@ private:
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    DialogModelProvider(const DialogModelProvider &) SAL_DELETED_FUNCTION;
-    DialogModelProvider& operator=(const DialogModelProvider &) SAL_DELETED_FUNCTION;
+    DialogModelProvider(const DialogModelProvider &) = delete;
+    DialogModelProvider& operator=(const DialogModelProvider &) = delete;
 
     // destructor is private and will be called indirectly by the release call    virtual ~DialogModelProvider() {}
 

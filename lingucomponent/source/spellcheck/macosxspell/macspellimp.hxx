@@ -72,8 +72,8 @@ class MacSpellChecker :
     linguistic::PropertyHelper_Spell *      pPropHelper;
     bool                                    bDisposing;
 
-    MacSpellChecker(const MacSpellChecker &) SAL_DELETED_FUNCTION;
-    MacSpellChecker & operator = (const MacSpellChecker &) SAL_DELETED_FUNCTION;
+    MacSpellChecker(const MacSpellChecker &) = delete;
+    MacSpellChecker & operator = (const MacSpellChecker &) = delete;
 
     linguistic::PropertyHelper_Spell &  GetPropHelper_Impl();
     linguistic::PropertyHelper_Spell &  GetPropHelper()

@@ -89,7 +89,7 @@ protected:
     LwpBackgroundOverride(LwpBackgroundOverride const& rOther);
 
 private:
-    LwpBackgroundOverride& operator=(LwpBackgroundOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpBackgroundOverride& operator=(LwpBackgroundOverride const& rOther) = delete;
 
 private:
     LwpBackgroundStuff  m_aStuff;

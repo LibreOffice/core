@@ -47,8 +47,8 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     sal_uIntPtr                  nChildIndex;
     INetMIMEMessageStream *pChildStrm;
 
-    INetMIMEMessageStream (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
-    INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
+    INetMIMEMessageStream (const INetMIMEMessageStream& rStrm) = delete;
+    INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm) = delete;
 
     int GetHeaderLine(sal_Char *pData, sal_uIntPtr nSize);
     int GetBodyLine(sal_Char *pData, sal_uIntPtr nSize);

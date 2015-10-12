@@ -107,8 +107,8 @@ public:
     rtl::ByteSequence getTid() throw () { return tid_;}
 
 private:
-    AttachThread(const AttachThread&) SAL_DELETED_FUNCTION;
-    AttachThread& operator=(const AttachThread&) SAL_DELETED_FUNCTION;
+    AttachThread(const AttachThread&) = delete;
+    AttachThread& operator=(const AttachThread&) = delete;
 
     uno_ThreadPool threadPool_;
     rtl::ByteSequence tid_;
@@ -138,8 +138,8 @@ public:
     void clear();
 
 private:
-    PopOutgoingRequest(const PopOutgoingRequest&) SAL_DELETED_FUNCTION;
-    PopOutgoingRequest& operator=(const PopOutgoingRequest&) SAL_DELETED_FUNCTION;
+    PopOutgoingRequest(const PopOutgoingRequest&) = delete;
+    PopOutgoingRequest& operator=(const PopOutgoingRequest&) = delete;
 
     OutgoingRequests & requests_;
     rtl::ByteSequence tid_;

@@ -73,8 +73,8 @@ namespace accessibility
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     private:
-        AccessibleOutlineEditSource( const AccessibleOutlineEditSource& ) SAL_DELETED_FUNCTION;
-        AccessibleOutlineEditSource& operator=( const AccessibleOutlineEditSource& ) SAL_DELETED_FUNCTION;
+        AccessibleOutlineEditSource( const AccessibleOutlineEditSource& ) = delete;
+        AccessibleOutlineEditSource& operator=( const AccessibleOutlineEditSource& ) = delete;
 
         DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
 

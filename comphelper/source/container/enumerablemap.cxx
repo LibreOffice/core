@@ -110,7 +110,7 @@ namespace comphelper
         {
         }
     private:
-        MapData& operator=( const MapData& _source ) SAL_DELETED_FUNCTION;
+        MapData& operator=( const MapData& _source ) = delete;
     };
 
 

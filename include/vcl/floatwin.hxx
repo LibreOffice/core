@@ -115,8 +115,8 @@ private:
     DECL_DLLPRIVATE_LINK_TYPED(  ImplEndPopupModeHdl, void*, void );
     virtual void setPosSizeOnContainee(Size aSize, Window &rBox) SAL_OVERRIDE;
 
-                           FloatingWindow (const FloatingWindow &) SAL_DELETED_FUNCTION;
-                           FloatingWindow & operator= (const FloatingWindow &) SAL_DELETED_FUNCTION;
+                           FloatingWindow (const FloatingWindow &) = delete;
+                           FloatingWindow & operator= (const FloatingWindow &) = delete;
 
 protected:
     using Window::ImplInit;

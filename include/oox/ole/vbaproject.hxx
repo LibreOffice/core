@@ -153,8 +153,8 @@ protected:
     virtual void        prepareImport();
 
 private:
-                        VbaProject( const VbaProject& ) SAL_DELETED_FUNCTION;
-    VbaProject&         operator=( const VbaProject& ) SAL_DELETED_FUNCTION;
+                        VbaProject( const VbaProject& ) = delete;
+    VbaProject&         operator=( const VbaProject& ) = delete;
 
     /** Returns the Basic or dialog library container. */
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >

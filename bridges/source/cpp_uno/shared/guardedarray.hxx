@@ -33,8 +33,8 @@ public:
     T * release() { T * p = pointer; pointer = 0; return p; }
 
 private:
-    GuardedArray(GuardedArray &) SAL_DELETED_FUNCTION;
-    void operator =(GuardedArray) SAL_DELETED_FUNCTION;
+    GuardedArray(GuardedArray &) = delete;
+    void operator =(GuardedArray) = delete;
 
     T * pointer;
 };

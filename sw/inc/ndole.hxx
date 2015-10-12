@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwOLEObj
     svt::EmbeddedObjectRef xOLERef;
     OUString aName;
 
-    SwOLEObj( const SwOLEObj& rObj ) SAL_DELETED_FUNCTION;
+    SwOLEObj( const SwOLEObj& rObj ) = delete;
 
     void SetNode( SwOLENode* pNode );
 
@@ -88,7 +88,7 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTextNode
                 SwGrfFormatColl *pGrfColl,
                 SwAttrSet* pAutoAttr = 0 );
 
-    SwOLENode( const SwOLENode & ) SAL_DELETED_FUNCTION;
+    SwOLENode( const SwOLENode & ) = delete;
 
     using SwNoTextNode::GetGraphic;
 

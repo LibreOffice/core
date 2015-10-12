@@ -698,8 +698,8 @@ private:
     SVT_DLLPRIVATE void     ImplDrag( const Point& rPos );
     SVT_DLLPRIVATE void     ImplEndDrag();
 
-    Ruler (const Ruler &) SAL_DELETED_FUNCTION;
-    Ruler& operator= (const Ruler &) SAL_DELETED_FUNCTION;
+    Ruler (const Ruler &) = delete;
+    Ruler& operator= (const Ruler &) = delete;
 
 protected:
     long            GetRulerVirHeight() const { return mnVirHeight;}

@@ -99,9 +99,9 @@ protected:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    AccessibleGraphicShape (const AccessibleGraphicShape&) SAL_DELETED_FUNCTION;
+    AccessibleGraphicShape (const AccessibleGraphicShape&) = delete;
 
-    AccessibleGraphicShape& operator= (const AccessibleGraphicShape&) SAL_DELETED_FUNCTION;
+    AccessibleGraphicShape& operator= (const AccessibleGraphicShape&) = delete;
 };
 
 } // end of namespace accessibility

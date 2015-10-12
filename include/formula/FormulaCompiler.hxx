@@ -66,8 +66,8 @@ typedef std::unordered_map< OUString, OUString, OUStringHash, ::std::equal_to< O
 class FORMULA_DLLPUBLIC FormulaCompiler
 {
 private:
-    FormulaCompiler(const FormulaCompiler&) SAL_DELETED_FUNCTION;
-    FormulaCompiler& operator=(const FormulaCompiler&) SAL_DELETED_FUNCTION;
+    FormulaCompiler(const FormulaCompiler&) = delete;
+    FormulaCompiler& operator=(const FormulaCompiler&) = delete;
 public:
     FormulaCompiler();
     FormulaCompiler(FormulaTokenArray& _rArr);
@@ -85,8 +85,8 @@ public:
         bool                    mbCore      : 1;            /// If mapping was setup by core, not filters
         bool                    mbEnglish   : 1;            /// If English symbols and external names
 
-        OpCodeMap( const OpCodeMap& ) SAL_DELETED_FUNCTION;
-        OpCodeMap& operator=( const OpCodeMap& ) SAL_DELETED_FUNCTION;
+        OpCodeMap( const OpCodeMap& ) = delete;
+        OpCodeMap& operator=( const OpCodeMap& ) = delete;
 
     public:
 
@@ -367,8 +367,8 @@ private:
     {
         FormulaTokenRef  pPrevFac;
         FormulaCompiler* pCompiler;
-        CurrentFactor( const CurrentFactor& ) SAL_DELETED_FUNCTION;
-        CurrentFactor& operator=( const CurrentFactor& ) SAL_DELETED_FUNCTION;
+        CurrentFactor( const CurrentFactor& ) = delete;
+        CurrentFactor& operator=( const CurrentFactor& ) = delete;
     public:
         explicit CurrentFactor( FormulaCompiler* pComp )
             : pPrevFac( pComp->pCurrentFactorToken )

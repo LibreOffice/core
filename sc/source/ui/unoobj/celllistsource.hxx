@@ -143,8 +143,8 @@ namespace calc
         void    notifyModified();
 
     private:
-        OCellListSource( const OCellListSource& ) SAL_DELETED_FUNCTION;
-        OCellListSource& operator=( const OCellListSource& ) SAL_DELETED_FUNCTION;
+        OCellListSource( const OCellListSource& ) = delete;
+        OCellListSource& operator=( const OCellListSource& ) = delete;
     };
 
 }   // namespace calc

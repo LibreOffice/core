@@ -66,8 +66,8 @@ public:
     void Disconnect();
 
 private:
-    SelectionChangeHandler(const SelectionChangeHandler&) SAL_DELETED_FUNCTION;
-    SelectionChangeHandler& operator=(const SelectionChangeHandler&) SAL_DELETED_FUNCTION;
+    SelectionChangeHandler(const SelectionChangeHandler&) = delete;
+    SelectionChangeHandler& operator=(const SelectionChangeHandler&) = delete;
 
     const std::function<rtl::OUString ()> maSelectionChangeCallback;
     css::uno::Reference<css::frame::XController> mxController;

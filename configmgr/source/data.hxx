@@ -85,8 +85,8 @@ struct Data {
         OUString const & url);
 
 private:
-    Data(const Data&) SAL_DELETED_FUNCTION;
-    Data& operator=(const Data&) SAL_DELETED_FUNCTION;
+    Data(const Data&) = delete;
+    Data& operator=(const Data&) = delete;
 
     typedef config_map< rtl::Reference< ExtensionXcu > >
         ExtensionXcuAdditions;

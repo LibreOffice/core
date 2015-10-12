@@ -47,8 +47,8 @@ class SW_DLLPUBLIC SwFormatFootnote
 
     css::uno::WeakReference<css::text::XFootnote> m_wXFootnote;
 
-    SwFormatFootnote& operator=(const SwFormatFootnote& rFootnote) SAL_DELETED_FUNCTION;
-    SwFormatFootnote( const SwFormatFootnote& ) SAL_DELETED_FUNCTION;
+    SwFormatFootnote& operator=(const SwFormatFootnote& rFootnote) = delete;
+    SwFormatFootnote( const SwFormatFootnote& ) = delete;
 
 public:
     SwFormatFootnote( bool bEndNote = false );

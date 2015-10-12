@@ -106,8 +106,8 @@ namespace accessibility
         virtual ~AccessibleStaticTextBase();
 
     private:
-        AccessibleStaticTextBase( const AccessibleStaticTextBase& ) SAL_DELETED_FUNCTION;
-        AccessibleStaticTextBase& operator= ( const AccessibleStaticTextBase& ) SAL_DELETED_FUNCTION;
+        AccessibleStaticTextBase( const AccessibleStaticTextBase& ) = delete;
+        AccessibleStaticTextBase& operator= ( const AccessibleStaticTextBase& ) = delete;
 
     public:
 

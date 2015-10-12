@@ -47,8 +47,8 @@ private:
 
     SAL_DLLPRIVATE void     ImplInitControlData();
 
-                            Control (const Control &) SAL_DELETED_FUNCTION;
-                            Control & operator= (const Control &) SAL_DELETED_FUNCTION;
+                            Control (const Control &) = delete;
+                            Control & operator= (const Control &) = delete;
 
 protected:
                     Control( WindowType nType );

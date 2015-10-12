@@ -41,8 +41,8 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    DependencyDialog(DependencyDialog &) SAL_DELETED_FUNCTION;
-    void operator =(DependencyDialog &) SAL_DELETED_FUNCTION;
+    DependencyDialog(DependencyDialog &) = delete;
+    void operator =(DependencyDialog &) = delete;
 
     VclPtr<ListBox>  m_list;
 };

@@ -59,8 +59,8 @@ private:
     utl::ConfigManager & manager_;
     utl::ConfigItem * item_;
 
-    RegisterConfigItemHelper(const RegisterConfigItemHelper&) SAL_DELETED_FUNCTION;
-    RegisterConfigItemHelper& operator=(const RegisterConfigItemHelper&) SAL_DELETED_FUNCTION;
+    RegisterConfigItemHelper(const RegisterConfigItemHelper&) = delete;
+    RegisterConfigItemHelper& operator=(const RegisterConfigItemHelper&) = delete;
 };
 
 css::uno::Reference< css::lang::XMultiServiceFactory >

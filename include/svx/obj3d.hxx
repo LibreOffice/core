@@ -78,7 +78,7 @@ public:
 
 class E3dObjList : public SdrObjList
 {
-    E3dObjList &operator=(const E3dObjList& rSrcList) SAL_DELETED_FUNCTION;
+    E3dObjList &operator=(const E3dObjList& rSrcList) = delete;
 
 public:
     TYPEINFO_OVERRIDE();

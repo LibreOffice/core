@@ -190,7 +190,7 @@ protected:
     void                implEndRecord( sal_Int32 nRecId );
 
 private:
-    ContextHandler2Helper& operator=( const ContextHandler2Helper& ) SAL_DELETED_FUNCTION;
+    ContextHandler2Helper& operator=( const ContextHandler2Helper& ) = delete;
 
     ElementInfo&        pushElementInfo( sal_Int32 nElement );
     void                popElementInfo();

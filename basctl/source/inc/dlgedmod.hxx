@@ -34,8 +34,8 @@ class DlgEdModel : public SdrModel
     friend class DlgEdPage;
 
 private:
-    DlgEdModel( const DlgEdModel& ) SAL_DELETED_FUNCTION;
-    void operator=(const DlgEdModel& rSrcModel) SAL_DELETED_FUNCTION;
+    DlgEdModel( const DlgEdModel& ) = delete;
+    void operator=(const DlgEdModel& rSrcModel) = delete;
 
 public:
     TYPEINFO_OVERRIDE();

@@ -68,8 +68,8 @@ public:
     const OUString& getUrl() const { return fileUrl_;}
 
 private:
-    XmlReader(const XmlReader&) SAL_DELETED_FUNCTION;
-    XmlReader& operator=(const XmlReader&) SAL_DELETED_FUNCTION;
+    XmlReader(const XmlReader&) = delete;
+    XmlReader& operator=(const XmlReader&) = delete;
 
     typedef std::vector< Span > NamespaceIris;
 

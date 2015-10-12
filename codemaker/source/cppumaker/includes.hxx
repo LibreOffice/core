@@ -65,8 +65,8 @@ public:
         FileStream & out, OString const & entityName, bool hpp);
 
 private:
-    Includes(Includes &) SAL_DELETED_FUNCTION;
-    void operator =(const Includes&) SAL_DELETED_FUNCTION;
+    Includes(Includes &) = delete;
+    void operator =(const Includes&) = delete;
 
     bool isInterfaceType(OString const & entityName) const;
 

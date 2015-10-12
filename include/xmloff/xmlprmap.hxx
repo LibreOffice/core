@@ -39,8 +39,8 @@ class XMLOFF_DLLPUBLIC XMLPropertySetMapper : public salhelper::SimpleReferenceO
 
     Impl* mpImpl;
 
-    XMLPropertySetMapper( const XMLPropertySetMapper& ) SAL_DELETED_FUNCTION;
-    XMLPropertySetMapper& operator= ( const XMLPropertySetMapper& ) SAL_DELETED_FUNCTION;
+    XMLPropertySetMapper( const XMLPropertySetMapper& ) = delete;
+    XMLPropertySetMapper& operator= ( const XMLPropertySetMapper& ) = delete;
 
 public:
     /** The last element of the XMLPropertyMapEntry-array must contain NULL-values.

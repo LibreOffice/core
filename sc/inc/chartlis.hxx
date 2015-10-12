@@ -52,7 +52,7 @@ public:
         std::unordered_set<sal_uInt16>& getAllFileIds() { return maFileIds;}
 
     private:
-        ExternalRefListener(const ExternalRefListener& r) SAL_DELETED_FUNCTION;
+        ExternalRefListener(const ExternalRefListener& r) = delete;
 
         ScChartListener& mrParent;
         std::unordered_set<sal_uInt16> maFileIds;
@@ -71,7 +71,7 @@ private:
     bool            bDirty:1;
     bool            bSeriesRangesScheduled:1;
 
-    ScChartListener& operator=( const ScChartListener& ) SAL_DELETED_FUNCTION;
+    ScChartListener& operator=( const ScChartListener& ) = delete;
 
 public:
     ScChartListener( const OUString& rName, ScDocument* pDoc,
@@ -147,7 +147,7 @@ private:
 
                     DECL_LINK_TYPED(TimerHdl, Idle *, void);
 
-    ScChartListenerCollection& operator=( const ScChartListenerCollection& ) SAL_DELETED_FUNCTION;
+    ScChartListenerCollection& operator=( const ScChartListenerCollection& ) = delete;
 
 public:
     ScChartListenerCollection( ScDocument* pDoc );

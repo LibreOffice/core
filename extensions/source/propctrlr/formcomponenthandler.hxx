@@ -434,8 +434,8 @@ namespace pcr
         DECL_LINK_TYPED( OnDesignerClosed, SQLCommandDesigner&, void );
 
     private:
-        FormComponentPropertyHandler( const FormComponentPropertyHandler& ) SAL_DELETED_FUNCTION;
-        FormComponentPropertyHandler& operator=( const FormComponentPropertyHandler& ) SAL_DELETED_FUNCTION;
+        FormComponentPropertyHandler( const FormComponentPropertyHandler& ) = delete;
+        FormComponentPropertyHandler& operator=( const FormComponentPropertyHandler& ) = delete;
 
     private:
         using ::comphelper::OPropertyContainer::addPropertyChangeListener;

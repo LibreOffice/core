@@ -79,8 +79,8 @@ namespace reportdesign
     class OReportControlModel
     {
         void checkIndex(sal_Int32 _nIndex);
-        OReportControlModel(OReportControlModel&) SAL_DELETED_FUNCTION;
-        void operator =(OReportControlModel&) SAL_DELETED_FUNCTION;
+        OReportControlModel(OReportControlModel&) = delete;
+        void operator =(OReportControlModel&) = delete;
     public:
         ::cppu::OInterfaceContainerHelper                   aContainerListeners;
         OReportComponentProperties                          aComponent;

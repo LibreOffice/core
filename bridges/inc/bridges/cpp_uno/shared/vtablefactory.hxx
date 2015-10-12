@@ -120,8 +120,8 @@ private:
 
     class BaseOffset;
 
-    VtableFactory(VtableFactory &) SAL_DELETED_FUNCTION;
-    void operator =(const VtableFactory&) SAL_DELETED_FUNCTION;
+    VtableFactory(VtableFactory &) = delete;
+    void operator =(const VtableFactory&) = delete;
 
     bool createBlock(Block &block, sal_Int32 slotCount) const;
 

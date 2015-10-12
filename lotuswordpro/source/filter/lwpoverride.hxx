@@ -94,7 +94,7 @@ protected:
     explicit LwpOverride(LwpOverride const& rOther);
 
 private:
-    LwpOverride& operator=(LwpOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpOverride& operator=(LwpOverride const& rOther) = delete;
 
 protected:
     sal_uInt16  m_nValues;
@@ -115,7 +115,7 @@ protected:
     LwpTextLanguageOverride(LwpTextLanguageOverride const& rOther);
 
 private:
-    LwpTextLanguageOverride& operator=(LwpTextLanguageOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpTextLanguageOverride& operator=(LwpTextLanguageOverride const& rOther) = delete;
 
 private:
     sal_uInt16  m_nLanguage;
@@ -138,7 +138,7 @@ protected:
     LwpTextAttributeOverride(LwpTextAttributeOverride const& rOther);
 
 private:
-    LwpTextAttributeOverride& operator=(LwpTextAttributeOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpTextAttributeOverride& operator=(LwpTextAttributeOverride const& rOther) = delete;
 
 private:
     enum{
@@ -166,7 +166,7 @@ protected:
     LwpKinsokuOptsOverride(LwpKinsokuOptsOverride const& rOther);
 
 private:
-    LwpKinsokuOptsOverride& operator=(LwpKinsokuOptsOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpKinsokuOptsOverride& operator=(LwpKinsokuOptsOverride const& rOther) = delete;
 
 private:
     sal_uInt16  m_nLevels;
@@ -206,7 +206,7 @@ protected:
     LwpBulletOverride(LwpBulletOverride const& rOther);
 
 private:
-    LwpBulletOverride& operator=(LwpBulletOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpBulletOverride& operator=(LwpBulletOverride const& rOther) = delete;
 
 private:
     enum
@@ -301,7 +301,7 @@ protected:
     LwpAlignmentOverride(LwpAlignmentOverride const& rOther);
 
 private:
-    LwpAlignmentOverride& operator=(LwpAlignmentOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpAlignmentOverride& operator=(LwpAlignmentOverride const& rOther) = delete;
 
 private:
     enum
@@ -346,7 +346,7 @@ protected:
     LwpSpacingCommonOverride(LwpSpacingCommonOverride const& rOther);
 
 private:
-    LwpSpacingCommonOverride& operator=(LwpSpacingCommonOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpSpacingCommonOverride& operator=(LwpSpacingCommonOverride const& rOther) = delete;
 
 protected:
     enum
@@ -381,7 +381,7 @@ protected:
     LwpSpacingOverride(LwpSpacingOverride const& rOther);
 
 private:
-    LwpSpacingOverride& operator=(LwpSpacingOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpSpacingOverride& operator=(LwpSpacingOverride const& rOther) = delete;
 
 private:
     LwpSpacingCommonOverride*   m_pSpacing;
@@ -430,7 +430,7 @@ protected:
     LwpIndentOverride(LwpIndentOverride const& rOther);
 
 private:
-    LwpIndentOverride& operator=(LwpIndentOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpIndentOverride& operator=(LwpIndentOverride const& rOther) = delete;
 
 private:
     enum
@@ -490,7 +490,7 @@ protected:
     LwpAmikakeOverride(LwpAmikakeOverride const& rOther);
 
 private:
-    LwpAmikakeOverride& operator=(LwpAmikakeOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpAmikakeOverride& operator=(LwpAmikakeOverride const& rOther) = delete;
 
 private:
     LwpBackgroundStuff* m_pBackgroundStuff;

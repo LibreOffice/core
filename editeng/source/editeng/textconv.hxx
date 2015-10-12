@@ -68,8 +68,8 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
                             ESelection *pESelection );
     void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );
 
-    TextConvWrapper (const TextConvWrapper &) SAL_DELETED_FUNCTION;
-    TextConvWrapper & operator= (const TextConvWrapper &) SAL_DELETED_FUNCTION;
+    TextConvWrapper (const TextConvWrapper &) = delete;
+    TextConvWrapper & operator= (const TextConvWrapper &) = delete;
 
 protected:
     virtual void    GetNextPortion( OUString& /* [out] */ rNextPortion,

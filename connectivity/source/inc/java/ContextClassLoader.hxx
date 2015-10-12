@@ -64,8 +64,8 @@ namespace connectivity { namespace jdbc
         }
 
     private:
-        ContextClassLoaderScope(ContextClassLoaderScope &) SAL_DELETED_FUNCTION;
-        void operator =(ContextClassLoaderScope &) SAL_DELETED_FUNCTION;
+        ContextClassLoaderScope(ContextClassLoaderScope &) = delete;
+        void operator =(ContextClassLoaderScope &) = delete;
 
         void pop( bool clearExceptions );
 

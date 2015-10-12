@@ -1501,8 +1501,8 @@ private:
 class VCL_DLLPUBLIC SolarMutexGuard
 {
 private:
-    SolarMutexGuard( const SolarMutexGuard& ) SAL_DELETED_FUNCTION;
-    const SolarMutexGuard& operator = ( const SolarMutexGuard& ) SAL_DELETED_FUNCTION;
+    SolarMutexGuard( const SolarMutexGuard& ) = delete;
+    const SolarMutexGuard& operator = ( const SolarMutexGuard& ) = delete;
     comphelper::SolarMutex& m_solarMutex;
 
 public:
@@ -1523,8 +1523,8 @@ public:
 
 class VCL_DLLPUBLIC SolarMutexClearableGuard SAL_FINAL
 {
-    SolarMutexClearableGuard( const SolarMutexClearableGuard& ) SAL_DELETED_FUNCTION;
-    const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& ) SAL_DELETED_FUNCTION;
+    SolarMutexClearableGuard( const SolarMutexClearableGuard& ) = delete;
+    const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& ) = delete;
     bool m_bCleared;
 public:
     /** Acquires mutex
@@ -1561,8 +1561,8 @@ protected:
 
 class VCL_DLLPUBLIC SolarMutexResettableGuard SAL_FINAL
 {
-    SolarMutexResettableGuard( const SolarMutexResettableGuard& ) SAL_DELETED_FUNCTION;
-    const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& ) SAL_DELETED_FUNCTION;
+    SolarMutexResettableGuard( const SolarMutexResettableGuard& ) = delete;
+    const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& ) = delete;
     bool m_bCleared;
 public:
     /** Acquires mutex
@@ -1621,8 +1621,8 @@ private:
 #endif
     comphelper::SolarMutex& m_rSolarMutex;
 
-    SolarMutexTryAndBuyGuard(const SolarMutexTryAndBuyGuard&) SAL_DELETED_FUNCTION;
-    SolarMutexTryAndBuyGuard& operator=(const SolarMutexTryAndBuyGuard&) SAL_DELETED_FUNCTION;
+    SolarMutexTryAndBuyGuard(const SolarMutexTryAndBuyGuard&) = delete;
+    SolarMutexTryAndBuyGuard& operator=(const SolarMutexTryAndBuyGuard&) = delete;
 
 public:
 

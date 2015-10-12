@@ -91,8 +91,8 @@ namespace reportdesign
         std::shared_ptr<OReportDefinitionImpl>                                  m_pImpl;
 
     private:
-        OReportDefinition(const OReportDefinition&) SAL_DELETED_FUNCTION;
-        OReportDefinition& operator=(const OReportDefinition&) SAL_DELETED_FUNCTION;
+        OReportDefinition(const OReportDefinition&) = delete;
+        OReportDefinition& operator=(const OReportDefinition&) = delete;
 
         void setSection(     const OUString& _sProperty
                             ,const bool& _bOn

@@ -192,8 +192,8 @@ class SwWrongList
     void Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos);
     void Remove( sal_uInt16 nIdx, sal_uInt16 nLen );
 
-    SwWrongList& operator= (const SwWrongList &) SAL_DELETED_FUNCTION;
-    SwWrongList( const SwWrongList& rCpy ) SAL_DELETED_FUNCTION;
+    SwWrongList& operator= (const SwWrongList &) = delete;
+    SwWrongList( const SwWrongList& rCpy ) = delete;
 
 public:
     SwWrongList( WrongListType eType );

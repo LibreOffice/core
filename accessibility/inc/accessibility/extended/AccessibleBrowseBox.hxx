@@ -278,8 +278,8 @@ protected:
     }
 
 private:
-    AccessibleBrowseBoxAccess( const AccessibleBrowseBoxAccess& ) SAL_DELETED_FUNCTION;
-    AccessibleBrowseBoxAccess& operator=( const AccessibleBrowseBoxAccess& ) SAL_DELETED_FUNCTION;
+    AccessibleBrowseBoxAccess( const AccessibleBrowseBoxAccess& ) = delete;
+    AccessibleBrowseBoxAccess& operator=( const AccessibleBrowseBoxAccess& ) = delete;
 };
 
 

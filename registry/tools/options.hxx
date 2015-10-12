@@ -33,8 +33,8 @@ class Options
 {
     std::string m_program;
 
-    Options (Options const &) SAL_DELETED_FUNCTION;
-    Options & operator= (Options const &) SAL_DELETED_FUNCTION;
+    Options (Options const &) = delete;
+    Options & operator= (Options const &) = delete;
 
 public:
     explicit Options (char const * program);

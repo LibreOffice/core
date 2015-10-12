@@ -69,8 +69,8 @@ class UNOTOOLS_DLLPUBLIC CharClass
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >    xCC;
     mutable ::osl::Mutex        aMutex;
 
-    CharClass(const CharClass&) SAL_DELETED_FUNCTION;
-    CharClass& operator=(const CharClass&) SAL_DELETED_FUNCTION;
+    CharClass(const CharClass&) = delete;
+    CharClass& operator=(const CharClass&) = delete;
 
 public:
     /// Preferred ctor with service manager specified

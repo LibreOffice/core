@@ -65,8 +65,8 @@ class SVT_DLLPUBLIC ContextMenuHelper
         // asynchronous link to prevent destruction while on stack
         DECL_STATIC_LINK_TYPED( ContextMenuHelper, ExecuteHdl_Impl, void*, void );
 
-        ContextMenuHelper( const ContextMenuHelper& ) SAL_DELETED_FUNCTION;
-        const ContextMenuHelper& operator=( const ContextMenuHelper& ) SAL_DELETED_FUNCTION;
+        ContextMenuHelper( const ContextMenuHelper& ) = delete;
+        const ContextMenuHelper& operator=( const ContextMenuHelper& ) = delete;
 
         // show context menu and dispatch command automatically
         void            executePopupMenu( const Point& aPos, PopupMenu* pMenu );

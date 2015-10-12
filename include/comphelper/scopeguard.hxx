@@ -51,8 +51,8 @@ public:
 
 private:
     // noncopyable until we have good reasons...
-    ScopeGuard(const ScopeGuard&) SAL_DELETED_FUNCTION;
-    ScopeGuard& operator=(const ScopeGuard&) SAL_DELETED_FUNCTION;
+    ScopeGuard(const ScopeGuard&) = delete;
+    ScopeGuard& operator=(const ScopeGuard&) = delete;
 
     ::std::function<void ()> m_func;
     exc_handling const m_excHandling;

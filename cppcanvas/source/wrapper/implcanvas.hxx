@@ -75,7 +75,7 @@ namespace cppcanvas
             //ImplCanvas(const ImplCanvas&);
 
         private:
-            ImplCanvas& operator=( const ImplCanvas& ) SAL_DELETED_FUNCTION;
+            ImplCanvas& operator=( const ImplCanvas& ) = delete;
 
             mutable css::rendering::ViewState                    maViewState;
             boost::optional<basegfx::B2DPolyPolygon>             maClipPolyPolygon;

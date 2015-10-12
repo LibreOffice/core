@@ -76,8 +76,8 @@ namespace sdbtools
         virtual ~TableName();
 
     private:
-        TableName( const TableName& ) SAL_DELETED_FUNCTION;
-        TableName& operator=( const TableName& ) SAL_DELETED_FUNCTION;
+        TableName( const TableName& ) = delete;
+        TableName& operator=( const TableName& ) = delete;
     };
 
 } // namespace sdbtools

@@ -58,9 +58,9 @@ public:
     OUString GetStyle() SAL_OVERRIDE;
 
 private:
-    AccessiblePresentationShape (const AccessiblePresentationShape&) SAL_DELETED_FUNCTION;
+    AccessiblePresentationShape (const AccessiblePresentationShape&) = delete;
 
-    AccessiblePresentationShape& operator= (const AccessiblePresentationShape&) SAL_DELETED_FUNCTION;
+    AccessiblePresentationShape& operator= (const AccessiblePresentationShape&) = delete;
 };
 
 } // end of namespace accessibility

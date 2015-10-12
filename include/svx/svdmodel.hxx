@@ -260,9 +260,9 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
 
 private:
-    SdrModel(const SdrModel& rSrcModel) SAL_DELETED_FUNCTION;
-    void operator=(const SdrModel& rSrcModel) SAL_DELETED_FUNCTION;
-    bool operator==(const SdrModel& rCmpModel) const SAL_DELETED_FUNCTION;
+    SdrModel(const SdrModel& rSrcModel) = delete;
+    void operator=(const SdrModel& rSrcModel) = delete;
+    bool operator==(const SdrModel& rCmpModel) const = delete;
     SVX_DLLPRIVATE void ImpPostUndoAction(SdrUndoAction* pUndo);
     SVX_DLLPRIVATE void ImpSetUIUnit();
     SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit = false );

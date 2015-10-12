@@ -50,7 +50,7 @@ class SVT_DLLPUBLIC EmbeddedObjectRef
     SVT_DLLPRIVATE SvStream* GetGraphicStream( bool bUpdate ) const;
     SVT_DLLPRIVATE void GetReplacement( bool bUpdate );
 
-    EmbeddedObjectRef& operator = ( const EmbeddedObjectRef& ) SAL_DELETED_FUNCTION;
+    EmbeddedObjectRef& operator = ( const EmbeddedObjectRef& ) = delete;
 
 public:
     static void DrawPaintReplacement( const Rectangle &rRect, const OUString &rText, OutputDevice *pOut );

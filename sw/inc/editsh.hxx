@@ -946,8 +946,8 @@ public:
     virtual ~SwEditShell();
 
 private:
-    SwEditShell(const SwEditShell &) SAL_DELETED_FUNCTION;
-    const SwEditShell &operator=(const SwEditShell &) SAL_DELETED_FUNCTION;
+    SwEditShell(const SwEditShell &) = delete;
+    const SwEditShell &operator=(const SwEditShell &) = delete;
 };
 
 inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const

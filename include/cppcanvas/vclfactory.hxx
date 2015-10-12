@@ -87,9 +87,9 @@ namespace cppcanvas
                                                 const Renderer::Parameters&     rParms );
 
     private:
-        VCLFactory() SAL_DELETED_FUNCTION;
-        VCLFactory(const VCLFactory&) SAL_DELETED_FUNCTION;
-        VCLFactory& operator=( const VCLFactory& ) SAL_DELETED_FUNCTION;
+        VCLFactory() = delete;
+        VCLFactory(const VCLFactory&) = delete;
+        VCLFactory& operator=( const VCLFactory& ) = delete;
     };
 
 }

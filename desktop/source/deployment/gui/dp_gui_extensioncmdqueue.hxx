@@ -87,8 +87,8 @@ public:
 
     bool isBusy();
 private:
-    ExtensionCmdQueue(ExtensionCmdQueue &) SAL_DELETED_FUNCTION;
-    void operator =(ExtensionCmdQueue &) SAL_DELETED_FUNCTION;
+    ExtensionCmdQueue(ExtensionCmdQueue &) = delete;
+    void operator =(ExtensionCmdQueue &) = delete;
 
     class Thread;
 

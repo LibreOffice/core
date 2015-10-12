@@ -41,7 +41,7 @@ class SVT_DLLPUBLIC SvtScriptedTextHelper
 private:
     SvtScriptedTextHelper_Impl* mpImpl;             /// Implementation of class functionality.
 
-    SvtScriptedTextHelper&      operator=( const SvtScriptedTextHelper& ) SAL_DELETED_FUNCTION;
+    SvtScriptedTextHelper&      operator=( const SvtScriptedTextHelper& ) = delete;
 
 public:
                                 /** Constructor sets an output device and no fonts.

@@ -63,8 +63,8 @@ namespace svt
             throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        JavaContext(JavaContext&) SAL_DELETED_FUNCTION;
-        JavaContext& operator = (JavaContext&) SAL_DELETED_FUNCTION;
+        JavaContext(JavaContext&) = delete;
+        JavaContext& operator = (JavaContext&) = delete;
 
         oslInterlockedCount m_aRefCount;
 

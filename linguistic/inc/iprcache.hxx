@@ -52,8 +52,8 @@ class FlushListener :
     css::uno::Reference< css::linguistic2::XLinguProperties >             xPropSet;
     SpellCache&                                                           mrSpellCache;
 
-    FlushListener(const FlushListener &) SAL_DELETED_FUNCTION;
-    FlushListener & operator = (const FlushListener &) SAL_DELETED_FUNCTION;
+    FlushListener(const FlushListener &) = delete;
+    FlushListener & operator = (const FlushListener &) = delete;
 
 public:
     FlushListener( SpellCache& rFO ) : mrSpellCache(rFO) {}
@@ -84,8 +84,8 @@ class SpellCache
     typedef std::map< LanguageType, WordList_t >    LangWordList_t;
     LangWordList_t  aWordLists;
 
-    SpellCache(const SpellCache &) SAL_DELETED_FUNCTION;
-    SpellCache & operator = (const SpellCache &) SAL_DELETED_FUNCTION;
+    SpellCache(const SpellCache &) = delete;
+    SpellCache & operator = (const SpellCache &) = delete;
 
 public:
     SpellCache();

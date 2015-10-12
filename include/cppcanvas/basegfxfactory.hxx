@@ -69,9 +69,9 @@ namespace cppcanvas
         static BitmapSharedPtr         createAlphaBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize );
 
     private:
-        BaseGfxFactory() SAL_DELETED_FUNCTION;
-        BaseGfxFactory(const BaseGfxFactory&) SAL_DELETED_FUNCTION;
-        BaseGfxFactory& operator=( const BaseGfxFactory& ) SAL_DELETED_FUNCTION;
+        BaseGfxFactory() = delete;
+        BaseGfxFactory(const BaseGfxFactory&) = delete;
+        BaseGfxFactory& operator=( const BaseGfxFactory& ) = delete;
     };
 
 }

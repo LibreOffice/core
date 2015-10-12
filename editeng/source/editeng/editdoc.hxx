@@ -603,7 +603,7 @@ private:
     bool                bVisible            : 1;    // Belongs to the node!
     bool                bForceRepaint       : 1;
 
-                        ParaPortion( const ParaPortion& ) SAL_DELETED_FUNCTION;
+                        ParaPortion( const ParaPortion& ) = delete;
 
 public:
                         ParaPortion( ContentNode* pNode );

@@ -23,8 +23,8 @@ class BulkDataHint : public SfxSimpleHint
     struct Impl;
     Impl* mpImpl;
 
-    BulkDataHint( const BulkDataHint& ) SAL_DELETED_FUNCTION;
-    BulkDataHint& operator= ( const BulkDataHint& ) SAL_DELETED_FUNCTION;
+    BulkDataHint( const BulkDataHint& ) = delete;
+    BulkDataHint& operator= ( const BulkDataHint& ) = delete;
 
 public:
     BulkDataHint( ScDocument& rDoc, const ColumnSpanSet* pSpans );

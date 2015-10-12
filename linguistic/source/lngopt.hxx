@@ -84,8 +84,8 @@ class LinguProps :
 
     bool                                        bDisposing;
 
-    LinguProps(const LinguProps &) SAL_DELETED_FUNCTION;
-    LinguProps & operator = (const LinguProps &) SAL_DELETED_FUNCTION;
+    LinguProps(const LinguProps &) = delete;
+    LinguProps & operator = (const LinguProps &) = delete;
 
     void    launchEvent( const ::com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
 

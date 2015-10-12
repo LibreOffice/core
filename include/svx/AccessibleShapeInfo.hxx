@@ -91,7 +91,7 @@ public:
 
     AccessibleShapeInfo (const AccessibleShapeInfo&);
 private:
-    AccessibleShapeInfo& operator= (const AccessibleShapeInfo&) SAL_DELETED_FUNCTION;
+    AccessibleShapeInfo& operator= (const AccessibleShapeInfo&) = delete;
 };
 
 } // end of namespace accessibility

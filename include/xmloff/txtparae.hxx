@@ -673,7 +673,7 @@ public:
     void PopTextListsHelper();
 
 private:
-        XMLTextParagraphExport(XMLTextParagraphExport &) SAL_DELETED_FUNCTION;
+        XMLTextParagraphExport(XMLTextParagraphExport &) = delete;
 };
 
 inline const XMLTextListAutoStylePool&

@@ -236,8 +236,8 @@ private:
 
 private:
     SAL_DLLPRIVATE bool         EndJob();
-                                Printer( const Printer& rPrinter ) SAL_DELETED_FUNCTION;
-                   Printer&     operator =( const Printer& rPrinter ) SAL_DELETED_FUNCTION;
+                                Printer( const Printer& rPrinter ) = delete;
+                   Printer&     operator =( const Printer& rPrinter ) = delete;
 
 public:
     SAL_DLLPRIVATE void         ImplStartPage();

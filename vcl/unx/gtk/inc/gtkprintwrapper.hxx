@@ -34,8 +34,8 @@ namespace unx
 class GtkPrintWrapper
 {
 private:
-    GtkPrintWrapper(const GtkPrintWrapper&) SAL_DELETED_FUNCTION;
-    GtkPrintWrapper& operator=(const GtkPrintWrapper&) SAL_DELETED_FUNCTION;
+    GtkPrintWrapper(const GtkPrintWrapper&) = delete;
+    GtkPrintWrapper& operator=(const GtkPrintWrapper&) = delete;
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
 public:
     GtkPrintWrapper();

@@ -55,8 +55,8 @@ private:
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
-    SAL_DLLPRIVATE         Dialog (const Dialog &) SAL_DELETED_FUNCTION;
-    SAL_DLLPRIVATE         Dialog & operator= (const Dialog &) SAL_DELETED_FUNCTION;
+    SAL_DLLPRIVATE         Dialog (const Dialog &) = delete;
+    SAL_DLLPRIVATE         Dialog & operator= (const Dialog &) = delete;
 
     DECL_DLLPRIVATE_LINK_TYPED( ImplAsyncCloseHdl, void*, void );
 
@@ -129,8 +129,8 @@ public:
 // - ModelessDialog -
 class VCL_DLLPUBLIC ModelessDialog : public Dialog
 {
-                    ModelessDialog (const ModelessDialog &) SAL_DELETED_FUNCTION;
-                    ModelessDialog & operator= (const ModelessDialog &) SAL_DELETED_FUNCTION;
+                    ModelessDialog (const ModelessDialog &) = delete;
+                    ModelessDialog & operator= (const ModelessDialog &) = delete;
 
 public:
     explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
@@ -149,8 +149,8 @@ protected:
 
 private:
 
-    SAL_DLLPRIVATE         ModalDialog (const ModalDialog &) SAL_DELETED_FUNCTION;
-    SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &) SAL_DELETED_FUNCTION;
+    SAL_DLLPRIVATE         ModalDialog (const ModalDialog &) = delete;
+    SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &) = delete;
 };
 
 #endif // INCLUDED_VCL_DIALOG_HXX

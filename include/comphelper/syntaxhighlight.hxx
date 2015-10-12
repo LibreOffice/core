@@ -72,8 +72,8 @@ class COMPHELPER_DLLPUBLIC SyntaxHighlighter
     HighlighterLanguage eLanguage;
     std::unique_ptr<Tokenizer> m_tokenizer;
 
-    SyntaxHighlighter(const SyntaxHighlighter&) SAL_DELETED_FUNCTION;
-    SyntaxHighlighter& operator=(const SyntaxHighlighter&) SAL_DELETED_FUNCTION;
+    SyntaxHighlighter(const SyntaxHighlighter&) = delete;
+    SyntaxHighlighter& operator=(const SyntaxHighlighter&) = delete;
 public:
     SyntaxHighlighter(HighlighterLanguage language);
     ~SyntaxHighlighter();

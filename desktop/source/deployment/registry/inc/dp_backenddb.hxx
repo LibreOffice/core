@@ -47,8 +47,8 @@ private:
     css::uno::Reference<css::xml::dom::XDocument> m_doc;
     css::uno::Reference<css::xml::xpath::XXPathAPI> m_xpathApi;
 
-    BackendDb(BackendDb const &) SAL_DELETED_FUNCTION;
-    BackendDb &  operator = (BackendDb const &) SAL_DELETED_FUNCTION;
+    BackendDb(BackendDb const &) = delete;
+    BackendDb &  operator = (BackendDb const &) = delete;
 
 protected:
     const css::uno::Reference<css::uno::XComponentContext> m_xContext;

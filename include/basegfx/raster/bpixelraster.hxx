@@ -31,8 +31,8 @@ namespace basegfx
     class BPixelRaster
     {
     private:
-        BPixelRaster(const BPixelRaster&) SAL_DELETED_FUNCTION;
-        BPixelRaster& operator=(const BPixelRaster&) SAL_DELETED_FUNCTION;
+        BPixelRaster(const BPixelRaster&) = delete;
+        BPixelRaster& operator=(const BPixelRaster&) = delete;
 
     protected:
         sal_uInt32                  mnWidth;

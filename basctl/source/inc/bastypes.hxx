@@ -301,8 +301,8 @@ bool QueryPassword( const css::uno::Reference< css::script::XLibraryContainer >&
 
 class ModuleInfoHelper
 {
-    ModuleInfoHelper (const ModuleInfoHelper&) SAL_DELETED_FUNCTION;
-    ModuleInfoHelper& operator = (const ModuleInfoHelper&) SAL_DELETED_FUNCTION;
+    ModuleInfoHelper (const ModuleInfoHelper&) = delete;
+    ModuleInfoHelper& operator = (const ModuleInfoHelper&) = delete;
 public:
     static void getObjectName( const css::uno::Reference< css::container::XNameContainer >& rLib, const OUString& rModName, OUString& rObjName );
     static sal_Int32 getModuleType(  const css::uno::Reference< css::container::XNameContainer >& rLib, const OUString& rModName );

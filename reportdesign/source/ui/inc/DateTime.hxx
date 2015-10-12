@@ -71,8 +71,8 @@ class ODateTimeDialog : public ModalDialog
     sal_Int32 getFormatKey(bool _bDate) const;
 
     DECL_LINK_TYPED( CBClickHdl, Button*, void );
-    ODateTimeDialog(const ODateTimeDialog&) SAL_DELETED_FUNCTION;
-    void operator =(const ODateTimeDialog&) SAL_DELETED_FUNCTION;
+    ODateTimeDialog(const ODateTimeDialog&) = delete;
+    void operator =(const ODateTimeDialog&) = delete;
 
     // fill methods
     void InsertEntry(sal_Int16 _nNumberFormatId);

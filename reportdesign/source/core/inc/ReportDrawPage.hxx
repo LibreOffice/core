@@ -28,8 +28,8 @@ namespace reportdesign
     class OReportDrawPage : public SvxDrawPage
     {
         ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XSection > m_xSection;
-        OReportDrawPage(const OReportDrawPage&) SAL_DELETED_FUNCTION;
-        void operator =(const OReportDrawPage&) SAL_DELETED_FUNCTION;
+        OReportDrawPage(const OReportDrawPage&) = delete;
+        void operator =(const OReportDrawPage&) = delete;
     protected:
         virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape )
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

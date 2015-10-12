@@ -26,7 +26,7 @@ class ScDrawLayer;
 
 class ScDrawPage: public FmFormPage
 {
-    ScDrawPage& operator=(const ScDrawPage&) SAL_DELETED_FUNCTION;
+    ScDrawPage& operator=(const ScDrawPage&) = delete;
 
 public:
     explicit ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage = false);

@@ -41,8 +41,8 @@ class HyphenatedWord :
     sal_Int16    nLanguage;
     bool         bIsAltSpelling;
 
-    HyphenatedWord(const HyphenatedWord &) SAL_DELETED_FUNCTION;
-    HyphenatedWord & operator = (const HyphenatedWord &) SAL_DELETED_FUNCTION;
+    HyphenatedWord(const HyphenatedWord &) = delete;
+    HyphenatedWord & operator = (const HyphenatedWord &) = delete;
 
 public:
     HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
@@ -86,8 +86,8 @@ class PossibleHyphens :
     ::com::sun::star::uno::Sequence< sal_Int16 >    aOrigHyphenPos;
     sal_Int16                       nLanguage;
 
-    PossibleHyphens(const PossibleHyphens &) SAL_DELETED_FUNCTION;
-    PossibleHyphens & operator = (const PossibleHyphens &) SAL_DELETED_FUNCTION;
+    PossibleHyphens(const PossibleHyphens &) = delete;
+    PossibleHyphens & operator = (const PossibleHyphens &) = delete;
 
 public:
     PossibleHyphens(const OUString &rWord, sal_Int16 nLang,

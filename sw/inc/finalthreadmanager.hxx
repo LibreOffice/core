@@ -62,8 +62,8 @@ public:
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    FinalThreadManager(FinalThreadManager &) SAL_DELETED_FUNCTION;
-    void operator =(FinalThreadManager &) SAL_DELETED_FUNCTION;
+    FinalThreadManager(FinalThreadManager &) = delete;
+    void operator =(FinalThreadManager &) = delete;
 
     virtual ~FinalThreadManager();
 

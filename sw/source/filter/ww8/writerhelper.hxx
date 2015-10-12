@@ -879,8 +879,8 @@ namespace sw
             */
             bool TransferToDoc(OUString &rName);
         private:
-            DrawingOLEAdaptor& operator=(const DrawingOLEAdaptor&) SAL_DELETED_FUNCTION;
-            DrawingOLEAdaptor(const DrawingOLEAdaptor &rDoc) SAL_DELETED_FUNCTION;
+            DrawingOLEAdaptor& operator=(const DrawingOLEAdaptor&) = delete;
+            DrawingOLEAdaptor(const DrawingOLEAdaptor &rDoc) = delete;
         };
     }
 }

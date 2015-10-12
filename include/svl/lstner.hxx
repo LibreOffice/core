@@ -31,7 +31,7 @@ class SVL_DLLPUBLIC SfxListener
     Impl* mpImpl;
 
 private:
-    const SfxListener&  operator=(const SfxListener &) SAL_DELETED_FUNCTION;
+    const SfxListener&  operator=(const SfxListener &) = delete;
 
 public:
     TYPEINFO();

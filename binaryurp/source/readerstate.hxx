@@ -32,8 +32,8 @@ namespace binaryurp {
 
 struct ReaderState {
 private:
-    ReaderState(const ReaderState&) SAL_DELETED_FUNCTION;
-    ReaderState& operator=(const ReaderState&) SAL_DELETED_FUNCTION;
+    ReaderState(const ReaderState&) = delete;
+    ReaderState& operator=(const ReaderState&) = delete;
 public:
     ReaderState() {}
 

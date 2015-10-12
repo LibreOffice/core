@@ -75,8 +75,8 @@ private:
         const ::std::vector<ww::bytes>& rExtra);
     static bool HasBareGraphicEnd(SwDoc *pD,SwNodeIndex &rIdx);
 
-    WW8Glossary(const WW8Glossary&) SAL_DELETED_FUNCTION;
-    WW8Glossary& operator=(const WW8Glossary&) SAL_DELETED_FUNCTION;
+    WW8Glossary(const WW8Glossary&) = delete;
+    WW8Glossary& operator=(const WW8Glossary&) = delete;
 };
 #endif
 

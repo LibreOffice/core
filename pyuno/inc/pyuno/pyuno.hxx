@@ -268,8 +268,8 @@ public:
 class LO_DLLPUBLIC_PYUNO PyThreadAttach
 {
     PyThreadState *tstate;
-    PyThreadAttach ( const PyThreadAttach & ) SAL_DELETED_FUNCTION;
-    PyThreadAttach & operator = ( const PyThreadAttach & ) SAL_DELETED_FUNCTION;
+    PyThreadAttach ( const PyThreadAttach & ) = delete;
+    PyThreadAttach & operator = ( const PyThreadAttach & ) = delete;
 public:
 
     /** Creates a new python threadstate and acquires the global interpreter lock.
@@ -295,8 +295,8 @@ public:
 class LO_DLLPUBLIC_PYUNO PyThreadDetach
 {
     PyThreadState *tstate;
-    PyThreadDetach ( const PyThreadDetach & ) SAL_DELETED_FUNCTION;
-    PyThreadDetach & operator = ( const PyThreadDetach & ) SAL_DELETED_FUNCTION;
+    PyThreadDetach ( const PyThreadDetach & ) = delete;
+    PyThreadDetach & operator = ( const PyThreadDetach & ) = delete;
 
 public:
     /** Releases the global interpreter lock.

@@ -49,8 +49,8 @@ private:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;
 
-    OReportModel( const OReportModel& ) SAL_DELETED_FUNCTION;
-    void operator=(const OReportModel& rSrcModel) SAL_DELETED_FUNCTION;
+    OReportModel( const OReportModel& ) = delete;
+    void operator=(const OReportModel& rSrcModel) = delete;
 
 public:
     TYPEINFO_OVERRIDE();

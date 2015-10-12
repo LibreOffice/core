@@ -82,8 +82,8 @@ namespace rptui
 
         void ImplInitSettings();
 
-        ODesignView(ODesignView&) SAL_DELETED_FUNCTION;
-        void operator =(ODesignView&) SAL_DELETED_FUNCTION;
+        ODesignView(ODesignView&) = delete;
+        void operator =(ODesignView&) = delete;
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;

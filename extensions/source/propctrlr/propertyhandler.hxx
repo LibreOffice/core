@@ -299,8 +299,8 @@ namespace pcr
         sal_Int16 impl_getDocumentMeasurementUnit_throw() const;
 
     private:
-        PropertyHandler( const PropertyHandler& ) SAL_DELETED_FUNCTION;
-        PropertyHandler& operator=( const PropertyHandler& ) SAL_DELETED_FUNCTION;
+        PropertyHandler( const PropertyHandler& ) = delete;
+        PropertyHandler& operator=( const PropertyHandler& ) = delete;
     };
 
 

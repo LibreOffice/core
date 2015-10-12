@@ -52,8 +52,8 @@ public:
     Node const & getRoot() const { return root_;}
 
 private:
-    Modifications(const Modifications&) SAL_DELETED_FUNCTION;
-    Modifications& operator=(const Modifications&) SAL_DELETED_FUNCTION;
+    Modifications(const Modifications&) = delete;
+    Modifications& operator=(const Modifications&) = delete;
 
     Node root_;
 };

@@ -74,8 +74,8 @@ private:
 
 // prevent copy and assignment
 private:
-    CommandLine(const CommandLine&) SAL_DELETED_FUNCTION;
-    CommandLine& operator=(const CommandLine&) SAL_DELETED_FUNCTION;
+    CommandLine(const CommandLine&) = delete;
+    CommandLine& operator=(const CommandLine&) = delete;
 };
 
 #endif

@@ -139,8 +139,8 @@ namespace frm
         css::uno::Sequence< css::uno::Any >                m_aNewValues;
 
     private:
-        ControlModelLock( const ControlModelLock& ) SAL_DELETED_FUNCTION;
-        ControlModelLock& operator=( const ControlModelLock& ) SAL_DELETED_FUNCTION;
+        ControlModelLock( const ControlModelLock& ) = delete;
+        ControlModelLock& operator=( const ControlModelLock& ) = delete;
     };
 
 

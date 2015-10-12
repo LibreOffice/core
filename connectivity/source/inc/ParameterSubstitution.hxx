@@ -38,8 +38,8 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >     m_xConnection;
 
-        ParameterSubstitution( const ParameterSubstitution& ) SAL_DELETED_FUNCTION;
-        ParameterSubstitution& operator=( const ParameterSubstitution& ) SAL_DELETED_FUNCTION;
+        ParameterSubstitution( const ParameterSubstitution& ) = delete;
+        ParameterSubstitution& operator=( const ParameterSubstitution& ) = delete;
     public:
 
         static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);

@@ -89,12 +89,12 @@ private:
 // intended cases:
 
 struct Base1: public css::uno::XInterface {
-    virtual ~Base1() SAL_DELETED_FUNCTION;
+    virtual ~Base1() = delete;
 };
-struct Base2: public Base1 { virtual ~Base2() SAL_DELETED_FUNCTION; };
-struct Base3: public Base1 { virtual ~Base3() SAL_DELETED_FUNCTION; };
+struct Base2: public Base1 { virtual ~Base2() = delete; };
+struct Base3: public Base1 { virtual ~Base3() = delete; };
 struct Derived: public Base2, public Base3 {
-    virtual ~Derived() SAL_DELETED_FUNCTION;
+    virtual ~Derived() = delete;
 };
 
 // The special case using the conversion operator instead:

@@ -50,8 +50,8 @@ namespace reportdesign
         ::sal_Int32                                     m_nFormatKey;
 
     private:
-        OFormattedField(const OFormattedField&) SAL_DELETED_FUNCTION;
-        OFormattedField& operator=(const OFormattedField&) SAL_DELETED_FUNCTION;
+        OFormattedField(const OFormattedField&) = delete;
+        OFormattedField& operator=(const OFormattedField&) = delete;
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value

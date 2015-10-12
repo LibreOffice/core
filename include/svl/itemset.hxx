@@ -60,7 +60,7 @@ public:
     SfxItemArray                GetItems_Impl() const { return m_pItems; }
 
 private:
-    const SfxItemSet&           operator=(const SfxItemSet &) SAL_DELETED_FUNCTION;
+    const SfxItemSet&           operator=(const SfxItemSet &) = delete;
 
 protected:
     // Notification-Callback

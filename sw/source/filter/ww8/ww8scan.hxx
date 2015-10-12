@@ -267,8 +267,8 @@ public:
     sal_uInt16 GetAktId() const { return nAktId; }
 
 private:
-    WW8SprmIter(const WW8SprmIter&) SAL_DELETED_FUNCTION;
-    WW8SprmIter& operator=(const WW8SprmIter&) SAL_DELETED_FUNCTION;
+    WW8SprmIter(const WW8SprmIter&) = delete;
+    WW8SprmIter& operator=(const WW8SprmIter&) = delete;
 };
 
 /* among others for FKPs to normal attr., i.e. one less attr than positions */
@@ -341,8 +341,8 @@ private:
     WW8PLCFpcd& rPLCF;
     long nIdx;
 
-    WW8PLCFpcd_Iter(const WW8PLCFpcd_Iter&) SAL_DELETED_FUNCTION;
-    WW8PLCFpcd_Iter& operator=(const WW8PLCFpcd_Iter&) SAL_DELETED_FUNCTION;
+    WW8PLCFpcd_Iter(const WW8PLCFpcd_Iter&) = delete;
+    WW8PLCFpcd_Iter& operator=(const WW8PLCFpcd_Iter&) = delete;
 
 public:
     WW8PLCFpcd_Iter( WW8PLCFpcd& rPLCFpcd, long nStartPos = -1 );
@@ -376,8 +376,8 @@ private:
     WW8_FC nStartFc;
     bool bDirty;
 
-    WW8PLCFx(const WW8PLCFx&) SAL_DELETED_FUNCTION;
-    WW8PLCFx& operator=(const WW8PLCFx&) SAL_DELETED_FUNCTION;
+    WW8PLCFx(const WW8PLCFx&) = delete;
+    WW8PLCFx& operator=(const WW8PLCFx&) = delete;
 
 public:
     WW8PLCFx(ww::WordVersion eVersion, bool bSprm)
@@ -418,8 +418,8 @@ private:
                                 // 1 byte param
     sal_uInt16 nGrpprls;            // attribute count of this
 
-    WW8PLCFx_PCDAttrs(const WW8PLCFx_PCDAttrs&) SAL_DELETED_FUNCTION;
-    WW8PLCFx_PCDAttrs& operator=(const WW8PLCFx_PCDAttrs&) SAL_DELETED_FUNCTION;
+    WW8PLCFx_PCDAttrs(const WW8PLCFx_PCDAttrs&) = delete;
+    WW8PLCFx_PCDAttrs& operator=(const WW8PLCFx_PCDAttrs&) = delete;
 
 public:
     WW8PLCFx_PCDAttrs(ww::WordVersion eVersion, WW8PLCFx_PCD* pPLCFx_PCD,
@@ -441,8 +441,8 @@ private:
     bool bVer67;
     WW8_CP nClipStart;
 
-    WW8PLCFx_PCD(const WW8PLCFx_PCD&) SAL_DELETED_FUNCTION;
-    WW8PLCFx_PCD& operator=(const WW8PLCFx_PCD&) SAL_DELETED_FUNCTION;
+    WW8PLCFx_PCD(const WW8PLCFx_PCD&) = delete;
+    WW8PLCFx_PCD& operator=(const WW8PLCFx_PCD&) = delete;
 
 public:
     WW8PLCFx_PCD(ww::WordVersion eVersion, WW8PLCFpcd* pPLCFpcd,
@@ -574,8 +574,8 @@ private:
 
     bool NewFkp();
 
-    WW8PLCFx_Fc_FKP(const WW8PLCFx_Fc_FKP&) SAL_DELETED_FUNCTION;
-    WW8PLCFx_Fc_FKP& operator=(const WW8PLCFx_Fc_FKP&) SAL_DELETED_FUNCTION;
+    WW8PLCFx_Fc_FKP(const WW8PLCFx_Fc_FKP&) = delete;
+    WW8PLCFx_Fc_FKP& operator=(const WW8PLCFx_Fc_FKP&) = delete;
 
 protected:
     ePLCFT ePLCF;
@@ -609,8 +609,8 @@ private:
     bool bLineEnd : 1;
     bool bComplex : 1;
 
-    WW8PLCFx_Cp_FKP(const WW8PLCFx_Cp_FKP&) SAL_DELETED_FUNCTION;
-    WW8PLCFx_Cp_FKP& operator=(const WW8PLCFx_Cp_FKP&) SAL_DELETED_FUNCTION;
+    WW8PLCFx_Cp_FKP(const WW8PLCFx_Cp_FKP&) = delete;
+    WW8PLCFx_Cp_FKP& operator=(const WW8PLCFx_Cp_FKP&) = delete;
 
 public:
     WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt, SvStream* pDataSt,
@@ -641,8 +641,8 @@ private:
     sal_uInt16 nArrMax;
     sal_uInt16 nSprmSiz;
 
-    WW8PLCFx_SEPX(const WW8PLCFx_SEPX&) SAL_DELETED_FUNCTION;
-    WW8PLCFx_SEPX& operator=(const WW8PLCFx_SEPX&) SAL_DELETED_FUNCTION;
+    WW8PLCFx_SEPX(const WW8PLCFx_SEPX&) = delete;
+    WW8PLCFx_SEPX& operator=(const WW8PLCFx_SEPX&) = delete;
 
 public:
     WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTablexySt, const WW8Fib& rFib,
@@ -669,8 +669,8 @@ private:
     WW8PLCF* pRef;
     WW8PLCF* pText;
 
-    WW8PLCFx_SubDoc(const WW8PLCFx_SubDoc&) SAL_DELETED_FUNCTION;
-    WW8PLCFx_SubDoc& operator=(const WW8PLCFx_SubDoc&) SAL_DELETED_FUNCTION;
+    WW8PLCFx_SubDoc(const WW8PLCFx_SubDoc&) = delete;
+    WW8PLCFx_SubDoc& operator=(const WW8PLCFx_SubDoc&) = delete;
 
 public:
     WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp,
@@ -698,8 +698,8 @@ class WW8PLCFx_FLD : public WW8PLCFx
 private:
     WW8PLCFspecial* pPLCF;
     const WW8Fib& rFib;
-    WW8PLCFx_FLD(const WW8PLCFx_FLD&) SAL_DELETED_FUNCTION;
-    WW8PLCFx_FLD& operator=(const WW8PLCFx_FLD &) SAL_DELETED_FUNCTION;
+    WW8PLCFx_FLD(const WW8PLCFx_FLD&) = delete;
+    WW8PLCFx_FLD& operator=(const WW8PLCFx_FLD &) = delete;
 
 public:
     WW8PLCFx_FLD(SvStream* pSt, const WW8Fib& rMyFib, short nType);
@@ -728,8 +728,8 @@ private:
     sal_uInt16 nIsEnd;
     sal_Int32 nBookmarkId; // counter incremented by GetUniqueBookmarkName.
 
-    WW8PLCFx_Book(const WW8PLCFx_Book&) SAL_DELETED_FUNCTION;
-    WW8PLCFx_Book& operator=(const WW8PLCFx_Book&) SAL_DELETED_FUNCTION;
+    WW8PLCFx_Book(const WW8PLCFx_Book&) = delete;
+    WW8PLCFx_Book& operator=(const WW8PLCFx_Book&) = delete;
 
 public:
     WW8PLCFx_Book(SvStream* pTableSt,const WW8Fib& rFib);
@@ -766,8 +766,8 @@ private:
     sal_Int32 nIMax;
     bool m_bIsEnd;
 
-    WW8PLCFx_AtnBook(const WW8PLCFx_AtnBook&) SAL_DELETED_FUNCTION;
-    WW8PLCFx_AtnBook& operator=(const WW8PLCFx_AtnBook&) SAL_DELETED_FUNCTION;
+    WW8PLCFx_AtnBook(const WW8PLCFx_AtnBook&) = delete;
+    WW8PLCFx_AtnBook& operator=(const WW8PLCFx_AtnBook&) = delete;
 
 public:
     WW8PLCFx_AtnBook(SvStream* pTableSt,const WW8Fib& rFib);

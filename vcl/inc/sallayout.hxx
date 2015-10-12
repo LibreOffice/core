@@ -216,8 +216,8 @@ protected:
     static int      CalcAsianKerning( sal_UCS4, bool bLeft, bool bVertical );
 
 private:
-                    SalLayout( const SalLayout& ) SAL_DELETED_FUNCTION;
-                    SalLayout& operator=( const SalLayout& ) SAL_DELETED_FUNCTION;
+                    SalLayout( const SalLayout& ) = delete;
+                    SalLayout& operator=( const SalLayout& ) = delete;
 
 protected:
     int             mnMinCharPos;
@@ -264,8 +264,8 @@ private:
     virtual void    DropGlyph( int ) SAL_OVERRIDE {}
     virtual void    Simplify( bool ) SAL_OVERRIDE {}
 
-                    MultiSalLayout( const MultiSalLayout& ) SAL_DELETED_FUNCTION;
-                    MultiSalLayout& operator=( const MultiSalLayout& ) SAL_DELETED_FUNCTION;
+                    MultiSalLayout( const MultiSalLayout& ) = delete;
+                    MultiSalLayout& operator=( const MultiSalLayout& ) = delete;
 
 private:
     SalLayout*      mpLayouts[ MAX_FALLBACK ];
@@ -368,8 +368,8 @@ protected:
 private:
     mutable Point   maBasePoint;
 
-                    GenericSalLayout( const GenericSalLayout& ) SAL_DELETED_FUNCTION;
-                    GenericSalLayout& operator=( const GenericSalLayout& ) SAL_DELETED_FUNCTION;
+                    GenericSalLayout( const GenericSalLayout& ) = delete;
+                    GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 };
 
 #undef SalGraphics

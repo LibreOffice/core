@@ -92,7 +92,7 @@ namespace sd {
 
 class SD_DLLPUBLIC SdPage : public FmFormPage, public SdrObjUserCall
 {
-    SdPage& operator=(const SdPage&) SAL_DELETED_FUNCTION;
+    SdPage& operator=(const SdPage&) = delete;
 
 friend class SdGenericDrawPage;
 friend class SdDrawPage;

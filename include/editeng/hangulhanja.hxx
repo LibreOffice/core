@@ -102,8 +102,8 @@ namespace editeng
         static bool                 m_bTryBothDirectionsSave;
         static ConversionDirection  m_ePrimaryConversionDirectionSave;
 
-        HangulHanjaConversion (const HangulHanjaConversion &) SAL_DELETED_FUNCTION;
-        HangulHanjaConversion & operator= (const HangulHanjaConversion &) SAL_DELETED_FUNCTION;
+        HangulHanjaConversion (const HangulHanjaConversion &) = delete;
+        HangulHanjaConversion & operator= (const HangulHanjaConversion &) = delete;
 
     public:
         HangulHanjaConversion(

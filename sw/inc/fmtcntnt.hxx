@@ -31,7 +31,7 @@ class SW_DLLPUBLIC SwFormatContent: public SfxPoolItem
 {
     SwNodeIndex *pStartNode;
 
-    SwFormatContent &operator=( const SwFormatContent & ) SAL_DELETED_FUNCTION;
+    SwFormatContent &operator=( const SwFormatContent & ) = delete;
 
 public:
     SwFormatContent( const SwStartNode* pStartNode = 0 );

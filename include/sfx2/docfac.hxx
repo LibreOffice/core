@@ -82,8 +82,8 @@ public:
     SAL_DLLPRIVATE sal_uInt16 GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback ) const;
 
 private:
-    SfxObjectFactory(const SfxObjectFactory&) SAL_DELETED_FUNCTION;
-    const SfxObjectFactory& operator=(const SfxObjectFactory &) SAL_DELETED_FUNCTION;
+    SfxObjectFactory(const SfxObjectFactory&) = delete;
+    const SfxObjectFactory& operator=(const SfxObjectFactory &) = delete;
 };
 
 #define SFX_DECL_OBJECTFACTORY()                                            \

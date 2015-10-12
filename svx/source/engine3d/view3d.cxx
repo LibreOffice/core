@@ -93,8 +93,8 @@ class Impl3DMirrorConstructOverlay
     drawinglayer::primitive2d::Primitive2DSequence  maFullOverlay;
 
     // Copy assignment is forbidden and not implemented.
-    Impl3DMirrorConstructOverlay (const Impl3DMirrorConstructOverlay &) SAL_DELETED_FUNCTION;
-    Impl3DMirrorConstructOverlay & operator= (const Impl3DMirrorConstructOverlay &) SAL_DELETED_FUNCTION;
+    Impl3DMirrorConstructOverlay (const Impl3DMirrorConstructOverlay &) = delete;
+    Impl3DMirrorConstructOverlay & operator= (const Impl3DMirrorConstructOverlay &) = delete;
 
 public:
     explicit Impl3DMirrorConstructOverlay(const E3dView& rView);

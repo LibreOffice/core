@@ -56,84 +56,84 @@ class ScDescriptiveStatisticsDialogWrapper :
     public ChildWindowWrapper<SID_DESCRIPTIVE_STATISTICS_DIALOG>
 {
 private:
-    ScDescriptiveStatisticsDialogWrapper() SAL_DELETED_FUNCTION;
+    ScDescriptiveStatisticsDialogWrapper() = delete;
 };
 
 class ScSamplingDialogWrapper :
     public ChildWindowWrapper<SID_SAMPLING_DIALOG>
 {
 private:
-    ScSamplingDialogWrapper() SAL_DELETED_FUNCTION;
+    ScSamplingDialogWrapper() = delete;
 };
 
 class ScRandomNumberGeneratorDialogWrapper :
     public ChildWindowWrapper<SID_RANDOM_NUMBER_GENERATOR_DIALOG>
 {
 private:
-    ScRandomNumberGeneratorDialogWrapper() SAL_DELETED_FUNCTION;
+    ScRandomNumberGeneratorDialogWrapper() = delete;
 };
 
 class ScAnalysisOfVarianceDialogWrapper :
     public ChildWindowWrapper<SID_ANALYSIS_OF_VARIANCE_DIALOG>
 {
 private:
-    ScAnalysisOfVarianceDialogWrapper() SAL_DELETED_FUNCTION;
+    ScAnalysisOfVarianceDialogWrapper() = delete;
 };
 
 class ScCorrelationDialogWrapper :
     public ChildWindowWrapper<SID_CORRELATION_DIALOG>
 {
 private:
-    ScCorrelationDialogWrapper() SAL_DELETED_FUNCTION;
+    ScCorrelationDialogWrapper() = delete;
 };
 
 class ScCovarianceDialogWrapper :
     public ChildWindowWrapper<SID_COVARIANCE_DIALOG>
 {
 private:
-    ScCovarianceDialogWrapper() SAL_DELETED_FUNCTION;
+    ScCovarianceDialogWrapper() = delete;
 };
 
 class ScExponentialSmoothingDialogWrapper :
     public ChildWindowWrapper<SID_EXPONENTIAL_SMOOTHING_DIALOG>
 {
 private:
-    ScExponentialSmoothingDialogWrapper() SAL_DELETED_FUNCTION;
+    ScExponentialSmoothingDialogWrapper() = delete;
 };
 
 class ScMovingAverageDialogWrapper :
     public ChildWindowWrapper<SID_MOVING_AVERAGE_DIALOG>
 {
 private:
-    ScMovingAverageDialogWrapper() SAL_DELETED_FUNCTION;
+    ScMovingAverageDialogWrapper() = delete;
 };
 
 class ScTTestDialogWrapper :
     public ChildWindowWrapper<SID_TTEST_DIALOG>
 {
 private:
-    ScTTestDialogWrapper() SAL_DELETED_FUNCTION;
+    ScTTestDialogWrapper() = delete;
 };
 
 class ScFTestDialogWrapper :
     public ChildWindowWrapper<SID_FTEST_DIALOG>
 {
 private:
-    ScFTestDialogWrapper() SAL_DELETED_FUNCTION;
+    ScFTestDialogWrapper() = delete;
 };
 
 class ScZTestDialogWrapper :
     public ChildWindowWrapper<SID_ZTEST_DIALOG>
 {
 private:
-    ScZTestDialogWrapper() SAL_DELETED_FUNCTION;
+    ScZTestDialogWrapper() = delete;
 };
 
 class ScChiSquareTestDialogWrapper :
     public ChildWindowWrapper<SID_CHI_SQUARE_TEST_DIALOG>
 {
 private:
-    ScChiSquareTestDialogWrapper() SAL_DELETED_FUNCTION;
+    ScChiSquareTestDialogWrapper() = delete;
 };
 
 class ScAcceptChgDlgWrapper: public SfxChildWindow

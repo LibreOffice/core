@@ -63,8 +63,8 @@ public:
         OUString * oid);
 
 private:
-    Proxy(const Proxy&) SAL_DELETED_FUNCTION;
-    Proxy& operator=(const Proxy&) SAL_DELETED_FUNCTION;
+    Proxy(const Proxy&) = delete;
+    Proxy& operator=(const Proxy&) = delete;
 
     ~Proxy();
 

@@ -84,8 +84,8 @@ namespace toolkit
         void    impl_updateImages_nolck( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_animatedImages );
 
     private:
-        AnimatedImagesPeer(const AnimatedImagesPeer&) SAL_DELETED_FUNCTION;
-        AnimatedImagesPeer& operator=(const AnimatedImagesPeer&) SAL_DELETED_FUNCTION;
+        AnimatedImagesPeer(const AnimatedImagesPeer&) = delete;
+        AnimatedImagesPeer& operator=(const AnimatedImagesPeer&) = delete;
 
         std::unique_ptr< AnimatedImagesPeer_Data >   m_xData;
     };

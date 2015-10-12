@@ -127,8 +127,8 @@ private:
     // like ReadString but doesn't call the string hook
     TOOLS_DLLPRIVATE OUString ReadStringWithoutHook();
 
-    ResMgr(const ResMgr&) SAL_DELETED_FUNCTION;
-    ResMgr& operator=(const ResMgr&) SAL_DELETED_FUNCTION;
+    ResMgr(const ResMgr&) = delete;
+    ResMgr& operator=(const ResMgr&) = delete;
 
 public:
     static void         DestroyAllResMgr();  ///< Called upon app shutdown

@@ -88,8 +88,8 @@ struct FSStorage_Impl
     ~FSStorage_Impl();
 
     // Copy assignment is forbidden and not implemented.
-    FSStorage_Impl (const FSStorage_Impl &) SAL_DELETED_FUNCTION;
-    FSStorage_Impl & operator= (const FSStorage_Impl &) SAL_DELETED_FUNCTION;
+    FSStorage_Impl (const FSStorage_Impl &) = delete;
+    FSStorage_Impl & operator= (const FSStorage_Impl &) = delete;
 };
 
 FSStorage_Impl::~FSStorage_Impl()

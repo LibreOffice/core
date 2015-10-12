@@ -150,8 +150,8 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XDrawPage> mxPage;
 
-    AccessiblePageShape (const AccessiblePageShape&) SAL_DELETED_FUNCTION;
-    AccessibleShape& operator= (const AccessiblePageShape&) SAL_DELETED_FUNCTION;
+    AccessiblePageShape (const AccessiblePageShape&) = delete;
+    AccessibleShape& operator= (const AccessiblePageShape&) = delete;
 };
 
 } // end of namespace accessibility

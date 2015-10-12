@@ -85,8 +85,8 @@ protected:
     bool mbSelected;
 
 private:
-    SmartTag( const SmartTag& ) SAL_DELETED_FUNCTION;
-    SmartTag& operator=( const SmartTag& ) SAL_DELETED_FUNCTION;
+    SmartTag( const SmartTag& ) = delete;
+    SmartTag& operator=( const SmartTag& ) = delete;
 };
 
 typedef rtl::Reference< SmartTag > SmartTagReference;
@@ -142,8 +142,8 @@ public:
     void CheckPossibilities();
 
 private:
-    SmartTagSet( const SmartTagSet& ) SAL_DELETED_FUNCTION;
-    SmartTagSet& operator=( const SmartTagSet& ) SAL_DELETED_FUNCTION;
+    SmartTagSet( const SmartTagSet& ) = delete;
+    SmartTagSet& operator=( const SmartTagSet& ) = delete;
 
     /** adds a new smart tag to this set */
     void add( const SmartTagReference& xTag );

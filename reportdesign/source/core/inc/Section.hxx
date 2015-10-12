@@ -74,8 +74,8 @@ namespace reportdesign
         bool                                                                                m_bInInsertNotify;
 
     private:
-        OSection(const OSection&) SAL_DELETED_FUNCTION;
-        OSection& operator=(const OSection&) SAL_DELETED_FUNCTION;
+        OSection(const OSection&) = delete;
+        OSection& operator=(const OSection&) = delete;
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value

@@ -160,8 +160,8 @@ public:
                                 Graphic& rGrf );
 
 private:
-                LinkManager( const LinkManager& ) SAL_DELETED_FUNCTION;
-                LinkManager& operator=( const LinkManager& ) SAL_DELETED_FUNCTION;
+                LinkManager( const LinkManager& ) = delete;
+                LinkManager& operator=( const LinkManager& ) = delete;
 };
 
 // Separator in the link name for the DDE-/File-/Graphics- links

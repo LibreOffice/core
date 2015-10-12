@@ -120,8 +120,8 @@ private:
                                                 long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos );
     SAL_DLLPRIVATE void ImplDrawSplitTracking(const Point& rPos);
 
-                        SplitWindow (const SplitWindow &) SAL_DELETED_FUNCTION;
-                        SplitWindow & operator= (const SplitWindow &) SAL_DELETED_FUNCTION;
+                        SplitWindow (const SplitWindow &) = delete;
+                        SplitWindow & operator= (const SplitWindow &) = delete;
 public:
                         SplitWindow( vcl::Window* pParent, WinBits nStyle = 0 );
     virtual             ~SplitWindow();

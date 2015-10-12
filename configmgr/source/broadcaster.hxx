@@ -78,8 +78,8 @@ public:
     void send();
 
 private:
-    Broadcaster(const Broadcaster&) SAL_DELETED_FUNCTION;
-    Broadcaster& operator=(const Broadcaster&) SAL_DELETED_FUNCTION;
+    Broadcaster(const Broadcaster&) = delete;
+    Broadcaster& operator=(const Broadcaster&) = delete;
 
     struct DisposeNotification {
         css::uno::Reference< css::lang::XEventListener >  listener;

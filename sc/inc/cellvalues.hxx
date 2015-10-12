@@ -42,8 +42,8 @@ class CellValues
 {
     CellValuesImpl* mpImpl;
 
-    CellValues( const CellValues& ) SAL_DELETED_FUNCTION;
-    CellValues& operator= ( const CellValues& ) SAL_DELETED_FUNCTION;
+    CellValues( const CellValues& ) = delete;
+    CellValues& operator= ( const CellValues& ) = delete;
 
 public:
     CellValues();
@@ -88,8 +88,8 @@ class TableValues
 
     Impl* mpImpl;
 
-    TableValues( const TableValues& ) SAL_DELETED_FUNCTION;
-    TableValues& operator= ( const TableValues& ) SAL_DELETED_FUNCTION;
+    TableValues( const TableValues& ) = delete;
+    TableValues& operator= ( const TableValues& ) = delete;
 
 public:
 

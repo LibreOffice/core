@@ -48,8 +48,8 @@ class ScChartPositionMap
                                     );
                                 ~ScChartPositionMap();  //! deletes all ScAddress*
 
-                                ScChartPositionMap( const ScChartPositionMap& ) SAL_DELETED_FUNCTION;
-            ScChartPositionMap& operator=( const ScChartPositionMap& ) SAL_DELETED_FUNCTION;
+                                ScChartPositionMap( const ScChartPositionMap& ) = delete;
+            ScChartPositionMap& operator=( const ScChartPositionMap& ) = delete;
 
 public:
             SCCOL               GetColCount() const { return nColCount; }

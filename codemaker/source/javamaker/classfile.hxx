@@ -130,8 +130,8 @@ public:
         Position getPosition() const;
 
     private:
-        Code(Code &) SAL_DELETED_FUNCTION;
-        void operator =(const Code&) SAL_DELETED_FUNCTION;
+        Code(Code &) = delete;
+        void operator =(const Code&) = delete;
 
         explicit Code(ClassFile & classFile);
 
@@ -181,8 +181,8 @@ public:
 private:
     typedef std::map< rtl::OString, sal_uInt16 > Map;
 
-    ClassFile(ClassFile &) SAL_DELETED_FUNCTION;
-    void operator =(const ClassFile&) SAL_DELETED_FUNCTION;
+    ClassFile(ClassFile &) = delete;
+    void operator =(const ClassFile&) = delete;
 
     sal_uInt16 nextConstantPoolIndex(sal_uInt16 width);
     sal_uInt16 addUtf8Info(rtl::OString const & value);

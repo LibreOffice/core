@@ -55,8 +55,8 @@ namespace rptui
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> m_pSectionMulti;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> m_pGroupMulti;
 
-        OSectionWindow(OSectionWindow&) SAL_DELETED_FUNCTION;
-        void operator =(OSectionWindow&) SAL_DELETED_FUNCTION;
+        OSectionWindow(OSectionWindow&) = delete;
+        void operator =(OSectionWindow&) = delete;
 
         /** set the title of the group header or footer
         *

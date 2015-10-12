@@ -87,8 +87,8 @@ private:
 
     static void _UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum );
 
-    SwNodeNum( const SwNodeNum& ) SAL_DELETED_FUNCTION;
-    SwNodeNum& operator=( const SwNodeNum& ) SAL_DELETED_FUNCTION;
+    SwNodeNum( const SwNodeNum& ) = delete;
+    SwNodeNum& operator=( const SwNodeNum& ) = delete;
 
     virtual bool IsCountPhantoms() const SAL_OVERRIDE;
 

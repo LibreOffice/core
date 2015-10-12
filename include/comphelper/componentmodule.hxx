@@ -162,8 +162,8 @@ namespace comphelper
         virtual void onLastClient();
 
     private:
-        OModule( const OModule& ) SAL_DELETED_FUNCTION;
-        OModule& operator=( const OModule& ) SAL_DELETED_FUNCTION;
+        OModule( const OModule& ) = delete;
+        OModule& operator=( const OModule& ) = delete;
     };
 
 

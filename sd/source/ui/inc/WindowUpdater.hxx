@@ -114,9 +114,9 @@ private:
     /// The document rendered in the output devices.
     SdDrawDocument* mpDocument;
 
-    WindowUpdater (const WindowUpdater& rUpdater) SAL_DELETED_FUNCTION;
+    WindowUpdater (const WindowUpdater& rUpdater) = delete;
 
-    WindowUpdater operator= (const WindowUpdater& rUpdater) SAL_DELETED_FUNCTION;
+    WindowUpdater operator= (const WindowUpdater& rUpdater) = delete;
 
     /** Type and data member for a list of devices that have to be kept
         up-to-date.

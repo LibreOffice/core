@@ -195,8 +195,8 @@ private:
     // supposed to be a singleton
     FunctionParser();
 
-    FunctionParser(const FunctionParser&) SAL_DELETED_FUNCTION;
-    FunctionParser& operator=( const FunctionParser& ) SAL_DELETED_FUNCTION;
+    FunctionParser(const FunctionParser&) = delete;
+    FunctionParser& operator=( const FunctionParser& ) = delete;
 };
 
 }

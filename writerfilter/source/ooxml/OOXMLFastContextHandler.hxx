@@ -232,7 +232,7 @@ protected:
     bool inPositionV;
 
 private:
-    void operator =(OOXMLFastContextHandler &) SAL_DELETED_FUNCTION;
+    void operator =(OOXMLFastContextHandler &) = delete;
     /// Handles AlternateContent. Returns true, if children of the current element should be ignored.
     bool prepareMceContext(Token_t nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs);
 

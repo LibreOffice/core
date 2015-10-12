@@ -169,8 +169,8 @@ public:
     bool isCurrentContextMode();
 
 private:
-    Bridge(const Bridge&) SAL_DELETED_FUNCTION;
-    Bridge& operator=(const Bridge&) SAL_DELETED_FUNCTION;
+    Bridge(const Bridge&) = delete;
+    Bridge& operator=(const Bridge&) = delete;
 
     virtual ~Bridge();
 

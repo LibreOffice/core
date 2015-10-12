@@ -85,8 +85,8 @@ namespace frm
     private:
 
     private:
-        FontControlModel( const FontControlModel& ) SAL_DELETED_FUNCTION;
-        FontControlModel& operator=( const FontControlModel& ) SAL_DELETED_FUNCTION;
+        FontControlModel( const FontControlModel& ) = delete;
+        FontControlModel& operator=( const FontControlModel& ) = delete;
     };
 
 

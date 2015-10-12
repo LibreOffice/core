@@ -130,7 +130,7 @@ protected:
     LwpBreaksOverride(LwpBreaksOverride const& rOther);
 
 private:
-    LwpBreaksOverride& operator=(const LwpBreaksOverride& rOther) SAL_DELETED_FUNCTION;
+    LwpBreaksOverride& operator=(const LwpBreaksOverride& rOther) = delete;
 
 private:
     LwpAtomHolder       *m_pNextStyle;

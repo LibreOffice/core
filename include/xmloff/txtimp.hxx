@@ -368,8 +368,8 @@ enum XMLTextType
 class XMLOFF_DLLPUBLIC XMLTextImportHelper : public salhelper::SimpleReferenceObject
 {
 private:
-    XMLTextImportHelper(const XMLTextImportHelper&) SAL_DELETED_FUNCTION;
-    XMLTextImportHelper& operator=(const XMLTextImportHelper&) SAL_DELETED_FUNCTION;
+    XMLTextImportHelper(const XMLTextImportHelper&) = delete;
+    XMLTextImportHelper& operator=(const XMLTextImportHelper&) = delete;
 
     struct Impl;
     std::unique_ptr<Impl> m_xImpl;

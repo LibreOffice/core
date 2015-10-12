@@ -209,8 +209,8 @@ namespace frm
         static sal_Int16 getFeatureId( const OUString& _rCompleteURL );
 
     private:
-        OFormNavigationMapper( const OFormNavigationMapper& ) SAL_DELETED_FUNCTION;
-        OFormNavigationMapper& operator=( const OFormNavigationMapper& ) SAL_DELETED_FUNCTION;
+        OFormNavigationMapper( const OFormNavigationMapper& ) = delete;
+        OFormNavigationMapper& operator=( const OFormNavigationMapper& ) = delete;
     };
 
 

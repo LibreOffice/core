@@ -28,8 +28,8 @@ class SmTmpDevice
 {
     OutputDevice  &rOutDev;
 
-    SmTmpDevice(const SmTmpDevice&) SAL_DELETED_FUNCTION;
-    SmTmpDevice& operator=(const SmTmpDevice&) SAL_DELETED_FUNCTION;
+    SmTmpDevice(const SmTmpDevice&) = delete;
+    SmTmpDevice& operator=(const SmTmpDevice&) = delete;
 
     Color   Impl_GetColor( const Color& rColor );
 

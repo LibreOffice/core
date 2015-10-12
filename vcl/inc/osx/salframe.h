@@ -202,8 +202,8 @@ public:
  private: // data
     static AquaSalFrame*                   s_pCaptureFrame;
 
-    AquaSalFrame( const AquaSalFrame& ) SAL_DELETED_FUNCTION;
-    AquaSalFrame& operator=(const AquaSalFrame&) SAL_DELETED_FUNCTION;
+    AquaSalFrame( const AquaSalFrame& ) = delete;
+    AquaSalFrame& operator=(const AquaSalFrame&) = delete;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_SALFRAME_H

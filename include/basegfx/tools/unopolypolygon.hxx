@@ -96,8 +96,8 @@ namespace unotools
         virtual void modifying() const {}
 
     private:
-        UnoPolyPolygon(const UnoPolyPolygon&) SAL_DELETED_FUNCTION;
-        UnoPolyPolygon& operator=(const UnoPolyPolygon&) SAL_DELETED_FUNCTION;
+        UnoPolyPolygon(const UnoPolyPolygon&) = delete;
+        UnoPolyPolygon& operator=(const UnoPolyPolygon&) = delete;
 
         B2DPolyPolygon                        maPolyPoly;
         ::com::sun::star::rendering::FillRule meFillRule;

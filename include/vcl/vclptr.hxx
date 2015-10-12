@@ -352,12 +352,12 @@ public:
 
 private:
     // Most likely we don't want this default copy-construtor.
-    ScopedVclPtr (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
+    ScopedVclPtr (const ScopedVclPtr<reference_type> &) = delete;
     // And certainly we don't want a default assignment operator.
-    ScopedVclPtr<reference_type>& operator= (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
+    ScopedVclPtr<reference_type>& operator= (const ScopedVclPtr<reference_type> &) = delete;
     // And disallow reset as that doesn't call disposeAndClear on the original reference
-    void reset() SAL_DELETED_FUNCTION;
-    void reset(reference_type *pBody) SAL_DELETED_FUNCTION;
+    void reset() = delete;
+    void reset(reference_type *pBody) = delete;
 
 protected:
     inline ScopedVclPtr (reference_type * pBody, __sal_NoAcquire)

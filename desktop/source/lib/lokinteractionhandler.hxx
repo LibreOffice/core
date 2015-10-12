@@ -38,8 +38,8 @@ class LOKInteractionHandler: public cppu::WeakImplHelper<com::sun::star::lang::X
                                                          com::sun::star::lang::XInitialization,
                                                          com::sun::star::task::XInteractionHandler2>
 {
-    LOKInteractionHandler(const LOKInteractionHandler&) SAL_DELETED_FUNCTION;
-    LOKInteractionHandler& operator=(const LOKInteractionHandler&) SAL_DELETED_FUNCTION;
+    LOKInteractionHandler(const LOKInteractionHandler&) = delete;
+    LOKInteractionHandler& operator=(const LOKInteractionHandler&) = delete;
 
 public:
     explicit LOKInteractionHandler(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const & rxContext);

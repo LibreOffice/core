@@ -35,7 +35,7 @@ class OModule
     friend class OModuleClient;
 
 private:
-    OModule() SAL_DELETED_FUNCTION; //TODO: get rid of this class
+    OModule() = delete; //TODO: get rid of this class
 
 protected:
     static ::osl::Mutex s_aMutex;       /// access safety

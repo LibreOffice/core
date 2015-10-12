@@ -82,9 +82,9 @@ private:
     MasterPageObserver();
     virtual ~MasterPageObserver();
 
-    MasterPageObserver (const MasterPageObserver&) SAL_DELETED_FUNCTION;
+    MasterPageObserver (const MasterPageObserver&) = delete;
 
-    MasterPageObserver& operator= (const MasterPageObserver&) SAL_DELETED_FUNCTION;
+    MasterPageObserver& operator= (const MasterPageObserver&) = delete;
 };
 
 /** Objects of this class are sent to listeners of the MasterPageObserver

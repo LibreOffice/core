@@ -46,7 +46,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
         sal_uInt16 nCharPoolId;
         std::vector<std::unique_ptr<SfxPoolItem>> m_Items;
 
-        _SwNumFormatGlobal& operator=( const _SwNumFormatGlobal& ) SAL_DELETED_FUNCTION;
+        _SwNumFormatGlobal& operator=( const _SwNumFormatGlobal& ) = delete;
 
     public:
         _SwNumFormatGlobal( const SwNumFormat& rFormat );

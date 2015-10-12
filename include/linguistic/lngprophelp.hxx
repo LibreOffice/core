@@ -75,8 +75,8 @@ class PropertyChgHelper :
     bool    bResIsIgnoreControlCharacters;
     bool    bResIsUseDictionaryList;
 
-    PropertyChgHelper( const PropertyChgHelper & ) SAL_DELETED_FUNCTION;
-    PropertyChgHelper & operator = ( const PropertyChgHelper & ) SAL_DELETED_FUNCTION;
+    PropertyChgHelper( const PropertyChgHelper & ) = delete;
+    PropertyChgHelper & operator = ( const PropertyChgHelper & ) = delete;
 
 protected:
     virtual void    SetDefaultValues();
@@ -146,8 +146,8 @@ public:
 class PropertyHelper_Thes :
     public PropertyChgHelper
 {
-    PropertyHelper_Thes( const PropertyHelper_Thes & ) SAL_DELETED_FUNCTION;
-    PropertyHelper_Thes & operator = ( const PropertyHelper_Thes & ) SAL_DELETED_FUNCTION;
+    PropertyHelper_Thes( const PropertyHelper_Thes & ) = delete;
+    PropertyHelper_Thes & operator = ( const PropertyHelper_Thes & ) = delete;
 
 public:
     PropertyHelper_Thes(
@@ -199,8 +199,8 @@ class LNG_DLLPUBLIC PropertyHelper_Spell :
     bool        bResIsSpellWithDigits;
     bool        bResIsSpellCapitalization;
 
-    PropertyHelper_Spell( const PropertyHelper_Spell & ) SAL_DELETED_FUNCTION;
-    PropertyHelper_Spell & operator = ( const PropertyHelper_Spell & ) SAL_DELETED_FUNCTION;
+    PropertyHelper_Spell( const PropertyHelper_Spell & ) = delete;
+    PropertyHelper_Spell & operator = ( const PropertyHelper_Spell & ) = delete;
 
 protected:
     // PropertyChgHelper
@@ -279,8 +279,8 @@ class PropertyHelper_Hyphen :
             nResHyphMinTrailing,
             nResHyphMinWordLength;
 
-    PropertyHelper_Hyphen( const PropertyHelper_Hyphen & ) SAL_DELETED_FUNCTION;
-    PropertyHelper_Hyphen & operator = ( const PropertyHelper_Hyphen & ) SAL_DELETED_FUNCTION;
+    PropertyHelper_Hyphen( const PropertyHelper_Hyphen & ) = delete;
+    PropertyHelper_Hyphen & operator = ( const PropertyHelper_Hyphen & ) = delete;
 
 protected:
     // PropertyChgHelper

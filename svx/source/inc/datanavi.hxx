@@ -160,7 +160,7 @@ namespace svxform
         OUString m_sInstance_API;
         OUString m_sNone_API;
 
-        ReplaceString( const ReplaceString& ) SAL_DELETED_FUNCTION;
+        ReplaceString( const ReplaceString& ) = delete;
 
     public:
         ReplaceString() :
@@ -208,7 +208,7 @@ namespace svxform
         OUString m_sPut_API;
         OUString m_sGet_API;
 
-        MethodString( const MethodString& ) SAL_DELETED_FUNCTION;
+        MethodString( const MethodString& ) = delete;
 
     public:
 

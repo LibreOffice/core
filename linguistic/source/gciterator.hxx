@@ -141,8 +141,8 @@ class GrammarCheckingIterator:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >   GetUpdateAccess() const;
 
-    GrammarCheckingIterator( const GrammarCheckingIterator & ) SAL_DELETED_FUNCTION;
-    GrammarCheckingIterator & operator = ( const GrammarCheckingIterator & ) SAL_DELETED_FUNCTION;
+    GrammarCheckingIterator( const GrammarCheckingIterator & ) = delete;
+    GrammarCheckingIterator & operator = ( const GrammarCheckingIterator & ) = delete;
 
 public:
 

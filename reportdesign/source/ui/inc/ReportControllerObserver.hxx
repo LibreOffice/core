@@ -53,8 +53,8 @@ namespace rptui
         FixedTextColor           m_aFixedTextColor;
 
         // do not allow copy
-        OXReportControllerObserver(const OXReportControllerObserver&) SAL_DELETED_FUNCTION;
-        OXReportControllerObserver& operator=(const OXReportControllerObserver&) SAL_DELETED_FUNCTION;
+        OXReportControllerObserver(const OXReportControllerObserver&) = delete;
+        OXReportControllerObserver& operator=(const OXReportControllerObserver&) = delete;
         virtual  ~OXReportControllerObserver(); // UNO Object must have private destructor!
     public:
         OXReportControllerObserver(const OReportController& _rController);

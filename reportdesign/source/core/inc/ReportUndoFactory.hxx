@@ -30,8 +30,8 @@ namespace rptui
         OModuleClient       m_aModuleClient;
         ::std::unique_ptr<SdrUndoFactory> m_pUndoFactory;
 
-        OReportUndoFactory(const OReportUndoFactory&) SAL_DELETED_FUNCTION;
-        OReportUndoFactory& operator=(const OReportUndoFactory&) SAL_DELETED_FUNCTION;
+        OReportUndoFactory(const OReportUndoFactory&) = delete;
+        OReportUndoFactory& operator=(const OReportUndoFactory&) = delete;
     public:
         OReportUndoFactory();
         virtual ~OReportUndoFactory();

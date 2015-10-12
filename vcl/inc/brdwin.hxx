@@ -112,8 +112,8 @@ private:
                                       WinBits nStyle, sal_uInt16 nTypeStyle,
                                       const ::com::sun::star::uno::Any& );
 
-                            ImplBorderWindow (const ImplBorderWindow &) SAL_DELETED_FUNCTION;
-                            ImplBorderWindow& operator= (const ImplBorderWindow &) SAL_DELETED_FUNCTION;
+                            ImplBorderWindow (const ImplBorderWindow &) = delete;
+                            ImplBorderWindow& operator= (const ImplBorderWindow &) = delete;
 
 public:
                             ImplBorderWindow( vcl::Window* pParent,

@@ -158,8 +158,8 @@ class SW_DLLPUBLIC SwFlyFrameFormat: public SwFrameFormat
        when they get borders (this is done in SwWrtShell::CalcAndGetScale) */
     Point   m_aLastFlyFrmPrtRectPos;
 
-    SwFlyFrameFormat( const SwFlyFrameFormat &rCpy ) SAL_DELETED_FUNCTION;
-    SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) SAL_DELETED_FUNCTION;
+    SwFlyFrameFormat( const SwFlyFrameFormat &rCpy ) = delete;
+    SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) = delete;
 
 protected:
     SwFlyFrameFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
@@ -234,8 +234,8 @@ class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
     mutable const SdrObject * pSdrObjCached;
     mutable OUString sSdrObjCachedComment;
 
-    SwDrawFrameFormat( const SwDrawFrameFormat &rCpy ) SAL_DELETED_FUNCTION;
-    SwDrawFrameFormat &operator=( const SwDrawFrameFormat &rCpy ) SAL_DELETED_FUNCTION;
+    SwDrawFrameFormat( const SwDrawFrameFormat &rCpy ) = delete;
+    SwDrawFrameFormat &operator=( const SwDrawFrameFormat &rCpy ) = delete;
 
     SwFrameFormat::tLayoutDir meLayoutDir;
 

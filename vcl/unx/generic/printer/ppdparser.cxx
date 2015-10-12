@@ -269,8 +269,8 @@ namespace
 class PPDDecompressStream
 {
 private:
-    PPDDecompressStream(const PPDDecompressStream&) SAL_DELETED_FUNCTION;
-    PPDDecompressStream& operator=(const PPDDecompressStream&) SAL_DELETED_FUNCTION;
+    PPDDecompressStream(const PPDDecompressStream&) = delete;
+    PPDDecompressStream& operator=(const PPDDecompressStream&) = delete;
 
     SvFileStream*       mpFileStream;
     SvMemoryStream*     mpMemStream;

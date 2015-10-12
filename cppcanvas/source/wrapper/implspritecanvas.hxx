@@ -73,7 +73,7 @@ namespace cppcanvas
             typedef std::shared_ptr< TransformationArbiter > TransformationArbiterSharedPtr;
 
         private:
-            ImplSpriteCanvas& operator=( const ImplSpriteCanvas& ) SAL_DELETED_FUNCTION;
+            ImplSpriteCanvas& operator=( const ImplSpriteCanvas& ) = delete;
 
             const css::uno::Reference< css::rendering::XSpriteCanvas > mxSpriteCanvas;
             TransformationArbiterSharedPtr                             mpTransformArbiter;

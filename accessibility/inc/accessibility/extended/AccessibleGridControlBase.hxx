@@ -338,8 +338,8 @@ protected:
         throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
-    GridControlAccessibleElement( const GridControlAccessibleElement& ) SAL_DELETED_FUNCTION;
-    GridControlAccessibleElement& operator=( const GridControlAccessibleElement& ) SAL_DELETED_FUNCTION;
+    GridControlAccessibleElement( const GridControlAccessibleElement& ) = delete;
+    GridControlAccessibleElement& operator=( const GridControlAccessibleElement& ) = delete;
 };
 
 // inlines --------------------------------------------------------------------

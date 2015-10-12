@@ -39,7 +39,7 @@ private:
     SfxPrinter_Impl*        pImpl;
     bool                    bKnown;
 
-    SAL_DLLPRIVATE void operator =(SfxPrinter &) SAL_DELETED_FUNCTION;
+    SAL_DLLPRIVATE void operator =(SfxPrinter &) = delete;
 
 public:
                             SfxPrinter( SfxItemSet *pTheOptions );

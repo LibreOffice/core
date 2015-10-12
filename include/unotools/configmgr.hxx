@@ -81,8 +81,8 @@ public:
 
 private:
 
-    ConfigManager(const ConfigManager&) SAL_DELETED_FUNCTION;
-    ConfigManager& operator=(const ConfigManager&) SAL_DELETED_FUNCTION;
+    ConfigManager(const ConfigManager&) = delete;
+    ConfigManager& operator=(const ConfigManager&) = delete;
 
     void doStoreConfigItems();
 

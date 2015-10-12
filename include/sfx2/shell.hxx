@@ -142,8 +142,8 @@ class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
     ::svl::IUndoManager*        pUndoMgr;
 
 private:
-                                SfxShell( const SfxShell & ) SAL_DELETED_FUNCTION;
-    SfxShell&                                   operator = ( const SfxShell & ) SAL_DELETED_FUNCTION;
+                                SfxShell( const SfxShell & ) = delete;
+    SfxShell&                                   operator = ( const SfxShell & ) = delete;
 
 protected:
     /**

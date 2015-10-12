@@ -61,8 +61,8 @@ namespace svt
         /// checks if the currently bound content is a folder or document
         bool implIs( const OUString& _rURL, Type _eType );
 
-        SmartContent( const SmartContent& _rSource ) SAL_DELETED_FUNCTION;
-        SmartContent& operator=( const SmartContent& _rSource ) SAL_DELETED_FUNCTION;
+        SmartContent( const SmartContent& _rSource ) = delete;
+        SmartContent& operator=( const SmartContent& _rSource ) = delete;
 
     public:
         SmartContent();

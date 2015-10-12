@@ -98,9 +98,9 @@ private:
     */
     void LateInit();
 
-    RecentlyUsedMasterPages (const RecentlyUsedMasterPages&) SAL_DELETED_FUNCTION;
+    RecentlyUsedMasterPages (const RecentlyUsedMasterPages&) = delete;
 
-    RecentlyUsedMasterPages& operator= (const RecentlyUsedMasterPages&) SAL_DELETED_FUNCTION;
+    RecentlyUsedMasterPages& operator= (const RecentlyUsedMasterPages&) = delete;
 
     void SendEvent();
     DECL_LINK_TYPED(MasterPageChangeListener, MasterPageObserverEvent&, void);

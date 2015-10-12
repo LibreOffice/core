@@ -38,8 +38,8 @@ namespace utl
         bool            m_bInitialized;
         OString  m_sResFilePrefix;
 
-        OComponentResModuleImpl(const OComponentResModuleImpl&) SAL_DELETED_FUNCTION;
-        OComponentResModuleImpl& operator=(const OComponentResModuleImpl&) SAL_DELETED_FUNCTION;
+        OComponentResModuleImpl(const OComponentResModuleImpl&) = delete;
+        OComponentResModuleImpl& operator=(const OComponentResModuleImpl&) = delete;
 
     public:
         explicit OComponentResModuleImpl( const OString& _rResFilePrefix )

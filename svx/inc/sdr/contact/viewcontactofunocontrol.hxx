@@ -73,8 +73,8 @@ namespace sdr { namespace contact {
         virtual ViewObjectContact& CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact ) SAL_OVERRIDE;
 
     private:
-        ViewContactOfUnoControl( const ViewContactOfUnoControl& ) SAL_DELETED_FUNCTION;
-        ViewContactOfUnoControl& operator=( const ViewContactOfUnoControl& ) SAL_DELETED_FUNCTION;
+        ViewContactOfUnoControl( const ViewContactOfUnoControl& ) = delete;
+        ViewContactOfUnoControl& operator=( const ViewContactOfUnoControl& ) = delete;
 
     protected:
         // This method is responsible for creating the graphical visualisation data

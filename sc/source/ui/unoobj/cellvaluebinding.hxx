@@ -138,8 +138,8 @@ namespace calc
         void    setBooleanFormat();
 
     private:
-        OCellValueBinding( const OCellValueBinding& ) SAL_DELETED_FUNCTION;
-        OCellValueBinding& operator=( const OCellValueBinding& ) SAL_DELETED_FUNCTION;
+        OCellValueBinding( const OCellValueBinding& ) = delete;
+        OCellValueBinding& operator=( const OCellValueBinding& ) = delete;
     };
 
 }   // namespace calc

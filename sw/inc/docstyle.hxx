@@ -229,7 +229,7 @@ protected:
     virtual ~SwDocStyleSheetPool();
 
 private:
-    SwDocStyleSheetPool( const SwDocStyleSheetPool& ) SAL_DELETED_FUNCTION;
+    SwDocStyleSheetPool( const SwDocStyleSheetPool& ) = delete;
 };
 
 #endif

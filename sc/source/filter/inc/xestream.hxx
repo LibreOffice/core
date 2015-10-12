@@ -252,8 +252,8 @@ class XclXmlUtils
 {
     XclXmlUtils();
     ~XclXmlUtils();
-    XclXmlUtils(const XclXmlUtils&) SAL_DELETED_FUNCTION;
-    XclXmlUtils& operator=(const XclXmlUtils&) SAL_DELETED_FUNCTION;
+    XclXmlUtils(const XclXmlUtils&) = delete;
+    XclXmlUtils& operator=(const XclXmlUtils&) = delete;
 public:
     static void                     GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& sType, OUString& rValue);
     static OUString          GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId );

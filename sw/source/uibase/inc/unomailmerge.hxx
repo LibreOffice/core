@@ -126,8 +126,8 @@ class SwXMailMerge :
 
     void    launchEvent( const com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
 
-    SwXMailMerge( const SwXMailMerge & ) SAL_DELETED_FUNCTION;
-    SwXMailMerge & operator = ( const SwXMailMerge & ) SAL_DELETED_FUNCTION;
+    SwXMailMerge( const SwXMailMerge & ) = delete;
+    SwXMailMerge & operator = ( const SwXMailMerge & ) = delete;
 protected:
     virtual ~SwXMailMerge();
 public:

@@ -120,8 +120,8 @@ public:
     css::uno::Reference<css::frame::XFrame> getFrame() { return m_xFrame; }
 
 private:
-    VclBuilder(const VclBuilder&) SAL_DELETED_FUNCTION;
-    VclBuilder& operator=(const VclBuilder&) SAL_DELETED_FUNCTION;
+    VclBuilder(const VclBuilder&) = delete;
+    VclBuilder& operator=(const VclBuilder&) = delete;
 
     typedef std::map<OUString, std::unique_ptr<osl::Module>> ModuleMap;
 

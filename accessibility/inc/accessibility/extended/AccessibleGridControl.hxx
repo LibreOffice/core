@@ -228,8 +228,8 @@ protected:
     }
 
 private:
-    AccessibleGridControlAccess( const AccessibleGridControlAccess& ) SAL_DELETED_FUNCTION;
-    AccessibleGridControlAccess& operator=( const AccessibleGridControlAccess& ) SAL_DELETED_FUNCTION;
+    AccessibleGridControlAccess( const AccessibleGridControlAccess& ) = delete;
+    AccessibleGridControlAccess& operator=( const AccessibleGridControlAccess& ) = delete;
 };
 
 

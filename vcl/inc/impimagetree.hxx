@@ -57,8 +57,8 @@ public:
     css::uno::Reference< css::container::XNameAccess > getNameAccess();
 
 private:
-    ImplImageTree(const ImplImageTree&) SAL_DELETED_FUNCTION;
-    ImplImageTree& operator=(const ImplImageTree&) SAL_DELETED_FUNCTION;
+    ImplImageTree(const ImplImageTree&) = delete;
+    ImplImageTree& operator=(const ImplImageTree&) = delete;
 
     typedef std::unordered_map<OUString, std::pair<bool, BitmapEx>, OUStringHash> IconCache;
     typedef std::unordered_map<OUString, OUString, OUStringHash> IconLinkHash;

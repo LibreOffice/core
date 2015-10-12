@@ -70,8 +70,8 @@ class DicList :
     bool    bDisposing;
     bool    bInCreation;
 
-    DicList( const DicList & ) SAL_DELETED_FUNCTION;
-    DicList & operator = (const DicList &) SAL_DELETED_FUNCTION;
+    DicList( const DicList & ) = delete;
+    DicList & operator = (const DicList &) = delete;
 
     void                _CreateDicList();
     DictionaryVec_t &   GetOrCreateDicList()

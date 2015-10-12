@@ -33,8 +33,8 @@ class SfxThesSubMenuHelper
     css::uno::Reference< css::linguistic2::XThesaurus >             m_xThesarus;
 
 private:
-    SfxThesSubMenuHelper( const SfxThesSubMenuHelper & ) SAL_DELETED_FUNCTION;
-    SfxThesSubMenuHelper & operator = ( const SfxThesSubMenuHelper & ) SAL_DELETED_FUNCTION;
+    SfxThesSubMenuHelper( const SfxThesSubMenuHelper & ) = delete;
+    SfxThesSubMenuHelper & operator = ( const SfxThesSubMenuHelper & ) = delete;
 
 public:
     SfxThesSubMenuHelper();

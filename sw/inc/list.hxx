@@ -53,8 +53,8 @@ class SwList
         bool IsListLevelMarked( const int nListLevel ) const;
 
     private:
-        SwList( const SwList& ) SAL_DELETED_FUNCTION;
-        SwList& operator=( const SwList& ) SAL_DELETED_FUNCTION;
+        SwList( const SwList& ) = delete;
+        SwList& operator=( const SwList& ) = delete;
 
         SwListImpl* mpListImpl;
 };

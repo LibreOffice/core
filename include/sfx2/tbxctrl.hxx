@@ -81,8 +81,8 @@ friend class SfxFrameStatusListener;
 private:
     SfxFrameStatusListener* GetOrCreateStatusListener();
 
-    SfxPopupWindow(SfxPopupWindow &) SAL_DELETED_FUNCTION;
-    void operator =(SfxPopupWindow &) SAL_DELETED_FUNCTION;
+    SfxPopupWindow(SfxPopupWindow &) = delete;
+    void operator =(SfxPopupWindow &) = delete;
     void Delete();
 
 protected:

@@ -351,8 +351,8 @@ private:
     }
 
 private:
-    OutputDevice(const OutputDevice&) SAL_DELETED_FUNCTION;
-    OutputDevice& operator=(const OutputDevice&) SAL_DELETED_FUNCTION;
+    OutputDevice(const OutputDevice&) = delete;
+    OutputDevice& operator=(const OutputDevice&) = delete;
 
     mutable SalGraphics*            mpGraphics;         ///< Graphics context to draw on
     mutable VclPtr<OutputDevice>    mpPrevGraphics;     ///< Previous output device in list
@@ -633,7 +633,7 @@ protected:
 private:
 
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
-    SAL_DLLPRIVATE void         DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&) SAL_DELETED_FUNCTION;
+    SAL_DLLPRIVATE void         DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&) = delete;
     ///@}
 
 

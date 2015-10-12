@@ -53,8 +53,8 @@ namespace sdr
             , public salhelper::SimpleReferenceObject
         {
         private:
-            OverlayManager(const OverlayManager&) SAL_DELETED_FUNCTION;
-            OverlayManager& operator=(const OverlayManager&) SAL_DELETED_FUNCTION;
+            OverlayManager(const OverlayManager&) = delete;
+            OverlayManager& operator=(const OverlayManager&) = delete;
 
         protected:
             // the OutputDevice to work on, set on construction and not to be changed

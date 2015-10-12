@@ -194,8 +194,8 @@ public:
     }
 
 private:
-                    ColorListBox( const ColorListBox& ) SAL_DELETED_FUNCTION;
-    ColorListBox&   operator =( const ColorListBox& ) SAL_DELETED_FUNCTION;
+                    ColorListBox( const ColorListBox& ) = delete;
+    ColorListBox&   operator =( const ColorListBox& ) = delete;
 };
 
 inline void ColorListBox::SelectEntry( const Color& rColor, bool bSelect )
@@ -345,8 +345,8 @@ protected:
     Color   GetColorDist( sal_Int32  nPos = 0 );
 
 private:
-                    LineListBox( const LineListBox& ) SAL_DELETED_FUNCTION;
-    LineListBox&    operator =( const LineListBox& ) SAL_DELETED_FUNCTION;
+                    LineListBox( const LineListBox& ) = delete;
+    LineListBox&    operator =( const LineListBox& ) = delete;
 };
 
 inline void LineListBox::SetColor( const Color& rColor )
@@ -401,8 +401,8 @@ public:
 private:
     void            InitFontMRUEntriesFile();
 
-                    FontNameBox( const FontNameBox& ) SAL_DELETED_FUNCTION;
-    FontNameBox&    operator =( const FontNameBox& ) SAL_DELETED_FUNCTION;
+                    FontNameBox( const FontNameBox& ) = delete;
+    FontNameBox&    operator =( const FontNameBox& ) = delete;
 };
 
 class SVT_DLLPUBLIC FontStyleBox : public ComboBox
@@ -425,8 +425,8 @@ public:
     void            Fill( const OUString& rName, const FontList* pList );
 
 private:
-                    FontStyleBox( const FontStyleBox& ) SAL_DELETED_FUNCTION;
-    FontStyleBox&   operator =( const FontStyleBox& ) SAL_DELETED_FUNCTION;
+                    FontStyleBox( const FontStyleBox& ) = delete;
+    FontStyleBox&   operator =( const FontStyleBox& ) = delete;
 };
 
 inline void FontStyleBox::SetText( const OUString& rText )
@@ -481,8 +481,8 @@ public:
     virtual sal_Int64   GetValue() const SAL_OVERRIDE;
 
 private:
-                    FontSizeBox( const FontSizeBox& ) SAL_DELETED_FUNCTION;
-    FontSizeBox&    operator =( const FontSizeBox& ) SAL_DELETED_FUNCTION;
+                    FontSizeBox( const FontSizeBox& ) = delete;
+    FontSizeBox&    operator =( const FontSizeBox& ) = delete;
 };
 
 #endif // INCLUDED_SVTOOLS_CTRLBOX_HXX

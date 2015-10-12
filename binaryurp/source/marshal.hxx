@@ -68,8 +68,8 @@ public:
         std::vector< unsigned char > * buffer, rtl::ByteSequence const & tid);
 
 private:
-    Marshal(const Marshal&) SAL_DELETED_FUNCTION;
-    Marshal& operator=(const Marshal&) SAL_DELETED_FUNCTION;
+    Marshal(const Marshal&) = delete;
+    Marshal& operator=(const Marshal&) = delete;
 
     void writeValue(
         std::vector< unsigned char > * buffer,

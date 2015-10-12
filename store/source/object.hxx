@@ -52,8 +52,8 @@ private:
     /** The IStoreHandle TypeId.
      */
     static const sal_uInt32 m_nTypeId;
-    OStoreObject (const OStoreObject&) SAL_DELETED_FUNCTION;
-    OStoreObject& operator= (const OStoreObject&) SAL_DELETED_FUNCTION;
+    OStoreObject (const OStoreObject&) = delete;
+    OStoreObject& operator= (const OStoreObject&) = delete;
 };
 
 /** Template helper function as dynamic_cast replacement.

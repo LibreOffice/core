@@ -39,8 +39,8 @@ namespace rptxml
 
     class OXMLReportElementBase : public SvXMLImportContext
     {
-        OXMLReportElementBase(const OXMLReportElementBase&) SAL_DELETED_FUNCTION;
-        void operator =(const OXMLReportElementBase&) SAL_DELETED_FUNCTION;
+        OXMLReportElementBase(const OXMLReportElementBase&) = delete;
+        void operator =(const OXMLReportElementBase&) = delete;
     protected:
         ORptFilter&   m_rImport;
         OXMLTable*    m_pContainer;

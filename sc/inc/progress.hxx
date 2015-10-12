@@ -53,8 +53,8 @@ private:
 
             SfxProgress*    pProgress;
 
-                            ScProgress( const ScProgress& ) SAL_DELETED_FUNCTION;
-            ScProgress&     operator=( const ScProgress& ) SAL_DELETED_FUNCTION;
+                            ScProgress( const ScProgress& ) = delete;
+            ScProgress&     operator=( const ScProgress& ) = delete;
 
     static  void            CalcGlobalPercent( sal_uLong nVal )
                                 {

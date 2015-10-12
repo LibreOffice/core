@@ -75,8 +75,8 @@ public:
     using BridgeFactoryBase::release;
 
 private:
-    BridgeFactory(const BridgeFactory&) SAL_DELETED_FUNCTION;
-    BridgeFactory& operator=(const BridgeFactory&) SAL_DELETED_FUNCTION;
+    BridgeFactory(const BridgeFactory&) = delete;
+    BridgeFactory& operator=(const BridgeFactory&) = delete;
 
     explicit BridgeFactory(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >

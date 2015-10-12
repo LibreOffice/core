@@ -53,8 +53,8 @@ namespace rptui
         /// access to property meta data
         ::std::unique_ptr< OPropertyInfoService >                                               m_pInfoService;
 
-        DefaultComponentInspectorModel(const DefaultComponentInspectorModel&) SAL_DELETED_FUNCTION;
-        DefaultComponentInspectorModel& operator=(const DefaultComponentInspectorModel&) SAL_DELETED_FUNCTION;
+        DefaultComponentInspectorModel(const DefaultComponentInspectorModel&) = delete;
+        DefaultComponentInspectorModel& operator=(const DefaultComponentInspectorModel&) = delete;
     protected:
         virtual ~DefaultComponentInspectorModel();
 

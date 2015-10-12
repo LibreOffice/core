@@ -39,8 +39,8 @@ class SvxJSearchOptionsDialog : public SfxSingleTabDialog
     sal_Int32                     nInitialTlFlags;
     VclPtr<SvxJSearchOptionsPage> pPage;
 
-    SvxJSearchOptionsDialog( const SvxJSearchOptionsDialog & ) SAL_DELETED_FUNCTION;
-    SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & ) SAL_DELETED_FUNCTION;
+    SvxJSearchOptionsDialog( const SvxJSearchOptionsDialog & ) = delete;
+    SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & ) = delete;
 
 public:
     SvxJSearchOptionsDialog(vcl::Window *pParent,

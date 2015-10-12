@@ -121,8 +121,8 @@ private:
     Reference< XTable > mxTable;
 
     // Copy assignment is forbidden and not implemented.
-    SdrTableRTFParser (const SdrTableRTFParser &) SAL_DELETED_FUNCTION;
-    SdrTableRTFParser & operator= (const SdrTableRTFParser &) SAL_DELETED_FUNCTION;
+    SdrTableRTFParser (const SdrTableRTFParser &) = delete;
+    SdrTableRTFParser & operator= (const SdrTableRTFParser &) = delete;
 };
 
 SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )

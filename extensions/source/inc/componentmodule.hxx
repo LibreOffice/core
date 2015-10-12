@@ -59,7 +59,7 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
         friend class OModuleResourceClient;
 
     private:
-        OModule() SAL_DELETED_FUNCTION; //TODO: get rid of this class
+        OModule() = delete; //TODO: get rid of this class
 
     protected:
         // resource administration

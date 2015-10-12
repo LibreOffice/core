@@ -183,7 +183,7 @@ private:
     DECL_LINK_TYPED( SeriesHeaderGotFocus, Control&, void );
     DECL_LINK_TYPED( SeriesHeaderChanged,  impl::SeriesHeaderEdit*, void );
 
-    DataBrowser( const DataBrowser & ) SAL_DELETED_FUNCTION;
+    DataBrowser( const DataBrowser & ) = delete;
 };
 
 } // namespace chart

@@ -31,8 +31,8 @@ namespace com { namespace sun { namespace star {
 class UNOTOOLS_DLLPUBLIC NativeNumberWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNativeNumberSupplier >   xNNS;
-                                NativeNumberWrapper( const NativeNumberWrapper& ) SAL_DELETED_FUNCTION;
-            NativeNumberWrapper&    operator=( const NativeNumberWrapper& ) SAL_DELETED_FUNCTION;
+                                NativeNumberWrapper( const NativeNumberWrapper& ) = delete;
+            NativeNumberWrapper&    operator=( const NativeNumberWrapper& ) = delete;
 
 public:
                                 NativeNumberWrapper(

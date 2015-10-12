@@ -60,8 +60,8 @@ class SwTextMarkupHelper
                        ::com::sun::star::uno::RuntimeException);
 
     private:
-        SwTextMarkupHelper( const SwTextMarkupHelper& ) SAL_DELETED_FUNCTION;
-        SwTextMarkupHelper& operator=( const SwTextMarkupHelper& ) SAL_DELETED_FUNCTION;
+        SwTextMarkupHelper( const SwTextMarkupHelper& ) = delete;
+        SwTextMarkupHelper& operator=( const SwTextMarkupHelper& ) = delete;
 
         const SwAccessiblePortionData& mrPortionData;
 

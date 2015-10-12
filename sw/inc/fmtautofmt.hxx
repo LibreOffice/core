@@ -37,7 +37,7 @@ public:
     SwFormatAutoFormat( const SwFormatAutoFormat& rAttr );
 private:
     /// @@@ public copy ctor, but no copy assignment?
-    SwFormatAutoFormat & operator= (const SwFormatAutoFormat &) SAL_DELETED_FUNCTION;
+    SwFormatAutoFormat & operator= (const SwFormatAutoFormat &) = delete;
 public:
 
     TYPEINFO_OVERRIDE();

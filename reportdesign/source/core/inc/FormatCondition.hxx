@@ -45,8 +45,8 @@ namespace reportdesign
         OUString            m_sFormula;
         bool                m_bEnabled;
     private:
-        OFormatCondition(const OFormatCondition&) SAL_DELETED_FUNCTION;
-        OFormatCondition& operator=(const OFormatCondition&) SAL_DELETED_FUNCTION;
+        OFormatCondition(const OFormatCondition&) = delete;
+        OFormatCondition& operator=(const OFormatCondition&) = delete;
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value

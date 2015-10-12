@@ -274,8 +274,8 @@ private:
     DECL_DLLPRIVATE_LINK_TYPED( ImplScrollHdl, ScrollBar*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplTimerHdl, Timer*, void );
 
-    ValueSet (const ValueSet &) SAL_DELETED_FUNCTION;
-    ValueSet & operator= (const ValueSet &) SAL_DELETED_FUNCTION;
+    ValueSet (const ValueSet &) = delete;
+    ValueSet & operator= (const ValueSet &) = delete;
 
 protected:
     bool StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion );

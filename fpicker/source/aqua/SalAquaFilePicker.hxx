@@ -163,8 +163,8 @@ public:
    }
 
 private:
-    SalAquaFilePicker( const SalAquaFilePicker& ) SAL_DELETED_FUNCTION;
-    SalAquaFilePicker& operator=( const SalAquaFilePicker& ) SAL_DELETED_FUNCTION;
+    SalAquaFilePicker( const SalAquaFilePicker& ) = delete;
+    SalAquaFilePicker& operator=( const SalAquaFilePicker& ) = delete;
 
     virtual void ensureFilterHelper();
 

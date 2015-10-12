@@ -36,8 +36,8 @@ namespace utl
         friend class OEventListenerImpl;
 
     private:
-        OEventListenerAdapter( const OEventListenerAdapter& _rSource ) SAL_DELETED_FUNCTION;
-        const OEventListenerAdapter& operator=( const OEventListenerAdapter& _rSource ) SAL_DELETED_FUNCTION;
+        OEventListenerAdapter( const OEventListenerAdapter& _rSource ) = delete;
+        const OEventListenerAdapter& operator=( const OEventListenerAdapter& _rSource ) = delete;
 
     protected:
         OEventListenerAdapterImpl*  m_pImpl;

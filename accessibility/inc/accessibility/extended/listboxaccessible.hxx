@@ -71,8 +71,8 @@ namespace accessibility
         DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
 
     private:
-        ListBoxAccessibleBase( const ListBoxAccessibleBase& ) SAL_DELETED_FUNCTION;
-        ListBoxAccessibleBase& operator=( const ListBoxAccessibleBase& ) SAL_DELETED_FUNCTION;
+        ListBoxAccessibleBase( const ListBoxAccessibleBase& ) = delete;
+        ListBoxAccessibleBase& operator=( const ListBoxAccessibleBase& ) = delete;
     };
 
 

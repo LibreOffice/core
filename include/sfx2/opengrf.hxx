@@ -46,8 +46,8 @@ public:
     OUString                GetCurrentFilter() const;
     void                    SetCurrentFilter(const OUString&);
 private:
-    SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&) SAL_DELETED_FUNCTION;
-    SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & ) SAL_DELETED_FUNCTION;
+    SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&) = delete;
+    SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & ) = delete;
 
     const std::unique_ptr< SvxOpenGrf_Impl >  mpImpl;
 };

@@ -49,8 +49,8 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xDest;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>    m_xDestInfo;
         bool                                                                        m_bInChange;
-        OPropertyMediator(OPropertyMediator&) SAL_DELETED_FUNCTION;
-        void operator =(OPropertyMediator&) SAL_DELETED_FUNCTION;
+        OPropertyMediator(OPropertyMediator&) = delete;
+        void operator =(OPropertyMediator&) = delete;
     protected:
         virtual ~OPropertyMediator();
 

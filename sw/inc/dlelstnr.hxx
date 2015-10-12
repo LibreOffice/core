@@ -57,8 +57,8 @@ class SwLinguServiceEventListener :
     com::sun::star::uno::Reference<
         com::sun::star::linguistic2::XProofreadingIterator >    xGCIterator;
 
-    SwLinguServiceEventListener(const SwLinguServiceEventListener &) SAL_DELETED_FUNCTION;
-    SwLinguServiceEventListener & operator = (const SwLinguServiceEventListener &) SAL_DELETED_FUNCTION;
+    SwLinguServiceEventListener(const SwLinguServiceEventListener &) = delete;
+    SwLinguServiceEventListener & operator = (const SwLinguServiceEventListener &) = delete;
 
 public:
     SwLinguServiceEventListener();

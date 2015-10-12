@@ -38,7 +38,7 @@ class SW_DLLPUBLIC SwFormatURL: public SfxPoolItem
 
     bool      bIsServerMap;     ///< A ServerSideImageMap with the URL.
 
-    SwFormatURL& operator=( const SwFormatURL& ) SAL_DELETED_FUNCTION;
+    SwFormatURL& operator=( const SwFormatURL& ) = delete;
 
 public:
     SwFormatURL();

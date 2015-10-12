@@ -118,8 +118,8 @@ namespace svt
         DECL_LINK_TYPED( OnWindowEvent, VclWindowEvent&, void );
 
     private:
-        DialogController( const DialogController& ) SAL_DELETED_FUNCTION;
-        DialogController& operator=( const DialogController& ) SAL_DELETED_FUNCTION;
+        DialogController( const DialogController& ) = delete;
+        DialogController& operator=( const DialogController& ) = delete;
     };
     typedef std::shared_ptr< DialogController > PDialogController;
 
@@ -179,8 +179,8 @@ namespace svt
         void    addController( const PDialogController& _pController );
 
     private:
-        ControlDependencyManager( const ControlDependencyManager& ) SAL_DELETED_FUNCTION;
-        ControlDependencyManager& operator=( const ControlDependencyManager& ) SAL_DELETED_FUNCTION;
+        ControlDependencyManager( const ControlDependencyManager& ) = delete;
+        ControlDependencyManager& operator=( const ControlDependencyManager& ) = delete;
     };
 
 

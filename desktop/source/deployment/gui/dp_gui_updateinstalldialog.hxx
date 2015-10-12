@@ -66,8 +66,8 @@ public:
     virtual short Execute() SAL_OVERRIDE;
 
 private:
-    UpdateInstallDialog(UpdateInstallDialog &) SAL_DELETED_FUNCTION;
-    void operator =(UpdateInstallDialog &) SAL_DELETED_FUNCTION;
+    UpdateInstallDialog(UpdateInstallDialog &) = delete;
+    void operator =(UpdateInstallDialog &) = delete;
 
     class Thread;
     friend class Thread;

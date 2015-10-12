@@ -102,8 +102,8 @@ public:
     getExternalValue(OUString const & descriptor);
 
 private:
-    Components(const Components&) SAL_DELETED_FUNCTION;
-    Components& operator=(const Components&) SAL_DELETED_FUNCTION;
+    Components(const Components&) = delete;
+    Components& operator=(const Components&) = delete;
 
     typedef void FileParser(
         OUString const &, int, Data &, Partial const *, Modifications *,

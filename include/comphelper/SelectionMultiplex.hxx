@@ -74,8 +74,8 @@ namespace comphelper
         bool                                    m_bListening        : 1;
         bool                                    m_bAutoSetRelease   : 1;
 
-        OSelectionChangeMultiplexer(const OSelectionChangeMultiplexer&) SAL_DELETED_FUNCTION;
-        OSelectionChangeMultiplexer& operator=(const OSelectionChangeMultiplexer&) SAL_DELETED_FUNCTION;
+        OSelectionChangeMultiplexer(const OSelectionChangeMultiplexer&) = delete;
+        OSelectionChangeMultiplexer& operator=(const OSelectionChangeMultiplexer&) = delete;
     protected:
         virtual ~OSelectionChangeMultiplexer();
     public:

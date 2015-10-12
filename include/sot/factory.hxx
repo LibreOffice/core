@@ -56,8 +56,8 @@ public:
     bool                Is( const SotFactory * pSuperClass ) const;
 
 private:
-                        SotFactory( const SotFactory & ) SAL_DELETED_FUNCTION;
-    SotFactory &        operator = ( const SotFactory & ) SAL_DELETED_FUNCTION;
+                        SotFactory( const SotFactory & ) = delete;
+    SotFactory &        operator = ( const SotFactory & ) = delete;
 };
 
 #endif // _FACTORY_HXX

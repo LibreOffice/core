@@ -101,8 +101,8 @@ public:
         throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
-    SalAquaFolderPicker( const SalAquaFolderPicker& ) SAL_DELETED_FUNCTION;
-    SalAquaFolderPicker& operator=( const SalAquaFolderPicker& ) SAL_DELETED_FUNCTION;
+    SalAquaFolderPicker( const SalAquaFolderPicker& ) = delete;
+    SalAquaFolderPicker& operator=( const SalAquaFolderPicker& ) = delete;
 
     // to instantiate own services
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;

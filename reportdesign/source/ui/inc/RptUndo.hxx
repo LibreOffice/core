@@ -35,8 +35,8 @@ namespace rptui
      */
     class OSectionUndo : public OCommentUndoAction
     {
-        OSectionUndo(const OSectionUndo&) SAL_DELETED_FUNCTION;
-        void operator =(const OSectionUndo&) SAL_DELETED_FUNCTION;
+        OSectionUndo(const OSectionUndo&) = delete;
+        void operator =(const OSectionUndo&) = delete;
     protected:
         ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> >
                                                     m_aControls;
@@ -72,8 +72,8 @@ namespace rptui
 
         void    implReInsert( ) SAL_OVERRIDE;
         void    implReRemove( ) SAL_OVERRIDE;
-        OReportSectionUndo(const OReportSectionUndo&) SAL_DELETED_FUNCTION;
-        void operator =(const OReportSectionUndo&) SAL_DELETED_FUNCTION;
+        OReportSectionUndo(const OReportSectionUndo&) = delete;
+        void operator =(const OReportSectionUndo&) = delete;
     public:
         TYPEINFO_OVERRIDE();
         //OReportSectionUndo(    const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
@@ -99,8 +99,8 @@ namespace rptui
 
         void    implReInsert( ) SAL_OVERRIDE;
         void    implReRemove( ) SAL_OVERRIDE;
-        OGroupSectionUndo(const OGroupSectionUndo&) SAL_DELETED_FUNCTION;
-        void operator =(const OGroupSectionUndo&) SAL_DELETED_FUNCTION;
+        OGroupSectionUndo(const OGroupSectionUndo&) = delete;
+        void operator =(const OGroupSectionUndo&) = delete;
     public:
         TYPEINFO_OVERRIDE();
         //OGroupSectionUndo(     const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection

@@ -457,8 +457,8 @@ class SC_DLLPUBLIC ScDocShellModificator
             bool            bAutoCalcShellDisabled;
             bool            bIdleEnabled;
 
-                            ScDocShellModificator( const ScDocShellModificator& ) SAL_DELETED_FUNCTION;
-    ScDocShellModificator&  operator=( const ScDocShellModificator& ) SAL_DELETED_FUNCTION;
+                            ScDocShellModificator( const ScDocShellModificator& ) = delete;
+    ScDocShellModificator&  operator=( const ScDocShellModificator& ) = delete;
 
 public:
                             ScDocShellModificator( ScDocShell& );

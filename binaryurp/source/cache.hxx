@@ -80,8 +80,8 @@ public:
     }
 
 private:
-    Cache(const Cache&) SAL_DELETED_FUNCTION;
-    Cache& operator=(const Cache&) SAL_DELETED_FUNCTION;
+    Cache(const Cache&) = delete;
+    Cache& operator=(const Cache&) = delete;
 
     typedef std::list<T> LruList; // last recently used list
     typedef typename LruList::iterator LruListIt;

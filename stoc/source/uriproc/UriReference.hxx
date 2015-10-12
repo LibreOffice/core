@@ -88,8 +88,8 @@ public:
     bool m_hasFragment;
 
 private:
-    UriReference(UriReference &) SAL_DELETED_FUNCTION;
-    void operator =(UriReference) SAL_DELETED_FUNCTION;
+    UriReference(UriReference &) = delete;
+    void operator =(UriReference) = delete;
 
     void appendSchemeSpecificPart(OUStringBuffer & buffer) const;
 };

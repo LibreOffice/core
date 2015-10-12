@@ -159,7 +159,7 @@ public:
     sal_uInt32     Reference();     // reference symbol in code
 
 private:
-    SbiSymDef( const SbiSymDef& ) SAL_DELETED_FUNCTION;
+    SbiSymDef( const SbiSymDef& ) = delete;
 
 };
 
@@ -202,7 +202,7 @@ public:
     void Match( SbiProcDef* pForward );
 
 private:
-    SbiProcDef( const SbiProcDef& ) SAL_DELETED_FUNCTION;
+    SbiProcDef( const SbiProcDef& ) = delete;
 
 };
 

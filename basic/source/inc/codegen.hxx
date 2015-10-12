@@ -66,8 +66,8 @@ class PCodeBuffConvertor
     sal_uInt8* m_pCnvtdBuf;
     S m_nCnvtdSize;
 
-    PCodeBuffConvertor(const PCodeBuffConvertor& ) SAL_DELETED_FUNCTION;
-    PCodeBuffConvertor& operator = ( const PCodeBuffConvertor& ) SAL_DELETED_FUNCTION;
+    PCodeBuffConvertor(const PCodeBuffConvertor& ) = delete;
+    PCodeBuffConvertor& operator = ( const PCodeBuffConvertor& ) = delete;
 public:
     PCodeBuffConvertor( sal_uInt8* pCode, T nSize ): m_nSize( nSize ),  m_pStart( pCode ), m_pCnvtdBuf( NULL ), m_nCnvtdSize( 0 ){ convert(); }
     S GetSize(){ return m_nCnvtdSize; }

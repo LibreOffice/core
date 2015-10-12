@@ -122,8 +122,8 @@ protected:
     sal_Size            mnOffset;       /// Key offset.
 
 private:
-                        MSCodec_Xor95( const MSCodec_Xor95& ) SAL_DELETED_FUNCTION;
-    MSCodec_Xor95&      operator=( const MSCodec_Xor95& ) SAL_DELETED_FUNCTION;
+                        MSCodec_Xor95( const MSCodec_Xor95& ) = delete;
+    MSCodec_Xor95&      operator=( const MSCodec_Xor95& ) = delete;
 
     sal_uInt16          mnKey;          /// Base key from password.
     sal_uInt16          mnHash;         /// Hash value from password.
@@ -346,8 +346,8 @@ public:
     void                GetDigestFromSalt( const sal_uInt8 pSaltData[16], sal_uInt8 pDigest[16] );
 
 private:
-                        MSCodec_Std97( const MSCodec_Std97& ) SAL_DELETED_FUNCTION;
-    MSCodec_Std97&      operator=( const MSCodec_Std97& ) SAL_DELETED_FUNCTION;
+                        MSCodec_Std97( const MSCodec_Std97& ) = delete;
+    MSCodec_Std97&      operator=( const MSCodec_Std97& ) = delete;
 
     rtlCipher           m_hCipher;
     rtlDigest           m_hDigest;

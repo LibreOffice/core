@@ -44,8 +44,8 @@ private:
     /// Command URL (like .uno:Save) in case the button should handle it.
     OUString maCommand;
 
-                                    Button (const Button &) SAL_DELETED_FUNCTION;
-                                    Button & operator= (const Button &) SAL_DELETED_FUNCTION;
+                                    Button (const Button &) = delete;
+                                    Button & operator= (const Button &) = delete;
 public:
     SAL_DLLPRIVATE DrawButtonFlags  ImplGetButtonState() const;
     SAL_DLLPRIVATE DrawButtonFlags& ImplGetButtonState();
@@ -218,8 +218,8 @@ protected:
 private:
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-                                   OKButton (const OKButton &) SAL_DELETED_FUNCTION;
-                                   OKButton & operator= (const OKButton &) SAL_DELETED_FUNCTION;
+                                   OKButton (const OKButton &) = delete;
+                                   OKButton & operator= (const OKButton &) = delete;
 
 public:
     explicit        OKButton( vcl::Window* pParent, WinBits nStyle = WB_DEFBUTTON );
@@ -234,8 +234,8 @@ protected:
 private:
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-                        CancelButton (const CancelButton &) SAL_DELETED_FUNCTION;
-                        CancelButton & operator= (const CancelButton &) SAL_DELETED_FUNCTION;
+                        CancelButton (const CancelButton &) = delete;
+                        CancelButton & operator= (const CancelButton &) = delete;
 
 public:
     explicit        CancelButton( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -261,8 +261,8 @@ protected:
 private:
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-                        HelpButton( const HelpButton & ) SAL_DELETED_FUNCTION;
-                        HelpButton & operator= ( const HelpButton & ) SAL_DELETED_FUNCTION;
+                        HelpButton( const HelpButton & ) = delete;
+                        HelpButton & operator= ( const HelpButton & ) = delete;
 
 public:
     explicit        HelpButton( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -302,8 +302,8 @@ private:
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
     SAL_DLLPRIVATE long     ImplGetImageToTextDistance() const;
 
-                            RadioButton(const RadioButton &) SAL_DELETED_FUNCTION;
-                            RadioButton& operator= (const RadioButton &) SAL_DELETED_FUNCTION;
+                            RadioButton(const RadioButton &) = delete;
+                            RadioButton& operator= (const RadioButton &) = delete;
 
 protected:
     using Control::ImplInitSettings;
@@ -426,8 +426,8 @@ private:
     SAL_DLLPRIVATE long         ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
 
-                                CheckBox(const CheckBox &) SAL_DELETED_FUNCTION;
-                                CheckBox& operator= (const CheckBox &) SAL_DELETED_FUNCTION;
+                                CheckBox(const CheckBox &) = delete;
+                                CheckBox& operator= (const CheckBox &) = delete;
 
 protected:
     using Control::ImplInitSettings;
@@ -510,8 +510,8 @@ protected:
 private:
     SAL_DLLPRIVATE void     ImplInitStyle();
 
-                            ImageButton( const ImageButton & ) SAL_DELETED_FUNCTION;
-                            ImageButton & operator= ( const ImageButton & ) SAL_DELETED_FUNCTION;
+                            ImageButton( const ImageButton & ) = delete;
+                            ImageButton & operator= ( const ImageButton & ) = delete;
 
 public:
                  ImageButton( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -520,8 +520,8 @@ public:
 
 class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
 {
-                    ImageRadioButton( const ImageRadioButton & ) SAL_DELETED_FUNCTION;
-                    ImageRadioButton & operator= ( const ImageRadioButton & ) SAL_DELETED_FUNCTION;
+                    ImageRadioButton( const ImageRadioButton & ) = delete;
+                    ImageRadioButton & operator= ( const ImageRadioButton & ) = delete;
 
 public:
     explicit        ImageRadioButton( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -529,8 +529,8 @@ public:
 
 class VCL_DLLPUBLIC TriStateBox : public CheckBox
 {
-                    TriStateBox( const TriStateBox & ) SAL_DELETED_FUNCTION;
-                    TriStateBox & operator= ( const TriStateBox & ) SAL_DELETED_FUNCTION;
+                    TriStateBox( const TriStateBox & ) = delete;
+                    TriStateBox & operator= ( const TriStateBox & ) = delete;
 
 public:
     explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle = 0 );

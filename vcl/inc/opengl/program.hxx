@@ -45,7 +45,7 @@ private:
     float mfLastPixelOffset;
 
 
-    OpenGLProgram(const OpenGLProgram &) SAL_DELETED_FUNCTION;
+    OpenGLProgram(const OpenGLProgram &) = delete;
 public:
     OpenGLProgram();
     ~OpenGLProgram();

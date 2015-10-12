@@ -37,7 +37,7 @@
 // All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
 struct VCL_DLLPUBLIC OpenGLHelper
 {
-    OpenGLHelper() SAL_DELETED_FUNCTION; // Should not be instantiated
+    OpenGLHelper() = delete; // Should not be instantiated
 
 public:
 

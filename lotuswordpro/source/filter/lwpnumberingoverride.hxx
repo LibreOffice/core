@@ -91,7 +91,7 @@ protected:
     LwpNumberingOverride(LwpNumberingOverride const& rOther);
 
 private:
-    LwpNumberingOverride& operator=(LwpNumberingOverride const& rOther) SAL_DELETED_FUNCTION;
+    LwpNumberingOverride& operator=(LwpNumberingOverride const& rOther) = delete;
 
     sal_uInt16  m_nLevel;
     sal_uInt16  m_nPosition;

@@ -203,8 +203,8 @@ enum AlwaysInputMode { AlwaysInputNone = 0, AlwaysInputEnabled = 1, AlwaysInputD
 class WindowImpl
 {
 private:
-    WindowImpl(const WindowImpl&) SAL_DELETED_FUNCTION;
-    WindowImpl& operator=(const WindowImpl&) SAL_DELETED_FUNCTION;
+    WindowImpl(const WindowImpl&) = delete;
+    WindowImpl& operator=(const WindowImpl&) = delete;
 public:
     WindowImpl( WindowType );
     ~WindowImpl();

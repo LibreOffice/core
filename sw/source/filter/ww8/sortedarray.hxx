@@ -41,8 +41,8 @@ namespace ww
         C *mpWwSprmTab;
         size_t mnNoElems;
 
-        SortedArray(const SortedArray&) SAL_DELETED_FUNCTION;
-        SortedArray& operator=(const SortedArray&) SAL_DELETED_FUNCTION;
+        SortedArray(const SortedArray&) = delete;
+        SortedArray& operator=(const SortedArray&) = delete;
     public:
         //Find an entry, return its address if found and 0 if not
         const C *search(C aSrch) const

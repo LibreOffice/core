@@ -48,8 +48,8 @@ namespace dbaccess
         virtual ~Veto();
 
     private:
-        Veto( const Veto& ) SAL_DELETED_FUNCTION;
-        Veto& operator=( const Veto& ) SAL_DELETED_FUNCTION;
+        Veto( const Veto& ) = delete;
+        Veto& operator=( const Veto& ) = delete;
     };
 
 } // namespace dbaccess

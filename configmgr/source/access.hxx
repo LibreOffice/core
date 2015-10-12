@@ -474,8 +474,8 @@ protected:
     bool isDisposed() const { return disposed_;}
 
 private:
-    Access(const Access&) SAL_DELETED_FUNCTION;
-    Access& operator=(const Access&) SAL_DELETED_FUNCTION;
+    Access(const Access&) = delete;
+    Access& operator=(const Access&) = delete;
 
     struct ModifiedChild {
         rtl::Reference< ChildAccess > child;

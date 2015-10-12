@@ -65,8 +65,8 @@ public:
     void done() const;
 
 private:
-    Unmarshal(const Unmarshal&) SAL_DELETED_FUNCTION;
-    Unmarshal& operator=(const Unmarshal&) SAL_DELETED_FUNCTION;
+    Unmarshal(const Unmarshal&) = delete;
+    Unmarshal& operator=(const Unmarshal&) = delete;
 
     void check(sal_Int32 size) const;
 

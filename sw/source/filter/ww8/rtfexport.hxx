@@ -192,9 +192,9 @@ public:
     OString* GetStyle(sal_uInt16 nId);
 
 private:
-    RtfExport(const RtfExport&) SAL_DELETED_FUNCTION;
+    RtfExport(const RtfExport&) = delete;
 
-    RtfExport& operator=(const RtfExport&) SAL_DELETED_FUNCTION;
+    RtfExport& operator=(const RtfExport&) = delete;
 
     void WriteFonts();
     void WriteStyles();

@@ -87,8 +87,8 @@ namespace dbtools
         OUString    getFormattedValue() const;
 
     private:
-        FormattedColumnValue(const FormattedColumnValue&) SAL_DELETED_FUNCTION;
-        FormattedColumnValue& operator=(const FormattedColumnValue&) SAL_DELETED_FUNCTION;
+        FormattedColumnValue(const FormattedColumnValue&) = delete;
+        FormattedColumnValue& operator=(const FormattedColumnValue&) = delete;
         std::unique_ptr< FormattedColumnValue_Data >    m_pData;
     };
 

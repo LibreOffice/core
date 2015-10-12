@@ -59,8 +59,8 @@ namespace basegfx
     class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier
     {
     private:
-        BColorModifier(const BColorModifier&) SAL_DELETED_FUNCTION;
-        BColorModifier& operator=(const BColorModifier&) SAL_DELETED_FUNCTION;
+        BColorModifier(const BColorModifier&) = delete;
+        BColorModifier& operator=(const BColorModifier&) = delete;
     protected:
         // no one is allowed to incarnate the abstract base class
         // except derivations

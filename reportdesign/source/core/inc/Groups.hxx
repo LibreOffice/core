@@ -42,8 +42,8 @@ namespace reportdesign
         ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XReportDefinition >     m_xParent;
         TGroups                                                                                 m_aGroups;
     private:
-        OGroups& operator=(const OGroups&) SAL_DELETED_FUNCTION;
-        OGroups(const OGroups&) SAL_DELETED_FUNCTION;
+        OGroups& operator=(const OGroups&) = delete;
+        OGroups(const OGroups&) = delete;
         void checkIndex(sal_Int32 _nIndex);
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!

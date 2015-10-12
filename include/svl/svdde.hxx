@@ -127,8 +127,8 @@ private:
     friend class    DdeInternal;
     friend class    DdeConnection;
 
-                            DdeTransaction( const DdeTransaction& ) SAL_DELETED_FUNCTION;
-    const DdeTransaction&   operator= ( const DdeTransaction& ) SAL_DELETED_FUNCTION;
+                            DdeTransaction( const DdeTransaction& ) = delete;
+    const DdeTransaction&   operator= ( const DdeTransaction& ) = delete;
 
 };
 
@@ -230,8 +230,8 @@ public:
     const OUString  GetTopicName();
 
 private:
-                            DdeConnection( const DdeConnection& ) SAL_DELETED_FUNCTION;
-    const DdeConnection&    operator= ( const DdeConnection& ) SAL_DELETED_FUNCTION;
+                            DdeConnection( const DdeConnection& ) = delete;
+    const DdeConnection&    operator= ( const DdeConnection& ) = delete;
 };
 
 
@@ -325,8 +325,8 @@ public:
     const std::vector<DdeItem*>& GetItems() const  { return aItems; }
 
 private:
-                    DdeTopic( const DdeTopic& ) SAL_DELETED_FUNCTION;
-    const DdeTopic& operator= ( const DdeTopic& ) SAL_DELETED_FUNCTION;
+                    DdeTopic( const DdeTopic& ) = delete;
+    const DdeTopic& operator= ( const DdeTopic& ) = delete;
 };
 
 

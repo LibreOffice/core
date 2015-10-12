@@ -229,8 +229,8 @@ private:
     DECL_DLLPRIVATE_LINK_TYPED(    ImplCustomMenuListener, VclMenuEvent&, void );
     DECL_DLLPRIVATE_LINK_TYPED(    ImplDropdownLongClickHdl, Timer*, void );
 
-                                   ToolBox (const ToolBox &) SAL_DELETED_FUNCTION;
-                          ToolBox& operator= (const ToolBox &) SAL_DELETED_FUNCTION;
+                                   ToolBox (const ToolBox &) = delete;
+                          ToolBox& operator= (const ToolBox &) = delete;
 
 public:
     SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow = NULL );

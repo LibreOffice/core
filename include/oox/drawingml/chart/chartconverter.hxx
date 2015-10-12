@@ -89,8 +89,8 @@ public:
             const DataSequenceModel& rDataSeq, const OUString& rRole );
 
 private:
-                        ChartConverter( const ChartConverter& ) SAL_DELETED_FUNCTION;
-    ChartConverter&     operator=( const ChartConverter& ) SAL_DELETED_FUNCTION;
+                        ChartConverter( const ChartConverter& ) = delete;
+    ChartConverter&     operator=( const ChartConverter& ) = delete;
 };
 
 

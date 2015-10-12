@@ -47,8 +47,8 @@ namespace reportdesign
         sal_Int16                           m_nScaleMode;
         bool                                m_bPreserveIRI;
     private:
-        OImageControl(const OImageControl&) SAL_DELETED_FUNCTION;
-        OImageControl& operator=(const OImageControl&) SAL_DELETED_FUNCTION;
+        OImageControl(const OImageControl&) = delete;
+        OImageControl& operator=(const OImageControl&) = delete;
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value

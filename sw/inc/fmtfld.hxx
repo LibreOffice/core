@@ -51,7 +51,7 @@ class SW_DLLPUBLIC SwFormatField
     SwTextField* mpTextField; // the TextAttribute
 
     // @@@ copy construction allowed, but copy assignment is not? @@@
-    SwFormatField& operator=(const SwFormatField& rField) SAL_DELETED_FUNCTION;
+    SwFormatField& operator=(const SwFormatField& rField) = delete;
 
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;

@@ -131,8 +131,8 @@ public:
     void PreWriteHyperlinkWithinFly(const SwFrameFormat& rFormat,EscherPropertyContainer& rPropOpt);
 
 private:
-    SwBasicEscherEx(const SwBasicEscherEx&) SAL_DELETED_FUNCTION;
-    SwBasicEscherEx& operator=(const SwBasicEscherEx&) SAL_DELETED_FUNCTION;
+    SwBasicEscherEx(const SwBasicEscherEx&) = delete;
+    SwBasicEscherEx& operator=(const SwBasicEscherEx&) = delete;
 };
 
 class SwEscherEx : public SwBasicEscherEx
@@ -172,8 +172,8 @@ public:
     EscherExHostAppData* StartShape(const com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > &, const Rectangle*) SAL_OVERRIDE {return &aHostData;}
 private:
-    SwEscherEx(const SwEscherEx&) SAL_DELETED_FUNCTION;
-    SwEscherEx &operator=(const SwEscherEx&) SAL_DELETED_FUNCTION;
+    SwEscherEx(const SwEscherEx&) = delete;
+    SwEscherEx &operator=(const SwEscherEx&) = delete;
 };
 
 #endif

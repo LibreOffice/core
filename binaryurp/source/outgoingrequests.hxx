@@ -45,8 +45,8 @@ public:
     void pop(rtl::ByteSequence const & tid) throw ();
 
 private:
-    OutgoingRequests(const OutgoingRequests&) SAL_DELETED_FUNCTION;
-    OutgoingRequests& operator=(const OutgoingRequests&) SAL_DELETED_FUNCTION;
+    OutgoingRequests(const OutgoingRequests&) = delete;
+    OutgoingRequests& operator=(const OutgoingRequests&) = delete;
 
     typedef std::map< rtl::ByteSequence, std::vector< OutgoingRequest > > Map;
 

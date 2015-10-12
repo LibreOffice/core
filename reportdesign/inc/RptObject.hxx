@@ -53,8 +53,8 @@ typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexTo
     private:
         DlgEdHintKind   eHintKind;
 
-        DlgEdHint(DlgEdHint&) SAL_DELETED_FUNCTION;
-        void operator =(DlgEdHint&) SAL_DELETED_FUNCTION;
+        DlgEdHint(DlgEdHint&) = delete;
+        void operator =(DlgEdHint&) = delete;
     public:
         DlgEdHint( DlgEdHintKind eHint );
         virtual ~DlgEdHint();

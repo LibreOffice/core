@@ -196,8 +196,8 @@ namespace pcr
         }
 
     private:
-        PropertyHandlerHelper( const PropertyHandlerHelper& ) SAL_DELETED_FUNCTION;
-        PropertyHandlerHelper& operator=( const PropertyHandlerHelper& ) SAL_DELETED_FUNCTION;
+        PropertyHandlerHelper( const PropertyHandlerHelper& ) = delete;
+        PropertyHandlerHelper& operator=( const PropertyHandlerHelper& ) = delete;
     };
 
 

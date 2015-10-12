@@ -138,8 +138,8 @@ private:
     bool                            mbIsUnoObj                  : 1;
     ::std::vector<std::shared_ptr<UserData> > maUserData;
 
-                                    SdTransferable( const SdTransferable& ) SAL_DELETED_FUNCTION;
-    SdTransferable&                 operator=( const SdTransferable& ) SAL_DELETED_FUNCTION;
+                                    SdTransferable( const SdTransferable& ) = delete;
+    SdTransferable&                 operator=( const SdTransferable& ) = delete;
 
     void                            CreateObjectReplacement( SdrObject* pObj );
     void                            CreateData();

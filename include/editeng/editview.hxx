@@ -93,8 +93,8 @@ private:
     ImpEditView*    pImpEditView;
     OUString        aDicNameSingle;
 
-                    EditView( const EditView& ) SAL_DELETED_FUNCTION;
-    EditView&       operator=( const EditView& ) SAL_DELETED_FUNCTION;
+                    EditView( const EditView& ) = delete;
+    EditView&       operator=( const EditView& ) = delete;
 
 public:
                     EditView( EditEngine* pEng, vcl::Window* pWindow );

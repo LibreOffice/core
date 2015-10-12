@@ -96,8 +96,8 @@ class ScChangeAction;
 
 class ScChangeActionLinkEntry
 {
-    ScChangeActionLinkEntry( const ScChangeActionLinkEntry& ) SAL_DELETED_FUNCTION;
-    ScChangeActionLinkEntry& operator=( const ScChangeActionLinkEntry& ) SAL_DELETED_FUNCTION;
+    ScChangeActionLinkEntry( const ScChangeActionLinkEntry& ) = delete;
+    ScChangeActionLinkEntry& operator=( const ScChangeActionLinkEntry& ) = delete;
 
 protected:
 
@@ -206,8 +206,8 @@ class ScChangeAction
     friend class ScChangeActionMove;
     friend class ScChangeActionContent;
 
-    ScChangeAction( const ScChangeAction& ) SAL_DELETED_FUNCTION;
-    ScChangeAction& operator=( const ScChangeAction& ) SAL_DELETED_FUNCTION;
+    ScChangeAction( const ScChangeAction& ) = delete;
+    ScChangeAction& operator=( const ScChangeAction& ) = delete;
 
 protected:
 
@@ -914,8 +914,8 @@ class ScChangeTrack : public utl::ConfigurationListener
     bool bUseFixDateTime:1;
     bool bTimeNanoSeconds:1;
 
-    ScChangeTrack( const ScChangeTrack& ) SAL_DELETED_FUNCTION;
-    ScChangeTrack& operator=( const ScChangeTrack& ) SAL_DELETED_FUNCTION;
+    ScChangeTrack( const ScChangeTrack& ) = delete;
+    ScChangeTrack& operator=( const ScChangeTrack& ) = delete;
 
     static  SCROW               InitContentRowsPerSlot();
 

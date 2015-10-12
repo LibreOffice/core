@@ -90,8 +90,8 @@ namespace svt
     private:
         DECL_LINK_TYPED( OnActionDone, void*, void );
 
-        AsyncPickerAction( const AsyncPickerAction& ) SAL_DELETED_FUNCTION;
-        AsyncPickerAction& operator=( const AsyncPickerAction& ) SAL_DELETED_FUNCTION;
+        AsyncPickerAction( const AsyncPickerAction& ) = delete;
+        AsyncPickerAction& operator=( const AsyncPickerAction& ) = delete;
     };
 
 

@@ -62,8 +62,8 @@ private:
     OSectionView*       m_pView;
     bool            m_bInitialStateChange;
 
-    PropBrw(PropBrw&) SAL_DELETED_FUNCTION;
-    void operator =(PropBrw&) SAL_DELETED_FUNCTION;
+    PropBrw(PropBrw&) = delete;
+    void operator =(PropBrw&) = delete;
 protected:
 
     virtual void Resize() SAL_OVERRIDE;

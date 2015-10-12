@@ -74,8 +74,8 @@ class Hyphenator :
     linguistic::PropertyHelper_Hyphenation* pPropHelper;
     bool                                    bDisposing;
 
-    Hyphenator(const Hyphenator &) SAL_DELETED_FUNCTION;
-    Hyphenator & operator = (const Hyphenator &) SAL_DELETED_FUNCTION;
+    Hyphenator(const Hyphenator &) = delete;
+    Hyphenator & operator = (const Hyphenator &) = delete;
 
     linguistic::PropertyHelper_Hyphenation& GetPropHelper_Impl();
     linguistic::PropertyHelper_Hyphenation& GetPropHelper()

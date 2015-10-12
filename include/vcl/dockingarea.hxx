@@ -31,8 +31,8 @@ class VCL_DLLPUBLIC DockingAreaWindow : public vcl::Window
 private:
     ImplData*       mpImplData;
 
-                    DockingAreaWindow (const DockingAreaWindow &) SAL_DELETED_FUNCTION;
-                    DockingAreaWindow & operator= (const DockingAreaWindow &) SAL_DELETED_FUNCTION;
+                    DockingAreaWindow (const DockingAreaWindow &) = delete;
+                    DockingAreaWindow & operator= (const DockingAreaWindow &) = delete;
 
 public:
     explicit        DockingAreaWindow( vcl::Window* pParent );

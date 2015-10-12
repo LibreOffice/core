@@ -80,8 +80,8 @@ protected:
     SAL_DLLPRIVATE long ImplGetButtonSize();
 
 private:
-                        ButtonDialog( const ButtonDialog & ) SAL_DELETED_FUNCTION;
-                        ButtonDialog& operator=( const ButtonDialog& ) SAL_DELETED_FUNCTION;
+                        ButtonDialog( const ButtonDialog & ) = delete;
+                        ButtonDialog& operator=( const ButtonDialog& ) = delete;
 
 private:
     std::vector<std::unique_ptr<ImplBtnDlgItem>> m_ItemList;

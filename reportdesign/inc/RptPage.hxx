@@ -34,7 +34,7 @@ class OReportModel;
 
 class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 {
-    OReportPage& operator=(const OReportPage&) SAL_DELETED_FUNCTION;
+    OReportPage& operator=(const OReportPage&) = delete;
 
     OReportModel&           rModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > m_xSection;

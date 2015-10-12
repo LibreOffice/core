@@ -40,8 +40,8 @@ class SD_DLLPUBLIC SdOpenSoundFileDialog
 {
     const std::unique_ptr< SdFileDialog_Imp > mpImpl;
 
-    SdOpenSoundFileDialog (const SdOpenSoundFileDialog &) SAL_DELETED_FUNCTION;
-    SdOpenSoundFileDialog & operator= (const SdOpenSoundFileDialog &) SAL_DELETED_FUNCTION;
+    SdOpenSoundFileDialog (const SdOpenSoundFileDialog &) = delete;
+    SdOpenSoundFileDialog & operator= (const SdOpenSoundFileDialog &) = delete;
 
 public:
                             SdOpenSoundFileDialog();

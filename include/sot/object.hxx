@@ -55,8 +55,8 @@ public:
     bool                IsInClose() const { return bInClose; }
 
 private:
-    SotObject & operator = ( const SotObject & ) SAL_DELETED_FUNCTION;
-    SotObject( const SotObject & ) SAL_DELETED_FUNCTION;
+    SotObject & operator = ( const SotObject & ) = delete;
+    SotObject( const SotObject & ) = delete;
 };
 
 #endif // _IFACE_HXX

@@ -31,8 +31,8 @@ class TOOLS_DLLPUBLIC ResStringArray
     struct Impl;
     Impl* mpImpl;
 
-    ResStringArray( const ResStringArray& ) SAL_DELETED_FUNCTION;
-    ResStringArray& operator=( const ResStringArray& ) SAL_DELETED_FUNCTION;
+    ResStringArray( const ResStringArray& ) = delete;
+    ResStringArray& operator=( const ResStringArray& ) = delete;
 
 public:
     ResStringArray( const ResId& rResId );

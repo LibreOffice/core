@@ -63,8 +63,8 @@ namespace extensions { namespace resource
         virtual  css::uno::Reference<  css::resource::XResourceBundle> SAL_CALL loadBundle( const OUString& abaseName, const css::lang::Locale& aLocale ) throw (css::resource::MissingResourceException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        OpenOfficeResourceLoader( const OpenOfficeResourceLoader& ) SAL_DELETED_FUNCTION;
-        OpenOfficeResourceLoader& operator=( const OpenOfficeResourceLoader& ) SAL_DELETED_FUNCTION;
+        OpenOfficeResourceLoader( const OpenOfficeResourceLoader& ) = delete;
+        OpenOfficeResourceLoader& operator=( const OpenOfficeResourceLoader& ) = delete;
         css::uno::Reference< css::uno::XComponentContext> m_xContext;
         ::osl::Mutex m_aMutex;
         ResourceBundleCache m_aBundleCache;

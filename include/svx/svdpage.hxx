@@ -76,8 +76,8 @@ public:
 
 class SVX_DLLPUBLIC SdrObjList
 {
-    SdrObjList(const SdrObjList& rSrcList) SAL_DELETED_FUNCTION;
-    SdrObjList &operator=(const SdrObjList& rSrcList) SAL_DELETED_FUNCTION;
+    SdrObjList(const SdrObjList& rSrcList) = delete;
+    SdrObjList &operator=(const SdrObjList& rSrcList) = delete;
 
 private:
     ::std::vector<SdrObject*> maList;
@@ -313,8 +313,8 @@ public:
 class SVX_DLLPUBLIC SdrPageGridFrameList {
     std::vector<SdrPageGridFrame*> aList;
 private:
-    SdrPageGridFrameList(const SdrPageGridFrameList& rSrcList) SAL_DELETED_FUNCTION;
-    void           operator=(const SdrPageGridFrameList& rSrcList) SAL_DELETED_FUNCTION;
+    SdrPageGridFrameList(const SdrPageGridFrameList& rSrcList) = delete;
+    void           operator=(const SdrPageGridFrameList& rSrcList) = delete;
 protected:
     SdrPageGridFrame* GetObject(sal_uInt16 i) const { return aList[i]; }
 public:
@@ -342,7 +342,7 @@ private:
     void ImpRemoveStyleSheet();
     void ImpAddStyleSheet(SfxStyleSheet& rNewStyleSheet);
 
-    SdrPageProperties& operator=(const SdrPageProperties& rCandidate) SAL_DELETED_FUNCTION;
+    SdrPageProperties& operator=(const SdrPageProperties& rCandidate) = delete;
 
 public:
     // construct/destruct
@@ -377,7 +377,7 @@ public:
 */
 class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase< SdrPage >
 {
-    SdrPage& operator=(const SdrPage& rSrcPage) SAL_DELETED_FUNCTION;
+    SdrPage& operator=(const SdrPage& rSrcPage) = delete;
 
     // start PageUser section
 private:

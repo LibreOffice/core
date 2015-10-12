@@ -75,8 +75,8 @@ public:
     virtual ~SelectedPackage();
 
 private:
-    SelectedPackage(SelectedPackage &) SAL_DELETED_FUNCTION;
-    void operator =(SelectedPackage &) SAL_DELETED_FUNCTION;
+    SelectedPackage(SelectedPackage &) = delete;
+    void operator =(SelectedPackage &) = delete;
 
     css::uno::Reference< css::deployment::XPackage> m_xPackage;
 };

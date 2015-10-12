@@ -17,7 +17,7 @@
 // All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
 struct VCL_DLLPUBLIC OpenGLWrapper
 {
-    OpenGLWrapper() SAL_DELETED_FUNCTION; // Should not be instantiated
+    OpenGLWrapper() = delete; // Should not be instantiated
 
     /**
      * Returns true if VCL has OpenGL rendering enabled

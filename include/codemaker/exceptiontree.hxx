@@ -54,8 +54,8 @@ struct ExceptionTreeNode {
     Children children;
 
 private:
-    ExceptionTreeNode(ExceptionTreeNode &) SAL_DELETED_FUNCTION;
-    void operator =(ExceptionTreeNode) SAL_DELETED_FUNCTION;
+    ExceptionTreeNode(ExceptionTreeNode &) = delete;
+    void operator =(ExceptionTreeNode) = delete;
 
     void clearChildren();
 };
@@ -107,8 +107,8 @@ public:
     ExceptionTreeNode const & getRoot() const { return m_root; }
 
 private:
-    ExceptionTree(ExceptionTree &) SAL_DELETED_FUNCTION;
-    void operator =(const ExceptionTree&) SAL_DELETED_FUNCTION;
+    ExceptionTree(ExceptionTree &) = delete;
+    void operator =(const ExceptionTree&) = delete;
 
     ExceptionTreeNode m_root;
 };

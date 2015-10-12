@@ -32,8 +32,8 @@ namespace rptxml
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
         ORptFilter& GetOwnImport();
 
-        OXMLSection(const OXMLSection&) SAL_DELETED_FUNCTION;
-        void operator =(const OXMLSection&) SAL_DELETED_FUNCTION;
+        OXMLSection(const OXMLSection&) = delete;
+        void operator =(const OXMLSection&) = delete;
     public:
 
         OXMLSection( ORptFilter& rImport

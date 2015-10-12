@@ -173,8 +173,8 @@ private:
     friend void intrusive_ptr_add_ref(ImplFontCharMap* pImplFontCharMap);
     friend void intrusive_ptr_release(ImplFontCharMap* pImplFontCharMap);
 
-                        ImplFontCharMap( const ImplFontCharMap& ) SAL_DELETED_FUNCTION;
-    void                operator=( const ImplFontCharMap& ) SAL_DELETED_FUNCTION;
+                        ImplFontCharMap( const ImplFontCharMap& ) = delete;
+    void                operator=( const ImplFontCharMap& ) = delete;
 
     static ImplFontCharMapPtr getDefaultMap( bool bSymbols=false);
     bool                isDefaultMap() const;

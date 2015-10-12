@@ -31,7 +31,7 @@ class SVL_DLLPUBLIC SvtListener
     typedef std::unordered_set<SvtBroadcaster*> BroadcastersType;
     BroadcastersType maBroadcasters;
 
-    const SvtListener&  operator=(const SvtListener &) SAL_DELETED_FUNCTION;
+    const SvtListener&  operator=(const SvtListener &) = delete;
 
 public:
     class SVL_DLLPUBLIC QueryBase

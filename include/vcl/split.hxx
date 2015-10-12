@@ -53,8 +53,8 @@ private:
     SAL_DLLPRIVATE void      ImplRestoreSplitter();
     SAL_DLLPRIVATE void      ImplInitHorVer(bool bNew);
 
-                             Splitter (const Splitter &) SAL_DELETED_FUNCTION;
-                             Splitter& operator= (const Splitter &) SAL_DELETED_FUNCTION;
+                             Splitter (const Splitter &) = delete;
+                             Splitter& operator= (const Splitter &) = delete;
 
 protected:
     using Window::ImplInit;

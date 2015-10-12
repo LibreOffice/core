@@ -34,7 +34,7 @@ class DlgEdForm;
 
 class DlgEdPage : public SdrPage
 {
-    DlgEdPage& operator=(const DlgEdPage&) SAL_DELETED_FUNCTION;
+    DlgEdPage& operator=(const DlgEdPage&) = delete;
 
 private:
     DlgEdForm*      pDlgEdForm;

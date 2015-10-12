@@ -36,7 +36,7 @@ public:
     rtl::OUString getUri() const { return uri_; }
 
 private:
-    void operator =(NoSuchFileException) SAL_DELETED_FUNCTION;
+    void operator =(NoSuchFileException) = delete;
 
     rtl::OUString uri_;
 };
@@ -59,7 +59,7 @@ public:
     rtl::OUString getDetail() const { return detail_; }
 
 private:
-    void operator =(FileFormatException) SAL_DELETED_FUNCTION;
+    void operator =(FileFormatException) = delete;
 
     rtl::OUString uri_;
     rtl::OUString detail_;

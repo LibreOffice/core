@@ -66,8 +66,8 @@ public:
     static CppInterfaceProxy * castInterfaceToProxy(void * pInterface);
 
 private:
-    CppInterfaceProxy(CppInterfaceProxy &) SAL_DELETED_FUNCTION;
-    void operator =(const CppInterfaceProxy&) SAL_DELETED_FUNCTION;
+    CppInterfaceProxy(CppInterfaceProxy &) = delete;
+    void operator =(const CppInterfaceProxy&) = delete;
 
     CppInterfaceProxy(
         Bridge * pBridge_, uno_Interface * pUnoI_,

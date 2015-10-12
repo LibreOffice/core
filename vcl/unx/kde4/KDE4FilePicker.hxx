@@ -215,8 +215,8 @@ Q_SIGNALS:
     void checkProtocolSignal();
 
 private:
-    KDE4FilePicker( const KDE4FilePicker& ) SAL_DELETED_FUNCTION;
-    KDE4FilePicker& operator=( const KDE4FilePicker& ) SAL_DELETED_FUNCTION;
+    KDE4FilePicker( const KDE4FilePicker& ) = delete;
+    KDE4FilePicker& operator=( const KDE4FilePicker& ) = delete;
 
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId);

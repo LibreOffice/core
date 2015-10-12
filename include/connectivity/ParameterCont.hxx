@@ -43,8 +43,8 @@ namespace dbtools
     protected:
         virtual ~OParameterContinuation() { }
     private:
-        OParameterContinuation(const OParameterContinuation&) SAL_DELETED_FUNCTION;
-        void operator =(const OParameterContinuation&) SAL_DELETED_FUNCTION;
+        OParameterContinuation(const OParameterContinuation&) = delete;
+        void operator =(const OParameterContinuation&) = delete;
     };
 } // dbtools
 #endif // INCLUDED_CONNECTIVITY_PARAMETERCONT_HXX

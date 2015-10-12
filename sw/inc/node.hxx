@@ -292,8 +292,8 @@ public:
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
-    SwNode( const SwNode & rNodes ) SAL_DELETED_FUNCTION;
-    SwNode & operator= ( const SwNode & rNodes ) SAL_DELETED_FUNCTION;
+    SwNode( const SwNode & rNodes ) = delete;
+    SwNode & operator= ( const SwNode & rNodes ) = delete;
 };
 
 /// Starts a section of nodes in the document model.
@@ -324,8 +324,8 @@ public:
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 
 private:
-    SwStartNode( const SwStartNode & rNode ) SAL_DELETED_FUNCTION;
-    SwStartNode & operator= ( const SwStartNode & rNode ) SAL_DELETED_FUNCTION;
+    SwStartNode( const SwStartNode & rNode ) = delete;
+    SwStartNode & operator= ( const SwStartNode & rNode ) = delete;
 };
 
 /// Ends a section of nodes in the document model.
@@ -344,8 +344,8 @@ protected:
     DECL_FIXEDMEMPOOL_NEWDEL(SwEndNode)
 
 private:
-    SwEndNode( const SwEndNode & rNode ) SAL_DELETED_FUNCTION;
-    SwEndNode & operator= ( const SwEndNode & rNode ) SAL_DELETED_FUNCTION;
+    SwEndNode( const SwEndNode & rNode ) = delete;
+    SwEndNode & operator= ( const SwEndNode & rNode ) = delete;
 };
 
 // SwContentNode
@@ -485,8 +485,8 @@ public:
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 
 private:
-    SwContentNode( const SwContentNode & rNode ) SAL_DELETED_FUNCTION;
-    SwContentNode & operator= ( const SwContentNode & rNode ) SAL_DELETED_FUNCTION;
+    SwContentNode( const SwContentNode & rNode ) = delete;
+    SwContentNode & operator= ( const SwContentNode & rNode ) = delete;
 };
 
 // SwTableNode
@@ -523,8 +523,8 @@ public:
     void RemoveRedlines();
 
 private:
-    SwTableNode( const SwTableNode & rNode ) SAL_DELETED_FUNCTION;
-    SwTableNode & operator= ( const SwTableNode & rNode ) SAL_DELETED_FUNCTION;
+    SwTableNode( const SwTableNode & rNode ) = delete;
+    SwTableNode & operator= ( const SwTableNode & rNode ) = delete;
 };
 
 class SwSectionNode
@@ -533,8 +533,8 @@ class SwSectionNode
     friend class SwNodes;
 
 private:
-    SwSectionNode(const SwSectionNode&) SAL_DELETED_FUNCTION;
-    SwSectionNode& operator=(const SwSectionNode&) SAL_DELETED_FUNCTION;
+    SwSectionNode(const SwSectionNode&) = delete;
+    SwSectionNode& operator=(const SwSectionNode&) = delete;
 
     std::unique_ptr<SwSection> const m_pSection;
 

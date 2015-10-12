@@ -81,8 +81,8 @@ class Thesaurus :
     OUString  prevTerm;
     sal_Int16 prevLocale;
 
-    Thesaurus(const Thesaurus &) SAL_DELETED_FUNCTION;
-    Thesaurus & operator = (const Thesaurus &) SAL_DELETED_FUNCTION;
+    Thesaurus(const Thesaurus &) = delete;
+    Thesaurus & operator = (const Thesaurus &) = delete;
 
     linguistic::PropertyHelper_Thesaurus&   GetPropHelper_Impl();
     linguistic::PropertyHelper_Thesaurus&   GetPropHelper()

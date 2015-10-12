@@ -162,8 +162,8 @@ public:
     virtual void        SetControlDontKnow( bool bSet ) = 0;
 
 private:
-                        ControlWrapperBase( const ControlWrapperBase& ) SAL_DELETED_FUNCTION;
-    ControlWrapperBase& operator=( const ControlWrapperBase& ) SAL_DELETED_FUNCTION;
+                        ControlWrapperBase( const ControlWrapperBase& ) = delete;
+    ControlWrapperBase& operator=( const ControlWrapperBase& ) = delete;
 };
 
 

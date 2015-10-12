@@ -194,8 +194,8 @@ private: // Private section
     sal_uInt8 nNatNumModifier;                  // Thai T speciality
 
     // Copy assignment is forbidden and not implemented.
-    ImpSvNumberformatScan (const ImpSvNumberformatScan &) SAL_DELETED_FUNCTION;
-    ImpSvNumberformatScan & operator= (const ImpSvNumberformatScan &) SAL_DELETED_FUNCTION;
+    ImpSvNumberformatScan (const ImpSvNumberformatScan &) = delete;
+    ImpSvNumberformatScan & operator= (const ImpSvNumberformatScan &) = delete;
 
     void InitKeywords() const;
     void InitSpecialKeyword( NfKeywordIndex eIdx ) const;

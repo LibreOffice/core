@@ -110,8 +110,8 @@ public:
     }
 
 private:
-    Service(const Service&) SAL_DELETED_FUNCTION;
-    Service& operator=(const Service&) SAL_DELETED_FUNCTION;
+    Service(const Service&) = delete;
+    Service& operator=(const Service&) = delete;
 
     virtual ~Service() {}
 
@@ -376,8 +376,8 @@ public:
     Factory() {}
 
 private:
-    Factory(const Factory&) SAL_DELETED_FUNCTION;
-    Factory& operator=(const Factory&) SAL_DELETED_FUNCTION;
+    Factory(const Factory&) = delete;
+    Factory& operator=(const Factory&) = delete;
 
     virtual ~Factory() {}
 

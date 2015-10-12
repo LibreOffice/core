@@ -85,8 +85,8 @@ private:
             ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >                m_xWindowParam;
             const OUString                                                                  m_aContextParam;
             StringHashMap                                                                   m_aTypedCustomHandlers;
-    UUIInteractionHelper(UUIInteractionHelper &) SAL_DELETED_FUNCTION;
-    void operator =(const UUIInteractionHelper&) SAL_DELETED_FUNCTION;
+    UUIInteractionHelper(UUIInteractionHelper &) = delete;
+    void operator =(const UUIInteractionHelper&) = delete;
 
 public:
     UUIInteractionHelper(

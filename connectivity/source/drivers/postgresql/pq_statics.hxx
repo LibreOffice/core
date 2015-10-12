@@ -252,8 +252,8 @@ struct Statics
     BaseTypeMap baseTypeMap;
     Statics(){}
 private:
-    Statics( const Statics & ) SAL_DELETED_FUNCTION;
-    Statics & operator = ( const Statics & ) SAL_DELETED_FUNCTION;
+    Statics( const Statics & ) = delete;
+    Statics & operator = ( const Statics & ) = delete;
 };
 
 Statics & getStatics();

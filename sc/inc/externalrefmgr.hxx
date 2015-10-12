@@ -75,8 +75,8 @@ public:
     void SetDoReferesh(bool b);
 
 private:
-    ScExternalRefLink() SAL_DELETED_FUNCTION;
-    ScExternalRefLink(const ScExternalRefLink&) SAL_DELETED_FUNCTION;
+    ScExternalRefLink() = delete;
+    ScExternalRefLink(const ScExternalRefLink&) = delete;
 
     sal_uInt16  mnFileId;
     OUString    maFilterName;
@@ -709,7 +709,7 @@ public:
     void enableDocTimer( bool bEnable );
 
 private:
-    ScExternalRefManager(const ScExternalRefManager&) SAL_DELETED_FUNCTION;
+    ScExternalRefManager(const ScExternalRefManager&) = delete;
 
     void refreshAllRefCells(sal_uInt16 nFileId);
 

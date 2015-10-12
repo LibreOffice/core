@@ -47,7 +47,7 @@ namespace cppcanvas
             //ImplBitmapCanvas(const ImplBitmapCanvas&);
 
         private:
-            ImplBitmapCanvas& operator=( const ImplBitmapCanvas& ) SAL_DELETED_FUNCTION;
+            ImplBitmapCanvas& operator=( const ImplBitmapCanvas& ) = delete;
 
             const css::uno::Reference< css::rendering::XBitmapCanvas >    mxBitmapCanvas;
             const css::uno::Reference< css::rendering::XBitmap >          mxBitmap;

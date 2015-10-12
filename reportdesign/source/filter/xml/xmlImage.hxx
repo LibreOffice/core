@@ -27,8 +27,8 @@ namespace rptxml
     class ORptFilter;
     class OXMLImage : public OXMLReportElementBase
     {
-        OXMLImage(const OXMLImage&) SAL_DELETED_FUNCTION;
-        void operator =(const OXMLImage&) SAL_DELETED_FUNCTION;
+        OXMLImage(const OXMLImage&) = delete;
+        void operator =(const OXMLImage&) = delete;
     public:
 
         OXMLImage( ORptFilter& rImport, sal_uInt16 nPrfx,

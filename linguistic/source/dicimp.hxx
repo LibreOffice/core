@@ -58,8 +58,8 @@ class DictionaryNeo :
     bool                                                        bIsActive;
     bool                                                        bIsReadonly;
 
-    DictionaryNeo(const DictionaryNeo &) SAL_DELETED_FUNCTION;
-    DictionaryNeo & operator = (const DictionaryNeo &) SAL_DELETED_FUNCTION;
+    DictionaryNeo(const DictionaryNeo &) = delete;
+    DictionaryNeo & operator = (const DictionaryNeo &) = delete;
 
     void                    launchEvent(sal_Int16 nEvent,
         ::com::sun::star::uno::Reference<
@@ -187,8 +187,8 @@ class DicEntry :
                     aReplacement;   // including hyphen positions represented by "="
     bool            bIsNegativ;
 
-    DicEntry(const DicEntry &) SAL_DELETED_FUNCTION;
-    DicEntry & operator = (const DicEntry &) SAL_DELETED_FUNCTION;
+    DicEntry(const DicEntry &) = delete;
+    DicEntry & operator = (const DicEntry &) = delete;
 
     static void            splitDicFileWord(const OUString &rDicFileWord,
                                      OUString &rDicWord,

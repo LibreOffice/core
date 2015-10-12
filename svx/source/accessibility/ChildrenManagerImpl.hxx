@@ -363,8 +363,8 @@ private:
     */
     sal_Int32 mnNewNameIndex;
 
-    ChildrenManagerImpl (const ChildrenManagerImpl&) SAL_DELETED_FUNCTION;
-    ChildrenManagerImpl& operator= (const ChildrenManagerImpl&) SAL_DELETED_FUNCTION;
+    ChildrenManagerImpl (const ChildrenManagerImpl&) = delete;
+    ChildrenManagerImpl& operator= (const ChildrenManagerImpl&) = delete;
 
     /** This member points to the currently focused shape.  It is NULL when
         there is no focused shape.

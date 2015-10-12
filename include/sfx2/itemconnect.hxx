@@ -206,8 +206,8 @@ protected:
     TriState            GetShowState( bool bKnown ) const;
 
 private:
-                        ItemConnectionBase( const ItemConnectionBase& ) SAL_DELETED_FUNCTION;
-    ItemConnectionBase& operator=( const ItemConnectionBase& ) SAL_DELETED_FUNCTION;
+                        ItemConnectionBase( const ItemConnectionBase& ) = delete;
+    ItemConnectionBase& operator=( const ItemConnectionBase& ) = delete;
 
     ItemConnFlags       mnFlags;    /// Flags for additional options.
 };

@@ -61,8 +61,8 @@ public:
     void                Flush();
 
 private:
-                        Config( const Config& rConfig ) SAL_DELETED_FUNCTION;
-    Config&             operator = ( const Config& rConfig ) SAL_DELETED_FUNCTION;
+                        Config( const Config& rConfig ) = delete;
+    Config&             operator = ( const Config& rConfig ) = delete;
 };
 
 #endif

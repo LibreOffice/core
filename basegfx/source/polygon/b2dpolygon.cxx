@@ -637,7 +637,7 @@ public:
         }
     }
 
-    ImplB2DPolygon& operator=( const ImplB2DPolygon& ) SAL_DELETED_FUNCTION;
+    ImplB2DPolygon& operator=( const ImplB2DPolygon& ) = delete;
 
     sal_uInt32 count() const
     {

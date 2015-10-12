@@ -52,8 +52,8 @@ namespace accessibility
         virtual ~AccessibleGridControlCell();
 
     private:
-        AccessibleGridControlCell( const AccessibleGridControlCell& ) SAL_DELETED_FUNCTION;
-        AccessibleGridControlCell& operator=( const AccessibleGridControlCell& ) SAL_DELETED_FUNCTION;
+        AccessibleGridControlCell( const AccessibleGridControlCell& ) = delete;
+        AccessibleGridControlCell& operator=( const AccessibleGridControlCell& ) = delete;
     };
 
     typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessibleText

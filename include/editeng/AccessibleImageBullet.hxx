@@ -148,8 +148,8 @@ namespace accessibility
         void FireEvent(const sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(), const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
 
     private:
-        AccessibleImageBullet( const AccessibleImageBullet& ) SAL_DELETED_FUNCTION;
-        AccessibleImageBullet& operator= ( const AccessibleImageBullet& ) SAL_DELETED_FUNCTION;
+        AccessibleImageBullet( const AccessibleImageBullet& ) = delete;
+        AccessibleImageBullet& operator= ( const AccessibleImageBullet& ) = delete;
 
         // syntactic sugar for FireEvent
         void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;

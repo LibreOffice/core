@@ -28,8 +28,8 @@
 class TextCharAttribList
 {
 private:
-    TextCharAttribList(const TextCharAttribList&) SAL_DELETED_FUNCTION;
-    TextCharAttribList& operator=(const TextCharAttribList&) SAL_DELETED_FUNCTION;
+    TextCharAttribList(const TextCharAttribList&) = delete;
+    TextCharAttribList& operator=(const TextCharAttribList&) = delete;
 
     typedef boost::ptr_vector<TextCharAttrib> TextCharAttribs;
     TextCharAttribs maAttribs;

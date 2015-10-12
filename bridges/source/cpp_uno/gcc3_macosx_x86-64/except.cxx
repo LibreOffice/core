@@ -47,16 +47,16 @@ namespace CPPU_CURRENT_NAMESPACE {
 namespace {
 
 struct Fake_type_info {
-    virtual ~Fake_type_info() SAL_DELETED_FUNCTION;
+    virtual ~Fake_type_info() = delete;
     char const * name;
 };
 
 struct Fake_class_type_info: Fake_type_info {
-    virtual ~Fake_class_type_info() SAL_DELETED_FUNCTION;
+    virtual ~Fake_class_type_info() = delete;
 };
 
 struct Fake_si_class_type_info: Fake_class_type_info {
-    virtual ~Fake_si_class_type_info() SAL_DELETED_FUNCTION;
+    virtual ~Fake_si_class_type_info() = delete;
     void const * base;
 };
 

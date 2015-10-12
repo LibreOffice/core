@@ -277,9 +277,9 @@ public:
     void SetFS(::sax_fastparser::FSHelperPtr mpFS);
 
 private:
-    DocxExport( const DocxExport& ) SAL_DELETED_FUNCTION;
+    DocxExport( const DocxExport& ) = delete;
 
-    DocxExport& operator=( const DocxExport& ) SAL_DELETED_FUNCTION;
+    DocxExport& operator=( const DocxExport& ) = delete;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXEXPORT_HXX

@@ -34,7 +34,7 @@ class SVL_DLLPUBLIC SfxBroadcaster
 private:
     void                    AddListener( SfxListener& rListener );
     void                    RemoveListener( SfxListener& rListener );
-    const SfxBroadcaster&   operator=(const SfxBroadcaster &) SAL_DELETED_FUNCTION;
+    const SfxBroadcaster&   operator=(const SfxBroadcaster &) = delete;
 
 protected:
     void                    Forward(SfxBroadcaster& rBC, const SfxHint& rHint);

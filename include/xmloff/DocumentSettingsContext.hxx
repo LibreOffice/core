@@ -47,8 +47,8 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 
 private:
-    XMLDocumentSettingsContext( const XMLDocumentSettingsContext& ) SAL_DELETED_FUNCTION;
-    XMLDocumentSettingsContext& operator=( const XMLDocumentSettingsContext& ) SAL_DELETED_FUNCTION;
+    XMLDocumentSettingsContext( const XMLDocumentSettingsContext& ) = delete;
+    XMLDocumentSettingsContext& operator=( const XMLDocumentSettingsContext& ) = delete;
 };
 
 #endif

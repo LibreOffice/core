@@ -185,8 +185,8 @@ private:
     sal_uInt16  nDatePatternNumbers;
 
     // Copy assignment is forbidden and not implemented.
-    ImpSvNumberInputScan (const ImpSvNumberInputScan &) SAL_DELETED_FUNCTION;
-    ImpSvNumberInputScan & operator= (const ImpSvNumberInputScan &) SAL_DELETED_FUNCTION;
+    ImpSvNumberInputScan (const ImpSvNumberInputScan &) = delete;
+    ImpSvNumberInputScan & operator= (const ImpSvNumberInputScan &) = delete;
 
     void Reset();                               // Reset all variables before start of analysis
 

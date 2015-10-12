@@ -37,8 +37,8 @@ public:
     WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk);
     void Insert(const SwPosition &rPos);
 private:
-    WW8DupProperties(const WW8DupProperties&) SAL_DELETED_FUNCTION;
-    WW8DupProperties& operator=(const WW8DupProperties&) SAL_DELETED_FUNCTION;
+    WW8DupProperties(const WW8DupProperties&) = delete;
+    WW8DupProperties& operator=(const WW8DupProperties&) = delete;
     SwWW8FltControlStack* pCtrlStck;
     SfxItemSet aChrSet,aParSet;
 };
@@ -125,8 +125,8 @@ friend class SwWW8ImplReader;
     bool PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisStyle, sal_uInt16 nNextStyle);
     void PostStyle(SwWW8StyInf &rSI, bool bOldNoImp);
 
-    WW8RStyle(const WW8RStyle&) SAL_DELETED_FUNCTION;
-    WW8RStyle& operator=(const WW8RStyle&) SAL_DELETED_FUNCTION;
+    WW8RStyle(const WW8RStyle&) = delete;
+    WW8RStyle& operator=(const WW8RStyle&) = delete;
 public:
     WW8RStyle( WW8Fib& rFib, SwWW8ImplReader* pI );
     void Import();
@@ -137,7 +137,7 @@ public:
 class WW8FlySet: public SfxItemSet
 {
 private:
-    const WW8FlySet& operator=(const WW8FlySet&) SAL_DELETED_FUNCTION;
+    const WW8FlySet& operator=(const WW8FlySet&) = delete;
     void Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM);
 public:
     WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,

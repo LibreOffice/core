@@ -51,8 +51,8 @@ class SVL_DLLPUBLIC INetURLHistory : public SfxBroadcaster
 
     /** Not implemented.
     */
-    INetURLHistory (const INetURLHistory&) SAL_DELETED_FUNCTION;
-    INetURLHistory& operator= (const INetURLHistory&) SAL_DELETED_FUNCTION;
+    INetURLHistory (const INetURLHistory&) = delete;
+    INetURLHistory& operator= (const INetURLHistory&) = delete;
 
 public:
     /** GetOrCreate.

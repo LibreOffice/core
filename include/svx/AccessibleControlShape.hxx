@@ -193,9 +193,9 @@ private:
     bool        m_bWaitingForControl    : 1;    // if we are created before our control exists, we need to wait for it to appear ...
 
 private:
-    AccessibleControlShape(const AccessibleControlShape&) SAL_DELETED_FUNCTION;
+    AccessibleControlShape(const AccessibleControlShape&) = delete;
 
-    AccessibleControlShape& operator= (const AccessibleControlShape&) SAL_DELETED_FUNCTION;
+    AccessibleControlShape& operator= (const AccessibleControlShape&) = delete;
 };
 
 } // end of namespace accessibility

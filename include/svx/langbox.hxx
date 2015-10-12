@@ -58,8 +58,8 @@ SVX_DLLPUBLIC OUString    GetDicInfoStr( const OUString& rName, const sal_uInt16
 class SVX_DLLPUBLIC SvxLanguageBoxBase
 {
 private:
-    SvxLanguageBoxBase(const SvxLanguageBoxBase&) SAL_DELETED_FUNCTION;
-    SvxLanguageBoxBase& operator=(const SvxLanguageBoxBase&) SAL_DELETED_FUNCTION;
+    SvxLanguageBoxBase(const SvxLanguageBoxBase&) = delete;
+    SvxLanguageBoxBase& operator=(const SvxLanguageBoxBase&) = delete;
 public:
     explicit SvxLanguageBoxBase( bool bCheck );
     virtual ~SvxLanguageBoxBase();

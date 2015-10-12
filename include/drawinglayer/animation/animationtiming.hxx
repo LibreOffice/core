@@ -35,8 +35,8 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC AnimationEntry
         {
         private:
-            AnimationEntry(const AnimationEntry&) SAL_DELETED_FUNCTION;
-            AnimationEntry& operator=(const AnimationEntry& rCandidate) SAL_DELETED_FUNCTION;
+            AnimationEntry(const AnimationEntry&) = delete;
+            AnimationEntry& operator=(const AnimationEntry& rCandidate) = delete;
 
         public:
             AnimationEntry();

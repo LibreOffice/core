@@ -202,7 +202,7 @@ private:
     typedef ::std::vector< ScDPSaveGroupDimension >         ScDPSaveGroupDimVec;
     typedef ::std::map<OUString, ScDPSaveNumGroupDimension> ScDPSaveNumGroupDimMap;
 
-    ScDPDimensionSaveData& operator=( const ScDPDimensionSaveData& ) SAL_DELETED_FUNCTION;
+    ScDPDimensionSaveData& operator=( const ScDPDimensionSaveData& ) = delete;
 
     ScDPSaveGroupDimVec maGroupDims;
     ScDPSaveNumGroupDimMap maNumGroupDims;

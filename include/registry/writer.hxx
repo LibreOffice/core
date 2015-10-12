@@ -278,8 +278,8 @@ public:
     }
 
 private:
-    Writer(Writer &) SAL_DELETED_FUNCTION;
-    void operator =(Writer) SAL_DELETED_FUNCTION;
+    Writer(Writer &) = delete;
+    void operator =(Writer) = delete;
 
     void * m_handle;
 };

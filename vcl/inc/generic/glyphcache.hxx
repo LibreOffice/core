@@ -306,8 +306,8 @@ private:
     ServerFont&             mrServerFont;
     com::sun::star::uno::Reference<com::sun::star::i18n::XBreakIterator> mxBreak;
 
-                            ServerFontLayout( const ServerFontLayout& ) SAL_DELETED_FUNCTION;
-                            ServerFontLayout& operator=( const ServerFontLayout& ) SAL_DELETED_FUNCTION;
+                            ServerFontLayout( const ServerFontLayout& ) = delete;
+                            ServerFontLayout& operator=( const ServerFontLayout& ) = delete;
 
 };
 

@@ -44,8 +44,8 @@ namespace comphelper
         virtual ~AnyEvent();
 
     private:
-        AnyEvent( AnyEvent& ) SAL_DELETED_FUNCTION;
-        void operator=( AnyEvent& ) SAL_DELETED_FUNCTION;
+        AnyEvent( AnyEvent& ) = delete;
+        void operator=( AnyEvent& ) = delete;
     };
 
 

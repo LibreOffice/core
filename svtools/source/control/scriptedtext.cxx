@@ -49,7 +49,7 @@ private:
     Size                        maTextSize;         /// The size the text will take in the current output device.
 
                                 /** Assignment operator not implemented to prevent usage. */
-    SvtScriptedTextHelper_Impl& operator=( const SvtScriptedTextHelper_Impl& ) SAL_DELETED_FUNCTION;
+    SvtScriptedTextHelper_Impl& operator=( const SvtScriptedTextHelper_Impl& ) = delete;
 
                                 /** Gets the font of the given script type. */
     const vcl::Font&            GetFont( sal_uInt16 _nScript ) const;

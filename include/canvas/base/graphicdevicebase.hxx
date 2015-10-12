@@ -363,8 +363,8 @@ namespace canvas
         bool              mbDumpScreenContent;
 
     private:
-        GraphicDeviceBase( const GraphicDeviceBase& ) SAL_DELETED_FUNCTION;
-        GraphicDeviceBase& operator=( const GraphicDeviceBase& ) SAL_DELETED_FUNCTION;
+        GraphicDeviceBase( const GraphicDeviceBase& ) = delete;
+        GraphicDeviceBase& operator=( const GraphicDeviceBase& ) = delete;
     };
 }
 

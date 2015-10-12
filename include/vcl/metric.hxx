@@ -212,8 +212,8 @@ private:
     sal_uInt32          mnRefCount;
 
     // prevent assignment and copy construction
-                        FontCharMap( const FontCharMap& ) SAL_DELETED_FUNCTION;
-    void                operator=( const FontCharMap& ) SAL_DELETED_FUNCTION;
+                        FontCharMap( const FontCharMap& ) = delete;
+    void                operator=( const FontCharMap& ) = delete;
 };
 
 inline void intrusive_ptr_add_ref(FontCharMap* pFontCharMap)

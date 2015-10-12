@@ -145,8 +145,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
-    UnxFilePicker( const UnxFilePicker& ) SAL_DELETED_FUNCTION;
-    UnxFilePicker& operator=( const UnxFilePicker& ) SAL_DELETED_FUNCTION;
+    UnxFilePicker( const UnxFilePicker& ) = delete;
+    UnxFilePicker& operator=( const UnxFilePicker& ) = delete;
 
 protected:
     void                        initFilePicker();

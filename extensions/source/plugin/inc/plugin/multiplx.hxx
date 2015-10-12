@@ -158,8 +158,8 @@ private:
     ::cppu::OMultiTypeInterfaceContainerHelper  aListenerHolder;
 
 
-    MRCListenerMultiplexerHelper( const MRCListenerMultiplexerHelper & ) SAL_DELETED_FUNCTION;
-    MRCListenerMultiplexerHelper & operator = ( const MRCListenerMultiplexerHelper & ) SAL_DELETED_FUNCTION;
+    MRCListenerMultiplexerHelper( const MRCListenerMultiplexerHelper & ) = delete;
+    MRCListenerMultiplexerHelper & operator = ( const MRCListenerMultiplexerHelper & ) = delete;
 };
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_MULTIPLX_HXX

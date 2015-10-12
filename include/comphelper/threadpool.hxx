@@ -49,8 +49,8 @@ public:
     sal_Int32   getWorkerCount() const { return maWorkers.size(); }
 
 private:
-    ThreadPool(const ThreadPool&) SAL_DELETED_FUNCTION;
-    ThreadPool& operator=(const ThreadPool&) SAL_DELETED_FUNCTION;
+    ThreadPool(const ThreadPool&) = delete;
+    ThreadPool& operator=(const ThreadPool&) = delete;
 
     class ThreadWorker;
     friend class ThreadWorker;
