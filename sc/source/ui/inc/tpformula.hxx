@@ -27,6 +27,7 @@
 #include <vcl/button.hxx>
 
 #include "calcconfig.hxx"
+#include "docoptio.hxx"
 
 class ScTpFormulaOptions : public SfxTabPage
 {
@@ -78,6 +79,9 @@ private:
 
     ScCalcConfig maSavedConfig;
     ScCalcConfig maCurrentConfig;
+
+    ScDocOptions maSavedDocOptions;
+    ScDocOptions maCurrentDocOptions;
 
     sal_Unicode mnDecSep;
 };
