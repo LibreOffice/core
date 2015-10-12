@@ -3171,6 +3171,22 @@ void ScXMLImport::SetSheetNamedRanges()
     }
 }
 
+void ScXMLImport::SetStringRefSyntaxIfMissing()
+{
+    if (!pDoc)
+        return;
+
+    ScCalcConfig aCalcConfig = pDoc->GetCalcConfig();
+
+    // Has any string ref syntax been imported?
+    // If not, we need to take action
+    if ( !aCalcConfig.mbHasStringRefSyntax )
+    {
+        aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_A1_XL_A1;
+        pDoc->SetCalcConfig(aCalcConfig);
+    }
+}
+
 void SAL_CALL ScXMLImport::endDocument()
     throw(::com::sun::star::xml::sax::SAXException,
           ::com::sun::star::uno::RuntimeException,
@@ -3217,6 +3233,7 @@ void SAL_CALL ScXMLImport::endDocument()
             SetLabelRanges();
             SetNamedRanges();
             SetSheetNamedRanges();
+            SetStringRefSyntaxIfMissing();
             if (mpPivotSources)
                 // Process pivot table sources after the named ranges have been set.
                 mpPivotSources->process();

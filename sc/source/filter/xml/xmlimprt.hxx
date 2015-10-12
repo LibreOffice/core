@@ -1208,6 +1208,7 @@ public:
     void SetNamedRanges();
     void SetSheetNamedRanges();
     void SetLabelRanges();
+    void SetStringRefSyntaxIfMissing();
 
     /** Extracts the formula string, the formula grammar namespace URL, and a
         grammar enum value from the passed formula attribute value.
