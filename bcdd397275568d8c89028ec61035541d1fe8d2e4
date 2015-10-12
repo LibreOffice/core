@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_597c7620",
+        "filename": "sc/uiconfig/scalc/ui/formulacalculationoptions.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-12T18:53:00Z",
+      "side": 1,
+      "message": "This is a bit confusing, in the dialog it looks as if the option would apply only to the StringRefSyntax listbox, and not to all three items above. I don\u0027t know how to place/accentuate it better, but maybe a different wording would already help, possibly \"Apply the above changed settings to current document only\" or some such?",
+      "revId": "bcdd397275568d8c89028ec61035541d1fe8d2e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
