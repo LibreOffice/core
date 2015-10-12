@@ -71,7 +71,8 @@ bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long 
     OpenGLZone aZone;
 
     Destroy();
-    VCL_GL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from FBO: [" << nX << ", " << nY << "] " << nWidth << "x" << nHeight );
+    VCL_GL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from FBO: ["
+                  << nX << ", " << nY << "] " << nWidth << "x" << nHeight );
 
     mnWidth = nWidth;
     mnHeight = nHeight;
@@ -127,7 +128,9 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
 
     const OpenGLSalBitmap& rSourceBitmap = static_cast<const OpenGLSalBitmap&>(rSalBmp);
 
-    VCL_GL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from BMP: " << rSourceBitmap.mnWidth << "x" << rSourceBitmap.mnHeight );
+    VCL_GL_INFO("vcl.opengl", "OpenGLSalBitmap::Create from BMP: "
+                << rSourceBitmap.mnWidth << "x" << rSourceBitmap.mnHeight
+                << " Bits old: " << mnBits << " new:" << nNewBitCount );
 
     if( isValidBitCount( nNewBitCount ) )
     {
@@ -177,7 +180,7 @@ void OpenGLSalBitmap::Destroy()
 {
     OpenGLZone aZone;
 
-    VCL_GL_INFO( "vcl.opengl", "Destroy OpenGLSalBitmap" );
+    VCL_GL_INFO("vcl.opengl", "Destroy OpenGLSalBitmap texture:" << maTexture.Id());
     maPendingOps.clear();
     maTexture = OpenGLTexture();
     maUserBuffer.reset();
@@ -384,7 +387,7 @@ void OpenGLSalBitmap::ExecuteOperations()
 
 GLuint OpenGLSalBitmap::CreateTexture()
 {
-    VCL_GL_INFO( "vcl.opengl", "::CreateTexture" );
+    VCL_GL_INFO( "vcl.opengl", "::CreateTexture bits: " << mnBits);
     GLenum nFormat = GL_RGBA;
     GLenum nType = GL_UNSIGNED_BYTE;
     sal_uInt8* pData( NULL );
@@ -419,6 +422,8 @@ GLuint OpenGLSalBitmap::CreateTexture()
         }
         else
         {
+            VCL_GL_INFO( "vcl.opengl", "::CreateTexture - convert from " << mnBits << " to 24 bits" );
+
             // convert to 32 bits RGBA using palette
             pData = new sal_uInt8[mnBufHeight * mnBufWidth * 4];
             bAllocated = true;
@@ -455,7 +460,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
 
     lclInstantiateTexture(maTexture, mnBufWidth, mnBufHeight, nFormat, nType, pData);
 
-    VCL_GL_INFO( "vcl.opengl", "Created texture " << maTexture.Id() );
+    VCL_GL_INFO("vcl.opengl", "Created texture " << maTexture.Id() << " bits: " << mnBits);
 
     if( bAllocated )
         delete[] pData;
@@ -471,7 +476,7 @@ bool OpenGLSalBitmap::ReadTexture()
 {
     sal_uInt8* pData = maUserBuffer.get();
 
-    VCL_GL_INFO( "vcl.opengl", "::ReadTexture " << mnWidth << "x" << mnHeight );
+    VCL_GL_INFO( "vcl.opengl", "::ReadTexture " << mnWidth << "x" << mnHeight << " bits: " << mnBits);
 
     if( pData == NULL )
         return false;
@@ -816,6 +821,9 @@ bool OpenGLSalBitmap::GetSystemData( BitmapSystemData& /*rData*/ )
 
 bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
+
+    VCL_GL_INFO("vcl.opengl", "::Replace");
+
     OpenGLZone aZone;
 
     OpenGLFramebuffer* pFramebuffer;
