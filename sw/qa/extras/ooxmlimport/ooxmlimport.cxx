@@ -2801,6 +2801,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf90153, "tdf90153.docx")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf89165, "tdf89165.docx")
+{
+    // This must not hang in layout
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
