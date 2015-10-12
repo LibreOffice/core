@@ -646,9 +646,6 @@ namespace drawinglayer
 
                         if(bAcceptPair)
                         {
-                            double fTexStart(0.0);
-                            double fTexStop(1.0);
-
                             if(bCreateNormals)
                             {
                                 impCreateInBetweenNormals(aPolB, aPolA, bSmoothHorizontalNormals);
@@ -728,6 +725,8 @@ namespace drawinglayer
 
                                     if(bHasSlant)
                                     {
+                                        double fTexStart{};
+                                        double fTexStop{};
                                         if(bCreateTextureCoordinates)
                                         {
                                             fTexStart = fTexHeightPos * fInvTexHeight;
@@ -818,6 +817,8 @@ namespace drawinglayer
 
                                     if(bHasSlant)
                                     {
+                                        double fTexStart{};
+                                        double fTexStop{};
                                         if(bCreateTextureCoordinates)
                                         {
                                             fTexStart = (fTexHeightPos + aTexHeightArray[a] + aTexHeightArray[(a + 1L) % nLoopCount]) * fInvTexHeight;
@@ -839,6 +840,8 @@ namespace drawinglayer
                                 }
                             }
 
+                            double fTexStart{};
+                            double fTexStop{};
                             if(bCreateTextureCoordinates)
                             {
                                 fTexStart = (fTexHeightPos + aTexHeightArray[a]) * fInvTexHeight;
