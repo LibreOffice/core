@@ -7335,11 +7335,7 @@ else
         if test "$with_doxygen" = yes; then
             AC_PATH_PROG([DOXYGEN], [doxygen])
             if test -z "$DOXYGEN"; then
-                if test "$enable_odk" = "" ; then
-                    enable_odk="no"
-                else
-                    AC_MSG_ERROR([doxygen not found in \$PATH; specify its pathname via --with-doxygen=..., or disable its use via --without-doxygen])
-                fi
+                AC_MSG_ERROR([doxygen not found in \$PATH; specify its pathname via --with-doxygen=..., or disable its use via --without-doxygen])
             fi
         else
             AC_MSG_CHECKING([for doxygen])
