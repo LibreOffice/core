@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a061dce_39f6e2d7",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3423,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-12T13:53:04Z",
+      "side": 0,
+      "message": "nitpick: the \"oben\" here actually means \"is displayed\" (on top of other windows, hence \"oben\"). Just to mention ;)",
+      "range": {
+        "startLine": 3423,
+        "startChar": 48,
+        "endLine": 3423,
+        "endChar": 52
+      },
+      "revId": "c985afb0e1af8a243a31886ba9d2e75fd203940d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
