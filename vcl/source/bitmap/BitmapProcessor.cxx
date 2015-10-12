@@ -24,9 +24,9 @@ BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)
 
     if (pRead && pWrite)
     {
-        for (int nY = 0; nY < aSize.Height(); ++nY)
+        for (long nY = 0; nY < aSize.Height(); ++nY)
         {
-            for (int nX = 0; nX < aSize.Width(); ++nX)
+            for (long nX = 0; nX < aSize.Width(); ++nX)
             {
                 BitmapColor aColor = pRead->HasPalette() ?
                                         pRead->GetPaletteColor(pRead->GetPixelIndex(nY, nX)) :
