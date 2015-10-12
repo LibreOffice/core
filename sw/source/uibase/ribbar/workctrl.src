@@ -359,5 +359,15 @@ ComboBox RID_PVIEW_ZOOM_LB
     Border = TRUE ;
     Hide = TRUE ;
 };
+ComboBox RID_JUMP_TO_SPEC_PAGE
+{
+    HelpId = HID_JUMP_TO_SPEC_PAGE;
+    Size = MAP_APPFONT ( 30 , 86) ;
+    DropDown = TRUE ;
+    AutoHScroll = TRUE ;
+    DDExtraWidth = TRUE ;
+    Border = TRUE ;
+    Hide = TRUE ;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
