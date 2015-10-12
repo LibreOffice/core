@@ -312,6 +312,11 @@ interface TextPrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    SID_JUMP_TO_SPECIFIC_PAGE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 
     // End StatusBar
 }

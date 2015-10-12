@@ -121,6 +121,7 @@
 #define CMD_FN_HEADERFOOTER_BORDERBACK              ".uno:HeaderFooterBorderBackground"
 #define CMD_FN_PAGEBREAK_EDIT                       ".uno:PageBreakEdit"
 #define CMD_FN_PAGEBREAK_DELETE                     ".uno:PageBreakDelete"
+#define CMD_SID_JUMP_TO_SPECIFIC_PAGE                ".uno:JumpToSpecificPage"
 
 #endif
 
