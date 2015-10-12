@@ -19,6 +19,7 @@ $(eval $(call gb_Library_set_include,tdeabdrv1,\
 $(eval $(call gb_Library_use_sdk_api,tdeabdrv1))
 
 $(eval $(call gb_Library_use_externals,tdeabdrv1,\
+	boost_headers \
 	tde \
 ))
 
